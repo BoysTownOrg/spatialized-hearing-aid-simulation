@@ -1,13 +1,6 @@
 #pragma once
 
-#define INTERFACE_OPERATIONS(class_name) \
-    virtual ~class_name() = default;\
-    class_name() = default;\
-    class_name(const class_name&) = delete;\
-    class_name& operator=(const class_name&) = delete;\
-    class_name(class_name&&) = delete;\
-    class_name& operator=(class_name&&) = delete;
-
+#include "Interface.h"
 #include <string>
 #include <vector>
 
@@ -23,4 +16,7 @@ public:
 	virtual void setDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
+	virtual std::string dslPrescriptionFilePath() const = 0;
+	virtual std::string audioFilePath() const = 0;
+	virtual std::string brirFilePath() const = 0;
 };

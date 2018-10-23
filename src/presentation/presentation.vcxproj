@@ -119,6 +119,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Presenter.h" />
     <ClInclude Include="View.h" />
   </ItemGroup>

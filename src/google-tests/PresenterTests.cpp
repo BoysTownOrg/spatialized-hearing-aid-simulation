@@ -1,7 +1,26 @@
 #include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
-class MockModel : public Model {};
+class MockModel : public Model {
+	std::string _dslPrescriptionFilePath{};
+	std::string _audioFilePath{};
+	std::string _brirFilePath{};
+public:
+	std::string dslPrescriptionFilePath() const {
+		return _dslPrescriptionFilePath;
+	}
+	std::string audioFilePath() const {
+		return _audioFilePath;
+	}
+	std::string brirFilePath() const {
+		return _brirFilePath;
+	}
+	void playRequest(PlayRequest request) override {
+		_dslPrescriptionFilePath = request.dslPrescriptionFilePath;
+		_audioFilePath = request.audioFilePath;
+		_brirFilePath = request.brirFilePath;
+	}
+};
 
 class MockView : public View {
 	std::vector<std::string> _browseFilters{};
@@ -46,7 +65,7 @@ public:
 	void setDslPrescriptionFilePath(std::string p) override {
 		_dslPrescriptionFilePath = p;
 	}
-	std::string dslPrescriptionFilePath() const {
+	std::string dslPrescriptionFilePath() const override {
 		return _dslPrescriptionFilePath;
 	}
 	void browseForAudio() {
@@ -55,7 +74,7 @@ public:
 	void setAudioFilePath(std::string p) override {
 		_audioFilePath = p;
 	}
-	std::string audioFilePath() const {
+	std::string audioFilePath() const override {
 		return _audioFilePath;
 	}
 	void browseForBrir() {
@@ -64,11 +83,14 @@ public:
 	void setBrirFilePath(std::string p) override {
 		_brirFilePath = p;
 	}
-	std::string brirFilePath() const {
+	std::string brirFilePath() const override {
 		return _brirFilePath;
 	}
 	std::vector<std::string> browseFilters() const {
 		return _browseFilters;
+	}
+	void play() {
+		_presenter->play();
 	}
 };
 
@@ -209,7 +231,7 @@ TEST(
 	view->setAudioFilePath("b");
 	view->setBrirFilePath("c");
 	view->play();
-	assertEqual("a", model->dslPrescriptionFilePath());
-	assertEqual("b", model->audioFilePath());
-	assertEqual("c", model->brirFilePath());
+	EXPECT_EQ("a", model->dslPrescriptionFilePath());
+	EXPECT_EQ("b", model->audioFilePath());
+	EXPECT_EQ("c", model->brirFilePath());
 }
