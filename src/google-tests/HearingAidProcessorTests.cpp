@@ -130,11 +130,48 @@ public:
 
 TEST(
 	HearingAidProcessorTestCase,
-	processPassesInputAppropriately)
+	processPassesRealInputsAppropriately)
 {
 	const auto compressor = std::make_shared<RealSignalPrimeMultiplier>();
 	HearingAidProcessor processor{ compressor };
 	std::vector<float> x = { 4 };
 	processor.process(&x[0], 0);
 	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
+}
+
+class ComplexSignalManipulator : public FilterbankCompressor {
+	int _chunkSize{};
+	complex _postSynthesizeFilterbankComplexResult{};
+public:
+	void compressInput(real *, real *, int) override {
+	}
+	void analyzeFilterbank(real *, complex *output, int) override {
+		*output += 1;
+		*output *= 2;
+	}
+	void compressChannels(complex *input, complex *output, int) override {
+		*input *= 3;
+		*output *= 5;
+	}
+	void synthesizeFilterbank(complex *input, real *, int) override {
+		*input *= 7;
+		_postSynthesizeFilterbankComplexResult = *input;
+	}
+	void compressOutput(real *, real *, int) override {
+	}
+	int chunkSize() const override {
+		return _chunkSize;
+	}
+};
+
+TEST(
+	HearingAidProcessorTestCase,
+	processPassesComplexInputsAppropriately)
+{
+	const auto compressor = std::make_shared<ComplexSignalManipulator>();
+	HearingAidProcessor processor{ compressor };
+	processor.process(nullptr, 0);
+	EXPECT_EQ(
+		(0 + 1) * 2 * 3 * 5 * 7, 
+		compressor->postSynthesizeFilterbankComplexResult());
 }
