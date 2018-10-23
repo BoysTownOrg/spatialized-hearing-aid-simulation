@@ -162,6 +162,9 @@ public:
 	int chunkSize() const override {
 		return _chunkSize;
 	}
+	complex postSynthesizeFilterbankComplexResult() const {
+		return _postSynthesizeFilterbankComplexResult;
+	}
 };
 
 TEST(

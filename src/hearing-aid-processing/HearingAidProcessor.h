@@ -8,8 +8,10 @@
 
 #include "FilterbankCompressor.h"
 #include <memory>
+#include <vector>
 
 class HearingAidProcessor {
+	std::vector<float> complexBuffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
