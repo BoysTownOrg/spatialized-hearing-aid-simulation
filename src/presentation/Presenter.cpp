@@ -13,3 +13,7 @@ void Presenter::loop()
 {
 	view->runEventLoop();
 }
+
+void Presenter::browseForDslPrescription()
+{
+}

@@ -4,8 +4,10 @@
 class MockModel : public Model {};
 
 class MockView : public View {
+	std::string _dslPrescriptionFilePath{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
+	bool _browseCancelled{};
 public:
 	Presenter *presenter() const {
 		return _presenter;
@@ -18,6 +20,18 @@ public:
 	}
 	void runEventLoop() override {
 		_runningEventLoop = true;
+	}
+	void setDslPrescriptionFilePath(std::string p) {
+		_dslPrescriptionFilePath = p;
+	}
+	void setBrowseCancelled() {
+		_browseCancelled = true;
+	}
+	void browseForDslPrescription() {
+		_presenter->browseForDslPrescription();
+	}
+	std::string dslPrescriptionFilePath() const {
+		return _dslPrescriptionFilePath;
 	}
 };
 
