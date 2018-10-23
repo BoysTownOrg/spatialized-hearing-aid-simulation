@@ -150,3 +150,14 @@ TEST(
 	view->browseForAudio();
 	EXPECT_EQ("a", view->audioFilePath());
 }
+
+TEST(
+	PresenterTestCase,
+	browseForBrirUpdatesBrirFilePath)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setBrowseFilePath("a");
+	view->browseForBrir();
+	EXPECT_EQ("a", view->brirFilePath());
+}
