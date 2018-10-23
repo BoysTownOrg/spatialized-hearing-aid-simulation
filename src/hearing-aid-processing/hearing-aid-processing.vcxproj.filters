@@ -18,6 +18,9 @@
     <ClInclude Include="HearingAidProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FilterbankCompressor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HearingAidProcessor.cpp">
