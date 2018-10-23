@@ -74,3 +74,14 @@ TEST(
 	view->browseForDslPrescription();
 	EXPECT_EQ("a", view->dslPrescriptionFilePath());
 }
+
+TEST(
+	PresenterTestCase,
+	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setBrowseFilePath("a");
+	view->browseForDslPrescription();
+	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+}
