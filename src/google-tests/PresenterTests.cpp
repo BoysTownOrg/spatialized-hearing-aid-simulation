@@ -97,3 +97,15 @@ TEST(
 	view->browseForDslPrescription();
 	EXPECT_EQ("a", view->dslPrescriptionFilePath());
 }
+
+TEST(
+	PresenterTestCase,
+	cancellingBrowseForAudioDoesNotChangeAudioFilePath)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setAudioFilePath("a");
+	view->setBrowseCancelled();
+	view->browseForAudio();
+	EXPECT_EQ("a", view->audioFilePath());
+}
