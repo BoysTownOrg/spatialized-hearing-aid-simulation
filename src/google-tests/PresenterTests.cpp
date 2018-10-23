@@ -180,10 +180,20 @@ static void assertEqual(
 
 TEST(
 	PresenterTestCase,
-	browseForAudioFiltersAudioFiles)
+	browseForAudioFiltersWavFiles)
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
 	view->browseForAudio();
 	assertEqual({ "*.wav" }, view->browseFilters());
+}
+
+TEST(
+	PresenterTestCase,
+	browseForBrirFiltersMatFiles)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->browseForBrir();
+	assertEqual({ "*.mat" }, view->browseFilters());
 }
