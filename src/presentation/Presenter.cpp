@@ -20,4 +20,7 @@ void Presenter::browseForDslPrescription() {
 }
 
 void Presenter::browseForAudio() {
+	const auto result = view->browseForFile();
+	if (!view->browseCancelled())
+		view->setAudioFilePath(result);
 }

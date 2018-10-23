@@ -23,7 +23,7 @@ public:
 	void runEventLoop() override {
 		_runningEventLoop = true;
 	}
-	void setDslPrescriptionFilePath(std::string p) {
+	void setDslPrescriptionFilePath(std::string p) override {
 		_dslPrescriptionFilePath = p;
 	}
 	void setBrowseCancelled() {
@@ -46,11 +46,11 @@ public:
 	{
 		return _browseCancelled;
 	}
-	void setAudioFilePath(std::string p) {
+	void setAudioFilePath(std::string p) override {
 		_audioFilePath = p;
 	}
 	void browseForAudio() {
-
+		_presenter->browseForAudio();
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;

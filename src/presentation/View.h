@@ -20,4 +20,5 @@ public:
 	virtual std::string browseForFile() = 0;
 	virtual bool browseCancelled() = 0;
 	virtual void setDslPrescriptionFilePath(std::string) = 0;
+	virtual void setAudioFilePath(std::string) = 0;
 };
