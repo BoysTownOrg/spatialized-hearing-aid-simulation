@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Interface.h"
+#include <common-includes/Interface.h>
 #include <string>
 
 class Model {
