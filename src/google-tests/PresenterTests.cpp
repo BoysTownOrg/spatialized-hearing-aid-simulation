@@ -6,6 +6,7 @@ class MockModel : public Model {};
 class MockView : public View {
 	std::string _dslPrescriptionFilePath{};
 	std::string _audioFilePath{};
+	std::string _brirFilePath{};
 	std::string _browseFilePath{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
@@ -52,6 +53,15 @@ public:
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
+	}
+	void browseForBrir() {
+		_presenter->browseForBrir();
+	}
+	void setBrirFilePath(std::string p) {
+		_brirFilePath = p;
+	}
+	std::string brirFilePath() const {
+		return _brirFilePath;
 	}
 };
 

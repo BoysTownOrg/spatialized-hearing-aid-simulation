@@ -24,3 +24,6 @@ void Presenter::browseForAudio() {
 	if (!view->browseCancelled())
 		view->setAudioFilePath(result);
 }
+
+void Presenter::browseForBrir() {
+}

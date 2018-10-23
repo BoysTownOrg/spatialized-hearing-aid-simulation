@@ -20,4 +20,5 @@ public:
 	PRESENTATION_API void loop();
 	PRESENTATION_API void browseForDslPrescription();
 	PRESENTATION_API void browseForAudio();
+	PRESENTATION_API void browseForBrir();
 };
