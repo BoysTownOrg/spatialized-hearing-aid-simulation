@@ -14,4 +14,5 @@ class View {
 public:
 	INTERFACE_OPERATIONS(View);
 	virtual void setPresenter(Presenter *) = 0;
+	virtual void runEventLoop() = 0;
 };

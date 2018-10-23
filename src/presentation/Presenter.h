@@ -12,8 +12,10 @@ class Model {};
 #include <memory>
 
 class Presenter {
+	std::shared_ptr<View> view;
 public:
 	PRESENTATION_API Presenter(
 		std::shared_ptr<Model> model, 
 		std::shared_ptr<View> view);
+	PRESENTATION_API void loop();
 };

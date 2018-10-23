@@ -5,12 +5,19 @@ class MockModel : public Model {};
 
 class MockView : public View {
 	Presenter *_presenter{};
+	bool _runningEventLoop{};
 public:
 	Presenter *presenter() const {
 		return _presenter;
 	}
 	void setPresenter(Presenter *p) override {
 		_presenter = p;
+	}
+	bool runningEventLoop() const {
+		return _runningEventLoop;
+	}
+	void runEventLoop() override {
+		_runningEventLoop = true;
 	}
 };
 
