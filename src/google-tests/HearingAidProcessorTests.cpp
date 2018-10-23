@@ -15,27 +15,27 @@ public:
 	std::string processingLog() const {
 		return _processingLog;
 	}
-	virtual void compressInput(float *, float *, int chunkSize) override
+	virtual void compressInput(real *, real *, int chunkSize) override
 	{
 		_compressInputChunkSize = chunkSize;
 		_processingLog += "compressInput";
 	}
-	virtual void analyzeFilterbank(float *, float *, int chunkSize) override
+	virtual void analyzeFilterbank(real *, complex *, int chunkSize) override
 	{
 		_filterbankAnalyzeChunkSize = chunkSize;
 		_processingLog += "analyzeFilterbank";
 	}
-	virtual void compressChannels(float *, float *, int chunkSize) override
+	virtual void compressChannels(complex *, complex *, int chunkSize) override
 	{
 		_compressChannelsChunkSize = chunkSize;
 		_processingLog += "compressChannels";
 	}
-	virtual void synthesizeFilterbank(float * , float * , int chunkSize) override
+	virtual void synthesizeFilterbank(complex * , real * , int chunkSize) override
 	{
 		_filterbankSynthesizeChunkSize = chunkSize;
 		_processingLog += "synthesizeFilterbank";
 	}
-	virtual void compressOutput(float * , float * , int chunkSize) override
+	virtual void compressOutput(real * , real * , int chunkSize) override
 	{
 		_compressOutputChunkSize = chunkSize;
 		_processingLog += "compressOutput";
@@ -105,21 +105,21 @@ TEST(
 	EXPECT_TRUE(compressor->processingLog().empty());
 }
 
-class PrimeMultiplier : public FilterbankCompressor {
+class RealSignalPrimeMultiplier : public FilterbankCompressor {
 public:
-	void compressInput(float *input, float *output, int) override {
+	void compressInput(real *input, real *output, int) override {
 		*input *= 2;
 		*output *= 3;
 	}
-	void analyzeFilterbank(float *input, float *, int) override {
+	void analyzeFilterbank(real *input, complex *, int) override {
 		*input *= 5;
 	}
-	void compressChannels(float *, float *, int) override {
+	void compressChannels(complex *, complex *, int) override {
 	}
-	void synthesizeFilterbank(float *, float *output, int) override {
+	void synthesizeFilterbank(complex *, real *output, int) override {
 		*output *= 7;
 	}
-	void compressOutput(float *input, float *output, int) override {
+	void compressOutput(real *input, real *output, int) override {
 		*input *= 11;
 		*output *= 13;
 	}
@@ -132,7 +132,7 @@ TEST(
 	HearingAidProcessorTestCase,
 	processPassesInputAppropriately)
 {
-	const auto compressor = std::make_shared<PrimeMultiplier>();
+	const auto compressor = std::make_shared<RealSignalPrimeMultiplier>();
 	HearingAidProcessor processor{ compressor };
 	std::vector<float> x = { 4 };
 	processor.process(&x[0], 0);

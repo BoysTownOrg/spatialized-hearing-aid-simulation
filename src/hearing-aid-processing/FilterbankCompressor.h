@@ -5,25 +5,27 @@
 class FilterbankCompressor {
 public:
 	INTERFACE_OPERATIONS(FilterbankCompressor);
+	using real = float;
+	using complex = float;
 	virtual void compressInput(
-		float *input,
-		float *output,
+		real *input,
+		real *output,
 		int chunkSize) = 0;
 	virtual void analyzeFilterbank(
-		float *input,
-		float *output,
+		real *input,
+		complex *output,
 		int chunkSize) = 0;
 	virtual void compressChannels(
-		float *input,
-		float *output,
+		complex *input,
+		complex *output,
 		int chunkSize) = 0;
 	virtual void synthesizeFilterbank(
-		float *input,
-		float *output,
+		complex *input,
+		real *output,
 		int chunkSize) = 0;
 	virtual void compressOutput(
-		float *input,
-		float *output,
+		real *input,
+		real *output,
 		int chunkSize) = 0;
 	virtual int chunkSize() const = 0;
 };
