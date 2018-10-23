@@ -25,4 +25,5 @@ public:
 		float *input,
 		float *output,
 		int chunkSize) = 0;
+	virtual int chunkSize() const = 0;
 };

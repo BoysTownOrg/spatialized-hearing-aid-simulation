@@ -4,29 +4,61 @@
 
 class MockFilterbankCompressor : public FilterbankCompressor {
 	std::string _processingLog{};
+	int _chunkSize{};
+	int _compressInputChunkSize{};
+	int _filterbankAnalyzeChunkSize{};
+	int _compressChannelsChunkSize{};
+	int _filterbankSynthesizeChunkSize{};
+	int _compressOutputChunkSize{};
 public:
 	std::string processingLog() const {
 		return _processingLog;
 	}
-	virtual void compressInput(float *, float *, int) override
+	virtual void compressInput(float *, float *, int chunkSize) override
 	{
+		_compressInputChunkSize = chunkSize;
 		_processingLog += "compressInput";
 	}
-	virtual void analyzeFilterbank(float *, float *, int) override
+	virtual void analyzeFilterbank(float *, float *, int chunkSize) override
 	{
+		_filterbankAnalyzeChunkSize = chunkSize;
 		_processingLog += "analyzeFilterbank";
 	}
-	virtual void compressChannels(float *, float *, int) override
+	virtual void compressChannels(float *, float *, int chunkSize) override
 	{
+		_compressChannelsChunkSize = chunkSize;
 		_processingLog += "compressChannels";
 	}
-	virtual void synthesizeFilterbank(float * , float * , int ) override
+	virtual void synthesizeFilterbank(float * , float * , int chunkSize) override
 	{
+		_filterbankSynthesizeChunkSize = chunkSize;
 		_processingLog += "synthesizeFilterbank";
 	}
-	virtual void compressOutput(float * , float * , int ) override
+	virtual void compressOutput(float * , float * , int chunkSize) override
 	{
+		_compressOutputChunkSize = chunkSize;
 		_processingLog += "compressOutput";
+	}
+	void setChunkSize(int s) {
+		_chunkSize = s;
+	}
+	int compressInputChunkSize() const {
+		return _compressInputChunkSize;
+	}
+	int filterbankAnalyzeChunkSize() const {
+		return _filterbankAnalyzeChunkSize;
+	}
+	int compressChannelsChunkSize() const {
+		return _compressChannelsChunkSize;
+	}
+	int filterbankSynthesizeChunkSize() const {
+		return _filterbankSynthesizeChunkSize;
+	}
+	int compressOutputChunkSize() const {
+		return _compressOutputChunkSize;
+	}
+	int chunkSize() const override {
+		return _chunkSize;
 	}
 };
 

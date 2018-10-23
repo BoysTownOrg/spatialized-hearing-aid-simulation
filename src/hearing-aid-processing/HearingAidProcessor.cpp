@@ -6,9 +6,10 @@ HearingAidProcessor::HearingAidProcessor(
 	compressor{ std::move(compressor) } {}
 
 void HearingAidProcessor::process() {
-	compressor->compressInput(nullptr, nullptr, 0);
-	compressor->analyzeFilterbank(nullptr, nullptr, 0);
-	compressor->compressChannels(nullptr, nullptr, 0);
-	compressor->synthesizeFilterbank(nullptr, nullptr, 0);
-	compressor->compressOutput(nullptr, nullptr, 0);
+	const auto chunkSize = compressor->chunkSize();
+	compressor->compressInput(nullptr, nullptr, chunkSize);
+	compressor->analyzeFilterbank(nullptr, nullptr, chunkSize);
+	compressor->compressChannels(nullptr, nullptr, chunkSize);
+	compressor->synthesizeFilterbank(nullptr, nullptr, chunkSize);
+	compressor->compressOutput(nullptr, nullptr, chunkSize);
 }
