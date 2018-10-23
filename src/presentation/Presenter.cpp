@@ -9,18 +9,15 @@ Presenter::Presenter(
 	this->view->setPresenter(this);
 }
 
-void Presenter::loop()
-{
+void Presenter::loop() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForDslPrescription()
-{
+void Presenter::browseForDslPrescription() {
 	const auto result = view->browseForFile();
 	if (!view->browseCancelled())
 		view->setDslPrescriptionFilePath(result);
 }
 
-void Presenter::browseForAudio()
-{
+void Presenter::browseForAudio() {
 }
