@@ -21,4 +21,5 @@ public:
 	virtual bool browseCancelled() = 0;
 	virtual void setDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
+	virtual void setBrirFilePath(std::string) = 0;
 };

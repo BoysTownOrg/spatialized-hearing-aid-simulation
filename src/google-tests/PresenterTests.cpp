@@ -57,7 +57,7 @@ public:
 	void browseForBrir() {
 		_presenter->browseForBrir();
 	}
-	void setBrirFilePath(std::string p) {
+	void setBrirFilePath(std::string p) override {
 		_brirFilePath = p;
 	}
 	std::string brirFilePath() const {

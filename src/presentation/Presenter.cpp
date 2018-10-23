@@ -26,4 +26,7 @@ void Presenter::browseForAudio() {
 }
 
 void Presenter::browseForBrir() {
+	const auto result = view->browseForFile();
+	if (!view->browseCancelled())
+		view->setBrirFilePath(result);
 }
