@@ -197,3 +197,19 @@ TEST(
 	view->browseForBrir();
 	assertEqual({ "*.mat" }, view->browseFilters());
 }
+
+TEST(
+	PresenterTestCase,
+	playPassesParametersToPlayRequest)
+{
+	const auto view = std::make_shared<MockView>();
+	const auto model = std::make_shared<MockModel>();
+	Presenter presenter{ model, view };
+	view->setDslPrescriptionFilePath("a");
+	view->setAudioFilePath("b");
+	view->setBrirFilePath("c");
+	view->play();
+	assertEqual("a", model->dslPrescriptionFilePath());
+	assertEqual("b", model->audioFilePath());
+	assertEqual("c", model->brirFilePath());
+}
