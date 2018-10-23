@@ -11,20 +11,26 @@ class MockView : public View {
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
 public:
-	Presenter *presenter() const {
-		return _presenter;
-	}
 	void setPresenter(Presenter *p) override {
 		_presenter = p;
 	}
-	bool runningEventLoop() const {
-		return _runningEventLoop;
+	Presenter *presenter() const {
+		return _presenter;
 	}
 	void runEventLoop() override {
 		_runningEventLoop = true;
 	}
-	void setDslPrescriptionFilePath(std::string p) override {
-		_dslPrescriptionFilePath = p;
+	bool runningEventLoop() const {
+		return _runningEventLoop;
+	}
+	virtual std::string browseForFile() override {
+		return _browseFilePath;
+	}
+	void setBrowseFilePath(std::string p) {
+		_browseFilePath = p;
+	}
+	virtual bool browseCancelled() override {
+		return _browseCancelled;
 	}
 	void setBrowseCancelled() {
 		_browseCancelled = true;
@@ -32,25 +38,17 @@ public:
 	void browseForDslPrescription() {
 		_presenter->browseForDslPrescription();
 	}
+	void setDslPrescriptionFilePath(std::string p) override {
+		_dslPrescriptionFilePath = p;
+	}
 	std::string dslPrescriptionFilePath() const {
 		return _dslPrescriptionFilePath;
 	}
-	void setBrowseFilePath(std::string p) {
-		_browseFilePath = p;
-	}
-	virtual std::string browseForFile() override
-	{
-		return _browseFilePath;
-	}
-	virtual bool browseCancelled() override
-	{
-		return _browseCancelled;
+	void browseForAudio() {
+		_presenter->browseForAudio();
 	}
 	void setAudioFilePath(std::string p) override {
 		_audioFilePath = p;
-	}
-	void browseForAudio() {
-		_presenter->browseForAudio();
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -99,17 +97,6 @@ TEST(
 
 TEST(
 	PresenterTestCase,
-	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
-{
-	const auto view = std::make_shared<MockView>();
-	PresenterFacade presenter{ view };
-	view->setBrowseFilePath("a");
-	view->browseForDslPrescription();
-	EXPECT_EQ("a", view->dslPrescriptionFilePath());
-}
-
-TEST(
-	PresenterTestCase,
 	cancellingBrowseForAudioDoesNotChangeAudioFilePath)
 {
 	const auto view = std::make_shared<MockView>();
@@ -118,6 +105,17 @@ TEST(
 	view->setBrowseCancelled();
 	view->browseForAudio();
 	EXPECT_EQ("a", view->audioFilePath());
+}
+
+TEST(
+	PresenterTestCase,
+	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setBrowseFilePath("a");
+	view->browseForDslPrescription();
+	EXPECT_EQ("a", view->dslPrescriptionFilePath());
 }
 
 TEST(
