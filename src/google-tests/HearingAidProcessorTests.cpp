@@ -70,7 +70,7 @@ TEST(
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	HearingAidProcessor processor{ compressor };
-	processor.process();
+	processor.process(0);
 	EXPECT_EQ(
 		"compressInput"
 		"analyzeFilterbank"
@@ -85,7 +85,7 @@ TEST(HearingAidProcessorTestCase, processPassesChunkSize)
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	compressor->setChunkSize(1);
 	HearingAidProcessor processor{ compressor };
-	processor.process();
+	processor.process(1);
 	EXPECT_EQ(1, compressor->compressInputChunkSize());
 	EXPECT_EQ(1, compressor->filterbankAnalyzeChunkSize());
 	EXPECT_EQ(1, compressor->compressChannelsChunkSize());
