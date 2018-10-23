@@ -103,3 +103,41 @@ TEST(
 	processor.process(2);
 	EXPECT_TRUE(compressor->processingLog().empty());
 }
+
+class PrimeMultiplier : public FilterbankCompressor {
+public:
+	void compressInput(float *input, float *output, int) override {
+		*input *= 2;
+		*output *= 3;
+	}
+	void analyzeFilterbank(float *input, float *output, int) override {
+		*input *= 5;
+		*output *= 7;
+	}
+	void compressChannels(float *input, float *output, int) override {
+		*input *= 11;
+		*output *= 13;
+	}
+	void synthesizeFilterbank(float *input, float *output, int) override {
+		*input *= 17;
+		*output *= 19;
+	}
+	void compressOutput(float *input, float *output, int) override {
+		*input *= 23;
+		*output *= 29;
+	}
+	int chunkSize() const override {
+		return {};
+	}
+};
+
+TEST(
+	HearingAidProcessorTestCase,
+	processPassesInputAppropriately)
+{
+	const auto compressor = std::make_shared<PrimeMultiplier>();
+	HearingAidProcessor processor{ compressor };
+	std::vector<float> x = { 4 };
+	processor.process(&x[0], 0);
+	assertEqual({ 4 * 2 * 3 * 5 * 19 * 23 * 29 }, x);
+}
