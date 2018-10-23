@@ -8,6 +8,8 @@
     class_name(class_name&&) = delete;\
     class_name& operator=(class_name&&) = delete;
 
+#include <string>
+
 class Presenter;
 
 class View {
@@ -15,4 +17,7 @@ public:
 	INTERFACE_OPERATIONS(View);
 	virtual void setPresenter(Presenter *) = 0;
 	virtual void runEventLoop() = 0;
+	virtual std::string browseForFile() = 0;
+	virtual bool browseCancelled() = 0;
+	virtual void setDslPrescriptionFilePath(std::string) = 0;
 };

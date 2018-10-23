@@ -16,4 +16,7 @@ void Presenter::loop()
 
 void Presenter::browseForDslPrescription()
 {
+	const auto result = view->browseForFile();
+	if (!view->browseCancelled())
+		view->setDslPrescriptionFilePath(result);
 }

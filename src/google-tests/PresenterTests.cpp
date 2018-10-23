@@ -5,6 +5,7 @@ class MockModel : public Model {};
 
 class MockView : public View {
 	std::string _dslPrescriptionFilePath{};
+	std::string _browseFilePath{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -32,6 +33,17 @@ public:
 	}
 	std::string dslPrescriptionFilePath() const {
 		return _dslPrescriptionFilePath;
+	}
+	void setBrowseFilePath(std::string p) {
+		_browseFilePath = p;
+	}
+	virtual std::string browseForFile() override
+	{
+		return _browseFilePath;
+	}
+	virtual bool browseCancelled() override
+	{
+		return _browseCancelled;
 	}
 };
 
