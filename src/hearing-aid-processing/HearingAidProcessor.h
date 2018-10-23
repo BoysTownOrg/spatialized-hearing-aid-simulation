@@ -15,6 +15,6 @@ public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
 		std::shared_ptr<FilterbankCompressor> compressor
 	);
-	HEARING_AID_PROCESSING_API void process(int frameCount);
+	HEARING_AID_PROCESSING_API void process(float *x, int frameCount);
 };
 

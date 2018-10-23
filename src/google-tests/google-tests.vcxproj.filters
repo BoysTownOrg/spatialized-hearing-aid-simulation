@@ -21,5 +21,11 @@
     <ClCompile Include="HearingAidProcessorTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assert-utility.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assert-utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

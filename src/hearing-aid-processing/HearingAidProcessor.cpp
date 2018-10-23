@@ -5,13 +5,13 @@ HearingAidProcessor::HearingAidProcessor(
 ) :
 	compressor{ std::move(compressor) } {}
 
-void HearingAidProcessor::process(int frameCount) {
+void HearingAidProcessor::process(float *x, int frameCount) {
 	const auto chunkSize = compressor->chunkSize();
 	if (frameCount == chunkSize) {
-		compressor->compressInput(nullptr, nullptr, chunkSize);
-		compressor->analyzeFilterbank(nullptr, nullptr, chunkSize);
+		compressor->compressInput(x, x, chunkSize);
+		compressor->analyzeFilterbank(x, nullptr, chunkSize);
 		compressor->compressChannels(nullptr, nullptr, chunkSize);
-		compressor->synthesizeFilterbank(nullptr, nullptr, chunkSize);
-		compressor->compressOutput(nullptr, nullptr, chunkSize);
+		compressor->synthesizeFilterbank(nullptr, x, chunkSize);
+		compressor->compressOutput(x, x, chunkSize);
 	}
 }

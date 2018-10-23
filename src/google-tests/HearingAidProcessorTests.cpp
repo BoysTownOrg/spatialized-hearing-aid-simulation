@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <gtest/gtest.h>
 #include <string>
@@ -70,7 +71,7 @@ TEST(
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	HearingAidProcessor processor{ compressor };
-	processor.process(0);
+	processor.process(nullptr, 0);
 	EXPECT_EQ(
 		"compressInput"
 		"analyzeFilterbank"
@@ -85,7 +86,7 @@ TEST(HearingAidProcessorTestCase, processPassesChunkSize)
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	compressor->setChunkSize(1);
 	HearingAidProcessor processor{ compressor };
-	processor.process(1);
+	processor.process(nullptr, 1);
 	EXPECT_EQ(1, compressor->compressInputChunkSize());
 	EXPECT_EQ(1, compressor->filterbankAnalyzeChunkSize());
 	EXPECT_EQ(1, compressor->compressChannelsChunkSize());
@@ -100,7 +101,7 @@ TEST(
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	compressor->setChunkSize(1);
 	HearingAidProcessor processor{ compressor };
-	processor.process(2);
+	processor.process(nullptr, 2);
 	EXPECT_TRUE(compressor->processingLog().empty());
 }
 
@@ -110,21 +111,17 @@ public:
 		*input *= 2;
 		*output *= 3;
 	}
-	void analyzeFilterbank(float *input, float *output, int) override {
+	void analyzeFilterbank(float *input, float *, int) override {
 		*input *= 5;
+	}
+	void compressChannels(float *, float *, int) override {
+	}
+	void synthesizeFilterbank(float *, float *output, int) override {
 		*output *= 7;
 	}
-	void compressChannels(float *input, float *output, int) override {
+	void compressOutput(float *input, float *output, int) override {
 		*input *= 11;
 		*output *= 13;
-	}
-	void synthesizeFilterbank(float *input, float *output, int) override {
-		*input *= 17;
-		*output *= 19;
-	}
-	void compressOutput(float *input, float *output, int) override {
-		*input *= 23;
-		*output *= 29;
 	}
 	int chunkSize() const override {
 		return {};
@@ -139,5 +136,5 @@ TEST(
 	HearingAidProcessor processor{ compressor };
 	std::vector<float> x = { 4 };
 	processor.process(&x[0], 0);
-	assertEqual({ 4 * 2 * 3 * 5 * 19 * 23 * 29 }, x);
+	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
 }
