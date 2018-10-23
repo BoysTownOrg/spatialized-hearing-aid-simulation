@@ -5,6 +5,7 @@ class MockModel : public Model {};
 
 class MockView : public View {
 	std::string _dslPrescriptionFilePath{};
+	std::string _audioFilePath{};
 	std::string _browseFilePath{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
@@ -44,6 +45,15 @@ public:
 	virtual bool browseCancelled() override
 	{
 		return _browseCancelled;
+	}
+	void setAudioFilePath(std::string p) {
+		_audioFilePath = p;
+	}
+	void browseForAudio() {
+
+	}
+	std::string audioFilePath() const {
+		return _audioFilePath;
 	}
 };
 

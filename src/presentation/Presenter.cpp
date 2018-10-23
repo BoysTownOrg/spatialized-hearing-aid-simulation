@@ -20,3 +20,7 @@ void Presenter::browseForDslPrescription()
 	if (!view->browseCancelled())
 		view->setDslPrescriptionFilePath(result);
 }
+
+void Presenter::browseForAudio()
+{
+}

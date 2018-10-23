@@ -19,4 +19,5 @@ public:
 		std::shared_ptr<View> view);
 	PRESENTATION_API void loop();
 	PRESENTATION_API void browseForDslPrescription();
+	PRESENTATION_API void browseForAudio();
 };
