@@ -109,6 +109,18 @@ TEST(
 
 TEST(
 	PresenterTestCase,
+	cancellingBrowseForBrirDoesNotChangeBrirFilePath)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setBrirFilePath("a");
+	view->setBrowseCancelled();
+	view->browseForBrir();
+	EXPECT_EQ("a", view->brirFilePath());
+}
+
+TEST(
+	PresenterTestCase,
 	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
 {
 	const auto view = std::make_shared<MockView>();
