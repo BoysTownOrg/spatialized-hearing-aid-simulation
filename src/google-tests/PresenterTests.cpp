@@ -161,3 +161,13 @@ TEST(
 	view->browseForBrir();
 	EXPECT_EQ("a", view->brirFilePath());
 }
+
+TEST(
+	PresenterTestCase,
+	browseForAudioFiltersAudioFiles)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->browseForAudio();
+	assertEqual({ "*.wav" }, view->browseFilters());
+}
