@@ -21,17 +21,30 @@ public:
 	}
 };
 
+class PresenterFacade {
+	Presenter presenter;
+public:
+	PresenterFacade(std::shared_ptr<View> view) :
+		presenter{ std::make_shared<MockModel>(), std::move(view) } {}
+	const Presenter *get() const {
+		return &presenter;
+	}
+	void loop() {
+		presenter.loop();
+	}
+};
+
 class PresenterTestCase : public ::testing::TestCase {};
 
 TEST(PresenterTestCase, constructorSetsItself) {
 	const auto view = std::make_shared<MockView>();
-	Presenter presenter{ std::make_shared<MockModel>(), view };
-	EXPECT_EQ(&presenter, view->presenter());
+	PresenterFacade presenter{ view };
+	EXPECT_EQ(presenter.get(), view->presenter());
 }
 
 TEST(PresenterTestCase, loopRunsEventLoop) {
 	const auto view = std::make_shared<MockView>();
-	Presenter presenter{ std::make_shared<MockModel>(), view };
+	PresenterFacade presenter{ view };
 	presenter.loop();
 	EXPECT_TRUE(view->runningEventLoop());
 }
