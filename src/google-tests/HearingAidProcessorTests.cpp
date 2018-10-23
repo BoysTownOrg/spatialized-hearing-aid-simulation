@@ -1,48 +1,4 @@
-#include <common-includes/Interface.h>
-
-class FilterbankCompressor {
-public:
-	INTERFACE_OPERATIONS(FilterbankCompressor);
-	virtual void compressInput(
-		float *input,
-		float *output,
-		int chunkSize) = 0;
-	virtual void analyzeFilterbank(
-		float *input,
-		float *output,
-		int chunkSize) = 0;
-	virtual void compressChannels(
-		float *input,
-		float *output,
-		int chunkSize) = 0;
-	virtual void synthesizeFilterbank(
-		float *input,
-		float *output,
-		int chunkSize) = 0;
-	virtual void compressOutput(
-		float *input,
-		float *output,
-		int chunkSize) = 0;
-};
-
-#include <memory>
-
-class HearingAidProcessor {
-	std::shared_ptr<FilterbankCompressor> compressor;
-public:
-	explicit HearingAidProcessor(
-		std::shared_ptr<FilterbankCompressor> compressor
-	) :
-		compressor{ std::move(compressor) } {}
-	void process() {
-		compressor->compressInput(nullptr, nullptr, 0);
-		compressor->analyzeFilterbank(nullptr, nullptr, 0);
-		compressor->compressChannels(nullptr, nullptr, 0);
-		compressor->synthesizeFilterbank(nullptr, nullptr, 0);
-		compressor->compressOutput(nullptr, nullptr, 0);
-	}
-};
-
+#include <hearing-aid-processing/HearingAidProcessor.h>
 #include <gtest/gtest.h>
 #include <string>
 
