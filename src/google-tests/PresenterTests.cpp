@@ -1,30 +1,4 @@
-#define INTERFACE_OPERATIONS(class_name) \
-    virtual ~class_name() = default;\
-    class_name() = default;\
-    class_name(const class_name&) = delete;\
-    class_name& operator=(const class_name&) = delete;\
-    class_name(class_name&&) = delete;\
-    class_name& operator=(class_name&&) = delete;
-
-class Model {};
-
-class Presenter;
-
-class View {
-public:
-	INTERFACE_OPERATIONS(View);
-	virtual void setPresenter(Presenter *) = 0;
-};
-
-#include <memory>
-
-class Presenter {
-public:
-	Presenter(std::shared_ptr<Model> model, std::shared_ptr<View> view) {
-		view->setPresenter(this);
-	}
-};
-
+#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 class MockModel : public Model {};
