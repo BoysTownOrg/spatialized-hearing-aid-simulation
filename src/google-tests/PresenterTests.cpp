@@ -21,3 +21,10 @@ TEST(PresenterTestCase, constructorSetsItself) {
 	Presenter presenter{ std::make_shared<MockModel>(), view };
 	EXPECT_EQ(&presenter, view->presenter());
 }
+
+TEST(PresenterTestCase, loopRunsEventLoop) {
+	const auto view = std::make_shared<MockView>();
+	Presenter presenter{ std::make_shared<MockModel>(), view };
+	presenter.loop();
+	EXPECT_TRUE(view->runningEventLoop());
+}
