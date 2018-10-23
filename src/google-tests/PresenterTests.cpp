@@ -48,3 +48,15 @@ TEST(PresenterTestCase, loopRunsEventLoop) {
 	presenter.loop();
 	EXPECT_TRUE(view->runningEventLoop());
 }
+
+TEST(
+	PresenterTestCase, 
+	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) 
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	view->setDslPrescriptionFilePath("a");
+	view->setBrowseCancelled();
+	view->browseForDslPrescription();
+	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+}
