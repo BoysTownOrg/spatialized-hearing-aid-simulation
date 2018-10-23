@@ -10,6 +10,7 @@ class Model {};
 
 #include "View.h"
 #include <memory>
+#include <functional>
 
 class Presenter {
 	std::shared_ptr<View> view;
@@ -21,4 +22,7 @@ public:
 	PRESENTATION_API void browseForDslPrescription();
 	PRESENTATION_API void browseForAudio();
 	PRESENTATION_API void browseForBrir();
+
+private:
+	void browseAndUpdateIfNotCancelled(std::function<void(std::string)>);
 };

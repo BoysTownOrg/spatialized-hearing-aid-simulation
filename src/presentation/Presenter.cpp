@@ -14,19 +14,22 @@ void Presenter::loop() {
 }
 
 void Presenter::browseForDslPrescription() {
-	const auto result = view->browseForFile();
-	if (!view->browseCancelled())
-		view->setDslPrescriptionFilePath(result);
+	browseAndUpdateIfNotCancelled(
+		[=](std::string p) { this->view->setDslPrescriptionFilePath(p); });
 }
 
 void Presenter::browseForAudio() {
-	const auto result = view->browseForFile();
-	if (!view->browseCancelled())
-		view->setAudioFilePath(result);
+	browseAndUpdateIfNotCancelled(
+		[=](std::string p) { this->view->setAudioFilePath(p); });
 }
 
 void Presenter::browseForBrir() {
-	const auto result = view->browseForFile();
+	browseAndUpdateIfNotCancelled(
+		[=](std::string p) { this->view->setBrirFilePath(p); });
+}
+
+void Presenter::browseAndUpdateIfNotCancelled(std::function<void(std::string)> update) {
+	const auto filePath = view->browseForFile();
 	if (!view->browseCancelled())
-		view->setBrirFilePath(result);
+		update(filePath);
 }
