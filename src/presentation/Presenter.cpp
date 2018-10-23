@@ -27,7 +27,7 @@ void Presenter::browseForAudio() {
 
 void Presenter::browseForBrir() {
 	browseAndUpdateIfNotCancelled(
-		{},
+		{ "*.mat" },
 		[=](std::string p) { this->view->setBrirFilePath(p); });
 }
 
