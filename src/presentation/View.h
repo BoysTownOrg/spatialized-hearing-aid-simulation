@@ -9,6 +9,7 @@
     class_name& operator=(class_name&&) = delete;
 
 #include <string>
+#include <vector>
 
 class Presenter;
 
@@ -17,7 +18,7 @@ public:
 	INTERFACE_OPERATIONS(View);
 	virtual void setPresenter(Presenter *) = 0;
 	virtual void runEventLoop() = 0;
-	virtual std::string browseForFile() = 0;
+	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
 	virtual bool browseCancelled() = 0;
 	virtual void setDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;

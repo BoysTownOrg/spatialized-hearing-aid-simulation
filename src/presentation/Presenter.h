@@ -24,5 +24,7 @@ public:
 	PRESENTATION_API void browseForBrir();
 
 private:
-	void browseAndUpdateIfNotCancelled(std::function<void(std::string)>);
+	void browseAndUpdateIfNotCancelled(
+		std::vector<std::string> filters,
+		std::function<void(std::string)>);
 };

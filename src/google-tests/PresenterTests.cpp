@@ -4,6 +4,7 @@
 class MockModel : public Model {};
 
 class MockView : public View {
+	std::vector<std::string> _browseFilters{};
 	std::string _dslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
@@ -24,7 +25,10 @@ public:
 	bool runningEventLoop() const {
 		return _runningEventLoop;
 	}
-	virtual std::string browseForFile() override {
+	virtual std::string browseForFile(
+		std::vector<std::string> filters) override 
+	{
+		_browseFilters = filters;
 		return _browseFilePath;
 	}
 	void setBrowseFilePath(std::string p) {
@@ -62,6 +66,9 @@ public:
 	}
 	std::string brirFilePath() const {
 		return _brirFilePath;
+	}
+	std::vector<std::string> browseFilters() const {
+		return _browseFilters;
 	}
 };
 
@@ -160,6 +167,15 @@ TEST(
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
 	EXPECT_EQ("a", view->brirFilePath());
+}
+
+static void assertEqual(
+	std::vector<std::string> expected,
+	std::vector<std::string> actual) 
+{
+	EXPECT_EQ(expected.size(), actual.size());
+	for (std::size_t i = 0; i < expected.size(); ++i)
+		EXPECT_EQ(expected.at(i), actual.at(i));
 }
 
 TEST(
