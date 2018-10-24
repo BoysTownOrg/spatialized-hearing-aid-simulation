@@ -12,13 +12,17 @@ public:
 	) :
 		processor{ compressor },
 		compressor{ compressor } {}
-	void processChunk() {
-		processor.process(nullptr, compressor->chunkSize());
-	}
+
 	void processUnequalChunk() {
 		processor.process(nullptr, compressor->chunkSize() + 1);
 	}
-	void processChunk(float *x) {
+
+	void process(float *x = nullptr) {
+		_process(x);
+	}
+
+private:
+	void _process(float *x) {
 		processor.process(x, compressor->chunkSize());
 	}
 };
@@ -94,7 +98,7 @@ TEST(
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	HearingAidProcessorFacade processor{ compressor };
-	processor.processChunk();
+	processor.process();
 	EXPECT_EQ(
 		"compressInput"
 		"analyzeFilterbank"
@@ -109,7 +113,7 @@ TEST(HearingAidProcessorTestCase, processPassesChunkSize)
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	compressor->setChunkSize(1);
 	HearingAidProcessorFacade processor{ compressor };
-	processor.processChunk();
+	processor.process();
 	EXPECT_EQ(1, compressor->compressInputChunkSize());
 	EXPECT_EQ(1, compressor->filterbankAnalyzeChunkSize());
 	EXPECT_EQ(1, compressor->compressChannelsChunkSize());
@@ -160,7 +164,7 @@ TEST(
 	const auto compressor = std::make_shared<RealSignalPrimeMultiplier>();
 	HearingAidProcessorFacade processor{ compressor };
 	std::vector<float> x = { 4 };
-	processor.processChunk(&x[0]);
+	processor.process(&x[0]);
 	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
 }
 
@@ -209,8 +213,8 @@ TEST(
 	const auto compressor = std::make_shared<ComplexSignalManipulator>();
 	compressor->setChunkSize(1);
 	compressor->setChannels(1);
-	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 1);
+	HearingAidProcessorFacade processor{ compressor };
+	processor.process();
 	EXPECT_EQ(
 		(0 + 1) * 2 * 3 * 5 * 7, 
 		compressor->postSynthesizeFilterbankComplexResult());
@@ -266,8 +270,8 @@ TEST(
 	compressor->setChunkSize(3);
 	compressor->setChannels(5);
 	compressor->setPointerOffset(3 * 5 * 2 - 1);
-	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 3);
+	HearingAidProcessorFacade processor{ compressor };
+	processor.process();
 	EXPECT_EQ(
 		(0 + 7) * 11 * 13 * 17 * 19,
 		compressor->postSynthesizeFilterbankComplexResult());
