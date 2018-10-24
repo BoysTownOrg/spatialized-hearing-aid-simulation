@@ -3,6 +3,26 @@
 #include <gtest/gtest.h>
 #include <string>
 
+class HearingAidProcessorFacade {
+	HearingAidProcessor processor;
+	std::shared_ptr<FilterbankCompressor> compressor;
+public:
+	explicit HearingAidProcessorFacade(
+		std::shared_ptr<FilterbankCompressor> compressor
+	) :
+		processor{ compressor },
+		compressor{ compressor } {}
+	void processChunk() {
+		processor.process(nullptr, compressor->chunkSize());
+	}
+	void processUnequalChunk() {
+		processor.process(nullptr, compressor->chunkSize() + 1);
+	}
+	void processChunk(float *x) {
+		processor.process(x, compressor->chunkSize());
+	}
+};
+
 class MockFilterbankCompressor : public FilterbankCompressor {
 	std::string _processingLog{};
 	int _chunkSize{};
@@ -73,8 +93,8 @@ TEST(
 	processCallsFilterbankCompressorMethodsInCorrectOrder) 
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
-	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 0);
+	HearingAidProcessorFacade processor{ compressor };
+	processor.processChunk();
 	EXPECT_EQ(
 		"compressInput"
 		"analyzeFilterbank"
@@ -88,8 +108,8 @@ TEST(HearingAidProcessorTestCase, processPassesChunkSize)
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
 	compressor->setChunkSize(1);
-	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 1);
+	HearingAidProcessorFacade processor{ compressor };
+	processor.processChunk();
 	EXPECT_EQ(1, compressor->compressInputChunkSize());
 	EXPECT_EQ(1, compressor->filterbankAnalyzeChunkSize());
 	EXPECT_EQ(1, compressor->compressChannelsChunkSize());
@@ -102,9 +122,8 @@ TEST(
 	processDoesNotCallCompressorWhenFrameCountDoesNotEqualChunkSize)
 {
 	const auto compressor = std::make_shared<MockFilterbankCompressor>();
-	compressor->setChunkSize(1);
-	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 2);
+	HearingAidProcessorFacade processor{ compressor };
+	processor.processUnequalChunk();
 	EXPECT_TRUE(compressor->processingLog().empty());
 }
 
@@ -139,9 +158,9 @@ TEST(
 	processPassesRealInputsAppropriately)
 {
 	const auto compressor = std::make_shared<RealSignalPrimeMultiplier>();
-	HearingAidProcessor processor{ compressor };
+	HearingAidProcessorFacade processor{ compressor };
 	std::vector<float> x = { 4 };
-	processor.process(&x[0], 0);
+	processor.processChunk(&x[0]);
 	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
 }
 
