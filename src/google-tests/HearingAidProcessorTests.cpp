@@ -178,3 +178,48 @@ TEST(
 		(0 + 1) * 2 * 3 * 5 * 7, 
 		compressor->postSynthesizeFilterbankComplexResult());
 }
+
+class ComplexSignalBackManipulator : public FilterbankCompressor {
+	int _chunkSize{};
+	int _channels{};
+	int _pointerOffset{};
+	complex _postSynthesizeFilterbankComplexResult{};
+public:
+	void compressInput(real *, real *, int) override {
+	}
+	void analyzeFilterbank(real *, complex *output, int) override {
+		*(output + _pointerOffset) += 7;
+		*(output + _pointerOffset) *= 11;
+	}
+	void compressChannels(complex *input, complex *output, int) override {
+		*(input + _pointerOffset) *= 13;
+		*(output + _pointerOffset) *= 17;
+	}
+	void synthesizeFilterbank(complex *input, real *, int) override {
+		*(input + _pointerOffset) *= 19;
+		_postSynthesizeFilterbankComplexResult = *(input + _pointerOffset);
+	}
+	void compressOutput(real *, real *, int) override {
+	}
+	int chunkSize() const override {
+		return _chunkSize;
+	}
+	complex postSynthesizeFilterbankComplexResult() const {
+		return _postSynthesizeFilterbankComplexResult;
+	}
+};
+
+TEST(
+	HearingAidProcessorTestCase,
+	complexInputSizeIsAtLeastChannelTimesChunkSizeTimesTwo)
+{
+	const auto compressor = std::make_shared<ComplexSignalBackManipulator>();
+	compressor->setChunkSize(3);
+	compressor->setChannels(5);
+	compressor->setPointerOffset(3 * 5 * 2);
+	HearingAidProcessor processor{ compressor };
+	processor.process(nullptr, 3);
+	EXPECT_EQ(
+		(0 + 7) * 11 * 13 * 17 * 19,
+		compressor->postSynthesizeFilterbankComplexResult());
+}
