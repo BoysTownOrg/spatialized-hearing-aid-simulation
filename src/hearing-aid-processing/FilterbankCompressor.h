@@ -28,4 +28,5 @@ public:
 		real *output,
 		int chunkSize) = 0;
 	virtual int chunkSize() const = 0;
+	virtual int channels() const = 0;
 };

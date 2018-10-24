@@ -61,6 +61,9 @@ public:
 	int chunkSize() const override {
 		return _chunkSize;
 	}
+	int channels() const override {
+		return {};
+	}
 };
 
 class HearingAidProcessorTestCase : public ::testing::TestCase {};
@@ -126,6 +129,9 @@ public:
 	int chunkSize() const override {
 		return {};
 	}
+	int channels() const override {
+		return {};
+	}
 };
 
 TEST(
@@ -160,10 +166,13 @@ public:
 	void compressOutput(real *, real *, int) override {
 	}
 	int chunkSize() const override {
-		return _chunkSize;
+		return 1;
 	}
 	complex postSynthesizeFilterbankComplexResult() const {
 		return _postSynthesizeFilterbankComplexResult;
+	}
+	int channels() const override {
+		return 1;
 	}
 };
 
@@ -173,7 +182,7 @@ TEST(
 {
 	const auto compressor = std::make_shared<ComplexSignalManipulator>();
 	HearingAidProcessor processor{ compressor };
-	processor.process(nullptr, 0);
+	processor.process(nullptr, 1);
 	EXPECT_EQ(
 		(0 + 1) * 2 * 3 * 5 * 7, 
 		compressor->postSynthesizeFilterbankComplexResult());
@@ -204,8 +213,20 @@ public:
 	int chunkSize() const override {
 		return _chunkSize;
 	}
+	void setChunkSize(int s) {
+		_chunkSize = s;
+	}
+	void setChannels(int c) {
+		_channels = c;
+	}
+	void setPointerOffset(int offset) {
+		_pointerOffset = offset;
+	}
 	complex postSynthesizeFilterbankComplexResult() const {
 		return _postSynthesizeFilterbankComplexResult;
+	}
+	int channels() const override {
+		return _channels;
 	}
 };
 
