@@ -11,6 +11,7 @@
 #include <vector>
 
 class HearingAidProcessor {
+	// Order important for construction.
 	std::vector<float> complexBuffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:

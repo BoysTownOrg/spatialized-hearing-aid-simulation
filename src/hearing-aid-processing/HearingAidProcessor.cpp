@@ -3,8 +3,8 @@
 HearingAidProcessor::HearingAidProcessor(
 	std::shared_ptr<FilterbankCompressor> compressor
 ) :
-	compressor{ std::move(compressor) },
-	complexBuffer(compressor->channels() * compressor->chunkSize() * 2) {}
+	complexBuffer(compressor->channels() * compressor->chunkSize() * 2),
+	compressor{ std::move(compressor) } {}
 
 void HearingAidProcessor::process(float *x, int frameCount) {
 	const auto chunkSize = compressor->chunkSize();
