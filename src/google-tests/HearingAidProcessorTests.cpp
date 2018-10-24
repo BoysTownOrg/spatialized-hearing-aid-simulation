@@ -169,60 +169,8 @@ TEST(
 }
 
 class ComplexSignalManipulator : public FilterbankCompressor {
-	int _chunkSize{};
-	int _channels{};
-	complex _postSynthesizeFilterbankComplexResult{};
-public:
-	void compressInput(real *, real *, int) override {
-	}
-	void analyzeFilterbank(real *, complex *output, int) override {
-		*output += 1;
-		*output *= 2;
-	}
-	void compressChannels(complex *input, complex *output, int) override {
-		*input *= 3;
-		*output *= 5;
-	}
-	void synthesizeFilterbank(complex *input, real *, int) override {
-		*input *= 7;
-		_postSynthesizeFilterbankComplexResult = *input;
-	}
-	void compressOutput(real *, real *, int) override {
-	}
-	int chunkSize() const override {
-		return _chunkSize;
-	}
-	int channels() const override {
-		return _channels;
-	}
-	void setChunkSize(int s) {
-		_chunkSize = s;
-	}
-	void setChannels(int c) {
-		_channels = c;
-	}
-	complex postSynthesizeFilterbankComplexResult() const {
-		return _postSynthesizeFilterbankComplexResult;
-	}
-};
-
-TEST(
-	HearingAidProcessorTestCase,
-	processPassesComplexInputsAppropriately)
-{
-	const auto compressor = std::make_shared<ComplexSignalManipulator>();
-	compressor->setChunkSize(1);
-	compressor->setChannels(1);
-	HearingAidProcessorFacade processor{ compressor };
-	processor.process();
-	EXPECT_EQ(
-		(0 + 1) * 2 * 3 * 5 * 7, 
-		compressor->postSynthesizeFilterbankComplexResult());
-}
-
-class ComplexSignalBackManipulator : public FilterbankCompressor {
-	int _chunkSize{};
-	int _channels{};
+	int _chunkSize{ 1 };
+	int _channels{ 1 };
 	int _pointerOffset{};
 	complex _postSynthesizeFilterbankComplexResult{};
 public:
@@ -264,9 +212,21 @@ public:
 
 TEST(
 	HearingAidProcessorTestCase,
+	processPassesComplexInputsAppropriately)
+{
+	const auto compressor = std::make_shared<ComplexSignalManipulator>();
+	HearingAidProcessorFacade processor{ compressor };
+	processor.process();
+	EXPECT_EQ(
+		(0 + 7) * 11 * 13 * 17 * 19,
+		compressor->postSynthesizeFilterbankComplexResult());
+}
+
+TEST(
+	HearingAidProcessorTestCase,
 	complexInputSizeIsAtLeastChannelTimesChunkSizeTimesTwo)
 {
-	const auto compressor = std::make_shared<ComplexSignalBackManipulator>();
+	const auto compressor = std::make_shared<ComplexSignalManipulator>();
 	compressor->setChunkSize(3);
 	compressor->setChannels(5);
 	compressor->setPointerOffset(3 * 5 * 2 - 1);
