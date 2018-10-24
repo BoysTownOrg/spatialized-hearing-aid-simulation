@@ -147,6 +147,7 @@ TEST(
 
 class ComplexSignalManipulator : public FilterbankCompressor {
 	int _chunkSize{};
+	int _channels{};
 	complex _postSynthesizeFilterbankComplexResult{};
 public:
 	void compressInput(real *, real *, int) override {
@@ -166,13 +167,19 @@ public:
 	void compressOutput(real *, real *, int) override {
 	}
 	int chunkSize() const override {
-		return 1;
+		return _chunkSize;
+	}
+	int channels() const override {
+		return _channels;
+	}
+	void setChunkSize(int s) {
+		_chunkSize = s;
+	}
+	void setChannels(int c) {
+		_channels = c;
 	}
 	complex postSynthesizeFilterbankComplexResult() const {
 		return _postSynthesizeFilterbankComplexResult;
-	}
-	int channels() const override {
-		return 1;
 	}
 };
 
@@ -181,6 +188,8 @@ TEST(
 	processPassesComplexInputsAppropriately)
 {
 	const auto compressor = std::make_shared<ComplexSignalManipulator>();
+	compressor->setChunkSize(1);
+	compressor->setChannels(1);
 	HearingAidProcessor processor{ compressor };
 	processor.process(nullptr, 1);
 	EXPECT_EQ(
@@ -237,7 +246,7 @@ TEST(
 	const auto compressor = std::make_shared<ComplexSignalBackManipulator>();
 	compressor->setChunkSize(3);
 	compressor->setChannels(5);
-	compressor->setPointerOffset(3 * 5 * 2);
+	compressor->setPointerOffset(3 * 5 * 2 - 1);
 	HearingAidProcessor processor{ compressor };
 	processor.process(nullptr, 3);
 	EXPECT_EQ(
