@@ -131,7 +131,7 @@ TEST(
 	EXPECT_TRUE(compressor->processingLog().empty());
 }
 
-class RealSignalPrimeMultiplier : public FilterbankCompressor {
+class MultipliesRealSignalsByPrimes : public FilterbankCompressor {
 public:
 	void compressInput(real *input, real *output, int) override {
 		*input *= 2;
@@ -161,14 +161,14 @@ TEST(
 	HearingAidProcessorTestCase,
 	processPassesRealInputsAppropriately)
 {
-	const auto compressor = std::make_shared<RealSignalPrimeMultiplier>();
+	const auto compressor = std::make_shared<MultipliesRealSignalsByPrimes>();
 	HearingAidProcessorFacade processor{ compressor };
 	std::vector<float> x = { 4 };
 	processor.process(&x[0]);
 	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
 }
 
-class ComplexSignalManipulator : public FilterbankCompressor {
+class ForComplexSignalTests : public FilterbankCompressor {
 	int _chunkSize{ 1 };
 	int _channels{ 1 };
 	int _pointerOffset{};
@@ -193,6 +193,9 @@ public:
 	int chunkSize() const override {
 		return _chunkSize;
 	}
+	int channels() const override {
+		return _channels;
+	}
 	void setChunkSize(int s) {
 		_chunkSize = s;
 	}
@@ -205,16 +208,13 @@ public:
 	complex postSynthesizeFilterbankComplexResult() const {
 		return _postSynthesizeFilterbankComplexResult;
 	}
-	int channels() const override {
-		return _channels;
-	}
 };
 
 TEST(
 	HearingAidProcessorTestCase,
 	processPassesComplexInputsAppropriately)
 {
-	const auto compressor = std::make_shared<ComplexSignalManipulator>();
+	const auto compressor = std::make_shared<ForComplexSignalTests>();
 	HearingAidProcessorFacade processor{ compressor };
 	processor.process();
 	EXPECT_EQ(
@@ -226,7 +226,7 @@ TEST(
 	HearingAidProcessorTestCase,
 	complexInputSizeIsAtLeastChannelTimesChunkSizeTimesTwo)
 {
-	const auto compressor = std::make_shared<ComplexSignalManipulator>();
+	const auto compressor = std::make_shared<ForComplexSignalTests>();
 	compressor->setChunkSize(3);
 	compressor->setChannels(5);
 	compressor->setPointerOffset(3 * 5 * 2 - 1);
