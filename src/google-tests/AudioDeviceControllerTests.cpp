@@ -62,3 +62,15 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	controller.stopStreaming();
 	EXPECT_FALSE(device->streaming());
 }
+
+TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	AudioDeviceControllerFacade controller{ device };
+	float left;
+	float right;
+	float *x[] = { &left, &right };
+	device->fillStreamBuffer(x, 1);
+	EXPECT_EQ(&left, stream->left());
+	EXPECT_EQ(&right, stream->right());
+	EXPECT_EQ(1, stream->frameCount());
+}
