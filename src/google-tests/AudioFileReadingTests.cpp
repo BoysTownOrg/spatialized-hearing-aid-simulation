@@ -38,6 +38,9 @@ TEST(AudioFileReadingTestCase, readEmptyFileReadsEmpty) {
 	assertEqual({}, audioFile.readLeftChannel(0));
 	assertEqual({}, audioFile.readLeftChannel(1));
 	assertEqual({}, audioFile.readLeftChannel(2));
+	assertEqual({}, audioFile.readRightChannel(0));
+	assertEqual({}, audioFile.readRightChannel(1));
+	assertEqual({}, audioFile.readRightChannel(2));
 }
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
