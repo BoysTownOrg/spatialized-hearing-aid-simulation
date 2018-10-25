@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assert-utility.h" />
+    <ClCompile Include="AudioDeviceControllerTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
   </ItemGroup>
