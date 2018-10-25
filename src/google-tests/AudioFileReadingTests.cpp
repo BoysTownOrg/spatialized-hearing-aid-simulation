@@ -74,4 +74,6 @@ TEST(AudioFileReadingTestCase, readChannelReturnsLessThanRequested) {
 	AudioFileInMemory audioFile{ reader };
 	assertEqual({ 3 }, audioFile.readLeftChannel(1));
 	assertEqual({ 5 }, audioFile.readLeftChannel(2));
+	assertEqual({ 4 }, audioFile.readRightChannel(1));
+	assertEqual({ 6 }, audioFile.readRightChannel(2));
 }
