@@ -20,9 +20,30 @@ public:
 	void stopStream() override {
 		_streaming = false;
 	}
+	void fillStreamBuffer(void *x, int n) {
+		_controller->fillStreamBuffer(x, n);
+	}
 };
 
 class MockAudioStream : public AudioStream {
+	int _frameCount{};
+	float *_left{};
+	float *_right{};
+public:
+	const float *left() const {
+		return _left;
+	}
+	const float *right() const {
+		return _right;
+	}
+	int frameCount() const {
+		return _frameCount;
+	}
+	void fillBuffer(float *left, float *right, int frameCount) override {
+		_left = left;
+		_right = right;
+		_frameCount = frameCount;
+	}
 };
 
 class AudioDeviceControllerFacade {
@@ -65,7 +86,8 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 
 TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	AudioDeviceControllerFacade controller{ device };
+	const auto stream = std::make_shared<MockAudioStream>();
+	AudioDeviceController controller{ device, stream };
 	float left;
 	float right;
 	float *x[] = { &left, &right };

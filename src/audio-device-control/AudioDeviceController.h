@@ -1,6 +1,12 @@
 #pragma once
 
-class AudioStream {};
+#include <common-includes/Interface.h>
+
+class AudioStream {
+public:
+	INTERFACE_OPERATIONS(AudioStream);
+	virtual void fillBuffer(float *left, float *right, int frameCount) = 0;
+};
 
 #ifdef AUDIO_DEVICE_CONTROL_EXPORTS
 	#define AUDIO_DEVICE_CONTROL_API __declspec(dllexport)
@@ -13,6 +19,7 @@ class AudioStream {};
 
 class AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;
+	std::shared_ptr<AudioStream> stream;
 public:
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice> device,
@@ -20,5 +27,6 @@ public:
 	);
 	AUDIO_DEVICE_CONTROL_API void startStreaming();
 	AUDIO_DEVICE_CONTROL_API void stopStreaming();
+	AUDIO_DEVICE_CONTROL_API void fillStreamBuffer(void *channels, int frameCount);
 };
 
