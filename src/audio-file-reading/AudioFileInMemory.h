@@ -13,11 +13,13 @@
 class AudioFileInMemory {
 	std::vector<float> left;
 	std::vector<float> right;
+	std::size_t leftHead = 0;
+	std::size_t rightHead = 0;
 public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
 	);
-	AUDIO_FILE_READING_API std::vector<float> readLeftChannel(int samples);
-	AUDIO_FILE_READING_API std::vector<float> readRightChannel(int samples);
+	AUDIO_FILE_READING_API void readLeftChannel(float *x, int samples);
+	AUDIO_FILE_READING_API void readRightChannel(float *x, int samples);
 };
 

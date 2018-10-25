@@ -12,28 +12,14 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) {
 	}
 }
 
-std::vector<float> AudioFileInMemory::readLeftChannel(int samples) {
-	if (samples >= left.size()) {
-		const auto next = left;
-		left.clear();
-		return next;
-	}
-	const auto next = std::vector<float>(
-		left.begin(),
-		left.begin() + samples);
-	left.erase(left.begin(), left.begin() + samples);
-	return next;
+void AudioFileInMemory::readLeftChannel(float *x, int samples) {
+	int i = 0;
+	while (leftHead < left.size() && i < samples)
+		x[i++] = left[leftHead++];
 }
 
-std::vector<float> AudioFileInMemory::readRightChannel(int samples) {
-	if (samples >= right.size()) {
-		const auto next = right;
-		right.clear();
-		return next;
-	}
-	const auto next = std::vector<float>(
-		right.begin(),
-		right.begin() + samples);
-	right.erase(right.begin(), right.begin() + samples);
-	return next;
+void AudioFileInMemory::readRightChannel(float *x, int samples) {
+	int i = 0;
+	while (rightHead < right.size() && i < samples)
+		x[i++] = right[rightHead++];
 }
