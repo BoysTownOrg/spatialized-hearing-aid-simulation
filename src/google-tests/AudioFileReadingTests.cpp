@@ -48,6 +48,9 @@ TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
 		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4, 5, 6 });
 	reader->setChannels(2);
 	AudioFileInMemory audioFile{ reader };
+	float x{};
+	audioFile.readLeftChannel(&x, 1);
+	EXPECT_EQ(3, x);
 	assertEqual({ 3 }, audioFile.readLeftChannel(1));
 	assertEqual({ 5 }, audioFile.readLeftChannel(1));
 	assertEqual({ 4 }, audioFile.readRightChannel(1));
