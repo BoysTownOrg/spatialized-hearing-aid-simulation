@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="AudioDevice.h" />
     <ClInclude Include="AudioDeviceController.h" />
+    <ClInclude Include="AudioStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDeviceController.cpp" />

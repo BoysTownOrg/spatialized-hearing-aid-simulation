@@ -21,6 +21,9 @@
     <ClInclude Include="AudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDeviceController.cpp">

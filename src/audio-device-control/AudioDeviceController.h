@@ -1,13 +1,5 @@
 #pragma once
 
-#include <common-includes/Interface.h>
-
-class AudioStream {
-public:
-	INTERFACE_OPERATIONS(AudioStream);
-	virtual void fillBuffer(float *left, float *right, int frameCount) = 0;
-};
-
 #ifdef AUDIO_DEVICE_CONTROL_EXPORTS
 	#define AUDIO_DEVICE_CONTROL_API __declspec(dllexport)
 #else
@@ -15,6 +7,7 @@ public:
 #endif
 
 #include "AudioDevice.h"
+#include "AudioStream.h"
 #include <memory>
 
 class AudioDeviceController {
