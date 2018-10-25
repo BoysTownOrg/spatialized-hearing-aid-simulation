@@ -15,16 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PresenterTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HearingAidProcessorTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="assert-utility.h">
+    <ClInclude Include="AudioDeviceController.h">
       <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioDeviceControllerTests.cpp">
+    </ClInclude>
+    <ClInclude Include="AudioDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AudioDeviceController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
