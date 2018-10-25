@@ -11,10 +11,12 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) {
 }
 
 std::vector<float> AudioFileInMemory::readLeftChannel(int samples) {
+	if (left.size() == 0)
+		return {};
 	const auto next = std::vector<float>(
-		left.begin() + leftHead,
-		left.begin() + leftHead + samples);
-	leftHead += samples;
+		left.begin(),
+		left.begin() + samples);
+	left.erase(left.begin(), left.begin() + samples);
 	return next;
 }
 
