@@ -6,7 +6,7 @@ class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	int _channels{};
 public:
-	explicit MockAudioFileReader(std::vector<float> contents) :
+	explicit MockAudioFileReader(std::vector<float> contents = {}) :
 		contents{ std::move(contents) } {}
 	void setChannels(int c) {
 		_channels = c;
@@ -29,6 +29,14 @@ public:
 };
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
+
+TEST(AudioFileReadingTestCase, readEmptyFileReadsEmpty) {
+	const auto reader = std::make_shared<MockAudioFileReader>();
+	AudioFileInMemory audioFile{ reader };
+	assertEqual({}, audioFile.readLeftChannel(0));
+	assertEqual({}, audioFile.readLeftChannel(1));
+	assertEqual({}, audioFile.readLeftChannel(2));
+}
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
 	const auto reader = 
