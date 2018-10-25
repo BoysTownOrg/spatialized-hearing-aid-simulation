@@ -24,3 +24,11 @@ TEST(AudioDeviceControllerTestCase, constructorSetsItself) {
 	AudioDeviceController controller{ device, stream };
 	EXPECT_EQ(&controller, device->controller());
 }
+
+TEST(AudioDeviceControllerTestCase, startStreamingStartsStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto stream = std::make_shared<MockAudioStream>();
+	AudioDeviceController controller{ device, stream };
+	controller.startStreaming();
+	EXPECT_TRUE(stream->streaming());
+}
