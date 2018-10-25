@@ -14,6 +14,8 @@ public:
 class AudioFileInMemory {
 	std::vector<float> left;
 	std::vector<float> right;
+	std::size_t leftHead = 0;
+	std::size_t rightHead = 0;
 public:
 	explicit AudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
@@ -22,13 +24,24 @@ public:
 		std::vector<float> buffer(
 			static_cast<std::size_t>(reader->frames() * reader->channels()));
 		reader->readFrames(&buffer[0], reader->frames());
-		for (std::size_t i = 0; i < buffer.size(); i += 2) {
+		for (std::size_t i = 0; i < buffer.size() - 1; i += 2) {
 			left.push_back(buffer[i]);
 			right.push_back(buffer[i + 1]);
 		}
 	}
 	std::vector<float> readLeftChannel(int samples) {
-		return std::vector<float>(left.begin(), left.begin() + samples);
+		const auto next = std::vector<float>(
+			left.begin() + leftHead, 
+			left.begin() + leftHead + samples);
+		leftHead += samples;
+		return next;
+	}
+	std::vector<float> readRightChannel(int samples) {
+		const auto next = std::vector<float>(
+			right.begin() + rightHead,
+			right.begin() + rightHead + samples);
+		rightHead += samples;
+		return next;
 	}
 };
 
@@ -54,7 +67,7 @@ public:
 	}
 	void readFrames(float *x, long long n) override
 	{
-		std::memcpy(x, &contents[0], static_cast<std::size_t>(n) * sizeof(float));
+		std::memcpy(x, &contents[0], static_cast<std::size_t>(n) * sizeof(float) * _channels);
 	}
 };
 
