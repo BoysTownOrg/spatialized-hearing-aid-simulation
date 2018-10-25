@@ -22,19 +22,34 @@ public:
 class MockAudioStream : public AudioStream {
 };
 
+class AudioDeviceControllerFacade {
+	AudioDeviceController controller;
+public:
+	explicit AudioDeviceControllerFacade(
+		std::shared_ptr<AudioDevice> device
+	) :
+		controller{ std::move(device), std::make_shared<MockAudioStream>() } {}
+
+	const AudioDeviceController *get() const {
+		return &controller;
+	}
+
+	void startStreaming() {
+		controller.startStreaming();
+	}
+};
+
 class AudioDeviceControllerTestCase : public ::testing::TestCase {};
 
 TEST(AudioDeviceControllerTestCase, constructorSetsItself) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto stream = std::make_shared<MockAudioStream>();
-	AudioDeviceController controller{ device, stream };
-	EXPECT_EQ(&controller, device->controller());
+	AudioDeviceControllerFacade controller{ device };
+	EXPECT_EQ(controller.get(), device->controller());
 }
 
 TEST(AudioDeviceControllerTestCase, startStreamingStartsStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto stream = std::make_shared<MockAudioStream>();
-	AudioDeviceController controller{ device, stream };
+	AudioDeviceControllerFacade controller{ device };
 	controller.startStreaming();
 	EXPECT_TRUE(device->streaming());
 }
