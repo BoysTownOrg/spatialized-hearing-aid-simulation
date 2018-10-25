@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioFileInMemory.h" />
+    <ClInclude Include="AudioFileReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFileInMemory.cpp" />

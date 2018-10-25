@@ -1,21 +1,12 @@
 #pragma once
 
-#include <common-includes/Interface.h>
-
-class AudioFileReader {
-public:
-	INTERFACE_OPERATIONS(AudioFileReader);
-	virtual long long frames() = 0;
-	virtual int channels() = 0;
-	virtual void readFrames(float *, long long) = 0;
-};
-
 #ifdef AUDIO_FILE_READING_EXPORTS
 	#define AUDIO_FILE_READING_API __declspec(dllexport)
 #else
 	#define AUDIO_FILE_READING_API __declspec(dllimport)
 #endif
 
+#include "AudioFileReader.h"
 #include <memory>
 #include <vector>
 
