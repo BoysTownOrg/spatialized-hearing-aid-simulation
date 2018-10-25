@@ -13,7 +13,6 @@
 class AudioFileInMemory {
 	std::vector<float> left;
 	std::vector<float> right;
-	std::size_t leftHead = 0;
 	std::size_t rightHead = 0;
 public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
