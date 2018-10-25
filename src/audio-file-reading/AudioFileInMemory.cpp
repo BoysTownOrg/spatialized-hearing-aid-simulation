@@ -3,6 +3,8 @@
 AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) {
 	std::vector<float> buffer(
 		static_cast<std::size_t>(reader->frames() * reader->channels()));
+	if (buffer.size() == 0)
+		return;
 	reader->readFrames(&buffer[0], reader->frames());
 	for (std::size_t i = 0; i < buffer.size() - 1; i += 2) {
 		left.push_back(buffer[i]);

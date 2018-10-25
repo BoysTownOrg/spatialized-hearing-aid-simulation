@@ -6,14 +6,14 @@ class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	int _channels{};
 public:
-	explicit MockAudioFileReader(std::vector<float> contents = {}) :
+	explicit MockAudioFileReader(std::vector<float> contents) :
 		contents{ std::move(contents) } {}
 	void setChannels(int c) {
 		_channels = c;
 	}
 	long long frames() override
 	{
-		return contents.size() / _channels;
+		return _channels == 0 ? 0 : contents.size() / _channels;
 	}
 	int channels() override
 	{
@@ -21,8 +21,10 @@ public:
 	}
 	void readFrames(float *x, long long n) override
 	{
+		if (contents.size() == 0)
+			return;
 		std::memcpy(
-			x, 
+			x,
 			&contents[0], 
 			static_cast<std::size_t>(n) * sizeof(float) * _channels);
 	}
@@ -31,7 +33,7 @@ public:
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileReadingTestCase, readEmptyFileReadsEmpty) {
-	const auto reader = std::make_shared<MockAudioFileReader>();
+	const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	AudioFileInMemory audioFile{ reader };
 	assertEqual({}, audioFile.readLeftChannel(0));
 	assertEqual({}, audioFile.readLeftChannel(1));
