@@ -19,5 +19,6 @@ public:
 		std::shared_ptr<AudioStream> stream
 	);
 	AUDIO_DEVICE_CONTROL_API void startStreaming();
+	AUDIO_DEVICE_CONTROL_API void stopStreaming();
 };
 

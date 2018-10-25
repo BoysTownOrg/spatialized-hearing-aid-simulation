@@ -12,3 +12,7 @@ AudioDeviceController::AudioDeviceController(
 void AudioDeviceController::startStreaming() {
 	device->startStream();
 }
+
+void AudioDeviceController::stopStreaming() {
+	device->stopStream();
+}

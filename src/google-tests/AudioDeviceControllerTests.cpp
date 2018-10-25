@@ -17,6 +17,9 @@ public:
 	void startStream() override {
 		_streaming = true;
 	}
+	void stopStream() override {
+		_streaming = false;
+	}
 };
 
 class MockAudioStream : public AudioStream {
@@ -36,6 +39,10 @@ public:
 
 	void startStreaming() {
 		controller.startStreaming();
+	}
+
+	void stopStreaming() {
+		controller.stopStreaming();
 	}
 };
 
