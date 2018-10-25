@@ -1,15 +1,5 @@
 #pragma once
 
-#include <common-includes/Interface.h>
-
-class AudioDeviceController;
-
-class AudioDevice {
-public:
-	INTERFACE_OPERATIONS(AudioDevice);
-	virtual void setController(AudioDeviceController *) = 0;
-};
-
 class AudioStream {};
 
 #ifdef AUDIO_DEVICE_CONTROL_EXPORTS
@@ -18,6 +8,7 @@ class AudioStream {};
 	#define AUDIO_DEVICE_CONTROL_API __declspec(dllimport)
 #endif
 
+#include "AudioDevice.h"
 #include <memory>
 
 class AudioDeviceController {

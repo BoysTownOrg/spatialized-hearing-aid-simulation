@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioDevice.h" />
     <ClInclude Include="AudioDeviceController.h" />
   </ItemGroup>
   <ItemGroup>
