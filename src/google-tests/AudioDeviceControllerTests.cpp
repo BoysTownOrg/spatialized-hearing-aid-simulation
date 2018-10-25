@@ -54,17 +54,11 @@ TEST(AudioDeviceControllerTestCase, constructorSetsItself) {
 	EXPECT_EQ(controller.get(), device->controller());
 }
 
-TEST(AudioDeviceControllerTestCase, startStreamingStartsStream) {
+TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	AudioDeviceControllerFacade controller{ device };
 	controller.startStreaming();
 	EXPECT_TRUE(device->streaming());
-}
-
-TEST(AudioDeviceControllerTestCase, stopStreamingStopsStream) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	AudioDeviceControllerFacade controller{ device };
-	controller.startStreaming();
 	controller.stopStreaming();
 	EXPECT_FALSE(device->streaming());
 }
