@@ -2,8 +2,13 @@
 
 AudioDeviceController::AudioDeviceController(
 	std::shared_ptr<AudioDevice> device, 
-	std::shared_ptr<AudioStream>
-)
+	std::shared_ptr<AudioStream> stream
+) :
+	device{ std::move(device) }
 {
-	device->setController(this);
+	this->device->setController(this);
+}
+
+void AudioDeviceController::startStreaming() {
+	device->startStream();
 }

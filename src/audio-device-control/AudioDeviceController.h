@@ -12,10 +12,12 @@ class AudioStream {};
 #include <memory>
 
 class AudioDeviceController {
+	std::shared_ptr<AudioDevice> device;
 public:
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice> device,
-		std::shared_ptr<AudioStream>
+		std::shared_ptr<AudioStream> stream
 	);
+	AUDIO_DEVICE_CONTROL_API void startStreaming();
 };
 

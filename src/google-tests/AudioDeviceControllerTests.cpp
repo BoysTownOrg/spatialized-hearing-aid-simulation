@@ -3,6 +3,7 @@
 
 class MockAudioDevice : public AudioDevice {
 	AudioDeviceController *_controller{};
+	bool _streaming{};
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -10,10 +11,15 @@ public:
 	void setController(AudioDeviceController *c) override {
 		_controller = c;
 	}
+	bool streaming() const {
+		return _streaming;
+	}
+	void startStream() override {
+		_streaming = true;
+	}
 };
 
 class MockAudioStream : public AudioStream {
-
 };
 
 class AudioDeviceControllerTestCase : public ::testing::TestCase {};
@@ -30,5 +36,5 @@ TEST(AudioDeviceControllerTestCase, startStreamingStartsStream) {
 	const auto stream = std::make_shared<MockAudioStream>();
 	AudioDeviceController controller{ device, stream };
 	controller.startStreaming();
-	EXPECT_TRUE(stream->streaming());
+	EXPECT_TRUE(device->streaming());
 }
