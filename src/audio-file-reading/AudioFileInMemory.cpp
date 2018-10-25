@@ -26,8 +26,8 @@ std::vector<float> AudioFileInMemory::readRightChannel(int samples) {
 	if (right.size() == 0)
 		return {};
 	const auto next = std::vector<float>(
-		right.begin() + rightHead,
-		right.begin() + rightHead + samples);
-	rightHead += samples;
+		right.begin(),
+		right.begin() + samples);
+	right.erase(right.begin(), right.begin() + samples);
 	return next;
 }
