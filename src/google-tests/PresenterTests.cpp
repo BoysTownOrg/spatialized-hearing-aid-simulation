@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
@@ -189,15 +190,6 @@ TEST(
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
 	EXPECT_EQ("a", view->brirFilePath());
-}
-
-static void assertEqual(
-	std::vector<std::string> expected,
-	std::vector<std::string> actual) 
-{
-	EXPECT_EQ(expected.size(), actual.size());
-	for (std::size_t i = 0; i < expected.size(); ++i)
-		EXPECT_EQ(expected.at(i), actual.at(i));
 }
 
 TEST(
