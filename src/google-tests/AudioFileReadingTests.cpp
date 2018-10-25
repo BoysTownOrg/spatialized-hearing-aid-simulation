@@ -35,12 +35,12 @@ class AudioFileReadingTestCase : public ::testing::TestCase {};
 TEST(AudioFileReadingTestCase, readEmptyFileReadsEmpty) {
 	const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	AudioFileInMemory audioFile{ reader };
-	assertEqual({}, audioFile.readLeftChannel(0));
-	assertEqual({}, audioFile.readLeftChannel(1));
-	assertEqual({}, audioFile.readLeftChannel(2));
-	assertEqual({}, audioFile.readRightChannel(0));
-	assertEqual({}, audioFile.readRightChannel(1));
-	assertEqual({}, audioFile.readRightChannel(2));
+	EXPECT_TRUE(audioFile.readLeftChannel(0).empty());
+	EXPECT_TRUE(audioFile.readLeftChannel(1).empty());
+	EXPECT_TRUE(audioFile.readLeftChannel(2).empty());
+	EXPECT_TRUE(audioFile.readRightChannel(0).empty());
+	EXPECT_TRUE(audioFile.readRightChannel(1).empty());
+	EXPECT_TRUE(audioFile.readRightChannel(2).empty());
 }
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
