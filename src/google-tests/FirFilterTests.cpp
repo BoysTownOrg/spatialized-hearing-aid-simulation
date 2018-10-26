@@ -45,13 +45,19 @@ TEST(FirFilterTestCase, testSimpleMovingSum) {
 	assertFilterOutput(FirFilter{ { 1, 1, 0 } }, { 1, 2, 3 }, { 1, 3, 5 });
 	assertFilterOutput(FirFilter{ { 1, 1, 0, 0 } }, { 1, 2, 3 }, { 1, 3, 5 });
 }
-/*
+
 TEST(FirFilterTestCase, testZeroIRWithSuccessiveCalls) {
 	FirFilter filter({ 0 });
-	assertAreEqual({ 0, 0, 0 }, filter({ 1, 2, 3 }));
-	assertAreEqual({ 0, 0, 0 }, filter({ 1, 2, 3 }));
-	assertAreEqual({ 0, 0, 0 }, filter({ 1, 2, 3 }));
+	std::vector<float> x = { 1, 2, 3 };
+	filter.process(&x[0], x.size());
+	assertEqual({ 0, 0, 0 }, x);
+	filter.process(&x[0], x.size());
+	assertEqual({ 0, 0, 0 }, x);
+	filter.process(&x[0], x.size());
+	assertEqual({ 0, 0, 0 }, x);
 }
+
+/*
 
 TEST(FirFilterTestCase, testIdentityFilterWithSuccessiveCalls) {
 	FirFilter filter({ 1 });
