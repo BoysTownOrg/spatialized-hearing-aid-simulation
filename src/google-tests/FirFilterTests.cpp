@@ -57,14 +57,18 @@ TEST(FirFilterTestCase, testZeroIRWithSuccessiveCalls) {
 	assertEqual({ 0, 0, 0 }, x);
 }
 
-/*
-
 TEST(FirFilterTestCase, testIdentityFilterWithSuccessiveCalls) {
 	FirFilter filter({ 1 });
-	assertAreEqual({ 1, 2, 3 }, filter({ 1, 2, 3 }));
-	assertAreEqual({ 4, 5, 6 }, filter({ 4, 5, 6 }));
-	assertAreEqual({ 1, 2, 3 }, filter({ 1, 2, 3 }));
+	std::vector<float> x = { 1, 2, 3 };
+	filter.process(&x[0], x.size());
+	assertEqual({ 1, 2, 3 }, x);
+	filter.process(&x[0], x.size());
+	assertEqual({ 1, 2, 3 }, x);
+	filter.process(&x[0], x.size());
+	assertEqual({ 1, 2, 3 }, x);
 }
+
+/*
 
 TEST(FirFilterTestCase, testSimpleMovingSumWithSuccessiveCalls) {
 	FirFilter filter({ 1, 1 });
