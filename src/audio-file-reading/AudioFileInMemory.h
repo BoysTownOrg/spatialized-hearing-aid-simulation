@@ -18,7 +18,7 @@ public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
 	);
-	AUDIO_FILE_READING_API int samplesRemaining();
+	AUDIO_FILE_READING_API int framesRemaining();
 	AUDIO_FILE_READING_API void read(float *left, float *right, int samples);
 };
 

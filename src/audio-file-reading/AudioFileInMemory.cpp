@@ -10,7 +10,7 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
 	reader->readFrames(&buffer[0], reader->frames());
 }
 
-int AudioFileInMemory::samplesRemaining()
+int AudioFileInMemory::framesRemaining()
 {
 	return 0;
 }

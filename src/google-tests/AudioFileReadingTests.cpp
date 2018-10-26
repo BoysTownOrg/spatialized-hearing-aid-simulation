@@ -36,11 +36,21 @@ public:
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
-TEST(AudioFileReadingTestCase, emptyFileHasZeroSamplesRemaining) {
+TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {
 	const auto reader =
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	AudioFileInMemory file{ reader };
-	EXPECT_EQ(0, file.samplesRemaining());
+	EXPECT_EQ(0, file.framesRemaining());
+}
+
+TEST(AudioFileReadingTestCase, readReducesFramesRemaining) {
+	const auto reader =
+		std::make_shared<MockAudioFileReader>(std::vector<float>{ 1, 2, 3 });
+	AudioFileInMemory file{ reader };
+	EXPECT_EQ(3, file.framesRemaining());
+	float x{};
+	file.read(&x, &x, 1);
+	EXPECT_EQ(2, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
