@@ -149,7 +149,6 @@ TEST(FirFilterTestCase, testNegativeCoefficients) {
 TEST(FirFilterTestCase, testPositiveAndNegativeCoefficients) {
 	FirFilterFacade filter({ -1, 1, 0, 1, -1 });
 	assertEqual({ -1, -1, -1, 0, 0 }, filter.process({ 1, 2, 3, 4, 5 }));
-	assertEqual({}, filter.process({}));
 	assertEqual({ 0, 0 }, filter.process({ 6, 7 }));
 	assertEqual({ 0, 0, 0 }, filter.process({ 8, 9, 10 }));
 }
