@@ -32,6 +32,28 @@ int LibsndfileReader::channels() {
 	return info.channels;
 }
 
+#include <audio-device-control/AudioDeviceController.h>
+
+class PortAudioDevice : public AudioDevice {
+	AudioDeviceController *controller{};
+public:
+	void setController(AudioDeviceController *) override;
+	void startStream() override;
+	void stopStream() override;
+};
+
+void PortAudioDevice::setController(AudioDeviceController *c) {
+	controller = c;
+}
+
+void PortAudioDevice::startStream() {
+	//TODO: implement
+}
+
+void PortAudioDevice::stopStream() {
+	//TODO: implement
+}
+
 #include <presentation/Presenter.h>
 #define WIN32
 #include <FL/Fl_Double_Window.H>
