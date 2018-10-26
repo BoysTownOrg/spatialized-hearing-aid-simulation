@@ -19,13 +19,9 @@ int AudioFileInMemory::framesRemaining()
 void AudioFileInMemory::read(float *left, float *right, int frames) {
 	int i = 0;
 	while (head < buffer.size() && i < frames) {
-		if (channels == 2) {
-			left[i] = buffer[head++];
-			right[i++] = buffer[head++];
-		}
-		else {
-			left[i] = buffer[head];
-			right[i++] = buffer[head++];
-		}
+		left[i] = buffer[head];
+		if (channels == 2)
+			++head;
+		right[i++] = buffer[head++];
 	}
 }
