@@ -12,6 +12,11 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) {
 	}
 }
 
+int AudioFileInMemory::samplesRemaining()
+{
+	return 0;
+}
+
 void AudioFileInMemory::readLeftChannel(float *x, int samples) {
 	int i = 0;
 	while (leftHead < left.size() && i < samples)
