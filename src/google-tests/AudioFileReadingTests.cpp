@@ -4,7 +4,7 @@
 
 class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
-	int _channels{};
+	int _channels = 1;
 public:
 	explicit MockAudioFileReader(std::vector<float> contents) :
 		contents{ std::move(contents) } {}

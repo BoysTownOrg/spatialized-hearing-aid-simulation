@@ -1,6 +1,8 @@
 #include "AudioFileInMemory.h"
 
 AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) {
+	if (reader->channels() == 0)
+		throw InvalidChannelCount{};
 	std::vector<float> buffer(
 		static_cast<std::size_t>(reader->frames() * reader->channels()));
 	if (buffer.size() == 0)

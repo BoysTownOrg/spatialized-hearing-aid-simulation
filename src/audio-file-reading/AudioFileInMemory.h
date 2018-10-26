@@ -16,6 +16,7 @@ class AudioFileInMemory {
 	std::size_t leftHead = 0;
 	std::size_t rightHead = 0;
 public:
+	class InvalidChannelCount {};
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
 	);
