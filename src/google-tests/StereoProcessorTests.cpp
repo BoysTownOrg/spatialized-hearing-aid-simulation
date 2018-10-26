@@ -19,7 +19,7 @@ public:
 
 class StereoProcessorTestCase : public ::testing::TestCase {};
 
-TEST(StereoProcessorTestCase, tbd) {
+TEST(StereoProcessorTestCase, processProcessesLeftAndRight) {
 	const auto left = std::make_shared<MockMonoProcessor>();
 	const auto right = std::make_shared<MockMonoProcessor>();
 	StereoProcessor stereo{ left, right };
