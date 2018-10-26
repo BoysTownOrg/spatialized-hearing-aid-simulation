@@ -36,6 +36,13 @@ public:
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
+TEST(AudioFileReadingTestCase, tbd) {
+	const auto reader =
+		std::make_shared<MockAudioFileReader>(std::vector<float>{});
+	AudioFileInMemory file{ reader };
+	EXPECT_EQ(0, file.samplesRemaining());
+}
+
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
 	const auto reader = 
 		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4, 5, 6 });
