@@ -1,4 +1,31 @@
+class MonoProcessor {};
+
+#include <memory>
+
+class StereoProcessor {
+public:
+	StereoProcessor(
+		std::shared_ptr<MonoProcessor> left,
+		std::shared_ptr<MonoProcessor> right
+	) {}
+	void process(float *, float *, int ) {
+
+	}
+};
+
 #include <gtest/gtest.h>
+
+class MockMonoProcessor : public MonoProcessor {
+	float *_signal{};
+	int _frameCount{};
+public:
+	const float *signal() const {
+		return _signal;
+	}
+	int frames() const {
+		return _frameCount;
+	}
+};
 
 class StereoProcessorTestCase : public ::testing::TestCase {};
 
