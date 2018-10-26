@@ -151,6 +151,7 @@
     <ClCompile Include="AudioFileReadingTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
+    <ClCompile Include="StereoProcessorTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
