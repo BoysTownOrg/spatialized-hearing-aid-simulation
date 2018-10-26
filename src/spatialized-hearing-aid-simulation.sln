@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "audio-device-control", "aud
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "audio-file-reading", "audio-file-reading\audio-file-reading.vcxproj", "{49E34B8E-1578-4405-A9D4-3A01039A0543}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "main", "main\main.vcxproj", "{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,6 +69,14 @@ Global
 		{49E34B8E-1578-4405-A9D4-3A01039A0543}.Release|x64.Build.0 = Release|x64
 		{49E34B8E-1578-4405-A9D4-3A01039A0543}.Release|x86.ActiveCfg = Release|Win32
 		{49E34B8E-1578-4405-A9D4-3A01039A0543}.Release|x86.Build.0 = Release|Win32
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Debug|x64.ActiveCfg = Debug|x64
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Debug|x64.Build.0 = Debug|x64
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Debug|x86.ActiveCfg = Debug|Win32
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Debug|x86.Build.0 = Debug|Win32
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x64.ActiveCfg = Release|x64
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x64.Build.0 = Release|x64
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x86.ActiveCfg = Release|Win32
+		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
