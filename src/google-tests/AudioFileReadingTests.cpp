@@ -66,20 +66,20 @@ TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
 	EXPECT_EQ(5, left);
 	EXPECT_EQ(6, right);
 }
-/*
+
 TEST(AudioFileReadingTestCase, readChannelReadsNothingWhenExhausted) {
 	const auto reader =
 		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4 });
 	reader->setChannels(2);
-	AudioFileInMemory audioFile{ reader };
-	float x{};
-	audioFile.readLeftChannel(&x, 1);
-	audioFile.readLeftChannel(&x, 1);
-	EXPECT_EQ(3, x);
-	audioFile.readRightChannel(&x, 1);
-	audioFile.readRightChannel(&x, 1);
-	EXPECT_EQ(4, x);
+	AudioFileInMemory file{ reader };
+	float left{};
+	float right{};
+	file.read(&left, &right, 1);
+	file.read(&left, &right, 1);
+	EXPECT_EQ(3, left);
+	EXPECT_EQ(4, right);
 }
+/*
 
 TEST(AudioFileReadingTestCase, readChannelReadsLessThanRequested) {
 	const auto reader =
