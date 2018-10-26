@@ -1,6 +1,6 @@
-#include "assert-utility.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
+#include <vector>
 
 class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
@@ -34,6 +34,31 @@ public:
 	}
 };
 
+class AudioFileInMemoryFacade {
+	AudioFileInMemory file;
+public:
+	explicit AudioFileInMemoryFacade(std::shared_ptr<AudioFileReader> reader) :
+		file{ std::move(reader) } {}
+
+	static AudioFileInMemoryFacade Stereo(std::vector<float> contents) {
+		const auto reader =
+			std::make_shared<MockAudioFileReader>(std::move(contents));
+		reader->setChannels(2);
+		return AudioFileInMemoryFacade{ std::move(reader) };
+	}
+
+	static AudioFileInMemoryFacade Mono(std::vector<float> contents) {
+		const auto reader =
+			std::make_shared<MockAudioFileReader>(std::move(contents));
+		reader->setChannels(1);
+		return AudioFileInMemoryFacade{ std::move(reader) };
+	}
+
+	int framesRemaining() {
+		return file.framesRemaining();
+	}
+};
+
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
@@ -50,9 +75,7 @@ TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
 }
 
 TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{});
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Mono({});
 	EXPECT_EQ(0, file.framesRemaining());
 }
 
