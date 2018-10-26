@@ -11,6 +11,7 @@
 class FirFilter {
 	const std::vector<float> b;
 	std::vector<float> delayLine;
+	std::vector<float> nextDelayLine;
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
@@ -18,5 +19,5 @@ public:
 
 private:
 	void filter(float *, int);
-	void updateDelayLine(float *x, int n);
+	void updateNextDelayLine(float *x, int n);
 };
