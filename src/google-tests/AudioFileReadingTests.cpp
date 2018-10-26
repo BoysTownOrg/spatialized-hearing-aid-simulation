@@ -4,10 +4,14 @@
 
 class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
-	int _channels = 1;
+	int _channels;
 public:
-	explicit MockAudioFileReader(std::vector<float> contents) :
-		contents{ std::move(contents) } {}
+	MockAudioFileReader(
+		std::vector<float> contents,
+		int _channels = 1
+	) :
+		contents{ std::move(contents) },
+		_channels(_channels) {}
 
 	void setChannels(int c) {
 		_channels = c;
@@ -37,21 +41,21 @@ public:
 class AudioFileInMemoryFacade {
 	AudioFileInMemory file;
 public:
-	explicit AudioFileInMemoryFacade(std::shared_ptr<AudioFileReader> reader) :
-		file{ std::move(reader) } {}
+	AudioFileInMemoryFacade(
+		std::vector<float> contents,
+		int _channels
+	) :
+		file { 
+			std::make_shared<MockAudioFileReader>(
+				std::move(contents), 
+				_channels)} {}
 
 	static AudioFileInMemoryFacade Stereo(std::vector<float> contents) {
-		const auto reader =
-			std::make_shared<MockAudioFileReader>(std::move(contents));
-		reader->setChannels(2);
-		return AudioFileInMemoryFacade{ std::move(reader) };
+		return AudioFileInMemoryFacade{ std::move(contents), 2 };
 	}
 
 	static AudioFileInMemoryFacade Mono(std::vector<float> contents) {
-		const auto reader =
-			std::make_shared<MockAudioFileReader>(std::move(contents));
-		reader->setChannels(1);
-		return AudioFileInMemoryFacade{ std::move(reader) };
+		return AudioFileInMemoryFacade{ std::move(contents), 1 };
 	}
 
 	int framesRemaining() const {
