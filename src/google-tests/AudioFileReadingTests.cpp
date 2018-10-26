@@ -36,11 +36,18 @@ public:
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
-TEST(AudioFileReadingTestCase, tbd) {
+TEST(AudioFileReadingTestCase, emptyFileHasZeroSamplesRemaining) {
 	const auto reader =
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	AudioFileInMemory file{ reader };
 	EXPECT_EQ(0, file.samplesRemaining());
+}
+
+TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
+	const auto reader =
+		std::make_shared<MockAudioFileReader>(std::vector<float>{});
+	reader->setChannels(0);
+	EXPECT_THROW(AudioFileInMemory file{ reader }, AudioFileInMemory::InvalidChannelCount);
 }
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
