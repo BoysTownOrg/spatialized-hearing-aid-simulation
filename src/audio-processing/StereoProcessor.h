@@ -7,22 +7,21 @@ public:
 	virtual void process(float *, int) = 0;
 };
 
+#ifdef AUDIO_PROCESSING_EXPORTS
+	#define AUDIO_PROCESSING_API __declspec(dllexport)
+#else
+	#define AUDIO_PROCESSING_API __declspec(dllimport)
+#endif
+
 #include <memory>
 
 class StereoProcessor {
 	std::shared_ptr<MonoProcessor> left;
 	std::shared_ptr<MonoProcessor> right;
 public:
-	StereoProcessor(
+	AUDIO_PROCESSING_API StereoProcessor(
 		std::shared_ptr<MonoProcessor> left,
-		std::shared_ptr<MonoProcessor> right
-	) :
-		left{ std::move(left) },
-		right{ std::move(right) } {}
-
-	void process(float *xLeft, float *xRight, int frameCount) {
-		left->process(xLeft, frameCount);
-		right->process(xRight, frameCount);
-	}
+		std::shared_ptr<MonoProcessor> right);
+	AUDIO_PROCESSING_API void process(float *xLeft, float *xRight, int frameCount);
 };
 
