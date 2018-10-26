@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MonoProcessor.h" />
     <ClInclude Include="StereoProcessor.h" />
   </ItemGroup>
   <ItemGroup>

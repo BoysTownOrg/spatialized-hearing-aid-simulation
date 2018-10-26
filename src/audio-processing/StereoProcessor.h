@@ -1,11 +1,4 @@
 #pragma once
-#include <common-includes/Interface.h>
-
-class MonoProcessor {
-public:
-	INTERFACE_OPERATIONS(MonoProcessor);
-	virtual void process(float *, int) = 0;
-};
 
 #ifdef AUDIO_PROCESSING_EXPORTS
 	#define AUDIO_PROCESSING_API __declspec(dllexport)
@@ -13,6 +6,7 @@ public:
 	#define AUDIO_PROCESSING_API __declspec(dllimport)
 #endif
 
+#include "MonoProcessor.h"
 #include <memory>
 
 class StereoProcessor {
