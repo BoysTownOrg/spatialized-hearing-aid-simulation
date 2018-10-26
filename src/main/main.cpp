@@ -39,7 +39,6 @@ int LibsndfileReader::channels() {
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl.H>
-#include <FL/fl_ask.H>
 
 class FltkWindow : public View
 {
