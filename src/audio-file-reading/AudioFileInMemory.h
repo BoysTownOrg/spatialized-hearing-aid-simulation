@@ -11,17 +11,14 @@
 #include <vector>
 
 class AudioFileInMemory {
-	std::vector<float> left;
-	std::vector<float> right;
-	std::size_t leftHead = 0;
-	std::size_t rightHead = 0;
+	std::vector<float> buffer;
+	std::size_t head = 0;
 public:
 	class InvalidChannelCount {};
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
 	);
 	AUDIO_FILE_READING_API int samplesRemaining();
-	AUDIO_FILE_READING_API void readLeftChannel(float *x, int samples);
-	AUDIO_FILE_READING_API void readRightChannel(float *x, int samples);
+	AUDIO_FILE_READING_API void read(float *left, float *right, int samples);
 };
 
