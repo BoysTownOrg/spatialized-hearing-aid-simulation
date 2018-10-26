@@ -9,16 +9,11 @@
 #include <vector>
 
 class FirFilter {
+	// Order important for construction.
 	const std::vector<float> b;
 	std::vector<float> delayLine;
-	std::vector<float> nextDelayLine;
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
 	FIR_FILTERING_API void process(float *, int);
-
-private:
-	void saveNextDelayLine(float *x, int n);
-	void filter(float *, int);
-	void updateDelayLine();
 };
