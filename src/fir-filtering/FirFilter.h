@@ -8,17 +8,15 @@
 
 #include <vector>
 
-template<typename T>
 class FirFilter {
-	using vector = std::vector<T>;
-	const vector b;
-	vector delayLine;
+	const std::vector<float> b;
+	std::vector<float> delayLine;
 public:
 	class InvalidCoefficients {};
-	FIR_FILTERING_API explicit FirFilter(vector b);
-	FIR_FILTERING_API void process(T *, int);
+	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
+	FIR_FILTERING_API void process(float *, int);
 
 private:
-	void filter(T *, int);
-	void updateDelayLine(T *x, int n);
+	void filter(float *, int);
+	void updateDelayLine(float *x, int n);
 };
