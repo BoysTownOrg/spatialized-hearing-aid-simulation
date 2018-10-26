@@ -2,6 +2,17 @@
 #include <fir-filtering/FirFilter.h>
 #include <gtest/gtest.h>
 
+class FirFilterFacade {
+	FirFilter filter;
+public:
+	explicit FirFilterFacade(std::vector<float> b) :
+		filter{ std::move(b) } {}
+	std::vector<float> process(std::vector<float> x) {
+		filter.process(&x[0], x.size());
+		return x;
+	}
+};
+
 class FirFilterTestCase : public ::testing::TestCase {};
 
 TEST(FirFilterTestCase, testEmptyCoefficientsThrowsException) {
@@ -47,14 +58,10 @@ TEST(FirFilterTestCase, testSimpleMovingSum) {
 }
 
 TEST(FirFilterTestCase, testZeroIRWithSuccessiveCalls) {
-	FirFilter filter({ 0 });
-	std::vector<float> x = { 1, 2, 3 };
-	filter.process(&x[0], x.size());
-	assertEqual({ 0, 0, 0 }, x);
-	filter.process(&x[0], x.size());
-	assertEqual({ 0, 0, 0 }, x);
-	filter.process(&x[0], x.size());
-	assertEqual({ 0, 0, 0 }, x);
+	FirFilterFacade filter{ { 0 } };
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
 }
 
 TEST(FirFilterTestCase, testIdentityFilterWithSuccessiveCalls) {
