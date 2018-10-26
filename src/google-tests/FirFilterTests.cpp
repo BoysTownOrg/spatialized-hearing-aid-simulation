@@ -14,9 +14,9 @@ static void assertFilterOutput(
 	std::vector<float> output);
 
 TEST(FirFilterTestCase, testZeroIR) {
-	assertFilterOutput(FirFilter({ 0 }), { 1, 2, 3 }, { 0, 0, 0 });
-	assertFilterOutput(FirFilter({ 0, 0 }), { 1, 2, 3 }, { 0, 0, 0 });
-	assertFilterOutput(FirFilter({ 0, 0, 0 }), { 1, 2, 3 }, { 0, 0, 0 });
+	assertFilterOutput(FirFilter{ { 0 } }, { 1, 2, 3 }, { 0, 0, 0 });
+	assertFilterOutput(FirFilter{ { 0, 0 } }, { 1, 2, 3 }, { 0, 0, 0 });
+	assertFilterOutput(FirFilter{ { 0, 0, 0 } }, { 1, 2, 3 }, { 0, 0, 0 });
 }
 
 void assertFilterOutput(
@@ -29,21 +29,21 @@ void assertFilterOutput(
 }
 
 TEST(FirFilterTestCase, testIdentityFilter) {
-	assertFilterOutput(FirFilter({ 1 }), { 1, 2, 3 }, { 1, 2, 3 });
-	assertFilterOutput(FirFilter({ 1, 0 }), { 1, 2, 3 }, { 1, 2, 3 });
-	assertFilterOutput(FirFilter({ 1, 0, 0 }), { 1, 2, 3 }, { 1, 2, 3 });
+	assertFilterOutput(FirFilter{ { 1 } }, { 1, 2, 3 }, { 1, 2, 3 });
+	assertFilterOutput(FirFilter{ { 1, 0 } }, { 1, 2, 3 }, { 1, 2, 3 });
+	assertFilterOutput(FirFilter{ { 1, 0, 0 } }, { 1, 2, 3 }, { 1, 2, 3 });
 }
 
 TEST(FirFilterTestCase, testDoublingFilter) {
-	assertFilterOutput(FirFilter({ 2 }), { 1, 2, 3 }, { 2, 4, 6 });
-	assertFilterOutput(FirFilter({ 2, 0 }), { 1, 2, 3 }, { 2, 4, 6 });
-	assertFilterOutput(FirFilter({ 2, 0, 0 }), { 1, 2, 3 }, { 2, 4, 6 });
+	assertFilterOutput(FirFilter{ { 2 } }, { 1, 2, 3 }, { 2, 4, 6 });
+	assertFilterOutput(FirFilter{ { 2, 0 } }, { 1, 2, 3 }, { 2, 4, 6 });
+	assertFilterOutput(FirFilter{ { 2, 0, 0 } }, { 1, 2, 3 }, { 2, 4, 6 });
 }
 
 TEST(FirFilterTestCase, testSimpleMovingSum) {
-	assertFilterOutput(FirFilter({ 1, 1 }), { 1, 2, 3 }, { 1, 3, 5 });
-	assertFilterOutput(FirFilter({ 1, 1, 0 }), { 1, 2, 3 }, { 1, 3, 5 });
-	assertFilterOutput(FirFilter({ 1, 1, 0, 0 }), { 1, 2, 3 }, { 1, 3, 5 });
+	assertFilterOutput(FirFilter{ { 1, 1 } }, { 1, 2, 3 }, { 1, 3, 5 });
+	assertFilterOutput(FirFilter{ { 1, 1, 0 } }, { 1, 2, 3 }, { 1, 3, 5 });
+	assertFilterOutput(FirFilter{ { 1, 1, 0, 0 } }, { 1, 2, 3 }, { 1, 3, 5 });
 }
 /*
 TEST(FirFilterTestCase, testZeroIRWithSuccessiveCalls) {
