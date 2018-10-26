@@ -12,16 +12,12 @@ FirFilter::FirFilter(std::vector<float> b) :
 void FirFilter::process(float *x, int n) {
 	const auto size = static_cast<std::size_t>(n);
 	for (std::size_t i = 0; i < size; ++i) {
-		for (std::size_t k = 0; k + 1 < delayLine.size(); ++k)
-			delayLine[k] = delayLine[k + 1];
+		for (std::size_t j = 0; j + 1 < delayLine.size(); ++j)
+			delayLine[j] = delayLine[j + 1];
 		delayLine.back() = x[i];
 		float accumulate = 0;
-		for (
-			std::size_t coefficientIndex = 0;
-			coefficientIndex < b.size();
-			++coefficientIndex
-			)
-			accumulate += b[coefficientIndex] * *(delayLine.end() - coefficientIndex - 1);
+		for (std::size_t j = 0; j < b.size(); ++j)
+			accumulate += b[j] * *(delayLine.end() - j - 1);
 		x[i] = accumulate;
 	}
 }
