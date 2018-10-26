@@ -65,27 +65,17 @@ TEST(FirFilterTestCase, testZeroIRWithSuccessiveCalls) {
 }
 
 TEST(FirFilterTestCase, testIdentityFilterWithSuccessiveCalls) {
-	FirFilter filter({ 1 });
-	std::vector<float> x = { 1, 2, 3 };
-	filter.process(&x[0], x.size());
-	assertEqual({ 1, 2, 3 }, x);
-	filter.process(&x[0], x.size());
-	assertEqual({ 1, 2, 3 }, x);
-	filter.process(&x[0], x.size());
-	assertEqual({ 1, 2, 3 }, x);
+	FirFilterFacade filter{ { 1 } };
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
 }
 
 TEST(FirFilterTestCase, testSimpleMovingSumWithSuccessiveCalls) {
-	FirFilter filter({ 1, 1 });
-	std::vector<float> x = { 1, 2, 3 };
-	filter.process(&x[0], x.size());
-	assertEqual({ 1, 3, 5 }, x);
-	x = { 1, 2, 3 };
-	filter.process(&x[0], x.size());
-	assertEqual({ 4, 3, 5 }, x);
-	x = { 1, 2, 3 };
-	filter.process(&x[0], x.size());
-	assertEqual({ 4, 3, 5 }, x);
+	FirFilterFacade filter{ { 1, 1 } };
+	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 4, 3, 5 }, filter.process({ 1, 2, 3 }));
+	assertEqual({ 4, 3, 5 }, filter.process({ 1, 2, 3 }));
 }
 /*
 TEST(FirFilterTestCase, testSimpleMovingSumWithIncreasingInputSize) {
