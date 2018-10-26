@@ -43,6 +43,13 @@ TEST(AudioFileReadingTestCase, emptyFileHasZeroSamplesRemaining) {
 	EXPECT_EQ(0, file.samplesRemaining());
 }
 
+TEST(AudioFileReadingTestCase, missingSamplesThrows) {
+	const auto reader =
+		std::make_shared<MockAudioFileReader>(std::vector<float>{ 4, 5, 6 });
+	reader->setChannels(2);
+	EXPECT_THROW(AudioFileInMemory file{ reader }, AudioFileInMemory::InvalidFrameCount);
+}
+
 TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
 	const auto reader =
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
@@ -79,18 +86,3 @@ TEST(AudioFileReadingTestCase, readChannelReadsNothingWhenExhausted) {
 	EXPECT_EQ(3, left);
 	EXPECT_EQ(4, right);
 }
-/*
-
-TEST(AudioFileReadingTestCase, readChannelReadsLessThanRequested) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4 });
-	reader->setChannels(2);
-	AudioFileInMemory audioFile{ reader };
-	float x[2] = {};
-	audioFile.readLeftChannel(x, 2);
-	EXPECT_EQ(3, x[0]);
-	EXPECT_EQ(0, x[1]);
-	audioFile.readRightChannel(x, 2);
-	EXPECT_EQ(4, x[0]);
-	EXPECT_EQ(0, x[1]);
-}*/
