@@ -18,6 +18,7 @@ public:
 	FIR_FILTERING_API void process(float *, int);
 
 private:
+	void saveNextDelayLine(float *x, int n);
 	void filter(float *, int);
-	void updateNextDelayLine(float *x, int n);
+	void updateDelayLine();
 };

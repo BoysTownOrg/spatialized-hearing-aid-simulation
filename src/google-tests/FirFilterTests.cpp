@@ -99,7 +99,10 @@ TEST(FirFilterTestCase, testSimpleMovingSumWithChangingInputSize) {
 	assertEqual({ 15, 17 }, filter.process({ 8, 9 }));
 }
 
-TEST(FirFilterTestCase, testSimpleMovingSumWithInputSizeGoingAboveAndBelowCoefficientLength) {
+TEST(
+	FirFilterTestCase, 
+	testSimpleMovingSumWithInputSizeGoingAboveAndBelowCoefficientLength) 
+{
 	FirFilterFacade filter({ 1, 1 });
 	assertEqual({ 1 }, filter.process({ 1 }));
 	assertEqual({ 3, 5 }, filter.process({ 2, 3 }));
@@ -143,7 +146,9 @@ TEST(FirFilterTestCase, testPositiveCoefficients) {
 TEST(FirFilterTestCase, testNegativeCoefficients) {
 	FirFilterFacade filter({ -4, -2, -3, -5 });
 	assertEqual({ -4, -10, -19 }, filter.process({ 1, 2, 3 }));
-	assertEqual({ -33, -47, -61, -75, -89, -103, -117 }, filter.process({ 4, 5, 6, 7, 8, 9, 10 }));
+	assertEqual(
+		{ -33, -47, -61, -75, -89, -103, -117 }, 
+		filter.process({ 4, 5, 6, 7, 8, 9, 10 }));
 }
 
 TEST(FirFilterTestCase, testPositiveAndNegativeCoefficients) {
