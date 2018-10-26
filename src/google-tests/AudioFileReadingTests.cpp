@@ -54,8 +54,17 @@ public:
 		return AudioFileInMemoryFacade{ std::move(reader) };
 	}
 
-	int framesRemaining() {
+	int framesRemaining() const {
 		return file.framesRemaining();
+	}
+
+	void readFrames(int frames) {
+		std::vector<float> x(frames);
+		file.read(&x[0], &x[0], frames);
+	}
+
+	void read(float *left, float *right, int frames) {
+		file.read(left, right, frames);
 	}
 };
 
@@ -75,31 +84,25 @@ TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
 }
 
 TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {
-	auto file = AudioFileInMemoryFacade::Mono({});
+	const auto file = AudioFileInMemoryFacade::Mono({});
 	EXPECT_EQ(0, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, readReducesFramesRemaining) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 1, 2, 3 });
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Mono({ 1, 2, 3 });
 	EXPECT_EQ(3, file.framesRemaining());
-	float x{};
-	file.read(&x, &x, 1);
+	file.readFrames(1);
 	EXPECT_EQ(2, file.framesRemaining());
-	file.read(&x, &x, 1);
+	file.readFrames(1);
 	EXPECT_EQ(1, file.framesRemaining());
-	file.read(&x, &x, 1);
+	file.readFrames(1);
 	EXPECT_EQ(0, file.framesRemaining());
-	file.read(&x, &x, 1);
+	file.readFrames(1);
 	EXPECT_EQ(0, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
-	const auto reader = 
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4, 5, 6 });
-	reader->setChannels(2);
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Stereo({ 3, 4, 5, 6 });
 	float left{};
 	float right{};
 	file.read(&left, &right, 1);
@@ -111,10 +114,7 @@ TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
 }
 
 TEST(AudioFileReadingTestCase, readNothingWhenExhausted) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4 });
-	reader->setChannels(2);
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Stereo({ 3, 4 });
 	float left{};
 	float right{};
 	file.read(&left, &right, 1);
@@ -124,10 +124,7 @@ TEST(AudioFileReadingTestCase, readNothingWhenExhausted) {
 }
 
 TEST(AudioFileReadingTestCase, readLessThanRequested) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4 });
-	reader->setChannels(2);
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Stereo({ 3, 4 });
 	float left[2]{};
 	float right[2]{};
 	file.read(left, right, 2);
@@ -138,10 +135,7 @@ TEST(AudioFileReadingTestCase, readLessThanRequested) {
 }
 
 TEST(AudioFileReadingTestCase, readMonoFileCopiesLeftChannelToRight) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{ 3, 4 });
-	reader->setChannels(1);
-	AudioFileInMemory file{ reader };
+	auto file = AudioFileInMemoryFacade::Mono({ 3, 4 });
 	float left{};
 	float right{};
 	file.read(&left, &right, 1);
