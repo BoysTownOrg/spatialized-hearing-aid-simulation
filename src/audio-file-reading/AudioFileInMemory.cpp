@@ -1,9 +1,10 @@
 #include "AudioFileInMemory.h"
 
 AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
-	buffer(static_cast<std::size_t>(reader->frames() * reader->channels())) 
+	buffer(static_cast<std::size_t>(reader->frames() * reader->channels())),
+	channels(reader->channels())
 {
-	if (!(reader->channels() == 1 || reader->channels() == 2))
+	if (!(channels == 1 || channels == 2))
 		throw InvalidChannelCount{};
 	if (buffer.size() == 0)
 		return;
@@ -12,13 +13,19 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
 
 int AudioFileInMemory::framesRemaining()
 {
-	return 0;
+	return buffer.size() - head;
 }
 
-void AudioFileInMemory::read(float *left, float *right, int samples) {
+void AudioFileInMemory::read(float *left, float *right, int frames) {
 	int i = 0;
-	while (head < buffer.size() && i < samples) {
-		left[i] = buffer[head++];
-		right[i++] = buffer[head++];
+	while (head < buffer.size() && i < frames) {
+		if (channels == 2) {
+			left[i] = buffer[head++];
+			right[i++] = buffer[head++];
+		}
+		else {
+			left[i] = buffer[head];
+			right[i++] = buffer[head++];
+		}
 	}
 }

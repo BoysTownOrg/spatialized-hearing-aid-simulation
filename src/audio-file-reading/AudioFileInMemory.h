@@ -12,6 +12,7 @@
 
 class AudioFileInMemory {
 	std::vector<float> buffer;
+	int channels;
 	std::size_t head = 0;
 public:
 	class InvalidChannelCount {};

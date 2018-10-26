@@ -29,7 +29,7 @@ private:
 
 class MockFilterbankCompressor : public FilterbankCompressor {
 	std::string _processingLog{};
-	int _chunkSize{};
+	int _chunkSize = 1;
 	int _compressInputChunkSize{};
 	int _filterbankAnalyzeChunkSize{};
 	int _compressChannelsChunkSize{};
@@ -86,7 +86,7 @@ public:
 		return _chunkSize;
 	}
 	int channels() const override {
-		return {};
+		return 1;
 	}
 };
 
@@ -150,10 +150,10 @@ public:
 		*output *= 13;
 	}
 	int chunkSize() const override {
-		return {};
+		return 1;
 	}
 	int channels() const override {
-		return {};
+		return 1;
 	}
 };
 
