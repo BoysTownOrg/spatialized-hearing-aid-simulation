@@ -48,6 +48,8 @@ TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	reader->setChannels(0);
 	EXPECT_THROW(AudioFileInMemory file{ reader }, AudioFileInMemory::InvalidChannelCount);
+	reader->setChannels(3);
+	EXPECT_THROW(AudioFileInMemory file{ reader }, AudioFileInMemory::InvalidChannelCount);
 }
 
 TEST(AudioFileReadingTestCase, readChannelsSampleBySample) {
