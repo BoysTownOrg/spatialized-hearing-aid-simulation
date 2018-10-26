@@ -51,6 +51,12 @@ TEST(AudioFileReadingTestCase, readReducesFramesRemaining) {
 	float x{};
 	file.read(&x, &x, 1);
 	EXPECT_EQ(2, file.framesRemaining());
+	file.read(&x, &x, 1);
+	EXPECT_EQ(1, file.framesRemaining());
+	file.read(&x, &x, 1);
+	EXPECT_EQ(0, file.framesRemaining());
+	file.read(&x, &x, 1);
+	EXPECT_EQ(0, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
