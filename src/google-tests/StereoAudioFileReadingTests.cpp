@@ -1,4 +1,4 @@
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading/StereoAudioFileInMemory.h>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -39,7 +39,7 @@ public:
 };
 
 class AudioFileInMemoryFacade {
-	AudioFileInMemory file;
+	StereoAudioFileInMemory file;
 public:
 	AudioFileInMemoryFacade(
 		std::vector<float> contents,
@@ -79,12 +79,12 @@ TEST(AudioFileReadingTestCase, constructorThrowsIfNotSignalOrStereo) {
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	reader->setChannels(0);
 	EXPECT_THROW(
-		AudioFileInMemory file{ reader }, 
-		AudioFileInMemory::InvalidChannelCount);
+		StereoAudioFileInMemory file{ reader }, 
+		StereoAudioFileInMemory::InvalidChannelCount);
 	reader->setChannels(3);
 	EXPECT_THROW(
-		AudioFileInMemory file{ reader }, 
-		AudioFileInMemory::InvalidChannelCount);
+		StereoAudioFileInMemory file{ reader }, 
+		StereoAudioFileInMemory::InvalidChannelCount);
 }
 
 TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {

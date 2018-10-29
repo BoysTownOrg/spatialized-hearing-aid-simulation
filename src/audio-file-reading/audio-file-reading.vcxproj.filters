@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFileInMemory.h">
+    <ClInclude Include="AudioFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioFileReader.h">
+    <ClInclude Include="StereoAudioFileInMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioFileInMemory.cpp">
+    <ClCompile Include="StereoAudioFileInMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

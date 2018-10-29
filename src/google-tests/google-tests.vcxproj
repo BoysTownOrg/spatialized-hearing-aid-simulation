@@ -148,10 +148,10 @@
   <ItemGroup>
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioDeviceControllerTests.cpp" />
-    <ClCompile Include="AudioFileReadingTests.cpp" />
+    <ClCompile Include="StereoAudioFileReadingTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />
-    <ClCompile Include="MonoProcessingChainTests.cpp" />
+    <ClCompile Include="SignalProcessingChainTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
     <ClCompile Include="StereoProcessorTests.cpp" />
   </ItemGroup>
