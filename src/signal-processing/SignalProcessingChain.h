@@ -1,6 +1,6 @@
 #pragma once
 
-#include "audio-processing-exports.h"
+#include "signal-processing-exports.h"
 #include "SignalProcessor.h"
 #include <memory>
 #include <vector>
