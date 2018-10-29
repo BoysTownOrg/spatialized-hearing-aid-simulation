@@ -1,6 +1,38 @@
 #include <audio-stream-processing/ProcessedAudioStream.h>
 #include <gtest/gtest.h>
 
+class MockAudioReader : public AudioReader {
+	int _frameCount{};
+	float **_channels{};
+public:
+	int frameCount() const {
+		return _frameCount;
+	}
+	const float *const *channels() const {
+		return _channels;
+	}
+	void read(float ** channels, int frameCount) override {
+		_channels = channels;
+		_frameCount = frameCount;
+	}
+};
+
+class MockAudioProcessor : public AudioProcessor {
+	int _frameCount{};
+	float **_channels{};
+public:
+	int frameCount() const {
+		return _frameCount;
+	}
+	const float *const *channels() const {
+		return _channels;
+	}
+	void process(float ** channels, int frameCount) override {
+		_channels = channels;
+		_frameCount = frameCount;
+	}
+};
+
 class ReadsAOne : public AudioReader {
 	void read(float ** channels, int) override {
 		*channels[0] = 1;
