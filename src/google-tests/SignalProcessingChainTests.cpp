@@ -34,5 +34,5 @@ TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
 	float x{};
 	chain.process(&x, 1);
 	EXPECT_EQ(&x, processor->signal());
-	EXPECT_EQ(1, processor->frames());
+	EXPECT_EQ(1, processor->samples());
 }
