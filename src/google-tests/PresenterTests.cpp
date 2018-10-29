@@ -130,9 +130,12 @@ TEST(
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
 	view->setLeftDslPrescriptionFilePath("a");
+	view->setRightDslPrescriptionFilePath("b");
 	view->setBrowseCancelled();
 	view->browseForLeftDslPrescription();
 	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	view->browseForRightDslPrescription();
+	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
