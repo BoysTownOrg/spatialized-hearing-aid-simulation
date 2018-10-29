@@ -11,11 +11,11 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
-class ProcessedAudioStream : public AudioFrameReader {
+class ProcessedAudioFrameReader : public AudioFrameReader {
 	std::shared_ptr<AudioFrameReader> reader;
 	std::shared_ptr<AudioProcessor> processor;
 public:
-	AUDIO_STREAM_PROCESSING_API ProcessedAudioStream(
+	AUDIO_STREAM_PROCESSING_API ProcessedAudioFrameReader(
 		std::shared_ptr<AudioFrameReader> reader,
 		std::shared_ptr<AudioProcessor> processor);
 	AUDIO_STREAM_PROCESSING_API void read(float **channels, int) override;

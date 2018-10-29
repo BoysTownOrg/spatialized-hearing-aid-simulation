@@ -1,4 +1,4 @@
-#include <audio-stream-processing/ProcessedAudioStream.h>
+#include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <gtest/gtest.h>
 
 class MockAudioReader : public AudioFrameReader {
@@ -50,7 +50,7 @@ class ProcessedAudioStreamTestCase : public ::testing::TestCase {};
 TEST(ProcessedAudioStreamTestCase, fillBufferReadsThenProcesses) {
 	const auto reader = std::make_shared<ReadsAOne>();
 	const auto processor = std::make_shared<AudioTimesTwo>();
-	ProcessedAudioStream stream{ reader, processor };
+	ProcessedAudioFrameReader stream{ reader, processor };
 	float x{};
 	float *channels[] = { &x };
 	stream.read(channels, 0);
@@ -60,7 +60,7 @@ TEST(ProcessedAudioStreamTestCase, fillBufferReadsThenProcesses) {
 TEST(ProcessedAudioStreamTestCase, fillBufferPassesParametersToReaderAndProcessor) {
 	const auto reader = std::make_shared<MockAudioReader>();
 	const auto processor = std::make_shared<MockAudioProcessor>();
-	ProcessedAudioStream stream{ reader, processor };
+	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
 	stream.read(&x, 1);
 	EXPECT_EQ(&x, reader->channels());
