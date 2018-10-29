@@ -1,16 +1,12 @@
 #pragma once
 
-#ifdef AUDIO_FILE_READING_EXPORTS
-	#define AUDIO_FILE_READING_API __declspec(dllexport)
-#else
-	#define AUDIO_FILE_READING_API __declspec(dllimport)
-#endif
-
+#include "audio-file-reading-exports.h"
 #include "AudioFileReader.h"
+#include "StereoAudioFile.h"
 #include <memory>
 #include <vector>
 
-class StereoAudioFileInMemory {
+class StereoAudioFileInMemory : public StereoAudioFile {
 	std::vector<float> buffer;
 	int channels;
 	std::size_t head = 0;
@@ -20,6 +16,6 @@ public:
 		std::shared_ptr<AudioFileReader> reader
 	);
 	AUDIO_FILE_READING_API int framesRemaining() const;
-	AUDIO_FILE_READING_API void read(float *left, float *right, int samples);
+	AUDIO_FILE_READING_API void read(float *left, float *right, int samples) override;
 };
 
