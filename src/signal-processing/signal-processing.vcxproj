@@ -135,11 +135,13 @@
     <ClInclude Include="SignalProcessingChain.h" />
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="DualSignalProcessor.h" />
+    <ClInclude Include="StereoProcessor.h" />
     <ClInclude Include="StereoProcessorAdapter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SignalProcessingChain.cpp" />
     <ClCompile Include="DualSignalProcessor.cpp" />
+    <ClCompile Include="StereoProcessorAdapter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

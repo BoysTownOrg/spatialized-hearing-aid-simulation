@@ -30,12 +30,18 @@
     <ClInclude Include="DualSignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StereoProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SignalProcessingChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DualSignalProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoProcessorAdapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
