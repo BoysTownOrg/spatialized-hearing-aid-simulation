@@ -76,7 +76,7 @@ public:
 	std::string rightDslPrescriptionFilePath() const {
 		return _rightDslPrescriptionFilePath;
 	}
-	void setRightDslPrescriptionFilePath(std::string p) {
+	void setRightDslPrescriptionFilePath(std::string p) override {
 		_rightDslPrescriptionFilePath = p;
 	}
 	void browseForAudio() {
