@@ -7,6 +7,7 @@ class MockModel : public Model {
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
+	int _level_dB_Spl{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
 		return _leftDslPrescriptionFilePath;
@@ -20,11 +21,15 @@ public:
 	std::string brirFilePath() const {
 		return _brirFilePath;
 	}
+	int level_dB_Spl() const {
+		return _level_dB_Spl;
+	}
 	void playRequest(PlayRequest request) override {
 		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
+		_level_dB_Spl = request.level_dB_Spl;
 	}
 };
 
@@ -35,6 +40,7 @@ class MockView : public View {
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
+	int _level_dB_Spl{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -104,6 +110,9 @@ public:
 	}
 	std::vector<std::string> browseFilters() const {
 		return _browseFilters;
+	}
+	void setLevel_dB_Spl(int level) {
+		_level_dB_Spl = level;
 	}
 	void play() {
 		_presenter->play();
