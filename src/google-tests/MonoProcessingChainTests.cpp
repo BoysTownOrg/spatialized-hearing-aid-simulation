@@ -25,3 +25,13 @@ TEST(MonoProcessingChainTestCase, chainCallsProcessorsInOrder) {
 	chain.process(&x, 0);
 	EXPECT_EQ(4, x);
 }
+
+TEST(MonoProcessingChainTestCase, chainPassesParametersToProcessor) {
+	MonoProcessingChain chain{};
+	const auto processor = std::make_shared<MockMonoProcessor>();
+	chain.add(processor);
+	float x{};
+	chain.process(&x, 1);
+	EXPECT_EQ(&x, processor->signal());
+	EXPECT_EQ(1, processor->frameCount());
+}
