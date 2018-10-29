@@ -22,4 +22,6 @@ public:
 	virtual std::string audioFilePath() const = 0;
 	virtual std::string brirFilePath() const = 0;
 	virtual std::string level_dB_Spl() const = 0;
+	virtual std::string attack_ms() const = 0;
+	virtual std::string release_ms() const = 0;
 };

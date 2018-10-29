@@ -132,8 +132,14 @@ public:
 	void setAttack_ms(std::string a) {
 		_attack_ms = a;
 	}
+	std::string attack_ms() const override {
+		return _attack_ms;
+	}
 	void setRelease_ms(std::string r) {
 		_release_ms = r;
+	}
+	std::string release_ms() const override {
+		return _release_ms;
 	}
 	void play() {
 		_presenter->play();
