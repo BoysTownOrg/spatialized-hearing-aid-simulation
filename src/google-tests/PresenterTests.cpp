@@ -283,6 +283,8 @@ TEST(
 	view->setLevel_dB_Spl("e");
 	view->setAttack_ms("f");
 	view->setRelease_ms("g");
+	view->setWindowSize("h");
+	view->setChunkSize("i");
 	view->play();
 	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
 	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
@@ -291,4 +293,6 @@ TEST(
 	EXPECT_EQ("e", model->level_dB_Spl());
 	EXPECT_EQ("f", model->attack_ms());
 	EXPECT_EQ("g", model->release_ms());
+	EXPECT_EQ("h", model->windowSize());
+	EXPECT_EQ("i", model->chunkSize());
 }
