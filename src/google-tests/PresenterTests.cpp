@@ -10,6 +10,8 @@ class MockModel : public Model {
 	std::string _level_dB_Spl{};
 	std::string _attack_ms{};
 	std::string _release_ms{};
+	std::string _windowSize{};
+	std::string _chunkSize{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
 		return _leftDslPrescriptionFilePath;
@@ -32,6 +34,12 @@ public:
 	std::string release_ms() const {
 		return _release_ms;
 	}
+	std::string windowSize() const {
+		return _windowSize;
+	}
+	std::string chunkSize() const {
+		return _chunkSize;
+	}
 	void playRequest(PlayRequest request) override {
 		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
@@ -40,6 +48,8 @@ public:
 		_level_dB_Spl = request.level_dB_Spl;
 		_attack_ms = request.attack_ms;
 		_release_ms = request.release_ms;
+		_windowSize = request.windowSize;
+		_chunkSize = request.chunkSize;
 	}
 };
 
@@ -53,6 +63,8 @@ class MockView : public View {
 	std::string _level_dB_Spl{};
 	std::string _attack_ms{};
 	std::string _release_ms{};
+	std::string _windowSize{};
+	std::string _chunkSize{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -140,6 +152,12 @@ public:
 	}
 	std::string release_ms() const override {
 		return _release_ms;
+	}
+	void setWindowSize(std::string s) {
+		_windowSize = s;
+	}
+	void setChunkSize(std::string s) {
+		_chunkSize = s;
 	}
 	void play() {
 		_presenter->play();

@@ -14,6 +14,8 @@ public:
 		std::string level_dB_Spl;
 		std::string attack_ms;
 		std::string release_ms;
+		std::string windowSize;
+		std::string chunkSize;
 	};
 	virtual void playRequest(PlayRequest) = 0;
 };
