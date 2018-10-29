@@ -1,7 +1,7 @@
 #include <audio-stream-processing/ProcessedAudioStream.h>
 #include <gtest/gtest.h>
 
-class MockAudioReader : public AudioReader {
+class MockAudioReader : public AudioFrameReader {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -33,7 +33,7 @@ public:
 	}
 };
 
-class ReadsAOne : public AudioReader {
+class ReadsAOne : public AudioFrameReader {
 	void read(float ** channels, int) override {
 		*channels[0] = 1;
 	}

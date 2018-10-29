@@ -2,10 +2,10 @@
 
 #include "audio-file-reading-exports.h"
 #include "StereoAudioFile.h"
-#include <audio-stream-processing/AudioReader.h>
+#include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
-class StereoAudioFileAdapter : public AudioReader {
+class StereoAudioFileAdapter : public AudioFrameReader {
 	std::shared_ptr<StereoAudioFile> file;
 public:
 	AUDIO_FILE_READING_API explicit StereoAudioFileAdapter(
