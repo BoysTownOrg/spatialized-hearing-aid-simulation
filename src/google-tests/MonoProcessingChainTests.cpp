@@ -1,3 +1,4 @@
+#include "MockMonoProcessor.h"
 #include <audio-processing/MonoProcessingChain.h>
 #include <gtest/gtest.h>
 
@@ -33,5 +34,5 @@ TEST(MonoProcessingChainTestCase, chainPassesParametersToProcessor) {
 	float x{};
 	chain.process(&x, 1);
 	EXPECT_EQ(&x, processor->signal());
-	EXPECT_EQ(1, processor->frameCount());
+	EXPECT_EQ(1, processor->frames());
 }
