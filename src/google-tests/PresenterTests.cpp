@@ -236,10 +236,12 @@ TEST(
 	const auto model = std::make_shared<MockModel>();
 	Presenter presenter{ model, view };
 	view->setLeftDslPrescriptionFilePath("a");
-	view->setAudioFilePath("b");
-	view->setBrirFilePath("c");
+	view->setRightDslPrescriptionFilePath("b");
+	view->setAudioFilePath("c");
+	view->setBrirFilePath("d");
 	view->play();
 	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
-	EXPECT_EQ("b", model->audioFilePath());
-	EXPECT_EQ("c", model->brirFilePath());
+	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
+	EXPECT_EQ("c", model->audioFilePath());
+	EXPECT_EQ("d", model->brirFilePath());
 }
