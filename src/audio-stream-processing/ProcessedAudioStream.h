@@ -1,19 +1,7 @@
 #pragma once
 
-#include <common-includes/Interface.h>
-
-class AudioReader {
-public:
-	INTERFACE_OPERATIONS(AudioReader);
-	virtual void read(float **channels, int frameCount) = 0;
-};
-
-class AudioProcessor {
-public:
-	INTERFACE_OPERATIONS(AudioProcessor);
-	virtual void process(float **channels, int frameCount) = 0;
-};
-
+#include "AudioReader.h"
+#include "AudioProcessor.h"
 #include <audio-device-control/AudioStream.h>
 #include <memory>
 

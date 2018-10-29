@@ -18,5 +18,11 @@
     <ClInclude Include="ProcessedAudioStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
