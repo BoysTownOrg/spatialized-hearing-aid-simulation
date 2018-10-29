@@ -148,7 +148,7 @@
   <ItemGroup>
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioDeviceControllerTests.cpp" />
-    <ClCompile Include="ProcessedAudioStreamTests.cpp" />
+    <ClCompile Include="ProcessedAudioFrameReaderTests.cpp" />
     <ClCompile Include="StereoAudioFileAdapterTests.cpp" />
     <ClCompile Include="StereoAudioFileReadingTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
@@ -156,7 +156,7 @@
     <ClCompile Include="SignalProcessingChainTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
     <ClCompile Include="StereoProcessorAdapterTests.cpp" />
-    <ClCompile Include="StereoProcessorTests.cpp" />
+    <ClCompile Include="DualSignalProcessorTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MockSignalProcessor.h" />

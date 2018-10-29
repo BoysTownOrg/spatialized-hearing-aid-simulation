@@ -16,9 +16,9 @@ int StereoAudioFileInMemory::framesRemaining() const
 	return buffer.size() - head;
 }
 
-void StereoAudioFileInMemory::read(float *left, float *right, int frames) {
+void StereoAudioFileInMemory::read(float *left, float *right, int samples) {
 	int i = 0;
-	while (head < buffer.size() && i < frames) {
+	while (head < buffer.size() && i < samples) {
 		left[i] = buffer[head];
 		if (channels == 2)
 			++head;

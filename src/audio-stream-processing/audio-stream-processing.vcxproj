@@ -130,13 +130,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioProcessor.h" />
-    <ClInclude Include="AudioReader.h" />
-    <ClInclude Include="AudioStream.h" />
-    <ClInclude Include="ProcessedAudioStream.h" />
+    <ClInclude Include="AudioFrameProcessor.h" />
+    <ClInclude Include="AudioFrameReader.h" />
+    <ClInclude Include="ProcessedAudioFrameReader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ProcessedAudioStream.cpp" />
+    <ClCompile Include="ProcessedAudioFrameReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

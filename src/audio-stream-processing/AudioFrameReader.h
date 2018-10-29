@@ -2,8 +2,9 @@
 
 #include <common-includes/Interface.h>
 
-class AudioReader {
+class AudioFrameReader {
 public:
-	INTERFACE_OPERATIONS(AudioReader);
+	INTERFACE_OPERATIONS(AudioFrameReader);
 	virtual void read(float **channels, int frameCount) = 0;
 };
+

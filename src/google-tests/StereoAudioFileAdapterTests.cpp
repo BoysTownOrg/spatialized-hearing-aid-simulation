@@ -24,7 +24,7 @@ public:
 
 class StereoAudioFileAdapterTestCase : public ::testing::TestCase {};
 
-TEST(StereoAudioFileAdapterTestCase, tbd) {
+TEST(StereoAudioFileAdapterTestCase, readPassesParameters) {
 	const auto file = std::make_shared<MockStereoAudioFile>();
 	StereoAudioFileAdapter adapter{ file };
 	float left{};

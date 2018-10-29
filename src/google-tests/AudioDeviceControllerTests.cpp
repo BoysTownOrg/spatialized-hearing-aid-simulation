@@ -25,7 +25,7 @@ public:
 	}
 };
 
-class MockAudioStream : public AudioStream {
+class MockAudioFrameReader : public AudioFrameReader {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -35,7 +35,7 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
-	void fillBuffer(float **channels, int frameCount) override {
+	void read(float **channels, int frameCount) override {
 		_channels = channels;
 		_frameCount = frameCount;
 	}
@@ -47,7 +47,7 @@ public:
 	explicit AudioDeviceControllerFacade(
 		std::shared_ptr<AudioDevice> device
 	) :
-		controller{ std::move(device), std::make_shared<MockAudioStream>() } {}
+		controller{ std::move(device), std::make_shared<MockAudioFrameReader>() } {}
 
 	const AudioDeviceController *get() const {
 		return &controller;
@@ -81,10 +81,10 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 
 TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto stream = std::make_shared<MockAudioStream>();
+	const auto stream = std::make_shared<MockAudioFrameReader>();
 	AudioDeviceController controller{ device, stream };
-	float *c{};
-	device->fillStreamBuffer(&c, 1);
-	EXPECT_EQ(&c, stream->channels());
+	float *channel{};
+	device->fillStreamBuffer(&channel, 1);
+	EXPECT_EQ(&channel, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
 }

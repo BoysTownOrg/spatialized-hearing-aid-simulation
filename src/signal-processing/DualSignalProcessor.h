@@ -12,6 +12,6 @@ public:
 	SIGNAL_PROCESSING_API DualSignalProcessor(
 		std::shared_ptr<SignalProcessor> left,
 		std::shared_ptr<SignalProcessor> right);
-	SIGNAL_PROCESSING_API void process(float *xLeft, float *xRight, int frameCount) override;
+	SIGNAL_PROCESSING_API void process(float *, float *, int) override;
 };
 

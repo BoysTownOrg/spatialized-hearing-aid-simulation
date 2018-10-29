@@ -4,16 +4,16 @@
 
 class MockSignalProcessor : public SignalProcessor {
 	float *_signal{};
-	int _frameCount{};
+	int _samples{};
 public:
 	const float *signal() const {
 		return _signal;
 	}
-	int frames() const {
-		return _frameCount;
+	int samples() const {
+		return _samples;
 	}
-	void process(float *x, int count) override {
+	void process(float *x, int samples) override {
 		_signal = x;
-		_frameCount = count;
+		_samples = samples;
 	}
 };

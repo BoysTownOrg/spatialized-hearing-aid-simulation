@@ -1,7 +1,7 @@
-#include <audio-stream-processing/ProcessedAudioStream.h>
+#include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <gtest/gtest.h>
 
-class MockAudioReader : public AudioReader {
+class MockAudioFrameReader : public AudioFrameReader {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -17,7 +17,7 @@ public:
 	}
 };
 
-class MockAudioProcessor : public AudioProcessor {
+class MockAudioFrameProcessor : public AudioFrameProcessor {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -33,36 +33,36 @@ public:
 	}
 };
 
-class ReadsAOne : public AudioReader {
+class ReadsAOne : public AudioFrameReader {
 	void read(float ** channels, int) override {
 		*channels[0] = 1;
 	}
 };
 
-class AudioTimesTwo : public AudioProcessor {
+class AudioTimesTwo : public AudioFrameProcessor {
 	void process(float ** channels, int) override {
 		*channels[0] *= 2;
 	}
 };
 
-class ProcessedAudioStreamTestCase : public ::testing::TestCase {};
+class ProcessedAudioFrameReaderTestCase : public ::testing::TestCase {};
 
-TEST(ProcessedAudioStreamTestCase, fillBufferReadsThenProcesses) {
+TEST(ProcessedAudioFrameReaderTestCase, fillBufferReadsThenProcesses) {
 	const auto reader = std::make_shared<ReadsAOne>();
 	const auto processor = std::make_shared<AudioTimesTwo>();
-	ProcessedAudioStream stream{ reader, processor };
+	ProcessedAudioFrameReader stream{ reader, processor };
 	float x{};
 	float *channels[] = { &x };
-	stream.fillBuffer(channels, 0);
+	stream.read(channels, 0);
 	EXPECT_EQ(2, x);
 }
 
-TEST(ProcessedAudioStreamTestCase, fillBufferPassesParametersToReaderAndProcessor) {
-	const auto reader = std::make_shared<MockAudioReader>();
-	const auto processor = std::make_shared<MockAudioProcessor>();
-	ProcessedAudioStream stream{ reader, processor };
+TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndProcessor) {
+	const auto reader = std::make_shared<MockAudioFrameReader>();
+	const auto processor = std::make_shared<MockAudioFrameProcessor>();
+	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
-	stream.fillBuffer(&x, 1);
+	stream.read(&x, 1);
 	EXPECT_EQ(&x, reader->channels());
 	EXPECT_EQ(1, reader->frameCount());
 	EXPECT_EQ(&x, processor->channels());

@@ -15,21 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProcessedAudioStream.h">
+    <ClInclude Include="AudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioReader.h">
+    <ClInclude Include="ProcessedAudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioStream.h">
+    <ClInclude Include="AudioFrameProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ProcessedAudioStream.cpp">
+    <ClCompile Include="ProcessedAudioFrameReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
