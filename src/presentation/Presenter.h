@@ -20,6 +20,7 @@ public:
 		std::shared_ptr<View> view);
 	PRESENTATION_API void loop();
 	PRESENTATION_API void browseForLeftDslPrescription();
+	PRESENTATION_API void browseForRightDslPrescription();
 	PRESENTATION_API void browseForAudio();
 	PRESENTATION_API void browseForBrir();
 	PRESENTATION_API void play();

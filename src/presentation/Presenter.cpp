@@ -20,6 +20,11 @@ void Presenter::browseForLeftDslPrescription() {
 		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
 }
 
+void Presenter::browseForRightDslPrescription()
+{
+	return void();
+}
+
 void Presenter::browseForAudio() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.wav" },

@@ -3,12 +3,12 @@
 #include <gtest/gtest.h>
 
 class MockModel : public Model {
-	std::string _lefDslPrescriptionFilePath{};
+	std::string _leftDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
-		return _lefDslPrescriptionFilePath;
+		return _leftDslPrescriptionFilePath;
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -17,7 +17,7 @@ public:
 		return _brirFilePath;
 	}
 	void playRequest(PlayRequest request) override {
-		_lefDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
 	}
@@ -25,7 +25,8 @@ public:
 
 class MockView : public View {
 	std::vector<std::string> _browseFilters{};
-	std::string _lefDslPrescriptionFilePath{};
+	std::string _leftDslPrescriptionFilePath{};
+	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
@@ -64,10 +65,19 @@ public:
 		_presenter->browseForLeftDslPrescription();
 	}
 	void setLeftDslPrescriptionFilePath(std::string p) override {
-		_lefDslPrescriptionFilePath = p;
+		_leftDslPrescriptionFilePath = p;
 	}
 	std::string leftDslPrescriptionFilePath() const override {
-		return _lefDslPrescriptionFilePath;
+		return _leftDslPrescriptionFilePath;
+	}
+	void browseForRightDslPrescription() {
+		_presenter->browseForRightDslPrescription();
+	}
+	std::string rightDslPrescriptionFilePath() const {
+		return _rightDslPrescriptionFilePath;
+	}
+	void setRightDslPrescriptionFilePath(std::string p) {
+		_rightDslPrescriptionFilePath = p;
 	}
 	void browseForAudio() {
 		_presenter->browseForAudio();

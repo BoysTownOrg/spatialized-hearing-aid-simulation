@@ -53,5 +53,8 @@
     <ClInclude Include="MockSignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PresenterTests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
