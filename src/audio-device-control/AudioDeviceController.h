@@ -15,8 +15,8 @@ class AudioDeviceController {
 	std::shared_ptr<AudioFrameReader> reader;
 public:
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
-		std::shared_ptr<AudioDevice> device,
-		std::shared_ptr<AudioFrameReader> stream
+		std::shared_ptr<AudioDevice>,
+		std::shared_ptr<AudioFrameReader>
 	);
 	AUDIO_DEVICE_CONTROL_API void startStreaming();
 	AUDIO_DEVICE_CONTROL_API void stopStreaming();
