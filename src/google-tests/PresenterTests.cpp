@@ -8,6 +8,8 @@ class MockModel : public Model {
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _level_dB_Spl{};
+	std::string _attack_ms{};
+	std::string _release_ms{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
 		return _leftDslPrescriptionFilePath;
@@ -24,12 +26,20 @@ public:
 	std::string level_dB_Spl() const {
 		return _level_dB_Spl;
 	}
+	std::string attack_ms() const {
+		return _attack_ms;
+	}
+	std::string release_ms() const {
+		return _release_ms;
+	}
 	void playRequest(PlayRequest request) override {
 		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
 		_level_dB_Spl = request.level_dB_Spl;
+		_attack_ms = request.attack_ms;
+		_release_ms = request.release_ms;
 	}
 };
 
@@ -41,6 +51,8 @@ class MockView : public View {
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
 	std::string _level_dB_Spl{};
+	std::string _attack_ms{};
+	std::string _release_ms{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -116,6 +128,12 @@ public:
 	}
 	std::string level_dB_Spl() const override {
 		return _level_dB_Spl;
+	}
+	void setAttack_ms(std::string a) {
+		_attack_ms = a;
+	}
+	void setRelease_ms(std::string r) {
+		_release_ms = r;
 	}
 	void play() {
 		_presenter->play();

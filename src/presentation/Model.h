@@ -12,6 +12,8 @@ public:
 		std::string audioFilePath;
 		std::string brirFilePath;
 		std::string level_dB_Spl;
+		std::string attack_ms;
+		std::string release_ms;
 	};
 	virtual void playRequest(PlayRequest) = 0;
 };
