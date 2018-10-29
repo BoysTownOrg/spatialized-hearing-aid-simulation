@@ -29,7 +29,7 @@ class MockAudioStream : public AudioStream {
 	int _frameCount{};
 	float **_channels{};
 public:
-	float * const * channels() const {
+	const float * const * channels() const {
 		return _channels;
 	}
 	int frameCount() const {
