@@ -7,7 +7,7 @@
 #endif
 
 #include "AudioDevice.h"
-#include "AudioStream.h"
+#include <audio-stream-processing/AudioStream.h>
 #include <memory>
 
 class AudioDeviceController {
