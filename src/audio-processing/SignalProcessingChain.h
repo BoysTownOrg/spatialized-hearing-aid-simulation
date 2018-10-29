@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-class MonoProcessingChain : public SignalProcessor {
+class SignalProcessingChain : public SignalProcessor {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 public:
 	AUDIO_PROCESSING_API void process(float *x, int) override;

@@ -1,5 +1,5 @@
 #include "MockSignalProcessor.h"
-#include <audio-processing/MonoProcessingChain.h>
+#include <audio-processing/SignalProcessingChain.h>
 #include <gtest/gtest.h>
 
 class AddOne : public SignalProcessor {
@@ -16,10 +16,10 @@ public:
 	}
 };
 
-class MonoProcessingChainTestCase : public ::testing::TestCase {};
+class SignalProcessingChainTestCase : public ::testing::TestCase {};
 
-TEST(MonoProcessingChainTestCase, chainCallsProcessorsInOrder) {
-	MonoProcessingChain chain{};
+TEST(SignalProcessingChainTestCase, chainCallsProcessorsInOrder) {
+	SignalProcessingChain chain{};
 	chain.add(std::make_shared<AddOne>());
 	chain.add(std::make_shared<TimesTwo>());
 	float x = 1;
@@ -27,8 +27,8 @@ TEST(MonoProcessingChainTestCase, chainCallsProcessorsInOrder) {
 	EXPECT_EQ(4, x);
 }
 
-TEST(MonoProcessingChainTestCase, chainPassesParametersToProcessor) {
-	MonoProcessingChain chain{};
+TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
+	SignalProcessingChain chain{};
 	const auto processor = std::make_shared<MockSignalProcessor>();
 	chain.add(processor);
 	float x{};

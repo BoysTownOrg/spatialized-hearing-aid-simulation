@@ -131,12 +131,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="audio-processing-exports.h" />
-    <ClInclude Include="MonoProcessingChain.h" />
+    <ClInclude Include="SignalProcessingChain.h" />
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="StereoProcessor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MonoProcessingChain.cpp" />
+    <ClCompile Include="SignalProcessingChain.cpp" />
     <ClCompile Include="StereoProcessor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
