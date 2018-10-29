@@ -14,10 +14,10 @@ void Presenter::loop() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForDslPrescription() {
+void Presenter::browseForLeftDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
-		[=](std::string p) { this->view->setDslPrescriptionFilePath(p); });
+		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
 }
 
 void Presenter::browseForAudio() {

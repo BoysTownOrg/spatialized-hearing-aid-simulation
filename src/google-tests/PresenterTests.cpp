@@ -60,10 +60,10 @@ public:
 	void setBrowseCancelled() {
 		_browseCancelled = true;
 	}
-	void browseForDslPrescription() {
-		_presenter->browseForDslPrescription();
+	void browseForLeftDslPrescription() {
+		_presenter->browseForLeftDslPrescription();
 	}
-	void setDslPrescriptionFilePath(std::string p) override {
+	void setLeftDslPrescriptionFilePath(std::string p) override {
 		_dslPrescriptionFilePath = p;
 	}
 	std::string dslPrescriptionFilePath() const override {
@@ -129,9 +129,9 @@ TEST(
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
-	view->setDslPrescriptionFilePath("a");
+	view->setLeftDslPrescriptionFilePath("a");
 	view->setBrowseCancelled();
-	view->browseForDslPrescription();
+	view->browseForLeftDslPrescription();
 	EXPECT_EQ("a", view->dslPrescriptionFilePath());
 }
 
@@ -166,7 +166,7 @@ TEST(
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
-	view->browseForDslPrescription();
+	view->browseForLeftDslPrescription();
 	EXPECT_EQ("a", view->dslPrescriptionFilePath());
 }
 
@@ -219,7 +219,7 @@ TEST(
 	const auto view = std::make_shared<MockView>();
 	const auto model = std::make_shared<MockModel>();
 	Presenter presenter{ model, view };
-	view->setDslPrescriptionFilePath("a");
+	view->setLeftDslPrescriptionFilePath("a");
 	view->setAudioFilePath("b");
 	view->setBrirFilePath("c");
 	view->play();

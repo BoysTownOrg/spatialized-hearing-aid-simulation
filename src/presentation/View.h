@@ -13,7 +13,7 @@ public:
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
 	virtual bool browseCancelled() = 0;
-	virtual void setDslPrescriptionFilePath(std::string) = 0;
+	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string dslPrescriptionFilePath() const = 0;
