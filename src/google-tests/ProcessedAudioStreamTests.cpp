@@ -15,7 +15,7 @@ class AudioTimesTwo : public AudioProcessor {
 
 class ProcessedAudioStreamTestCase : public ::testing::TestCase {};
 
-TEST(ProcessedAudioStreamTestCase, readsThenProcesses) {
+TEST(ProcessedAudioStreamTestCase, fillBufferReadsThenProcesses) {
 	const auto reader = std::make_shared<ReadsAOne>();
 	const auto processor = std::make_shared<AudioTimesTwo>();
 	ProcessedAudioStream stream{ reader, processor };
@@ -23,4 +23,16 @@ TEST(ProcessedAudioStreamTestCase, readsThenProcesses) {
 	float *channels[] = { &x };
 	stream.fillBuffer(channels, 0);
 	EXPECT_EQ(2, x);
+}
+
+TEST(ProcessedAudioStreamTestCase, fillBufferPassesParametersToReaderAndProcessor) {
+	const auto reader = std::make_shared<MockAudioReader>();
+	const auto processor = std::make_shared<MockAudioProcessor>();
+	ProcessedAudioStream stream{ reader, processor };
+	float *x;
+	stream.fillBuffer(&x, 1);
+	EXPECT_EQ(&x, reader->channels());
+	EXPECT_EQ(1, reader->frameCount());
+	EXPECT_EQ(&x, processor->channels());
+	EXPECT_EQ(1, processor->frameCount());
 }
