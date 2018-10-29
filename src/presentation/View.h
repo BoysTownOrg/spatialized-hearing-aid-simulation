@@ -18,6 +18,7 @@ public:
 	virtual void setAudioFilePath(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string leftDslPrescriptionFilePath() const = 0;
+	virtual std::string rightDslPrescriptionFilePath() const = 0;
 	virtual std::string audioFilePath() const = 0;
 	virtual std::string brirFilePath() const = 0;
 };

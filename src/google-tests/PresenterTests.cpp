@@ -4,11 +4,15 @@
 
 class MockModel : public Model {
 	std::string _leftDslPrescriptionFilePath{};
+	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
 		return _leftDslPrescriptionFilePath;
+	}
+	std::string rightDslPrescriptionFilePath() const {
+		return _rightDslPrescriptionFilePath;
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -18,6 +22,7 @@ public:
 	}
 	void playRequest(PlayRequest request) override {
 		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
 	}
@@ -73,7 +78,7 @@ public:
 	void browseForRightDslPrescription() {
 		_presenter->browseForRightDslPrescription();
 	}
-	std::string rightDslPrescriptionFilePath() const {
+	std::string rightDslPrescriptionFilePath() const override {
 		return _rightDslPrescriptionFilePath;
 	}
 	void setRightDslPrescriptionFilePath(std::string p) override {

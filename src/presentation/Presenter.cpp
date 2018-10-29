@@ -42,6 +42,7 @@ void Presenter::play() {
 	model->playRequest(
 		{
 			view->leftDslPrescriptionFilePath(),
+			view->rightDslPrescriptionFilePath(),
 			view->audioFilePath(),
 			view->brirFilePath()
 		}
