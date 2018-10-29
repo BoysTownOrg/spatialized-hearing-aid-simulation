@@ -27,16 +27,16 @@ public:
 
 class MockAudioFrameReader : public AudioFrameReader {
 	int _frameCount{};
-	float **_frames{};
+	float **_channels{};
 public:
 	const float * const * channels() const {
-		return _frames;
+		return _channels;
 	}
 	int frameCount() const {
 		return _frameCount;
 	}
 	void read(float **channels, int frameCount) override {
-		_frames = channels;
+		_channels = channels;
 		_frameCount = frameCount;
 	}
 };
@@ -83,8 +83,8 @@ TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	const auto stream = std::make_shared<MockAudioFrameReader>();
 	AudioDeviceController controller{ device, stream };
-	float *frame{};
-	device->fillStreamBuffer(&frame, 1);
-	EXPECT_EQ(&frame, stream->channels());
+	float *channel{};
+	device->fillStreamBuffer(&channel, 1);
+	EXPECT_EQ(&channel, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
 }

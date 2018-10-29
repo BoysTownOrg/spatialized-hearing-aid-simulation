@@ -3,32 +3,32 @@
 
 class MockAudioFrameReader : public AudioFrameReader {
 	int _frameCount{};
-	float **_frames{};
+	float **_channels{};
 public:
 	int frameCount() const {
 		return _frameCount;
 	}
 	const float *const *channels() const {
-		return _frames;
+		return _channels;
 	}
 	void read(float ** channels, int frameCount) override {
-		_frames = channels;
+		_channels = channels;
 		_frameCount = frameCount;
 	}
 };
 
 class MockAudioFrameProcessor : public AudioFrameProcessor {
 	int _frameCount{};
-	float **_frames{};
+	float **_channels{};
 public:
 	int frameCount() const {
 		return _frameCount;
 	}
 	const float *const *channels() const {
-		return _frames;
+		return _channels;
 	}
 	void process(float ** channels, int frameCount) override {
-		_frames = channels;
+		_channels = channels;
 		_frameCount = frameCount;
 	}
 };
