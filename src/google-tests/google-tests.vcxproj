@@ -155,6 +155,7 @@
     <ClCompile Include="HearingAidProcessorTests.cpp" />
     <ClCompile Include="SignalProcessingChainTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
+    <ClCompile Include="StereoProcessorAdapterTests.cpp" />
     <ClCompile Include="StereoProcessorTests.cpp" />
   </ItemGroup>
   <ItemGroup>

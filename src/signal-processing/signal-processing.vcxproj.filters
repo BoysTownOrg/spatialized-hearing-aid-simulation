@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StereoProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -27,12 +24,24 @@
     <ClInclude Include="signal-processing-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StereoProcessorAdapter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DualSignalProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StereoProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StereoProcessor.cpp">
+    <ClCompile Include="SignalProcessingChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SignalProcessingChain.cpp">
+    <ClCompile Include="DualSignalProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoProcessorAdapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
