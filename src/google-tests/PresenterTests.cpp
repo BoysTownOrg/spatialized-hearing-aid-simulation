@@ -114,6 +114,9 @@ public:
 	void setLevel_dB_Spl(int level) {
 		_level_dB_Spl = level;
 	}
+	int level_dB_Spl() const override {
+		return _level_dB_Spl;
+	}
 	void play() {
 		_presenter->play();
 	}

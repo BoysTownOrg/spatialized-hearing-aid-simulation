@@ -21,4 +21,5 @@ public:
 	virtual std::string rightDslPrescriptionFilePath() const = 0;
 	virtual std::string audioFilePath() const = 0;
 	virtual std::string brirFilePath() const = 0;
+	virtual int level_dB_Spl() const = 0;
 };

@@ -44,7 +44,8 @@ void Presenter::play() {
 			view->leftDslPrescriptionFilePath(),
 			view->rightDslPrescriptionFilePath(),
 			view->audioFilePath(),
-			view->brirFilePath()
+			view->brirFilePath(),
+			view->level_dB_Spl()
 		}
 	);
 }
