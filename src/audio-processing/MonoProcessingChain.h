@@ -1,13 +1,13 @@
 #pragma once
 
 #include "audio-processing-exports.h"
-#include "MonoProcessor.h"
+#include "SignalProcessor.h"
 #include <memory>
 #include <vector>
 
-class MonoProcessingChain : public MonoProcessor {
-	std::vector<std::shared_ptr<MonoProcessor>> processors{};
+class MonoProcessingChain : public SignalProcessor {
+	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 public:
 	AUDIO_PROCESSING_API void process(float *x, int) override;
-	AUDIO_PROCESSING_API void add(std::shared_ptr<MonoProcessor> processor);
+	AUDIO_PROCESSING_API void add(std::shared_ptr<SignalProcessor> processor);
 };

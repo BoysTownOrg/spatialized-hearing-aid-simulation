@@ -1,12 +1,12 @@
-#include "MockMonoProcessor.h"
+#include "MockSignalProcessor.h"
 #include <audio-processing/StereoProcessor.h>
 #include <gtest/gtest.h>
 
 class StereoProcessorTestCase : public ::testing::TestCase {};
 
 TEST(StereoProcessorTestCase, processProcessesLeftAndRight) {
-	const auto left = std::make_shared<MockMonoProcessor>();
-	const auto right = std::make_shared<MockMonoProcessor>();
+	const auto left = std::make_shared<MockSignalProcessor>();
+	const auto right = std::make_shared<MockSignalProcessor>();
 	StereoProcessor stereo{ left, right };
 	float x{};
 	float y{};

@@ -1,8 +1,8 @@
 #include "StereoProcessor.h"
 
 StereoProcessor::StereoProcessor(
-	std::shared_ptr<MonoProcessor> left, 
-	std::shared_ptr<MonoProcessor> right
+	std::shared_ptr<SignalProcessor> left, 
+	std::shared_ptr<SignalProcessor> right
 ) :
 	left{ std::move(left) },
 	right{ std::move(right) } {}

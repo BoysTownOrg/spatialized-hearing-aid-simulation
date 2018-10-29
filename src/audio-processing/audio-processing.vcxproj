@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClInclude Include="audio-processing-exports.h" />
     <ClInclude Include="MonoProcessingChain.h" />
-    <ClInclude Include="MonoProcessor.h" />
+    <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="StereoProcessor.h" />
   </ItemGroup>
   <ItemGroup>

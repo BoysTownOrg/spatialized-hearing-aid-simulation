@@ -18,13 +18,13 @@
     <ClInclude Include="StereoProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MonoProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MonoProcessingChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="audio-processing-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

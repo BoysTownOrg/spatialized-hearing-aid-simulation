@@ -1,15 +1,15 @@
-#include "MockMonoProcessor.h"
+#include "MockSignalProcessor.h"
 #include <audio-processing/MonoProcessingChain.h>
 #include <gtest/gtest.h>
 
-class AddOne : public MonoProcessor {
+class AddOne : public SignalProcessor {
 public:
 	void process(float *x, int) override {
 		*x += 1;
 	}
 };
 
-class TimesTwo : public MonoProcessor {
+class TimesTwo : public SignalProcessor {
 public:
 	void process(float *x, int) override {
 		*x *= 2;
@@ -29,7 +29,7 @@ TEST(MonoProcessingChainTestCase, chainCallsProcessorsInOrder) {
 
 TEST(MonoProcessingChainTestCase, chainPassesParametersToProcessor) {
 	MonoProcessingChain chain{};
-	const auto processor = std::make_shared<MockMonoProcessor>();
+	const auto processor = std::make_shared<MockSignalProcessor>();
 	chain.add(processor);
 	float x{};
 	chain.process(&x, 1);

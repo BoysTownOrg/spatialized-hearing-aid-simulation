@@ -5,6 +5,6 @@ void MonoProcessingChain::process(float * x, int frameCount) {
 		processor->process(x, frameCount);
 }
 
-void MonoProcessingChain::add(std::shared_ptr<MonoProcessor> processor) {
+void MonoProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {
 	processors.push_back(processor);
 }
