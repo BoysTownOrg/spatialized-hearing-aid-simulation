@@ -47,7 +47,9 @@ void Presenter::play() {
 			view->brirFilePath(),
 			view->level_dB_Spl(),
 			view->attack_ms(),
-			view->release_ms()
+			view->release_ms(),
+			view->windowSize(),
+			view->chunkSize()
 		}
 	);
 }

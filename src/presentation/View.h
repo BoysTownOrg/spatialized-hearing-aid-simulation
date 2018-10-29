@@ -24,4 +24,6 @@ public:
 	virtual std::string level_dB_Spl() const = 0;
 	virtual std::string attack_ms() const = 0;
 	virtual std::string release_ms() const = 0;
+	virtual std::string windowSize() const = 0;
+	virtual std::string chunkSize() const = 0;
 };

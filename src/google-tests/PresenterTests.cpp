@@ -156,8 +156,14 @@ public:
 	void setWindowSize(std::string s) {
 		_windowSize = s;
 	}
+	std::string windowSize() const override {
+		return _windowSize;
+	}
 	void setChunkSize(std::string s) {
 		_chunkSize = s;
+	}
+	std::string chunkSize() const override {
+		return _chunkSize;
 	}
 	void play() {
 		_presenter->play();
