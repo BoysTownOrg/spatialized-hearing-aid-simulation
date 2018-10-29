@@ -7,7 +7,7 @@ ProcessedAudioStream::ProcessedAudioStream(
 	reader{ std::move(reader) },
 	processor{ std::move(processor) } {}
 
-void ProcessedAudioStream::fillBuffer(float ** channels, int frameCount) {
+void ProcessedAudioStream::read(float ** channels, int frameCount) {
 	reader->read(channels, frameCount);
 	processor->process(channels, frameCount);
 }

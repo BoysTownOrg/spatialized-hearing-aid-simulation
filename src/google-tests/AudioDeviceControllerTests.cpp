@@ -25,7 +25,7 @@ public:
 	}
 };
 
-class MockAudioStream : public AudioStream {
+class MockAudioStream : public AudioFrameReader {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -35,7 +35,7 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
-	void fillBuffer(float **channels, int frameCount) override {
+	void read(float **channels, int frameCount) override {
 		_channels = channels;
 		_frameCount = frameCount;
 	}

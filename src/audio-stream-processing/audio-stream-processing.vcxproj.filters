@@ -24,7 +24,7 @@
     <ClInclude Include="AudioProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioStream.h">
+    <ClInclude Include="AudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

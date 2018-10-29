@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClInclude Include="AudioProcessor.h" />
     <ClInclude Include="AudioReader.h" />
-    <ClInclude Include="AudioStream.h" />
+    <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="ProcessedAudioStream.h" />
   </ItemGroup>
   <ItemGroup>

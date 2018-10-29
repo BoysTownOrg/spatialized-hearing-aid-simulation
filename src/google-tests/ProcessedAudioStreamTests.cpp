@@ -53,7 +53,7 @@ TEST(ProcessedAudioStreamTestCase, fillBufferReadsThenProcesses) {
 	ProcessedAudioStream stream{ reader, processor };
 	float x{};
 	float *channels[] = { &x };
-	stream.fillBuffer(channels, 0);
+	stream.read(channels, 0);
 	EXPECT_EQ(2, x);
 }
 
@@ -62,7 +62,7 @@ TEST(ProcessedAudioStreamTestCase, fillBufferPassesParametersToReaderAndProcesso
 	const auto processor = std::make_shared<MockAudioProcessor>();
 	ProcessedAudioStream stream{ reader, processor };
 	float *x;
-	stream.fillBuffer(&x, 1);
+	stream.read(&x, 1);
 	EXPECT_EQ(&x, reader->channels());
 	EXPECT_EQ(1, reader->frameCount());
 	EXPECT_EQ(&x, processor->channels());

@@ -8,16 +8,16 @@
 
 #include "AudioReader.h"
 #include "AudioProcessor.h"
-#include <audio-stream-processing/AudioStream.h>
+#include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
-class ProcessedAudioStream : public AudioStream {
+class ProcessedAudioStream : public AudioFrameReader {
 	std::shared_ptr<AudioReader> reader;
 	std::shared_ptr<AudioProcessor> processor;
 public:
 	AUDIO_STREAM_PROCESSING_API ProcessedAudioStream(
 		std::shared_ptr<AudioReader> reader,
 		std::shared_ptr<AudioProcessor> processor);
-	AUDIO_STREAM_PROCESSING_API void fillBuffer(float **channels, int) override;
+	AUDIO_STREAM_PROCESSING_API void read(float **channels, int) override;
 };
 
