@@ -7,7 +7,7 @@ class MockModel : public Model {
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
-	int _level_dB_Spl{};
+	std::string _level_dB_Spl{};
 public:
 	std::string leftDslPrescriptionFilePath() const {
 		return _leftDslPrescriptionFilePath;
@@ -21,7 +21,7 @@ public:
 	std::string brirFilePath() const {
 		return _brirFilePath;
 	}
-	int level_dB_Spl() const {
+	std::string level_dB_Spl() const {
 		return _level_dB_Spl;
 	}
 	void playRequest(PlayRequest request) override {
@@ -40,7 +40,7 @@ class MockView : public View {
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
-	int _level_dB_Spl{};
+	std::string _level_dB_Spl{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -111,10 +111,10 @@ public:
 	std::vector<std::string> browseFilters() const {
 		return _browseFilters;
 	}
-	void setLevel_dB_Spl(int level) {
+	void setLevel_dB_Spl(std::string level) {
 		_level_dB_Spl = level;
 	}
-	int level_dB_Spl() const override {
+	std::string level_dB_Spl() const override {
 		return _level_dB_Spl;
 	}
 	void play() {
@@ -256,11 +256,11 @@ TEST(
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioFilePath("c");
 	view->setBrirFilePath("d");
-	view->setLevel_dB_Spl(1);
+	view->setLevel_dB_Spl("e");
 	view->play();
 	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
 	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
 	EXPECT_EQ("c", model->audioFilePath());
 	EXPECT_EQ("d", model->brirFilePath());
-	EXPECT_EQ(1, model->level_dB_Spl());
+	EXPECT_EQ("e", model->level_dB_Spl());
 }

@@ -11,7 +11,7 @@ public:
 		std::string rightDslPrescriptionFilePath;
 		std::string audioFilePath;
 		std::string brirFilePath;
-		int level_dB_Spl;
+		std::string level_dB_Spl;
 	};
 	virtual void playRequest(PlayRequest) = 0;
 };
