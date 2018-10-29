@@ -35,7 +35,7 @@ void Presenter::browseForBrir() {
 void Presenter::play() {
 	model->playRequest(
 		{
-			view->dslPrescriptionFilePath(),
+			view->leftDslPrescriptionFilePath(),
 			view->audioFilePath(),
 			view->brirFilePath()
 		}

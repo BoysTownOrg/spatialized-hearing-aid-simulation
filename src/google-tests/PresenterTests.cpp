@@ -3,12 +3,12 @@
 #include <gtest/gtest.h>
 
 class MockModel : public Model {
-	std::string _dslPrescriptionFilePath{};
+	std::string _lefDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 public:
-	std::string dslPrescriptionFilePath() const {
-		return _dslPrescriptionFilePath;
+	std::string leftDslPrescriptionFilePath() const {
+		return _lefDslPrescriptionFilePath;
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -17,7 +17,7 @@ public:
 		return _brirFilePath;
 	}
 	void playRequest(PlayRequest request) override {
-		_dslPrescriptionFilePath = request.dslPrescriptionFilePath;
+		_lefDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
 	}
@@ -25,7 +25,7 @@ public:
 
 class MockView : public View {
 	std::vector<std::string> _browseFilters{};
-	std::string _dslPrescriptionFilePath{};
+	std::string _lefDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
@@ -64,10 +64,10 @@ public:
 		_presenter->browseForLeftDslPrescription();
 	}
 	void setLeftDslPrescriptionFilePath(std::string p) override {
-		_dslPrescriptionFilePath = p;
+		_lefDslPrescriptionFilePath = p;
 	}
-	std::string dslPrescriptionFilePath() const override {
-		return _dslPrescriptionFilePath;
+	std::string leftDslPrescriptionFilePath() const override {
+		return _lefDslPrescriptionFilePath;
 	}
 	void browseForAudio() {
 		_presenter->browseForAudio();
@@ -132,7 +132,7 @@ TEST(
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setBrowseCancelled();
 	view->browseForLeftDslPrescription();
-	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
 }
 
 TEST(
@@ -167,7 +167,7 @@ TEST(
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
-	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
 }
 
 TEST(
@@ -223,7 +223,7 @@ TEST(
 	view->setAudioFilePath("b");
 	view->setBrirFilePath("c");
 	view->play();
-	EXPECT_EQ("a", model->dslPrescriptionFilePath());
+	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
 	EXPECT_EQ("b", model->audioFilePath());
 	EXPECT_EQ("c", model->brirFilePath());
 }

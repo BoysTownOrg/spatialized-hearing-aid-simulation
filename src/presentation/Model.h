@@ -7,7 +7,7 @@ class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
 	struct PlayRequest {
-		std::string dslPrescriptionFilePath;
+		std::string leftDslPrescriptionFilePath;
 		std::string audioFilePath;
 		std::string brirFilePath;
 	};
