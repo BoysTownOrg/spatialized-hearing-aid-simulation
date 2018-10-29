@@ -39,16 +39,17 @@ public:
 };
 
 class AudioFileInMemoryFacade {
-	StereoAudioFileInMemory file;
+	std::shared_ptr<StereoAudioFileInMemory> file;
 public:
 	AudioFileInMemoryFacade(
 		std::vector<float> contents,
 		int _channels
 	) :
 		file { 
-			std::make_shared<MockAudioFileReader>(
-				std::move(contents), 
-				_channels)} {}
+			std::make_shared<StereoAudioFileInMemory>(
+				std::make_shared<MockAudioFileReader>(
+					std::move(contents), 
+					_channels))} {}
 
 	static AudioFileInMemoryFacade Stereo(std::vector<float> contents) {
 		return AudioFileInMemoryFacade{ std::move(contents), 2 };
@@ -59,16 +60,16 @@ public:
 	}
 
 	int framesRemaining() const {
-		return file.framesRemaining();
+		return file->framesRemaining();
 	}
 
 	void readFrames(int frames) {
 		std::vector<float> x(frames);
-		file.read(&x[0], &x[0], frames);
+		file->read(&x[0], &x[0], frames);
 	}
 
 	void read(float *left, float *right, int frames) {
-		file.read(left, right, frames);
+		file->read(left, right, frames);
 	}
 };
 
