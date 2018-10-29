@@ -1,21 +1,6 @@
+#include "MockMonoProcessor.h"
 #include <audio-processing/StereoProcessor.h>
 #include <gtest/gtest.h>
-
-class MockMonoProcessor : public MonoProcessor {
-	float *_signal{};
-	int _frameCount{};
-public:
-	const float *signal() const {
-		return _signal;
-	}
-	int frames() const {
-		return _frameCount;
-	}
-	virtual void process(float *x, int count) override {
-		_signal = x;
-		_frameCount = count;
-	}
-};
 
 class StereoProcessorTestCase : public ::testing::TestCase {};
 

@@ -151,8 +151,12 @@
     <ClCompile Include="AudioFileReadingTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />
+    <ClCompile Include="MonoProcessingChainTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
     <ClCompile Include="StereoProcessorTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MockMonoProcessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
