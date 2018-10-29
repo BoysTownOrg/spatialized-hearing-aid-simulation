@@ -39,6 +39,9 @@
     <ClCompile Include="StereoAudioFileReadingTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProcessedAudioStreamTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MockSignalProcessor.h">
