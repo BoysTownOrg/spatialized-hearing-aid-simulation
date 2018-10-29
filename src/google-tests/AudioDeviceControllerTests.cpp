@@ -27,21 +27,16 @@ public:
 
 class MockAudioStream : public AudioStream {
 	int _frameCount{};
-	float *_left{};
-	float *_right{};
+	float **_channels{};
 public:
-	const float *left() const {
-		return _left;
-	}
-	const float *right() const {
-		return _right;
+	const float * const * channels() const {
+		return _channels;
 	}
 	int frameCount() const {
 		return _frameCount;
 	}
-	void fillBuffer(float *left, float *right, int frameCount) override {
-		_left = left;
-		_right = right;
+	void fillBuffer(float **channels, int frameCount) override {
+		_channels = channels;
 		_frameCount = frameCount;
 	}
 };
@@ -88,11 +83,8 @@ TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	const auto stream = std::make_shared<MockAudioStream>();
 	AudioDeviceController controller{ device, stream };
-	float left;
-	float right;
-	float *x[] = { &left, &right };
-	device->fillStreamBuffer(x, 1);
-	EXPECT_EQ(&left, stream->left());
-	EXPECT_EQ(&right, stream->right());
+	float *c{};
+	device->fillStreamBuffer(&c, 1);
+	EXPECT_EQ(&c, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
 }

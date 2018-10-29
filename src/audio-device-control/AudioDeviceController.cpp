@@ -19,6 +19,5 @@ void AudioDeviceController::stopStreaming() {
 }
 
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
-	const auto _channels = static_cast<float **>(channels);
-	stream->fillBuffer(_channels[0], _channels[1], frameCount);
+	stream->fillBuffer(static_cast<float **>(channels), frameCount);
 }
