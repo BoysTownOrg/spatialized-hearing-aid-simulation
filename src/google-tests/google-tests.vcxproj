@@ -148,7 +148,7 @@
   <ItemGroup>
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioDeviceControllerTests.cpp" />
-    <ClCompile Include="AudioStreamProcessorTests.cpp" />
+    <ClCompile Include="ProcessedAudioStreamTests.cpp" />
     <ClCompile Include="StereoAudioFileReadingTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />
