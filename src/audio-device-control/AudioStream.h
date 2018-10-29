@@ -5,6 +5,6 @@
 class AudioStream {
 public:
 	INTERFACE_OPERATIONS(AudioStream);
-	virtual void fillBuffer(float *left, float *right, int frameCount) = 0;
+	virtual void fillBuffer(float **channels, int frameCount) = 0;
 };
 
