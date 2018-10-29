@@ -24,7 +24,7 @@ public:
 
 class StereoProcessorAdapterTestCase : public ::testing::TestCase {};
 
-TEST(StereoProcessorAdapterTestCase, tbd) {
+TEST(StereoProcessorAdapterTestCase, processPassesParameters) {
 	const auto processor = std::make_shared<MockStereoProcessor>();
 	StereoProcessorAdapter adapter{ processor };
 	float left{};

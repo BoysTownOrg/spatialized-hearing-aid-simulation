@@ -8,11 +8,11 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
-	const float *const *frames() const {
+	const float *const *channels() const {
 		return _frames;
 	}
-	void read(float ** frames, int frameCount) override {
-		_frames = frames;
+	void read(float ** channels, int frameCount) override {
+		_frames = channels;
 		_frameCount = frameCount;
 	}
 };
@@ -24,24 +24,24 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
-	const float *const *frames() const {
+	const float *const *channels() const {
 		return _frames;
 	}
-	void process(float ** frames, int frameCount) override {
-		_frames = frames;
+	void process(float ** channels, int frameCount) override {
+		_frames = channels;
 		_frameCount = frameCount;
 	}
 };
 
 class ReadsAOne : public AudioFrameReader {
-	void read(float ** frames, int) override {
-		*frames[0] = 1;
+	void read(float ** channels, int) override {
+		*channels[0] = 1;
 	}
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
-	void process(float ** frames, int) override {
-		*frames[0] *= 2;
+	void process(float ** channels, int) override {
+		*channels[0] *= 2;
 	}
 };
 
@@ -63,8 +63,8 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndPro
 	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
 	stream.read(&x, 1);
-	EXPECT_EQ(&x, reader->frames());
+	EXPECT_EQ(&x, reader->channels());
 	EXPECT_EQ(1, reader->frameCount());
-	EXPECT_EQ(&x, processor->frames());
+	EXPECT_EQ(&x, processor->channels());
 	EXPECT_EQ(1, processor->frameCount());
 }

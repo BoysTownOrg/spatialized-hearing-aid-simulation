@@ -18,6 +18,6 @@ void AudioDeviceController::stopStreaming() {
 	device->stopStream();
 }
 
-void AudioDeviceController::fillStreamBuffer(void *frames, int frameCount) {
-	reader->read(static_cast<float **>(frames), frameCount);
+void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
+	reader->read(static_cast<float **>(channels), frameCount);
 }

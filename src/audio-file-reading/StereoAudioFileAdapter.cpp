@@ -5,6 +5,6 @@ StereoAudioFileAdapter::StereoAudioFileAdapter(
 ) :
 	file{ std::move(file) } {}
 
-void StereoAudioFileAdapter::read(float **frames, int frameCount) {
-	file->read(frames[0], frames[1], frameCount);
+void StereoAudioFileAdapter::read(float **channels, int frameCount) {
+	file->read(channels[0], channels[1], frameCount);
 }

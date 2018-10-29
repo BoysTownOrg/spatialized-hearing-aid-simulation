@@ -17,8 +17,8 @@ class HearingAidProcessor : public SignalProcessor {
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
-		std::shared_ptr<FilterbankCompressor> compressor
+		std::shared_ptr<FilterbankCompressor>
 	);
-	HEARING_AID_PROCESSING_API void process(float *x, int frameCount) override;
+	HEARING_AID_PROCESSING_API void process(float *, int) override;
 };
 

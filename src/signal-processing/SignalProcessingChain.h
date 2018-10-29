@@ -8,6 +8,6 @@
 class SignalProcessingChain : public SignalProcessor {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 public:
-	SIGNAL_PROCESSING_API void process(float *x, int) override;
-	SIGNAL_PROCESSING_API void add(std::shared_ptr<SignalProcessor> processor);
+	SIGNAL_PROCESSING_API void process(float *, int) override;
+	SIGNAL_PROCESSING_API void add(std::shared_ptr<SignalProcessor>);
 };

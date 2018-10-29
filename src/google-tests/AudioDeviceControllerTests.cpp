@@ -29,7 +29,7 @@ class MockAudioFrameReader : public AudioFrameReader {
 	int _frameCount{};
 	float **_frames{};
 public:
-	const float * const * frames() const {
+	const float * const * channels() const {
 		return _frames;
 	}
 	int frameCount() const {
@@ -85,6 +85,6 @@ TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	AudioDeviceController controller{ device, stream };
 	float *frame{};
 	device->fillStreamBuffer(&frame, 1);
-	EXPECT_EQ(&frame, stream->frames());
+	EXPECT_EQ(&frame, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
 }

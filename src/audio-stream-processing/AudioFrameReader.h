@@ -5,6 +5,6 @@
 class AudioFrameReader {
 public:
 	INTERFACE_OPERATIONS(AudioFrameReader);
-	virtual void read(float **frames, int frameCount) = 0;
+	virtual void read(float **channels, int frameCount) = 0;
 };
 

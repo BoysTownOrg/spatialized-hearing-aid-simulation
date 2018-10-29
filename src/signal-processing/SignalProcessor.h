@@ -5,5 +5,5 @@
 class SignalProcessor {
 public:
 	INTERFACE_OPERATIONS(SignalProcessor);
-	virtual void process(float *, int) = 0;
+	virtual void process(float *signal, int samples) = 0;
 };

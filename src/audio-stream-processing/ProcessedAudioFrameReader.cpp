@@ -7,7 +7,7 @@ ProcessedAudioFrameReader::ProcessedAudioFrameReader(
 	reader{ std::move(reader) },
 	processor{ std::move(processor) } {}
 
-void ProcessedAudioFrameReader::read(float ** frames, int frameCount) {
-	reader->read(frames, frameCount);
-	processor->process(frames, frameCount);
+void ProcessedAudioFrameReader::read(float ** channels, int frameCount) {
+	reader->read(channels, frameCount);
+	processor->process(channels, frameCount);
 }
