@@ -27,21 +27,21 @@
     <ClCompile Include="AudioDeviceControllerTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioFileReadingTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StereoProcessorTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FirFilterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MonoProcessingChainTests.cpp">
+    <ClCompile Include="SignalProcessingChainTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoAudioFileReadingTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MockMonoProcessor.h">
+    <ClInclude Include="MockSignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

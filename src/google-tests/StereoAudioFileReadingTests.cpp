@@ -1,4 +1,4 @@
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading/StereoAudioFileInMemory.h>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -39,7 +39,7 @@ public:
 };
 
 class AudioFileInMemoryFacade {
-	AudioFileInMemory file;
+	StereoAudioFileInMemory file;
 public:
 	AudioFileInMemoryFacade(
 		std::vector<float> contents,
@@ -54,7 +54,7 @@ public:
 		return AudioFileInMemoryFacade{ std::move(contents), 2 };
 	}
 
-	static AudioFileInMemoryFacade Mono(std::vector<float> contents) {
+	static AudioFileInMemoryFacade Signal(std::vector<float> contents) {
 		return AudioFileInMemoryFacade{ std::move(contents), 1 };
 	}
 
@@ -74,26 +74,26 @@ public:
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
-TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
+TEST(AudioFileReadingTestCase, constructorThrowsIfNotSignalOrStereo) {
 	const auto reader =
 		std::make_shared<MockAudioFileReader>(std::vector<float>{});
 	reader->setChannels(0);
 	EXPECT_THROW(
-		AudioFileInMemory file{ reader }, 
-		AudioFileInMemory::InvalidChannelCount);
+		StereoAudioFileInMemory file{ reader }, 
+		StereoAudioFileInMemory::InvalidChannelCount);
 	reader->setChannels(3);
 	EXPECT_THROW(
-		AudioFileInMemory file{ reader }, 
-		AudioFileInMemory::InvalidChannelCount);
+		StereoAudioFileInMemory file{ reader }, 
+		StereoAudioFileInMemory::InvalidChannelCount);
 }
 
 TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {
-	const auto file = AudioFileInMemoryFacade::Mono({});
+	const auto file = AudioFileInMemoryFacade::Signal({});
 	EXPECT_EQ(0, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, readReducesFramesRemaining) {
-	auto file = AudioFileInMemoryFacade::Mono({ 1, 2, 3 });
+	auto file = AudioFileInMemoryFacade::Signal({ 1, 2, 3 });
 	EXPECT_EQ(3, file.framesRemaining());
 	file.readFrames(1);
 	EXPECT_EQ(2, file.framesRemaining());
@@ -138,8 +138,8 @@ TEST(AudioFileReadingTestCase, readLessThanRequested) {
 	EXPECT_EQ(0, right[1]);
 }
 
-TEST(AudioFileReadingTestCase, readMonoFileCopiesLeftChannelToRight) {
-	auto file = AudioFileInMemoryFacade::Mono({ 3, 4 });
+TEST(AudioFileReadingTestCase, readSignalFileCopiesLeftChannelToRight) {
+	auto file = AudioFileInMemoryFacade::Signal({ 3, 4 });
 	float left{};
 	float right{};
 	file.read(&left, &right, 1);

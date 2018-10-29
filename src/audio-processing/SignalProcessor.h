@@ -2,8 +2,8 @@
 
 #include <common-includes/Interface.h>
 
-class MonoProcessor {
+class SignalProcessor {
 public:
-	INTERFACE_OPERATIONS(MonoProcessor);
+	INTERFACE_OPERATIONS(SignalProcessor);
 	virtual void process(float *, int) = 0;
 };

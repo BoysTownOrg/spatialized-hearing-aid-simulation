@@ -1,8 +1,8 @@
 #pragma once
 
-#include <audio-processing/MonoProcessor.h>
+#include <audio-processing/SignalProcessor.h>
 
-class MockMonoProcessor : public MonoProcessor {
+class MockSignalProcessor : public SignalProcessor {
 	float *_signal{};
 	int _frameCount{};
 public:

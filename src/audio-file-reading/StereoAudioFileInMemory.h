@@ -10,13 +10,13 @@
 #include <memory>
 #include <vector>
 
-class AudioFileInMemory {
+class StereoAudioFileInMemory {
 	std::vector<float> buffer;
 	int channels;
 	std::size_t head = 0;
 public:
 	class InvalidChannelCount {};
-	AUDIO_FILE_READING_API explicit AudioFileInMemory(
+	AUDIO_FILE_READING_API explicit StereoAudioFileInMemory(
 		std::shared_ptr<AudioFileReader> reader
 	);
 	AUDIO_FILE_READING_API int framesRemaining() const;

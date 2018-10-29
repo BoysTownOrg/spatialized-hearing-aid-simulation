@@ -134,11 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFileInMemory.h" />
+    <ClInclude Include="StereoAudioFileInMemory.h" />
     <ClInclude Include="AudioFileReader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioFileInMemory.cpp" />
+    <ClCompile Include="StereoAudioFileInMemory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

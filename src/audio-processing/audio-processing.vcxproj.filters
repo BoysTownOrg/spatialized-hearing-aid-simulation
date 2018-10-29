@@ -18,13 +18,13 @@
     <ClInclude Include="StereoProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MonoProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MonoProcessingChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="audio-processing-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalProcessingChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="StereoProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MonoProcessingChain.cpp">
+    <ClCompile Include="SignalProcessingChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
