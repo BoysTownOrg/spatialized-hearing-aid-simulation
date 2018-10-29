@@ -155,6 +155,9 @@
     <ClCompile Include="PresenterTests.cpp" />
     <ClCompile Include="StereoProcessorTests.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MockMonoProcessor.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
