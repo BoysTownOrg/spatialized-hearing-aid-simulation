@@ -257,10 +257,14 @@ TEST(
 	view->setAudioFilePath("c");
 	view->setBrirFilePath("d");
 	view->setLevel_dB_Spl("e");
+	view->setAttack_ms("f");
+	view->setRelease_ms("g");
 	view->play();
 	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
 	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
 	EXPECT_EQ("c", model->audioFilePath());
 	EXPECT_EQ("d", model->brirFilePath());
 	EXPECT_EQ("e", model->level_dB_Spl());
+	EXPECT_EQ("f", model->attack_ms());
+	EXPECT_EQ("g", model->release_ms());
 }
