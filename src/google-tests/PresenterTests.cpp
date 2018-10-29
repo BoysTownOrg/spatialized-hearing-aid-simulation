@@ -181,6 +181,9 @@ TEST(
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
 	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	view->setBrowseFilePath("b");
+	view->browseForRightDslPrescription();
+	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
