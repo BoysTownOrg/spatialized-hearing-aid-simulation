@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProcessedAudioFrameReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioFrameProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

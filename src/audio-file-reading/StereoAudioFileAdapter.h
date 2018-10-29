@@ -10,6 +10,6 @@ class StereoAudioFileAdapter : public AudioFrameReader {
 public:
 	AUDIO_FILE_READING_API explicit StereoAudioFileAdapter(
 		std::shared_ptr<StereoAudioFile> file);
-	AUDIO_FILE_READING_API void read(float **channels, int frameCount) override;
+	AUDIO_FILE_READING_API void read(float **, int) override;
 };
 

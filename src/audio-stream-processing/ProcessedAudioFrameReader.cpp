@@ -2,7 +2,7 @@
 
 ProcessedAudioFrameReader::ProcessedAudioFrameReader(
 	std::shared_ptr<AudioFrameReader> reader,
-	std::shared_ptr<AudioProcessor> processor
+	std::shared_ptr<AudioFrameProcessor> processor
 ) :
 	reader{ std::move(reader) },
 	processor{ std::move(processor) } {}

@@ -7,17 +7,17 @@
 #endif
 
 #include "AudioFrameReader.h"
-#include "AudioProcessor.h"
+#include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
 class ProcessedAudioFrameReader : public AudioFrameReader {
 	std::shared_ptr<AudioFrameReader> reader;
-	std::shared_ptr<AudioProcessor> processor;
+	std::shared_ptr<AudioFrameProcessor> processor;
 public:
 	AUDIO_STREAM_PROCESSING_API ProcessedAudioFrameReader(
-		std::shared_ptr<AudioFrameReader> reader,
-		std::shared_ptr<AudioProcessor> processor);
-	AUDIO_STREAM_PROCESSING_API void read(float **channels, int) override;
+		std::shared_ptr<AudioFrameReader>,
+		std::shared_ptr<AudioFrameProcessor>);
+	AUDIO_STREAM_PROCESSING_API void read(float **, int) override;
 };
 

@@ -2,10 +2,10 @@
 
 AudioDeviceController::AudioDeviceController(
 	std::shared_ptr<AudioDevice> device, 
-	std::shared_ptr<AudioFrameReader> stream
+	std::shared_ptr<AudioFrameReader> reader
 ) :
 	device{ std::move(device) },
-	reader{ std::move(stream) }
+	reader{ std::move(reader) }
 {
 	this->device->setController(this);
 }

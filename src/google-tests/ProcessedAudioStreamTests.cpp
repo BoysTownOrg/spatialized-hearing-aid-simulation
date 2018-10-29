@@ -17,7 +17,7 @@ public:
 	}
 };
 
-class MockAudioProcessor : public AudioProcessor {
+class MockAudioProcessor : public AudioFrameProcessor {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -39,7 +39,7 @@ class ReadsAOne : public AudioFrameReader {
 	}
 };
 
-class AudioTimesTwo : public AudioProcessor {
+class AudioTimesTwo : public AudioFrameProcessor {
 	void process(float ** channels, int) override {
 		*channels[0] *= 2;
 	}
