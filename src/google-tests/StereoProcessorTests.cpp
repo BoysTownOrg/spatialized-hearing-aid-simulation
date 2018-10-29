@@ -1,5 +1,5 @@
 #include "MockSignalProcessor.h"
-#include <audio-processing/StereoProcessor.h>
+#include <signal-processing/StereoProcessor.h>
 #include <gtest/gtest.h>
 
 class StereoProcessorTestCase : public ::testing::TestCase {};

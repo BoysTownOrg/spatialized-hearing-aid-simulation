@@ -1,6 +1,6 @@
 #pragma once
 
-#include <audio-processing/SignalProcessor.h>
+#include <signal-processing/SignalProcessor.h>
 
 class MockSignalProcessor : public SignalProcessor {
 	float *_signal{};

@@ -8,7 +8,7 @@
 
 #include "AudioReader.h"
 #include "AudioProcessor.h"
-#include <audio-device-control/AudioStream.h>
+#include <audio-stream-processing/AudioStream.h>
 #include <memory>
 
 class ProcessedAudioStream : public AudioStream {

@@ -1,5 +1,5 @@
 #include "MockSignalProcessor.h"
-#include <audio-processing/SignalProcessingChain.h>
+#include <signal-processing/SignalProcessingChain.h>
 #include <gtest/gtest.h>
 
 class AddOne : public SignalProcessor {
