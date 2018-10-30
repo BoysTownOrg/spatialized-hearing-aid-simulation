@@ -16,9 +16,13 @@ public:
 			int windowSize;
 			int chunkSize;
 		};
+		struct ForAudioDevice {
+			int framesPerBuffer;
+		};
 		std::string audioFilePath;
 		std::string brirFilePath;
 		ForHearingAidSimulation forHearingAidSimulation;
+		ForAudioDevice forAudioDevice;
 	};
 	virtual void play() = 0;
 };
