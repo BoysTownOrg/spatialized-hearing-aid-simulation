@@ -7,7 +7,10 @@ class AudioPlayer {
 public:
 	INTERFACE_OPERATIONS(AudioPlayer);
 	struct Parameters {
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
 		std::string audioFilePath;
+		std::string brirFilePath;
 	};
 };
 

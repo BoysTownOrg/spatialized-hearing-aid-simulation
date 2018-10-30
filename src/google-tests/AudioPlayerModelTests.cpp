@@ -23,6 +23,9 @@ public:
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
 		_audioFilePath = p.audioFilePath;
+		_leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
+		_rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
+		_brirFilePath = p.brirFilePath;
 		return {};
 	}
 };
