@@ -178,6 +178,7 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 	EXPECT_EQ(3, factory->release_ms());
 	EXPECT_EQ(4, factory->windowSize());
 	EXPECT_EQ(5, factory->chunkSize());
+	EXPECT_EQ(5, factory->framesPerBuffer());
 }
 
 TEST(AudioPlayerModelTestCase, successfulRequestPlaysPlayer) {
