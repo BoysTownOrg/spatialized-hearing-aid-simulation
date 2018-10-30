@@ -37,7 +37,7 @@ static void expectRequestTransformationYieldsFailure(
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
-TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
+TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) { 
 			request.level_dB_Spl = "a";
@@ -56,6 +56,9 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 			return request;
 		},
 		"'a' is not a valid release time.");
+}
+
+TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
 			request.windowSize = "a";
