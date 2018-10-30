@@ -15,4 +15,5 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.attack_ms, "attack time");
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotDouble(request.windowSize, "window size");
+	throwIfNotDouble(request.chunkSize, "chunk size");
 }
