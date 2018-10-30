@@ -3,10 +3,22 @@
 #include <functional>
 
 class MockAudioPlayerFactory : public AudioPlayerFactory {
+	std::string _leftDslPrescriptionFilePath{};
+	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
+	std::string _brirFilePath{};
 public:
 	std::string audioFilePath() const {
 		return _audioFilePath;
+	}
+	std::string leftDslPrescriptionFilePath() const {
+		return _leftDslPrescriptionFilePath;
+	}
+	std::string rightDslPrescriptionFilePath() const {
+		return _rightDslPrescriptionFilePath;
+	}
+	std::string brirFilePath() const {
+		return _brirFilePath;
 	}
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
