@@ -2,6 +2,14 @@
 #include <gtest/gtest.h>
 #include <functional>
 
+class MockAudioPlayer : public AudioPlayer {
+	bool _played{};
+public:
+	bool played() const {
+		return _played;
+	}
+};
+
 class MockAudioPlayerFactory : public AudioPlayerFactory {
 	std::string _leftDslPrescriptionFilePath{};
 	std::string _rightDslPrescriptionFilePath{};
@@ -12,7 +20,14 @@ class MockAudioPlayerFactory : public AudioPlayerFactory {
 	double _release_ms{};
 	int _windowSize{};
 	int _chunkSize{};
+	std::shared_ptr<AudioPlayer> player;
 public:
+	explicit MockAudioPlayerFactory(
+		std::shared_ptr<AudioPlayer> player =
+			std::make_shared<MockAudioPlayer>()
+	) :
+		player{ std::move(player) } {}
+
 	std::string audioFilePath() const {
 		return _audioFilePath;
 	}
@@ -51,7 +66,7 @@ public:
 		_release_ms = p.forHearingAidSimulation.release_ms;
 		_windowSize = p.forHearingAidSimulation.windowSize;
 		_chunkSize = p.forHearingAidSimulation.chunkSize;
-		return {};
+		return player;
 	}
 };
 
