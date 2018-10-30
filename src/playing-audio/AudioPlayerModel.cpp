@@ -21,6 +21,9 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 				std::stod(request.release_ms),
 				std::stoi(request.windowSize),
 				std::stoi(request.chunkSize)
+			},
+			{
+				std::stoi(request.chunkSize)
 			}
 		}
 	);
