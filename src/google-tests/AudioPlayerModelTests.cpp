@@ -130,4 +130,9 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 	EXPECT_EQ("b", factory->rightDslPrescriptionFilePath());
 	EXPECT_EQ("c", factory->audioFilePath());
 	EXPECT_EQ("d", factory->brirFilePath());
+	EXPECT_EQ(1, factory->level_dB_Spl());
+	EXPECT_EQ(2, factory->attack_ms());
+	EXPECT_EQ(3, factory->release_ms());
+	EXPECT_EQ(4, factory->windowSize());
+	EXPECT_EQ(5, factory->chunkSize());
 }
