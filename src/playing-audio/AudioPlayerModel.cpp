@@ -9,7 +9,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
-	factory->make(
+	const auto player = factory->make(
 		{ 
 			request.audioFilePath,
 			request.brirFilePath,
@@ -24,6 +24,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 			}
 		}
 	);
+	player->play();
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {

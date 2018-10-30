@@ -8,6 +8,9 @@ public:
 	bool played() const {
 		return _played;
 	}
+	void play() override {
+		_played = true;
+	}
 };
 
 class MockAudioPlayerFactory : public AudioPlayerFactory {

@@ -20,6 +20,7 @@ public:
 		std::string brirFilePath;
 		ForHearingAidSimulation forHearingAidSimulation;
 	};
+	virtual void play() = 0;
 };
 
 #include <memory>
