@@ -21,7 +21,7 @@ TEST(AudioPlayerModelTestCase, badLevelThrowsRequestFailure) {
 		FAIL() << "Expected Model::RequestFailure";
 	}
 	catch (const Model::RequestFailure &failure) {
-		EXPECT_EQ(std::string{ "'a' is not a valid level..." }, failure.what());
+		EXPECT_EQ(std::string{ "'a' is not a valid level." }, failure.what());
 	}
 }
 

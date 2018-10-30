@@ -6,5 +6,7 @@
 class AudioPlayerModel : public Model {
 public:
 	PRESENTATION_API void playRequest(PlayRequest) override;
+private:
+	void throwIfNotDouble(std::string x, std::string identifier);
 };
 
