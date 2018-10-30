@@ -23,7 +23,8 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 				std::stoi(request.chunkSize)
 			},
 			{
-				std::stoi(request.chunkSize)
+				std::stoi(request.chunkSize),
+				44100
 			}
 		}
 	);
