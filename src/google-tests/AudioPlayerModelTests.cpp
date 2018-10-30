@@ -21,15 +21,13 @@ static void expectEqual(std::string expected, std::string actual) {
 	EXPECT_EQ(expected, actual);
 }
 
-static void expectRequestAlterationYieldsFailure(
-	std::function<void(Model::PlayRequest &)> alteration,
+static void expectRequestTransformationYieldsFailure(
+	std::function<Model::PlayRequest(Model::PlayRequest)> transformation,
 	std::string message) 
 {
 	try {
 		AudioPlayerModel model{};
-		auto request = validRequest();
-		alteration(request);
-		model.playRequest(request);
+		model.playRequest(transformation(validRequest()));
 		FAIL() << "Expected Model::RequestFailure";
 	}
 	catch (const Model::RequestFailure &failure) {
@@ -40,10 +38,16 @@ static void expectRequestAlterationYieldsFailure(
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
-	expectRequestAlterationYieldsFailure(
-		[](Model::PlayRequest &request) { request.level_dB_Spl = "a"; },
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) { 
+			request.level_dB_Spl = "a";
+			return request;
+		},
 		"'a' is not a valid level.");
-	expectRequestAlterationYieldsFailure(
-		[](Model::PlayRequest &request) { request.attack_ms = "a"; },
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) {
+			request.attack_ms = "a";
+			return request;
+		},
 		"'a' is not a valid attack time.");
 }
