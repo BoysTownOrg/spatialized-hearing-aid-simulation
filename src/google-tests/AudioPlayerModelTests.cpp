@@ -50,4 +50,10 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 			return request;
 		},
 		"'a' is not a valid attack time.");
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) {
+		request.release_ms = "a";
+		return request;
+	},
+		"'a' is not a valid release time.");
 }
