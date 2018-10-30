@@ -1,5 +1,9 @@
 #include "AudioPlayerModel.h"
 
+AudioPlayerModel::AudioPlayerModel(std::shared_ptr<AudioPlayerFactory>)
+{
+}
+
 void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.level_dB_Spl, "level");
 	throwIfNotDouble(request.attack_ms, "attack time");

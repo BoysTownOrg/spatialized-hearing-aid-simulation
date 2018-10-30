@@ -2,6 +2,13 @@
 #include <gtest/gtest.h>
 #include <functional>
 
+class MockAudioPlayerFactory : public AudioPlayerFactory {
+public:
+	std::string audioFilePath() const {
+		return "";
+	}
+};
+
 static Model::PlayRequest validRequest() {
 	return 
 		{
@@ -26,7 +33,7 @@ static void expectRequestTransformationYieldsFailure(
 	std::string message) 
 {
 	try {
-		AudioPlayerModel model{};
+		AudioPlayerModel model{std::make_shared<MockAudioPlayerFactory>()};
 		model.playRequest(transformation(validRequest()));
 		FAIL() << "Expected Model::RequestFailure";
 	}
