@@ -161,3 +161,11 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 	EXPECT_EQ(4, factory->windowSize());
 	EXPECT_EQ(5, factory->chunkSize());
 }
+
+TEST(AudioPlayerModelTestCase, successfulRequestPlaysPlayer) {
+	const auto player = std::make_shared<MockAudioPlayer>();
+	const auto factory = std::make_shared<MockAudioPlayerFactory>(player);
+	AudioPlayerModel model{ factory };
+	model.playRequest(validRequest());
+	EXPECT_TRUE(player->played());
+}

@@ -14,7 +14,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 			request.audioFilePath,
 			request.brirFilePath,
 			{
-				request.leftDslPrescriptionFilePath ,
+				request.leftDslPrescriptionFilePath,
 				request.rightDslPrescriptionFilePath,
 				std::stod(request.level_dB_Spl),
 				std::stod(request.attack_ms),
@@ -22,7 +22,8 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 				std::stoi(request.windowSize),
 				std::stoi(request.chunkSize)
 			}
-		});
+		}
+	);
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {
