@@ -1,8 +1,7 @@
 #include "AudioPlayerModel.h"
 
-AudioPlayerModel::AudioPlayerModel(std::shared_ptr<AudioPlayerFactory>)
-{
-}
+AudioPlayerModel::AudioPlayerModel(std::shared_ptr<AudioPlayerFactory> factory) :
+	factory{ std::move(factory) } {}
 
 void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.level_dB_Spl, "level");
@@ -10,6 +9,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
+	factory->make({ request.audioFilePath });
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {

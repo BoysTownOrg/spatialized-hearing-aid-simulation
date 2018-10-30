@@ -3,9 +3,15 @@
 #include <functional>
 
 class MockAudioPlayerFactory : public AudioPlayerFactory {
+	std::string _audioFilePath{};
 public:
 	std::string audioFilePath() const {
-		return "";
+		return _audioFilePath;
+	}
+	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
+	{
+		_audioFilePath = p.audioFilePath;
+		return {};
 	}
 };
 
