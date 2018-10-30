@@ -3,9 +3,9 @@
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
-TEST(AudioPlayerModelTestCase, badParametersThrowErrors) {
-	AudioPlayerModel model{};
+TEST(AudioPlayerModelTestCase, badLevelThrowsRequestFailure) {
 	try {
+		AudioPlayerModel model{};
 		model.playRequest(
 			{
 				"",
