@@ -9,6 +9,9 @@ public:
 	const mxArray *get() const {
 		return data;
 	}
+	mxClassID classId() const {
+		return mxGetClassID(data);
+	}
 	~MatlabArray() {
 		mxDestroyArray(data);
 	}
@@ -41,4 +44,5 @@ TEST(MatFileTestCase, getVariable) {
 	MatFileReader reader{ "../example.mat" };
 	const auto s = reader.getVariable("s");
 	EXPECT_FALSE(s.get() == nullptr);
+	EXPECT_EQ(mxSTRUCT_CLASS, s.classId());
 }
