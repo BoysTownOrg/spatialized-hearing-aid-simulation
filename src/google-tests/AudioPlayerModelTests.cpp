@@ -52,14 +52,20 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 		"'a' is not a valid attack time.");
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
-		request.release_ms = "a";
-		return request;
-	},
+			request.release_ms = "a";
+			return request;
+		},
 		"'a' is not a valid release time.");
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
-		request.windowSize = "a";
-		return request;
-	},
+			request.windowSize = "a";
+			return request;
+		},
 		"'a' is not a valid window size.");
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) {
+			request.chunkSize = "a";
+			return request;
+		},
+		"'a' is not a valid chunk size.");
 }
