@@ -1,5 +1,6 @@
 #include <presentation/AudioPlayerModel.h>
 #include <gtest/gtest.h>
+#include <functional>
 
 static Model::PlayRequest validRequest() {
 	return 
@@ -20,30 +21,29 @@ static void expectEqual(std::string expected, std::string actual) {
 	EXPECT_EQ(expected, actual);
 }
 
-class AudioPlayerModelTestCase : public ::testing::TestCase {};
-
-TEST(AudioPlayerModelTestCase, badLevelThrowsRequestFailure) {
+static void expectRequestAlterationYieldsFailure(
+	std::function<void(Model::PlayRequest &)> alteration,
+	std::string message) 
+{
 	try {
 		AudioPlayerModel model{};
 		auto request = validRequest();
-		request.level_dB_Spl = "a";
+		alteration(request);
 		model.playRequest(request);
 		FAIL() << "Expected Model::RequestFailure";
 	}
 	catch (const Model::RequestFailure &failure) {
-		expectEqual("'a' is not a valid level.", failure.what());
+		expectEqual(message, failure.what());
 	}
 }
 
-TEST(AudioPlayerModelTestCase, badAttackThrowsRequestFailure) {
-	try {
-		AudioPlayerModel model{};
-		auto request = validRequest();
-		request.attack_ms = "a";
-		model.playRequest(request);
-		FAIL() << "Expected Model::RequestFailure";
-	}
-	catch (const Model::RequestFailure &failure) {
-		expectEqual("'a' is not a valid attack time.", failure.what());
-	}
+class AudioPlayerModelTestCase : public ::testing::TestCase {};
+
+TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
+	expectRequestAlterationYieldsFailure(
+		[](Model::PlayRequest &request) { request.level_dB_Spl = "a"; },
+		"'a' is not a valid level.");
+	expectRequestAlterationYieldsFailure(
+		[](Model::PlayRequest &request) { request.attack_ms = "a"; },
+		"'a' is not a valid attack time.");
 }
