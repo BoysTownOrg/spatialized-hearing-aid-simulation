@@ -43,14 +43,14 @@ public:
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
 		_audioFilePath = p.audioFilePath;
-		_leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
-		_rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
 		_brirFilePath = p.brirFilePath;
-		_level_dB_Spl = p.level_dB_Spl;
-		_attack_ms = p.attack_ms;
-		_release_ms = p.release_ms;
-		_windowSize = p.windowSize;
-		_chunkSize = p.chunkSize;
+		_leftDslPrescriptionFilePath = p.forHearingAidSimulation.leftDslPrescriptionFilePath;
+		_rightDslPrescriptionFilePath = p.forHearingAidSimulation.rightDslPrescriptionFilePath;
+		_level_dB_Spl = p.forHearingAidSimulation.level_dB_Spl;
+		_attack_ms = p.forHearingAidSimulation.attack_ms;
+		_release_ms = p.forHearingAidSimulation.release_ms;
+		_windowSize = p.forHearingAidSimulation.windowSize;
+		_chunkSize = p.forHearingAidSimulation.chunkSize;
 		return {};
 	}
 };

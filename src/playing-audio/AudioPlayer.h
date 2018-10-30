@@ -7,15 +7,18 @@ class AudioPlayer {
 public:
 	INTERFACE_OPERATIONS(AudioPlayer);
 	struct Parameters {
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
+		struct ForHearingAidSimulation {
+			std::string leftDslPrescriptionFilePath;
+			std::string rightDslPrescriptionFilePath;
+			double level_dB_Spl;
+			double attack_ms;
+			double release_ms;
+			int windowSize;
+			int chunkSize;
+		};
 		std::string audioFilePath;
 		std::string brirFilePath;
-		double level_dB_Spl;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
+		ForHearingAidSimulation forHearingAidSimulation;
 	};
 };
 

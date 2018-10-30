@@ -11,15 +11,17 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
 	factory->make(
 		{ 
-			request.leftDslPrescriptionFilePath ,
-			request.rightDslPrescriptionFilePath,
 			request.audioFilePath,
 			request.brirFilePath,
-			std::stod(request.level_dB_Spl),
-			std::stod(request.attack_ms),
-			std::stod(request.release_ms),
-			std::stoi(request.windowSize),
-			std::stoi(request.chunkSize),
+			{
+				request.leftDslPrescriptionFilePath ,
+				request.rightDslPrescriptionFilePath,
+				std::stod(request.level_dB_Spl),
+				std::stod(request.attack_ms),
+				std::stod(request.release_ms),
+				std::stoi(request.windowSize),
+				std::stoi(request.chunkSize)
+			}
 		});
 }
 
