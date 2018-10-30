@@ -65,6 +65,7 @@ class MockView : public View {
 	std::string _release_ms{};
 	std::string _windowSize{};
 	std::string _chunkSize{};
+	std::string _errorMessage{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -167,6 +168,9 @@ public:
 	}
 	void play() {
 		_presenter->play();
+	}
+	std::string errorMessage() const {
+		return _errorMessage;
 	}
 };
 
@@ -320,6 +324,16 @@ TEST(
 	EXPECT_EQ("h", model->windowSize());
 	EXPECT_EQ("i", model->chunkSize());
 }
+
+class ErrorModel : public Model {
+	std::string message;
+public:
+	explicit ErrorModel(std::string message) :
+		message(std::move(message)) {}
+	void playRequest(PlayRequest) override {
+		throw RequestFailure{ message };
+	}
+};
 
 TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	const auto view = std::make_shared<MockView>();
