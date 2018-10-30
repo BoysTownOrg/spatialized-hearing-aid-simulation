@@ -1,4 +1,4 @@
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading/StereoAudioFileInMemory.h>
 #include <sndfile.h>
 
 class LibsndfileReader : public AudioFileReader {
@@ -81,10 +81,10 @@ public:
 	void runEventLoop() override;
 	std::string browseForFile(std::vector<std::string> filters) override;
 	bool browseCancelled() override;
-	void setDslPrescriptionFilePath(std::string) override;
+	void setLeftDslPrescriptionFilePath(std::string) override;
 	void setAudioFilePath(std::string) override;
 	void setBrirFilePath(std::string) override;
-	std::string dslPrescriptionFilePath() const override;
+	std::string leftDslPrescriptionFilePath() const override;
 	std::string audioFilePath() const override;
 	std::string brirFilePath() const override;
 
@@ -97,7 +97,7 @@ private:
 #include <sstream>
 
 void FltkWindow::onBrowsePrescription(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->browseForDslPrescription();
+	static_cast<FltkWindow *>(self)->presenter->browseForLeftDslPrescription();
 }
 
 void FltkWindow::onBrowseAudio(Fl_Widget *, void *self) {
@@ -110,7 +110,7 @@ void FltkWindow::onBrowseBrir(Fl_Widget *, void *self) {
 
 FltkWindow::FltkWindow() :
 	window(500, 300, 450, 300),
-	_prescriptionFilePath(150, 50, 200, 40, "Prescription file path"),
+	_prescriptionFilePath(150, 50, 200, 40, "Left DSL prescription file path"),
 	_audioFilePath(150, 100, 200, 40, "Audio file path"),
 	_brirFilePath(150, 150, 200, 40, "BRIR file path"),
 	browsePrescription(360, 50, 60, 40, "Browse"),
@@ -155,7 +155,7 @@ bool FltkWindow::browseCancelled() {
 	return browseResult == static_cast<int>(BrowseResult::cancelled);
 }
 
-void FltkWindow::setDslPrescriptionFilePath(std::string p) {
+void FltkWindow::setLeftDslPrescriptionFilePath(std::string p) {
 	_prescriptionFilePath.value(p.c_str());
 }
 
@@ -167,7 +167,7 @@ void FltkWindow::setBrirFilePath(std::string p) {
 	_brirFilePath.value(p.c_str());
 }
 
-std::string FltkWindow::dslPrescriptionFilePath() const {
+std::string FltkWindow::leftDslPrescriptionFilePath() const {
 	return _prescriptionFilePath.value();
 }
 
