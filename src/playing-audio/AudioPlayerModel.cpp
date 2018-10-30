@@ -9,6 +9,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
+	const auto sampleRate = 44100;
 	const auto player = factory->make(
 		{ 
 			request.audioFilePath,
@@ -20,11 +21,12 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 				std::stod(request.attack_ms),
 				std::stod(request.release_ms),
 				std::stoi(request.windowSize),
-				std::stoi(request.chunkSize)
+				std::stoi(request.chunkSize),
+				sampleRate
 			},
 			{
 				std::stoi(request.chunkSize),
-				44100
+				sampleRate
 			}
 		}
 	);
