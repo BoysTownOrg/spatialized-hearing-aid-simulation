@@ -2,6 +2,7 @@
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
-TEST(AudioPlayerModelTestCase, tbd) {
-
+TEST(AudioPlayerModelTestCase, badParametersThrowErrors) {
+	AudioPlayerModel model{};
+	model.playRequest({});
 }
