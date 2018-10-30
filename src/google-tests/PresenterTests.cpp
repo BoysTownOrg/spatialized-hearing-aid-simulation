@@ -172,6 +172,9 @@ public:
 	std::string errorMessage() const {
 		return _errorMessage;
 	}
+	void showErrorDialog(std::string message) override {
+		_errorMessage = message;
+	}
 };
 
 class PresenterFacade {

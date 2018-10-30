@@ -39,19 +39,24 @@ void Presenter::browseForBrir() {
 }
 
 void Presenter::play() {
-	model->playRequest(
-		{
-			view->leftDslPrescriptionFilePath(),
-			view->rightDslPrescriptionFilePath(),
-			view->audioFilePath(),
-			view->brirFilePath(),
-			view->level_dB_Spl(),
-			view->attack_ms(),
-			view->release_ms(),
-			view->windowSize(),
-			view->chunkSize()
-		}
-	);
+	try {
+		model->playRequest(
+			{
+				view->leftDslPrescriptionFilePath(),
+				view->rightDslPrescriptionFilePath(),
+				view->audioFilePath(),
+				view->brirFilePath(),
+				view->level_dB_Spl(),
+				view->attack_ms(),
+				view->release_ms(),
+				view->windowSize(),
+				view->chunkSize()
+			}
+		);
+	}
+	catch (const Model::RequestFailure &failure) {
+		view->showErrorDialog(failure.what());
+	}
 }
 
 void Presenter::browseAndUpdateIfNotCancelled(
