@@ -17,17 +17,17 @@ public:
 			int chunkSize;
 			int sampleRate;
 		};
+		struct ForSpatialization {
+			std::string brirFilePath;
+		};
 		struct ForAudioDevice {
 			int framesPerBuffer;
 			int sampleRate;
 		};
-		struct ForSpatialization {
-			std::string brirFilePath;
-		};
 		std::string audioFilePath;
 		ForHearingAidSimulation forHearingAidSimulation;
-		ForAudioDevice forAudioDevice;
 		ForSpatialization forSpatialization;
+		ForAudioDevice forAudioDevice;
 	};
 	virtual void play() = 0;
 };

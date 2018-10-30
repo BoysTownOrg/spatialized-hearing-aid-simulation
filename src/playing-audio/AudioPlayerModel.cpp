@@ -24,11 +24,11 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 				sampleRate
 			},
 			{
-				std::stoi(request.chunkSize),
-				sampleRate
+				request.brirFilePath
 			},
 			{
-				request.brirFilePath
+				std::stoi(request.chunkSize),
+				sampleRate
 			}
 		}
 	);
