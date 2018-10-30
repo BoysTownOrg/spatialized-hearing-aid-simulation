@@ -15,6 +15,9 @@ public:
 	int fieldCount() const {
 		return mxGetNumberOfFields(data);
 	}
+	const mxArray *getField(mwIndex index, std::string name) const {
+		return mxGetField(data, index, name.c_str());
+	}
 	~MatlabArray() {
 		mxDestroyArray(data);
 	}
@@ -49,4 +52,6 @@ TEST(MatFileTestCase, getVariable) {
 	EXPECT_FALSE(s.get() == nullptr);
 	EXPECT_EQ(mxSTRUCT_CLASS, s.classId());
 	EXPECT_EQ(2, s.fieldCount());
+	const auto a = s.getField(0, "a");
+	EXPECT_FALSE(a == nullptr);
 }
