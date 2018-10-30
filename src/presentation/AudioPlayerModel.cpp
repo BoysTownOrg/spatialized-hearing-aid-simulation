@@ -5,7 +5,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.attack_ms, "attack time");
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
-	throwIfNotDouble(request.chunkSize, "chunk size");
+	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {
