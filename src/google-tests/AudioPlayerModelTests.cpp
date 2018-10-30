@@ -24,6 +24,7 @@ class MockAudioPlayerFactory : public AudioPlayerFactory {
 	int _windowSize{};
 	int _chunkSize{};
 	int _framesPerBuffer{};
+	int _sampleRate{};
 	std::shared_ptr<AudioPlayer> player;
 public:
 	explicit MockAudioPlayerFactory(
@@ -62,6 +63,9 @@ public:
 	int framesPerBuffer() const {
 		return _framesPerBuffer;
 	}
+	int sampleRate() const {
+		return _sampleRate;
+	}
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
 		_audioFilePath = p.audioFilePath;
@@ -74,6 +78,7 @@ public:
 		_windowSize = p.forHearingAidSimulation.windowSize;
 		_chunkSize = p.forHearingAidSimulation.chunkSize;
 		_framesPerBuffer = p.forAudioDevice.framesPerBuffer;
+		_sampleRate = p.forAudioDevice.sampleRate;
 		return player;
 	}
 };

@@ -18,6 +18,7 @@ public:
 		};
 		struct ForAudioDevice {
 			int framesPerBuffer;
+			int sampleRate;
 		};
 		std::string audioFilePath;
 		std::string brirFilePath;
