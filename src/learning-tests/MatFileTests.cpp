@@ -1,15 +1,31 @@
 #include <mat.h>
 #include <gtest/gtest.h>
 
+class MatFileReader {
+	MATFile *file;
+public:
+	explicit MatFileReader(std::string filePath) :
+		file{ matOpen(filePath.c_str(), "r") } {}
+	~MatFileReader() {
+		matClose(file);
+	}
+	mxArray *getVariable(std::string name) {
+		return matGetVariable(file, name.c_str());
+	}
+	const MATFile *get() const {
+		return file;
+	}
+};
+
 class MatFileTestCase : public ::testing::TestCase {};
 
 TEST(MatFileTestCase, canOpen) {
-	const auto matFile = matOpen("../example.mat", "r");
-	EXPECT_FALSE(matFile == nullptr);
+	MatFileReader reader{ "../example.mat" };
+	EXPECT_FALSE(reader.get() == nullptr);
 }
 
 TEST(MatFileTestCase, tbd) {
-	const auto matFile = matOpen("../example.mat", "r");
-	const auto s = matGetVariable(matFile, "s");
+	MatFileReader reader{ "../example.mat" };
+	const auto s = reader.getVariable("s");
 	EXPECT_FALSE(s == nullptr);
 }
