@@ -67,19 +67,18 @@ static void expectBadWindowSize(std::string size) {
 		"'" + size + "' is not a valid window size.");
 }
 
+static void expectBadChunkSize(std::string size) {
+	expectRequestTransformationYieldsFailure(
+		[=](Model::PlayRequest request) {
+			request.chunkSize = size;
+			return request;
+		},
+		"'" + size + "' is not a valid chunk size.");
+}
+
 TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
-	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" }) {
 		expectBadWindowSize(s);
-	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
-			request.chunkSize = "a";
-			return request;
-		},
-		"'a' is not a valid chunk size.");
-	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
-			request.chunkSize = "0.1";
-			return request;
-		},
-		"'0.1' is not a valid chunk size.");
+		expectBadChunkSize(s);
+	}
 }
