@@ -64,9 +64,9 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 		"'a' is not a valid window size.");
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
-		request.windowSize = "0.1";
-		return request;
-	},
+			request.windowSize = "0.1";
+			return request;
+		},
 		"'0.1' is not a valid window size.");
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
@@ -74,4 +74,10 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 			return request;
 		},
 		"'a' is not a valid chunk size.");
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) {
+			request.chunkSize = "0.1";
+			return request;
+		},
+		"'0.1' is not a valid chunk size.");
 }
