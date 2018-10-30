@@ -111,5 +111,8 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 			"4",
 			"5"
 		});
+	EXPECT_EQ("a", factory->leftDslPrescriptionFilePath());
+	EXPECT_EQ("b", factory->rightDslPrescriptionFilePath());
 	EXPECT_EQ("c", factory->audioFilePath());
+	EXPECT_EQ("d", factory->brirFilePath());
 }
