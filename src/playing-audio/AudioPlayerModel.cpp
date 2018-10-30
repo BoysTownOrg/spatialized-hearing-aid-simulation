@@ -13,7 +13,6 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	const auto player = factory->make(
 		{ 
 			request.audioFilePath,
-			request.brirFilePath,
 			{
 				request.leftDslPrescriptionFilePath,
 				request.rightDslPrescriptionFilePath,
@@ -27,6 +26,9 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 			{
 				std::stoi(request.chunkSize),
 				sampleRate
+			},
+			{
+				request.brirFilePath
 			}
 		}
 	);

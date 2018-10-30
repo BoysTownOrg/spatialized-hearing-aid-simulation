@@ -21,10 +21,13 @@ public:
 			int framesPerBuffer;
 			int sampleRate;
 		};
+		struct ForSpatialization {
+			std::string brirFilePath;
+		};
 		std::string audioFilePath;
-		std::string brirFilePath;
 		ForHearingAidSimulation forHearingAidSimulation;
 		ForAudioDevice forAudioDevice;
+		ForSpatialization forSpatialization;
 	};
 	virtual void play() = 0;
 };

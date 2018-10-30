@@ -73,7 +73,7 @@ public:
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
 		_audioFilePath = p.audioFilePath;
-		_brirFilePath = p.brirFilePath;
+		_brirFilePath = p.forSpatialization.brirFilePath;
 		_leftDslPrescriptionFilePath = p.forHearingAidSimulation.leftDslPrescriptionFilePath;
 		_rightDslPrescriptionFilePath = p.forHearingAidSimulation.rightDslPrescriptionFilePath;
 		_level_dB_Spl = p.forHearingAidSimulation.level_dB_Spl;
