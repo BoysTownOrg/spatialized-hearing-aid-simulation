@@ -13,7 +13,7 @@ class StereoAudioFileInMemory : public StereoAudioFile {
 public:
 	class InvalidChannelCount {};
 	AUDIO_FILE_READING_API explicit StereoAudioFileInMemory(
-		std::shared_ptr<AudioFileReader> reader
+		AudioFileReader &reader
 	);
 	AUDIO_FILE_READING_API int framesRemaining() const;
 	AUDIO_FILE_READING_API void read(float *left, float *right, int samples) override;

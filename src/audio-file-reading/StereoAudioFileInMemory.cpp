@@ -1,14 +1,15 @@
+#include <gsl/gsl_util>
 #include "StereoAudioFileInMemory.h"
 
-StereoAudioFileInMemory::StereoAudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
-	buffer(static_cast<std::size_t>(reader->frames() * reader->channels())),
-	channels(reader->channels())
+StereoAudioFileInMemory::StereoAudioFileInMemory(AudioFileReader &reader) :
+	buffer(gsl::narrow<std::size_t>(reader.frames() * reader.channels())),
+	channels(reader.channels())
 {
 	if (!(channels == 1 || channels == 2))
 		throw InvalidChannelCount{};
 	if (buffer.size() == 0)
 		return;
-	reader->readFrames(&buffer[0], reader->frames());
+	reader.readFrames(&buffer[0], reader.frames());
 }
 
 int StereoAudioFileInMemory::framesRemaining() const
