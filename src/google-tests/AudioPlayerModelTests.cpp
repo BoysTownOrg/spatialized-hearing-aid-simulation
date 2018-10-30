@@ -68,13 +68,8 @@ static void expectBadWindowSize(std::string size) {
 }
 
 TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
-	expectBadWindowSize("a");
-	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
-			request.windowSize = "0.1";
-			return request;
-		},
-		"'0.1' is not a valid window size.");
+	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+		expectBadWindowSize(s);
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
 			request.chunkSize = "a";
