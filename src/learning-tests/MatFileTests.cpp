@@ -54,4 +54,6 @@ TEST(MatFileTestCase, getVariable) {
 	EXPECT_EQ(2, s.fieldCount());
 	const auto a = s.getField(0, "a");
 	EXPECT_FALSE(a == nullptr);
+	const auto c = s.getField(0, "c");
+	EXPECT_TRUE(c == nullptr);
 }
