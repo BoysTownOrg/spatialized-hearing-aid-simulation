@@ -26,4 +26,5 @@ public:
 	virtual std::string release_ms() const = 0;
 	virtual std::string windowSize() const = 0;
 	virtual std::string chunkSize() const = 0;
+	virtual void showErrorDialog(std::string message) = 0;
 };
