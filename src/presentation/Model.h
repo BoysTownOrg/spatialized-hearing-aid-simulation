@@ -2,14 +2,14 @@
 
 #include <common-includes/Interface.h>
 #include <string>
+#include <stdexcept>
 
 class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
-	class RequestFailure {
+	class RequestFailure : public std::runtime_error {
 	public:
-		INTERFACE_OPERATIONS(RequestFailure);
-		virtual std::string what() const = 0;
+		explicit RequestFailure(std::string s) : std::runtime_error{ s } {}
 	};
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
