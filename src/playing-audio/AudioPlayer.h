@@ -15,6 +15,7 @@ public:
 			double release_ms;
 			int windowSize;
 			int chunkSize;
+			int sampleRate;
 		};
 		struct ForAudioDevice {
 			int framesPerBuffer;
