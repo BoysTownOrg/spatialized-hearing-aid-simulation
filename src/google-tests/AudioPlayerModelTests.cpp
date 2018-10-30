@@ -82,3 +82,21 @@ TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
 		expectBadChunkSize(s);
 	}
 }
+
+TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
+	const auto factory = std::make_shared<MockAudioPlayerFactory>();
+	AudioPlayerModel model{ factory };
+	model.playRequest(
+		{
+			"a",
+			"b",
+			"c",
+			"d",
+			"1",
+			"2",
+			"3",
+			"4",
+			"5"
+		});
+	EXPECT_EQ("c", factory->audioFilePath());
+}
