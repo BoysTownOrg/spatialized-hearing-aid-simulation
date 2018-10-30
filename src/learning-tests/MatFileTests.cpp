@@ -12,6 +12,9 @@ public:
 	mxClassID classId() const {
 		return mxGetClassID(data);
 	}
+	int fieldCount() const {
+		return mxGetNumberOfFields(data);
+	}
 	~MatlabArray() {
 		mxDestroyArray(data);
 	}
@@ -45,4 +48,5 @@ TEST(MatFileTestCase, getVariable) {
 	const auto s = reader.getVariable("s");
 	EXPECT_FALSE(s.get() == nullptr);
 	EXPECT_EQ(mxSTRUCT_CLASS, s.classId());
+	EXPECT_EQ(2, s.fieldCount());
 }
