@@ -6,7 +6,7 @@ class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	int _channels;
 public:
-	MockAudioFileReader(
+	explicit MockAudioFileReader(
 		std::vector<float> contents,
 		int _channels = 1
 	) :
@@ -42,21 +42,18 @@ class AudioFileInMemoryFacade {
 	std::shared_ptr<StereoAudioFileInMemory> file;
 public:
 	AudioFileInMemoryFacade(
-		std::vector<float> contents,
-		int _channels
+		AudioFileReader &reader
 	) :
-		file { 
-			std::make_shared<StereoAudioFileInMemory>(
-				std::make_shared<MockAudioFileReader>(
-					std::move(contents), 
-					_channels))} {}
+		file { std::make_shared<StereoAudioFileInMemory>(reader) } {}
 
 	static AudioFileInMemoryFacade Stereo(std::vector<float> contents) {
-		return AudioFileInMemoryFacade{ std::move(contents), 2 };
+		MockAudioFileReader reader{ std::move(contents), 2 };
+		return AudioFileInMemoryFacade{ reader };
 	}
 
 	static AudioFileInMemoryFacade Signal(std::vector<float> contents) {
-		return AudioFileInMemoryFacade{ std::move(contents), 1 };
+		MockAudioFileReader reader{ std::move(contents), 1 };
+		return AudioFileInMemoryFacade{ reader };
 	}
 
 	int framesRemaining() const {
@@ -76,13 +73,12 @@ public:
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileReadingTestCase, constructorThrowsIfNotSignalOrStereo) {
-	const auto reader =
-		std::make_shared<MockAudioFileReader>(std::vector<float>{});
-	reader->setChannels(0);
+	MockAudioFileReader reader{ std::vector<float>{} };
+	reader.setChannels(0);
 	EXPECT_THROW(
 		StereoAudioFileInMemory file{ reader }, 
 		StereoAudioFileInMemory::InvalidChannelCount);
-	reader->setChannels(3);
+	reader.setChannels(3);
 	EXPECT_THROW(
 		StereoAudioFileInMemory file{ reader }, 
 		StereoAudioFileInMemory::InvalidChannelCount);

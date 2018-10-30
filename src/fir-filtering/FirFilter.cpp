@@ -1,4 +1,5 @@
 #include "FirFilter.h"
+#include <gsl/gsl_util>
 #include <algorithm>
 
 FirFilter::FirFilter(std::vector<float> b) :
@@ -10,7 +11,7 @@ FirFilter::FirFilter(std::vector<float> b) :
 }
 
 void FirFilter::process(float *x, int n) {
-	const auto size = static_cast<std::size_t>(n);
+	const auto size = gsl::narrow_cast<std::size_t>(n);
 	for (std::size_t i = 0; i < size; ++i) {
 		for (std::size_t j = 0; j + 1 < delayLine.size(); ++j)
 			delayLine[j] = delayLine[j + 1];
