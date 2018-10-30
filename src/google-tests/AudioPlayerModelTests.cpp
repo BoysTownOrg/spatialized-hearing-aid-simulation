@@ -56,4 +56,10 @@ TEST(AudioPlayerModelTestCase, badParametersThrowRequestFailures) {
 		return request;
 	},
 		"'a' is not a valid release time.");
+	expectRequestTransformationYieldsFailure(
+		[](Model::PlayRequest request) {
+		request.windowSize = "a";
+		return request;
+	},
+		"'a' is not a valid window size.");
 }
