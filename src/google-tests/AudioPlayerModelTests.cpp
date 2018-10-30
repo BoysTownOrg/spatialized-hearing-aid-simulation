@@ -1,11 +1,4 @@
-#include <presentation/Model.h>
-
-class AudioPlayerModel : public Model {
-public:
-	void playRequest(PlayRequest) override {
-	}
-};
-
+#include <presentation/AudioPlayerModel.h>
 #include <gtest/gtest.h>
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};

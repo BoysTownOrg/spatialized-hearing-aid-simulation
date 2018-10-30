@@ -134,11 +134,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioPlayerModel.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="presentation-exports.h" />
     <ClInclude Include="Presenter.h" />
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioPlayerModel.cpp" />
     <ClCompile Include="Presenter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
