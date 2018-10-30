@@ -58,13 +58,17 @@ TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
 		"'a' is not a valid release time.");
 }
 
-TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
+static void expectBadWindowSize(std::string size) {
 	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
-			request.windowSize = "a";
+		[=](Model::PlayRequest request) {
+			request.windowSize = size;
 			return request;
 		},
-		"'a' is not a valid window size.");
+		"'" + size + "' is not a valid window size.");
+}
+
+TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
+	expectBadWindowSize("a");
 	expectRequestTransformationYieldsFailure(
 		[](Model::PlayRequest request) {
 			request.windowSize = "0.1";
