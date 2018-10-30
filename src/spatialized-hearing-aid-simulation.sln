@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-tests\google-tests.vcxproj", "{03E08837-A004-40B9-8FD2-4CDA51994ED1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6E368A0E-612A-4A30-A18D-145E6341FE31} = {6E368A0E-612A-4A30-A18D-145E6341FE31}
+		{B63D5042-124C-4D0D-8141-17D8F84F6625} = {B63D5042-124C-4D0D-8141-17D8F84F6625}
 		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
 		{1254F04B-68DF-45A9-BA9E-2B5CB673533B} = {1254F04B-68DF-45A9-BA9E-2B5CB673533B}
 		{668D0564-F956-49E7-AC77-A34F0B33D6B3} = {668D0564-F956-49E7-AC77-A34F0B33D6B3}
@@ -29,6 +30,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "signal-processing", "signal-processing\signal-processing.vcxproj", "{8E991A8E-5FA0-492A-8273-A0626CB15164}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "main", "main\main.vcxproj", "{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "playing-audio", "playing-audio\playing-audio.vcxproj", "{B63D5042-124C-4D0D-8141-17D8F84F6625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +113,14 @@ Global
 		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x64.Build.0 = Release|x64
 		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x86.ActiveCfg = Release|Win32
 		{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}.Release|x86.Build.0 = Release|Win32
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Debug|x64.ActiveCfg = Debug|x64
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Debug|x64.Build.0 = Debug|x64
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Debug|x86.ActiveCfg = Debug|Win32
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Debug|x86.Build.0 = Debug|Win32
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Release|x64.ActiveCfg = Release|x64
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Release|x64.Build.0 = Release|x64
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Release|x86.ActiveCfg = Release|Win32
+		{B63D5042-124C-4D0D-8141-17D8F84F6625}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

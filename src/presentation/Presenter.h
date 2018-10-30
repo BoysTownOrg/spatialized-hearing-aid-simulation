@@ -1,8 +1,8 @@
 #pragma once
 
 #include "presentation-exports.h"
-#include "Model.h"
 #include "View.h"
+#include <playing-audio/Model.h>
 #include <memory>
 #include <functional>
 
