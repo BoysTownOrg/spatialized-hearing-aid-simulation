@@ -6,25 +6,7 @@
 	#define PLAYING_AUDIO_API __declspec(dllimport)
 #endif
 
-#include <common-includes/Interface.h>
-#include <string>
-
-class AudioPlayer {
-public:
-	INTERFACE_OPERATIONS(AudioPlayer);
-	struct Parameters {
-		std::string audioFilePath;
-	};
-};
-
-#include <memory>
-
-class AudioPlayerFactory {
-public:
-	INTERFACE_OPERATIONS(AudioPlayerFactory);
-	virtual std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters) = 0;
-};
-
+#include "AudioPlayer.h"
 #include "Model.h"
 
 class AudioPlayerModel : public Model {

@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioPlayerModel.h" />
     <ClInclude Include="Model.h" />
   </ItemGroup>
