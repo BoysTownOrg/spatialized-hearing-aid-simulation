@@ -320,3 +320,11 @@ TEST(
 	EXPECT_EQ("h", model->windowSize());
 	EXPECT_EQ("i", model->chunkSize());
 }
+
+TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
+	const auto view = std::make_shared<MockView>();
+	const auto model = std::make_shared<ErrorModel>("error.");
+	Presenter presenter{ model, view };
+	view->play();
+	EXPECT_EQ("error.", view->errorMessage());
+}
