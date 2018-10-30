@@ -1,6 +1,19 @@
 #include <mat.h>
 #include <gtest/gtest.h>
 
+class MatlabArray {
+	mxArray *data;
+public:
+	explicit MatlabArray(mxArray *data) :
+		data{ data } {}
+	const mxArray *get() const {
+		return data;
+	}
+	~MatlabArray() {
+		mxDestroyArray(data);
+	}
+};
+
 class MatFileReader {
 	MATFile *file;
 public:
@@ -9,8 +22,8 @@ public:
 	~MatFileReader() {
 		matClose(file);
 	}
-	mxArray *getVariable(std::string name) {
-		return matGetVariable(file, name.c_str());
+	MatlabArray getVariable(std::string name) {
+		return MatlabArray{ matGetVariable(file, name.c_str()) };
 	}
 	const MATFile *get() const {
 		return file;
@@ -24,8 +37,8 @@ TEST(MatFileTestCase, canOpen) {
 	EXPECT_FALSE(reader.get() == nullptr);
 }
 
-TEST(MatFileTestCase, tbd) {
+TEST(MatFileTestCase, getVariable) {
 	MatFileReader reader{ "../example.mat" };
 	const auto s = reader.getVariable("s");
-	EXPECT_FALSE(s == nullptr);
+	EXPECT_FALSE(s.get() == nullptr);
 }
