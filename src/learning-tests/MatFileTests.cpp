@@ -57,3 +57,12 @@ TEST(MatFileTestCase, getVariable) {
 	const auto c = s.getField(0, "c");
 	EXPECT_TRUE(c == nullptr);
 }
+
+TEST(MatFileTestCase, getPr) {
+	MatFileReader reader{ "../example.mat" };
+	const auto s = reader.getVariable("s");
+	const auto b = s.getField(0, "b");
+	const auto contents = mxGetPr(b);
+	EXPECT_EQ(2, contents[0]);
+	EXPECT_EQ(3, contents[1]);
+}
