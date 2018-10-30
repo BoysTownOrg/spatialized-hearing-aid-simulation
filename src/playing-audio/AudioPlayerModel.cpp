@@ -1,11 +1,38 @@
 #include "AudioPlayerModel.h"
 
+AudioPlayerModel::AudioPlayerModel(std::shared_ptr<AudioPlayerFactory> factory) :
+	factory{ std::move(factory) } {}
+
 void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.level_dB_Spl, "level");
 	throwIfNotDouble(request.attack_ms, "attack time");
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
+	const auto sampleRate = 44100;
+	const auto player = factory->make(
+		{ 
+			request.audioFilePath,
+			{
+				request.leftDslPrescriptionFilePath,
+				request.rightDslPrescriptionFilePath,
+				std::stod(request.level_dB_Spl),
+				std::stod(request.attack_ms),
+				std::stod(request.release_ms),
+				std::stoi(request.windowSize),
+				std::stoi(request.chunkSize),
+				sampleRate
+			},
+			{
+				request.brirFilePath
+			},
+			{
+				std::stoi(request.chunkSize),
+				sampleRate
+			}
+		}
+	);
+	player->play();
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {
