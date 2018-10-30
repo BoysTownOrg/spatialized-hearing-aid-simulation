@@ -18,6 +18,7 @@ TEST(AudioPlayerModelTestCase, badParametersThrowErrors) {
 				"4",
 				"5"
 			});
+		FAIL() << "Expected Model::RequestFailure";
 	}
 	catch (const Model::RequestFailure &failure) {
 		EXPECT_EQ("'a' is not a valid level...", failure.what());

@@ -6,6 +6,11 @@
 class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
+	class RequestFailure {
+	public:
+		INTERFACE_OPERATIONS(RequestFailure);
+		virtual std::string what() const = 0;
+	};
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
