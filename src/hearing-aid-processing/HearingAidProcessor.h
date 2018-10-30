@@ -1,0 +1,24 @@
+#pragma once
+
+#ifdef HEARING_AID_PROCESSING_EXPORTS
+	#define HEARING_AID_PROCESSING_API __declspec(dllexport)
+#else
+	#define HEARING_AID_PROCESSING_API __declspec(dllimport)
+#endif
+
+#include "FilterbankCompressor.h"
+#include <signal-processing/SignalProcessor.h>
+#include <memory>
+#include <vector>
+
+class HearingAidProcessor : public SignalProcessor {
+	// Order important for construction.
+	std::vector<float> complexBuffer;
+	std::shared_ptr<FilterbankCompressor> compressor;
+public:
+	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
+		std::shared_ptr<FilterbankCompressor>
+	);
+	HEARING_AID_PROCESSING_API void process(float *, int) override;
+};
+

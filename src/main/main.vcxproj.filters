@@ -15,45 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PresenterTests.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HearingAidProcessorTests.cpp">
+    <ClCompile Include="LibsndfileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assert-utility.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioDeviceControllerTests.cpp">
+    <ClCompile Include="PortAudioDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FirFilterTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SignalProcessingChainTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StereoAudioFileReadingTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StereoAudioFileAdapterTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StereoProcessorAdapterTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ProcessedAudioFrameReaderTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DualSignalProcessorTests.cpp">
+    <ClCompile Include="FltkWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MockSignalProcessor.h">
+    <ClInclude Include="LibsndfileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PresenterTests.h">
+    <ClInclude Include="PortAudioDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FltkWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

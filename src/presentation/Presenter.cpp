@@ -14,10 +14,16 @@ void Presenter::loop() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForDslPrescription() {
+void Presenter::browseForLeftDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
-		[=](std::string p) { this->view->setDslPrescriptionFilePath(p); });
+		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
+}
+
+void Presenter::browseForRightDslPrescription() {
+	browseAndUpdateIfNotCancelled(
+		{},
+		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(p); });
 }
 
 void Presenter::browseForAudio() {
@@ -35,9 +41,15 @@ void Presenter::browseForBrir() {
 void Presenter::play() {
 	model->playRequest(
 		{
-			view->dslPrescriptionFilePath(),
+			view->leftDslPrescriptionFilePath(),
+			view->rightDslPrescriptionFilePath(),
 			view->audioFilePath(),
-			view->brirFilePath()
+			view->brirFilePath(),
+			view->level_dB_Spl(),
+			view->attack_ms(),
+			view->release_ms(),
+			view->windowSize(),
+			view->chunkSize()
 		}
 	);
 }

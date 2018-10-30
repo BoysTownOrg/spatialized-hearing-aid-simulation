@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Interface.h"
+#include <common-includes/Interface.h>
 #include <string>
 #include <vector>
 
@@ -13,10 +13,17 @@ public:
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
 	virtual bool browseCancelled() = 0;
-	virtual void setDslPrescriptionFilePath(std::string) = 0;
+	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
+	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
-	virtual std::string dslPrescriptionFilePath() const = 0;
+	virtual std::string leftDslPrescriptionFilePath() const = 0;
+	virtual std::string rightDslPrescriptionFilePath() const = 0;
 	virtual std::string audioFilePath() const = 0;
 	virtual std::string brirFilePath() const = 0;
+	virtual std::string level_dB_Spl() const = 0;
+	virtual std::string attack_ms() const = 0;
+	virtual std::string release_ms() const = 0;
+	virtual std::string windowSize() const = 0;
+	virtual std::string chunkSize() const = 0;
 };
