@@ -6,14 +6,14 @@ HearingAidProcessor::HearingAidProcessor(
 	complexBuffer(compressor->channels() * compressor->chunkSize() * 2),
 	compressor{ std::move(compressor) } {}
 
-void HearingAidProcessor::process(float *x, int frameCount) {
+void HearingAidProcessor::process(float *signal, int samples) {
 	const auto chunkSize = compressor->chunkSize();
-	if (frameCount == chunkSize) {
+	if (samples == chunkSize) {
 		const auto complex = &complexBuffer[0];
-		compressor->compressInput(x, x, chunkSize);
-		compressor->analyzeFilterbank(x, complex, chunkSize);
+		compressor->compressInput(signal, signal, chunkSize);
+		compressor->analyzeFilterbank(signal, complex, chunkSize);
 		compressor->compressChannels(complex, complex, chunkSize);
-		compressor->synthesizeFilterbank(complex, x, chunkSize);
-		compressor->compressOutput(x, x, chunkSize);
+		compressor->synthesizeFilterbank(complex, signal, chunkSize);
+		compressor->compressOutput(signal, signal, chunkSize);
 	}
 }

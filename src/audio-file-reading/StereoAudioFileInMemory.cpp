@@ -1,6 +1,6 @@
-#include "AudioFileInMemory.h"
+#include "StereoAudioFileInMemory.h"
 
-AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
+StereoAudioFileInMemory::StereoAudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
 	buffer(static_cast<std::size_t>(reader->frames() * reader->channels())),
 	channels(reader->channels())
 {
@@ -11,14 +11,14 @@ AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
 	reader->readFrames(&buffer[0], reader->frames());
 }
 
-int AudioFileInMemory::framesRemaining() const
+int StereoAudioFileInMemory::framesRemaining() const
 {
 	return buffer.size() - head;
 }
 
-void AudioFileInMemory::read(float *left, float *right, int frames) {
+void StereoAudioFileInMemory::read(float *left, float *right, int samples) {
 	int i = 0;
-	while (head < buffer.size() && i < frames) {
+	while (head < buffer.size() && i < samples) {
 		left[i] = buffer[head];
 		if (channels == 2)
 			++head;

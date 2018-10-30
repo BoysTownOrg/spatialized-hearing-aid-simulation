@@ -2,10 +2,10 @@
 
 AudioDeviceController::AudioDeviceController(
 	std::shared_ptr<AudioDevice> device, 
-	std::shared_ptr<AudioStream> stream
+	std::shared_ptr<AudioFrameReader> reader
 ) :
 	device{ std::move(device) },
-	stream{ std::move(stream) }
+	reader{ std::move(reader) }
 {
 	this->device->setController(this);
 }
@@ -19,6 +19,5 @@ void AudioDeviceController::stopStreaming() {
 }
 
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
-	const auto _channels = static_cast<float **>(channels);
-	stream->fillBuffer(_channels[0], _channels[1], frameCount);
+	reader->read(static_cast<float **>(channels), frameCount);
 }

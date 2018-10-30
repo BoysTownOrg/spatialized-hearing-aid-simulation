@@ -3,12 +3,21 @@
 #include <gtest/gtest.h>
 
 class MockModel : public Model {
-	std::string _dslPrescriptionFilePath{};
+	std::string _leftDslPrescriptionFilePath{};
+	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
+	std::string _level_dB_Spl{};
+	std::string _attack_ms{};
+	std::string _release_ms{};
+	std::string _windowSize{};
+	std::string _chunkSize{};
 public:
-	std::string dslPrescriptionFilePath() const {
-		return _dslPrescriptionFilePath;
+	std::string leftDslPrescriptionFilePath() const {
+		return _leftDslPrescriptionFilePath;
+	}
+	std::string rightDslPrescriptionFilePath() const {
+		return _rightDslPrescriptionFilePath;
 	}
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -16,19 +25,46 @@ public:
 	std::string brirFilePath() const {
 		return _brirFilePath;
 	}
+	std::string level_dB_Spl() const {
+		return _level_dB_Spl;
+	}
+	std::string attack_ms() const {
+		return _attack_ms;
+	}
+	std::string release_ms() const {
+		return _release_ms;
+	}
+	std::string windowSize() const {
+		return _windowSize;
+	}
+	std::string chunkSize() const {
+		return _chunkSize;
+	}
 	void playRequest(PlayRequest request) override {
-		_dslPrescriptionFilePath = request.dslPrescriptionFilePath;
+		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
 		_audioFilePath = request.audioFilePath;
 		_brirFilePath = request.brirFilePath;
+		_level_dB_Spl = request.level_dB_Spl;
+		_attack_ms = request.attack_ms;
+		_release_ms = request.release_ms;
+		_windowSize = request.windowSize;
+		_chunkSize = request.chunkSize;
 	}
 };
 
 class MockView : public View {
 	std::vector<std::string> _browseFilters{};
-	std::string _dslPrescriptionFilePath{};
+	std::string _leftDslPrescriptionFilePath{};
+	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
+	std::string _level_dB_Spl{};
+	std::string _attack_ms{};
+	std::string _release_ms{};
+	std::string _windowSize{};
+	std::string _chunkSize{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -60,14 +96,23 @@ public:
 	void setBrowseCancelled() {
 		_browseCancelled = true;
 	}
-	void browseForDslPrescription() {
-		_presenter->browseForDslPrescription();
+	void browseForLeftDslPrescription() {
+		_presenter->browseForLeftDslPrescription();
 	}
-	void setDslPrescriptionFilePath(std::string p) override {
-		_dslPrescriptionFilePath = p;
+	void setLeftDslPrescriptionFilePath(std::string p) override {
+		_leftDslPrescriptionFilePath = p;
 	}
-	std::string dslPrescriptionFilePath() const override {
-		return _dslPrescriptionFilePath;
+	std::string leftDslPrescriptionFilePath() const override {
+		return _leftDslPrescriptionFilePath;
+	}
+	void browseForRightDslPrescription() {
+		_presenter->browseForRightDslPrescription();
+	}
+	std::string rightDslPrescriptionFilePath() const override {
+		return _rightDslPrescriptionFilePath;
+	}
+	void setRightDslPrescriptionFilePath(std::string p) override {
+		_rightDslPrescriptionFilePath = p;
 	}
 	void browseForAudio() {
 		_presenter->browseForAudio();
@@ -89,6 +134,36 @@ public:
 	}
 	std::vector<std::string> browseFilters() const {
 		return _browseFilters;
+	}
+	void setLevel_dB_Spl(std::string level) {
+		_level_dB_Spl = level;
+	}
+	std::string level_dB_Spl() const override {
+		return _level_dB_Spl;
+	}
+	void setAttack_ms(std::string a) {
+		_attack_ms = a;
+	}
+	std::string attack_ms() const override {
+		return _attack_ms;
+	}
+	void setRelease_ms(std::string r) {
+		_release_ms = r;
+	}
+	std::string release_ms() const override {
+		return _release_ms;
+	}
+	void setWindowSize(std::string s) {
+		_windowSize = s;
+	}
+	std::string windowSize() const override {
+		return _windowSize;
+	}
+	void setChunkSize(std::string s) {
+		_chunkSize = s;
+	}
+	std::string chunkSize() const override {
+		return _chunkSize;
 	}
 	void play() {
 		_presenter->play();
@@ -129,10 +204,13 @@ TEST(
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
-	view->setDslPrescriptionFilePath("a");
+	view->setLeftDslPrescriptionFilePath("a");
+	view->setRightDslPrescriptionFilePath("b");
 	view->setBrowseCancelled();
-	view->browseForDslPrescription();
-	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+	view->browseForLeftDslPrescription();
+	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	view->browseForRightDslPrescription();
+	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
@@ -166,8 +244,11 @@ TEST(
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
-	view->browseForDslPrescription();
-	EXPECT_EQ("a", view->dslPrescriptionFilePath());
+	view->browseForLeftDslPrescription();
+	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	view->setBrowseFilePath("b");
+	view->browseForRightDslPrescription();
+	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
@@ -219,11 +300,23 @@ TEST(
 	const auto view = std::make_shared<MockView>();
 	const auto model = std::make_shared<MockModel>();
 	Presenter presenter{ model, view };
-	view->setDslPrescriptionFilePath("a");
-	view->setAudioFilePath("b");
-	view->setBrirFilePath("c");
+	view->setLeftDslPrescriptionFilePath("a");
+	view->setRightDslPrescriptionFilePath("b");
+	view->setAudioFilePath("c");
+	view->setBrirFilePath("d");
+	view->setLevel_dB_Spl("e");
+	view->setAttack_ms("f");
+	view->setRelease_ms("g");
+	view->setWindowSize("h");
+	view->setChunkSize("i");
 	view->play();
-	EXPECT_EQ("a", model->dslPrescriptionFilePath());
-	EXPECT_EQ("b", model->audioFilePath());
-	EXPECT_EQ("c", model->brirFilePath());
+	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
+	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
+	EXPECT_EQ("c", model->audioFilePath());
+	EXPECT_EQ("d", model->brirFilePath());
+	EXPECT_EQ("e", model->level_dB_Spl());
+	EXPECT_EQ("f", model->attack_ms());
+	EXPECT_EQ("g", model->release_ms());
+	EXPECT_EQ("h", model->windowSize());
+	EXPECT_EQ("i", model->chunkSize());
 }

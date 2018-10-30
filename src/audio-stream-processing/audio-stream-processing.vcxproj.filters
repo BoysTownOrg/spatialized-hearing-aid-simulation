@@ -15,27 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFileReader.h">
+    <ClInclude Include="AudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StereoAudioFileInMemory.h">
+    <ClInclude Include="ProcessedAudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StereoAudioFileAdapter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StereoAudioFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="audio-file-reading-exports.h">
+    <ClInclude Include="AudioFrameProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StereoAudioFileInMemory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StereoAudioFileAdapter.cpp">
+    <ClCompile Include="ProcessedAudioFrameReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
