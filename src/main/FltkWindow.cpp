@@ -92,6 +92,10 @@ std::string FltkWindow::leftDslPrescriptionFilePath() const {
 	return _leftPrescriptionFilePath.value();
 }
 
+std::string FltkWindow::rightDslPrescriptionFilePath() const {
+	return _rightPrescriptionFilePath.value();
+}
+
 std::string FltkWindow::audioFilePath() const {
 	return _audioFilePath.value();
 }
@@ -100,32 +104,22 @@ std::string FltkWindow::brirFilePath() const {
 	return _brirFilePath.value();
 }
 
-std::string FltkWindow::rightDslPrescriptionFilePath() const
-{
-	return _rightPrescriptionFilePath.value();
-}
-
-std::string FltkWindow::level_dB_Spl() const
-{
+std::string FltkWindow::level_dB_Spl() const {
 	return _level_dB_Spl.value();
 }
 
-std::string FltkWindow::attack_ms() const
-{
+std::string FltkWindow::attack_ms() const {
 	return _attack_ms.value();
 }
 
-std::string FltkWindow::release_ms() const
-{
+std::string FltkWindow::release_ms() const {
 	return _release_ms.value();
 }
 
-std::string FltkWindow::windowSize() const
-{
+std::string FltkWindow::windowSize() const {
 	return _windowSize.value();
 }
 
-std::string FltkWindow::chunkSize() const
-{
+std::string FltkWindow::chunkSize() const {
 	return _chunkSize.value();
 }
