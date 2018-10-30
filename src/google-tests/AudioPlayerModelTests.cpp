@@ -7,6 +7,11 @@ class MockAudioPlayerFactory : public AudioPlayerFactory {
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
+	double _level_dB_Spl{};
+	double _attack_ms{};
+	double _release_ms{};
+	int _windowSize{};
+	int _chunkSize{};
 public:
 	std::string audioFilePath() const {
 		return _audioFilePath;
@@ -20,12 +25,32 @@ public:
 	std::string brirFilePath() const {
 		return _brirFilePath;
 	}
+	double level_dB_Spl() const {
+		return _level_dB_Spl;
+	}
+	double attack_ms() const {
+		return _attack_ms;
+	}
+	double release_ms() const {
+		return _release_ms;
+	}
+	int windowSize() const {
+		return _windowSize;
+	}
+	int chunkSize() const {
+		return _chunkSize;
+	}
 	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
 	{
 		_audioFilePath = p.audioFilePath;
 		_leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
 		_rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
 		_brirFilePath = p.brirFilePath;
+		_level_dB_Spl = p.level_dB_Spl;
+		_attack_ms = p.attack_ms;
+		_release_ms = p.release_ms;
+		_windowSize = p.windowSize;
+		_chunkSize = p.chunkSize;
 		return {};
 	}
 };

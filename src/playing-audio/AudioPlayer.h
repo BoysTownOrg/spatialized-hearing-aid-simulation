@@ -11,6 +11,11 @@ public:
 		std::string rightDslPrescriptionFilePath;
 		std::string audioFilePath;
 		std::string brirFilePath;
+		double level_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
 	};
 };
 
