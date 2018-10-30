@@ -1,11 +1,6 @@
 #pragma once
 
-#ifdef PRESENTATION_EXPORTS
-	#define PRESENTATION_API __declspec(dllexport)
-#else
-	#define PRESENTATION_API __declspec(dllimport)
-#endif
-
+#include "presentation-exports.h"
 #include "Model.h"
 #include "View.h"
 #include <memory>
