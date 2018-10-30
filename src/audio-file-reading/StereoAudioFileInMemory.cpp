@@ -1,5 +1,5 @@
-#include <gsl/gsl_util>
 #include "StereoAudioFileInMemory.h"
+#include <gsl/gsl_util>
 
 StereoAudioFileInMemory::StereoAudioFileInMemory(AudioFileReader &reader) :
 	buffer(gsl::narrow<std::size_t>(reader.frames() * reader.channels())),

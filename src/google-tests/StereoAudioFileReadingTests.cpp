@@ -6,7 +6,7 @@ class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	int _channels;
 public:
-	MockAudioFileReader(
+	explicit MockAudioFileReader(
 		std::vector<float> contents,
 		int _channels = 1
 	) :
