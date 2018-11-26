@@ -10,3 +10,12 @@ public:
 	virtual void readFrames(float *, long long) = 0;
 };
 
+#include <memory>
+#include <string>
+
+class AudioFileReaderFactory {
+public:
+	INTERFACE_OPERATIONS(AudioFileReaderFactory);
+	virtual std::shared_ptr<AudioFileReader> make(std::string filePath) = 0;
+};
+
