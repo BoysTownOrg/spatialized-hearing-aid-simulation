@@ -110,6 +110,23 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	EXPECT_FALSE(device->streaming());
 }
 
+TEST(
+	AudioDeviceControllerTestCase,
+	startAndStopThrowStreamingErrorWhenDeviceFailure)
+{
+	try {
+		const auto device = std::make_shared<MockAudioDevice>();
+		AudioDeviceControllerFacade controller{ device };
+		device->setFailedTrue();
+		device->setErrorMessage("error.");
+		controller.startStreaming();
+		FAIL() << "Expected AudioDeviceController::StreamingError";
+	}
+	catch (const AudioDeviceController::StreamingError &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	const auto stream = std::make_shared<MockAudioFrameReader>();
