@@ -14,14 +14,17 @@ AudioDeviceController::AudioDeviceController(
 
 void AudioDeviceController::startStreaming() {
 	device->startStream();
-	if (this->device->failed())
-		throw StreamingError{ this->device->errorMessage() };
+	throwIfStreamingError();
 }
 
 void AudioDeviceController::stopStreaming() {
 	device->stopStream();
-	if (this->device->failed())
-		throw StreamingError{ this->device->errorMessage() };
+	throwIfStreamingError();
+}
+
+void AudioDeviceController::throwIfStreamingError() {
+	if (device->failed())
+		throw StreamingError{ device->errorMessage() };
 }
 
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
