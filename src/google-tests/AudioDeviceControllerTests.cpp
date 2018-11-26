@@ -110,16 +110,17 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	EXPECT_FALSE(device->streaming());
 }
 
-TEST(
-	AudioDeviceControllerTestCase,
-	startThrowStreamingErrorWhenDeviceFailure)
+#include <functional>
+
+static void assertFailedDeviceThrowsStreamingError(
+	std::function<void(AudioDeviceControllerFacade &)> f) 
 {
 	try {
 		const auto device = std::make_shared<MockAudioDevice>();
 		AudioDeviceControllerFacade controller{ device };
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
-		controller.startStreaming();
+		f(controller);
 		FAIL() << "Expected AudioDeviceController::StreamingError";
 	}
 	catch (const AudioDeviceController::StreamingError &e) {
@@ -129,19 +130,12 @@ TEST(
 
 TEST(
 	AudioDeviceControllerTestCase,
-	stopThrowStreamingErrorWhenDeviceFailure)
+	startAndStopThrowStreamingErrorWhenDeviceFailure)
 {
-	try {
-		const auto device = std::make_shared<MockAudioDevice>();
-		AudioDeviceControllerFacade controller{ device };
-		device->setFailedTrue();
-		device->setErrorMessage("error.");
-		controller.stopStreaming();
-		FAIL() << "Expected AudioDeviceController::StreamingError";
-	}
-	catch (const AudioDeviceController::StreamingError &e) {
-		assertEqual("error.", e.what());
-	}
+	assertFailedDeviceThrowsStreamingError(
+		[](AudioDeviceControllerFacade &c) { return c.startStreaming(); });
+	assertFailedDeviceThrowsStreamingError(
+		[](AudioDeviceControllerFacade &c) { return c.stopStreaming(); });
 }
 
 TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
