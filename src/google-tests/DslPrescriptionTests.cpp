@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include <dsl-prescription/DslPrescription.h>
 #include <gtest/gtest.h>
 #include <map>
@@ -46,4 +47,31 @@ TEST(DslPrescriptionTestCase, constructorThrowsInvalidPrescriptionOnChannelCount
 			"BOLT_dB_SPL"
 		})
 		assertInvalidPrescriptionThrownOnChannelCountMismatch(property);
+}
+
+TEST(
+	DslPrescriptionTestCase,
+	parametersReceivedAsParsed)
+{
+	MockDslPrescriptionParser parser{};
+	parser.setDoubleProperty("attack_ms", 1);
+	parser.setDoubleProperty("release_ms", 2);
+	parser.setVectorProperty("cross_frequencies_Hz", { 3 });
+	parser.setVectorProperty("compression_ratios", { 4, 4 });
+	parser.setVectorProperty("kneepoint_gains_dB", { 5, 5 });
+	parser.setVectorProperty("kneepoints_dB_SPL", { 6, 6 });
+	parser.setVectorProperty("BOLT_dB_SPL", { 7, 7 });
+	parser.setIntProperty("chunk_size", 8);
+	parser.setIntProperty("window_size", 9);
+	DslPrescription prescription{ parser };
+	EXPECT_EQ(2, prescription.channels());
+	EXPECT_EQ(1, prescription.attack_ms());
+	EXPECT_EQ(2, prescription.release_ms());
+	assertEqual({ 3 }, prescription.crossFrequenciesHz());
+	assertEqual({ 4, 4 }, prescription.compressionRatios());
+	assertEqual({ 5, 5 }, prescription.kneepointGains_dB());
+	assertEqual({ 6, 6 }, prescription.kneepoints_dBSpl());
+	assertEqual({ 7, 7 }, prescription.broadbandOutputLimitingThresholds_dBSpl());
+	EXPECT_EQ(8, prescription.chunkSize());
+	EXPECT_EQ(9, prescription.windowSize());
 }
