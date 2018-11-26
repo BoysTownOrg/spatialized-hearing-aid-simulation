@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include <audio-device-control/AudioDeviceController.h>
 #include <gtest/gtest.h>
 
@@ -22,6 +23,12 @@ public:
 	}
 	void fillStreamBuffer(void *x, int n) {
 		_controller->fillStreamBuffer(x, n);
+	}
+	void setErrorTrue() {
+
+	}
+	void setErrorMessage(std::string) {
+
 	}
 };
 

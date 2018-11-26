@@ -14,6 +14,10 @@ class AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<AudioFrameReader> reader;
 public:
+	class DeviceConnectionFailure : public std::runtime_error {
+	public:
+		explicit DeviceConnectionFailure(std::string s) : std::runtime_error{ s } {}
+	};
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice>,
 		std::shared_ptr<AudioFrameReader>
