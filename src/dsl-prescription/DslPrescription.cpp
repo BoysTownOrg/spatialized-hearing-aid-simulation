@@ -1,6 +1,7 @@
 #include "DslPrescription.h"
 
-DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) :
+DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) 
+	try :
 	_chunkSize(parser.asInt("chunk_size")),
 	_windowSize(parser.asInt("window_size")),
 	_attack_ms(parser.asDouble("attack_ms")),
@@ -21,6 +22,9 @@ DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) :
 		_broadbandOutputLimitingThresholds_dBSpl.size() != channels
 	)
 		throw InvalidPrescription{ "channel count mismatch in prescription." };
+}
+catch (const DslPrescriptionFileParser::ParseError &e) {
+	throw InvalidPrescription{ e.what() };
 }
 
 const std::vector<double> &
