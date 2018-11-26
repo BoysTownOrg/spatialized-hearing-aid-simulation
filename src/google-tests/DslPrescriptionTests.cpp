@@ -5,8 +5,14 @@
 
 class MockDslPrescriptionParser : public DslPrescriptionFileParser {
 	std::map<std::string, std::vector<double>> vectors{};
+	std::map<std::string, double> doubles{};
+	std::map<std::string, int> ints{};
 public:
 	void setValidSingleChannelProperties() {
+		setIntProperty("chunk_size", 0);
+		setIntProperty("window_size", 0);
+		setDoubleProperty("attack_ms", 0);
+		setDoubleProperty("release_ms", 0);
 		setVectorProperty("cross_frequencies_Hz", {});
 		setVectorProperty("compression_ratios", { 0 });
 		setVectorProperty("kneepoint_gains_dB", { 0 });
@@ -16,8 +22,20 @@ public:
 	void setVectorProperty(std::string property, std::vector<double> v) {
 		vectors[property] = v;
 	}
+	void setDoubleProperty(std::string property, double x) {
+		doubles[property] = x;
+	}
+	void setIntProperty(std::string property, int x) {
+		ints[property] = x;
+	}
 	std::vector<double> asVector(std::string property) const override {
 		return vectors.at(property);
+	}
+	double asDouble(std::string property) const override {
+		return doubles.at(property);
+	}
+	int asInt(std::string property) const override {
+		return ints.at(property);
 	}
 };
 
