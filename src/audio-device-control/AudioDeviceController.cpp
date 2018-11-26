@@ -20,6 +20,8 @@ void AudioDeviceController::startStreaming() {
 
 void AudioDeviceController::stopStreaming() {
 	device->stopStream();
+	if (this->device->failed())
+		throw StreamingError{ this->device->errorMessage() };
 }
 
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
