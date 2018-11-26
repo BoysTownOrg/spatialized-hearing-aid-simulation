@@ -14,6 +14,8 @@ AudioDeviceController::AudioDeviceController(
 
 void AudioDeviceController::startStreaming() {
 	device->startStream();
+	if (this->device->failed())
+		throw StreamingError{ this->device->errorMessage() };
 }
 
 void AudioDeviceController::stopStreaming() {
