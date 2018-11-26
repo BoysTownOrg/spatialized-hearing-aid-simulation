@@ -9,15 +9,15 @@ class MockDslPrescriptionParser : public DslPrescriptionFileParser {
 	std::map<std::string, int> ints{};
 public:
 	void setValidSingleChannelProperties() {
-		setIntProperty("chunk_size", 0);
-		setIntProperty("window_size", 0);
-		setDoubleProperty("attack_ms", 0);
-		setDoubleProperty("release_ms", 0);
-		setVectorProperty("cross_frequencies_Hz", {});
-		setVectorProperty("compression_ratios", { 0 });
-		setVectorProperty("kneepoint_gains_dB", { 0 });
-		setVectorProperty("kneepoints_dB_SPL", { 0 });
-		setVectorProperty("BOLT_dB_SPL", { 0 });
+		setIntProperty(DslPrescription::propertyName(DslPrescription::Property::chunkSize), 0);
+		setIntProperty(DslPrescription::propertyName(DslPrescription::Property::windowSize), 0);
+		setDoubleProperty(DslPrescription::propertyName(DslPrescription::Property::attack_ms), 0);
+		setDoubleProperty(DslPrescription::propertyName(DslPrescription::Property::release_ms), 0);
+		setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), {});
+		setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::compressionRatios), { 0 });
+		setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::kneepointGains_dB), { 0 });
+		setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 0 });
+		setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 0 });
 	}
 	void setVectorProperty(std::string property, std::vector<double> v) {
 		vectors[property] = v;
@@ -72,15 +72,15 @@ TEST(
 	parametersReceivedAsParsed)
 {
 	MockDslPrescriptionParser parser{};
-	parser.setDoubleProperty("attack_ms", 1);
-	parser.setDoubleProperty("release_ms", 2);
-	parser.setVectorProperty("cross_frequencies_Hz", { 3 });
-	parser.setVectorProperty("compression_ratios", { 4, 4 });
-	parser.setVectorProperty("kneepoint_gains_dB", { 5, 5 });
-	parser.setVectorProperty("kneepoints_dB_SPL", { 6, 6 });
-	parser.setVectorProperty("BOLT_dB_SPL", { 7, 7 });
-	parser.setIntProperty("chunk_size", 8);
-	parser.setIntProperty("window_size", 9);
+	parser.setDoubleProperty(DslPrescription::propertyName(DslPrescription::Property::attack_ms), 1);
+	parser.setDoubleProperty(DslPrescription::propertyName(DslPrescription::Property::release_ms), 2);
+	parser.setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), { 3 });
+	parser.setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::compressionRatios), { 4, 4 });
+	parser.setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::kneepointGains_dB), { 5, 5 });
+	parser.setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 6, 6 });
+	parser.setVectorProperty(DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 7, 7 });
+	parser.setIntProperty(DslPrescription::propertyName(DslPrescription::Property::chunkSize), 8);
+	parser.setIntProperty(DslPrescription::propertyName(DslPrescription::Property::windowSize), 9);
 	DslPrescription prescription{ parser };
 	EXPECT_EQ(2, prescription.channels());
 	EXPECT_EQ(1, prescription.attack_ms());

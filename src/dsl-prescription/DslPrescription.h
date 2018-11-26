@@ -27,6 +27,18 @@ public:
 	public:
 		explicit InvalidPrescription(std::string what) : std::runtime_error{ what } {}
 	};
+	enum class Property {
+		attack_ms,
+		release_ms,
+		chunkSize,
+		windowSize,
+		crossFrequenciesHz,
+		compressionRatios,
+		kneepointGains_dB,
+		kneepoints_dBSpl,
+		broadbandOutputLimitingThresholds_dBSpl
+	};
+	DSL_PRESCRIPTION_API static std::string propertyName(Property);
 	DSL_PRESCRIPTION_API explicit DslPrescription(const DslPrescriptionFileParser &parser);
 	DSL_PRESCRIPTION_API int channels() const;
 	DSL_PRESCRIPTION_API int chunkSize() const;
