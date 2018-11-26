@@ -7,6 +7,7 @@
 #endif
 
 #include "AudioDevice.h"
+#include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
@@ -14,14 +15,8 @@ class AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<AudioFrameReader> reader;
 public:
-	class DeviceConnectionFailure : public std::runtime_error {
-	public:
-		explicit DeviceConnectionFailure(std::string s) : std::runtime_error{ s } {}
-	};
-	class StreamingError : public std::runtime_error {
-	public:
-		explicit StreamingError(std::string s) : std::runtime_error{ s } {}
-	};
+	RUNTIME_ERROR(DeviceConnectionFailure);
+	RUNTIME_ERROR(StreamingError);
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice>,
 		std::shared_ptr<AudioFrameReader>
