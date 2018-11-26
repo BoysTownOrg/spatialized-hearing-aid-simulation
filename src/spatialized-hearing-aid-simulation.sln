@@ -33,6 +33,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "main", "main\main.vcxproj", "{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD} = {94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}
+		{1254F04B-68DF-45A9-BA9E-2B5CB673533B} = {1254F04B-68DF-45A9-BA9E-2B5CB673533B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "playing-audio", "playing-audio\playing-audio.vcxproj", "{B63D5042-124C-4D0D-8141-17D8F84F6625}"
