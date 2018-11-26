@@ -55,6 +55,14 @@ int PortAudioDevice::audioCallback(
 	return paContinue;
 }
 
+bool PortAudioDevice::failed() {
+	return lastError != paNoError;
+}
+
+std::string PortAudioDevice::errorMessage() {
+	return Pa_GetErrorText(lastError);
+}
+
 void PortAudioDevice::setController(AudioDeviceController *c) {
 	controller = c;
 }

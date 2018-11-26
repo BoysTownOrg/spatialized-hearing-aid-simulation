@@ -17,6 +17,8 @@ public:
 	void setController(AudioDeviceController *) override;
 	void startStream() override;
 	void stopStream() override;
+	bool failed() override;
+	std::string errorMessage() override;
 private:
 	PaDeviceIndex getAsioDeviceIndex() const;
 	bool isAsioDriven(PaDeviceIndex index) const;
