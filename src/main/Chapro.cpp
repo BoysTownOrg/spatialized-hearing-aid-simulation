@@ -5,14 +5,14 @@ extern "C" {
 
 Chapro::Chapro(
 	const DslPrescription &prescription,
-	int sampleRate
+	Parameters parameters
 ) :
-	_chunkSize(prescription.chunkSize()),
+	_chunkSize(parameters.chunkSize),
 	_channels(prescription.channels())
 {
 	CHA_DSL dsl;
-	dsl.attack = prescription.attack_ms();
-	dsl.release = prescription.release_ms();
+	dsl.attack = parameters.attack_ms;
+	dsl.release = parameters.release_ms;
 	dsl.nchannel = _channels;
 	using size_type = std::vector<double>::size_type;
 	for (size_type i = 0; i < prescription.crossFrequenciesHz().size(); ++i)
@@ -32,19 +32,20 @@ Chapro::Chapro(
 	CHA_WDRC wdrc;
 	wdrc.attack = 1;
 	wdrc.release = 50;
-	wdrc.fs = sampleRate;
+	wdrc.fs = parameters.sampleRate;
 	wdrc.maxdB = 119;
 	wdrc.tkgain = 0;
 	wdrc.tk = 105;
 	wdrc.cr = 10;
 	wdrc.bolt = 105;
+	const auto hamming = 0;
 	cha_firfb_prepare(
 		cha_pointer,
 		dsl.cross_freq,
 		_channels,
-		sampleRate,
-		prescription.windowSize(),
-		0,
+		parameters.sampleRate,
+		parameters.windowSize,
+		hamming,
 		_chunkSize);
 	cha_agc_prepare(cha_pointer, &dsl, &wdrc);
 }

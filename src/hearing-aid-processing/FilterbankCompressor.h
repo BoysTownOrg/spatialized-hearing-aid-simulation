@@ -4,6 +4,13 @@
 
 class FilterbankCompressor {
 public:
+	struct Parameters {
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+		int sampleRate;
+	};
 	INTERFACE_OPERATIONS(FilterbankCompressor);
 	using real = float;
 	using complex = float;

@@ -14,7 +14,7 @@ class Chapro : public FilterbankCompressor {
 public:
 	Chapro(
 		const DslPrescription &,
-		int sampleRate);
+		Parameters);
 	~Chapro() noexcept;
 	Chapro(Chapro &&) = delete;
 	Chapro &operator=(Chapro &&) = delete;

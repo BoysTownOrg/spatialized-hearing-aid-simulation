@@ -3,14 +3,6 @@
 
 std::string DslPrescription::propertyName(Property p) {
 	switch (p) {
-	case Property::chunkSize:
-		return "chunk_size";
-	case Property::windowSize:
-		return "window_size";
-	case Property::attack_ms:
-		return "attack_ms";
-	case Property::release_ms:
-		return "release_ms";
 	case Property::crossFrequenciesHz:
 		return "cross_frequencies_Hz";
 	case Property::compressionRatios:
@@ -28,10 +20,6 @@ std::string DslPrescription::propertyName(Property p) {
 
 DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) 
 	try :
-	_chunkSize(parser.asInt(propertyName(Property::chunkSize))),
-	_windowSize(parser.asInt(propertyName(Property::windowSize))),
-	_attack_ms(parser.asDouble(propertyName(Property::attack_ms))),
-	_release_ms(parser.asDouble(propertyName(Property::release_ms))),
 	_crossFrequenciesHz(parser.asVector(propertyName(Property::crossFrequenciesHz))),
 	_compressionRatios(parser.asVector(propertyName(Property::compressionRatios))),
 	_kneepointGains_dB(parser.asVector(propertyName(Property::kneepointGains_dB))),
@@ -75,22 +63,6 @@ const std::vector<double> &DslPrescription::crossFrequenciesHz() const {
 	return _crossFrequenciesHz;
 }
 
-double DslPrescription::release_ms() const {
-	return _release_ms;
-}
-
-double DslPrescription::attack_ms() const {
-	return _attack_ms;
-}
-
 int DslPrescription::channels() const {
 	return _channels;
-}
-
-int DslPrescription::chunkSize() const {
-	return _chunkSize;
-}
-
-int DslPrescription::windowSize() const {
-	return _windowSize;
 }

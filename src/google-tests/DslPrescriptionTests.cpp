@@ -9,14 +9,6 @@ class MockDslPrescriptionParser : public DslPrescriptionFileParser {
 	std::map<std::string, int> ints{};
 public:
 	void setValidSingleChannelProperties() {
-		setIntProperty(
-			DslPrescription::propertyName(DslPrescription::Property::chunkSize), 0);
-		setIntProperty(
-			DslPrescription::propertyName(DslPrescription::Property::windowSize), 0);
-		setDoubleProperty(
-			DslPrescription::propertyName(DslPrescription::Property::attack_ms), 0);
-		setDoubleProperty(
-			DslPrescription::propertyName(DslPrescription::Property::release_ms), 0);
 		setVectorProperty(
 			DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), {});
 		setVectorProperty(
@@ -81,10 +73,6 @@ TEST(
 	parametersReceivedAsParsed)
 {
 	MockDslPrescriptionParser parser{};
-	parser.setDoubleProperty(
-		DslPrescription::propertyName(DslPrescription::Property::attack_ms), 1);
-	parser.setDoubleProperty(
-		DslPrescription::propertyName(DslPrescription::Property::release_ms), 2);
 	parser.setVectorProperty(
 		DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), { 3 });
 	parser.setVectorProperty(
@@ -95,21 +83,13 @@ TEST(
 		DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 6, 6 });
 	parser.setVectorProperty(
 		DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 7, 7 });
-	parser.setIntProperty(
-		DslPrescription::propertyName(DslPrescription::Property::chunkSize), 8);
-	parser.setIntProperty(
-		DslPrescription::propertyName(DslPrescription::Property::windowSize), 9);
 	DslPrescription prescription{ parser };
 	EXPECT_EQ(2, prescription.channels());
-	EXPECT_EQ(1, prescription.attack_ms());
-	EXPECT_EQ(2, prescription.release_ms());
 	assertEqual({ 3 }, prescription.crossFrequenciesHz());
 	assertEqual({ 4, 4 }, prescription.compressionRatios());
 	assertEqual({ 5, 5 }, prescription.kneepointGains_dB());
 	assertEqual({ 6, 6 }, prescription.kneepoints_dBSpl());
 	assertEqual({ 7, 7 }, prescription.broadbandOutputLimitingThresholds_dBSpl());
-	EXPECT_EQ(8, prescription.chunkSize());
-	EXPECT_EQ(9, prescription.windowSize());
 }
 
 class ErrorParser : public DslPrescriptionFileParser {
