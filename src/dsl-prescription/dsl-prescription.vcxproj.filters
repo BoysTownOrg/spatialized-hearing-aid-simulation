@@ -18,5 +18,13 @@
     <ClInclude Include="DslPrescription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DslPrescriptionFileParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DslPrescription.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
