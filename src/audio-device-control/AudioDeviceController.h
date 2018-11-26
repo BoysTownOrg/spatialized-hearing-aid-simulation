@@ -18,6 +18,10 @@ public:
 	public:
 		explicit DeviceConnectionFailure(std::string s) : std::runtime_error{ s } {}
 	};
+	class StreamingError : public std::runtime_error {
+	public:
+		explicit StreamingError(std::string s) : std::runtime_error{ s } {}
+	};
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice>,
 		std::shared_ptr<AudioFrameReader>
