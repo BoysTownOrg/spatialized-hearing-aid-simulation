@@ -8,7 +8,11 @@ class LibsndfileReader : public AudioFileReader {
 	SF_INFO info{};
 public:
 	explicit LibsndfileReader(std::string filePath);
-	~LibsndfileReader();
+	~LibsndfileReader() noexcept;
+	LibsndfileReader(LibsndfileReader &&) = delete;
+	LibsndfileReader &operator=(LibsndfileReader &&) = delete;
+	LibsndfileReader(const LibsndfileReader &) = delete;
+	LibsndfileReader &operator=(const LibsndfileReader &) = delete;
 	void readFrames(float *, long long) override;
 	long long frames() override;
 	int channels() override;
