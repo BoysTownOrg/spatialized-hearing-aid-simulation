@@ -13,3 +13,9 @@ public:
 	long long frames() override;
 	int channels() override;
 };
+
+class LibsndfileReaderFactory : public AudioFileReaderFactory {
+	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
+		return std::make_shared<LibsndfileReader>(filePath);
+	}
+};
