@@ -50,7 +50,7 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 		FAIL() << "Expected DslPrescription::InvalidPrescription.";
 	}
 	catch (const DslPrescription::InvalidPrescription &e) {
-		EXPECT_EQ(std::string{ "channel count mismatch in prescription." }, e.what());
+		assertEqual("channel count mismatch in prescription.", e.what());
 	}
 }
 
@@ -122,6 +122,6 @@ TEST(
 		FAIL() << "Expected DslPrescriptionFileReader::InvalidPrescription.";
 	}
 	catch (const DslPrescription::InvalidPrescription &e) {
-		EXPECT_EQ(std::string{ "error." }, e.what());
+		assertEqual("error.", e.what());
 	}
 }
