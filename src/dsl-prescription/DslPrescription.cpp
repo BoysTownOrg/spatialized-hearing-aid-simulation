@@ -1,26 +1,29 @@
 #include "DslPrescription.h"
+#include <gsl/gsl>
 
 std::string DslPrescription::propertyName(Property p) {
-	if (p == Property::chunkSize)
+	switch (p) {
+	case Property::chunkSize:
 		return "chunk_size";
-	else if (p == Property::windowSize)
+	case Property::windowSize:
 		return "window_size";
-	else if (p == Property::attack_ms)
+	case Property::attack_ms:
 		return "attack_ms";
-	else if (p == Property::release_ms)
+	case Property::release_ms:
 		return "release_ms";
-	else if (p == Property::crossFrequenciesHz)
+	case Property::crossFrequenciesHz:
 		return "cross_frequencies_Hz";
-	else if (p == Property::compressionRatios)
+	case Property::compressionRatios:
 		return "compression_ratios";
-	else if (p == Property::kneepointGains_dB)
+	case Property::kneepointGains_dB:
 		return "kneepoint_gains_dB";
-	else if (p == Property::kneepoints_dBSpl)
+	case Property::kneepoints_dBSpl:
 		return "kneepoints_dB_SPL";
-	else if (p == Property::broadbandOutputLimitingThresholds_dBSpl)
+	case Property::broadbandOutputLimitingThresholds_dBSpl:
 		return "BOLT_dB_SPL";
-	else
+	default:
 		return "unknown";
+	}
 }
 
 DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) 
@@ -35,7 +38,7 @@ DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser)
 	_kneepoints_dBSpl(parser.asVector(propertyName(Property::kneepoints_dBSpl))),
 	_broadbandOutputLimitingThresholds_dBSpl(
 		parser.asVector(propertyName(Property::broadbandOutputLimitingThresholds_dBSpl))),
-	_channels(static_cast<int>(_crossFrequenciesHz.size() + 1))
+	_channels(gsl::narrow<int>(_crossFrequenciesHz.size() + 1))
 {
 	const auto channels = _crossFrequenciesHz.size() + 1;
 	if (
