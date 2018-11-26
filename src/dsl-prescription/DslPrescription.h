@@ -7,8 +7,7 @@
 #endif
 
 #include "DslPrescriptionFileParser.h"
-#include <string>
-#include <stdexcept>
+#include <common-includes/RuntimeError.h>
 
 class DslPrescription {
 	// Order important for construction.
@@ -19,10 +18,7 @@ class DslPrescription {
 	const std::vector<double> _broadbandOutputLimitingThresholds_dBSpl;
 	const int _channels;
 public:
-	class InvalidPrescription : public std::runtime_error {
-	public:
-		explicit InvalidPrescription(std::string what) : std::runtime_error{ what } {}
-	};
+	RUNTIME_ERROR(InvalidPrescription);
 	enum class Property {
 		crossFrequenciesHz,
 		compressionRatios,

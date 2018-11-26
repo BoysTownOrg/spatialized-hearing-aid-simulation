@@ -1,16 +1,14 @@
 #pragma once
 
 #include <common-includes/Interface.h>
+#include <common-includes/RuntimeError.h>
 #include <string>
 #include <stdexcept>
 
 class Model {
 public:
+	RUNTIME_ERROR(RequestFailure);
 	INTERFACE_OPERATIONS(Model);
-	class RequestFailure : public std::runtime_error {
-	public:
-		explicit RequestFailure(std::string s) : std::runtime_error{ s } {}
-	};
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
