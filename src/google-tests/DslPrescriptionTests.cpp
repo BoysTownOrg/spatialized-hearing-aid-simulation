@@ -93,3 +93,35 @@ TEST(
 	EXPECT_EQ(8, prescription.chunkSize());
 	EXPECT_EQ(9, prescription.windowSize());
 }
+
+class ErrorParser : public DslPrescriptionFileParser {
+	std::string message;
+public:
+	explicit ErrorParser(std::string message) :
+		message{ std::move(message) } {}
+
+	double asDouble(std::string) const override {
+		throw ParseError{ message };
+	}
+
+	int asInt(std::string) const override {
+		throw ParseError{ message };
+	}
+
+	std::vector<double> asVector(std::string) const override {
+		throw ParseError{ message };
+	}
+};
+
+TEST(
+	DslPrescriptionTestCase,
+	throwsWhenParserThrows)
+{
+	try {
+		DslPrescription{ ErrorParser{"error."} };
+		FAIL() << "Expected DslPrescriptionFileReader::InvalidPrescription.";
+	}
+	catch (const DslPrescription::InvalidPrescription &e) {
+		EXPECT_EQ(std::string{ "error." }, e.what());
+	}
+}
