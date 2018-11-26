@@ -70,6 +70,22 @@ TEST(AudioDeviceControllerTestCase, constructorSetsItself) {
 	EXPECT_EQ(controller.get(), device->controller());
 }
 
+TEST(
+	AudioDeviceControllerTestCase, 
+	constructorThrowsDeviceConnectionFailureWhenDeviceError) 
+{
+	try {
+		const auto device = std::make_shared<MockAudioDevice>();
+		device->setErrorTrue();
+		device->setErrorMessage("error.");
+		AudioDeviceControllerFacade controller{ device };
+		FAIL() << "Expected AudioDeviceController::DeviceConnectionFailure";
+	}
+	catch (const AudioDeviceController::DeviceConnectionFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	AudioDeviceControllerFacade controller{ device };
