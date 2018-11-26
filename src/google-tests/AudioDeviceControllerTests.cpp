@@ -3,8 +3,10 @@
 #include <gtest/gtest.h>
 
 class MockAudioDevice : public AudioDevice {
+	std::string _errorMessage{};
 	AudioDeviceController *_controller{};
 	bool _streaming{};
+	bool _failed{};
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -25,10 +27,16 @@ public:
 		_controller->fillStreamBuffer(x, n);
 	}
 	void setErrorTrue() {
-
+		_failed = true;
 	}
-	void setErrorMessage(std::string) {
-
+	void setErrorMessage(std::string s) {
+		_errorMessage = s;
+	}
+	bool failed() override {
+		return _failed;
+	}
+	std::string errorMessage() override {
+		return _errorMessage;
 	}
 };
 

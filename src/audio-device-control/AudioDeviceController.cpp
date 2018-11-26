@@ -7,6 +7,8 @@ AudioDeviceController::AudioDeviceController(
 	device{ std::move(device) },
 	reader{ std::move(reader) }
 {
+	if (this->device->failed())
+		throw DeviceConnectionFailure{ this->device->errorMessage() };
 	this->device->setController(this);
 }
 
