@@ -30,3 +30,9 @@ private:
 		PaStreamCallbackFlags,
 		void *);
 };
+
+class PortAudioDeviceFactory : public AudioDeviceFactory {
+	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
+		return std::make_shared<PortAudioDevice>(p);
+	}
+};

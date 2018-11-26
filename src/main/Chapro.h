@@ -28,3 +28,12 @@ public:
 	int chunkSize() const override;
 	int channels() const override;
 };
+
+class ChaproFactory : public FilterbankCompressorFactory {
+	std::shared_ptr<FilterbankCompressor> make(
+		const DslPrescription &prescription,
+		FilterbankCompressor::Parameters parameters) override 
+	{
+		return std::make_shared<Chapro>(prescription, parameters);
+	}
+};
