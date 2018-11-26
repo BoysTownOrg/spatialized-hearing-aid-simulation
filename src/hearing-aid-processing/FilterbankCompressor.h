@@ -37,3 +37,14 @@ public:
 	virtual int chunkSize() const = 0;
 	virtual int channels() const = 0;
 };
+
+#include <dsl-prescription/DslPrescription.h>
+#include <memory>
+
+class FilterbankCompressorFactory {
+public:
+	INTERFACE_OPERATIONS(FilterbankCompressorFactory);
+	virtual std::shared_ptr<FilterbankCompressor> make(
+		const DslPrescription &,
+		FilterbankCompressor::Parameters) = 0;
+};

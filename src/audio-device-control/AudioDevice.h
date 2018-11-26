@@ -20,3 +20,11 @@ public:
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
 };
+
+#include <memory>
+
+class AudioDeviceFactory {
+public:
+	INTERFACE_OPERATIONS(AudioDeviceFactory);
+	virtual std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) = 0;
+};
