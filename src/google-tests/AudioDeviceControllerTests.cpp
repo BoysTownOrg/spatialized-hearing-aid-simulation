@@ -26,7 +26,7 @@ public:
 	void fillStreamBuffer(void *x, int n) {
 		_controller->fillStreamBuffer(x, n);
 	}
-	void setErrorTrue() {
+	void setFailedTrue() {
 		_failed = true;
 	}
 	void setErrorMessage(std::string s) {
@@ -91,7 +91,7 @@ TEST(
 {
 	try {
 		const auto device = std::make_shared<MockAudioDevice>();
-		device->setErrorTrue();
+		device->setFailedTrue();
 		device->setErrorMessage("error.");
 		AudioDeviceControllerFacade controller{ device };
 		FAIL() << "Expected AudioDeviceController::DeviceConnectionFailure";
