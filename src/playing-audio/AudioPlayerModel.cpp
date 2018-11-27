@@ -16,15 +16,13 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 			{
 				request.leftDslPrescriptionFilePath,
 				request.rightDslPrescriptionFilePath,
+				request.brirFilePath,
 				std::stod(request.level_dB_Spl),
 				std::stod(request.attack_ms),
 				std::stod(request.release_ms),
 				std::stoi(request.windowSize),
 				std::stoi(request.chunkSize),
 				sampleRate
-			},
-			{
-				request.brirFilePath
 			},
 			{
 				std::stoi(request.chunkSize),

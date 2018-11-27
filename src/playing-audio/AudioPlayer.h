@@ -10,6 +10,7 @@ public:
 		struct ForHearingAidSimulation {
 			std::string leftDslPrescriptionFilePath;
 			std::string rightDslPrescriptionFilePath;
+			std::string brirFilePath;
 			double level_dB_Spl;
 			double attack_ms;
 			double release_ms;
@@ -17,16 +18,12 @@ public:
 			int chunkSize;
 			int sampleRate;
 		};
-		struct ForSpatialization {
-			std::string brirFilePath;
-		};
 		struct ForAudioDevice {
 			int framesPerBuffer;
 			int sampleRate;
 		};
 		std::string audioFilePath;
 		ForHearingAidSimulation forHearingAidSimulation;
-		ForSpatialization forSpatialization;
 		ForAudioDevice forAudioDevice;
 	};
 	virtual void play() = 0;
