@@ -23,3 +23,16 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 	MockAudioFileReader reader{ {} };
 	AudioFileInMemory adapter{ reader };
 }
+
+TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
+	MockAudioFileReader reader{ { 3, 4 } };
+	AudioFileInMemory adapter{ reader };
+	float x{};
+	float *channels[] { &x };
+	adapter.read(channels, 1);
+	EXPECT_EQ(3, x);
+	adapter.read(channels, 1);
+	EXPECT_EQ(4, x);
+	adapter.read(channels, 1);
+	EXPECT_EQ(4, x);
+}
