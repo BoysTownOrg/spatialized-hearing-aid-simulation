@@ -16,7 +16,7 @@ public:
 		return AudioFileInMemoryFacade{ reader };
 	}
 
-	static AudioFileInMemoryFacade Signal(std::vector<float> contents) {
+	static AudioFileInMemoryFacade Mono(std::vector<float> contents) {
 		MockAudioFileReader reader{ std::move(contents), 1 };
 		return AudioFileInMemoryFacade{ reader };
 	}
@@ -37,7 +37,7 @@ public:
 
 class AudioFileReadingTestCase : public ::testing::TestCase {};
 
-TEST(AudioFileReadingTestCase, constructorThrowsIfNotSignalOrStereo) {
+TEST(AudioFileReadingTestCase, constructorThrowsIfNotMonoOrStereo) {
 	MockAudioFileReader reader{ std::vector<float>{} };
 	reader.setChannels(0);
 	EXPECT_THROW(
@@ -50,12 +50,12 @@ TEST(AudioFileReadingTestCase, constructorThrowsIfNotSignalOrStereo) {
 }
 
 TEST(AudioFileReadingTestCase, emptyFileHasZeroFramesRemaining) {
-	const auto file = AudioFileInMemoryFacade::Signal({});
+	const auto file = AudioFileInMemoryFacade::Mono({});
 	EXPECT_EQ(0, file.framesRemaining());
 }
 
 TEST(AudioFileReadingTestCase, readReducesFramesRemaining) {
-	auto file = AudioFileInMemoryFacade::Signal({ 1, 2, 3 });
+	auto file = AudioFileInMemoryFacade::Mono({ 1, 2, 3 });
 	EXPECT_EQ(3, file.framesRemaining());
 	file.readFrames(1);
 	EXPECT_EQ(2, file.framesRemaining());
@@ -100,8 +100,8 @@ TEST(AudioFileReadingTestCase, readLessThanRequested) {
 	EXPECT_EQ(0, right[1]);
 }
 
-TEST(AudioFileReadingTestCase, readSignalFileCopiesLeftChannelToRight) {
-	auto file = AudioFileInMemoryFacade::Signal({ 3, 4 });
+TEST(AudioFileReadingTestCase, readMonoFileCopiesLeftChannelToRight) {
+	auto file = AudioFileInMemoryFacade::Mono({ 3, 4 });
 	float left{};
 	float right{};
 	file.read(&left, &right, 1);
