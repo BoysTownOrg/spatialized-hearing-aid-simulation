@@ -4,7 +4,7 @@
 
 class ChannelProcessingGroupTestCase : public ::testing::TestCase {};
 
-TEST(ChannelProcessingGroupTestCase, tbd) {
+TEST(ChannelProcessingGroupTestCase, processesChannelsInOrder) {
 	std::vector<std::shared_ptr<MockSignalProcessor>> processors;
 	processors.push_back(std::make_shared<MockSignalProcessor>());
 	processors.push_back(std::make_shared<MockSignalProcessor>());
@@ -14,8 +14,11 @@ TEST(ChannelProcessingGroupTestCase, tbd) {
 	float b{};
 	float c{};
 	float *channels[] = { &a, &b, &c };
-	group.process(channels, 0);
+	group.process(channels, 1);
 	EXPECT_EQ(&a, processors[0]->signal());
 	EXPECT_EQ(&b, processors[1]->signal());
 	EXPECT_EQ(&c, processors[2]->signal());
+	EXPECT_EQ(1, processors[0]->samples());
+	EXPECT_EQ(1, processors[1]->samples());
+	EXPECT_EQ(1, processors[2]->samples());
 }
