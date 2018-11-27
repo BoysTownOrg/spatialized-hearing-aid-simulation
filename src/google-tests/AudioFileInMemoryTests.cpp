@@ -24,6 +24,13 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 	AudioFileInMemory adapter{ reader };
 }
 
+TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
+	const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>();
+	AudioFileInMemoryFactory factory{ mockFactory };
+	factory.make("path");
+	assertEqual("path", mockFactory->filePath());
+}
+
 TEST(AudioFileInMemoryTestCase, factoryThrowsFileError) {
 	try {
 		const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{});
