@@ -33,12 +33,6 @@
     <ClCompile Include="SignalProcessingChainTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StereoAudioFileReadingTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StereoAudioFileAdapterTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StereoProcessorAdapterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

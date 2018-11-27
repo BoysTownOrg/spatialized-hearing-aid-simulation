@@ -1,7 +1,7 @@
 #pragma once
 
 #include "audio-file-reading-exports.h"
-#include <audio-file-reading/AudioFileReader.h>
+#include "AudioFileReader.h"
 #include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <vector>
