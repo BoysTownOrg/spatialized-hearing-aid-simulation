@@ -54,6 +54,9 @@
     <ClCompile Include="DslPrescriptionTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChannelProcessorTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MockSignalProcessor.h">
