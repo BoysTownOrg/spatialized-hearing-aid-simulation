@@ -1,3 +1,17 @@
+#include <signal-processing/SignalProcessor.h>
+
+class ScalingProcessor : public SignalProcessor {
+	double scale;
+public:
+	explicit ScalingProcessor(double scale) : scale{ scale } {}
+	void process(float * signal, int samples) override
+	{
+		signal;
+		samples;
+	}
+};
+
+#include "assert-utility.h"
 #include <gtest/gtest.h>
 
 class ScalingProcessorTestCase : public ::testing::TestCase {};
