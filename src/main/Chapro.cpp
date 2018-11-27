@@ -81,3 +81,7 @@ int Chapro::chunkSize() const {
 int Chapro::channels() const {
 	return _channels;
 }
+
+bool Chapro::failed() const {
+	return error != 0;
+}

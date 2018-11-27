@@ -28,6 +28,7 @@ public:
 	void compressOutput(real * input, real * output, int chunkSize) override;
 	int chunkSize() const override;
 	int channels() const override;
+	bool failed() const override;
 };
 
 class ChaproFactory : public FilterbankCompressorFactory {
