@@ -1,11 +1,11 @@
 #include "AudioFileInMemory.h"
 #include <gsl/gsl>
 
-AudioFileInMemory::AudioFileInMemory(std::shared_ptr<AudioFileReader> reader) :
-	buffer(gsl::narrow<size_type>(reader->frames() * reader->channels())),
-	channelCount(reader->channels())
+AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
+	buffer(gsl::narrow<size_type>(reader.frames() * reader.channels())),
+	channelCount(reader.channels())
 {
-	reader->readFrames(&buffer[0], reader->frames());
+	reader.readFrames(&buffer[0], reader.frames());
 }
 
 void AudioFileInMemory::read(float ** channels, int frameCount) {

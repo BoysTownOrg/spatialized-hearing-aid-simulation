@@ -60,7 +60,7 @@
     <ClCompile Include="ScalingProcessorTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioFileAdapterTests.cpp">
+    <ClCompile Include="AudioFileInMemoryTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

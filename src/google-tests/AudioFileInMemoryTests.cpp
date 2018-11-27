@@ -3,12 +3,11 @@
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
-class AudioFileAdapterTestCase : public ::testing::TestCase {};
+class AudioFileInMemoryTestCase : public ::testing::TestCase {};
 
-TEST(AudioFileAdapterTestCase, tbd) {
-	const auto reader = std::make_shared<MockAudioFileReader>(
-		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
-	reader->setChannels(3);
+TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
+	MockAudioFileReader reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+	reader.setChannels(3);
 	AudioFileInMemory adapter{ reader };
 	std::vector<float> a(4);
 	std::vector<float> b(4);

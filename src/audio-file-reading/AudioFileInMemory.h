@@ -12,7 +12,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	size_type head = 0;
 public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
-		std::shared_ptr<AudioFileReader> reader
+		AudioFileReader &reader
 	);
 	AUDIO_FILE_READING_API void read(float ** channels, int frameCount) override;
 };
