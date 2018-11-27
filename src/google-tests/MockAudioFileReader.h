@@ -9,7 +9,7 @@ class MockAudioFileReader : public AudioFileReader {
 	bool _failed{};
 public:
 	explicit MockAudioFileReader(
-		std::vector<float> contents,
+		std::vector<float> contents = {},
 		int _channels = 1
 	) :
 		contents{ std::move(contents) },
@@ -57,14 +57,21 @@ public:
 };
 
 class MockAudioFileReaderFactory : public AudioFileReaderFactory {
+	std::string _filePath{};
 	std::shared_ptr<AudioFileReader> reader;
 public:
 	explicit MockAudioFileReaderFactory(
-		std::shared_ptr<AudioFileReader> reader
+		std::shared_ptr<AudioFileReader> reader =
+			std::make_shared<MockAudioFileReader>()
 	) :
 		reader{ std::move(reader) } {}
 
-	std::shared_ptr<AudioFileReader> make(std::string) override {
+	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
+		_filePath = filePath;
 		return reader;
+	}
+
+	std::string filePath() const {
+		return _filePath;
 	}
 };
