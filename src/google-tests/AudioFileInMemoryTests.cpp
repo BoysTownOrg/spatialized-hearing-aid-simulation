@@ -24,28 +24,6 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 	AudioFileInMemory adapter{ reader };
 }
 
-TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
-	const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>();
-	AudioFileInMemoryFactory factory{ mockFactory };
-	factory.make("path");
-	assertEqual("path", mockFactory->filePath());
-}
-
-TEST(AudioFileInMemoryTestCase, factoryThrowsFileError) {
-	try {
-		const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{});
-		reader->setFailedTrue();
-		reader->setErrorMessage("error.");
-		const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
-		AudioFileInMemoryFactory factory{ mockFactory };
-		factory.make("");
-		FAIL() << "Expected AudioFileInMemory::FileError.";
-	}
-	catch (const AudioFrameReaderFactory::FileError &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
 TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 	MockAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
@@ -57,4 +35,26 @@ TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 	EXPECT_EQ(4, x);
 	adapter.read(channels, 1);
 	EXPECT_EQ(4, x);
+}
+
+TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
+	const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>();
+	AudioFileInMemoryFactory factory{ mockFactory };
+	factory.make("path");
+	assertEqual("path", mockFactory->filePath());
+}
+
+TEST(AudioFileInMemoryTestCase, factoryThrowsFileError) {
+	try {
+		const auto reader = std::make_shared<MockAudioFileReader>();
+		reader->setFailedTrue();
+		reader->setErrorMessage("error.");
+		const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
+		AudioFileInMemoryFactory factory{ mockFactory };
+		factory.make("");
+		FAIL() << "Expected AudioFrameReaderFactory::FileError.";
+	}
+	catch (const AudioFrameReaderFactory::FileError &e) {
+		assertEqual("error.", e.what());
+	}
 }
