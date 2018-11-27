@@ -19,3 +19,11 @@ long long LibsndfileReader::frames() {
 int LibsndfileReader::channels() {
 	return info.channels;
 }
+
+bool LibsndfileReader::failed() const {
+	return file == nullptr;
+}
+
+std::string LibsndfileReader::errorMessage() const {
+	return sf_strerror(file);
+}

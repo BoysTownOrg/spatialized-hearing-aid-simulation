@@ -16,6 +16,8 @@ public:
 	void readFrames(float *, long long) override;
 	long long frames() override;
 	int channels() override;
+	bool failed() const override;
+	std::string errorMessage() const override;
 };
 
 class LibsndfileReaderFactory : public AudioFileReaderFactory {
