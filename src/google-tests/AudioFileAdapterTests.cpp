@@ -1,10 +1,26 @@
+#include <audio-file-reading/AudioFileReader.h>
+#include <audio-stream-processing/AudioFrameReader.h>
+
+class AudioFileAdapter : public AudioFrameReader {
+	std::shared_ptr<AudioFileReader> reader;
+public:
+	explicit AudioFileAdapter(std::shared_ptr<AudioFileReader> reader) : reader{ std::move(reader) } {}
+	void read(float ** channels, int frameCount) override {
+		channels;
+		frameCount;
+	}
+};
+
+#include "assert-utility.h"
+#include "MockAudioFileReader.h"
 #include <gtest/gtest.h>
 
 class AudioFileAdapterTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileAdapterTestCase, tbd) {
-	MockAudioFileReader reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
-	reader.setChannels(3);
+	const auto reader = std::make_shared<MockAudioFileReader>(
+		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
+	reader->setChannels(3);
 	AudioFileAdapter adapter{ reader };
 	std::vector<float> a(3);
 	std::vector<float> b(3);

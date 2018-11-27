@@ -164,6 +164,7 @@
     <ClCompile Include="DualSignalProcessorTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MockAudioFileReader.h" />
     <ClInclude Include="MockSignalProcessor.h" />
     <ClInclude Include="PresenterTests.h" />
   </ItemGroup>
