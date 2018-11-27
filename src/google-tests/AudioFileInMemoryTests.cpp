@@ -18,3 +18,8 @@ TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
 	assertEqual({ 2, 5, 8, 11 }, b);
 	assertEqual({ 3, 6, 9, 12 }, c);
 }
+
+TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
+	MockAudioFileReader reader{ {} };
+	AudioFileInMemory adapter{ reader };
+}
