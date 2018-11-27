@@ -1,13 +1,12 @@
 #include <signal-processing/SignalProcessor.h>
 
 class ScalingProcessor : public SignalProcessor {
-	double scale;
+	float scale;
 public:
-	explicit ScalingProcessor(double scale) : scale{ scale } {}
-	void process(float * signal, int samples) override
-	{
-		signal;
-		samples;
+	explicit ScalingProcessor(float scale) : scale{ scale } {}
+	void process(float * signal, int samples) override {
+		for (int i = 0; i < samples; ++i)
+			signal[i] *= scale;
 	}
 };
 
