@@ -2,6 +2,7 @@
 
 #include "audio-file-reading-exports.h"
 #include <audio-file-reading/AudioFileReader.h>
+#include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <vector>
 
@@ -11,6 +12,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	int channelCount;
 	size_type head = 0;
 public:
+	RUNTIME_ERROR(FileError);
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		AudioFileReader &reader
 	);

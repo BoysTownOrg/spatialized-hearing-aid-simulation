@@ -27,8 +27,8 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 TEST(AudioFileInMemoryTestCase, failedFileThrowsFileError) {
 	try {
 		MockAudioFileReader reader{ {} };
-		reader->setFailedTrue();
-		reader->setErrorMessage("error.");
+		reader.setFailedTrue();
+		reader.setErrorMessage("error.");
 		AudioFileInMemory adapter{ reader };
 		FAIL() << "Expected AudioFileInMemory::FileError.";
 	}

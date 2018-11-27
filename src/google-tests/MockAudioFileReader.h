@@ -36,4 +36,12 @@ public:
 			&contents[0],
 			static_cast<std::size_t>(n) * sizeof(float) * _channels);
 	}
+
+	void setFailedTrue() {
+
+	}
+
+	void setErrorMessage(std::string) {
+
+	}
 };
