@@ -93,6 +93,21 @@ public:
 class HearingAidProcessorTestCase : public ::testing::TestCase {};
 
 TEST(
+	HearingAidProcessorTestCase,
+	failedCompressorThrowsCompressorError)
+{
+	try {
+		const auto compressor = std::make_shared<MockFilterbankCompressor>();
+		compressor->setFailedTrue();
+		HearingAidProcessorFacade processor{ compressor };
+		FAIL() << "Expected HearingAidProcessor::CompressorError";
+	}
+	catch (const HearingAidProcessor::CompressorError &e) {
+		assertEqual("The compressor failed to initialize.", e.what());
+	}
+}
+
+TEST(
 	HearingAidProcessorTestCase, 
 	processCallsFilterbankCompressorMethodsInCorrectOrder) 
 {
