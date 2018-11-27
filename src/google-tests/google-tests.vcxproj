@@ -152,6 +152,7 @@
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />
     <ClCompile Include="DslPrescriptionTests.cpp" />
     <ClCompile Include="ProcessedAudioFrameReaderTests.cpp" />
+    <ClCompile Include="ScalingProcessorTests.cpp" />
     <ClCompile Include="StereoAudioFileAdapterTests.cpp" />
     <ClCompile Include="StereoAudioFileReadingTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
