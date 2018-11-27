@@ -7,7 +7,7 @@ class AudioPlayer {
 public:
 	INTERFACE_OPERATIONS(AudioPlayer);
 	struct Parameters {
-		struct ForHearingAidSimulation {
+		struct ForSignalProcessing {
 			std::string leftDslPrescriptionFilePath;
 			std::string rightDslPrescriptionFilePath;
 			std::string brirFilePath;
@@ -23,7 +23,7 @@ public:
 			int sampleRate;
 		};
 		std::string audioFilePath;
-		ForHearingAidSimulation forHearingAidSimulation;
+		ForSignalProcessing forHearingAidSimulation;
 		ForAudioDevice forAudioDevice;
 	};
 	virtual void play() = 0;
