@@ -28,7 +28,12 @@ public:
 		factory{ std::move(factory) } {}
 
 	std::shared_ptr<AudioFrameReader> make(std::string) override {
-		auto reader = factory->make("");
-		return std::make_shared<AudioFileInMemory>(*reader);
+		try {
+			auto reader = factory->make("");
+			return std::make_shared<AudioFileInMemory>(*reader);
+		}
+		catch (const AudioFileInMemory::FileError &e) {
+			throw FileError{ e.what() };
+		}
 	}
 };
