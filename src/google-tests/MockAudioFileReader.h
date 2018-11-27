@@ -4,7 +4,9 @@
 
 class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
+	std::string _errorMessage{};
 	int _channels;
+	bool _failed{};
 public:
 	explicit MockAudioFileReader(
 		std::vector<float> contents,
@@ -38,10 +40,18 @@ public:
 	}
 
 	void setFailedTrue() {
-
+		_failed = true;
 	}
 
-	void setErrorMessage(std::string) {
+	void setErrorMessage(std::string s) {
+		_errorMessage = s;
+	}
 
+	bool failed() const override {
+		return _failed;
+	}
+
+	std::string errorMessage() const override {
+		return _errorMessage;
 	}
 };

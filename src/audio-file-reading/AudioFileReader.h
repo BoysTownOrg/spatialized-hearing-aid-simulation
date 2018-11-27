@@ -1,6 +1,7 @@
 #pragma once
 
 #include <common-includes/Interface.h>
+#include <string>
 
 class AudioFileReader {
 public:
@@ -8,10 +9,11 @@ public:
 	virtual long long frames() = 0;
 	virtual int channels() = 0;
 	virtual void readFrames(float *, long long) = 0;
+	virtual bool failed() const = 0;
+	virtual std::string errorMessage() const = 0;
 };
 
 #include <memory>
-#include <string>
 
 class AudioFileReaderFactory {
 public:
