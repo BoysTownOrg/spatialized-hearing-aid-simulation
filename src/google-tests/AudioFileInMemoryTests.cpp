@@ -24,12 +24,14 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 	AudioFileInMemory adapter{ reader };
 }
 
-TEST(AudioFileInMemoryTestCase, failedFileThrowsFileError) {
+TEST(AudioFileInMemoryTestCase, factoryThrowsFileError) {
 	try {
 		MockAudioFileReader reader{ {} };
 		reader.setFailedTrue();
 		reader.setErrorMessage("error.");
-		AudioFileInMemory adapter{ reader };
+		MockAudioFileReaderFactory mockFactory{ reader };
+		AudioFileInMemoryFactory factory{ mockFactory };
+		factory.make("");
 		FAIL() << "Expected AudioFileInMemory::FileError.";
 	}
 	catch (const AudioFileInMemory::FileError &e) {
