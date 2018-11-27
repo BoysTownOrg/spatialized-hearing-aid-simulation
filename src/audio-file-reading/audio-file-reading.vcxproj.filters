@@ -30,12 +30,18 @@
     <ClInclude Include="audio-file-reading-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFileInMemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StereoAudioFileInMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StereoAudioFileAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioFileInMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

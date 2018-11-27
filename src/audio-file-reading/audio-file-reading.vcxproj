@@ -136,12 +136,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="audio-file-reading-exports.h" />
+    <ClInclude Include="AudioFileInMemory.h" />
     <ClInclude Include="StereoAudioFile.h" />
     <ClInclude Include="StereoAudioFileAdapter.h" />
     <ClInclude Include="StereoAudioFileInMemory.h" />
     <ClInclude Include="AudioFileReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioFileInMemory.cpp" />
     <ClCompile Include="StereoAudioFileAdapter.cpp" />
     <ClCompile Include="StereoAudioFileInMemory.cpp" />
   </ItemGroup>
