@@ -54,7 +54,7 @@
     <ClCompile Include="DslPrescriptionTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChannelProcessorTests.cpp">
+    <ClCompile Include="ChannelProcessingGroupTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -149,7 +149,7 @@
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioDeviceControllerTests.cpp" />
     <ClCompile Include="AudioPlayerModelTests.cpp" />
-    <ClCompile Include="ChannelProcessorTests.cpp" />
+    <ClCompile Include="ChannelProcessingGroupTests.cpp" />
     <ClCompile Include="DslPrescriptionTests.cpp" />
     <ClCompile Include="ProcessedAudioFrameReaderTests.cpp" />
     <ClCompile Include="StereoAudioFileAdapterTests.cpp" />
