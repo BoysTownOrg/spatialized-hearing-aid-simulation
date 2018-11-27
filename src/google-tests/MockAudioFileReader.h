@@ -55,3 +55,16 @@ public:
 		return _errorMessage;
 	}
 };
+
+class MockAudioFileReaderFactory : public AudioFileReaderFactory {
+	std::shared_ptr<AudioFileReader> reader;
+public:
+	explicit MockAudioFileReaderFactory(
+		std::shared_ptr<AudioFileReader> reader
+	) :
+		reader{ std::move(reader) } {}
+
+	std::shared_ptr<AudioFileReader> make(std::string) override {
+		return reader;
+	}
+};

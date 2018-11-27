@@ -26,15 +26,15 @@ TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
 
 TEST(AudioFileInMemoryTestCase, factoryThrowsFileError) {
 	try {
-		MockAudioFileReader reader{ {} };
-		reader.setFailedTrue();
-		reader.setErrorMessage("error.");
-		MockAudioFileReaderFactory mockFactory{ reader };
+		const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{});
+		reader->setFailedTrue();
+		reader->setErrorMessage("error.");
+		const auto mockFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 		AudioFileInMemoryFactory factory{ mockFactory };
 		factory.make("");
 		FAIL() << "Expected AudioFileInMemory::FileError.";
 	}
-	catch (const AudioFileInMemory::FileError &e) {
+	catch (const AudioFrameReaderFactory::FileError &e) {
 		assertEqual("error.", e.what());
 	}
 }

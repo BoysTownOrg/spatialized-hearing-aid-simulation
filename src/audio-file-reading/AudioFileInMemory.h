@@ -19,3 +19,16 @@ public:
 	AUDIO_FILE_READING_API void read(float ** channels, int frameCount) override;
 };
 
+class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
+	std::shared_ptr<AudioFileReaderFactory> factory;
+public:
+	explicit AudioFileInMemoryFactory(
+		std::shared_ptr<AudioFileReaderFactory> factory
+	) :
+		factory{ std::move(factory) } {}
+
+	std::shared_ptr<AudioFrameReader> make(std::string) override {
+		auto reader = factory->make("");
+		return std::make_shared<AudioFileInMemory>(*reader);
+	}
+};
