@@ -35,6 +35,7 @@ class MockFilterbankCompressor : public FilterbankCompressor {
 	int _compressChannelsChunkSize{};
 	int _filterbankSynthesizeChunkSize{};
 	int _compressOutputChunkSize{};
+	bool _failed{};
 public:
 	std::string processingLog() const {
 		return _processingLog;
@@ -89,7 +90,10 @@ public:
 		return 1;
 	}
 	void setFailedTrue() {
-
+		_failed = true;
+	}
+	bool failed() const override {
+		return _failed;
 	}
 };
 
@@ -173,6 +177,9 @@ public:
 	int channels() const override {
 		return 1;
 	}
+	bool failed() const override {
+		return false;
+	}
 };
 
 TEST(
@@ -225,6 +232,9 @@ public:
 	}
 	complex postSynthesizeFilterbankComplexResult() const {
 		return _postSynthesizeFilterbankComplexResult;
+	}
+	bool failed() const override {
+		return false;
 	}
 };
 
