@@ -39,7 +39,7 @@ Chapro::Chapro(
 	wdrc.cr = 10;
 	wdrc.bolt = 105;
 	const auto hamming = 0;
-	cha_firfb_prepare(
+	error = cha_firfb_prepare(
 		cha_pointer,
 		dsl.cross_freq,
 		_channels,
@@ -47,7 +47,7 @@ Chapro::Chapro(
 		parameters.windowSize,
 		hamming,
 		_chunkSize);
-	cha_agc_prepare(cha_pointer, &dsl, &wdrc);
+	error = cha_agc_prepare(cha_pointer, &dsl, &wdrc);
 }
 
 Chapro::~Chapro() noexcept {

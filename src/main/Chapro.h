@@ -11,6 +11,7 @@ class Chapro : public FilterbankCompressor {
 	void *cha_pointer[NPTR]{};
 	const int _channels;
 	const int _chunkSize;
+	int error = 0;
 public:
 	Chapro(
 		const DslPrescription &,
