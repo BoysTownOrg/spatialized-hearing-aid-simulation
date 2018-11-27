@@ -1,6 +1,6 @@
 #pragma once
 
-#include <audio-file-reading/StereoAudioFileInMemory.h>
+#include <audio-file-reading/AudioFileReader.h>
 #include <sndfile.h>
 
 class LibsndfileReader : public AudioFileReader {
