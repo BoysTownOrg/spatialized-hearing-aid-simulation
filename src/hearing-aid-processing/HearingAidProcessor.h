@@ -7,6 +7,7 @@
 #endif
 
 #include "FilterbankCompressor.h"
+#include <common-includes/RuntimeError.h>
 #include <signal-processing/SignalProcessor.h>
 #include <memory>
 #include <vector>
@@ -16,6 +17,7 @@ class HearingAidProcessor : public SignalProcessor {
 	std::vector<float> complexBuffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
+	RUNTIME_ERROR(CompressorError);
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
 		std::shared_ptr<FilterbankCompressor>
 	);

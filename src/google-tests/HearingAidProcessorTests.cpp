@@ -88,6 +88,9 @@ public:
 	int channels() const override {
 		return 1;
 	}
+	void setFailedTrue() {
+
+	}
 };
 
 class HearingAidProcessorTestCase : public ::testing::TestCase {};
