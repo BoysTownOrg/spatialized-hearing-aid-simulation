@@ -1,19 +1,29 @@
 #pragma once
 
 #include <common-includes/Interface.h>
-#include <audio-stream-processing/AudioFrameProcessor.h>
 #include <string>
 
 class AudioPlayer {
 public:
 	INTERFACE_OPERATIONS(AudioPlayer);
 	struct Parameters {
+		struct ForSignalProcessing {
+			std::string leftDslPrescriptionFilePath;
+			std::string rightDslPrescriptionFilePath;
+			std::string brirFilePath;
+			double level_dB_Spl;
+			double attack_ms;
+			double release_ms;
+			int windowSize;
+			int chunkSize;
+			int sampleRate;
+		};
 		struct ForAudioDevice {
 			int framesPerBuffer;
 			int sampleRate;
 		};
 		std::string audioFilePath;
-		AudioFrameProcessor::Parameters forHearingAidSimulation;
+		ForSignalProcessing forHearingAidSimulation;
 		ForAudioDevice forAudioDevice;
 	};
 	virtual void play() = 0;

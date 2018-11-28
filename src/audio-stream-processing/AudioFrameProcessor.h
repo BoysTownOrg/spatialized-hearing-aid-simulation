@@ -1,7 +1,6 @@
 #pragma once
 
 #include <common-includes/Interface.h>
-#include <string>
 
 class AudioFrameProcessor {
 public:
