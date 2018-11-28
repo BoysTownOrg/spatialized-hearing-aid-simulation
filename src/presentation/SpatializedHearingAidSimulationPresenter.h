@@ -2,7 +2,7 @@
 
 #include "presentation-exports.h"
 #include "SpatializedHearingAidSimulationView.h"
-#include <playing-audio/SpatializedHearingAidSimulationModel.h>
+#include "SpatializedHearingAidSimulationModel.h"
 #include <memory>
 #include <functional>
 

@@ -1,7 +1,11 @@
 #include "AudioPlayerModel.h"
 
-AudioPlayerModel::AudioPlayerModel(std::shared_ptr<AudioPlayerFactory> factory) :
-	factory{ std::move(factory) } {}
+AudioPlayerModel::AudioPlayerModel(
+	std::shared_ptr<AudioDeviceFactory> deviceFactory,
+	std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
+) :
+	deviceFactory{ std::move(deviceFactory) },
+	simulatorFactory{ std::move(simulatorFactory) } {}
 
 void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.level_dB_Spl, "level");
@@ -10,7 +14,8 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
 	const auto sampleRate = 44100;
-	const auto player = factory->make(
+	/*
+	factory->make(
 		{ 
 			request.audioFilePath,
 			{
@@ -30,7 +35,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 			}
 		}
 	);
-	player->play();
+	*/
 }
 
 void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {

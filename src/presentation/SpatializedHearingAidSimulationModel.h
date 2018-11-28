@@ -3,7 +3,6 @@
 #include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
 #include <string>
-#include <stdexcept>
 
 class SpatializedHearingAidSimulationModel {
 public:

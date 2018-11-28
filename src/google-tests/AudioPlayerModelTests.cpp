@@ -2,89 +2,57 @@
 #include <gtest/gtest.h>
 #include <functional>
 
-class MockAudioPlayer : public AudioPlayer {
-	bool _played{};
+class MockAudioDeviceFactory : public AudioDeviceFactory {
+	AudioDevice::Parameters _parameters{};
 public:
-	bool played() const {
-		return _played;
+	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
+		_parameters = p;
+		return std::shared_ptr<AudioDevice>();
 	}
-	void play() override {
-		_played = true;
+	const AudioDevice::Parameters &parameters() const {
+		return _parameters;
 	}
 };
 
-class MockAudioPlayerFactory : public AudioPlayerFactory {
-	std::string _leftDslPrescriptionFilePath{};
-	std::string _rightDslPrescriptionFilePath{};
-	std::string _audioFilePath{};
-	std::string _brirFilePath{};
-	double _level_dB_Spl{};
-	double _attack_ms{};
-	double _release_ms{};
-	int _windowSize{};
-	int _chunkSize{};
-	int _framesPerBuffer{};
-	int _audioDeviceSampleRate{};
-	int _hearingAidSampleRate{};
-	std::shared_ptr<AudioPlayer> player;
+class MockSpatializedHearingAidSimulatorFactory : public SpatializedHearingAidSimulatorFactory {
+	SpatializedHearingAidSimulator::Parameters _parameters{};
 public:
-	explicit MockAudioPlayerFactory(
-		std::shared_ptr<AudioPlayer> player =
-			std::make_shared<MockAudioPlayer>()
-	) :
-		player{ std::move(player) } {}
+	const SpatializedHearingAidSimulator::Parameters &parameters() const {
+		return _parameters;
+	}
 
-	std::string audioFilePath() const {
-		return _audioFilePath;
-	}
-	std::string leftDslPrescriptionFilePath() const {
-		return _leftDslPrescriptionFilePath;
-	}
-	std::string rightDslPrescriptionFilePath() const {
-		return _rightDslPrescriptionFilePath;
-	}
-	std::string brirFilePath() const {
-		return _brirFilePath;
-	}
-	double level_dB_Spl() const {
-		return _level_dB_Spl;
-	}
-	double attack_ms() const {
-		return _attack_ms;
-	}
-	double release_ms() const {
-		return _release_ms;
-	}
-	int windowSize() const {
-		return _windowSize;
-	}
-	int chunkSize() const {
-		return _chunkSize;
-	}
-	int framesPerBuffer() const {
-		return _framesPerBuffer;
-	}
-	int audioDeviceSampleRate() const {
-		return _audioDeviceSampleRate;
-	}
-	int hearingAidSampleRate() const {
-		return _hearingAidSampleRate;
-	}
-	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) override
+	std::shared_ptr<SpatializedHearingAidSimulator> make(
+		SpatializedHearingAidSimulator::Parameters p) override
 	{
-		_audioFilePath = p.audioFilePath;
-		_brirFilePath = p.forHearingAidSimulation.brirFilePath;
-		_leftDslPrescriptionFilePath = p.forHearingAidSimulation.leftDslPrescriptionFilePath;
-		_rightDslPrescriptionFilePath = p.forHearingAidSimulation.rightDslPrescriptionFilePath;
-		_level_dB_Spl = p.forHearingAidSimulation.level_dB_Spl;
-		_attack_ms = p.forHearingAidSimulation.attack_ms;
-		_release_ms = p.forHearingAidSimulation.release_ms;
-		_windowSize = p.forHearingAidSimulation.windowSize;
-		_chunkSize = p.forHearingAidSimulation.chunkSize;
-		_framesPerBuffer = p.forAudioDevice.framesPerBuffer;
-		_audioDeviceSampleRate = p.forAudioDevice.sampleRate;
-		_hearingAidSampleRate = p.forHearingAidSimulation.sampleRate;
-		return player;
+		_parameters = p;
+		return {};
+	}
+};
+
+class AudioPlayerModelFacade {
+	AudioPlayerModel model;
+public:
+	explicit AudioPlayerModelFacade(
+		std::shared_ptr<AudioDeviceFactory> deviceFactory =
+			std::make_shared<MockAudioDeviceFactory>(),
+		std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory =
+			std::make_shared<MockSpatializedHearingAidSimulatorFactory>()
+	) :
+		model{
+			std::move(deviceFactory),
+			std::move(simulatorFactory)
+	} {}
+
+	explicit AudioPlayerModelFacade(
+		std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
+	) :
+		AudioPlayerModelFacade{
+			std::make_shared<MockAudioDeviceFactory>(),
+			simulatorFactory
+	} {}
+
+	void playRequest(AudioPlayerModel::PlayRequest r) {
+		model.playRequest(r);
 	}
 };
 
@@ -108,11 +76,12 @@ static void expectEqual(std::string expected, std::string actual) {
 }
 
 static void expectRequestTransformationYieldsFailure(
-	std::function<SpatializedHearingAidSimulationModel::PlayRequest(SpatializedHearingAidSimulationModel::PlayRequest)> transformation,
+	std::function<SpatializedHearingAidSimulationModel::PlayRequest(
+		SpatializedHearingAidSimulationModel::PlayRequest)> transformation,
 	std::string message) 
 {
 	try {
-		AudioPlayerModel model{std::make_shared<MockAudioPlayerFactory>()};
+		AudioPlayerModelFacade model{};
 		model.playRequest(transformation(validRequest()));
 		FAIL() << "Expected SpatializedHearingAidSimulationModel::RequestFailure";
 	}
@@ -170,8 +139,9 @@ TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
 }
 
 TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
-	const auto factory = std::make_shared<MockAudioPlayerFactory>();
-	AudioPlayerModel model{ factory };
+	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
+	const auto simulatorFactory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
+	AudioPlayerModel model{ deviceFactory, simulatorFactory };
 	model.playRequest(
 		{
 			"a",
@@ -184,24 +154,23 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 			"4",
 			"5"
 		});
-	EXPECT_EQ("a", factory->leftDslPrescriptionFilePath());
-	EXPECT_EQ("b", factory->rightDslPrescriptionFilePath());
-	EXPECT_EQ("c", factory->audioFilePath());
-	EXPECT_EQ("d", factory->brirFilePath());
-	EXPECT_EQ(1, factory->level_dB_Spl());
-	EXPECT_EQ(2, factory->attack_ms());
-	EXPECT_EQ(3, factory->release_ms());
-	EXPECT_EQ(4, factory->windowSize());
-	EXPECT_EQ(5, factory->chunkSize());
-	EXPECT_EQ(5, factory->framesPerBuffer());
-	EXPECT_EQ(44100, factory->hearingAidSampleRate());
-	EXPECT_EQ(44100, factory->audioDeviceSampleRate());
+	EXPECT_EQ("a", simulatorFactory->parameters().leftDslPrescriptionFilePath);
+	EXPECT_EQ("b", simulatorFactory->parameters().rightDslPrescriptionFilePath);
+	EXPECT_EQ("c", simulatorFactory->parameters().audioFilePath);
+	EXPECT_EQ("d", simulatorFactory->parameters().brirFilePath);
+	EXPECT_EQ(1, simulatorFactory->parameters().level_dB_Spl);
+	EXPECT_EQ(2, simulatorFactory->parameters().attack_ms);
+	EXPECT_EQ(3, simulatorFactory->parameters().release_ms);
+	EXPECT_EQ(4, simulatorFactory->parameters().windowSize);
+	EXPECT_EQ(5, simulatorFactory->parameters().chunkSize);
+	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
 }
 
+/*
 TEST(AudioPlayerModelTestCase, successfulRequestPlaysPlayer) {
 	const auto player = std::make_shared<MockAudioPlayer>();
 	const auto factory = std::make_shared<MockAudioPlayerFactory>(player);
 	AudioPlayerModel model{ factory };
 	model.playRequest(validRequest());
 	EXPECT_TRUE(player->played());
-}
+}*/
