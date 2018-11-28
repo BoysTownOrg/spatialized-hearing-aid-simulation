@@ -30,3 +30,8 @@ std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(std::string fil
 		throw FileError{ e.what() };
 	}
 }
+
+AudioFileInMemoryFactory::AudioFileInMemoryFactory(
+	std::shared_ptr<AudioFileReaderFactory> factory
+) :
+	factory{ std::move(factory) } {}
