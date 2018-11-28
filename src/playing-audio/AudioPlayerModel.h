@@ -38,7 +38,7 @@ class AudioPlayerModel : public SpatializedHearingAidSimulationModel {
 public:
 	PLAYING_AUDIO_API AudioPlayerModel(
 		std::shared_ptr<AudioDeviceFactory>,
-		std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
+		std::shared_ptr<SpatializedHearingAidSimulatorFactory>
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
 private:

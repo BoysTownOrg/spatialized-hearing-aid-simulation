@@ -13,18 +13,17 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.release_ms, "release time");
 	throwIfNotPositiveInteger(request.windowSize, "window size");
 	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
-	const auto sampleRate = 44100;
 	simulatorFactory->make(
 		{
-				request.leftDslPrescriptionFilePath,
-				request.rightDslPrescriptionFilePath,
-				request.brirFilePath,
-				request.audioFilePath,
-				std::stod(request.level_dB_Spl),
-				std::stod(request.attack_ms),
-				std::stod(request.release_ms),
-				std::stoi(request.windowSize),
-				std::stoi(request.chunkSize),
+			request.leftDslPrescriptionFilePath,
+			request.rightDslPrescriptionFilePath,
+			request.brirFilePath,
+			request.audioFilePath,
+			std::stod(request.level_dB_Spl),
+			std::stod(request.attack_ms),
+			std::stod(request.release_ms),
+			std::stoi(request.windowSize),
+			std::stoi(request.chunkSize),
 		});
 	AudioDevice::Parameters forDevice{};
 	forDevice.framesPerBuffer = std::stoi(request.chunkSize);

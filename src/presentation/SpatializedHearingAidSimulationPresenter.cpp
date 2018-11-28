@@ -40,19 +40,17 @@ void SpatializedHearingAidSimulationPresenter::browseForBrir() {
 
 void SpatializedHearingAidSimulationPresenter::play() {
 	try {
-		model->playRequest(
-			{
-				view->leftDslPrescriptionFilePath(),
-				view->rightDslPrescriptionFilePath(),
-				view->audioFilePath(),
-				view->brirFilePath(),
-				view->level_dB_Spl(),
-				view->attack_ms(),
-				view->release_ms(),
-				view->windowSize(),
-				view->chunkSize()
-			}
-		);
+		SpatializedHearingAidSimulationModel::PlayRequest request;
+		request.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+		request.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+		request.brirFilePath = view->brirFilePath();
+		request.audioFilePath = view->audioFilePath();
+		request.level_dB_Spl = view->level_dB_Spl();
+		request.attack_ms = view->attack_ms();
+		request.release_ms = view->release_ms();
+		request.windowSize = view->windowSize();
+		request.chunkSize = view->chunkSize();
+		model->playRequest(request);
 	}
 	catch (const SpatializedHearingAidSimulationModel::RequestFailure &failure) {
 		view->showErrorDialog(failure.what());
