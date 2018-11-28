@@ -5,6 +5,7 @@
 #include <audio-device-control/AudioDevice.h>
 
 class AudioPlayerAdapterFactory : public AudioPlayerFactory {
+	std::shared_ptr<AudioDeviceFactory> deviceFactory;
 public:
 	PLAYING_AUDIO_API explicit AudioPlayerAdapterFactory(std::shared_ptr<AudioDeviceFactory>);
 	PLAYING_AUDIO_API std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters) override;

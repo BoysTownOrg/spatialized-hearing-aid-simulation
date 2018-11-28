@@ -4,7 +4,8 @@
 class MockAudioDeviceFactory : public AudioDeviceFactory {
 	AudioDevice::Parameters _parameters{};
 public:
-	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) override {
+	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
+		_parameters = p;
 		return std::shared_ptr<AudioDevice>();
 	}
 	int framesPerBuffer() const {

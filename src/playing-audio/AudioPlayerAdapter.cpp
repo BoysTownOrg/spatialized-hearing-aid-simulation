@@ -1,9 +1,16 @@
 #include "AudioPlayerAdapter.h"
 
-AudioPlayerAdapterFactory::AudioPlayerAdapterFactory(std::shared_ptr<AudioDeviceFactory>)
+AudioPlayerAdapterFactory::AudioPlayerAdapterFactory(
+	std::shared_ptr<AudioDeviceFactory> deviceFactory
+) :
+	deviceFactory{ std::move(deviceFactory) }
 {
 }
 
-std::shared_ptr<AudioPlayer> AudioPlayerAdapterFactory::make(AudioPlayer::Parameters) {
+std::shared_ptr<AudioPlayer> AudioPlayerAdapterFactory::make(AudioPlayer::Parameters p) {
+	AudioDevice::Parameters forDevice{};
+	forDevice.framesPerBuffer = p.forAudioDevice.framesPerBuffer;
+	forDevice.sampleRate = p.forAudioDevice.sampleRate;
+	deviceFactory->make(forDevice);
 	return {};
 }
