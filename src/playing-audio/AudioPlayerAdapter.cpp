@@ -1,7 +1,8 @@
 #include "AudioPlayerAdapter.h"
 
 AudioPlayerAdapterFactory::AudioPlayerAdapterFactory(
-	std::shared_ptr<AudioDeviceFactory> deviceFactory
+	std::shared_ptr<AudioDeviceFactory> deviceFactory,
+	std::shared_ptr<SpatializedHearingAidSimulatorFactory>
 ) :
 	deviceFactory{ std::move(deviceFactory) }
 {

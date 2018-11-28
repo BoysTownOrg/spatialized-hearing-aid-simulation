@@ -16,11 +16,45 @@ public:
 	}
 };
 
+class MockSpatializedHearingAidSimulatorFactory : public SpatializedHearingAidSimulatorFactory {
+	double _attack_ms{};
+public:
+	double attack_ms() const {
+		return _attack_ms;
+	}
+};
+
+class AudioPlayerAdapterFactoryFacade {
+	AudioPlayerAdapterFactory factory;
+public:
+	explicit AudioPlayerAdapterFactoryFacade(
+		std::shared_ptr<AudioDeviceFactory> deviceFactory,
+		std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory =
+			std::make_shared<MockSpatializedHearingAidSimulatorFactory>()
+	) :
+		factory { 
+			std::move(deviceFactory),
+			std::move(simulatorFactory)
+		} {}
+
+	explicit AudioPlayerAdapterFactoryFacade(
+		std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
+	) :
+		AudioPlayerAdapterFactoryFacade{ 
+			std::make_shared<MockAudioDeviceFactory>(),
+			simulatorFactory
+		} {}
+
+	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters p) {
+		return factory.make(p);
+	}
+};
+
 class AudioPlayerAdapterTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerAdapterTestCase, makePassesDeviceParametersToFactory) {
 	const auto factory = std::make_shared<MockAudioDeviceFactory>();
-	AudioPlayerAdapterFactory adapter{ factory };
+	AudioPlayerAdapterFactoryFacade adapter{ factory };
 	AudioPlayer::Parameters p{};
 	p.forAudioDevice.framesPerBuffer = 1;
 	p.forAudioDevice.sampleRate = 2;
@@ -31,7 +65,7 @@ TEST(AudioPlayerAdapterTestCase, makePassesDeviceParametersToFactory) {
 
 TEST(AudioPlayerAdapterTestCase, makePassesSimulationParametersToFactory) {
 	const auto factory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
-	AudioPlayerAdapterFactory adapter{ factory };
+	AudioPlayerAdapterFactoryFacade adapter{ factory };
 	AudioPlayer::Parameters p{};
 	p.forHearingAidSimulation.attack_ms = 1;
 	adapter.make(p);
