@@ -133,7 +133,7 @@ TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
 	}
 }
 
-TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
+TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto simulatorFactory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
 	AudioPlayerModel model{ deviceFactory, simulatorFactory };
