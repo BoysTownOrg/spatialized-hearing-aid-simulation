@@ -17,10 +17,17 @@ public:
 };
 
 class MockSpatializedHearingAidSimulatorFactory : public SpatializedHearingAidSimulatorFactory {
+	SpatializedHearingAidSimulator::Parameters _parameters{};
 	double _attack_ms{};
 public:
 	double attack_ms() const {
-		return _attack_ms;
+		return _parameters.attack_ms;
+	}
+	std::shared_ptr<SpatializedHearingAidSimulator> make(
+		SpatializedHearingAidSimulator::Parameters p) override 
+	{
+		_parameters = p;
+		return {};
 	}
 };
 
