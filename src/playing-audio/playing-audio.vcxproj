@@ -136,10 +136,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="AudioPlayerAdapter.h" />
     <ClInclude Include="AudioPlayerModel.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="playing-audio-exports.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioPlayerAdapter.cpp" />
     <ClCompile Include="AudioPlayerModel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

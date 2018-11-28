@@ -1,12 +1,4 @@
-#include <playing-audio/AudioPlayer.h>
-
-class AudioPlayerAdapterFactory : public AudioPlayerFactory {
-public:
-	std::shared_ptr<AudioPlayer> make(AudioPlayer::Parameters) override {
-		return {};
-	}
-};
-
+#include <playing-audio/AudioPlayerAdapter.h>
 #include <gtest/gtest.h>
 
 class AudioPlayerAdapterTestCase : public ::testing::TestCase {};

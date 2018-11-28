@@ -1,11 +1,6 @@
 #pragma once
 
-#ifdef PLAYING_AUDIO_EXPORTS
-	#define PLAYING_AUDIO_API __declspec(dllexport)
-#else
-	#define PLAYING_AUDIO_API __declspec(dllimport)
-#endif
-
+#include "playing-audio-exports.h"
 #include "AudioPlayer.h"
 #include "Model.h"
 
