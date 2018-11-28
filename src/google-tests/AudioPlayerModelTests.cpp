@@ -57,18 +57,13 @@ public:
 };
 
 static SpatializedHearingAidSimulationModel::PlayRequest validRequest() {
-	return 
-		{
-			"",
-			"",
-			"",
-			"",
-			"0.0",
-			"0.0",
-			"0.0",
-			"0",
-			"0"
-		};
+	SpatializedHearingAidSimulationModel::PlayRequest request;
+	request.attack_ms = "0.0";
+	request.release_ms = "0.0";
+	request.level_dB_Spl = "0.0";
+	request.windowSize = "0";
+	request.chunkSize = "0";
+	return request;
 }
 
 static void expectEqual(std::string expected, std::string actual) {
@@ -142,18 +137,17 @@ TEST(AudioPlayerModelTestCase, parametersPassedToAudioPlayerFactory) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto simulatorFactory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
 	AudioPlayerModel model{ deviceFactory, simulatorFactory };
-	model.playRequest(
-		{
-			"a",
-			"b",
-			"c",
-			"d",
-			"1",
-			"2",
-			"3",
-			"4",
-			"5"
-		});
+	AudioPlayerModel::PlayRequest request;
+	request.leftDslPrescriptionFilePath = "a";
+	request.rightDslPrescriptionFilePath = "b";
+	request.audioFilePath = "c";
+	request.brirFilePath = "d";
+	request.level_dB_Spl = "1";
+	request.attack_ms = "2";
+	request.release_ms = "3";
+	request.windowSize = "4";
+	request.chunkSize = "5";
+	model.playRequest(request);
 	EXPECT_EQ("a", simulatorFactory->parameters().leftDslPrescriptionFilePath);
 	EXPECT_EQ("b", simulatorFactory->parameters().rightDslPrescriptionFilePath);
 	EXPECT_EQ("c", simulatorFactory->parameters().audioFilePath);
