@@ -3,5 +3,7 @@
 class AudioPlayerAdapterTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerAdapterTestCase, tbd) {
-	FAIL();
+	AudioPlayerAdapterFactory adapter{};
+	AudioPlayer::Parameters p{};
+	adapter.make(p);
 }
