@@ -18,7 +18,7 @@ public:
 
 class AudioPlayerAdapterTestCase : public ::testing::TestCase {};
 
-TEST(AudioPlayerAdapterTestCase, tbd) {
+TEST(AudioPlayerAdapterTestCase, makePassesDeviceParametersToFactory) {
 	const auto factory = std::make_shared<MockAudioDeviceFactory>();
 	AudioPlayerAdapterFactory adapter{ factory };
 	AudioPlayer::Parameters p{};
