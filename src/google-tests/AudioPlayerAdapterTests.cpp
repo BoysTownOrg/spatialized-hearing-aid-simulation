@@ -1,6 +1,20 @@
 #include <playing-audio/AudioPlayerAdapter.h>
 #include <gtest/gtest.h>
 
+class MockAudioDeviceFactory : public AudioDeviceFactory {
+	AudioDevice::Parameters _parameters{};
+public:
+	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) override {
+		return std::shared_ptr<AudioDevice>();
+	}
+	int framesPerBuffer() const {
+		return _parameters.framesPerBuffer;
+	}
+	int sampleRate() const {
+		return _parameters.sampleRate;
+	}
+};
+
 class AudioPlayerAdapterTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerAdapterTestCase, tbd) {
