@@ -28,3 +28,12 @@ TEST(AudioPlayerAdapterTestCase, makePassesDeviceParametersToFactory) {
 	EXPECT_EQ(1, factory->framesPerBuffer());
 	EXPECT_EQ(2, factory->sampleRate());
 }
+
+TEST(AudioPlayerAdapterTestCase, makePassesSimulationParametersToFactory) {
+	const auto factory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
+	AudioPlayerAdapterFactory adapter{ factory };
+	AudioPlayer::Parameters p{};
+	p.forHearingAidSimulation.attack_ms = 1;
+	adapter.make(p);
+	EXPECT_EQ(1, factory->attack_ms());
+}
