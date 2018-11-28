@@ -1,8 +1,8 @@
-#include "Presenter.h"
+#include "SpatializedHearingAidSimulationPresenter.h"
 
-Presenter::Presenter(
-	std::shared_ptr<Model> model, 
-	std::shared_ptr<View> view
+SpatializedHearingAidSimulationPresenter::SpatializedHearingAidSimulationPresenter(
+	std::shared_ptr<SpatializedHearingAidSimulationModel> model, 
+	std::shared_ptr<SpatializedHearingAidSimulationView> view
 ) :
 	model{ std::move(model) },
 	view{ std::move(view) }
@@ -10,35 +10,35 @@ Presenter::Presenter(
 	this->view->setPresenter(this);
 }
 
-void Presenter::loop() {
+void SpatializedHearingAidSimulationPresenter::loop() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForLeftDslPrescription() {
+void SpatializedHearingAidSimulationPresenter::browseForLeftDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
 		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
 }
 
-void Presenter::browseForRightDslPrescription() {
+void SpatializedHearingAidSimulationPresenter::browseForRightDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
 		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(p); });
 }
 
-void Presenter::browseForAudio() {
+void SpatializedHearingAidSimulationPresenter::browseForAudio() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.wav" },
 		[=](std::string p) { this->view->setAudioFilePath(p); });
 }
 
-void Presenter::browseForBrir() {
+void SpatializedHearingAidSimulationPresenter::browseForBrir() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.mat" },
 		[=](std::string p) { this->view->setBrirFilePath(p); });
 }
 
-void Presenter::play() {
+void SpatializedHearingAidSimulationPresenter::play() {
 	try {
 		model->playRequest(
 			{
@@ -54,12 +54,12 @@ void Presenter::play() {
 			}
 		);
 	}
-	catch (const Model::RequestFailure &failure) {
+	catch (const SpatializedHearingAidSimulationModel::RequestFailure &failure) {
 		view->showErrorDialog(failure.what());
 	}
 }
 
-void Presenter::browseAndUpdateIfNotCancelled(
+void SpatializedHearingAidSimulationPresenter::browseAndUpdateIfNotCancelled(
 	std::vector<std::string> filters, 
 	std::function<void(std::string)> update) 
 {

@@ -88,7 +88,7 @@ public:
 	}
 };
 
-static Model::PlayRequest validRequest() {
+static SpatializedHearingAidSimulationModel::PlayRequest validRequest() {
 	return 
 		{
 			"",
@@ -108,15 +108,15 @@ static void expectEqual(std::string expected, std::string actual) {
 }
 
 static void expectRequestTransformationYieldsFailure(
-	std::function<Model::PlayRequest(Model::PlayRequest)> transformation,
+	std::function<SpatializedHearingAidSimulationModel::PlayRequest(SpatializedHearingAidSimulationModel::PlayRequest)> transformation,
 	std::string message) 
 {
 	try {
 		AudioPlayerModel model{std::make_shared<MockAudioPlayerFactory>()};
 		model.playRequest(transformation(validRequest()));
-		FAIL() << "Expected Model::RequestFailure";
+		FAIL() << "Expected SpatializedHearingAidSimulationModel::RequestFailure";
 	}
-	catch (const Model::RequestFailure &failure) {
+	catch (const SpatializedHearingAidSimulationModel::RequestFailure &failure) {
 		expectEqual(message, failure.what());
 	}
 }
@@ -125,19 +125,19 @@ class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
 	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) { 
+		[](SpatializedHearingAidSimulationModel::PlayRequest request) { 
 			request.level_dB_Spl = "a";
 			return request;
 		},
 		"'a' is not a valid level.");
 	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
+		[](SpatializedHearingAidSimulationModel::PlayRequest request) {
 			request.attack_ms = "a";
 			return request;
 		},
 		"'a' is not a valid attack time.");
 	expectRequestTransformationYieldsFailure(
-		[](Model::PlayRequest request) {
+		[](SpatializedHearingAidSimulationModel::PlayRequest request) {
 			request.release_ms = "a";
 			return request;
 		},
@@ -146,7 +146,7 @@ TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
 
 static void expectBadWindowSize(std::string size) {
 	expectRequestTransformationYieldsFailure(
-		[=](Model::PlayRequest request) {
+		[=](SpatializedHearingAidSimulationModel::PlayRequest request) {
 			request.windowSize = size;
 			return request;
 		},
@@ -155,7 +155,7 @@ static void expectBadWindowSize(std::string size) {
 
 static void expectBadChunkSize(std::string size) {
 	expectRequestTransformationYieldsFailure(
-		[=](Model::PlayRequest request) {
+		[=](SpatializedHearingAidSimulationModel::PlayRequest request) {
 			request.chunkSize = size;
 			return request;
 		},

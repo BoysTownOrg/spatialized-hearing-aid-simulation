@@ -138,7 +138,7 @@
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioPlayerAdapter.h" />
     <ClInclude Include="AudioPlayerModel.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="SpatializedHearingAidSimulationModel.h" />
     <ClInclude Include="playing-audio-exports.h" />
   </ItemGroup>
   <ItemGroup>

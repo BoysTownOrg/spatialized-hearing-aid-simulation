@@ -4,12 +4,12 @@
 #include <string>
 #include <vector>
 
-class Presenter;
+class SpatializedHearingAidSimulationPresenter;
 
-class View {
+class SpatializedHearingAidSimulationView {
 public:
-	INTERFACE_OPERATIONS(View);
-	virtual void setPresenter(Presenter *) = 0;
+	INTERFACE_OPERATIONS(SpatializedHearingAidSimulationView);
+	virtual void setPresenter(SpatializedHearingAidSimulationPresenter *) = 0;
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
 	virtual bool browseCancelled() = 0;

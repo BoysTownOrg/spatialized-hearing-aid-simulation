@@ -2,9 +2,9 @@
 
 #include "playing-audio-exports.h"
 #include "AudioPlayer.h"
-#include "Model.h"
+#include "SpatializedHearingAidSimulationModel.h"
 
-class AudioPlayerModel : public Model {
+class AudioPlayerModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioPlayerFactory> factory;
 public:
 	PLAYING_AUDIO_API explicit AudioPlayerModel(

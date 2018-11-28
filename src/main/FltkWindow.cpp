@@ -45,7 +45,7 @@ void FltkWindow::runEventLoop() {
 	Fl::run();
 }
 
-void FltkWindow::setPresenter(Presenter *c) {
+void FltkWindow::setPresenter(SpatializedHearingAidSimulationPresenter *c) {
 	presenter = c;
 }
 

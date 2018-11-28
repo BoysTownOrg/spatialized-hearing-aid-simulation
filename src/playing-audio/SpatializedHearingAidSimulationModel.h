@@ -5,10 +5,10 @@
 #include <string>
 #include <stdexcept>
 
-class Model {
+class SpatializedHearingAidSimulationModel {
 public:
 	RUNTIME_ERROR(RequestFailure);
-	INTERFACE_OPERATIONS(Model);
+	INTERFACE_OPERATIONS(SpatializedHearingAidSimulationModel);
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
