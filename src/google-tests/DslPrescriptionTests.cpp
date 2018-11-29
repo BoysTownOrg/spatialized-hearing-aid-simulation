@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 #include <map>
 
-class MockDslPrescriptionParser : public DslPrescriptionFileParser {
+class MockDslPrescriptionParser : public ConfigurationFileParser {
 	std::map<std::string, std::vector<double>> vectors{};
 	std::map<std::string, double> doubles{};
 	std::map<std::string, int> ints{};
@@ -92,7 +92,7 @@ TEST(
 	assertEqual({ 7, 7 }, prescription.broadbandOutputLimitingThresholds_dBSpl());
 }
 
-class ErrorParser : public DslPrescriptionFileParser {
+class ErrorParser : public ConfigurationFileParser {
 	std::string message;
 public:
 	explicit ErrorParser(std::string message) :

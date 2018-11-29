@@ -18,7 +18,7 @@
     <ClInclude Include="DslPrescription.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DslPrescriptionFileParser.h">
+    <ClInclude Include="ConfigurationFileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

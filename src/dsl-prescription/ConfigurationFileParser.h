@@ -5,10 +5,10 @@
 #include <vector>
 #include <string>
 
-class DslPrescriptionFileParser {
+class ConfigurationFileParser {
 public:
 	RUNTIME_ERROR(ParseError);
-	INTERFACE_OPERATIONS(DslPrescriptionFileParser);
+	INTERFACE_OPERATIONS(ConfigurationFileParser);
 	virtual std::vector<double> asVector(std::string property) const = 0;
 	virtual double asDouble(std::string property) const = 0;
 	virtual int asInt(std::string property) const = 0;
@@ -16,9 +16,9 @@ public:
 
 #include <memory>
 
-class DslPrescriptionFileParserFactory {
+class ConfigurationFileParserFactory {
 public:
-	INTERFACE_OPERATIONS(DslPrescriptionFileParserFactory);
-	virtual std::shared_ptr<DslPrescriptionFileParser> make(std::string filePath) = 0;
+	INTERFACE_OPERATIONS(ConfigurationFileParserFactory);
+	virtual std::shared_ptr<ConfigurationFileParser> make(std::string filePath) = 0;
 };
 

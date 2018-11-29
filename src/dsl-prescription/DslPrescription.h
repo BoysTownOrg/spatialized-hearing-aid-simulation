@@ -6,7 +6,7 @@
 	#define DSL_PRESCRIPTION_API __declspec(dllimport)
 #endif
 
-#include "DslPrescriptionFileParser.h"
+#include "ConfigurationFileParser.h"
 #include <common-includes/RuntimeError.h>
 
 class DslPrescription {
@@ -27,7 +27,7 @@ public:
 		broadbandOutputLimitingThresholds_dBSpl
 	};
 	DSL_PRESCRIPTION_API static std::string propertyName(Property);
-	DSL_PRESCRIPTION_API explicit DslPrescription(const DslPrescriptionFileParser &parser);
+	DSL_PRESCRIPTION_API explicit DslPrescription(const ConfigurationFileParser &parser);
 	DSL_PRESCRIPTION_API int channels() const;
 	DSL_PRESCRIPTION_API const std::vector<double> &crossFrequenciesHz() const;
 	DSL_PRESCRIPTION_API const std::vector<double> &compressionRatios() const;

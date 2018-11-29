@@ -18,7 +18,7 @@ std::string DslPrescription::propertyName(Property p) {
 	}
 }
 
-DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser) 
+DslPrescription::DslPrescription(const ConfigurationFileParser &parser) 
 	try :
 	_crossFrequenciesHz(parser.asVector(propertyName(Property::crossFrequenciesHz))),
 	_compressionRatios(parser.asVector(propertyName(Property::compressionRatios))),
@@ -37,7 +37,7 @@ DslPrescription::DslPrescription(const DslPrescriptionFileParser &parser)
 	)
 		throw InvalidPrescription{ "channel count mismatch in prescription." };
 }
-catch (const DslPrescriptionFileParser::ParseError &e) {
+catch (const ConfigurationFileParser::ParseError &e) {
 	throw InvalidPrescription{ e.what() };
 }
 

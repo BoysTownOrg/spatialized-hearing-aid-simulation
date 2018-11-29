@@ -7,6 +7,8 @@
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <signal-processing/SignalProcessingChain.h>
 #include <dsl-prescription/DslPrescription.h>
+#include <algorithm>
+#include <gsl/gsl>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory
@@ -23,8 +25,16 @@ void PlayAudioModel::playRequest(PlayRequest request)
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
 	forCompressor.sampleRate = 44100;
+	const auto brirParser = parserFactory->make(request.brirFilePath);
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
-	leftChannel->add(std::make_shared<FirFilter>(std::vector<float>{ 1, 2, 3 }));
+	const auto leftImpulseResponse = brirParser->asVector("left impulse response");
+	std::vector<float> leftImpulseAsFloat;
+	std::transform(
+		leftImpulseResponse.begin(), 
+		leftImpulseResponse.end(), 
+		std::back_inserter(leftImpulseAsFloat),
+		[](double x) -> float { return gsl::narrow_cast<float>(x); });
+	leftChannel->add(std::make_shared<FirFilter>(leftImpulseAsFloat));
 	leftChannel->add(
 		std::make_shared<HearingAidProcessor>(
 			compressorFactory->make(
@@ -34,7 +44,14 @@ void PlayAudioModel::playRequest(PlayRequest request)
 		)
 	);
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
-	rightChannel->add(std::make_shared<FirFilter>(std::vector<float>{ 1, 2, 3 }));
+	const auto rightImpulseResponse = brirParser->asVector("right impulse response");
+	std::vector<float> rightImpulseAsFloat;
+	std::transform(
+		rightImpulseResponse.begin(),
+		rightImpulseResponse.end(),
+		std::back_inserter(rightImpulseAsFloat),
+		[](double x) -> float { return gsl::narrow_cast<float>(x); });
+	rightChannel->add(std::make_shared<FirFilter>(rightImpulseAsFloat));
 	rightChannel->add(
 		std::make_shared<HearingAidProcessor>(
 			compressorFactory->make(

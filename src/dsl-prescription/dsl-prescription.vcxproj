@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DslPrescription.h" />
-    <ClInclude Include="DslPrescriptionFileParser.h" />
+    <ClInclude Include="ConfigurationFileParser.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DslPrescription.cpp" />
