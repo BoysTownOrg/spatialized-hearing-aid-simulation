@@ -3,6 +3,7 @@
 #include "presentation-exports.h"
 #include "SpatializedHearingAidSimulationView.h"
 #include "SpatializedHearingAidSimulationModel.h"
+#include <common-includes/RuntimeError.h>
 #include <memory>
 #include <functional>
 
@@ -21,7 +22,10 @@ public:
 	PRESENTATION_API void play();
 
 private:
+	RUNTIME_ERROR(BadInput);
 	void browseAndUpdateIfNotCancelled(
 		std::vector<std::string> filters,
 		std::function<void(std::string)>);
+	double convertToDouble(std::string x, std::string identifier);
+	int convertToPositiveInteger(std::string x, std::string identifier);
 };
