@@ -6,9 +6,10 @@
 #include <fir-filtering/FirFilter.h>
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <signal-processing/SignalProcessingChain.h>
+#include <signal-processing/ScalingProcessor.h>
 #include <dsl-prescription/DslPrescription.h>
-#include <algorithm>
 #include <gsl/gsl>
+#include <algorithm>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory
@@ -25,46 +26,110 @@ void PlayAudioModel::playRequest(PlayRequest request)
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
 	forCompressor.sampleRate = 44100;
-	const auto brirParser = parserFactory->make(request.brirFilePath);
+
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
-	const auto leftImpulseResponse = brirParser->asVector("left impulse response");
+	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));
+
+	const auto brirParser = parserFactory->make(request.brirFilePath);
+
+	std::vector<double> leftImpulseResponse;
+	try {
+		leftImpulseResponse = brirParser->asVector("left impulse response");
+	}
+	catch (const ConfigurationFileParser::ParseError &e) {
+		throw RequestFailure{ e.what() };
+	}
+
 	std::vector<float> leftImpulseAsFloat;
 	std::transform(
 		leftImpulseResponse.begin(), 
 		leftImpulseResponse.end(), 
 		std::back_inserter(leftImpulseAsFloat),
 		[](double x) -> float { return gsl::narrow_cast<float>(x); });
-	leftChannel->add(std::make_shared<FirFilter>(leftImpulseAsFloat));
-	leftChannel->add(
-		std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(
-				DslPrescription{ *parserFactory->make(request.leftDslPrescriptionFilePath) },
-				forCompressor
-			)
-		)
-	);
+
+	std::shared_ptr<SignalProcessor> leftFilter;
+	try {
+		leftFilter = std::make_shared<FirFilter>(leftImpulseAsFloat);
+	}
+	catch (const FirFilter::InvalidCoefficients &) {
+		throw RequestFailure{ "" };
+	}
+	leftChannel->add(leftFilter);
+
+	std::shared_ptr<DslPrescription> leftPrescription;
+	try {
+		leftPrescription = std::make_shared<DslPrescription>(
+			*parserFactory->make(request.leftDslPrescriptionFilePath));
+	}
+	catch (const DslPrescription::InvalidPrescription &e) {
+		throw RequestFailure{ e.what() };
+	}
+
+	std::shared_ptr<SignalProcessor> leftHearingAid;
+	try {
+		leftHearingAid = std::make_shared<HearingAidProcessor>(
+			compressorFactory->make(*leftPrescription, forCompressor)
+		);
+	}
+	catch (const HearingAidProcessor::CompressorError &e) {
+		throw RequestFailure{ e.what() };
+	}
+	leftChannel->add(leftHearingAid);
+
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
-	const auto rightImpulseResponse = brirParser->asVector("right impulse response");
+	rightChannel->add(std::make_shared<ScalingProcessor>(0.5f));
+
+	std::vector<double> rightImpulseResponse;
+	try {
+		rightImpulseResponse = brirParser->asVector("right impulse response");
+	}
+	catch (const ConfigurationFileParser::ParseError &e) {
+		throw RequestFailure{ e.what() };
+	}
+
 	std::vector<float> rightImpulseAsFloat;
 	std::transform(
 		rightImpulseResponse.begin(),
 		rightImpulseResponse.end(),
 		std::back_inserter(rightImpulseAsFloat),
 		[](double x) -> float { return gsl::narrow_cast<float>(x); });
-	rightChannel->add(std::make_shared<FirFilter>(rightImpulseAsFloat));
-	rightChannel->add(
-		std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(
-				DslPrescription{ *parserFactory->make(request.rightDslPrescriptionFilePath) },
-				forCompressor
-			)
-		)
-	);
+
+	std::shared_ptr<SignalProcessor> rightFilter;
+	try {
+		rightFilter = std::make_shared<FirFilter>(rightImpulseAsFloat);
+	}
+	catch (const FirFilter::InvalidCoefficients &) {
+		throw RequestFailure{ "" };
+	}
+	rightChannel->add(rightFilter);
+
+	std::shared_ptr<DslPrescription> rightPrescription;
+	try {
+		rightPrescription = std::make_shared<DslPrescription>(
+			*parserFactory->make(request.rightDslPrescriptionFilePath));
+	}
+	catch (const DslPrescription::InvalidPrescription &e) {
+		throw RequestFailure{ e.what() };
+	}
+
+	std::shared_ptr<SignalProcessor> rightHearingAid;
+	try {
+		rightHearingAid = std::make_shared<HearingAidProcessor>(
+			compressorFactory->make(*rightPrescription, forCompressor)
+			);
+	}
+	catch (const HearingAidProcessor::CompressorError &e) {
+		throw RequestFailure{ e.what() };
+	}
+	rightChannel->add(rightHearingAid);
+
 	AudioDevice::Parameters forDevice;
 	forDevice.framesPerBuffer = request.chunkSize;
 	forDevice.sampleRate = 44100;
-	forDevice.channels = { 0 , 1 };
+	forDevice.channels = { 0, 1 };
+
 	const auto reader = audioFileFactory->make(request.audioFilePath);
+
 	AudioDeviceController controller {
 		deviceFactory->make(forDevice),
 		std::make_shared<ProcessedAudioFrameReader>(
