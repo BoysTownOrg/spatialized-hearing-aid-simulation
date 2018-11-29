@@ -1,17 +1,14 @@
 #pragma once
 
 #include "playing-audio-exports.h"
-#include "SpatializedHearingAidSimulator.h"
 #include <presentation/SpatializedHearingAidSimulationModel.h>
 #include <audio-device-control/AudioDevice.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioDeviceFactory> deviceFactory;
-	std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory;
 public:
 	PLAYING_AUDIO_API PlayAudioModel(
-		std::shared_ptr<AudioDeviceFactory>,
-		std::shared_ptr<SpatializedHearingAidSimulatorFactory>
+		std::shared_ptr<AudioDeviceFactory>
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
 private:

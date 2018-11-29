@@ -137,7 +137,6 @@
   <ItemGroup>
     <ClInclude Include="PlayAudioModel.h" />
     <ClInclude Include="playing-audio-exports.h" />
-    <ClInclude Include="SpatializedHearingAidSimulator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PlayAudioModel.cpp" />

@@ -3,53 +3,14 @@
 #include <gtest/gtest.h>
 
 class MockModel : public SpatializedHearingAidSimulationModel {
-	std::string _leftDslPrescriptionFilePath{};
-	std::string _rightDslPrescriptionFilePath{};
-	std::string _audioFilePath{};
-	std::string _brirFilePath{};
-	std::string _level_dB_Spl{};
-	std::string _attack_ms{};
-	std::string _release_ms{};
-	std::string _windowSize{};
-	std::string _chunkSize{};
+	PlayRequest _request{};
 public:
-	std::string leftDslPrescriptionFilePath() const {
-		return _leftDslPrescriptionFilePath;
+	const PlayRequest &request() const {
+		return _request;
 	}
-	std::string rightDslPrescriptionFilePath() const {
-		return _rightDslPrescriptionFilePath;
-	}
-	std::string audioFilePath() const {
-		return _audioFilePath;
-	}
-	std::string brirFilePath() const {
-		return _brirFilePath;
-	}
-	std::string level_dB_Spl() const {
-		return _level_dB_Spl;
-	}
-	std::string attack_ms() const {
-		return _attack_ms;
-	}
-	std::string release_ms() const {
-		return _release_ms;
-	}
-	std::string windowSize() const {
-		return _windowSize;
-	}
-	std::string chunkSize() const {
-		return _chunkSize;
-	}
+
 	void playRequest(PlayRequest request) override {
-		_leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
-		_rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-		_audioFilePath = request.audioFilePath;
-		_brirFilePath = request.brirFilePath;
-		_level_dB_Spl = request.level_dB_Spl;
-		_attack_ms = request.attack_ms;
-		_release_ms = request.release_ms;
-		_windowSize = request.windowSize;
-		_chunkSize = request.chunkSize;
+		_request = request;
 	}
 };
 
@@ -311,21 +272,21 @@ TEST(
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioFilePath("c");
 	view->setBrirFilePath("d");
-	view->setLevel_dB_Spl("e");
-	view->setAttack_ms("f");
-	view->setRelease_ms("g");
-	view->setWindowSize("h");
-	view->setChunkSize("i");
+	view->setLevel_dB_Spl("1.1");
+	view->setAttack_ms("2.2");
+	view->setRelease_ms("3.3");
+	view->setWindowSize("4");
+	view->setChunkSize("5");
 	view->play();
-	EXPECT_EQ("a", model->leftDslPrescriptionFilePath());
-	EXPECT_EQ("b", model->rightDslPrescriptionFilePath());
-	EXPECT_EQ("c", model->audioFilePath());
-	EXPECT_EQ("d", model->brirFilePath());
-	EXPECT_EQ("e", model->level_dB_Spl());
-	EXPECT_EQ("f", model->attack_ms());
-	EXPECT_EQ("g", model->release_ms());
-	EXPECT_EQ("h", model->windowSize());
-	EXPECT_EQ("i", model->chunkSize());
+	EXPECT_EQ("a", model->request().leftDslPrescriptionFilePath);
+	EXPECT_EQ("b", model->request().rightDslPrescriptionFilePath);
+	EXPECT_EQ("c", model->request().audioFilePath);
+	EXPECT_EQ("d", model->request().brirFilePath);
+	EXPECT_EQ(1.1, model->request().level_dB_Spl);
+	EXPECT_EQ(2.2, model->request().attack_ms);
+	EXPECT_EQ(3.3, model->request().release_ms);
+	EXPECT_EQ(4, model->request().windowSize);
+	EXPECT_EQ(5, model->request().chunkSize);
 }
 
 class ErrorModel : public SpatializedHearingAidSimulationModel {
@@ -345,3 +306,85 @@ TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	view->play();
 	EXPECT_EQ("error.", view->errorMessage());
 }
+
+static void expectRequestTransformationYieldsFailure(
+	std::function<void(MockView &)> transformation,
+	std::string message)
+{
+	const auto view = std::make_shared<MockView>();
+	PresenterFacade presenter{ view };
+	transformation(*view);
+	view->play();
+	EXPECT_EQ(message, view->errorMessage());
+}
+
+class AudioPlayerModelTestCase : public ::testing::TestCase {};
+
+TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
+	expectRequestTransformationYieldsFailure(
+		[](MockView & request) {
+			request.setLevel_dB_Spl("a");
+		},
+		"'a' is not a valid level.");
+	expectRequestTransformationYieldsFailure(
+		[](MockView & request) {
+			request.setAttack_ms("a");
+		},
+		"'a' is not a valid attack time.");
+	expectRequestTransformationYieldsFailure(
+		[](MockView & request) {
+			request.setRelease_ms("a");
+		},
+		"'a' is not a valid release time.");
+}
+
+static void expectBadWindowSize(std::string size) {
+	expectRequestTransformationYieldsFailure(
+		[=](MockView & request) {
+			request.setWindowSize(size);
+		},
+		"'" + size + "' is not a valid window size.");
+}
+
+static void expectBadChunkSize(std::string size) {
+	expectRequestTransformationYieldsFailure(
+		[=](MockView & request) {
+			request.setChunkSize(size);
+		},
+		"'" + size + "' is not a valid chunk size.");
+}
+
+TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
+	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" }) {
+		expectBadWindowSize(s);
+		expectBadChunkSize(s);
+	}
+}
+
+/*
+TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
+	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
+	const auto simulatorFactory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
+	PlayAudioModel model{ deviceFactory, simulatorFactory };
+	PlayAudioModel::PlayRequest request;
+	request.leftDslPrescriptionFilePath = "a";
+	request.rightDslPrescriptionFilePath = "b";
+	request.audioFilePath = "c";
+	request.brirFilePath = "d";
+	request.level_dB_Spl = "1";
+	request.attack_ms = "2";
+	request.release_ms = "3";
+	request.windowSize = "4";
+	request.chunkSize = "5";
+	model.playRequest(request);
+	EXPECT_EQ("a", simulatorFactory->parameters().leftDslPrescriptionFilePath);
+	EXPECT_EQ("b", simulatorFactory->parameters().rightDslPrescriptionFilePath);
+	EXPECT_EQ("c", simulatorFactory->parameters().audioFilePath);
+	EXPECT_EQ("d", simulatorFactory->parameters().brirFilePath);
+	EXPECT_EQ(1, simulatorFactory->parameters().level_dB_Spl);
+	EXPECT_EQ(2, simulatorFactory->parameters().attack_ms);
+	EXPECT_EQ(3, simulatorFactory->parameters().release_ms);
+	EXPECT_EQ(4, simulatorFactory->parameters().windowSize);
+	EXPECT_EQ(5, simulatorFactory->parameters().chunkSize);
+	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
+}*/

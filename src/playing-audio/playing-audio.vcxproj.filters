@@ -18,9 +18,6 @@
     <ClInclude Include="playing-audio-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpatializedHearingAidSimulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayAudioModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>

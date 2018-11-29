@@ -45,11 +45,11 @@ void SpatializedHearingAidSimulationPresenter::play() {
 		request.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 		request.brirFilePath = view->brirFilePath();
 		request.audioFilePath = view->audioFilePath();
-		request.level_dB_Spl = view->level_dB_Spl();
-		request.attack_ms = view->attack_ms();
-		request.release_ms = view->release_ms();
-		request.windowSize = view->windowSize();
-		request.chunkSize = view->chunkSize();
+		request.level_dB_Spl = std::stod(view->level_dB_Spl());
+		request.attack_ms = std::stod(view->attack_ms());
+		request.release_ms = std::stod(view->release_ms());
+		request.windowSize = std::stoi(view->windowSize());
+		request.chunkSize = std::stoi(view->chunkSize());
 		model->playRequest(request);
 	}
 	catch (const SpatializedHearingAidSimulationModel::RequestFailure &failure) {

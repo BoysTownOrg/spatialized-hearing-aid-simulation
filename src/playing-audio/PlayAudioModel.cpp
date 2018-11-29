@@ -1,32 +1,13 @@
 #include "PlayAudioModel.h"
 
 PlayAudioModel::PlayAudioModel(
-	std::shared_ptr<AudioDeviceFactory> deviceFactory,
-	std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
+	std::shared_ptr<AudioDeviceFactory> deviceFactory
 ) :
-	deviceFactory{ std::move(deviceFactory) },
-	simulatorFactory{ std::move(simulatorFactory) } {}
+	deviceFactory{ std::move(deviceFactory) } {}
 
 void PlayAudioModel::playRequest(PlayRequest request) {
-	throwIfNotDouble(request.level_dB_Spl, "level");
-	throwIfNotDouble(request.attack_ms, "attack time");
-	throwIfNotDouble(request.release_ms, "release time");
-	throwIfNotPositiveInteger(request.windowSize, "window size");
-	throwIfNotPositiveInteger(request.chunkSize, "chunk size");
-	simulatorFactory->make(
-		{
-			request.leftDslPrescriptionFilePath,
-			request.rightDslPrescriptionFilePath,
-			request.brirFilePath,
-			request.audioFilePath,
-			std::stod(request.level_dB_Spl),
-			std::stod(request.attack_ms),
-			std::stod(request.release_ms),
-			std::stoi(request.windowSize),
-			std::stoi(request.chunkSize),
-		});
 	AudioDevice::Parameters forDevice{};
-	forDevice.framesPerBuffer = std::stoi(request.chunkSize);
+	forDevice.framesPerBuffer = request.chunkSize;
 	deviceFactory->make(forDevice);
 }
 

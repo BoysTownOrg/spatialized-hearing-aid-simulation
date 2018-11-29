@@ -11,13 +11,13 @@ public:
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
-		std::string audioFilePath;
 		std::string brirFilePath;
-		std::string level_dB_Spl;
-		std::string attack_ms;
-		std::string release_ms;
-		std::string windowSize;
-		std::string chunkSize;
+		std::string audioFilePath;
+		double level_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
 	};
 	virtual void playRequest(PlayRequest) = 0;
 };
