@@ -28,6 +28,7 @@ class FltkWindow : public SpatializedHearingAidSimulationView
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
+	Fl_Button play;
 	SpatializedHearingAidSimulationPresenter *presenter{};
 	int browseResult{};
 public:
@@ -56,4 +57,5 @@ private:
 	static void onBrowseRightPrescription(Fl_Widget *, void *);
 	static void onBrowseAudio(Fl_Widget *, void *);
 	static void onBrowseBrir(Fl_Widget *, void *);
+	static void onPlay(Fl_Widget *, void *);
 };
