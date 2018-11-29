@@ -95,10 +95,11 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
+	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{ 
 		deviceFactory, 
 		compressorFactory,
-		std::make_shared<MockAudioFileReaderFactory>(reader),
+		audioFactory,
 		std::make_shared<MockParserFactory>(parser)
 	};
 	PlayAudioModel::PlayRequest request;
@@ -112,6 +113,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	request.windowSize = 4;
 	request.chunkSize = 5;
 	model.playRequest(request);
+	EXPECT_EQ("c", audioFactory->filePath());
 	EXPECT_EQ(2, compressorFactory->parameters().attack_ms);
 	EXPECT_EQ(3, compressorFactory->parameters().release_ms);
 	EXPECT_EQ(4, compressorFactory->parameters().windowSize);
