@@ -21,9 +21,7 @@ public:
 		std::shared_ptr<AudioDeviceFactory> deviceFactory =
 			std::make_shared<MockAudioDeviceFactory>()
 	) :
-		model{
-			std::move(deviceFactory)
-	} {}
+		model{ std::move(deviceFactory)} {}
 
 	void playRequest(PlayAudioModel::PlayRequest r) {
 		model.playRequest(r);
