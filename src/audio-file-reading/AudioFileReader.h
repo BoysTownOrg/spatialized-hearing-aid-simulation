@@ -8,6 +8,7 @@ public:
 	INTERFACE_OPERATIONS(AudioFileReader);
 	virtual long long frames() = 0;
 	virtual int channels() = 0;
+	virtual int sampleRate() = 0;
 	virtual void readFrames(float *, long long) = 0;
 	virtual bool failed() const = 0;
 	virtual std::string errorMessage() const = 0;

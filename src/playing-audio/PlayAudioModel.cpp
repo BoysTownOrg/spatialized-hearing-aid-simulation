@@ -18,19 +18,43 @@ PlayAudioModel::PlayAudioModel(
 {
 }
 
-void PlayAudioModel::playRequest(PlayRequest request)
-{
+void PlayAudioModel::playRequest(PlayRequest request) {
+	const auto reader = audioFileFactory->make(request.audioFilePath);
+	if (reader->failed())
+		throw RequestFailure{ reader->errorMessage() };
+
+	std::shared_ptr<AudioFrameReader> frameReader;
+	try {
+		frameReader = std::make_shared<AudioFileInMemory>(*reader);
+	}
+	catch (const AudioFileInMemory::FileError &e) {
+		throw RequestFailure{ e.what() };
+	}
+
+	const auto audioSampleRate = reader->sampleRate();
+
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = request.attack_ms;
 	forCompressor.release_ms = request.release_ms;
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
-	forCompressor.sampleRate = 44100;
+	forCompressor.sampleRate = audioSampleRate;
 
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));
 
 	const auto brirParser = parserFactory->make(request.brirFilePath);
+
+	int brirSampleRate;
+	try {
+		brirSampleRate = brirParser->asInt("sample rate");
+	}
+	catch (const ConfigurationFileParser::ParseError &e) {
+		throw RequestFailure{ e.what() };
+	}
+
+	if (brirSampleRate != audioSampleRate)
+		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
 	std::vector<double> leftImpulseResponse;
 	try {
@@ -52,7 +76,7 @@ void PlayAudioModel::playRequest(PlayRequest request)
 		leftFilter = std::make_shared<FirFilter>(leftImpulseAsFloat);
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
-		throw RequestFailure{ "" };
+		throw RequestFailure{ "bad coefficients?" };
 	}
 	leftChannel->add(leftFilter);
 
@@ -116,7 +140,7 @@ void PlayAudioModel::playRequest(PlayRequest request)
 	try {
 		rightHearingAid = std::make_shared<HearingAidProcessor>(
 			compressorFactory->make(*rightPrescription, forCompressor)
-			);
+		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
 		throw RequestFailure{ e.what() };
@@ -125,17 +149,9 @@ void PlayAudioModel::playRequest(PlayRequest request)
 
 	AudioDevice::Parameters forDevice;
 	forDevice.framesPerBuffer = request.chunkSize;
-	forDevice.sampleRate = 44100;
+	forDevice.sampleRate = audioSampleRate;
 	forDevice.channels = { 0, 1 };
 
-	const auto reader = audioFileFactory->make(request.audioFilePath);
-	std::shared_ptr<AudioFrameReader> frameReader;
-	try {
-		frameReader = std::make_shared<AudioFileInMemory>(*reader);
-	}
-	catch (const AudioFileInMemory::FileError &e) {
-		throw RequestFailure{ e.what() };
-	}
 	try {
 		AudioDeviceController controller{
 			deviceFactory->make(forDevice),
