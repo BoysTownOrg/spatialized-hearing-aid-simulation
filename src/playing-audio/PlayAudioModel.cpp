@@ -1,13 +1,13 @@
-#include "AudioPlayerModel.h"
+#include "PlayAudioModel.h"
 
-AudioPlayerModel::AudioPlayerModel(
+PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory,
 	std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory
 ) :
 	deviceFactory{ std::move(deviceFactory) },
 	simulatorFactory{ std::move(simulatorFactory) } {}
 
-void AudioPlayerModel::playRequest(PlayRequest request) {
+void PlayAudioModel::playRequest(PlayRequest request) {
 	throwIfNotDouble(request.level_dB_Spl, "level");
 	throwIfNotDouble(request.attack_ms, "attack time");
 	throwIfNotDouble(request.release_ms, "release time");
@@ -30,7 +30,7 @@ void AudioPlayerModel::playRequest(PlayRequest request) {
 	deviceFactory->make(forDevice);
 }
 
-void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {
+void PlayAudioModel::throwIfNotDouble(std::string x, std::string identifier) {
 	try {
 		std::stod(x);
 	}
@@ -39,7 +39,7 @@ void AudioPlayerModel::throwIfNotDouble(std::string x, std::string identifier) {
 	}
 }
 
-void AudioPlayerModel::throwRequestFailure(std::string x, std::string identifier)
+void PlayAudioModel::throwRequestFailure(std::string x, std::string identifier)
 {
 	throw RequestFailure{
 		"'" + x + "' is not a valid " + identifier + "." };
@@ -49,7 +49,7 @@ static bool onlyContainsDigits(const std::string s) {
 	return s.find_first_not_of("0123456789") == std::string::npos;
 }
 
-void AudioPlayerModel::throwIfNotPositiveInteger(std::string x, std::string identifier) {
+void PlayAudioModel::throwIfNotPositiveInteger(std::string x, std::string identifier) {
 	if (!onlyContainsDigits(x))
 		throwRequestFailure(x, identifier);
 }

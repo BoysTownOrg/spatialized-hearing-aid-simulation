@@ -1,4 +1,4 @@
-#include <playing-audio/AudioPlayerModel.h>
+#include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
 #include <functional>
 
@@ -30,7 +30,7 @@ public:
 };
 
 class AudioPlayerModelFacade {
-	AudioPlayerModel model;
+	PlayAudioModel model;
 public:
 	explicit AudioPlayerModelFacade(
 		std::shared_ptr<AudioDeviceFactory> deviceFactory =
@@ -51,7 +51,7 @@ public:
 			simulatorFactory
 	} {}
 
-	void playRequest(AudioPlayerModel::PlayRequest r) {
+	void playRequest(PlayAudioModel::PlayRequest r) {
 		model.playRequest(r);
 	}
 };
@@ -136,8 +136,8 @@ TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto simulatorFactory = std::make_shared<MockSpatializedHearingAidSimulatorFactory>();
-	AudioPlayerModel model{ deviceFactory, simulatorFactory };
-	AudioPlayerModel::PlayRequest request;
+	PlayAudioModel model{ deviceFactory, simulatorFactory };
+	PlayAudioModel::PlayRequest request;
 	request.leftDslPrescriptionFilePath = "a";
 	request.rightDslPrescriptionFilePath = "b";
 	request.audioFilePath = "c";
@@ -164,7 +164,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 TEST(AudioPlayerModelTestCase, successfulRequestPlaysPlayer) {
 	const auto player = std::make_shared<MockAudioPlayer>();
 	const auto factory = std::make_shared<MockAudioPlayerFactory>(player);
-	AudioPlayerModel model{ factory };
+	PlayAudioModel model{ factory };
 	model.playRequest(validRequest());
 	EXPECT_TRUE(player->played());
 }*/

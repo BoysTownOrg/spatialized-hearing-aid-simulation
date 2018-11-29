@@ -5,11 +5,11 @@
 #include <presentation/SpatializedHearingAidSimulationModel.h>
 #include <audio-device-control/AudioDevice.h>
 
-class AudioPlayerModel : public SpatializedHearingAidSimulationModel {
+class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioDeviceFactory> deviceFactory;
 	std::shared_ptr<SpatializedHearingAidSimulatorFactory> simulatorFactory;
 public:
-	PLAYING_AUDIO_API AudioPlayerModel(
+	PLAYING_AUDIO_API PlayAudioModel(
 		std::shared_ptr<AudioDeviceFactory>,
 		std::shared_ptr<SpatializedHearingAidSimulatorFactory>
 	);

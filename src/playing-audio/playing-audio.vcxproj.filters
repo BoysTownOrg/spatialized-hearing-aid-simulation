@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioPlayerModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="playing-audio-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpatializedHearingAidSimulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PlayAudioModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioPlayerModel.cpp">
+    <ClCompile Include="PlayAudioModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
