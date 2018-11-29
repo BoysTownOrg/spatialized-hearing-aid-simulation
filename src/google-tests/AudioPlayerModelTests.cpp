@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include "MockAudioFileReader.h"
 #include "MockConfigurationFileParser.h"
 #include "MockFilterbankCompressor.h"
@@ -91,9 +92,11 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto reader = std::make_shared<MockAudioFileReader>();
 	reader->setChannels(2);
+	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
+	parser->setIntProperty("sample rate", 48000);
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{ 
@@ -119,4 +122,6 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	EXPECT_EQ(4, compressorFactory->parameters().windowSize);
 	EXPECT_EQ(5, compressorFactory->parameters().chunkSize);
 	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
+	EXPECT_EQ(48000, deviceFactory->parameters().sampleRate);
+	assertEqual({ 0, 1 }, deviceFactory->parameters().channels);
 }

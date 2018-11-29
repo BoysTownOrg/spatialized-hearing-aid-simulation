@@ -6,6 +6,7 @@ class MockAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	std::string _errorMessage{};
 	int _channels;
+	int _sampleRate{};
 	bool _failed{};
 public:
 	explicit MockAudioFileReader(
@@ -55,8 +56,12 @@ public:
 		return _errorMessage;
 	}
 
+	void setSampleRate(int s) {
+		_sampleRate = s;
+	}
+
 	int sampleRate() override {
-		return {};
+		return _sampleRate;
 	}
 };
 
