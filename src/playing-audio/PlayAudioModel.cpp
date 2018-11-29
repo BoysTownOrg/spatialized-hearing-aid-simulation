@@ -12,9 +12,15 @@
 #include <algorithm>
 
 PlayAudioModel::PlayAudioModel(
-	std::shared_ptr<AudioDeviceFactory> deviceFactory
+	std::shared_ptr<AudioDeviceFactory> deviceFactory,
+	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
+	std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
+	std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 ) :
-	deviceFactory{ std::move(deviceFactory) }
+	deviceFactory{ std::move(deviceFactory) },
+	compressorFactory{ std::move(compressorFactory) },
+	audioFileFactory{ std::move(audioFileFactory) },
+	parserFactory{ std::move(parserFactory) }
 {
 }
 

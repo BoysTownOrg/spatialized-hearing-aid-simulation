@@ -14,7 +14,10 @@ class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<ConfigurationFileParserFactory> parserFactory;
 public:
 	PLAYING_AUDIO_API PlayAudioModel(
-		std::shared_ptr<AudioDeviceFactory>
+		std::shared_ptr<AudioDeviceFactory> deviceFactory,
+		std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
+		std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
+		std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
 };
