@@ -64,6 +64,10 @@ void SpatializedHearingAidSimulationPresenter::play() {
 	}
 }
 
+static std::string badInputMessage(std::string x, std::string identifier) {
+	return { "'" + x + "' is not a valid " + identifier + "." };
+}
+
 double SpatializedHearingAidSimulationPresenter::convertToDouble(
 	std::string x, 
 	std::string identifier)
@@ -72,19 +76,19 @@ double SpatializedHearingAidSimulationPresenter::convertToDouble(
 		return std::stod(x);
 	}
 	catch (const std::invalid_argument &) {
-		throw BadInput("'" + x + "' is not a valid " + identifier + ".");
+		throw BadInput{ badInputMessage(x, identifier) };
 	}
 }
 
 int SpatializedHearingAidSimulationPresenter::convertToPositiveInteger(std::string x, std::string identifier)
 {
+	if (!onlyContainsDigits(x))
+		throw BadInput{ badInputMessage(x, identifier) };
 	try {
-		if (!onlyContainsDigits(x))
-			throw std::invalid_argument{ "" };
 		return std::stoi(x);
 	}
 	catch (const std::invalid_argument &) {
-		throw BadInput("'" + x + "' is not a valid " + identifier + ".");
+		throw BadInput{ badInputMessage(x, identifier) };
 	}
 }
 
