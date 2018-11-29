@@ -143,9 +143,11 @@ class PresenterFacade {
 public:
 	PresenterFacade(std::shared_ptr<SpatializedHearingAidSimulationView> view) :
 		presenter{ std::make_shared<MockModel>(), std::move(view) } {}
+
 	const SpatializedHearingAidSimulationPresenter *get() const {
 		return &presenter;
 	}
+
 	void loop() {
 		presenter.loop();
 	}
@@ -293,7 +295,8 @@ class ErrorModel : public SpatializedHearingAidSimulationModel {
 	std::string message;
 public:
 	explicit ErrorModel(std::string message) :
-		message(std::move(message)) {}
+		message{std::move(message)} {}
+
 	void playRequest(PlayRequest) override {
 		throw RequestFailure{ message };
 	}
@@ -307,7 +310,7 @@ TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	EXPECT_EQ("error.", view->errorMessage());
 }
 
-static void expectRequestTransformationYieldsFailure(
+static void expectRequestTransformationYieldsErrorMessage(
 	std::function<void(MockView &)> transformation,
 	std::string message)
 {
@@ -321,35 +324,35 @@ static void expectRequestTransformationYieldsFailure(
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
-	expectRequestTransformationYieldsFailure(
-		[](MockView & request) {
-			request.setLevel_dB_Spl("a");
+	expectRequestTransformationYieldsErrorMessage(
+		[](MockView & view) {
+			view.setLevel_dB_Spl("a");
 		},
 		"'a' is not a valid level.");
-	expectRequestTransformationYieldsFailure(
-		[](MockView & request) {
-			request.setAttack_ms("a");
+	expectRequestTransformationYieldsErrorMessage(
+		[](MockView & view) {
+			view.setAttack_ms("a");
 		},
 		"'a' is not a valid attack time.");
-	expectRequestTransformationYieldsFailure(
-		[](MockView & request) {
-			request.setRelease_ms("a");
+	expectRequestTransformationYieldsErrorMessage(
+		[](MockView & view) {
+			view.setRelease_ms("a");
 		},
 		"'a' is not a valid release time.");
 }
 
 static void expectBadWindowSize(std::string size) {
-	expectRequestTransformationYieldsFailure(
-		[=](MockView & request) {
-			request.setWindowSize(size);
+	expectRequestTransformationYieldsErrorMessage(
+		[=](MockView & view) {
+			view.setWindowSize(size);
 		},
 		"'" + size + "' is not a valid window size.");
 }
 
 static void expectBadChunkSize(std::string size) {
-	expectRequestTransformationYieldsFailure(
-		[=](MockView & request) {
-			request.setChunkSize(size);
+	expectRequestTransformationYieldsErrorMessage(
+		[=](MockView & view) {
+			view.setChunkSize(size);
 		},
 		"'" + size + "' is not a valid chunk size.");
 }

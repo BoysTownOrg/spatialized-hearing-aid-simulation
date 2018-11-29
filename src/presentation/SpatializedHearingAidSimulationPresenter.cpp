@@ -38,8 +38,13 @@ void SpatializedHearingAidSimulationPresenter::browseForBrir() {
 		[=](std::string p) { this->view->setBrirFilePath(p); });
 }
 
-static bool onlyContainsDigits(const std::string s) {
-	return s.find_first_not_of("0123456789") == std::string::npos;
+void SpatializedHearingAidSimulationPresenter::browseAndUpdateIfNotCancelled(
+	std::vector<std::string> filters,
+	std::function<void(std::string)> update)
+{
+	const auto filePath = view->browseForFile(filters);
+	if (!view->browseCancelled())
+		update(filePath);
 }
 
 void SpatializedHearingAidSimulationPresenter::play() {
@@ -80,6 +85,10 @@ double SpatializedHearingAidSimulationPresenter::convertToDouble(
 	}
 }
 
+static bool onlyContainsDigits(const std::string s) {
+	return s.find_first_not_of("0123456789") == std::string::npos;
+}
+
 int SpatializedHearingAidSimulationPresenter::convertToPositiveInteger(std::string x, std::string identifier)
 {
 	if (!onlyContainsDigits(x))
@@ -90,13 +99,4 @@ int SpatializedHearingAidSimulationPresenter::convertToPositiveInteger(std::stri
 	catch (const std::invalid_argument &) {
 		throw BadInput{ badInputMessage(x, identifier) };
 	}
-}
-
-void SpatializedHearingAidSimulationPresenter::browseAndUpdateIfNotCancelled(
-	std::vector<std::string> filters, 
-	std::function<void(std::string)> update) 
-{
-	const auto filePath = view->browseForFile(filters);
-	if (!view->browseCancelled())
-		update(filePath);
 }
