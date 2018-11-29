@@ -1,51 +1,15 @@
 #include "assert-utility.h"
+#include "MockConfigurationFileParser.h"
 #include <dsl-prescription/DslPrescription.h>
 #include <gtest/gtest.h>
 #include <map>
-
-class MockDslPrescriptionParser : public ConfigurationFileParser {
-	std::map<std::string, std::vector<double>> vectors{};
-	std::map<std::string, double> doubles{};
-	std::map<std::string, int> ints{};
-public:
-	void setValidSingleChannelProperties() {
-		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), {});
-		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::compressionRatios), { 0 });
-		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::kneepointGains_dB), { 0 });
-		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 0 });
-		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 0 });
-	}
-	void setVectorProperty(std::string property, std::vector<double> v) {
-		vectors[property] = v;
-	}
-	void setDoubleProperty(std::string property, double x) {
-		doubles[property] = x;
-	}
-	void setIntProperty(std::string property, int x) {
-		ints[property] = x;
-	}
-	std::vector<double> asVector(std::string property) const override {
-		return vectors.at(property);
-	}
-	double asDouble(std::string property) const override {
-		return doubles.at(property);
-	}
-	int asInt(std::string property) const override {
-		return ints.at(property);
-	}
-};
 
 static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 	std::string property)
 {
 	try {
-		MockDslPrescriptionParser parser{};
-		parser.setValidSingleChannelProperties();
+		MockConfigurationFileParser parser{};
+		parser.setValidSingleChannelDslProperties();
 		parser.setVectorProperty(property, {});
 		DslPrescription{ parser };
 		FAIL() << "Expected DslPrescription::InvalidPrescription.";
@@ -72,7 +36,7 @@ TEST(
 	DslPrescriptionTestCase,
 	parametersReceivedAsParsed)
 {
-	MockDslPrescriptionParser parser{};
+	MockConfigurationFileParser parser{};
 	parser.setVectorProperty(
 		DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), { 3 });
 	parser.setVectorProperty(
