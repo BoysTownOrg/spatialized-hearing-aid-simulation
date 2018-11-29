@@ -4,7 +4,6 @@
 #include "MockAudioDevice.h"
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
-#include <functional>
 
 class MockAudioDeviceFactory : public AudioDeviceFactory {
 	AudioDevice::Parameters _parameters{};
@@ -26,6 +25,7 @@ public:
 };
 
 class MockCompressorFactory : public FilterbankCompressorFactory {
+	FilterbankCompressor::Parameters _parameters{};
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	explicit MockCompressorFactory(
@@ -34,10 +34,15 @@ public:
 	) :
 		compressor{ std::move(compressor) } {}
 
+	const FilterbankCompressor::Parameters &parameters() const {
+		return _parameters;
+	}
+
 	std::shared_ptr<FilterbankCompressor> make(
 		const DslPrescription &, 
-		FilterbankCompressor::Parameters) override
+		FilterbankCompressor::Parameters p) override
 	{
+		_parameters = p;
 		return compressor;
 	}
 };
@@ -89,9 +94,10 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
+	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	PlayAudioModelFacade model{ 
 		deviceFactory, 
-		std::make_shared<MockCompressorFactory>(),
+		compressorFactory,
 		std::make_shared<MockAudioFileReaderFactory>(reader),
 		std::make_shared<MockParserFactory>(parser)
 	};
@@ -106,5 +112,9 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	request.windowSize = 4;
 	request.chunkSize = 5;
 	model.playRequest(request);
+	EXPECT_EQ(2, compressorFactory->parameters().attack_ms);
+	EXPECT_EQ(3, compressorFactory->parameters().release_ms);
+	EXPECT_EQ(4, compressorFactory->parameters().windowSize);
+	EXPECT_EQ(5, compressorFactory->parameters().chunkSize);
 	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
 }
