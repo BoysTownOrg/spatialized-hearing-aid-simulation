@@ -21,11 +21,11 @@ class MockView : public SpatializedHearingAidSimulationView {
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _browseFilePath{};
-	std::string _level_dB_Spl{};
-	std::string _attack_ms{};
-	std::string _release_ms{};
-	std::string _windowSize{};
-	std::string _chunkSize{};
+	std::string _level_dB_Spl{ "0" };
+	std::string _attack_ms{ "0" };
+	std::string _release_ms{ "0" };
+	std::string _windowSize{ "0" };
+	std::string _chunkSize{ "0" };
 	std::string _errorMessage{};
 	SpatializedHearingAidSimulationPresenter *_presenter{};
 	bool _runningEventLoop{};
