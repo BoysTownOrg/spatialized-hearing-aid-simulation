@@ -1,10 +1,15 @@
 #include "PlayAudioModel.h"
 
-PlayAudioModel::PlayAudioModel(std::shared_ptr<AudioDeviceFactory>)
+PlayAudioModel::PlayAudioModel(
+	std::shared_ptr<AudioDeviceFactory> deviceFactory
+) :
+	deviceFactory{ std::move(deviceFactory) }
 {
 }
 
-void PlayAudioModel::playRequest(PlayRequest)
+void PlayAudioModel::playRequest(PlayRequest request)
 {
-	return void();
+	AudioDevice::Parameters forDevice;
+	forDevice.framesPerBuffer = request.chunkSize;
+	deviceFactory->make(forDevice);
 }
