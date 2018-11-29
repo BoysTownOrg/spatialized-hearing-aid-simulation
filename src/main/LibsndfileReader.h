@@ -18,6 +18,7 @@ public:
 	int channels() override;
 	bool failed() const override;
 	std::string errorMessage() const override;
+	int sampleRate() override;
 };
 
 class LibsndfileReaderFactory : public AudioFileReaderFactory {

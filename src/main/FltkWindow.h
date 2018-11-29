@@ -49,6 +49,7 @@ public:
 	std::string release_ms() const override;
 	std::string windowSize() const override;
 	std::string chunkSize() const override;
+	void showErrorDialog(std::string message) override;
 
 private:
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);

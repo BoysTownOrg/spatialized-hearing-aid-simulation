@@ -32,8 +32,6 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	if (reader->channels() != 2)
 		throw RequestFailure{ "Not sure if I can handle other than two channels." };
 
-	const auto frameReader = std::make_shared<AudioFileInMemory>(*reader);
-
 	const auto audioSampleRate = reader->sampleRate();
 
 	FilterbankCompressor::Parameters forCompressor;
@@ -154,6 +152,8 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.framesPerBuffer = request.chunkSize;
 	forDevice.sampleRate = audioSampleRate;
 	forDevice.channels = { 0, 1 };
+
+	const auto frameReader = std::make_shared<AudioFileInMemory>(*reader);
 
 	try {
 		AudioDeviceController controller{

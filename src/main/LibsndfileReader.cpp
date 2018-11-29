@@ -27,3 +27,7 @@ bool LibsndfileReader::failed() const {
 std::string LibsndfileReader::errorMessage() const {
 	return sf_strerror(file);
 }
+
+int LibsndfileReader::sampleRate() {
+	return info.samplerate;
+}

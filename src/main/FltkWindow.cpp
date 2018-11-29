@@ -1,4 +1,5 @@
 #include "FltkWindow.h"
+#include <FL/fl_ask.H>
 #include <sstream>
 
 void FltkWindow::onBrowseLeftPrescription(Fl_Widget *, void *self) {
@@ -18,20 +19,20 @@ void FltkWindow::onBrowseBrir(Fl_Widget *, void *self) {
 }
 
 FltkWindow::FltkWindow() :
-	window(500, 300, 450, 500),
-	_leftPrescriptionFilePath(150, 50, 200, 40, "Left DSL prescription file path"),
-	_rightPrescriptionFilePath(150, 100, 200, 40, "Right DSL prescription file path"),
-	_audioFilePath(150, 150, 200, 40, "Audio file path"),
-	_brirFilePath(150, 200, 200, 40, "BRIR file path"),
-	browseLeftPrescription(360, 50, 60, 40, "Browse"),
-	browseRightPrescription(360, 100, 60, 40, "Browse"),
-	browseAudio(360, 150, 60, 40, "Browse"),
-	browseBrir(360, 200, 60, 40, "Browse"),
-	_level_dB_Spl(150, 250, 200, 40, "Level (dB SPL)"),
-	_attack_ms(150, 300, 200, 40, "attack (ms)"),
-	_release_ms(150, 350, 200, 40, "release (ms)"),
-	_windowSize(150, 400, 200, 40, "window size (samples)"),
-	_chunkSize(150, 450, 200, 40, "chunk size (samples)")
+	window(800, 200, 600, 700),
+	_leftPrescriptionFilePath(250, 50, 200, 40, "Left DSL prescription file path"),
+	_rightPrescriptionFilePath(250, 100, 200, 40, "Right DSL prescription file path"),
+	_audioFilePath(250, 150, 200, 40, "Audio file path"),
+	_brirFilePath(250, 200, 200, 40, "BRIR file path"),
+	browseLeftPrescription(460, 50, 60, 40, "Browse"),
+	browseRightPrescription(460, 100, 60, 40, "Browse"),
+	browseAudio(460, 150, 60, 40, "Browse"),
+	browseBrir(460, 200, 60, 40, "Browse"),
+	_level_dB_Spl(250, 250, 200, 40, "Level (dB SPL)"),
+	_attack_ms(250, 300, 200, 40, "attack (ms)"),
+	_release_ms(250, 350, 200, 40, "release (ms)"),
+	_windowSize(250, 400, 200, 40, "window size (samples)"),
+	_chunkSize(250, 450, 200, 40, "chunk size (samples)")
 {
 	window.end();
 	window.show();
@@ -122,4 +123,8 @@ std::string FltkWindow::windowSize() const {
 
 std::string FltkWindow::chunkSize() const {
 	return _chunkSize.value();
+}
+
+void FltkWindow::showErrorDialog(std::string message) {
+	fl_alert(message.c_str());
 }
