@@ -129,15 +129,29 @@ void PlayAudioModel::playRequest(PlayRequest request)
 	forDevice.channels = { 0, 1 };
 
 	const auto reader = audioFileFactory->make(request.audioFilePath);
-
-	AudioDeviceController controller {
-		deviceFactory->make(forDevice),
-		std::make_shared<ProcessedAudioFrameReader>(
-			std::make_shared<AudioFileInMemory>(*reader),
-			std::make_shared<ChannelProcessingGroup>(
-				std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
+	std::shared_ptr<AudioFrameReader> frameReader;
+	try {
+		frameReader = std::make_shared<AudioFileInMemory>(*reader);
+	}
+	catch (const AudioFileInMemory::FileError &e) {
+		throw RequestFailure{ e.what() };
+	}
+	try {
+		AudioDeviceController controller{
+			deviceFactory->make(forDevice),
+			std::make_shared<ProcessedAudioFrameReader>(
+				frameReader,
+				std::make_shared<ChannelProcessingGroup>(
+					std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
+				)
 			)
-		)
-	};
-	controller.startStreaming();
+		};
+		controller.startStreaming();
+	}
+	catch (const AudioDeviceController::DeviceConnectionFailure &e) {
+		throw RequestFailure{ e.what() };
+	}
+	catch (const AudioDeviceController::StreamingError &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
