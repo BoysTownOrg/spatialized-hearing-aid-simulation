@@ -23,6 +23,9 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	if (reader->failed())
 		throw RequestFailure{ reader->errorMessage() };
 
+	if (reader->channels() != 2)
+		throw RequestFailure{ "Not sure if I can handle other than two channels." };
+
 	std::shared_ptr<AudioFrameReader> frameReader;
 	try {
 		frameReader = std::make_shared<AudioFileInMemory>(*reader);

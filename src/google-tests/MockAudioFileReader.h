@@ -54,6 +54,10 @@ public:
 	std::string errorMessage() const override {
 		return _errorMessage;
 	}
+
+	int sampleRate() override {
+		return {};
+	}
 };
 
 class MockAudioFileReaderFactory : public AudioFileReaderFactory {
