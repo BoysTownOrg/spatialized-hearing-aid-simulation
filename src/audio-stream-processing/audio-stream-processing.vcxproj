@@ -135,12 +135,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="audio-stream-processing-exports.h" />
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="ChannelCopier.h" />
     <ClInclude Include="ProcessedAudioFrameReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChannelCopier.cpp" />
     <ClCompile Include="ProcessedAudioFrameReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

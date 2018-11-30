@@ -27,9 +27,15 @@
     <ClInclude Include="ChannelCopier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="audio-stream-processing-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ProcessedAudioFrameReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelCopier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
