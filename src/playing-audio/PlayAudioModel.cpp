@@ -43,6 +43,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
 	forCompressor.sampleRate = audioSampleRate;
+	forCompressor.max_dB = 119;
 
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));

@@ -7,9 +7,10 @@ public:
 	struct Parameters {
 		double attack_ms;
 		double release_ms;
+		double sampleRate;
+		double max_dB;
 		int windowSize;
 		int chunkSize;
-		int sampleRate;
 	};
 	INTERFACE_OPERATIONS(FilterbankCompressor);
 	using real = float;
