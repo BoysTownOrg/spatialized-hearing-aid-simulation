@@ -6,63 +6,6 @@
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
 
-class MockAudioDeviceFactory : public AudioDeviceFactory {
-	AudioDevice::Parameters _parameters{};
-	std::shared_ptr<AudioDevice> device;
-public:
-	explicit MockAudioDeviceFactory(
-		std::shared_ptr<AudioDevice> device =
-			std::make_shared<MockAudioDevice>()
-	) :
-		device{ std::move(device) } {}
-
-	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
-		_parameters = p;
-		return device;
-	}
-	const AudioDevice::Parameters &parameters() const {
-		return _parameters;
-	}
-};
-
-class MockCompressorFactory : public FilterbankCompressorFactory {
-	FilterbankCompressor::Parameters _parameters{};
-	std::shared_ptr<FilterbankCompressor> compressor;
-public:
-	explicit MockCompressorFactory(
-		std::shared_ptr<FilterbankCompressor> compressor =
-			std::make_shared<MockFilterbankCompressor>()
-	) :
-		compressor{ std::move(compressor) } {}
-
-	const FilterbankCompressor::Parameters &parameters() const {
-		return _parameters;
-	}
-
-	std::shared_ptr<FilterbankCompressor> make(
-		const DslPrescription &, 
-		FilterbankCompressor::Parameters p) override
-	{
-		_parameters = p;
-		return compressor;
-	}
-};
-
-class MockParserFactory : public ConfigurationFileParserFactory {
-	std::shared_ptr<ConfigurationFileParser> parser;
-public:
-	explicit MockParserFactory(
-		std::shared_ptr<ConfigurationFileParser> parser =
-			std::make_shared<MockConfigurationFileParser>()
-	) :
-		parser{ std::move(parser) } {}
-
-	std::shared_ptr<ConfigurationFileParser> make(std::string filePath) override
-	{
-		return parser;
-	}
-};
-
 class PlayAudioModelFacade {
 	PlayAudioModel model;
 public:

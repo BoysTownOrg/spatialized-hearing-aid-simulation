@@ -81,3 +81,26 @@ public:
 		return _failed;
 	}
 };
+
+class MockCompressorFactory : public FilterbankCompressorFactory {
+	FilterbankCompressor::Parameters _parameters{};
+	std::shared_ptr<FilterbankCompressor> compressor;
+public:
+	explicit MockCompressorFactory(
+		std::shared_ptr<FilterbankCompressor> compressor =
+		std::make_shared<MockFilterbankCompressor>()
+	) :
+		compressor{ std::move(compressor) } {}
+
+	const FilterbankCompressor::Parameters &parameters() const {
+		return _parameters;
+	}
+
+	std::shared_ptr<FilterbankCompressor> make(
+		const DslPrescription &,
+		FilterbankCompressor::Parameters p) override
+	{
+		_parameters = p;
+		return compressor;
+	}
+};

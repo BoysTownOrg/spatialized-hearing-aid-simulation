@@ -47,3 +47,18 @@ public:
 		return ints.at(property);
 	}
 };
+
+class MockParserFactory : public ConfigurationFileParserFactory {
+	std::shared_ptr<ConfigurationFileParser> parser;
+public:
+	explicit MockParserFactory(
+		std::shared_ptr<ConfigurationFileParser> parser =
+		std::make_shared<MockConfigurationFileParser>()
+	) :
+		parser{ std::move(parser) } {}
+
+	std::shared_ptr<ConfigurationFileParser> make(std::string filePath) override
+	{
+		return parser;
+	}
+};
