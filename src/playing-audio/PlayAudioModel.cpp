@@ -24,50 +24,49 @@ PlayAudioModel::PlayAudioModel(
 
 void PlayAudioModel::playRequest(PlayRequest request) {
 	const auto reader = makeAudioFileReader(request.audioFilePath);
+	
 	std::shared_ptr<AudioFrameReader> frameReader = std::make_shared<AudioFileInMemory>(*reader);
-
 	if (reader->channels() == 1)
 		frameReader = std::make_shared<ChannelCopier>(frameReader);
 
-	const auto audioSampleRate = reader->sampleRate();
+	const auto brir = makeBrir(request.brirFilePath);
+
+	if (brir.sampleRate() != reader->sampleRate())
+		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = request.attack_ms;
 	forCompressor.release_ms = request.release_ms;
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
-	forCompressor.sampleRate = audioSampleRate;
+	forCompressor.sampleRate = reader->sampleRate();
 	forCompressor.max_dB = 119;
 
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
+	
 	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));
-
-	const auto brir = makeBrir(request.brirFilePath);
-
-	const auto brirSampleRate = brir.sampleRate();
-
-	if (brirSampleRate != audioSampleRate)
-		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
 	leftChannel->add(makeFilter(brir.left()));
 
-	const auto leftHearingAid = makeHearingAid(
-		makeDslPrescription(request.leftDslPrescriptionFilePath), 
-		forCompressor);
-	leftChannel->add(leftHearingAid);
+	leftChannel->add(
+		makeHearingAid(
+			makeDslPrescription(request.leftDslPrescriptionFilePath),
+			forCompressor));
 
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
+	
 	rightChannel->add(std::make_shared<ScalingProcessor>(0.5f));
+	
 	rightChannel->add(makeFilter(brir.right()));
 
-	const auto rightHearingAid = makeHearingAid(
-		makeDslPrescription(request.rightDslPrescriptionFilePath), 
-		forCompressor);
-	rightChannel->add(rightHearingAid);
+	rightChannel->add(
+		makeHearingAid(
+			makeDslPrescription(request.rightDslPrescriptionFilePath),
+			forCompressor));
 
 	AudioDevice::Parameters forDevice;
 	forDevice.framesPerBuffer = request.chunkSize;
-	forDevice.sampleRate = audioSampleRate;
+	forDevice.sampleRate = reader->sampleRate();
 	forDevice.channels = { 0, 1 };
 
 	try {
@@ -113,7 +112,7 @@ std::shared_ptr<SignalProcessor> PlayAudioModel::makeFilter(std::vector<float> b
 		return std::make_shared<FirFilter>(b);
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
-		throw RequestFailure{ "" };
+		throw RequestFailure{ "The impulse response is empty?" };
 	}
 }
 
