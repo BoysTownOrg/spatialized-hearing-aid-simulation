@@ -13,5 +13,6 @@ TEST(BinauralRoomImpulseResponseTester, returnsValuesParsed) {
 	parser.setIntProperty(propertyName(Property::sampleRate), 7);
 	BinauralRoomImpulseResponse response{ parser };
 	assertEqual({ 1, 2, 3 }, response.left());
+	assertEqual({ 4, 5, 6 }, response.right());
 	EXPECT_EQ(7, response.sampleRate());
 }
