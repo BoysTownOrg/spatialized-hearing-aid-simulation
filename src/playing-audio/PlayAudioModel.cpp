@@ -9,7 +9,6 @@
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
 #include <dsl-prescription/DslPrescription.h>
-#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory,
@@ -47,24 +46,16 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));
 
+	const auto brir = makeBrir(request.brirFilePath);
 
-	std::shared_ptr<BinauralRoomImpulseResponse> brir;
-	try {
-		brir = std::make_shared<BinauralRoomImpulseResponse>(
-			*parserFactory->make(request.brirFilePath));
-	}
-	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
-		throw RequestFailure{ e.what() };
-	}
-
-	const auto brirSampleRate = brir->sampleRate();
+	const auto brirSampleRate = brir.sampleRate();
 
 	if (brirSampleRate != audioSampleRate)
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
 	std::shared_ptr<SignalProcessor> leftFilter;
 	try {
-		leftFilter = std::make_shared<FirFilter>(brir->left());
+		leftFilter = std::make_shared<FirFilter>(brir.left());
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw RequestFailure{ "bad coefficients?" };
@@ -96,7 +87,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 
 	std::shared_ptr<SignalProcessor> rightFilter;
 	try {
-		rightFilter = std::make_shared<FirFilter>(brir->right());
+		rightFilter = std::make_shared<FirFilter>(brir.right());
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw RequestFailure{ "" };
@@ -144,6 +135,15 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 		throw RequestFailure{ e.what() };
 	}
 	catch (const AudioDeviceController::StreamingError &e) {
+		throw RequestFailure{ e.what() };
+	}
+}
+
+BinauralRoomImpulseResponse PlayAudioModel::makeBrir(std::string filePath) {
+	try {
+		return BinauralRoomImpulseResponse{ *parserFactory->make(filePath) };
+	}
+	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
 		throw RequestFailure{ e.what() };
 	}
 }

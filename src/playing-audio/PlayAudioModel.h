@@ -6,6 +6,7 @@
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <audio-device-control/AudioDevice.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
+#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioDeviceFactory> deviceFactory;
@@ -20,4 +21,6 @@ public:
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
+private:
+	BinauralRoomImpulseResponse makeBrir(std::string filePath);
 };

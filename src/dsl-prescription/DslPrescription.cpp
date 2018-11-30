@@ -19,7 +19,7 @@ std::string dsl_prescription::propertyName(Property p) {
 }
 
 DslPrescription::DslPrescription(const ConfigurationFileParser &parser) 
-	try :
+try :
 	_crossFrequenciesHz(parser.asVector(
 		propertyName(dsl_prescription::Property::crossFrequenciesHz))),
 	_compressionRatios(parser.asVector(
