@@ -49,21 +49,20 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	if (brirSampleRate != audioSampleRate)
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
-	const auto leftFilter = makeFilter(brir.left());
-	leftChannel->add(leftFilter);
+	leftChannel->add(makeFilter(brir.left()));
 
-	const auto leftPrescription = makeDslPrescription(request.leftDslPrescriptionFilePath);
-	const auto leftHearingAid = makeHearingAid(leftPrescription, forCompressor);
+	const auto leftHearingAid = makeHearingAid(
+		makeDslPrescription(request.leftDslPrescriptionFilePath), 
+		forCompressor);
 	leftChannel->add(leftHearingAid);
 
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	rightChannel->add(std::make_shared<ScalingProcessor>(0.5f));
+	rightChannel->add(makeFilter(brir.right()));
 
-	const auto rightFilter = makeFilter(brir.right());
-	rightChannel->add(rightFilter);
-
-	const auto rightPrescription = makeDslPrescription(request.rightDslPrescriptionFilePath);
-	const auto rightHearingAid = makeHearingAid(rightPrescription, forCompressor);
+	const auto rightHearingAid = makeHearingAid(
+		makeDslPrescription(request.rightDslPrescriptionFilePath), 
+		forCompressor);
 	rightChannel->add(rightHearingAid);
 
 	AudioDevice::Parameters forDevice;
