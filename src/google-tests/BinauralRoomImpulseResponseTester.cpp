@@ -16,3 +16,16 @@ TEST(BinauralRoomImpulseResponseTester, returnsValuesParsed) {
 	assertEqual({ 4, 5, 6 }, response.right());
 	EXPECT_EQ(7, response.sampleRate());
 }
+
+TEST(
+	BinauralRoomImpulseResponseTester,
+	throwsWhenParserThrows)
+{
+	try {
+		BinauralRoomImpulseResponseTester{ ErrorParser{"error."} };
+		FAIL() << "Expected BinauralRoomImpulseResponseTester::InvalidPrescription.";
+	}
+	catch (const BinauralRoomImpulseResponseTester::InvalidResponse &e) {
+		assertEqual("error.", e.what());
+	}
+}

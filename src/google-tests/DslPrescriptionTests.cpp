@@ -56,25 +56,6 @@ TEST(
 	assertEqual({ 7, 7 }, prescription.broadbandOutputLimitingThresholds_dBSpl());
 }
 
-class ErrorParser : public ConfigurationFileParser {
-	std::string message;
-public:
-	explicit ErrorParser(std::string message) :
-		message{ std::move(message) } {}
-
-	double asDouble(std::string) const override {
-		throw ParseError{ message };
-	}
-
-	int asInt(std::string) const override {
-		throw ParseError{ message };
-	}
-
-	std::vector<double> asVector(std::string) const override {
-		throw ParseError{ message };
-	}
-};
-
 TEST(
 	DslPrescriptionTestCase,
 	throwsWhenParserThrows)
