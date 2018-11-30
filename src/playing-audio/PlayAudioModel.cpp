@@ -9,7 +9,7 @@
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
 #include <dsl-prescription/DslPrescription.h>
-#include <binaural-room-impulse-response-config/BrirConfig.h>
+#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 #include <gsl/gsl>
 #include <algorithm>
 

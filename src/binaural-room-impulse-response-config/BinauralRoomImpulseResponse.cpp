@@ -1,4 +1,4 @@
-#include "BrirConfig.h"
+#include "BinauralRoomImpulseResponse.h"
 #include <gsl/gsl>
 #include <algorithm>
 

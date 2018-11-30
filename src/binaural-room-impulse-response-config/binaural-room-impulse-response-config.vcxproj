@@ -130,10 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BrirConfig.h" />
+    <ClInclude Include="BinauralRoomImpulseResponse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BrirConfig.cpp" />
+    <ClCompile Include="BinauralRoomImpulseResponse.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

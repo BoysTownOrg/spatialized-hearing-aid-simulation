@@ -54,7 +54,7 @@
     <ClCompile Include="ChannelCopierTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BrirConfigTester.cpp">
+    <ClCompile Include="BinauralRoomImpulseResponseTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

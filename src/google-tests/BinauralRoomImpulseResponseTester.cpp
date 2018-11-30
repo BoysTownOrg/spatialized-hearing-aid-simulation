@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "MockConfigurationFileParser.h"
-#include <binaural-room-impulse-response-config/BrirConfig.h>
+#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 #include <gtest/gtest.h>
 
 class BinauralRoomImpulseResponseTester : public ::testing::TestCase {};

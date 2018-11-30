@@ -1,7 +1,7 @@
 #pragma once
 
 #include <dsl-prescription/DslPrescription.h>
-#include <binaural-room-impulse-response-config/BrirConfig.h>
+#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 #include <map>
 
 class MockConfigurationFileParser : public ConfigurationFileParser {
