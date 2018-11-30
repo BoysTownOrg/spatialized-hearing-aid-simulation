@@ -10,8 +10,9 @@ public:
 
 	void read(float ** channels, int frameCount) override
 	{
-		channels;
-		frameCount;
+		reader->read(channels, frameCount);
+		for (int i = 0; i < frameCount; ++i)
+			channels[1][i] = channels[0][i];
 	}
 };
 
