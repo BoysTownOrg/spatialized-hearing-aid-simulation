@@ -9,6 +9,7 @@
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
 #include <dsl-prescription/DslPrescription.h>
+#include <binaural-room-impulse-response-config/BrirConfig.h>
 #include <gsl/gsl>
 #include <algorithm>
 
@@ -52,7 +53,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 
 	int brirSampleRate;
 	try {
-		brirSampleRate = brirParser->asInt("sample rate");
+		brirSampleRate = brirParser->asInt(propertyName(brir_config::Property::sampleRate));
 	}
 	catch (const ConfigurationFileParser::ParseError &e) {
 		throw RequestFailure{ e.what() };
@@ -63,7 +64,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 
 	std::vector<double> leftImpulseResponse;
 	try {
-		leftImpulseResponse = brirParser->asVector("left impulse response");
+		leftImpulseResponse = brirParser->asVector(propertyName(brir_config::Property::leftImpulseResponse));
 	}
 	catch (const ConfigurationFileParser::ParseError &e) {
 		throw RequestFailure{ e.what() };
@@ -110,7 +111,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 
 	std::vector<double> rightImpulseResponse;
 	try {
-		rightImpulseResponse = brirParser->asVector("right impulse response");
+		rightImpulseResponse = brirParser->asVector(propertyName(brir_config::Property::rightImpulseResponse));
 	}
 	catch (const ConfigurationFileParser::ParseError &e) {
 		throw RequestFailure{ e.what() };
