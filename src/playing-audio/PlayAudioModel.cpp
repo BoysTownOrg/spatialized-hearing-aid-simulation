@@ -23,10 +23,7 @@ PlayAudioModel::PlayAudioModel(
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
-	const auto reader = audioFileFactory->make(request.audioFilePath);
-	if (reader->failed())
-		throw RequestFailure{ reader->errorMessage() };
-
+	const auto reader = makeAudioFileReader(request.audioFilePath);
 	std::shared_ptr<AudioFrameReader> frameReader = std::make_shared<AudioFileInMemory>(*reader);
 
 	if (reader->channels() == 1)
@@ -133,4 +130,11 @@ std::shared_ptr<SignalProcessor> PlayAudioModel::makeHearingAid(
 	catch (const HearingAidProcessor::CompressorError &e) {
 		throw RequestFailure{ e.what() };
 	}
+}
+
+std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string filePath) {
+	const auto reader = audioFileFactory->make(filePath);
+	if (reader->failed())
+		throw RequestFailure{ reader->errorMessage() };
+	return reader;
 }

@@ -31,4 +31,5 @@ private:
 		const DslPrescription &, 
 		FilterbankCompressor::Parameters
 	);
+	std::shared_ptr<AudioFileReader> makeAudioFileReader(std::string filePath);
 };
