@@ -1,6 +1,7 @@
 #pragma once
 
 #include <dsl-prescription/DslPrescription.h>
+#include <binaural-room-impulse-response-config/BrirConfig.h>
 #include <map>
 
 class MockConfigurationFileParser : public ConfigurationFileParser {
@@ -18,9 +19,10 @@ public:
 	}
 
 	void setValidBrirProperties() {
-		vectors["left impulse response"] = { 0 };
-		vectors["right impulse response"] = { 0 };
-		ints["sample rate"] = 0;
+		using brir_config::Property;
+		vectors[propertyName(Property::leftImpulseResponse)] = { 0 };
+		vectors[propertyName(Property::rightImpulseResponse)] = { 0 };
+		ints[propertyName(Property::sampleRate)] = 0;
 	}
 
 	void setVectorProperty(std::string property, std::vector<double> v) {
