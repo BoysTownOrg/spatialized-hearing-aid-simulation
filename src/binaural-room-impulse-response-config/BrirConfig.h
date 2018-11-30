@@ -22,12 +22,14 @@ namespace brir_config {
 
 class BinauralRoomImpulseResponse {
 	std::vector<float> _left;
+	std::vector<float> _right;
 	int _sampleRate;
 public:
 	BRIR_CONFIG_API explicit BinauralRoomImpulseResponse(
 		const ConfigurationFileParser &parser
 	);
 	BRIR_CONFIG_API const std::vector<float> &left() const;
+	BRIR_CONFIG_API const std::vector<float> &right() const;
 	BRIR_CONFIG_API int sampleRate() const;
 };
 
