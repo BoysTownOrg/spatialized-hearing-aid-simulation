@@ -34,105 +34,138 @@ public:
 	void setPresenter(SpatializedHearingAidSimulationPresenter *p) override {
 		_presenter = p;
 	}
+
 	SpatializedHearingAidSimulationPresenter *presenter() const {
 		return _presenter;
 	}
+
 	void runEventLoop() override {
 		_runningEventLoop = true;
 	}
+
 	bool runningEventLoop() const {
 		return _runningEventLoop;
 	}
+
 	virtual std::string browseForFile(
 		std::vector<std::string> filters) override 
 	{
 		_browseFilters = filters;
 		return _browseFilePath;
 	}
+
 	void setBrowseFilePath(std::string p) {
 		_browseFilePath = p;
 	}
-	virtual bool browseCancelled() override {
+
+	bool browseCancelled() override {
 		return _browseCancelled;
 	}
+
 	void setBrowseCancelled() {
 		_browseCancelled = true;
 	}
+
 	void browseForLeftDslPrescription() {
 		_presenter->browseForLeftDslPrescription();
 	}
+
 	void setLeftDslPrescriptionFilePath(std::string p) override {
 		_leftDslPrescriptionFilePath = p;
 	}
+
 	std::string leftDslPrescriptionFilePath() const override {
 		return _leftDslPrescriptionFilePath;
 	}
+
 	void browseForRightDslPrescription() {
 		_presenter->browseForRightDslPrescription();
 	}
+
 	std::string rightDslPrescriptionFilePath() const override {
 		return _rightDslPrescriptionFilePath;
 	}
+
 	void setRightDslPrescriptionFilePath(std::string p) override {
 		_rightDslPrescriptionFilePath = p;
 	}
+
 	void browseForAudio() {
 		_presenter->browseForAudio();
 	}
+
 	void setAudioFilePath(std::string p) override {
 		_audioFilePath = p;
 	}
+
 	std::string audioFilePath() const override {
 		return _audioFilePath;
 	}
+
 	void browseForBrir() {
 		_presenter->browseForBrir();
 	}
+
 	void setBrirFilePath(std::string p) override {
 		_brirFilePath = p;
 	}
+
 	std::string brirFilePath() const override {
 		return _brirFilePath;
 	}
+
 	std::vector<std::string> browseFilters() const {
 		return _browseFilters;
 	}
+
 	void setLevel_dB_Spl(std::string level) {
 		_level_dB_Spl = level;
 	}
+
 	std::string level_dB_Spl() const override {
 		return _level_dB_Spl;
 	}
+
 	void setAttack_ms(std::string a) {
 		_attack_ms = a;
 	}
+
 	std::string attack_ms() const override {
 		return _attack_ms;
 	}
+
 	void setRelease_ms(std::string r) {
 		_release_ms = r;
 	}
+
 	std::string release_ms() const override {
 		return _release_ms;
 	}
+
 	void setWindowSize(std::string s) {
 		_windowSize = s;
 	}
+
 	std::string windowSize() const override {
 		return _windowSize;
 	}
+
 	void setChunkSize(std::string s) {
 		_chunkSize = s;
 	}
+
 	std::string chunkSize() const override {
 		return _chunkSize;
 	}
+
 	void play() {
 		_presenter->play();
 	}
+
 	std::string errorMessage() const {
 		return _errorMessage;
 	}
+
 	void showErrorDialog(std::string message) override {
 		_errorMessage = message;
 	}
@@ -178,9 +211,9 @@ TEST(
 	view->setRightDslPrescriptionFilePath("b");
 	view->setBrowseCancelled();
 	view->browseForLeftDslPrescription();
-	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	assertEqual("a", view->leftDslPrescriptionFilePath());
 	view->browseForRightDslPrescription();
-	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
+	assertEqual("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
@@ -192,7 +225,7 @@ TEST(
 	view->setAudioFilePath("a");
 	view->setBrowseCancelled();
 	view->browseForAudio();
-	EXPECT_EQ("a", view->audioFilePath());
+	assertEqual("a", view->audioFilePath());
 }
 
 TEST(
@@ -204,7 +237,7 @@ TEST(
 	view->setBrirFilePath("a");
 	view->setBrowseCancelled();
 	view->browseForBrir();
-	EXPECT_EQ("a", view->brirFilePath());
+	assertEqual("a", view->brirFilePath());
 }
 
 TEST(
@@ -215,10 +248,10 @@ TEST(
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
-	EXPECT_EQ("a", view->leftDslPrescriptionFilePath());
+	assertEqual("a", view->leftDslPrescriptionFilePath());
 	view->setBrowseFilePath("b");
 	view->browseForRightDslPrescription();
-	EXPECT_EQ("b", view->rightDslPrescriptionFilePath());
+	assertEqual("b", view->rightDslPrescriptionFilePath());
 }
 
 TEST(
@@ -229,7 +262,7 @@ TEST(
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForAudio();
-	EXPECT_EQ("a", view->audioFilePath());
+	assertEqual("a", view->audioFilePath());
 }
 
 TEST(
@@ -240,7 +273,7 @@ TEST(
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
-	EXPECT_EQ("a", view->brirFilePath());
+	assertEqual("a", view->brirFilePath());
 }
 
 TEST(
@@ -280,10 +313,10 @@ TEST(
 	view->setWindowSize("4");
 	view->setChunkSize("5");
 	view->play();
-	EXPECT_EQ("a", model->request().leftDslPrescriptionFilePath);
-	EXPECT_EQ("b", model->request().rightDslPrescriptionFilePath);
-	EXPECT_EQ("c", model->request().audioFilePath);
-	EXPECT_EQ("d", model->request().brirFilePath);
+	assertEqual("a", model->request().leftDslPrescriptionFilePath);
+	assertEqual("b", model->request().rightDslPrescriptionFilePath);
+	assertEqual("c", model->request().audioFilePath);
+	assertEqual("d", model->request().brirFilePath);
 	EXPECT_EQ(1.1, model->request().level_dB_Spl);
 	EXPECT_EQ(2.2, model->request().attack_ms);
 	EXPECT_EQ(3.3, model->request().release_ms);
@@ -307,7 +340,7 @@ TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	const auto model = std::make_shared<ErrorModel>("error.");
 	SpatializedHearingAidSimulationPresenter presenter{ model, view };
 	view->play();
-	EXPECT_EQ("error.", view->errorMessage());
+	assertEqual("error.", view->errorMessage());
 }
 
 static void expectRequestTransformationYieldsErrorMessage(
@@ -318,7 +351,7 @@ static void expectRequestTransformationYieldsErrorMessage(
 	PresenterFacade presenter{ view };
 	transformation(*view);
 	view->play();
-	EXPECT_EQ(message, view->errorMessage());
+	assertEqual(message, view->errorMessage());
 }
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
@@ -331,14 +364,14 @@ TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
 		"'a' is not a valid level.");
 	expectRequestTransformationYieldsErrorMessage(
 		[](MockView & view) {
-			view.setAttack_ms("a");
+			view.setAttack_ms("b");
 		},
-		"'a' is not a valid attack time.");
+		"'b' is not a valid attack time.");
 	expectRequestTransformationYieldsErrorMessage(
 		[](MockView & view) {
-			view.setRelease_ms("a");
+			view.setRelease_ms("c");
 		},
-		"'a' is not a valid release time.");
+		"'c' is not a valid release time.");
 }
 
 static void expectBadWindowSize(std::string size) {

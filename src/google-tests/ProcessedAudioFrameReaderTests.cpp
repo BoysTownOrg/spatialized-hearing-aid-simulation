@@ -8,9 +8,11 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
+
 	const float *const *channels() const {
 		return _channels;
 	}
+
 	void read(float ** channels, int frameCount) override {
 		_channels = channels;
 		_frameCount = frameCount;
@@ -24,9 +26,11 @@ public:
 	int frameCount() const {
 		return _frameCount;
 	}
+
 	const float *const *channels() const {
 		return _channels;
 	}
+
 	void process(float ** channels, int frameCount) override {
 		_channels = channels;
 		_frameCount = frameCount;
