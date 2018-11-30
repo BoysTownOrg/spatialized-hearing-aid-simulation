@@ -24,7 +24,7 @@ static std::vector<float> transformToFloat(std::vector<double> v) {
 
 BinauralRoomImpulseResponse::BinauralRoomImpulseResponse(const ConfigurationFileParser & parser) :
 	_left{ transformToFloat(parser.asVector(propertyName(brir_config::Property::leftImpulseResponse))) },
-	_right{ transformToFloat(parser.asVector(propertyName(brir_config::Property::leftImpulseResponse))) },
+	_right{ transformToFloat(parser.asVector(propertyName(brir_config::Property::rightImpulseResponse))) },
 	_sampleRate{ parser.asInt(propertyName(brir_config::Property::sampleRate)) } {}
 
 const std::vector<float> &BinauralRoomImpulseResponse::left() const {
