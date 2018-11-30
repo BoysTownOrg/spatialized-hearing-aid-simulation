@@ -3,10 +3,11 @@
 #include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
-#include <hearing-aid-processing/HearingAidProcessor.h>
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
+#include <hearing-aid-processing/HearingAidProcessor.h>
+#include <fir-filtering/FirFilter.h>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory,
@@ -55,17 +56,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	leftChannel->add(leftFilter);
 
 	const auto leftPrescription = makeDslPrescription(request.leftDslPrescriptionFilePath);
-	
-
-	std::shared_ptr<SignalProcessor> leftHearingAid;
-	try {
-		leftHearingAid = std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(leftPrescription, forCompressor)
-		);
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		throw RequestFailure{ e.what() };
-	}
+	const auto leftHearingAid = makeHearingAid(leftPrescription, forCompressor);
 	leftChannel->add(leftHearingAid);
 
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
@@ -75,16 +66,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	rightChannel->add(rightFilter);
 
 	const auto rightPrescription = makeDslPrescription(request.rightDslPrescriptionFilePath);
-
-	std::shared_ptr<SignalProcessor> rightHearingAid;
-	try {
-		rightHearingAid = std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(rightPrescription, forCompressor)
-		);
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		throw RequestFailure{ e.what() };
-	}
+	const auto rightHearingAid = makeHearingAid(rightPrescription, forCompressor);
 	rightChannel->add(rightHearingAid);
 
 	AudioDevice::Parameters forDevice;
@@ -136,5 +118,19 @@ std::shared_ptr<SignalProcessor> PlayAudioModel::makeFilter(std::vector<float> b
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw RequestFailure{ "" };
+	}
+}
+
+std::shared_ptr<SignalProcessor> PlayAudioModel::makeHearingAid(
+	const DslPrescription &prescription, 
+	FilterbankCompressor::Parameters parameters)
+{
+	try {
+		return std::make_shared<HearingAidProcessor>(
+			compressorFactory->make(prescription, parameters)
+		);
+	}
+	catch (const HearingAidProcessor::CompressorError &e) {
+		throw RequestFailure{ e.what() };
 	}
 }
