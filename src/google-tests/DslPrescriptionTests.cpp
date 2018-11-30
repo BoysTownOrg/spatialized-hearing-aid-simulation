@@ -22,12 +22,13 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 class DslPrescriptionTestCase : public ::testing::TestCase {};
 
 TEST(DslPrescriptionTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
+	using dsl_prescription::Property;
 	for (const std::string property :
 		{
-			"compression_ratios",
-			"kneepoint_gains_dB",
-			"kneepoints_dB_SPL",
-			"BOLT_dB_SPL"
+			propertyName(Property::compressionRatios),
+			propertyName(Property::kneepointGains_dB),
+			propertyName(Property::kneepoints_dBSpl),
+			propertyName(Property::broadbandOutputLimitingThresholds_dBSpl)
 		})
 		assertInvalidPrescriptionThrownOnChannelCountMismatch(property);
 }
@@ -37,16 +38,15 @@ TEST(
 	parametersReceivedAsParsed)
 {
 	MockConfigurationFileParser parser{};
+	using dsl_prescription::Property;
+	parser.setVectorProperty(propertyName(Property::crossFrequenciesHz), { 3 });
+	parser.setVectorProperty(propertyName(Property::compressionRatios), { 4, 4 });
+	parser.setVectorProperty(propertyName(Property::kneepointGains_dB), { 5, 5 });
+	parser.setVectorProperty(propertyName(Property::kneepoints_dBSpl), { 6, 6 });
 	parser.setVectorProperty(
-		propertyName(dsl_prescription::Property::crossFrequenciesHz), { 3 });
-	parser.setVectorProperty(
-		propertyName(dsl_prescription::Property::compressionRatios), { 4, 4 });
-	parser.setVectorProperty(
-		propertyName(dsl_prescription::Property::kneepointGains_dB), { 5, 5 });
-	parser.setVectorProperty(
-		propertyName(dsl_prescription::Property::kneepoints_dBSpl), { 6, 6 });
-	parser.setVectorProperty(
-		propertyName(dsl_prescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 7, 7 });
+		propertyName(Property::broadbandOutputLimitingThresholds_dBSpl), 
+		{ 7, 7 }
+	);
 	DslPrescription prescription{ parser };
 	EXPECT_EQ(2, prescription.channels());
 	assertEqual({ 3 }, prescription.crossFrequenciesHz());
