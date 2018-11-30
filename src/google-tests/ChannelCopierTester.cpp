@@ -1,29 +1,12 @@
-#include <audio-stream-processing/AudioFrameReader.h>
-
-class ChannelCopier : public AudioFrameReader {
-	std::shared_ptr<AudioFrameReader> reader;
-public:
-	explicit ChannelCopier(
-		std::shared_ptr<AudioFrameReader> reader
-	) :
-		reader{ std::move(reader) } {}
-
-	void read(float ** channels, int frameCount) override
-	{
-		reader->read(channels, frameCount);
-		for (int i = 0; i < frameCount; ++i)
-			channels[1][i] = channels[0][i];
-	}
-};
-
 #include "assert-utility.h"
 #include "MockAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-stream-processing/ChannelCopier.h>
 #include <gtest/gtest.h>
 
 class ChannelCopierTestCase : public ::testing::TestCase {};
 
-TEST(ChannelCopierTestCase, tbd) {
+TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
 	const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{ 1, 2, 3 });
 	reader->setChannels(1);
 	const auto adapter = std::make_shared<AudioFileInMemory>(*reader);

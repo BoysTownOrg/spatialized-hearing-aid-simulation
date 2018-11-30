@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioFrameReader.h" />
+    <ClInclude Include="ChannelCopier.h" />
     <ClInclude Include="ProcessedAudioFrameReader.h" />
   </ItemGroup>
   <ItemGroup>
