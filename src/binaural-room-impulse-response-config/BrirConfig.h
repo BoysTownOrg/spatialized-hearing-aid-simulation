@@ -17,3 +17,15 @@ namespace brir_config {
 
 	BRIR_CONFIG_API std::string propertyName(Property);
 }
+
+#include <dsl-prescription/ConfigurationFileParser.h>
+
+class BinauralRoomImpulseResponse {
+	int _sampleRate;
+public:
+	BRIR_CONFIG_API explicit BinauralRoomImpulseResponse(
+		const ConfigurationFileParser &parser
+	);
+	BRIR_CONFIG_API int sampleRate() const;
+};
+

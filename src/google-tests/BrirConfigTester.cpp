@@ -1,19 +1,3 @@
-#include <binaural-room-impulse-response-config/BrirConfig.h>
-#include <dsl-prescription/ConfigurationFileParser.h>
-
-class BinauralRoomImpulseResponse {
-	int _sampleRate;
-public:
-	explicit BinauralRoomImpulseResponse(
-		const ConfigurationFileParser &parser
-	) :
-		_sampleRate{ parser.asInt(propertyName(brir_config::Property::sampleRate)) } {}
-
-	int sampleRate() const {
-		return _sampleRate;
-	}
-};
-
 #include "MockConfigurationFileParser.h"
 #include <gtest/gtest.h>
 

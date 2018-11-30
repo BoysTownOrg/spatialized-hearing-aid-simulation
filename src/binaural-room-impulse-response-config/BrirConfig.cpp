@@ -9,3 +9,10 @@ std::string brir_config::propertyName(Property p) {
 		return "sample rate";
 	return "unknown";
 }
+
+BinauralRoomImpulseResponse::BinauralRoomImpulseResponse(const ConfigurationFileParser & parser) :
+	_sampleRate{ parser.asInt(propertyName(brir_config::Property::sampleRate)) } {}
+
+int BinauralRoomImpulseResponse::sampleRate() const {
+	return _sampleRate;
+}
