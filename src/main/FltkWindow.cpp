@@ -24,20 +24,20 @@ void FltkWindow::onPlay(Fl_Widget *, void *self) {
 
 FltkWindow::FltkWindow() :
 	window(800, 200, 600, 700),
-	_leftPrescriptionFilePath(250, 50, 200, 40, "Left DSL prescription file path"),
-	_rightPrescriptionFilePath(250, 100, 200, 40, "Right DSL prescription file path"),
-	_audioFilePath(250, 150, 200, 40, "Audio file path"),
+	_leftPrescriptionFilePath(250, 50, 200, 40, "left DSL prescription file path"),
+	_rightPrescriptionFilePath(250, 100, 200, 40, "right DSL prescription file path"),
+	_audioFilePath(250, 150, 200, 40, "audio file path"),
 	_brirFilePath(250, 200, 200, 40, "BRIR file path"),
-	browseLeftPrescription(460, 50, 60, 40, "Browse"),
-	browseRightPrescription(460, 100, 60, 40, "Browse"),
-	browseAudio(460, 150, 60, 40, "Browse"),
-	browseBrir(460, 200, 60, 40, "Browse"),
-	_level_dB_Spl(250, 250, 200, 40, "Level (dB SPL)"),
+	browseLeftPrescription(460, 50, 60, 40, "browse"),
+	browseRightPrescription(460, 100, 60, 40, "browse"),
+	browseAudio(460, 150, 60, 40, "browse"),
+	browseBrir(460, 200, 60, 40, "browse"),
+	_level_dB_Spl(250, 250, 200, 40, "level (dB SPL)"),
 	_attack_ms(250, 300, 200, 40, "attack (ms)"),
 	_release_ms(250, 350, 200, 40, "release (ms)"),
 	_windowSize(250, 400, 200, 40, "window size (samples)"),
 	_chunkSize(250, 450, 200, 40, "chunk size (samples)"),
-	play(250, 650, 60, 40, "Play")
+	play(250, 650, 60, 40, "play")
 {
 	window.end();
 	window.show();

@@ -3,17 +3,12 @@
 
 PortAudioDevice::PortAudioDevice(Parameters parameters)
 {
+	Pa_Initialize();
 	PaStreamParameters outputParameters;
-	outputParameters.device = getAsioDeviceIndex();
+	outputParameters.device = Pa_GetDefaultOutputDevice();
 	outputParameters.channelCount = parameters.channels.size();
 	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
-	PaAsioStreamInfo streamInfo;
-	streamInfo.size = sizeof(PaAsioStreamInfo);
-	streamInfo.version = 1;
-	streamInfo.hostApiType = paASIO;
-	streamInfo.flags = paAsioUseChannelSelectors;
-	streamInfo.channelSelectors = &parameters.channels[0];
-	outputParameters.hostApiSpecificStreamInfo = &streamInfo;
+	outputParameters.hostApiSpecificStreamInfo = nullptr;
 	lastError = Pa_OpenStream(
 		&stream,
 		nullptr,
@@ -77,4 +72,5 @@ void PortAudioDevice::stopStream() {
 
 PortAudioDevice::~PortAudioDevice() {
 	Pa_CloseStream(stream);
+	Pa_Terminate();
 }
