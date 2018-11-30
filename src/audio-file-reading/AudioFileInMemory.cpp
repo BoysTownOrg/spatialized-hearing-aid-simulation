@@ -20,18 +20,3 @@ void AudioFileInMemory::read(float ** channels, int frameCount) {
 			channels[j][i] = buffer[head++];
 		}
 }
-
-std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(std::string filePath) {
-	try {
-		auto reader = factory->make(filePath);
-		return std::make_shared<AudioFileInMemory>(*reader);
-	}
-	catch (const AudioFileInMemory::FileError &e) {
-		throw FileError{ e.what() };
-	}
-}
-
-AudioFileInMemoryFactory::AudioFileInMemoryFactory(
-	std::shared_ptr<AudioFileReaderFactory> factory
-) :
-	factory{ std::move(factory) } {}
