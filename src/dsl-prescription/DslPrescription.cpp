@@ -1,7 +1,7 @@
 #include "DslPrescription.h"
 #include <gsl/gsl>
 
-std::string DslPrescription::propertyName(Property p) {
+std::string dsl_prescription::propertyName(Property p) {
 	switch (p) {
 	case Property::crossFrequenciesHz:
 		return "cross_frequencies_Hz";
@@ -20,12 +20,17 @@ std::string DslPrescription::propertyName(Property p) {
 
 DslPrescription::DslPrescription(const ConfigurationFileParser &parser) 
 	try :
-	_crossFrequenciesHz(parser.asVector(propertyName(Property::crossFrequenciesHz))),
-	_compressionRatios(parser.asVector(propertyName(Property::compressionRatios))),
-	_kneepointGains_dB(parser.asVector(propertyName(Property::kneepointGains_dB))),
-	_kneepoints_dBSpl(parser.asVector(propertyName(Property::kneepoints_dBSpl))),
+	_crossFrequenciesHz(parser.asVector(
+		propertyName(dsl_prescription::Property::crossFrequenciesHz))),
+	_compressionRatios(parser.asVector(
+		propertyName(dsl_prescription::Property::compressionRatios))),
+	_kneepointGains_dB(parser.asVector(
+		propertyName(dsl_prescription::Property::kneepointGains_dB))),
+	_kneepoints_dBSpl(parser.asVector(
+		propertyName(dsl_prescription::Property::kneepoints_dBSpl))),
 	_broadbandOutputLimitingThresholds_dBSpl(
-		parser.asVector(propertyName(Property::broadbandOutputLimitingThresholds_dBSpl))),
+		parser.asVector(propertyName(
+			dsl_prescription::Property::broadbandOutputLimitingThresholds_dBSpl))),
 	_channels(gsl::narrow<int>(_crossFrequenciesHz.size() + 1))
 {
 	const auto channels = _crossFrequenciesHz.size() + 1;

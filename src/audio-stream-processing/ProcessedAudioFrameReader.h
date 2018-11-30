@@ -8,7 +8,6 @@
 
 #include "AudioFrameReader.h"
 #include "AudioFrameProcessor.h"
-#include <audio-stream-processing/AudioFrameReader.h>
 #include <memory>
 
 class ProcessedAudioFrameReader : public AudioFrameReader {

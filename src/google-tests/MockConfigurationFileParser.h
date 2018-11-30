@@ -10,15 +10,15 @@ class MockConfigurationFileParser : public ConfigurationFileParser {
 public:
 	void setValidSingleChannelDslProperties() {
 		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), {});
+			propertyName(dsl_prescription::Property::crossFrequenciesHz), {});
 		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::compressionRatios), { 0 });
+			propertyName(dsl_prescription::Property::compressionRatios), { 0 });
 		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::kneepointGains_dB), { 0 });
+			propertyName(dsl_prescription::Property::kneepointGains_dB), { 0 });
 		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 0 });
+			propertyName(dsl_prescription::Property::kneepoints_dBSpl), { 0 });
 		setVectorProperty(
-			DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 0 });
+			propertyName(dsl_prescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 0 });
 	}
 	void setValidBrirProperties() {
 		vectors["left impulse response"] = { 0 };

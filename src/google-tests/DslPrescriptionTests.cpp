@@ -38,15 +38,15 @@ TEST(
 {
 	MockConfigurationFileParser parser{};
 	parser.setVectorProperty(
-		DslPrescription::propertyName(DslPrescription::Property::crossFrequenciesHz), { 3 });
+		propertyName(dsl_prescription::Property::crossFrequenciesHz), { 3 });
 	parser.setVectorProperty(
-		DslPrescription::propertyName(DslPrescription::Property::compressionRatios), { 4, 4 });
+		propertyName(dsl_prescription::Property::compressionRatios), { 4, 4 });
 	parser.setVectorProperty(
-		DslPrescription::propertyName(DslPrescription::Property::kneepointGains_dB), { 5, 5 });
+		propertyName(dsl_prescription::Property::kneepointGains_dB), { 5, 5 });
 	parser.setVectorProperty(
-		DslPrescription::propertyName(DslPrescription::Property::kneepoints_dBSpl), { 6, 6 });
+		propertyName(dsl_prescription::Property::kneepoints_dBSpl), { 6, 6 });
 	parser.setVectorProperty(
-		DslPrescription::propertyName(DslPrescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 7, 7 });
+		propertyName(dsl_prescription::Property::broadbandOutputLimitingThresholds_dBSpl), { 7, 7 });
 	DslPrescription prescription{ parser };
 	EXPECT_EQ(2, prescription.channels());
 	assertEqual({ 3 }, prescription.crossFrequenciesHz());

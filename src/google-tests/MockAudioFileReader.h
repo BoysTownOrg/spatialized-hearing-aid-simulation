@@ -1,4 +1,5 @@
 #pragma once
+
 #include <audio-file-reading/AudioFileReader.h>
 #include <vector>
 
@@ -20,18 +21,15 @@ public:
 		_channels = c;
 	}
 
-	long long frames() override
-	{
+	long long frames() override {
 		return _channels == 0 ? 0 : contents.size() / _channels;
 	}
 
-	int channels() override
-	{
+	int channels() override {
 		return _channels;
 	}
 
-	void readFrames(float *x, long long n) override
-	{
+	void readFrames(float *x, long long n) override {
 		if (contents.size() == 0)
 			return;
 		std::memcpy(

@@ -6,6 +6,20 @@
 	#define DSL_PRESCRIPTION_API __declspec(dllimport)
 #endif
 
+#include <string>
+
+namespace dsl_prescription {
+	enum class Property {
+		crossFrequenciesHz,
+		compressionRatios,
+		kneepointGains_dB,
+		kneepoints_dBSpl,
+		broadbandOutputLimitingThresholds_dBSpl
+	};
+
+	DSL_PRESCRIPTION_API std::string propertyName(Property);
+}
+
 #include "ConfigurationFileParser.h"
 #include <common-includes/RuntimeError.h>
 
@@ -19,14 +33,6 @@ class DslPrescription {
 	const int _channels;
 public:
 	RUNTIME_ERROR(InvalidPrescription);
-	enum class Property {
-		crossFrequenciesHz,
-		compressionRatios,
-		kneepointGains_dB,
-		kneepoints_dBSpl,
-		broadbandOutputLimitingThresholds_dBSpl
-	};
-	DSL_PRESCRIPTION_API static std::string propertyName(Property);
 	DSL_PRESCRIPTION_API explicit DslPrescription(const ConfigurationFileParser &parser);
 	DSL_PRESCRIPTION_API int channels() const;
 	DSL_PRESCRIPTION_API const std::vector<double> &crossFrequenciesHz() const;
