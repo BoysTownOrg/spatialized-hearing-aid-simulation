@@ -10,8 +10,6 @@
 #include <signal-processing/ScalingProcessor.h>
 #include <dsl-prescription/DslPrescription.h>
 #include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
-#include <gsl/gsl>
-#include <algorithm>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory,
@@ -49,37 +47,24 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	leftChannel->add(std::make_shared<ScalingProcessor>(0.5f));
 
-	const auto brirParser = parserFactory->make(request.brirFilePath);
 
-	int brirSampleRate;
+	std::shared_ptr<BinauralRoomImpulseResponse> brir;
 	try {
-		brirSampleRate = brirParser->asInt(propertyName(brir_config::Property::sampleRate));
+		brir = std::make_shared<BinauralRoomImpulseResponse>(
+			*parserFactory->make(request.brirFilePath));
 	}
-	catch (const ConfigurationFileParser::ParseError &e) {
+	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
 		throw RequestFailure{ e.what() };
 	}
+
+	const auto brirSampleRate = brir->sampleRate();
 
 	if (brirSampleRate != audioSampleRate)
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
-	std::vector<double> leftImpulseResponse;
-	try {
-		leftImpulseResponse = brirParser->asVector(propertyName(brir_config::Property::leftImpulseResponse));
-	}
-	catch (const ConfigurationFileParser::ParseError &e) {
-		throw RequestFailure{ e.what() };
-	}
-
-	std::vector<float> leftImpulseAsFloat;
-	std::transform(
-		leftImpulseResponse.begin(), 
-		leftImpulseResponse.end(), 
-		std::back_inserter(leftImpulseAsFloat),
-		[](double x) -> float { return gsl::narrow_cast<float>(x); });
-
 	std::shared_ptr<SignalProcessor> leftFilter;
 	try {
-		leftFilter = std::make_shared<FirFilter>(leftImpulseAsFloat);
+		leftFilter = std::make_shared<FirFilter>(brir->left());
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw RequestFailure{ "bad coefficients?" };
@@ -109,24 +94,9 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	rightChannel->add(std::make_shared<ScalingProcessor>(0.5f));
 
-	std::vector<double> rightImpulseResponse;
-	try {
-		rightImpulseResponse = brirParser->asVector(propertyName(brir_config::Property::rightImpulseResponse));
-	}
-	catch (const ConfigurationFileParser::ParseError &e) {
-		throw RequestFailure{ e.what() };
-	}
-
-	std::vector<float> rightImpulseAsFloat;
-	std::transform(
-		rightImpulseResponse.begin(),
-		rightImpulseResponse.end(),
-		std::back_inserter(rightImpulseAsFloat),
-		[](double x) -> float { return gsl::narrow_cast<float>(x); });
-
 	std::shared_ptr<SignalProcessor> rightFilter;
 	try {
-		rightFilter = std::make_shared<FirFilter>(rightImpulseAsFloat);
+		rightFilter = std::make_shared<FirFilter>(brir->right());
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw RequestFailure{ "" };
