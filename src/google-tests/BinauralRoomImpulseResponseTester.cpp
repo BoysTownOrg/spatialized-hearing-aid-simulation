@@ -22,10 +22,10 @@ TEST(
 	throwsWhenParserThrows)
 {
 	try {
-		BinauralRoomImpulseResponseTester{ ErrorParser{"error."} };
-		FAIL() << "Expected BinauralRoomImpulseResponseTester::InvalidPrescription.";
+		BinauralRoomImpulseResponse{ ErrorParser{"error."} };
+		FAIL() << "Expected BinauralRoomImpulseResponse::InvalidResponse.";
 	}
-	catch (const BinauralRoomImpulseResponseTester::InvalidResponse &e) {
+	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
 		assertEqual("error.", e.what());
 	}
 }

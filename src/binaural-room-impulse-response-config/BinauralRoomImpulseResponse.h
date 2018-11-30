@@ -19,12 +19,14 @@ namespace brir_config {
 }
 
 #include <dsl-prescription/ConfigurationFileParser.h>
+#include <common-includes/RuntimeError.h>
 
 class BinauralRoomImpulseResponse {
 	std::vector<float> _left;
 	std::vector<float> _right;
 	int _sampleRate;
 public:
+	RUNTIME_ERROR(InvalidResponse);
 	BRIR_CONFIG_API explicit BinauralRoomImpulseResponse(
 		const ConfigurationFileParser &parser
 	);
