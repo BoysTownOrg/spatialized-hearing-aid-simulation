@@ -7,6 +7,7 @@
 #include <audio-device-control/AudioDevice.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
 #include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
+#include <dsl-prescription/DslPrescription.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioDeviceFactory> deviceFactory;
@@ -23,4 +24,5 @@ public:
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
+	DslPrescription makeDslPrescription(std::string filePath);
 };

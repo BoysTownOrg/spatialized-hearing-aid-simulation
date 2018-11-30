@@ -8,7 +8,6 @@
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
-#include <dsl-prescription/DslPrescription.h>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDeviceFactory> deviceFactory,
@@ -62,19 +61,13 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	}
 	leftChannel->add(leftFilter);
 
-	std::shared_ptr<DslPrescription> leftPrescription;
-	try {
-		leftPrescription = std::make_shared<DslPrescription>(
-			*parserFactory->make(request.leftDslPrescriptionFilePath));
-	}
-	catch (const DslPrescription::InvalidPrescription &e) {
-		throw RequestFailure{ e.what() };
-	}
+	const auto leftPrescription = makeDslPrescription(request.leftDslPrescriptionFilePath);
+	
 
 	std::shared_ptr<SignalProcessor> leftHearingAid;
 	try {
 		leftHearingAid = std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(*leftPrescription, forCompressor)
+			compressorFactory->make(leftPrescription, forCompressor)
 		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
@@ -94,19 +87,12 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	}
 	rightChannel->add(rightFilter);
 
-	std::shared_ptr<DslPrescription> rightPrescription;
-	try {
-		rightPrescription = std::make_shared<DslPrescription>(
-			*parserFactory->make(request.rightDslPrescriptionFilePath));
-	}
-	catch (const DslPrescription::InvalidPrescription &e) {
-		throw RequestFailure{ e.what() };
-	}
+	const auto rightPrescription = makeDslPrescription(request.rightDslPrescriptionFilePath);
 
 	std::shared_ptr<SignalProcessor> rightHearingAid;
 	try {
 		rightHearingAid = std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(*rightPrescription, forCompressor)
+			compressorFactory->make(rightPrescription, forCompressor)
 		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
@@ -144,6 +130,15 @@ BinauralRoomImpulseResponse PlayAudioModel::makeBrir(std::string filePath) {
 		return BinauralRoomImpulseResponse{ *parserFactory->make(filePath) };
 	}
 	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
+		throw RequestFailure{ e.what() };
+	}
+}
+
+DslPrescription PlayAudioModel::makeDslPrescription(std::string filePath) {
+	try {
+		return DslPrescription{ *parserFactory->make(filePath) };
+	}
+	catch (const DslPrescription::InvalidPrescription &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
