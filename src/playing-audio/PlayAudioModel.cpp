@@ -1,6 +1,7 @@
 #include "PlayAudioModel.h"
 #include <audio-device-control/AudioDeviceController.h>
 #include <audio-stream-processing/ProcessedAudioFrameReader.h>
+#include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <fir-filtering/FirFilter.h>
@@ -29,8 +30,10 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	if (reader->failed())
 		throw RequestFailure{ reader->errorMessage() };
 
-	if (reader->channels() != 2)
-		throw RequestFailure{ "Not sure if I can handle other than two channels." };
+	std::shared_ptr<AudioFrameReader> frameReader = std::make_shared<AudioFileInMemory>(*reader);
+
+	if (reader->channels() == 1)
+		frameReader = std::make_shared<ChannelCopier>(frameReader);
 
 	const auto audioSampleRate = reader->sampleRate();
 
@@ -152,8 +155,6 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.framesPerBuffer = request.chunkSize;
 	forDevice.sampleRate = audioSampleRate;
 	forDevice.channels = { 0, 1 };
-
-	const auto frameReader = std::make_shared<AudioFileInMemory>(*reader);
 
 	try {
 		AudioDeviceController controller{
