@@ -8,6 +8,7 @@
 #include <dsl-prescription/ConfigurationFileParser.h>
 #include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
 #include <dsl-prescription/DslPrescription.h>
+#include <fir-filtering/FirFilter.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel {
 	std::shared_ptr<AudioDeviceFactory> deviceFactory;
@@ -25,4 +26,5 @@ public:
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
 	DslPrescription makeDslPrescription(std::string filePath);
+	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 };

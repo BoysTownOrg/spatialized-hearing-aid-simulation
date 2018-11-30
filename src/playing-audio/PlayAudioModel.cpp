@@ -4,7 +4,6 @@
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <hearing-aid-processing/HearingAidProcessor.h>
-#include <fir-filtering/FirFilter.h>
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <signal-processing/SignalProcessingChain.h>
 #include <signal-processing/ScalingProcessor.h>
@@ -52,13 +51,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	if (brirSampleRate != audioSampleRate)
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
-	std::shared_ptr<SignalProcessor> leftFilter;
-	try {
-		leftFilter = std::make_shared<FirFilter>(brir.left());
-	}
-	catch (const FirFilter::InvalidCoefficients &) {
-		throw RequestFailure{ "bad coefficients?" };
-	}
+	const auto leftFilter = makeFilter(brir.left());
 	leftChannel->add(leftFilter);
 
 	const auto leftPrescription = makeDslPrescription(request.leftDslPrescriptionFilePath);
@@ -78,13 +71,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	rightChannel->add(std::make_shared<ScalingProcessor>(0.5f));
 
-	std::shared_ptr<SignalProcessor> rightFilter;
-	try {
-		rightFilter = std::make_shared<FirFilter>(brir.right());
-	}
-	catch (const FirFilter::InvalidCoefficients &) {
-		throw RequestFailure{ "" };
-	}
+	const auto rightFilter = makeFilter(brir.right());
 	rightChannel->add(rightFilter);
 
 	const auto rightPrescription = makeDslPrescription(request.rightDslPrescriptionFilePath);
@@ -140,5 +127,14 @@ DslPrescription PlayAudioModel::makeDslPrescription(std::string filePath) {
 	}
 	catch (const DslPrescription::InvalidPrescription &e) {
 		throw RequestFailure{ e.what() };
+	}
+}
+
+std::shared_ptr<SignalProcessor> PlayAudioModel::makeFilter(std::vector<float> b) {
+	try {
+		return std::make_shared<FirFilter>(b);
+	}
+	catch (const FirFilter::InvalidCoefficients &) {
+		throw RequestFailure{ "" };
 	}
 }
