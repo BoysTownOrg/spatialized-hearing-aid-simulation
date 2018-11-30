@@ -7,6 +7,7 @@ class FirFilterFacade {
 public:
 	explicit FirFilterFacade(std::vector<float> b) :
 		filter{ std::move(b) } {}
+
 	std::vector<float> process(std::vector<float> x) {
 		filter.process(&x[0], x.size());
 		return x;
