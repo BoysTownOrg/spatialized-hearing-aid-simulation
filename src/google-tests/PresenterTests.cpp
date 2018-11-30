@@ -354,9 +354,7 @@ static void expectRequestTransformationYieldsErrorMessage(
 	assertEqual(message, view->errorMessage());
 }
 
-class AudioPlayerModelTestCase : public ::testing::TestCase {};
-
-TEST(AudioPlayerModelTestCase, nonFloatsThrowRequestFailures) {
+TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
 	expectRequestTransformationYieldsErrorMessage(
 		[](MockView & view) {
 			view.setLevel_dB_Spl("a");
@@ -390,7 +388,7 @@ static void expectBadChunkSize(std::string size) {
 		"'" + size + "' is not a valid chunk size.");
 }
 
-TEST(AudioPlayerModelTestCase, nonPositiveIntegersThrowRequestFailures) {
+TEST(PresenterTestCase, nonPositiveIntegersThrowRequestFailures) {
 	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" }) {
 		expectBadWindowSize(s);
 		expectBadChunkSize(s);

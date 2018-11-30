@@ -31,6 +31,8 @@ public:
 	}
 };
 
+class AudioPlayerModelTestCase : public ::testing::TestCase {};
+
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto reader = std::make_shared<MockAudioFileReader>();
