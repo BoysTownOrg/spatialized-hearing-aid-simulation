@@ -12,7 +12,6 @@ void ProcessedAudioFrameReader::read(float ** channels, int frameCount) {
 	processor->process(channels, frameCount);
 }
 
-bool ProcessedAudioFrameReader::complete() const
-{
-	return false;
+bool ProcessedAudioFrameReader::complete() const {
+	return reader->complete();
 }

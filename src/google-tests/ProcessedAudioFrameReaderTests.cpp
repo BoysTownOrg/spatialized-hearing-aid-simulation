@@ -62,8 +62,8 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndPro
 
 TEST(ProcessedAudioFrameReaderTestCase, returnsCompleteWhenComplete) {
 	const auto reader = std::make_shared<MockAudioFrameReader>();
-	ProcessedAudioFrameReader copier{ reader, std::make_shared<MockAudioFrameProcessor>() };
-	EXPECT_FALSE(copier.complete());
+	ProcessedAudioFrameReader adapter{ reader, std::make_shared<MockAudioFrameProcessor>() };
+	EXPECT_FALSE(adapter.complete());
 	reader->setComplete();
-	EXPECT_TRUE(copier.complete());
+	EXPECT_TRUE(adapter.complete());
 }
