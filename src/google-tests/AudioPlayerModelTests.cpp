@@ -34,7 +34,8 @@ public:
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
-	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>(device);
 	const auto reader = std::make_shared<MockAudioFileReader>();
 	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
@@ -68,4 +69,5 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
 	EXPECT_EQ(48000, deviceFactory->parameters().sampleRate);
 	assertEqual({ 0, 1 }, deviceFactory->parameters().channels);
+	EXPECT_EQ(3, device.use_count());
 }
