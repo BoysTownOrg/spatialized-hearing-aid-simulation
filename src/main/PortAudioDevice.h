@@ -6,7 +6,8 @@
 class PortAudioDevice : public AudioDevice {
 	AudioDeviceController *controller{};
 	PaStream *stream{};
-	PaError lastError = paNoError;
+	PaError lastError{};
+	PaStreamCallbackResult callbackResult{};
 public:
 	explicit PortAudioDevice(Parameters);
 	~PortAudioDevice();
@@ -20,6 +21,7 @@ public:
 	bool failed() override;
 	std::string errorMessage() override;
 	bool streaming() const override;
+	void setCallbackResultToComplete() override;
 private:
 	PaDeviceIndex getAsioDeviceIndex() const;
 	bool isAsioDriven(PaDeviceIndex index) const;

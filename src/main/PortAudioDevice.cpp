@@ -44,10 +44,13 @@ int PortAudioDevice::audioCallback(
 	PaStreamCallbackFlags,
 	void *streamObject)
 {
-	static_cast<PortAudioDevice *>(streamObject)->controller->fillStreamBuffer(
-		output,
-		frames);
-	return paContinue;
+	const auto self = static_cast<PortAudioDevice *>(streamObject);
+	self->controller->fillStreamBuffer(output, frames);
+	return self->callbackResult;
+}
+
+void PortAudioDevice::setCallbackResultToComplete() {
+	callbackResult = paComplete;
 }
 
 bool PortAudioDevice::streaming() const {
