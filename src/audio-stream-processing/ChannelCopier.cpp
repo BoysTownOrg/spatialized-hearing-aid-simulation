@@ -10,7 +10,6 @@ inline void ChannelCopier::read(float ** channels, int frameCount)
 		channels[1][i] = channels[0][i];
 }
 
-bool ChannelCopier::complete() const
-{
-	return false;
+bool ChannelCopier::complete() const {
+	return reader->complete();
 }
