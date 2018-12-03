@@ -112,3 +112,12 @@ TEST(AudioDeviceControllerTestCase, fillStreamBufferFillsFromStream) {
 	EXPECT_EQ(&channel, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
 }
+
+TEST(AudioDeviceControllerTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto reader = std::make_shared<MockAudioFrameReader>();
+	AudioDeviceController controller{ device, reader };
+	reader->setComplete();
+	device->fillStreamBuffer(nullptr, 0);
+	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+}
