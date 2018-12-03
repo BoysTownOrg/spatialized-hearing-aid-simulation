@@ -1,5 +1,4 @@
 #include "PlayAudioModel.h"
-#include <audio-device-control/AudioDeviceController.h>
 #include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
@@ -70,7 +69,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.channels = { 0, 1 };
 
 	try {
-		AudioDeviceController controller{
+		controller = std::make_unique<AudioDeviceController>(
 			deviceFactory->make(forDevice),
 			std::make_shared<ProcessedAudioFrameReader>(
 				frameReader,
@@ -78,8 +77,8 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 					std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
 				)
 			)
-		};
-		controller.startStreaming();
+		);
+		controller->startStreaming();
 	}
 	catch (const AudioDeviceController::DeviceConnectionFailure &e) {
 		throw RequestFailure{ e.what() };
