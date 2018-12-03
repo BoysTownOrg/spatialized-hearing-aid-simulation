@@ -12,12 +12,12 @@ public:
 	explicit PlayAudioModelFacade(
 		std::shared_ptr<AudioDeviceFactory> deviceFactory =
 			std::make_shared<MockAudioDeviceFactory>(),
+		std::shared_ptr<ConfigurationFileParserFactory> parserFactory =
+			std::make_shared<MockParserFactory>(),
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory =
 			std::make_shared<MockCompressorFactory>(),
 		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
-			std::make_shared<MockAudioFileReaderFactory>(),
-		std::shared_ptr<ConfigurationFileParserFactory> parserFactory =
-			std::make_shared<MockParserFactory>()
+			std::make_shared<MockAudioFileReaderFactory>()
 	) :
 		model{ 
 			std::move(deviceFactory),
@@ -44,10 +44,10 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{ 
-		deviceFactory, 
+		deviceFactory,
+		std::make_shared<MockParserFactory>(parser),
 		compressorFactory,
-		audioFactory,
-		std::make_shared<MockParserFactory>(parser)
+		audioFactory
 	};
 	PlayAudioModel::PlayRequest request;
 	request.leftDslPrescriptionFilePath = "a";
@@ -77,10 +77,11 @@ TEST(AudioPlayerModelTestCase, playRequestDoesNotDestroyStream) {
 	parser->setValidBrirProperties();
 	PlayAudioModelFacade model{
 		std::make_shared<MockAudioDeviceFactory>(device),
-		std::make_shared<MockCompressorFactory>(),
-		std::make_shared<MockAudioFileReaderFactory>(),
 		std::make_shared<MockParserFactory>(parser)
 	};
 	model.playRequest({});
-	EXPECT_EQ(3, device.use_count());
+	auto inController = 1;
+	auto inFactory = 1;
+	auto inTest = 1;
+	EXPECT_EQ(inController + inFactory + inTest, device.use_count());
 }
