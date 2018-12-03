@@ -19,6 +19,7 @@ public:
 	void stopStream() override;
 	bool failed() override;
 	std::string errorMessage() override;
+	bool streaming() const override;
 private:
 	PaDeviceIndex getAsioDeviceIndex() const;
 	bool isAsioDriven(PaDeviceIndex index) const;

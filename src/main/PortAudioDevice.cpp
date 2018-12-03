@@ -50,6 +50,10 @@ int PortAudioDevice::audioCallback(
 	return paContinue;
 }
 
+bool PortAudioDevice::streaming() const {
+	return Pa_IsStreamActive(stream);
+}
+
 bool PortAudioDevice::failed() {
 	return lastError != paNoError;
 }
