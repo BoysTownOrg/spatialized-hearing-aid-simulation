@@ -38,11 +38,15 @@ public:
 	std::string errorMessage() override {
 		return _errorMessage;
 	}
+	void setIsStreaming() {
+		_streaming = true;
+	}
 };
 
 class MockAudioDeviceFactory : public AudioDeviceFactory {
 	AudioDevice::Parameters _parameters{};
 	std::shared_ptr<AudioDevice> device;
+	bool _makeCalled{};
 public:
 	explicit MockAudioDeviceFactory(
 		std::shared_ptr<AudioDevice> device =
@@ -51,10 +55,14 @@ public:
 		device{ std::move(device) } {}
 
 	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
+		_makeCalled = true;
 		_parameters = p;
 		return device;
 	}
 	const AudioDevice::Parameters &parameters() const {
 		return _parameters;
+	}
+	bool makeCalled() const {
+		return _makeCalled;
 	}
 };
