@@ -2,6 +2,7 @@
 
 #include "audio-stream-processing-exports.h"
 #include <audio-stream-processing/AudioFrameReader.h>
+#include <memory>
 
 class ChannelCopier : public AudioFrameReader {
 	std::shared_ptr<AudioFrameReader> reader;
