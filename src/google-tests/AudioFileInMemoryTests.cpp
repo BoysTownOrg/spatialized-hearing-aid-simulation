@@ -36,3 +36,14 @@ TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 	adapter.read(channels, 1);
 	EXPECT_EQ(4, x);
 }
+
+TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
+	MockAudioFileReader reader{ { 3, 4 } };
+	AudioFileInMemory adapter{ reader };
+	float x{};
+	float *channels[]{ &x };
+	adapter.read(channels, 1);
+	EXPECT_FALSE(adapter.complete());
+	adapter.read(channels, 1);
+	EXPECT_TRUE(adapter.complete());
+}
