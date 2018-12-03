@@ -20,6 +20,7 @@ public:
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
 	virtual bool streaming() const = 0;
+	virtual void setCallbackResultToComplete() = 0;
 };
 
 #include <memory>

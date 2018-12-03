@@ -20,3 +20,7 @@ void AudioFileInMemory::read(float ** channels, int frameCount) {
 			channels[j][i] = buffer[head++];
 		}
 }
+
+bool AudioFileInMemory::complete() const {
+	return false;
+}

@@ -17,4 +17,5 @@ public:
 		AudioFileReader &reader
 	);
 	AUDIO_FILE_READING_API void read(float ** channels, int frameCount) override;
+	AUDIO_FILE_READING_API bool complete() const override;
 };

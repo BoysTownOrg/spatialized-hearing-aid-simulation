@@ -74,5 +74,8 @@
     <ClInclude Include="MockAudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MockAudioFrameReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

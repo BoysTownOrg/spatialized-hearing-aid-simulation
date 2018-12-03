@@ -1,29 +1,8 @@
 #include "assert-utility.h"
 #include "MockAudioDevice.h"
+#include "MockAudioFrameReader.h"
 #include <audio-device-control/AudioDeviceController.h>
 #include <gtest/gtest.h>
-
-class MockAudioFrameReader : public AudioFrameReader {
-	int _frameCount{};
-	float **_channels{};
-public:
-	const float * const * channels() const {
-		return _channels;
-	}
-
-	int frameCount() const {
-		return _frameCount;
-	}
-
-	void read(float **channels, int frameCount) override {
-		_channels = channels;
-		_frameCount = frameCount;
-	}
-
-	void setComplete() {
-
-	}
-};
 
 class AudioDeviceControllerFacade {
 	AudioDeviceController controller;

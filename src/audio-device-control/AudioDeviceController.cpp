@@ -29,6 +29,8 @@ void AudioDeviceController::throwIfStreamingError() {
 
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
 	reader->read(static_cast<float **>(channels), frameCount);
+	if (reader->complete())
+		device->setCallbackResultToComplete();
 }
 
 bool AudioDeviceController::active() {

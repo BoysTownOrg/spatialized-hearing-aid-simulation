@@ -42,6 +42,9 @@ public:
 	bool setCallbackResultToCompleteCalled() const {
 		return _setCallbackResultToCompleteCalled;
 	}
+	void setCallbackResultToComplete() override {
+		_setCallbackResultToCompleteCalled = true;
+	}
 };
 
 class MockAudioDeviceFactory : public AudioDeviceFactory {

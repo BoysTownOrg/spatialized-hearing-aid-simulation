@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="MockAudioDevice.h" />
     <ClInclude Include="MockAudioFileReader.h" />
+    <ClInclude Include="MockAudioFrameReader.h" />
     <ClInclude Include="MockConfigurationFileParser.h" />
     <ClInclude Include="MockFilterbankCompressor.h" />
     <ClInclude Include="MockSignalProcessor.h" />

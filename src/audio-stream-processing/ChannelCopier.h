@@ -11,5 +11,6 @@ public:
 		std::shared_ptr<AudioFrameReader>
 	);
 	AUDIO_STREAM_PROCESSING_API void read(float ** channels, int frameCount) override;
+	AUDIO_STREAM_PROCESSING_API bool complete() const override;
 };
 
