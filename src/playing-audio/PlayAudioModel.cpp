@@ -22,6 +22,8 @@ PlayAudioModel::PlayAudioModel(
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
+	if (controller->active())
+		return;
 	const auto reader = makeAudioFileReader(request.audioFilePath);
 	
 	std::shared_ptr<AudioFrameReader> frameReader = std::make_shared<AudioFileInMemory>(*reader);

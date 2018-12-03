@@ -19,6 +19,7 @@ public:
 	virtual void stopStream() = 0;
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
+	virtual bool streaming() const = 0;
 };
 
 #include <memory>

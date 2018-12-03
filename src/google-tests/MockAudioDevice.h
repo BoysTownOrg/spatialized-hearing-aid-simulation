@@ -14,7 +14,7 @@ public:
 	void setController(AudioDeviceController *c) override {
 		_controller = c;
 	}
-	bool streaming() const {
+	bool streaming() const override {
 		return _streaming;
 	}
 	void startStream() override {
