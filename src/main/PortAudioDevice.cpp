@@ -20,22 +20,6 @@ PortAudioDevice::PortAudioDevice(Parameters parameters)
 		this);
 }
 
-PaDeviceIndex PortAudioDevice::getAsioDeviceIndex() const
-{
-	const auto deviceCount = Pa_GetDeviceCount();
-	for (PaDeviceIndex index = 0; index < deviceCount; ++index)
-		if (isAsioDriven(index))
-			return index;
-	return -1;
-}
-
-bool PortAudioDevice::isAsioDriven(PaDeviceIndex index) const
-{
-	return
-		Pa_GetDeviceInfo(index)->hostApi ==
-		Pa_HostApiTypeIdToHostApiIndex(paASIO);
-}
-
 int PortAudioDevice::audioCallback(
 	const void *,
 	void *output,

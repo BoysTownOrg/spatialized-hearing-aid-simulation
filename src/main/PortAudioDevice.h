@@ -23,8 +23,6 @@ public:
 	bool streaming() const override;
 	void setCallbackResultToComplete() override;
 private:
-	PaDeviceIndex getAsioDeviceIndex() const;
-	bool isAsioDriven(PaDeviceIndex index) const;
 	static int audioCallback(
 		const void *,
 		void *,
