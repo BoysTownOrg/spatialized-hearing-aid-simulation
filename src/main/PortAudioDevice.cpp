@@ -1,9 +1,14 @@
 #include "PortAudioDevice.h"
-#include <pa_asio.h>
 
-PortAudioDevice::PortAudioDevice(Parameters parameters)
-{
+PortAudioInitializer::PortAudioInitializer() {
 	Pa_Initialize();
+}
+
+PortAudioInitializer::~PortAudioInitializer() {
+	Pa_Terminate();
+}
+
+PortAudioDevice::PortAudioDevice(Parameters parameters) {
 	PaStreamParameters outputParameters;
 	outputParameters.device = Pa_GetDefaultOutputDevice();
 	outputParameters.channelCount = parameters.channels.size();
@@ -63,5 +68,4 @@ void PortAudioDevice::stopStream() {
 
 PortAudioDevice::~PortAudioDevice() {
 	Pa_CloseStream(stream);
-	Pa_Terminate();
 }

@@ -3,7 +3,14 @@
 #include <audio-device-control/AudioDeviceController.h>
 #include <portaudio.h>
 
+class PortAudioInitializer {
+public:
+	PortAudioInitializer();
+	~PortAudioInitializer();
+};
+
 class PortAudioDevice : public AudioDevice {
+	PortAudioInitializer initializer{};
 	AudioDeviceController *controller{};
 	PaStream *stream{};
 	PaError lastError{};
