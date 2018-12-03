@@ -22,5 +22,5 @@ void AudioFileInMemory::read(float ** channels, int frameCount) {
 }
 
 bool AudioFileInMemory::complete() const {
-	return false;
+	return head == buffer.size();
 }
