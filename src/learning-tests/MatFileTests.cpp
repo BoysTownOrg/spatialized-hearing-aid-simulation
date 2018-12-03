@@ -12,6 +12,9 @@ public:
 	mxClassID classId() const {
 		return mxGetClassID(data);
 	}
+	bool isStruct() const {
+		return mxIsStruct(data);
+	}
 	int fieldCount() const {
 		return mxGetNumberOfFields(data);
 	}
@@ -34,8 +37,8 @@ public:
 	MatlabArray getVariable(std::string name) {
 		return MatlabArray{ matGetVariable(file, name.c_str()) };
 	}
-	const MATFile *get() const {
-		return file;
+	bool failed() const {
+		return file == nullptr;
 	}
 };
 
@@ -43,13 +46,14 @@ class MatFileTestCase : public ::testing::TestCase {};
 
 TEST(MatFileTestCase, canOpen) {
 	MatFileReader reader{ "../example.mat" };
-	EXPECT_FALSE(reader.get() == nullptr);
+	EXPECT_FALSE(reader.failed());
 }
 
 TEST(MatFileTestCase, getVariable) {
 	MatFileReader reader{ "../example.mat" };
 	const auto s = reader.getVariable("s");
 	EXPECT_FALSE(s.get() == nullptr);
+	EXPECT_TRUE(s.isStruct());
 	EXPECT_EQ(mxSTRUCT_CLASS, s.classId());
 	EXPECT_EQ(2, s.fieldCount());
 	const auto a = s.getField(0, "a");
@@ -65,4 +69,5 @@ TEST(MatFileTestCase, getPr) {
 	const auto contents = mxGetPr(b);
 	EXPECT_EQ(2, contents[0]);
 	EXPECT_EQ(3, contents[1]);
+	EXPECT_EQ(2, mxGetNumberOfElements(b));
 }
