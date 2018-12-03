@@ -10,7 +10,7 @@ PortAudioInitializer::~PortAudioInitializer() {
 
 PortAudioDevice::PortAudioDevice(Parameters parameters) {
 	PaStreamParameters outputParameters;
-	outputParameters.device = Pa_GetDefaultOutputDevice();
+	outputParameters.device = Pa_GetHostApiInfo(Pa_HostApiTypeIdToHostApiIndex(paASIO))->defaultOutputDevice;
 	outputParameters.channelCount = parameters.channels.size();
 	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
 	outputParameters.hostApiSpecificStreamInfo = nullptr;
