@@ -22,7 +22,7 @@ PlayAudioModel::PlayAudioModel(
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
-	if (controller->active())
+	if (controller && controller->active())
 		return;
 	const auto reader = makeAudioFileReader(request.audioFilePath);
 	

@@ -88,7 +88,6 @@ TEST(AudioPlayerModelTestCase, playRequestDoesNotDestroyStream) {
 
 TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	device->setIsStreaming();
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>(device);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
@@ -98,5 +97,6 @@ TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) 
 		std::make_shared<MockParserFactory>(parser)
 	};
 	model.playRequest({});
-	EXPECT_FALSE(deviceFactory->makeCalled());
+	model.playRequest({});
+	EXPECT_EQ(1, deviceFactory->makeCalls());
 }
