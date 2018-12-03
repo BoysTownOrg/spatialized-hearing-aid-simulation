@@ -1,5 +1,6 @@
 #include "assert-utility.h"
 #include "MockAudioFileReader.h"
+#include "MockAudioFrameReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <gtest/gtest.h>
@@ -17,4 +18,12 @@ TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
 	copier.read(x, 3);
 	assertEqual({ 1, 2, 3 }, left);
 	assertEqual({ 1, 2, 3 }, right);
+}
+
+TEST(ChannelCopierTestCase, returnsCompleteWhenComplete) {
+	const auto reader = std::make_shared<MockAudioFrameReader>();
+	ChannelCopier copier{ reader };
+	EXPECT_FALSE(copier.complete());
+	reader->setComplete();
+	EXPECT_TRUE(copier.complete());
 }
