@@ -19,6 +19,10 @@ public:
 		_channels = channels;
 		_frameCount = frameCount;
 	}
+
+	void setComplete() {
+
+	}
 };
 
 class AudioDeviceControllerFacade {

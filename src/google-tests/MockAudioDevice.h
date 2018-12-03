@@ -7,6 +7,7 @@ class MockAudioDevice : public AudioDevice {
 	AudioDeviceController *_controller{};
 	bool _streaming{};
 	bool _failed{};
+	bool _setCallbackResultToCompleteCalled{};
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -37,6 +38,9 @@ public:
 	}
 	std::string errorMessage() override {
 		return _errorMessage;
+	}
+	bool setCallbackResultToCompleteCalled() const {
+		return _setCallbackResultToCompleteCalled;
 	}
 };
 
