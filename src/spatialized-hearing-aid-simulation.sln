@@ -60,7 +60,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dsl-prescription", "dsl-pre
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "binaural-room-impulse-response-config", "binaural-room-impulse-response-config\binaural-room-impulse-response-config.vcxproj", "{27FD3D17-8E94-4152-B8AF-E40A34C3414F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fir-filtering-profiling", "fir-filtering-profiling\fir-filtering-profiling.vcxproj", "{93B0C687-F972-4784-86FD-7B639A1D114B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -164,6 +172,14 @@ Global
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.Build.0 = Release|x64
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.ActiveCfg = Release|Win32
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.Build.0 = Release|Win32
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x64.ActiveCfg = Debug|x64
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x64.Build.0 = Debug|x64
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x86.ActiveCfg = Debug|Win32
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x86.Build.0 = Debug|Win32
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x64.ActiveCfg = Release|x64
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x64.Build.0 = Release|x64
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x86.ActiveCfg = Release|Win32
+		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
