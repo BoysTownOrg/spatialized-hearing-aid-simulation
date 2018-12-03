@@ -36,12 +36,11 @@ class AudioPlayerModelTestCase : public ::testing::TestCase {};
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
 	const auto reader = std::make_shared<MockAudioFileReader>();
-	reader->setChannels(2);
 	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
-	parser->setIntProperty("sample rate", 48000);
+	parser->setIntProperty(propertyName(brir_config::Property::sampleRate), 48000);
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{ 
