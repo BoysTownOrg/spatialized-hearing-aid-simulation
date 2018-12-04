@@ -1,5 +1,4 @@
 #include "PlayAudioModel.h"
-#include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <signal-processing/ChannelProcessingGroup.h>
@@ -31,13 +30,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 		return;
 
 	const auto reader = makeAudioFileReader(request.audioFilePath);
-	
-	frameReader = std::make_shared<AudioFileInMemory>(*reader);
-	if (reader->channels() == 1)
-		frameReader = std::make_shared<ChannelCopier>(frameReader);
-
 	const auto brir = makeBrir(request.brirFilePath);
-
 	if (brir.sampleRate() != reader->sampleRate())
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
@@ -76,8 +69,8 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.sampleRate = reader->sampleRate();
 	forDevice.channels = { 0, 1 };
 
-	frameReader = std::make_shared<ProcessedAudioFrameReader>(
-		frameReader,
+	streamProcessor = std::make_shared<ProcessedAudioFrameReader>(
+		makeAudioFrameReader(reader),
 		std::make_shared<ChannelProcessingGroup>(
 			std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
 		)
@@ -90,8 +83,8 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
-	frameReader->read(static_cast<float **>(channels), frameCount);
-	if (frameReader->complete())
+	streamProcessor->read(static_cast<float **>(channels), frameCount);
+	if (streamProcessor->complete())
 		device->setCallbackResultToComplete();
 }
 
@@ -141,4 +134,14 @@ std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string
 	if (reader->failed())
 		throw RequestFailure{ reader->errorMessage() };
 	return reader;
+}
+
+std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(
+	std::shared_ptr<AudioFileReader> reader
+) {
+	const auto inMemory = std::make_shared<AudioFileInMemory>(*reader);
+	if (reader->channels() == 1)
+		return std::make_shared<ChannelCopier>(inMemory);
+	else
+		return inMemory;
 }

@@ -2,7 +2,7 @@
 
 #include "playing-audio-exports.h"
 #include "AudioDevice.h"
-#include <audio-stream-processing/AudioFrameReader.h>
+#include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <presentation/SpatializedHearingAidSimulationModel.h>
 #include <audio-file-reading/AudioFileReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
@@ -17,7 +17,7 @@ class PlayAudioModel : public SpatializedHearingAidSimulationModel, public Audio
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory;
 	std::shared_ptr<ConfigurationFileParserFactory> parserFactory;
-	std::shared_ptr<AudioFrameReader> frameReader{};
+	std::shared_ptr<ProcessedAudioFrameReader> streamProcessor{};
 public:
 	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API PlayAudioModel(
@@ -37,4 +37,5 @@ private:
 		FilterbankCompressor::Parameters
 	);
 	std::shared_ptr<AudioFileReader> makeAudioFileReader(std::string filePath);
+	std::shared_ptr<AudioFrameReader> makeAudioFrameReader(std::shared_ptr<AudioFileReader>);
 };
