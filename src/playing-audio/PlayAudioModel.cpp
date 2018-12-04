@@ -25,6 +25,8 @@ PlayAudioModel::PlayAudioModel(
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
+	if (device->streaming())
+		return;
 	const auto reader = makeAudioFileReader(request.audioFilePath);
 	
 	frameReader = std::make_shared<AudioFileInMemory>(*reader);
@@ -77,8 +79,11 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 			std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
 		)
 	);
+	device->closeStream();
 	device->openStream(forDevice);
 	device->startStream();
+	if (device->failed())
+		throw RequestFailure{ device->errorMessage() };
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
