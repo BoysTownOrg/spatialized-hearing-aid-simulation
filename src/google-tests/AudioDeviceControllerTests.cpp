@@ -58,6 +58,13 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 	EXPECT_FALSE(device->streaming());
 }
 
+TEST(AudioDeviceControllerTestCase, openNewStreamFirstClosesStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	AudioDeviceControllerFacade controller{ device };
+	controller.openStream();
+	assertEqual("close open ", device->streamLog());
+}
+
 #include <functional>
 
 static void assertFailedDeviceThrowsStreamingError(
