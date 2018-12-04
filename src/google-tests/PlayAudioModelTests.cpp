@@ -165,6 +165,13 @@ TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenC
 	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
 }
 
+TEST(AudioPlayerModelTestCase, playRequestSetsCallbackResultToContinue) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto model = PlayAudioModelFacade::withValidParser(device);
+	model->playRequest({});
+	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
+}
+
 /*
 TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
