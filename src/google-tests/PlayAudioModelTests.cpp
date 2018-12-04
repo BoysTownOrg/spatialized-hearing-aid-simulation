@@ -68,7 +68,7 @@ static void assertDeviceFailureOnConstruction(
 
 TEST(
 	AudioPlayerModelTestCase,
-	constructorThrowsDeviceFailureWhenDeviceError)
+	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize)
 {
 	const auto device = std::make_shared<MockAudioDevice>();
 	device->setFailedTrue();
@@ -85,9 +85,9 @@ TEST(
 	assertDeviceFailureOnConstruction(device, "This device does not support ASIO.");
 }
 
-TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
+TEST(AudioPlayerModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	auto model = PlayAudioModelFacade::withValidParser(device);
+	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
 	assertEqual("close open start ", device->streamLog());
 }
@@ -98,20 +98,20 @@ TEST(
 {
 	try {
 		const auto device = std::make_shared<MockAudioDevice>();
-		auto model = PlayAudioModelFacade::withValidParser(device);
+		const auto model = PlayAudioModelFacade::withValidParser(device);
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
 		model->playRequest({});
-		FAIL() << "Expected AudioDeviceController::StreamError";
+		FAIL() << "Expected PlayAudioModel::RequestFailure";
 	}
 	catch (const PlayAudioModel::RequestFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }
 
-TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
+TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	auto model = PlayAudioModelFacade::withValidParser(device);
+	const auto model = PlayAudioModelFacade::withValidParser(device);
 	device->setStreaming();
 	model->playRequest({});
 	EXPECT_TRUE(device->streamLog().empty());
