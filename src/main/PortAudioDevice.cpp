@@ -34,6 +34,10 @@ int PortAudioDevice::audioCallback(
 	return self->callbackResult;
 }
 
+bool PortAudioDevice::supportsAsio() {
+	return Pa_HostApiTypeIdToHostApiIndex(paASIO) != paHostApiNotFound;
+}
+
 void PortAudioDevice::closeStream() {
 	lastError = Pa_CloseStream(stream);
 }

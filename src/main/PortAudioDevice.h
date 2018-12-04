@@ -24,6 +24,7 @@ public:
 	void setCallbackResultToComplete() override;
 	void openStream(StreamParameters parameters) override;
 	void closeStream() override;
+	bool supportsAsio() override;
 private:
 	static int audioCallback(
 		const void *,
