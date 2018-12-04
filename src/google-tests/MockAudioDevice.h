@@ -62,4 +62,7 @@ public:
 	const StreamParameters &streamParameters() const {
 		return _streamParameters;
 	}
+	void setSupportsAsioFalse() {
+
+	}
 };
