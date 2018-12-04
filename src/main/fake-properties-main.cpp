@@ -8,9 +8,9 @@
 
 int main() {
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
-	parser->setIntProperty(propertyName(brir_config::Property::sampleRate), 44100);
-	parser->setVectorProperty(propertyName(brir_config::Property::leftImpulseResponse), { 1 });
-	parser->setVectorProperty(propertyName(brir_config::Property::rightImpulseResponse), { 1 });
+	parser->setIntProperty(propertyName(binaural_room_impulse_response::Property::sampleRate), 44100);
+	parser->setVectorProperty(propertyName(binaural_room_impulse_response::Property::leftImpulseResponse), { 1 });
+	parser->setVectorProperty(propertyName(binaural_room_impulse_response::Property::rightImpulseResponse), { 1 });
 	parser->setVectorProperty(propertyName(dsl_prescription::Property::crossFrequenciesHz), 
 		{
 			317.16,

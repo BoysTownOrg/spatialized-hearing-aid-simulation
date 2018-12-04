@@ -1,21 +1,21 @@
 #pragma once
 
-#ifdef BRIR_CONFIG_EXPORTS
-#define BRIR_CONFIG_API __declspec(dllexport)
+#ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
+#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
 #else
-#define BRIR_CONFIG_API __declspec(dllimport)
+#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
 #endif
 
 #include <string>
 
-namespace brir_config {
+namespace binaural_room_impulse_response {
 	enum class Property {
 		leftImpulseResponse,
 		rightImpulseResponse,
 		sampleRate
 	};
 
-	BRIR_CONFIG_API std::string propertyName(Property);
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API std::string propertyName(Property);
 }
 
 #include <dsl-prescription/ConfigurationFileParser.h>
@@ -27,11 +27,11 @@ class BinauralRoomImpulseResponse {
 	int _sampleRate;
 public:
 	RUNTIME_ERROR(InvalidResponse);
-	BRIR_CONFIG_API explicit BinauralRoomImpulseResponse(
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API explicit BinauralRoomImpulseResponse(
 		const ConfigurationFileParser &parser
 	);
-	BRIR_CONFIG_API const std::vector<float> &left() const;
-	BRIR_CONFIG_API const std::vector<float> &right() const;
-	BRIR_CONFIG_API int sampleRate() const;
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API const std::vector<float> &left() const;
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API const std::vector<float> &right() const;
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API int sampleRate() const;
 };
 

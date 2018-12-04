@@ -108,7 +108,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
-	parser->setIntProperty(propertyName(brir_config::Property::sampleRate), 48000);
+	parser->setIntProperty(propertyName(binaural_room_impulse_response::Property::sampleRate), 48000);
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{

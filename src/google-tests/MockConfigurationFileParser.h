@@ -19,7 +19,7 @@ public:
 	}
 
 	void setValidBrirProperties() {
-		using brir_config::Property;
+		using binaural_room_impulse_response::Property;
 		vectors[propertyName(Property::leftImpulseResponse)] = { 0 };
 		vectors[propertyName(Property::rightImpulseResponse)] = { 0 };
 		ints[propertyName(Property::sampleRate)] = 0;

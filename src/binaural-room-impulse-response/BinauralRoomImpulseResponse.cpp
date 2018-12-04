@@ -2,7 +2,7 @@
 #include <gsl/gsl>
 #include <algorithm>
 
-std::string brir_config::propertyName(Property p) {
+std::string binaural_room_impulse_response::propertyName(Property p) {
 	if (p == Property::leftImpulseResponse)
 		return "left impulse response";
 	if (p == Property::rightImpulseResponse)
@@ -24,9 +24,9 @@ static std::vector<float> transformToFloat(std::vector<double> v) {
 
 BinauralRoomImpulseResponse::BinauralRoomImpulseResponse(const ConfigurationFileParser & parser) 
 try :
-	_left{ transformToFloat(parser.asVector(propertyName(brir_config::Property::leftImpulseResponse))) },
-	_right{ transformToFloat(parser.asVector(propertyName(brir_config::Property::rightImpulseResponse))) },
-	_sampleRate{ parser.asInt(propertyName(brir_config::Property::sampleRate)) } {}
+	_left{ transformToFloat(parser.asVector(propertyName(binaural_room_impulse_response::Property::leftImpulseResponse))) },
+	_right{ transformToFloat(parser.asVector(propertyName(binaural_room_impulse_response::Property::rightImpulseResponse))) },
+	_sampleRate{ parser.asInt(propertyName(binaural_room_impulse_response::Property::sampleRate)) } {}
 catch (const ConfigurationFileParser::ParseError &e) {
 	throw InvalidResponse{ e.what() };
 }
