@@ -9,12 +9,12 @@
 #include <fir-filtering/FirFilter.h>
 
 PlayAudioModel::PlayAudioModel(
-	std::shared_ptr<AudioDeviceFactory> deviceFactory,
+	std::shared_ptr<AudioDevice> device,
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
 	std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 ) :
-	deviceFactory{ std::move(deviceFactory) },
+	device{ std::move(device) },
 	compressorFactory{ std::move(compressorFactory) },
 	audioFileFactory{ std::move(audioFileFactory) },
 	parserFactory{ std::move(parserFactory) }
@@ -72,7 +72,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 
 	try {
 		controller = std::make_unique<AudioDeviceController>(
-			deviceFactory->make(forDevice),
+			device,
 			std::make_shared<ProcessedAudioFrameReader>(
 				frameReader,
 				std::make_shared<ChannelProcessingGroup>(
@@ -80,6 +80,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 				)
 			)
 		);
+		controller->openStream(forDevice);
 		controller->startStreaming();
 	}
 	catch (const AudioDeviceController::DeviceConnectionFailure &e) {

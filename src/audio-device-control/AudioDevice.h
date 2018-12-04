@@ -24,11 +24,3 @@ public:
 	virtual void openStream(StreamParameters) = 0;
 	virtual void closeStream() = 0;
 };
-
-#include <memory>
-
-class AudioDeviceFactory {
-public:
-	INTERFACE_OPERATIONS(AudioDeviceFactory);
-	virtual std::shared_ptr<AudioDevice> make(AudioDevice::StreamParameters) = 0;
-};

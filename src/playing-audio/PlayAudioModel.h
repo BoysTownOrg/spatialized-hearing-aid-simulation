@@ -12,14 +12,14 @@
 #include <signal-processing/SignalProcessor.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel {
-	std::shared_ptr<AudioDeviceFactory> deviceFactory;
+	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory;
 	std::shared_ptr<ConfigurationFileParserFactory> parserFactory;
 	std::unique_ptr<AudioDeviceController> controller{};
 public:
 	PLAYING_AUDIO_API PlayAudioModel(
-		std::shared_ptr<AudioDeviceFactory> deviceFactory,
+		std::shared_ptr<AudioDevice> device,
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
 		std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory

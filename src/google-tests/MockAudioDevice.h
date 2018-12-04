@@ -61,27 +61,3 @@ public:
 		return _streamParameters;
 	}
 };
-
-class MockAudioDeviceFactory : public AudioDeviceFactory {
-	AudioDevice::StreamParameters _parameters{};
-	std::shared_ptr<AudioDevice> device;
-	int _makeCalls{};
-public:
-	explicit MockAudioDeviceFactory(
-		std::shared_ptr<AudioDevice> device =
-		std::make_shared<MockAudioDevice>()
-	) :
-		device{ std::move(device) } {}
-
-	std::shared_ptr<AudioDevice> make(AudioDevice::StreamParameters p) override {
-		++_makeCalls;
-		_parameters = p;
-		return device;
-	}
-	const AudioDevice::StreamParameters &parameters() const {
-		return _parameters;
-	}
-	int makeCalls() const {
-		return _makeCalls;
-	}
-};

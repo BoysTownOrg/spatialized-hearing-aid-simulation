@@ -10,8 +10,8 @@ class PlayAudioModelFacade {
 	PlayAudioModel model;
 public:
 	explicit PlayAudioModelFacade(
-		std::shared_ptr<AudioDeviceFactory> deviceFactory =
-			std::make_shared<MockAudioDeviceFactory>(),
+		std::shared_ptr<AudioDevice> device =
+			std::make_shared<MockAudioDevice>(),
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory =
 			std::make_shared<MockParserFactory>(),
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory =
@@ -20,7 +20,7 @@ public:
 			std::make_shared<MockAudioFileReaderFactory>()
 	) :
 		model{ 
-			std::move(deviceFactory),
+			std::move(device),
 			std::move(compressorFactory),
 			std::move(audioFileFactory),
 			std::move(parserFactory)
@@ -34,7 +34,7 @@ public:
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
-	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>();
+	const auto device = std::make_shared<MockAudioDevice>();
 	const auto reader = std::make_shared<MockAudioFileReader>();
 	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
@@ -44,7 +44,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
 	PlayAudioModelFacade model{ 
-		deviceFactory,
+		device,
 		std::make_shared<MockParserFactory>(parser),
 		compressorFactory,
 		audioFactory
@@ -65,9 +65,9 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	EXPECT_EQ(3, compressorFactory->parameters().release_ms);
 	EXPECT_EQ(4, compressorFactory->parameters().windowSize);
 	EXPECT_EQ(5, compressorFactory->parameters().chunkSize);
-	EXPECT_EQ(5, deviceFactory->parameters().framesPerBuffer);
-	EXPECT_EQ(48000, deviceFactory->parameters().sampleRate);
-	assertEqual({ 0, 1 }, deviceFactory->parameters().channels);
+	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
+	EXPECT_EQ(48000, device->streamParameters().sampleRate);
+	assertEqual({ 0, 1 }, device->streamParameters().channels);
 }
 
 TEST(AudioPlayerModelTestCase, playRequestDoesNotDestroyStream) {
@@ -76,7 +76,7 @@ TEST(AudioPlayerModelTestCase, playRequestDoesNotDestroyStream) {
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
 	PlayAudioModelFacade model{
-		std::make_shared<MockAudioDeviceFactory>(device),
+		device,
 		std::make_shared<MockParserFactory>(parser)
 	};
 	model.playRequest({});
@@ -88,15 +88,14 @@ TEST(AudioPlayerModelTestCase, playRequestDoesNotDestroyStream) {
 
 TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto deviceFactory = std::make_shared<MockAudioDeviceFactory>(device);
 	const auto parser = std::make_shared<MockConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
 	PlayAudioModelFacade model{
-		deviceFactory,
+		device,
 		std::make_shared<MockParserFactory>(parser)
 	};
 	model.playRequest({});
 	model.playRequest({});
-	EXPECT_EQ(1, deviceFactory->makeCalls());
+	assertEqual("close open ", device->streamLog());
 }
