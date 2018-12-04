@@ -65,7 +65,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 			makeDslPrescription(request.rightDslPrescriptionFilePath),
 			forCompressor));
 
-	AudioDevice::Parameters forDevice;
+	AudioDevice::StreamParameters forDevice;
 	forDevice.framesPerBuffer = request.chunkSize;
 	forDevice.sampleRate = reader->sampleRate();
 	forDevice.channels = { 0, 1 };

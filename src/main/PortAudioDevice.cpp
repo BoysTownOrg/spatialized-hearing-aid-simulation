@@ -4,7 +4,7 @@ PortAudioDevice::PortAudioDevice() {
 	lastError = Pa_Initialize();
 }
 
-void PortAudioDevice::openStream(Parameters parameters) {
+void PortAudioDevice::openStream(StreamParameters parameters) {
 	PaStreamParameters outputParameters;
 	outputParameters.device = Pa_GetHostApiInfo(Pa_HostApiTypeIdToHostApiIndex(paASIO))->defaultOutputDevice;
 	outputParameters.channelCount = parameters.channels.size();

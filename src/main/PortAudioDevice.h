@@ -22,7 +22,7 @@ public:
 	std::string errorMessage() override;
 	bool streaming() const override;
 	void setCallbackResultToComplete() override;
-	void openStream(Parameters parameters) override;
+	void openStream(StreamParameters parameters) override;
 	void closeStream() override;
 private:
 	static int audioCallback(
@@ -35,7 +35,7 @@ private:
 };
 
 class PortAudioDeviceFactory : public AudioDeviceFactory {
-	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) override {
+	std::shared_ptr<AudioDevice> make(AudioDevice::StreamParameters) override {
 		return std::make_shared<PortAudioDevice>();
 	}
 };

@@ -24,8 +24,8 @@ public:
 		controller.stopStreaming();
 	}
 
-	void openStream() {
-		controller.openStream();
+	void openStream(AudioDevice::StreamParameters p) {
+		controller.openStream(p);
 	}
 };
 
@@ -65,14 +65,14 @@ TEST(AudioDeviceControllerTestCase, startAndStopStreaming) {
 TEST(AudioDeviceControllerTestCase, openNewStreamFirstClosesStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	AudioDeviceControllerFacade controller{ device };
-	controller.openStream();
+	controller.openStream({});
 	assertEqual("close open ", device->streamLog());
 }
 
 TEST(AudioDeviceControllerTestCase, openStreamPassesStreamParameters) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	AudioDeviceControllerFacade controller{ device };
-	AudioDevice::Parameters p;
+	AudioDevice::StreamParameters p;
 	p.channels = { 1 };
 	p.framesPerBuffer = 2;
 	p.sampleRate = 3;
@@ -105,7 +105,7 @@ TEST(
 	startAndStopThrowStreamingErrorWhenDeviceFailure)
 {
 	assertFailedDeviceThrowsStreamingError(
-		[](AudioDeviceControllerFacade &c) { return c.openStream(); });
+		[](AudioDeviceControllerFacade &c) { return c.openStream({}); });
 	assertFailedDeviceThrowsStreamingError(
 		[](AudioDeviceControllerFacade &c) { return c.startStreaming(); });
 	assertFailedDeviceThrowsStreamingError(

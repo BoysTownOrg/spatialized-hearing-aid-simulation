@@ -37,8 +37,8 @@ bool AudioDeviceController::active() {
 	return device->streaming();
 }
 
-void AudioDeviceController::openStream() {
+void AudioDeviceController::openStream(AudioDevice::StreamParameters p) {
 	device->closeStream();
-	device->openStream();
+	device->openStream(p);
 	throwIfStreamingError();
 }

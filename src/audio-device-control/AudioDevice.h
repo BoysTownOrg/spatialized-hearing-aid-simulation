@@ -8,7 +8,7 @@ class AudioDeviceController;
 
 class AudioDevice {
 public:
-	struct Parameters {
+	struct StreamParameters {
 		std::vector<int> channels;
 		unsigned long framesPerBuffer;
 		int sampleRate;
@@ -21,7 +21,7 @@ public:
 	virtual std::string errorMessage() = 0;
 	virtual bool streaming() const = 0;
 	virtual void setCallbackResultToComplete() = 0;
-	virtual void openStream() = 0;
+	virtual void openStream(StreamParameters) = 0;
 	virtual void closeStream() = 0;
 };
 
@@ -30,5 +30,5 @@ public:
 class AudioDeviceFactory {
 public:
 	INTERFACE_OPERATIONS(AudioDeviceFactory);
-	virtual std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) = 0;
+	virtual std::shared_ptr<AudioDevice> make(AudioDevice::StreamParameters) = 0;
 };

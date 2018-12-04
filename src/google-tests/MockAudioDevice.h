@@ -5,6 +5,7 @@
 class MockAudioDevice : public AudioDevice {
 	std::string _errorMessage{};
 	std::string _streamLog{};
+	StreamParameters _streamParameters{};
 	AudioDeviceController *_controller{};
 	bool _streaming{};
 	bool _failed{};
@@ -49,16 +50,20 @@ public:
 	std::string streamLog() const {
 		return _streamLog;
 	}
-	void openStream() override {
+	void openStream(StreamParameters p) override {
+		_streamParameters = p;
 		_streamLog += "open ";
 	}
 	void closeStream() override {
 		_streamLog += "close ";
 	}
+	const StreamParameters &streamParameters() const {
+		return _streamParameters;
+	}
 };
 
 class MockAudioDeviceFactory : public AudioDeviceFactory {
-	AudioDevice::Parameters _parameters{};
+	AudioDevice::StreamParameters _parameters{};
 	std::shared_ptr<AudioDevice> device;
 	int _makeCalls{};
 public:
@@ -68,12 +73,12 @@ public:
 	) :
 		device{ std::move(device) } {}
 
-	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
+	std::shared_ptr<AudioDevice> make(AudioDevice::StreamParameters p) override {
 		++_makeCalls;
 		_parameters = p;
 		return device;
 	}
-	const AudioDevice::Parameters &parameters() const {
+	const AudioDevice::StreamParameters &parameters() const {
 		return _parameters;
 	}
 	int makeCalls() const {
