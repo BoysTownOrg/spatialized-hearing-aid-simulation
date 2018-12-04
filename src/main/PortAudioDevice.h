@@ -1,10 +1,10 @@
 #pragma once
 
-#include <playing-audio/PlayAudioModel.h>
+#include <playing-audio/AudioDevice.h>
 #include <portaudio.h>
 
 class PortAudioDevice : public AudioDevice {
-	PlayAudioModel *controller{};
+	AudioDeviceController *controller{};
 	PaStream *stream{};
 	PaError lastError{};
 	PaStreamCallbackResult callbackResult{};
@@ -15,7 +15,7 @@ public:
 	PortAudioDevice(PortAudioDevice &&) = delete;
 	PortAudioDevice &operator=(const PortAudioDevice &) = delete;
 	PortAudioDevice &operator=(PortAudioDevice &&) = delete;
-	void setController(PlayAudioModel *) override;
+	void setController(AudioDeviceController *) override;
 	void startStream() override;
 	void stopStream() override;
 	bool failed() override;
