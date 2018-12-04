@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-tests\google-tests.vcxproj", "{03E08837-A004-40B9-8FD2-4CDA51994ED1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6E368A0E-612A-4A30-A18D-145E6341FE31} = {6E368A0E-612A-4A30-A18D-145E6341FE31}
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F} = {27FD3D17-8E94-4152-B8AF-E40A34C3414F}
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD} = {94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}
 		{B63D5042-124C-4D0D-8141-17D8F84F6625} = {B63D5042-124C-4D0D-8141-17D8F84F6625}
 		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
@@ -30,7 +31,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "main", "main\main.vcxproj", "{21BBA603-6D73-4FDB-AD71-25A1BE2D9AF2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6E368A0E-612A-4A30-A18D-145E6341FE31} = {6E368A0E-612A-4A30-A18D-145E6341FE31}
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F} = {27FD3D17-8E94-4152-B8AF-E40A34C3414F}
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD} = {94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}
 		{B63D5042-124C-4D0D-8141-17D8F84F6625} = {B63D5042-124C-4D0D-8141-17D8F84F6625}
 		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
@@ -53,12 +53,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "playing-audio", "playing-au
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dsl-prescription", "dsl-prescription\dsl-prescription.vcxproj", "{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "binaural-room-impulse-response-config", "binaural-room-impulse-response-config\binaural-room-impulse-response-config.vcxproj", "{27FD3D17-8E94-4152-B8AF-E40A34C3414F}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fir-filtering-profiling", "fir-filtering-profiling\fir-filtering-profiling.vcxproj", "{93B0C687-F972-4784-86FD-7B639A1D114B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "binaural-room-impulse-response", "binaural-room-impulse-response\binaural-room-impulse-response.vcxproj", "{27FD3D17-8E94-4152-B8AF-E40A34C3414F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -148,14 +148,6 @@ Global
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}.Release|x64.Build.0 = Release|x64
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}.Release|x86.ActiveCfg = Release|Win32
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}.Release|x86.Build.0 = Release|Win32
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x64.ActiveCfg = Debug|x64
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x64.Build.0 = Debug|x64
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x86.ActiveCfg = Debug|Win32
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x86.Build.0 = Debug|Win32
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.ActiveCfg = Release|x64
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.Build.0 = Release|x64
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.ActiveCfg = Release|Win32
-		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.Build.0 = Release|Win32
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x64.ActiveCfg = Debug|x64
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x64.Build.0 = Debug|x64
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Debug|x86.ActiveCfg = Debug|Win32
@@ -164,6 +156,14 @@ Global
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x64.Build.0 = Release|x64
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x86.ActiveCfg = Release|Win32
 		{93B0C687-F972-4784-86FD-7B639A1D114B}.Release|x86.Build.0 = Release|Win32
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x64.ActiveCfg = Debug|x64
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x64.Build.0 = Debug|x64
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x86.ActiveCfg = Debug|Win32
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Debug|x86.Build.0 = Debug|Win32
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.ActiveCfg = Release|x64
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.Build.0 = Release|x64
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.ActiveCfg = Release|Win32
+		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

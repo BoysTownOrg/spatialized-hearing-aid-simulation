@@ -47,7 +47,7 @@ void PortAudioDevice::stopStream() {
 }
 
 bool PortAudioDevice::streaming() const {
-	return Pa_IsStreamActive(stream);
+	return Pa_IsStreamActive(stream) == 1;
 }
 
 void PortAudioDevice::setCallbackResultToComplete() {

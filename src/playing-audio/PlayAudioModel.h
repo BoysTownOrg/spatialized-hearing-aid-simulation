@@ -7,7 +7,7 @@
 #include <audio-file-reading/AudioFileReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
-#include <binaural-room-impulse-response-config/BinauralRoomImpulseResponse.h>
+#include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <dsl-prescription/DslPrescription.h>
 #include <signal-processing/SignalProcessor.h>
 #include <common-includes/RuntimeError.h>
