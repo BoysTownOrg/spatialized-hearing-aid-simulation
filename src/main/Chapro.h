@@ -21,11 +21,11 @@ public:
 	Chapro &operator=(Chapro &&) = delete;
 	Chapro(const Chapro &) = delete;
 	Chapro &operator=(const Chapro &) = delete;
-	void compressInput(real * input, real * output, int chunkSize) override;
-	void analyzeFilterbank(real * input, complex * output, int chunkSize) override;
-	void compressChannels(complex * input, complex * output, int chunkSize) override;
-	void synthesizeFilterbank(complex * input, real * output, int chunkSize) override;
-	void compressOutput(real * input, real * output, int chunkSize) override;
+	void compressInput(real_type * input, real_type * output, int chunkSize) override;
+	void analyzeFilterbank(real_type * input, complex_type * output, int chunkSize) override;
+	void compressChannels(complex_type * input, complex_type * output, int chunkSize) override;
+	void synthesizeFilterbank(complex_type * input, real_type * output, int chunkSize) override;
+	void compressOutput(real_type * input, real_type * output, int chunkSize) override;
 	int chunkSize() const override;
 	int channels() const override;
 	bool failed() const override;

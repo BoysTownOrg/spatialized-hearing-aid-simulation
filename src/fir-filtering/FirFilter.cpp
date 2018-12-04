@@ -2,7 +2,7 @@
 #include <gsl/gsl_util>
 #include <algorithm>
 
-FirFilter::FirFilter(std::vector<float> b) :
+FirFilter::FirFilter(vector_type b) :
 	b(std::move(b)),
 	delayLine(this->b.size(), 0)
 {

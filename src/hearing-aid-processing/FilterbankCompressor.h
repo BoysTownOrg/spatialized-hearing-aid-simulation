@@ -13,27 +13,27 @@ public:
 		int chunkSize;
 	};
 	INTERFACE_OPERATIONS(FilterbankCompressor);
-	using real = float;
-	using complex = float;
+	using real_type = float;
+	using complex_type = float;
 	virtual void compressInput(
-		real *input,
-		real *output,
+		real_type *input,
+		real_type *output,
 		int chunkSize) = 0;
 	virtual void analyzeFilterbank(
-		real *input,
-		complex *output,
+		real_type *input,
+		complex_type *output,
 		int chunkSize) = 0;
 	virtual void compressChannels(
-		complex *input,
-		complex *output,
+		complex_type *input,
+		complex_type *output,
 		int chunkSize) = 0;
 	virtual void synthesizeFilterbank(
-		complex *input,
-		real *output,
+		complex_type *input,
+		real_type *output,
 		int chunkSize) = 0;
 	virtual void compressOutput(
-		real *input,
-		real *output,
+		real_type *input,
+		real_type *output,
 		int chunkSize) = 0;
 	virtual int chunkSize() const = 0;
 	virtual int channels() const = 0;
