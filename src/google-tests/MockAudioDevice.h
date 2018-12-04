@@ -21,6 +21,7 @@ public:
 		return _streaming;
 	}
 	void startStream() override {
+		_streamLog += "start ";
 		_streaming = true;
 	}
 	void stopStream() override {

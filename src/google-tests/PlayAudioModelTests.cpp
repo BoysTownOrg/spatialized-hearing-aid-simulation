@@ -26,9 +26,20 @@ public:
 			std::move(parserFactory)
 		} {}
 
+	static std::shared_ptr<PlayAudioModelFacade> withValidParser(std::shared_ptr<AudioDevice> device) {
+		const auto parser = std::make_shared<MockConfigurationFileParser>();
+		parser->setValidSingleChannelDslProperties();
+		parser->setValidBrirProperties();
+		return std::make_shared<PlayAudioModelFacade>(
+			device,
+			std::make_shared<MockParserFactory>(parser)
+		);
+	}
+
 	void playRequest(PlayAudioModel::PlayRequest r) {
 		model.playRequest(r);
 	}
+
 	const PlayAudioModel *get() const {
 		return &model;
 	}
@@ -38,8 +49,8 @@ class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, constructorSetsItself) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	PlayAudioModelFacade controller{ device };
-	EXPECT_EQ(controller.get(), device->controller());
+	auto model = PlayAudioModelFacade::withValidParser(device);
+	EXPECT_EQ(model->get(), device->controller());
 }
 
 TEST(
@@ -50,7 +61,7 @@ TEST(
 		const auto device = std::make_shared<MockAudioDevice>();
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
-		PlayAudioModelFacade controller{ device };
+		PlayAudioModelFacade model{ device };
 		FAIL() << "Expected AudioDeviceController::DeviceConnectionFailure";
 	}
 	catch (const PlayAudioModel::DeviceFailure &e) {
@@ -60,28 +71,16 @@ TEST(
 
 TEST(AudioPlayerModelTestCase, playRequestStartsStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto parser = std::make_shared<MockConfigurationFileParser>();
-	parser->setValidSingleChannelDslProperties();
-	parser->setValidBrirProperties();
-	PlayAudioModelFacade model{
-		device,
-		std::make_shared<MockParserFactory>(parser)
-	};
-	model.playRequest({});
+	auto model = PlayAudioModelFacade::withValidParser(device);
+	model->playRequest({});
 	EXPECT_TRUE(device->streaming());
 }
 
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto parser = std::make_shared<MockConfigurationFileParser>();
-	parser->setValidSingleChannelDslProperties();
-	parser->setValidBrirProperties();
-	PlayAudioModelFacade model{
-		device,
-		std::make_shared<MockParserFactory>(parser)
-	};
-	model.playRequest({});
-	assertEqual("close open ", device->streamLog());
+	auto model = PlayAudioModelFacade::withValidParser(device);
+	model->playRequest({});
+	assertEqual("close open start ", device->streamLog());
 }
 
 TEST(
@@ -90,42 +89,25 @@ TEST(
 {
 	try {
 		const auto device = std::make_shared<MockAudioDevice>();
-		const auto parser = std::make_shared<MockConfigurationFileParser>();
-		parser->setValidSingleChannelDslProperties();
-		parser->setValidBrirProperties();
-		PlayAudioModelFacade model{
-			device,
-			std::make_shared<MockParserFactory>(parser)
-		};
+		auto model = PlayAudioModelFacade::withValidParser(device);
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
-		model.playRequest({});
+		model->playRequest({});
 		FAIL() << "Expected AudioDeviceController::StreamError";
 	}
 	catch (const PlayAudioModel::RequestFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }
-/*
-TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
+
+TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto stream = std::make_shared<MockAudioFrameReader>();
-	AudioDeviceController controller{ device, stream };
-	float *channel{};
-	device->fillStreamBuffer(&channel, 1);
-	EXPECT_EQ(&channel, stream->channels());
-	EXPECT_EQ(1, stream->frameCount());
+	auto model = PlayAudioModelFacade::withValidParser(device);
+	model->playRequest({});
+	model->playRequest({});
+	assertEqual("close open start ", device->streamLog());
 }
 
-TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	const auto reader = std::make_shared<MockAudioFrameReader>();
-	AudioDeviceController controller{ device, reader };
-	reader->setComplete();
-	device->fillStreamBuffer(nullptr, 0);
-	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
-}
-*/
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	const auto reader = std::make_shared<MockAudioFileReader>();
@@ -136,7 +118,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	parser->setIntProperty(propertyName(brir_config::Property::sampleRate), 48000);
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
 	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
-	PlayAudioModelFacade model{ 
+	PlayAudioModelFacade model{
 		device,
 		std::make_shared<MockParserFactory>(parser),
 		compressorFactory,
@@ -163,16 +145,23 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	assertEqual({ 0, 1 }, device->streamParameters().channels);
 }
 
-TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
+/*
+TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
-	const auto parser = std::make_shared<MockConfigurationFileParser>();
-	parser->setValidSingleChannelDslProperties();
-	parser->setValidBrirProperties();
-	PlayAudioModelFacade model{
-		device,
-		std::make_shared<MockParserFactory>(parser)
-	};
-	model.playRequest({});
-	model.playRequest({});
-	assertEqual("close open ", device->streamLog());
+	const auto stream = std::make_shared<MockAudioFrameReader>();
+	AudioDeviceController model{ device, stream };
+	float *channel{};
+	device->fillStreamBuffer(&channel, 1);
+	EXPECT_EQ(&channel, stream->channels());
+	EXPECT_EQ(1, stream->frameCount());
 }
+
+TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto reader = std::make_shared<MockAudioFrameReader>();
+	AudioDeviceController model{ device, reader };
+	reader->setComplete();
+	device->fillStreamBuffer(nullptr, 0);
+	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+}
+*/
