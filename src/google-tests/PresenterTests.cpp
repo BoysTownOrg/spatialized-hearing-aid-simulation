@@ -194,6 +194,14 @@ TEST(PresenterTestCase, constructorSetsItself) {
 	EXPECT_EQ(presenter.get(), view->presenter());
 }
 
+TEST(PresenterTestCase, constructorPopulatesAudioDeviceMenu) {
+	const auto view = std::make_shared<MockView>();
+	const auto model = std::make_shared<MockModel>();
+	model->setAudioDeviceDescriptions({ "a", "b", "c" });
+	SpatializedHearingAidSimulationPresenter presenter{ model, view };
+	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
+}
+
 TEST(PresenterTestCase, loopRunsEventLoop) {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
