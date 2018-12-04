@@ -36,9 +36,6 @@
     <ClCompile Include="ProcessedAudioFrameReaderTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioPlayerModelTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DslPrescriptionTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BinauralRoomImpulseResponseTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayAudioModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
