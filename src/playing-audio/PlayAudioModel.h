@@ -12,7 +12,7 @@
 #include <signal-processing/SignalProcessor.h>
 #include <common-includes/RuntimeError.h>
 
-class PlayAudioModel : public SpatializedHearingAidSimulationModel {
+class PlayAudioModel : public SpatializedHearingAidSimulationModel, public AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory;
@@ -27,7 +27,7 @@ public:
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
-	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frameCount);
+	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frameCount) override;
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
 	DslPrescription makeDslPrescription(std::string filePath);

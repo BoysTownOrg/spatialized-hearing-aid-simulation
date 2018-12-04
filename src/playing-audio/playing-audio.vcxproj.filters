@@ -24,6 +24,9 @@
     <ClInclude Include="AudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioDeviceController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PlayAudioModel.cpp">
