@@ -53,35 +53,36 @@ TEST(AudioPlayerModelTestCase, constructorSetsItself) {
 	EXPECT_EQ(model->get(), device->controller());
 }
 
-TEST(
-	AudioPlayerModelTestCase,
-	constructorThrowsDeviceFailureWhenDeviceError)
-{
+static void assertDeviceFailureOnConstruction(
+	std::shared_ptr<AudioDevice> device, 
+	std::string message
+) {
 	try {
-		const auto device = std::make_shared<MockAudioDevice>();
-		device->setFailedTrue();
-		device->setErrorMessage("error.");
 		PlayAudioModelFacade model{ device };
 		FAIL() << "Expected PlayAudioModel::DeviceFailure";
 	}
 	catch (const PlayAudioModel::DeviceFailure &e) {
-		assertEqual("error.", e.what());
+		assertEqual(message, e.what());
 	}
+}
+
+TEST(
+	AudioPlayerModelTestCase,
+	constructorThrowsDeviceFailureWhenDeviceError)
+{
+	const auto device = std::make_shared<MockAudioDevice>();
+	device->setFailedTrue();
+	device->setErrorMessage("error.");
+	assertDeviceFailureOnConstruction(device, "error.");
 }
 
 TEST(
 	AudioPlayerModelTestCase,
 	constructorThrowsDeviceFailureWhenDeviceDoesNotSupportAsio)
 {
-	try {
-		const auto device = std::make_shared<MockAudioDevice>();
-		device->setSupportsAsioFalse();
-		PlayAudioModelFacade model{ device };
-		FAIL() << "Expected PlayAudioModel::DeviceFailure";
-	}
-	catch (const PlayAudioModel::DeviceFailure &e) {
-		assertEqual("This device does not support ASIO.", e.what());
-	}
+	const auto device = std::make_shared<MockAudioDevice>();
+	device->setSupportsAsioFalse();
+	assertDeviceFailureOnConstruction(device, "This device does not support ASIO.");
 }
 
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
