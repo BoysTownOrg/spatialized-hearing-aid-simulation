@@ -1,6 +1,6 @@
 #include "assert-utility.h"
-#include "MockAudioFileReader.h"
-#include "MockAudioFrameReader.h"
+#include "AudioFrameReaderStub.h"
+#include "AudioFileReaderStub.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <gtest/gtest.h>
@@ -8,7 +8,7 @@
 class ChannelCopierTestCase : public ::testing::TestCase {};
 
 TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
-	MockAudioFileReader reader{ std::vector<float>{ 1, 2, 3 } };
+	AudioFileReaderStub reader{ std::vector<float>{ 1, 2, 3 } };
 	ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
 	std::vector<float> left(3);
 	std::vector<float> right(3);
@@ -19,7 +19,7 @@ TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
 }
 
 TEST(ChannelCopierTestCase, returnsCompleteWhenComplete) {
-	const auto reader = std::make_shared<MockAudioFrameReader>();
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	ChannelCopier copier{ reader };
 	EXPECT_FALSE(copier.complete());
 	reader->setComplete();

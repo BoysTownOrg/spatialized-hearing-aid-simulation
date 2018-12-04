@@ -56,22 +56,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MockSignalProcessor.h">
+    <ClInclude Include="FakeConfigurationFileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MockAudioFileReader.h">
+    <ClInclude Include="SignalProcessorStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MockConfigurationFileParser.h">
+    <ClInclude Include="FilterbankCompressorSpy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MockFilterbankCompressor.h">
+    <ClInclude Include="AudioDeviceStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MockAudioDevice.h">
+    <ClInclude Include="AudioFileReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MockAudioFrameReader.h">
+    <ClInclude Include="AudioFrameReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

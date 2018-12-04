@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include "MockFilterbankCompressor.h"
+#include "FilterbankCompressorSpy.h"
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <gtest/gtest.h>
 
@@ -34,7 +34,7 @@ TEST(
 	failedCompressorThrowsCompressorError)
 {
 	try {
-		const auto compressor = std::make_shared<MockFilterbankCompressor>();
+		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
 		compressor->setFailedTrue();
 		HearingAidProcessorFacade processor{ compressor };
 		FAIL() << "Expected HearingAidProcessor::CompressorError";
@@ -48,7 +48,7 @@ TEST(
 	HearingAidProcessorTestCase, 
 	processCallsFilterbankCompressorMethodsInCorrectOrder) 
 {
-	const auto compressor = std::make_shared<MockFilterbankCompressor>();
+	const auto compressor = std::make_shared<FilterbankCompressorSpy>();
 	HearingAidProcessorFacade processor{ compressor };
 	processor.process();
 	assertEqual(
@@ -62,7 +62,7 @@ TEST(
 
 TEST(HearingAidProcessorTestCase, processPassesChunkSize)
 {
-	const auto compressor = std::make_shared<MockFilterbankCompressor>();
+	const auto compressor = std::make_shared<FilterbankCompressorSpy>();
 	compressor->setChunkSize(1);
 	HearingAidProcessorFacade processor{ compressor };
 	processor.process();
@@ -77,7 +77,7 @@ TEST(
 	HearingAidProcessorTestCase,
 	processDoesNotCallCompressorWhenFrameCountDoesNotEqualChunkSize)
 {
-	const auto compressor = std::make_shared<MockFilterbankCompressor>();
+	const auto compressor = std::make_shared<FilterbankCompressorSpy>();
 	HearingAidProcessorFacade processor{ compressor };
 	processor.processUnequalChunk();
 	EXPECT_TRUE(compressor->processingLog().empty());

@@ -2,7 +2,7 @@
 
 #include <audio-stream-processing/AudioFrameReader.h>
 
-class MockAudioFrameReader : public AudioFrameReader {
+class AudioFrameReaderStub : public AudioFrameReader {
 	int _frameCount{};
 	float **_channels{};
 	bool _complete{};

@@ -2,7 +2,7 @@
 
 #include <playing-audio/AudioDevice.h>
 
-class MockAudioDevice : public AudioDevice {
+class AudioDeviceStub : public AudioDevice {
 	std::string _errorMessage{};
 	std::string _streamLog{};
 	StreamParameters _streamParameters{};

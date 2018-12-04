@@ -1,12 +1,12 @@
 #include "assert-utility.h"
-#include "MockAudioFileReader.h"
+#include "AudioFileReaderStub.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 class AudioFileInMemoryTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
-	MockAudioFileReader reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+	AudioFileReaderStub reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
 	reader.setChannels(3);
 	AudioFileInMemory adapter{ reader };
 	std::vector<float> a(4);
@@ -20,12 +20,12 @@ TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
 }
 
 TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
-	MockAudioFileReader reader{ {} };
+	AudioFileReaderStub reader{ {} };
 	AudioFileInMemory adapter{ reader };
 }
 
 TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
-	MockAudioFileReader reader{ { 3, 4 } };
+	AudioFileReaderStub reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	float *channels[] { &x };
@@ -38,7 +38,7 @@ TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 }
 
 TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
-	MockAudioFileReader reader{ { 3, 4 } };
+	AudioFileReaderStub reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	float *channels[]{ &x };

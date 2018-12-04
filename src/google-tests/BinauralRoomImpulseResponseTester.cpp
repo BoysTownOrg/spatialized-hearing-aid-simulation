@@ -1,12 +1,12 @@
 #include "assert-utility.h"
-#include "MockConfigurationFileParser.h"
+#include "FakeConfigurationFileParser.h"
 #include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <gtest/gtest.h>
 
 class BinauralRoomImpulseResponseTester : public ::testing::TestCase {};
 
 TEST(BinauralRoomImpulseResponseTester, returnsValuesParsed) {
-	MockConfigurationFileParser parser{};
+	FakeConfigurationFileParser parser{};
 	using namespace binaural_room_impulse_response;
 	parser.setVectorProperty(propertyName(Property::leftImpulseResponse), { 1, 2, 3 });
 	parser.setVectorProperty(propertyName(Property::rightImpulseResponse), { 4, 5, 6 });

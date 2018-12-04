@@ -4,7 +4,7 @@
 #include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <map>
 
-class MockConfigurationFileParser : public ConfigurationFileParser {
+class FakeConfigurationFileParser : public ConfigurationFileParser {
 	std::map<std::string, std::vector<double>> vectors{};
 	std::map<std::string, double> doubles{};
 	std::map<std::string, int> ints{};
@@ -55,7 +55,7 @@ class MockParserFactory : public ConfigurationFileParserFactory {
 public:
 	explicit MockParserFactory(
 		std::shared_ptr<ConfigurationFileParser> parser =
-		std::make_shared<MockConfigurationFileParser>()
+		std::make_shared<FakeConfigurationFileParser>()
 	) :
 		parser{ std::move(parser) } {}
 

@@ -1,4 +1,4 @@
-#include "MockAudioFrameReader.h"
+#include "AudioFrameReaderStub.h"
 #include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <gtest/gtest.h>
 
@@ -49,7 +49,7 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferReadsThenProcesses) {
 }
 
 TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndProcessor) {
-	const auto reader = std::make_shared<MockAudioFrameReader>();
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	const auto processor = std::make_shared<MockAudioFrameProcessor>();
 	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
@@ -61,7 +61,7 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndPro
 }
 
 TEST(ProcessedAudioFrameReaderTestCase, returnsCompleteWhenComplete) {
-	const auto reader = std::make_shared<MockAudioFrameReader>();
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	ProcessedAudioFrameReader adapter{ reader, std::make_shared<MockAudioFrameProcessor>() };
 	EXPECT_FALSE(adapter.complete());
 	reader->setComplete();

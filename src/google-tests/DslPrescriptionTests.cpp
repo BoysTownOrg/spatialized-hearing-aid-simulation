@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include "MockConfigurationFileParser.h"
+#include "FakeConfigurationFileParser.h"
 #include <dsl-prescription/DslPrescription.h>
 #include <gtest/gtest.h>
 #include <map>
@@ -8,7 +8,7 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 	std::string property)
 {
 	try {
-		MockConfigurationFileParser parser{};
+		FakeConfigurationFileParser parser{};
 		parser.setValidSingleChannelDslProperties();
 		parser.setVectorProperty(property, {});
 		DslPrescription{ parser };
@@ -38,7 +38,7 @@ TEST(
 	parametersReceivedAsParsed)
 {
 	using namespace dsl_prescription;
-	MockConfigurationFileParser parser{};
+	FakeConfigurationFileParser parser{};
 	parser.setVectorProperty(propertyName(Property::crossFrequenciesHz), { 3 });
 	parser.setVectorProperty(propertyName(Property::compressionRatios), { 4, 4 });
 	parser.setVectorProperty(propertyName(Property::kneepointGains_dB), { 5, 5 });

@@ -2,12 +2,12 @@
 #include "FltkWindow.h"
 #include "LibsndfileReader.h"
 #include "PortAudioDevice.h"
-#include <google-tests/MockConfigurationFileParser.h>
+#include <google-tests/FakeConfigurationFileParser.h>
 #include <presentation/SpatializedHearingAidSimulationPresenter.h>
 #include <playing-audio/PlayAudioModel.h>
 
 int main() {
-	const auto parser = std::make_shared<MockConfigurationFileParser>();
+	const auto parser = std::make_shared<FakeConfigurationFileParser>();
 	parser->setIntProperty(propertyName(binaural_room_impulse_response::Property::sampleRate), 44100);
 	parser->setVectorProperty(propertyName(binaural_room_impulse_response::Property::leftImpulseResponse), { 1 });
 	parser->setVectorProperty(propertyName(binaural_room_impulse_response::Property::rightImpulseResponse), { 1 });

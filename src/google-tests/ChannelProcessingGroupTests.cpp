@@ -1,14 +1,14 @@
-#include "MockSignalProcessor.h"
+#include "SignalProcessorStub.h"
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <gtest/gtest.h>
 
 class ChannelProcessingGroupTestCase : public ::testing::TestCase {};
 
 TEST(ChannelProcessingGroupTestCase, processesChannelsInOrder) {
-	std::vector<std::shared_ptr<MockSignalProcessor>> processors{
-		std::make_shared<MockSignalProcessor>(),
-		std::make_shared<MockSignalProcessor>(),
-		std::make_shared<MockSignalProcessor>()
+	std::vector<std::shared_ptr<SignalProcessorStub>> processors{
+		std::make_shared<SignalProcessorStub>(),
+		std::make_shared<SignalProcessorStub>(),
+		std::make_shared<SignalProcessorStub>()
 	};
 	ChannelProcessingGroup group{ { processors[0], processors[1], processors[2] } };
 	float a{};

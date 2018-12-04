@@ -1,8 +1,8 @@
 #include "assert-utility.h"
-#include "MockAudioFileReader.h"
-#include "MockConfigurationFileParser.h"
-#include "MockFilterbankCompressor.h"
-#include "MockAudioDevice.h"
+#include "AudioFileReaderStub.h"
+#include "FakeConfigurationFileParser.h"
+#include "FilterbankCompressorSpy.h"
+#include "AudioDeviceStub.h"
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
 
@@ -11,13 +11,13 @@ class PlayAudioModelFacade {
 public:
 	explicit PlayAudioModelFacade(
 		std::shared_ptr<AudioDevice> device =
-			std::make_shared<MockAudioDevice>(),
+			std::make_shared<AudioDeviceStub>(),
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory =
 			std::make_shared<MockParserFactory>(),
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory =
 			std::make_shared<MockCompressorFactory>(),
 		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
-			std::make_shared<MockAudioFileReaderFactory>()
+			std::make_shared<AudioFileReaderStubFactory>()
 	) :
 		model{ 
 			std::move(device),
@@ -27,7 +27,7 @@ public:
 		} {}
 
 	static std::shared_ptr<PlayAudioModelFacade> withValidParser(std::shared_ptr<AudioDevice> device) {
-		const auto parser = std::make_shared<MockConfigurationFileParser>();
+		const auto parser = std::make_shared<FakeConfigurationFileParser>();
 		parser->setValidSingleChannelDslProperties();
 		parser->setValidBrirProperties();
 		return std::make_shared<PlayAudioModelFacade>(
@@ -48,7 +48,7 @@ public:
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
 TEST(AudioPlayerModelTestCase, constructorSetsItself) {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
 	EXPECT_EQ(model->get(), device->controller());
 }
@@ -70,7 +70,7 @@ TEST(
 	AudioPlayerModelTestCase,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize)
 {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	device->setFailedTrue();
 	device->setErrorMessage("error.");
 	assertDeviceFailureOnConstruction(device, "error.");
@@ -80,13 +80,13 @@ TEST(
 	AudioPlayerModelTestCase,
 	constructorThrowsDeviceFailureWhenDeviceDoesNotSupportAsio)
 {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	device->setSupportsAsioFalse();
 	assertDeviceFailureOnConstruction(device, "This device does not support ASIO.");
 }
 
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
 	assertEqual("close open start ", device->streamLog());
@@ -97,7 +97,7 @@ TEST(
 	playRequestThrowsRequestErrorWhenDeviceFailure)
 {
 	try {
-		const auto device = std::make_shared<MockAudioDevice>();
+		const auto device = std::make_shared<AudioDeviceStub>();
 		const auto model = PlayAudioModelFacade::withValidParser(device);
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
@@ -110,7 +110,7 @@ TEST(
 }
 
 TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStream) {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	device->setStreaming();
 	model->playRequest({});
@@ -118,15 +118,15 @@ TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStrea
 }
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	const auto reader = std::make_shared<MockAudioFileReader>();
+	const auto device = std::make_shared<AudioDeviceStub>();
+	const auto reader = std::make_shared<AudioFileReaderStub>();
 	reader->setSampleRate(48000);
-	const auto parser = std::make_shared<MockConfigurationFileParser>();
+	const auto parser = std::make_shared<FakeConfigurationFileParser>();
 	parser->setValidSingleChannelDslProperties();
 	parser->setValidBrirProperties();
 	parser->setIntProperty(propertyName(binaural_room_impulse_response::Property::sampleRate), 48000);
 	const auto compressorFactory = std::make_shared<MockCompressorFactory>();
-	const auto audioFactory = std::make_shared<MockAudioFileReaderFactory>(reader);
+	const auto audioFactory = std::make_shared<AudioFileReaderStubFactory>(reader);
 	PlayAudioModelFacade model{
 		device,
 		std::make_shared<MockParserFactory>(parser),
@@ -155,7 +155,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 }
 
 TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
 	float left{};
@@ -166,7 +166,7 @@ TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenC
 }
 
 TEST(AudioPlayerModelTestCase, playRequestSetsCallbackResultToContinue) {
-	const auto device = std::make_shared<MockAudioDevice>();
+	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
 	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
@@ -174,8 +174,8 @@ TEST(AudioPlayerModelTestCase, playRequestSetsCallbackResultToContinue) {
 
 /*
 TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	const auto stream = std::make_shared<MockAudioFrameReader>();
+	const auto device = std::make_shared<AudioDeviceStub>();
+	const auto stream = std::make_shared<AudioFrameReaderStub>();
 	AudioDeviceController model{ device, stream };
 	float *channel{};
 	device->fillStreamBuffer(&channel, 1);

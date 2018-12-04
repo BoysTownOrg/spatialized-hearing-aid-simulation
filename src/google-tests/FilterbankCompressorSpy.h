@@ -2,7 +2,7 @@
 
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
-class MockFilterbankCompressor : public FilterbankCompressor {
+class FilterbankCompressorSpy : public FilterbankCompressor {
 	std::string _processingLog{};
 	int _chunkSize = 1;
 	int _compressInputChunkSize{};
@@ -88,7 +88,7 @@ class MockCompressorFactory : public FilterbankCompressorFactory {
 public:
 	explicit MockCompressorFactory(
 		std::shared_ptr<FilterbankCompressor> compressor =
-		std::make_shared<MockFilterbankCompressor>()
+		std::make_shared<FilterbankCompressorSpy>()
 	) :
 		compressor{ std::move(compressor) } {}
 

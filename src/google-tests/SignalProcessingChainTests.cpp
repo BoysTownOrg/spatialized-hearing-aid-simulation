@@ -1,4 +1,4 @@
-#include "MockSignalProcessor.h"
+#include "SignalProcessorStub.h"
 #include <signal-processing/SignalProcessingChain.h>
 #include <gtest/gtest.h>
 
@@ -29,7 +29,7 @@ TEST(SignalProcessingChainTestCase, chainCallsProcessorsInOrder) {
 
 TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
 	SignalProcessingChain chain{};
-	const auto processor = std::make_shared<MockSignalProcessor>();
+	const auto processor = std::make_shared<SignalProcessorStub>();
 	chain.add(processor);
 	float x{};
 	chain.process(&x, 1);
