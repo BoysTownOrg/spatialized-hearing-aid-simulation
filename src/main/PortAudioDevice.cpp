@@ -1,14 +1,10 @@
 #include "PortAudioDevice.h"
 
-PortAudioInitializer::PortAudioInitializer() {
-	Pa_Initialize();
+PortAudioDevice::PortAudioDevice() {
+	lastError = Pa_Initialize();
 }
 
-PortAudioInitializer::~PortAudioInitializer() {
-	Pa_Terminate();
-}
-
-PortAudioDevice::PortAudioDevice(Parameters parameters) {
+void PortAudioDevice::openStream(Parameters parameters) {
 	PaStreamParameters outputParameters;
 	outputParameters.device = Pa_GetHostApiInfo(Pa_HostApiTypeIdToHostApiIndex(paASIO))->defaultOutputDevice;
 	outputParameters.channelCount = parameters.channels.size();
@@ -38,12 +34,24 @@ int PortAudioDevice::audioCallback(
 	return self->callbackResult;
 }
 
-void PortAudioDevice::setCallbackResultToComplete() {
-	callbackResult = paComplete;
+void PortAudioDevice::closeStream() {
+	lastError = Pa_CloseStream(stream);
+}
+
+void PortAudioDevice::startStream() {
+	lastError = Pa_StartStream(stream);
+}
+
+void PortAudioDevice::stopStream() {
+	lastError = Pa_StopStream(stream);
 }
 
 bool PortAudioDevice::streaming() const {
 	return Pa_IsStreamActive(stream);
+}
+
+void PortAudioDevice::setCallbackResultToComplete() {
+	callbackResult = paComplete;
 }
 
 bool PortAudioDevice::failed() {
@@ -58,14 +66,6 @@ void PortAudioDevice::setController(AudioDeviceController *c) {
 	controller = c;
 }
 
-void PortAudioDevice::startStream() {
-	lastError = Pa_StartStream(stream);
-}
-
-void PortAudioDevice::stopStream() {
-	lastError = Pa_StopStream(stream);
-}
-
 PortAudioDevice::~PortAudioDevice() {
-	Pa_CloseStream(stream);
+	Pa_Terminate();
 }

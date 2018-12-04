@@ -3,20 +3,13 @@
 #include <audio-device-control/AudioDeviceController.h>
 #include <portaudio.h>
 
-class PortAudioInitializer {
-public:
-	PortAudioInitializer();
-	~PortAudioInitializer();
-};
-
 class PortAudioDevice : public AudioDevice {
-	PortAudioInitializer initializer{};
 	AudioDeviceController *controller{};
 	PaStream *stream{};
 	PaError lastError{};
 	PaStreamCallbackResult callbackResult{};
 public:
-	explicit PortAudioDevice(Parameters);
+	PortAudioDevice();
 	~PortAudioDevice();
 	PortAudioDevice(const PortAudioDevice &) = delete;
 	PortAudioDevice(PortAudioDevice &&) = delete;
@@ -29,6 +22,8 @@ public:
 	std::string errorMessage() override;
 	bool streaming() const override;
 	void setCallbackResultToComplete() override;
+	void openStream(Parameters parameters) override;
+	void closeStream() override;
 private:
 	static int audioCallback(
 		const void *,
@@ -40,7 +35,7 @@ private:
 };
 
 class PortAudioDeviceFactory : public AudioDeviceFactory {
-	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters p) override {
-		return std::make_shared<PortAudioDevice>(p);
+	std::shared_ptr<AudioDevice> make(AudioDevice::Parameters) override {
+		return std::make_shared<PortAudioDevice>();
 	}
 };
