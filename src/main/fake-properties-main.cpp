@@ -72,7 +72,7 @@ int main() {
 	);
 	SpatializedHearingAidSimulationPresenter presenter{
 		std::make_shared<PlayAudioModel>(
-			std::make_shared<PortAudioDeviceFactory>(),
+			std::make_shared<PortAudioDevice>(),
 			std::make_shared<ChaproFactory>(),
 			std::make_shared<LibsndfileReaderFactory>(),
 			std::make_shared<MockParserFactory>(parser)
