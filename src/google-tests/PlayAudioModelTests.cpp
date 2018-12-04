@@ -69,6 +69,21 @@ TEST(
 	}
 }
 
+TEST(
+	AudioPlayerModelTestCase,
+	constructorThrowsDeviceFailureWhenDeviceDoesNotSupportAsio)
+{
+	try {
+		const auto device = std::make_shared<MockAudioDevice>();
+		device->setSupportsAsioFalse();
+		PlayAudioModelFacade model{ device };
+		FAIL() << "Expected PlayAudioModel::DeviceFailure";
+	}
+	catch (const PlayAudioModel::DeviceFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
