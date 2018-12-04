@@ -40,4 +40,5 @@ bool AudioDeviceController::active() {
 void AudioDeviceController::openStream() {
 	device->closeStream();
 	device->openStream();
+	throwIfStreamingError();
 }
