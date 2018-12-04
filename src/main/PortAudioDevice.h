@@ -22,6 +22,7 @@ public:
 	std::string errorMessage() override;
 	bool streaming() const override;
 	void setCallbackResultToComplete() override;
+	void setCallbackResultToContinue() override;
 	void openStream(StreamParameters parameters) override;
 	void closeStream() override;
 	bool supportsAsio() override;

@@ -58,6 +58,10 @@ void PortAudioDevice::setCallbackResultToComplete() {
 	callbackResult = paComplete;
 }
 
+void PortAudioDevice::setCallbackResultToContinue() {
+	callbackResult = paContinue;
+}
+
 bool PortAudioDevice::failed() {
 	return lastError != paNoError;
 }
