@@ -80,7 +80,7 @@ TEST(
 		FAIL() << "Expected PlayAudioModel::DeviceFailure";
 	}
 	catch (const PlayAudioModel::DeviceFailure &e) {
-		assertEqual("error.", e.what());
+		assertEqual("This device does not support ASIO.", e.what());
 	}
 }
 

@@ -10,6 +10,7 @@ class MockAudioDevice : public AudioDevice {
 	bool _streaming{};
 	bool _failed{};
 	bool _setCallbackResultToCompleteCalled{};
+	bool _supportsAsio{ true };
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -63,6 +64,9 @@ public:
 		return _streamParameters;
 	}
 	void setSupportsAsioFalse() {
-
+		_supportsAsio = false;
+	}
+	bool supportsAsio() override {
+		return _supportsAsio;
 	}
 };

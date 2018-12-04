@@ -22,4 +22,5 @@ public:
 	virtual void setCallbackResultToComplete() = 0;
 	virtual void openStream(StreamParameters) = 0;
 	virtual void closeStream() = 0;
+	virtual bool supportsAsio() = 0;
 };
