@@ -77,6 +77,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	);
 	device->closeStream();
 	device->openStream(forDevice);
+	device->setCallbackResultToContinue();
 	device->startStream();
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };

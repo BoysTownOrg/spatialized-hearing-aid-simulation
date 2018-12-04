@@ -73,4 +73,7 @@ public:
 	bool setCallbackResultToContinueCalled() {
 		return _setCallbackResultToContinueCalled;
 	}
+	void setCallbackResultToContinue() override {
+		_setCallbackResultToContinueCalled = true;
+	}
 };
