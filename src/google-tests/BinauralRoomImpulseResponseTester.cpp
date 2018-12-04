@@ -7,7 +7,7 @@ class BinauralRoomImpulseResponseTester : public ::testing::TestCase {};
 
 TEST(BinauralRoomImpulseResponseTester, returnsValuesParsed) {
 	MockConfigurationFileParser parser{};
-	using binaural_room_impulse_response::Property;
+	using namespace binaural_room_impulse_response;
 	parser.setVectorProperty(propertyName(Property::leftImpulseResponse), { 1, 2, 3 });
 	parser.setVectorProperty(propertyName(Property::rightImpulseResponse), { 4, 5, 6 });
 	parser.setIntProperty(propertyName(Property::sampleRate), 7);

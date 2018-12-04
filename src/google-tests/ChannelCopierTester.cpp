@@ -8,10 +8,8 @@
 class ChannelCopierTestCase : public ::testing::TestCase {};
 
 TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
-	const auto reader = std::make_shared<MockAudioFileReader>(std::vector<float>{ 1, 2, 3 });
-	reader->setChannels(1);
-	const auto adapter = std::make_shared<AudioFileInMemory>(*reader);
-	ChannelCopier copier{ adapter };
+	MockAudioFileReader reader{ std::vector<float>{ 1, 2, 3 } };
+	ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
 	std::vector<float> left(3);
 	std::vector<float> right(3);
 	float *x[]{ &left[0], &right[0] };
