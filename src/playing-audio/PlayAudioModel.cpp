@@ -19,6 +19,9 @@ PlayAudioModel::PlayAudioModel(
 	audioFileFactory{ std::move(audioFileFactory) },
 	parserFactory{ std::move(parserFactory) }
 {
+	if (this->device->failed())
+		throw DeviceFailure{ this->device->errorMessage() };
+	this->device->setController(this);
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
