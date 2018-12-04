@@ -92,6 +92,8 @@ TEST(
 	startAndStopThrowStreamingErrorWhenDeviceFailure)
 {
 	assertFailedDeviceThrowsStreamingError(
+		[](AudioDeviceControllerFacade &c) { return c.openStream(); });
+	assertFailedDeviceThrowsStreamingError(
 		[](AudioDeviceControllerFacade &c) { return c.startStreaming(); });
 	assertFailedDeviceThrowsStreamingError(
 		[](AudioDeviceControllerFacade &c) { return c.stopStreaming(); });
