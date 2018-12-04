@@ -343,7 +343,7 @@ TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	assertEqual("error.", view->errorMessage());
 }
 
-static void expectRequestTransformationYieldsErrorMessage(
+static void expectViewSettingYieldsErrorMessageOnPlay(
 	std::function<void(MockView &)> transformation,
 	std::string message)
 {
@@ -355,17 +355,17 @@ static void expectRequestTransformationYieldsErrorMessage(
 }
 
 TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
-	expectRequestTransformationYieldsErrorMessage(
+	expectViewSettingYieldsErrorMessageOnPlay(
 		[](MockView & view) {
 			view.setLevel_dB_Spl("a");
 		},
 		"'a' is not a valid level.");
-	expectRequestTransformationYieldsErrorMessage(
+	expectViewSettingYieldsErrorMessageOnPlay(
 		[](MockView & view) {
 			view.setAttack_ms("b");
 		},
 		"'b' is not a valid attack time.");
-	expectRequestTransformationYieldsErrorMessage(
+	expectViewSettingYieldsErrorMessageOnPlay(
 		[](MockView & view) {
 			view.setRelease_ms("c");
 		},
@@ -373,7 +373,7 @@ TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
 }
 
 static void expectBadWindowSize(std::string size) {
-	expectRequestTransformationYieldsErrorMessage(
+	expectViewSettingYieldsErrorMessageOnPlay(
 		[=](MockView & view) {
 			view.setWindowSize(size);
 		},
@@ -381,7 +381,7 @@ static void expectBadWindowSize(std::string size) {
 }
 
 static void expectBadChunkSize(std::string size) {
-	expectRequestTransformationYieldsErrorMessage(
+	expectViewSettingYieldsErrorMessageOnPlay(
 		[=](MockView & view) {
 			view.setChunkSize(size);
 		},

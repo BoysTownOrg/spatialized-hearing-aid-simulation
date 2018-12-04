@@ -5,10 +5,11 @@
 class ChannelProcessingGroupTestCase : public ::testing::TestCase {};
 
 TEST(ChannelProcessingGroupTestCase, processesChannelsInOrder) {
-	std::vector<std::shared_ptr<MockSignalProcessor>> processors;
-	processors.push_back(std::make_shared<MockSignalProcessor>());
-	processors.push_back(std::make_shared<MockSignalProcessor>());
-	processors.push_back(std::make_shared<MockSignalProcessor>());
+	std::vector<std::shared_ptr<MockSignalProcessor>> processors{
+		std::make_shared<MockSignalProcessor>(),
+		std::make_shared<MockSignalProcessor>(),
+		std::make_shared<MockSignalProcessor>()
+	};
 	ChannelProcessingGroup group{ { processors[0], processors[1], processors[2] } };
 	float a{};
 	float b{};

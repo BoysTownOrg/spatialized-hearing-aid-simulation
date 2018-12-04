@@ -22,7 +22,7 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 class DslPrescriptionTestCase : public ::testing::TestCase {};
 
 TEST(DslPrescriptionTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
-	using dsl_prescription::Property;
+	using namespace dsl_prescription;
 	for (const std::string property :
 		{
 			propertyName(Property::compressionRatios),
@@ -37,8 +37,8 @@ TEST(
 	DslPrescriptionTestCase,
 	parametersReceivedAsParsed)
 {
+	using namespace dsl_prescription;
 	MockConfigurationFileParser parser{};
-	using dsl_prescription::Property;
 	parser.setVectorProperty(propertyName(Property::crossFrequenciesHz), { 3 });
 	parser.setVectorProperty(propertyName(Property::compressionRatios), { 4, 4 });
 	parser.setVectorProperty(propertyName(Property::kneepointGains_dB), { 5, 5 });

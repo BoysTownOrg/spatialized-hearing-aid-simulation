@@ -2,7 +2,6 @@
 #include "MockFilterbankCompressor.h"
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <gtest/gtest.h>
-#include <string>
 
 class HearingAidProcessorFacade {
 	HearingAidProcessor processor;
