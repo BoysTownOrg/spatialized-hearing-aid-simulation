@@ -85,7 +85,7 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	catch (const AudioDeviceController::DeviceConnectionFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
-	catch (const AudioDeviceController::StreamingError &e) {
+	catch (const AudioDeviceController::StreamError &e) {
 		throw RequestFailure{ e.what() };
 	}
 }

@@ -12,6 +12,17 @@ AudioDeviceController::AudioDeviceController(
 	this->device->setController(this);
 }
 
+void AudioDeviceController::openStream(AudioDevice::StreamParameters p) {
+	device->closeStream();
+	device->openStream(p);
+	throwIfStreamingError();
+}
+
+void AudioDeviceController::throwIfStreamingError() {
+	if (device->failed())
+		throw StreamError{ device->errorMessage() };
+}
+
 void AudioDeviceController::startStreaming() {
 	device->startStream();
 	throwIfStreamingError();
@@ -22,11 +33,6 @@ void AudioDeviceController::stopStreaming() {
 	throwIfStreamingError();
 }
 
-void AudioDeviceController::throwIfStreamingError() {
-	if (device->failed())
-		throw StreamingError{ device->errorMessage() };
-}
-
 void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
 	reader->read(static_cast<float **>(channels), frameCount);
 	if (reader->complete())
@@ -35,10 +41,4 @@ void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
 
 bool AudioDeviceController::active() {
 	return device->streaming();
-}
-
-void AudioDeviceController::openStream(AudioDevice::StreamParameters p) {
-	device->closeStream();
-	device->openStream(p);
-	throwIfStreamingError();
 }

@@ -93,9 +93,9 @@ static void assertFailedDeviceThrowsStreamingError(
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
 		f(controller);
-		FAIL() << "Expected AudioDeviceController::StreamingError";
+		FAIL() << "Expected AudioDeviceController::StreamError";
 	}
-	catch (const AudioDeviceController::StreamingError &e) {
+	catch (const AudioDeviceController::StreamError &e) {
 		assertEqual("error.", e.what());
 	}
 }

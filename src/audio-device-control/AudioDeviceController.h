@@ -16,7 +16,7 @@ class AudioDeviceController {
 	std::shared_ptr<AudioFrameReader> reader;
 public:
 	RUNTIME_ERROR(DeviceConnectionFailure);
-	RUNTIME_ERROR(StreamingError);
+	RUNTIME_ERROR(StreamError);
 	AUDIO_DEVICE_CONTROL_API AudioDeviceController(
 		std::shared_ptr<AudioDevice>,
 		std::shared_ptr<AudioFrameReader>
