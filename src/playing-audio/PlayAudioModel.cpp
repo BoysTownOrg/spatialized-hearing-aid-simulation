@@ -22,11 +22,9 @@ PlayAudioModel::PlayAudioModel(
 }
 
 void PlayAudioModel::playRequest(PlayRequest request) {
-	if (controller && controller->active())
-		return;
 	const auto reader = makeAudioFileReader(request.audioFilePath);
 	
-	std::shared_ptr<AudioFrameReader> frameReader = std::make_shared<AudioFileInMemory>(*reader);
+	frameReader = std::make_shared<AudioFileInMemory>(*reader);
 	if (reader->channels() == 1)
 		frameReader = std::make_shared<ChannelCopier>(frameReader);
 
@@ -70,25 +68,20 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.sampleRate = reader->sampleRate();
 	forDevice.channels = { 0, 1 };
 
-	try {
-		controller = std::make_unique<AudioDeviceController>(
-			device,
-			std::make_shared<ProcessedAudioFrameReader>(
-				frameReader,
-				std::make_shared<ChannelProcessingGroup>(
-					std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
-				)
-			)
-		);
-		controller->openStream(forDevice);
-		controller->startStreaming();
-	}
-	catch (const AudioDeviceController::DeviceConnectionFailure &e) {
-		throw RequestFailure{ e.what() };
-	}
-	catch (const AudioDeviceController::StreamError &e) {
-		throw RequestFailure{ e.what() };
-	}
+	frameReader = std::make_shared<ProcessedAudioFrameReader>(
+		frameReader,
+		std::make_shared<ChannelProcessingGroup>(
+			std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
+		)
+	);
+	device->openStream(forDevice);
+	device->startStream();
+}
+
+void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
+	frameReader->read(static_cast<float **>(channels), frameCount);
+	if (frameReader->complete())
+		device->setCallbackResultToComplete();
 }
 
 BinauralRoomImpulseResponse PlayAudioModel::makeBrir(std::string filePath) {

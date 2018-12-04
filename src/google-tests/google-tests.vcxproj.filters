@@ -24,9 +24,6 @@
     <ClCompile Include="assert-utility.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioDeviceControllerTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FirFilterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

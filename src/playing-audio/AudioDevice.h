@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-class AudioDeviceController;
+class PlayAudioModel;
 
 class AudioDevice {
 public:
@@ -14,7 +14,7 @@ public:
 		int sampleRate;
 	};
 	INTERFACE_OPERATIONS(AudioDevice);
-	virtual void setController(AudioDeviceController *) = 0;
+	virtual void setController(PlayAudioModel *) = 0;
 	virtual void startStream() = 0;
 	virtual void stopStream() = 0;
 	virtual bool failed() = 0;

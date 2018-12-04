@@ -29,10 +29,85 @@ public:
 	void playRequest(PlayAudioModel::PlayRequest r) {
 		model.playRequest(r);
 	}
+	const PlayAudioModel *get() const {
+		return &model;
+	}
 };
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
 
+TEST(AudioPlayerModelTestCase, constructorSetsItself) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	PlayAudioModelFacade controller{ device };
+	EXPECT_EQ(controller.get(), device->controller());
+}
+
+TEST(
+	AudioPlayerModelTestCase,
+	constructorThrowsDeviceFailureWhenDeviceError)
+{
+	try {
+		const auto device = std::make_shared<MockAudioDevice>();
+		device->setFailedTrue();
+		device->setErrorMessage("error.");
+		PlayAudioModelFacade controller{ device };
+		FAIL() << "Expected AudioDeviceController::DeviceConnectionFailure";
+	}
+	catch (const PlayAudioModel::DeviceFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
+TEST(AudioPlayerModelTestCase, playRequestStartsStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	PlayAudioModelFacade controller{ device };
+	controller.playRequest({});
+	EXPECT_TRUE(device->streaming());
+}
+
+TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	PlayAudioModelFacade controller{ device };
+	controller.playRequest({});
+	assertEqual("close open ", device->streamLog());
+}
+
+TEST(
+	AudioPlayerModelTestCase,
+	playRequestThrowsRequestErrorWhenDeviceFailure)
+{
+	try {
+		const auto device = std::make_shared<MockAudioDevice>();
+		PlayAudioModelFacade controller{ device };
+		device->setFailedTrue();
+		device->setErrorMessage("error.");
+		controller.playRequest({});
+		FAIL() << "Expected AudioDeviceController::StreamError";
+	}
+	catch (const PlayAudioModel::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+/*
+TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto stream = std::make_shared<MockAudioFrameReader>();
+	AudioDeviceController controller{ device, stream };
+	float *channel{};
+	device->fillStreamBuffer(&channel, 1);
+	EXPECT_EQ(&channel, stream->channels());
+	EXPECT_EQ(1, stream->frameCount());
+}
+
+TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	const auto reader = std::make_shared<MockAudioFrameReader>();
+	AudioDeviceController controller{ device, reader };
+	reader->setComplete();
+	device->fillStreamBuffer(nullptr, 0);
+	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+}
+*/
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	const auto reader = std::make_shared<MockAudioFileReader>();

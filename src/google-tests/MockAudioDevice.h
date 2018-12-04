@@ -1,20 +1,20 @@
 #pragma once
 
-#include <audio-device-control/AudioDeviceController.h>
+#include <playing-audio/PlayAudioModel.h>
 
 class MockAudioDevice : public AudioDevice {
 	std::string _errorMessage{};
 	std::string _streamLog{};
 	StreamParameters _streamParameters{};
-	AudioDeviceController *_controller{};
+	PlayAudioModel *_controller{};
 	bool _streaming{};
 	bool _failed{};
 	bool _setCallbackResultToCompleteCalled{};
 public:
-	const AudioDeviceController *controller() const {
+	const PlayAudioModel *controller() const {
 		return _controller;
 	}
-	void setController(AudioDeviceController *c) override {
+	void setController(PlayAudioModel *c) override {
 		_controller = c;
 	}
 	bool streaming() const override {
