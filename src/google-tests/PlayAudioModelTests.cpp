@@ -138,6 +138,17 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	assertEqual({ 0, 1 }, device->streamParameters().channels);
 }
 
+TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	auto model = PlayAudioModelFacade::withValidParser(device);
+	model->playRequest({});
+	float left{};
+	float right{};
+	float *x[]{ &left, &right };
+	device->fillStreamBuffer(x, 0);
+	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+}
+
 /*
 TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
@@ -147,14 +158,5 @@ TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
 	device->fillStreamBuffer(&channel, 1);
 	EXPECT_EQ(&channel, stream->channels());
 	EXPECT_EQ(1, stream->frameCount());
-}
-
-TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	const auto reader = std::make_shared<MockAudioFrameReader>();
-	AudioDeviceController model{ device, reader };
-	reader->setComplete();
-	device->fillStreamBuffer(nullptr, 0);
-	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
 }
 */
