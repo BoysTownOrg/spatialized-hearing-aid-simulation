@@ -23,6 +23,10 @@ public:
 	void stopStreaming() {
 		controller.stopStreaming();
 	}
+
+	void openStream() {
+		controller.openStream();
+	}
 };
 
 class AudioDeviceControllerTestCase : public ::testing::TestCase {};

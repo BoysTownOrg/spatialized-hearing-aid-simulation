@@ -36,3 +36,8 @@ void AudioDeviceController::fillStreamBuffer(void *channels, int frameCount) {
 bool AudioDeviceController::active() {
 	return device->streaming();
 }
+
+void AudioDeviceController::openStream() {
+	device->closeStream();
+	device->openStream();
+}

@@ -21,6 +21,8 @@ public:
 	virtual std::string errorMessage() = 0;
 	virtual bool streaming() const = 0;
 	virtual void setCallbackResultToComplete() = 0;
+	virtual void openStream() = 0;
+	virtual void closeStream() = 0;
 };
 
 #include <memory>

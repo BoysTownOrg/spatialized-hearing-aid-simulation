@@ -25,6 +25,7 @@ public:
 	AUDIO_DEVICE_CONTROL_API void stopStreaming();
 	AUDIO_DEVICE_CONTROL_API void fillStreamBuffer(void *channels, int frameCount);
 	AUDIO_DEVICE_CONTROL_API bool active();
+	AUDIO_DEVICE_CONTROL_API void openStream();
 private:
 	void throwIfStreamingError();
 };

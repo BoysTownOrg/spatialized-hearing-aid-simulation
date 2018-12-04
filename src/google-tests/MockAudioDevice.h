@@ -4,6 +4,7 @@
 
 class MockAudioDevice : public AudioDevice {
 	std::string _errorMessage{};
+	std::string _streamLog{};
 	AudioDeviceController *_controller{};
 	bool _streaming{};
 	bool _failed{};
@@ -44,6 +45,15 @@ public:
 	}
 	void setCallbackResultToComplete() override {
 		_setCallbackResultToCompleteCalled = true;
+	}
+	std::string streamLog() const {
+		return _streamLog;
+	}
+	void openStream() override {
+		_streamLog += "open ";
+	}
+	void closeStream() override {
+		_streamLog += "close ";
 	}
 };
 
