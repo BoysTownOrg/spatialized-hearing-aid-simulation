@@ -2,7 +2,7 @@
 #include <audio-stream-processing/ProcessedAudioFrameReader.h>
 #include <gtest/gtest.h>
 
-class MockAudioFrameProcessor : public AudioFrameProcessor {
+class AudioFrameProcessorStub : public AudioFrameProcessor {
 	int _frameCount{};
 	float **_channels{};
 public:
@@ -50,7 +50,7 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferReadsThenProcesses) {
 
 TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndProcessor) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
-	const auto processor = std::make_shared<MockAudioFrameProcessor>();
+	const auto processor = std::make_shared<AudioFrameProcessorStub>();
 	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
 	stream.read(&x, 1);
@@ -62,7 +62,7 @@ TEST(ProcessedAudioFrameReaderTestCase, fillBufferPassesParametersToReaderAndPro
 
 TEST(ProcessedAudioFrameReaderTestCase, returnsCompleteWhenComplete) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
-	ProcessedAudioFrameReader adapter{ reader, std::make_shared<MockAudioFrameProcessor>() };
+	ProcessedAudioFrameReader adapter{ reader, std::make_shared<AudioFrameProcessorStub>() };
 	EXPECT_FALSE(adapter.complete());
 	reader->setComplete();
 	EXPECT_TRUE(adapter.complete());
