@@ -20,12 +20,13 @@ public:
 	bool streaming() const override {
 		return _streaming;
 	}
-	void startStream() override {
-		_streamLog += "start ";
+	void setStreaming() {
 		_streaming = true;
 	}
+	void startStream() override {
+		_streamLog += "start ";
+	}
 	void stopStream() override {
-		_streaming = false;
 	}
 	void fillStreamBuffer(void *x, int n) {
 		_controller->fillStreamBuffer(x, n);

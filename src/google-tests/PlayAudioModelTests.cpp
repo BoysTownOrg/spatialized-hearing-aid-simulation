@@ -62,7 +62,7 @@ TEST(
 		device->setFailedTrue();
 		device->setErrorMessage("error.");
 		PlayAudioModelFacade model{ device };
-		FAIL() << "Expected AudioDeviceController::DeviceConnectionFailure";
+		FAIL() << "Expected PlayAudioModel::DeviceFailure";
 	}
 	catch (const PlayAudioModel::DeviceFailure &e) {
 		assertEqual("error.", e.what());
@@ -96,9 +96,9 @@ TEST(
 TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotCreateNewStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
+	device->setStreaming();
 	model->playRequest({});
-	model->playRequest({});
-	assertEqual("close open start ", device->streamLog());
+	EXPECT_TRUE(device->streamLog().empty());
 }
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
