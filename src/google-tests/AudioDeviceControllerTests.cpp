@@ -69,6 +69,19 @@ TEST(AudioDeviceControllerTestCase, openNewStreamFirstClosesStream) {
 	assertEqual("close open ", device->streamLog());
 }
 
+TEST(AudioDeviceControllerTestCase, openStreamPassesStreamParameters) {
+	const auto device = std::make_shared<MockAudioDevice>();
+	AudioDeviceControllerFacade controller{ device };
+	AudioDevice::Parameters p;
+	p.channels = { 1 };
+	p.framesPerBuffer = 2;
+	p.sampleRate = 3;
+	controller.openStream(p);
+	assertEqual({ 1 }, device->streamParameters().channels);
+	EXPECT_EQ(2, device->streamParameters().framesPerBuffer);
+	EXPECT_EQ(3, device->streamParameters().sampleRate);
+}
+
 #include <functional>
 
 static void assertFailedDeviceThrowsStreamingError(
