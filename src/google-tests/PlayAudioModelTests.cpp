@@ -69,13 +69,6 @@ TEST(
 	}
 }
 
-TEST(AudioPlayerModelTestCase, playRequestStartsStream) {
-	const auto device = std::make_shared<MockAudioDevice>();
-	auto model = PlayAudioModelFacade::withValidParser(device);
-	model->playRequest({});
-	EXPECT_TRUE(device->streaming());
-}
-
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStream) {
 	const auto device = std::make_shared<MockAudioDevice>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
