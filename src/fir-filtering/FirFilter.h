@@ -10,11 +10,13 @@
 #include <vector>
 
 class FirFilter : public SignalProcessor {
+	using vector = std::vector<float>;
+	using size_type = vector::size_type;
 	// Order important for construction.
-	const std::vector<float> b;
-	std::vector<float> delayLine;
+	const vector b;
+	vector delayLine;
 public:
 	class InvalidCoefficients {};
-	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
+	FIR_FILTERING_API explicit FirFilter(vector b);
 	FIR_FILTERING_API void process(float *, int) override;
 };

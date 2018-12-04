@@ -11,13 +11,13 @@ FirFilter::FirFilter(std::vector<float> b) :
 }
 
 void FirFilter::process(float *x, int n) {
-	const auto size = gsl::narrow_cast<std::size_t>(n);
-	for (std::size_t i = 0; i < size; ++i) {
-		for (std::size_t j = 0; j + 1 < delayLine.size(); ++j)
+	const auto size = gsl::narrow_cast<size_type>(n);
+	for (size_type i = 0; i < size; ++i) {
+		for (size_type j = 0; j + 1 < delayLine.size(); ++j)
 			delayLine[j] = delayLine[j + 1];
 		delayLine.back() = x[i];
 		float accumulate = 0;
-		for (std::size_t j = 0; j < b.size(); ++j)
+		for (size_type j = 0; j < b.size(); ++j)
 			accumulate += b[j] * *(delayLine.end() - j - 1);
 		x[i] = accumulate;
 	}
