@@ -27,7 +27,7 @@ public:
 		std::shared_ptr<ConfigurationFileParserFactory> parserFactory
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
-	void fillStreamBuffer(void *channels, int frameCount);
+	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frameCount);
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
 	DslPrescription makeDslPrescription(std::string filePath);

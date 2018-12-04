@@ -62,7 +62,7 @@ std::string PortAudioDevice::errorMessage() {
 	return Pa_GetErrorText(lastError);
 }
 
-void PortAudioDevice::setController(AudioDeviceController *c) {
+void PortAudioDevice::setController(PlayAudioModel *c) {
 	controller = c;
 }
 
