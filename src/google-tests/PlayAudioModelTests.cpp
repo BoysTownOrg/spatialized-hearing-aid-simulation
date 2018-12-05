@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include "AudioFileReaderStub.h"
+#include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include "AudioDeviceStub.h"
 #include <playing-audio/PlayAudioModel.h>
@@ -13,12 +13,12 @@ public:
 			std::make_shared<AudioDeviceStub>(),
 		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
 			std::make_shared<AudioFrameProcessorStubFactory>(),
-		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
-			std::make_shared<AudioFileReaderStubFactory>()
+		std::shared_ptr<AudioFrameReaderFactory> audioFactory =
+			std::make_shared<AudioFrameReaderStubFactory>()
 	) :
 		model{ 
 			std::move(device),
-			std::move(audioFileFactory),
+			std::move(audioFactory),
 			std::move(processorFactory)
 		} {}
 
@@ -100,8 +100,8 @@ TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
 
 TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	const auto reader = std::make_shared<AudioFileReaderStub>();
-	const auto audioFactory = std::make_shared<AudioFileReaderStubFactory>(reader);
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	const auto audioFactory = std::make_shared<AudioFrameReaderStubFactory>(reader);
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
 		device,
@@ -110,6 +110,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	};
 	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	reader->setSampleRate(48000);
+	reader->setChannels(42);
 	PlayAudioModel::PlayRequest request;
 	request.leftDslPrescriptionFilePath = "a";
 	request.rightDslPrescriptionFilePath = "b";
@@ -130,18 +131,20 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	EXPECT_EQ(5, processorFactory->parameters().chunkSize);
 	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(48000, device->streamParameters().sampleRate);
-	EXPECT_EQ(2, device->streamParameters().channels);
+	EXPECT_EQ(42, device->streamParameters().channels);
 	EXPECT_EQ(2, device->streamParameters().deviceIndex);
 }
 
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	PlayAudioModelFacade model{ device };
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	const auto audioFactory = std::make_shared<AudioFrameReaderStubFactory>(reader);
+	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameProcessorStubFactory>(), audioFactory };
 	model.play();
-	float left{};
-	float right{};
-	float *x[]{ &left, &right };
-	device->fillStreamBuffer(x, 0);
+	device->fillStreamBuffer(nullptr, 0);
+	EXPECT_FALSE(device->setCallbackResultToCompleteCalled());
+	reader->setComplete();
+	device->fillStreamBuffer(nullptr, 0);
 	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
 }
 

@@ -4,11 +4,11 @@
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDevice> device,
-	std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
+	std::shared_ptr<AudioFrameReaderFactory> readerFactory,
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory
 ) :
 	device{ std::move(device) },
-	audioFileFactory{ std::move(audioFileFactory) },
+	readerFactory{ std::move(readerFactory) },
 	processorFactory{ std::move(processorFactory) }
 {
 	if (this->device->failed())
@@ -20,16 +20,17 @@ void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
-	frameReader = makeAudioFrameReader(request.audioFilePath);
-	auto channels = frameReader->channels();
-	if (channels == 1) {
-		frameReader = std::make_shared<ChannelCopier>(frameReader);
-		channels = 2;
+	try {
+		frameReader = readerFactory->make(request.audioFilePath);
 	}
+	catch (const AudioFrameReaderFactory::FileError &e) {
+		throw RequestFailure{ e.what() };
+	}
+
 	AudioFrameProcessorFactory::Parameters forProcessor;
 	forProcessor.attack_ms = request.attack_ms;
 	forProcessor.release_ms = request.release_ms;
-	forProcessor.channels = channels;
+	forProcessor.channels = frameReader->channels();
 	forProcessor.brirFilePath = request.brirFilePath;
 	forProcessor.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 	forProcessor.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
@@ -37,6 +38,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
+
 	try {
 		frameProcessor = processorFactory->make(forProcessor);
 	}
@@ -47,7 +49,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = frameReader->sampleRate();
-	forStreaming.channels = channels;
+	forStreaming.channels = frameReader->channels();
 
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
@@ -68,17 +70,6 @@ void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 	frameProcessor->process(audio, frames);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
-}
-
-std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(std::string filePath) {
-	return std::make_shared<AudioFileInMemory>(*makeAudioFileReader(filePath));
-}
-
-std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string filePath) {
-	const auto reader = audioFileFactory->make(filePath);
-	if (reader->failed())
-		throw RequestFailure{ reader->errorMessage() };
-	return reader;
 }
 
 std::vector<std::string> PlayAudioModel::audioDeviceDescriptions() {

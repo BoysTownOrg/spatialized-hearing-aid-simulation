@@ -16,3 +16,11 @@ public:
 	AUDIO_STREAM_PROCESSING_API int channels() const override;
 };
 
+class ChannelCopierFactory : public AudioFrameReaderFactory {
+	std::shared_ptr<AudioFrameReaderFactory> factory;
+public:
+	explicit ChannelCopierFactory(
+		std::shared_ptr<AudioFrameReaderFactory> factory
+	);
+	std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+};

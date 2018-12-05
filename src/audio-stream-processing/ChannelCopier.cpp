@@ -20,3 +20,17 @@ int ChannelCopier::sampleRate() const {
 int ChannelCopier::channels() const {
 	return 2;
 }
+
+ChannelCopierFactory::ChannelCopierFactory(
+	std::shared_ptr<AudioFrameReaderFactory> factory
+) :
+	factory{ std::move(factory) }
+{
+}
+
+std::shared_ptr<AudioFrameReader> ChannelCopierFactory::make(std::string filePath) {
+	auto frameReader = factory->make(filePath);
+	if (frameReader->channels() == 1)
+		frameReader = std::make_shared<ChannelCopier>(frameReader);
+	return frameReader;
+}

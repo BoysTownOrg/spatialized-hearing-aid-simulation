@@ -46,3 +46,23 @@ public:
 		_channels = c;
 	}
 };
+
+class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {
+	std::string _filePath{};
+	std::shared_ptr<AudioFrameReaderStub> reader;
+public:
+	explicit AudioFrameReaderStubFactory(
+		std::shared_ptr<AudioFrameReaderStub> reader =
+			std::make_shared<AudioFrameReaderStub>()
+	) :
+		reader{ std::move(reader) } {}
+
+	std::shared_ptr<AudioFrameReader> make(std::string filePath) override {
+		_filePath = filePath;
+		return reader;
+	}
+
+	std::string filePath() const {
+		return _filePath;
+	}
+};

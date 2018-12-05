@@ -23,3 +23,12 @@ public:
 	AUDIO_FILE_READING_API int sampleRate() const override;
 	AUDIO_FILE_READING_API int channels() const override;
 };
+
+class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
+	std::shared_ptr<AudioFileReaderFactory> factory;
+public:
+	explicit AudioFileInMemoryFactory(
+		std::shared_ptr<AudioFileReaderFactory> factory
+	);
+	std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+};
