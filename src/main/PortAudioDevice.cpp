@@ -7,7 +7,7 @@ PortAudioDevice::PortAudioDevice() {
 void PortAudioDevice::openStream(StreamParameters parameters) {
 	PaStreamParameters outputParameters;
 	outputParameters.device = parameters.deviceIndex;
-	outputParameters.channelCount = parameters.channels.size();
+	outputParameters.channelCount = parameters.channels;
 	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
 	outputParameters.hostApiSpecificStreamInfo = nullptr;
 	lastError = Pa_OpenStream(
