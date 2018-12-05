@@ -45,5 +45,5 @@ private:
 	);
 	std::shared_ptr<AudioFileReader> makeAudioFileReader(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeAudioFrameReader(std::string filePath);
-	std::shared_ptr<AudioFrameProcessor> makeAudioFrameProcessor(PlayRequest, int sampleRate);
+	std::shared_ptr<AudioFrameProcessor> makeAudioFrameProcessor(PlayRequest, int sampleRate, int channels);
 };
