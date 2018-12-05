@@ -11,10 +11,10 @@ public:
 	explicit PlayAudioModelFacade(
 		std::shared_ptr<AudioDevice> device =
 			std::make_shared<AudioDeviceStub>(),
-		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
-			std::make_shared<AudioFrameProcessorStubFactory>(),
 		std::shared_ptr<AudioFrameReaderFactory> audioFactory =
-			std::make_shared<AudioFrameReaderStubFactory>()
+			std::make_shared<AudioFrameReaderStubFactory>(),
+		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
+			std::make_shared<AudioFrameProcessorStubFactory>()
 	) :
 		model{ 
 			std::move(device),
@@ -105,8 +105,8 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
 		device,
-		processorFactory,
-		audioFactory
+		audioFactory,
+		processorFactory
 	};
 	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	reader->setSampleRate(48000);
@@ -141,8 +141,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
-	const auto audioFactory = std::make_shared<AudioFrameReaderStubFactory>(reader);
-	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameProcessorStubFactory>(), audioFactory };
+	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameReaderStubFactory>(reader) };
 	model.play();
 	device->fillStreamBuffer(nullptr, 0);
 	EXPECT_FALSE(device->setCallbackResultToCompleteCalled());
@@ -156,9 +155,9 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	const auto processor = std::make_shared<AudioFrameProcessorStub>();
 	PlayAudioModelFacade model{ 
-		device, 
-		std::make_shared<AudioFrameProcessorStubFactory>(processor),
-		std::make_shared<AudioFrameReaderStubFactory>(reader) 
+		device,
+		std::make_shared<AudioFrameReaderStubFactory>(reader),
+		std::make_shared<AudioFrameProcessorStubFactory>(processor)
 	};
 	model.play();
 	float left{};
@@ -212,8 +211,8 @@ TEST(PlayAudioModelTestCase, fillBufferReadsThenProcesses) {
 	const auto processor = std::make_shared<AudioTimesTwo>();
 	PlayAudioModelFacade model{
 		device,
-		std::make_shared<AudioFrameProcessorStubFactory>(processor),
-		std::make_shared<AudioFrameReaderStubFactory>(reader)
+		std::make_shared<AudioFrameReaderStubFactory>(reader),
+		std::make_shared<AudioFrameProcessorStubFactory>(processor)
 	};
 	model.play();
 	float x{};
