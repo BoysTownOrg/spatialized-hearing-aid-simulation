@@ -49,9 +49,9 @@ public:
 	}
 };
 
-class AudioPlayerModelTestCase : public ::testing::TestCase {};
+class PlayAudioModelTestCase : public ::testing::TestCase {};
 
-TEST(AudioPlayerModelTestCase, constructorSetsItself) {
+TEST(PlayAudioModelTestCase, constructorSetsItself) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
 	EXPECT_EQ(model->get(), device->controller());
@@ -71,16 +71,16 @@ static void assertDeviceFailureOnConstruction(
 }
 
 TEST(
-	AudioPlayerModelTestCase,
+	PlayAudioModelTestCase,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize)
 {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	device->setFailedTrue();
+	device->fail();
 	device->setErrorMessage("error.");
 	assertDeviceFailureOnConstruction(device, "error.");
 }
 
-TEST(AudioPlayerModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) {
+TEST(PlayAudioModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
@@ -88,13 +88,13 @@ TEST(AudioPlayerModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) 
 }
 
 TEST(
-	AudioPlayerModelTestCase,
+	PlayAudioModelTestCase,
 	playRequestThrowsRequestErrorWhenDeviceFailure)
 {
 	try {
 		const auto device = std::make_shared<AudioDeviceStub>();
 		const auto model = PlayAudioModelFacade::withValidParser(device);
-		device->setFailedTrue();
+		device->fail();
 		device->setErrorMessage("error.");
 		model->playRequest({});
 		FAIL() << "Expected PlayAudioModel::RequestFailure";
@@ -104,7 +104,7 @@ TEST(
 	}
 }
 
-TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStream) {
+TEST(PlayAudioModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	device->setStreaming();
@@ -112,7 +112,7 @@ TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStrea
 	EXPECT_TRUE(device->streamLog().empty());
 }
 
-TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
+TEST(PlayAudioModelTestCase, playRequestPassesParametersToFactories) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	device->setDescriptions({ "a", "b", "c", "d", "e", "f", "g" });
 	const auto reader = std::make_shared<AudioFileReaderStub>();
@@ -152,7 +152,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	EXPECT_EQ(4, device->streamParameters().deviceIndex);
 }
 
-TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
@@ -163,14 +163,14 @@ TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenC
 	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
 }
 
-TEST(AudioPlayerModelTestCase, playRequestSetsCallbackResultToContinue) {
+TEST(PlayAudioModelTestCase, playRequestSetsCallbackResultToContinue) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->playRequest({});
 	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
 }
 
-TEST(AudioPlayerModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
+TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	device->setDescriptions({ "a", "b", "c" });
 	PlayAudioModelFacade model{ device };
@@ -178,7 +178,7 @@ TEST(AudioPlayerModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 }
 
 /*
-TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
+TEST(PlayAudioModelTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto stream = std::make_shared<AudioFrameReaderStub>();
 	AudioDeviceController model{ device, stream };

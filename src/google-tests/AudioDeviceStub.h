@@ -36,7 +36,7 @@ public:
 	void fillStreamBuffer(void *x, int n) {
 		_controller->fillStreamBuffer(x, n);
 	}
-	void setFailedTrue() {
+	void fail() {
 		_failed = true;
 	}
 	void setErrorMessage(std::string s) {

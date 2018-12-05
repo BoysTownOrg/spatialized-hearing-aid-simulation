@@ -35,7 +35,7 @@ TEST(
 {
 	try {
 		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
-		compressor->setFailedTrue();
+		compressor->fail();
 		HearingAidProcessorFacade processor{ compressor };
 		FAIL() << "Expected HearingAidProcessor::CompressorError";
 	}

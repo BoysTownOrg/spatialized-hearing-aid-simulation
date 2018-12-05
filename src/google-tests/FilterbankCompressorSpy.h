@@ -73,7 +73,7 @@ public:
 		return 1;
 	}
 
-	void setFailedTrue() {
+	void fail() {
 		_failed = true;
 	}
 
