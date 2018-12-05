@@ -67,6 +67,10 @@ void PlayAudioModel::playRequest(PlayRequest request) {
 	forDevice.sampleRate = reader->sampleRate();
 	forDevice.channels = { 0, 1 };
 
+	for (int i = 0; i < device->count(); ++i)
+		if (device->description(i) == request.audioDevice)
+			forDevice.deviceIndex = i;
+
 	streamProcessor = std::make_shared<ProcessedAudioFrameReader>(
 		makeAudioFrameReader(reader),
 		std::make_shared<ChannelProcessingGroup>(
