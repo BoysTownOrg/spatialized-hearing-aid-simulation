@@ -37,7 +37,7 @@ FltkWindow::FltkWindow() :
 	_release_ms(250, 350, 200, 45, "release (ms)"),
 	_windowSize(250, 400, 200, 45, "window size (samples)"),
 	_chunkSize(250, 450, 200, 45, "chunk size (samples)"),
-	audioDevice(250, 500, 200, 45, "audio device"),
+	_audioDevice(250, 500, 200, 45, "audio device"),
 	play(250, 550, 60, 45, "play")
 {
 	window.end();
@@ -51,7 +51,12 @@ FltkWindow::FltkWindow() :
 
 void FltkWindow::populateAudioDeviceMenu(std::vector<std::string> items) {
 	for (const auto &s : items)
-		audioDevice.add(s.c_str());
+		_audioDevice.add(s.c_str());
+	_audioDevice.value(0);
+}
+
+std::string FltkWindow::audioDevice() const {
+	return _audioDevice.text();
 }
 
 void FltkWindow::runEventLoop() {

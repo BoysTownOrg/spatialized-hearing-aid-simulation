@@ -29,7 +29,7 @@ class FltkWindow : public SpatializedHearingAidSimulationView
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
-	Fl_Choice audioDevice;
+	Fl_Choice _audioDevice;
 	Fl_Button play;
 	SpatializedHearingAidSimulationPresenter *presenter{};
 	int browseResult{};
@@ -47,6 +47,7 @@ public:
 	std::string rightDslPrescriptionFilePath() const override;
 	std::string audioFilePath() const override;
 	std::string brirFilePath() const override;
+	std::string audioDevice() const override;
 	std::string level_dB_Spl() const override;
 	std::string attack_ms() const override;
 	std::string release_ms() const override;
