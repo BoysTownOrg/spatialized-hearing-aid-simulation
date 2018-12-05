@@ -47,3 +47,12 @@ TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
 	adapter.read(channels, 1);
 	EXPECT_TRUE(adapter.complete());
 }
+
+TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
+	AudioFileReaderStub reader{};
+	reader.setChannels(1);
+	reader.setSampleRate(2);
+	AudioFileInMemory adapter{ reader };
+	EXPECT_EQ(1, adapter.channels());
+	EXPECT_EQ(2, adapter.sampleRate());
+}
