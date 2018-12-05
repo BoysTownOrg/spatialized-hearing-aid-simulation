@@ -1,8 +1,8 @@
-#include "SpatializedHearingAidSimulationPresenter.h"
+#include "Presenter.h"
 
-SpatializedHearingAidSimulationPresenter::SpatializedHearingAidSimulationPresenter(
-	std::shared_ptr<SpatializedHearingAidSimulationModel> model, 
-	std::shared_ptr<SpatializedHearingAidSimulationView> view
+Presenter::Presenter(
+	std::shared_ptr<Model> model, 
+	std::shared_ptr<View> view
 ) :
 	model{ std::move(model) },
 	view{ std::move(view) }
@@ -11,35 +11,35 @@ SpatializedHearingAidSimulationPresenter::SpatializedHearingAidSimulationPresent
 	this->view->populateAudioDeviceMenu(this->model->audioDeviceDescriptions());
 }
 
-void SpatializedHearingAidSimulationPresenter::loop() {
+void Presenter::loop() {
 	view->runEventLoop();
 }
 
-void SpatializedHearingAidSimulationPresenter::browseForLeftDslPrescription() {
+void Presenter::browseForLeftDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
 		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
 }
 
-void SpatializedHearingAidSimulationPresenter::browseForRightDslPrescription() {
+void Presenter::browseForRightDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{},
 		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(p); });
 }
 
-void SpatializedHearingAidSimulationPresenter::browseForAudio() {
+void Presenter::browseForAudio() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.wav" },
 		[=](std::string p) { this->view->setAudioFilePath(p); });
 }
 
-void SpatializedHearingAidSimulationPresenter::browseForBrir() {
+void Presenter::browseForBrir() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.mat" },
 		[=](std::string p) { this->view->setBrirFilePath(p); });
 }
 
-void SpatializedHearingAidSimulationPresenter::browseAndUpdateIfNotCancelled(
+void Presenter::browseAndUpdateIfNotCancelled(
 	std::vector<std::string> filters,
 	std::function<void(std::string)> update)
 {
@@ -48,9 +48,9 @@ void SpatializedHearingAidSimulationPresenter::browseAndUpdateIfNotCancelled(
 		update(filePath);
 }
 
-void SpatializedHearingAidSimulationPresenter::play() {
+void Presenter::play() {
 	try {
-		SpatializedHearingAidSimulationModel::PlayRequest request;
+		Model::PlayRequest request;
 		request.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
 		request.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 		request.brirFilePath = view->brirFilePath();
@@ -66,7 +66,7 @@ void SpatializedHearingAidSimulationPresenter::play() {
 	catch (const BadInput &e) {
 		view->showErrorDialog(e.what());
 	}
-	catch (const SpatializedHearingAidSimulationModel::RequestFailure &failure) {
+	catch (const Model::RequestFailure &failure) {
 		view->showErrorDialog(failure.what());
 	}
 }
@@ -75,7 +75,7 @@ static std::string badInputMessage(std::string x, std::string identifier) {
 	return { "'" + x + "' is not a valid " + identifier + "." };
 }
 
-double SpatializedHearingAidSimulationPresenter::convertToDouble(
+double Presenter::convertToDouble(
 	std::string x, 
 	std::string identifier)
 {
@@ -91,7 +91,7 @@ static bool onlyContainsDigits(const std::string s) {
 	return s.find_first_not_of("0123456789") == std::string::npos;
 }
 
-int SpatializedHearingAidSimulationPresenter::convertToPositiveInteger(std::string x, std::string identifier)
+int Presenter::convertToPositiveInteger(std::string x, std::string identifier)
 {
 	if (!onlyContainsDigits(x))
 		throw BadInput{ badInputMessage(x, identifier) };

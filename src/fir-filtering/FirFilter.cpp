@@ -1,5 +1,5 @@
 #include "FirFilter.h"
-#include <gsl/gsl_util>
+#include <gsl/gsl>
 #include <algorithm>
 
 FirFilter::FirFilter(vector_type b) :

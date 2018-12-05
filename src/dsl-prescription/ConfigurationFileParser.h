@@ -4,6 +4,7 @@
 #include <common-includes/RuntimeError.h>
 #include <vector>
 #include <string>
+#include <memory>
 
 class ConfigurationFileParser {
 public:
@@ -13,8 +14,6 @@ public:
 	virtual double asDouble(std::string property) const = 0;
 	virtual int asInt(std::string property) const = 0;
 };
-
-#include <memory>
 
 class ConfigurationFileParserFactory {
 public:

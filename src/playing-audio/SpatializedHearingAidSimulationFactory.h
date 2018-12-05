@@ -4,8 +4,8 @@
 #include "AudioFrameProcessor.h"
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
-#include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <dsl-prescription/DslPrescription.h>
+#include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <signal-processing/SignalProcessor.h>
 
 class SpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {

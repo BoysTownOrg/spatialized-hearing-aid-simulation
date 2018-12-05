@@ -2,6 +2,7 @@
 
 #include <common-includes/Interface.h>
 #include <string>
+#include <memory>
 
 class AudioFileReader {
 public:
@@ -13,8 +14,6 @@ public:
 	virtual bool failed() const = 0;
 	virtual std::string errorMessage() const = 0;
 };
-
-#include <memory>
 
 class AudioFileReaderFactory {
 public:

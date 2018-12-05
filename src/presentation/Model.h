@@ -5,11 +5,10 @@
 #include <string>
 #include <vector>
 
-class SpatializedHearingAidSimulationModel {
+class Model {
 public:
+	INTERFACE_OPERATIONS(Model);
 	RUNTIME_ERROR(RequestFailure);
-	INTERFACE_OPERATIONS(SpatializedHearingAidSimulationModel);
-	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -23,4 +22,5 @@ public:
 		int chunkSize;
 	};
 	virtual void play(PlayRequest) = 0;
+	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };

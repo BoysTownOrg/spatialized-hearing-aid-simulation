@@ -18,13 +18,13 @@
     <ClInclude Include="presentation-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpatializedHearingAidSimulationPresenter.h">
+    <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpatializedHearingAidSimulationView.h">
+    <ClInclude Include="Presenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpatializedHearingAidSimulationModel.h">
+    <ClInclude Include="View.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

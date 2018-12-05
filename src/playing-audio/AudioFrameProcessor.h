@@ -1,16 +1,15 @@
 #pragma once
 
 #include <common-includes/Interface.h>
+#include <common-includes/RuntimeError.h>
+#include <memory>
+#include <string>
 
 class AudioFrameProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessor);
 	virtual void process(float **channels, int frameCount) = 0;
 };
-
-#include <common-includes/RuntimeError.h>
-#include <memory>
-#include <string>
 
 class AudioFrameProcessorFactory {
 public:

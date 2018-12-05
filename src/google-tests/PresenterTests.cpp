@@ -1,8 +1,8 @@
 #include "assert-utility.h"
-#include <presentation/SpatializedHearingAidSimulationPresenter.h>
+#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
-class MockModel : public SpatializedHearingAidSimulationModel {
+class MockModel : public Model {
 	PlayRequest _request{};
 	std::vector<std::string> _audioDeviceDescriptions{};
 public:
@@ -23,7 +23,7 @@ public:
 	}
 };
 
-class MockView : public SpatializedHearingAidSimulationView {
+class MockView : public View {
 	std::vector<std::string> _browseFilters{};
 	std::vector<std::string> _audioDeviceMenuItems{};
 	std::string _leftDslPrescriptionFilePath{};
@@ -38,15 +38,15 @@ class MockView : public SpatializedHearingAidSimulationView {
 	std::string _windowSize{ "0" };
 	std::string _chunkSize{ "0" };
 	std::string _errorMessage{};
-	SpatializedHearingAidSimulationPresenter *_presenter{};
+	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
 public:
-	void setPresenter(SpatializedHearingAidSimulationPresenter *p) override {
+	void setPresenter(Presenter *p) override {
 		_presenter = p;
 	}
 
-	SpatializedHearingAidSimulationPresenter *presenter() const {
+	Presenter *presenter() const {
 		return _presenter;
 	}
 
@@ -199,12 +199,12 @@ public:
 };
 
 class PresenterFacade {
-	SpatializedHearingAidSimulationPresenter presenter;
+	Presenter presenter;
 public:
-	PresenterFacade(std::shared_ptr<SpatializedHearingAidSimulationView> view) :
+	PresenterFacade(std::shared_ptr<View> view) :
 		presenter{ std::make_shared<MockModel>(), std::move(view) } {}
 
-	const SpatializedHearingAidSimulationPresenter *get() const {
+	const Presenter *get() const {
 		return &presenter;
 	}
 
@@ -225,7 +225,7 @@ TEST(PresenterTestCase, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<MockView>();
 	const auto model = std::make_shared<MockModel>();
 	model->setAudioDeviceDescriptions({ "a", "b", "c" });
-	SpatializedHearingAidSimulationPresenter presenter{ model, view };
+	Presenter presenter{ model, view };
 	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
 }
 
@@ -337,7 +337,7 @@ TEST(
 {
 	const auto view = std::make_shared<MockView>();
 	const auto model = std::make_shared<MockModel>();
-	SpatializedHearingAidSimulationPresenter presenter{ model, view };
+	Presenter presenter{ model, view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioFilePath("c");
@@ -361,7 +361,7 @@ TEST(
 	EXPECT_EQ(5, model->request().chunkSize);
 }
 
-class ErrorModel : public SpatializedHearingAidSimulationModel {
+class ErrorModel : public Model {
 	std::string message;
 public:
 	explicit ErrorModel(std::string message) :
@@ -379,7 +379,7 @@ public:
 TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 	const auto view = std::make_shared<MockView>();
 	const auto model = std::make_shared<ErrorModel>("error.");
-	SpatializedHearingAidSimulationPresenter presenter{ model, view };
+	Presenter presenter{ model, view };
 	view->play();
 	assertEqual("error.", view->errorMessage());
 }

@@ -3,7 +3,7 @@
 #include "LibsndfileReader.h"
 #include "PortAudioDevice.h"
 #include <google-tests/FakeConfigurationFileParser.h>
-#include <presentation/SpatializedHearingAidSimulationPresenter.h>
+#include <presentation/Presenter.h>
 #include <playing-audio/SpatializedHearingAidSimulationFactory.h>
 #include <playing-audio/PlayAudioModel.h>
 
@@ -71,7 +71,7 @@ int main() {
 			105.1 
 		}
 	);
-	SpatializedHearingAidSimulationPresenter presenter{
+	Presenter presenter{
 		std::make_shared<PlayAudioModel>(
 			std::make_shared<PortAudioDevice>(),
 			std::make_shared<LibsndfileReaderFactory>(),

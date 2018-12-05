@@ -136,9 +136,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="presentation-exports.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationModel.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationPresenter.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationView.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Presenter.h" />
+    <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpatializedHearingAidSimulationPresenter.cpp" />

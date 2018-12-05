@@ -2,17 +2,17 @@
 
 #include "audio-file-reading-exports.h"
 #include "AudioFileReader.h"
-#include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
+#include <common-includes/RuntimeError.h>
 #include <vector>
 
 class AudioFileInMemory : public AudioFrameReader {
 	using buffer_type = std::vector<float>;
 	using size_type = buffer_type::size_type;
 	buffer_type buffer;
+	size_type head = 0;
 	int _channels;
 	int _sampleRate;
-	size_type head = 0;
 public:
 	RUNTIME_ERROR(FileError);
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <presentation/SpatializedHearingAidSimulationPresenter.h>
+#include <presentation/Presenter.h>
 #define WIN32
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Input.H>
@@ -11,7 +11,7 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl.H>
 
-class FltkWindow : public SpatializedHearingAidSimulationView
+class FltkWindow : public View
 {
 	// FLTK forms widget groups at construction.
 	// Therefore window is declared first.
@@ -31,11 +31,11 @@ class FltkWindow : public SpatializedHearingAidSimulationView
 	Fl_Button browseBrir;
 	Fl_Choice _audioDevice;
 	Fl_Button play;
-	SpatializedHearingAidSimulationPresenter *presenter{};
+	Presenter *presenter{};
 	int browseResult{};
 public:
 	FltkWindow();
-	void setPresenter(SpatializedHearingAidSimulationPresenter *) override;
+	void setPresenter(Presenter *) override;
 	void runEventLoop() override;
 	std::string browseForFile(std::vector<std::string> filters) override;
 	bool browseCancelled() override;

@@ -5,10 +5,10 @@
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <audio-file-reading/AudioFileReader.h>
+#include <presentation/Model.h>
 #include <common-includes/RuntimeError.h>
-#include <presentation/SpatializedHearingAidSimulationModel.h>
 
-class PlayAudioModel : public SpatializedHearingAidSimulationModel, public AudioDeviceController {
+class PlayAudioModel : public Model, public AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;

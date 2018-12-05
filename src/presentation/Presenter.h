@@ -1,19 +1,19 @@
 #pragma once
 
 #include "presentation-exports.h"
-#include "SpatializedHearingAidSimulationView.h"
-#include "SpatializedHearingAidSimulationModel.h"
+#include "View.h"
+#include "Model.h"
 #include <common-includes/RuntimeError.h>
 #include <memory>
 #include <functional>
 
-class SpatializedHearingAidSimulationPresenter {
-	std::shared_ptr<SpatializedHearingAidSimulationModel> model;
-	std::shared_ptr<SpatializedHearingAidSimulationView> view;
+class Presenter {
+	std::shared_ptr<Model> model;
+	std::shared_ptr<View> view;
 public:
-	PRESENTATION_API SpatializedHearingAidSimulationPresenter(
-		std::shared_ptr<SpatializedHearingAidSimulationModel> model, 
-		std::shared_ptr<SpatializedHearingAidSimulationView> view);
+	PRESENTATION_API Presenter(
+		std::shared_ptr<Model> model, 
+		std::shared_ptr<View> view);
 	PRESENTATION_API void loop();
 	PRESENTATION_API void browseForLeftDslPrescription();
 	PRESENTATION_API void browseForRightDslPrescription();

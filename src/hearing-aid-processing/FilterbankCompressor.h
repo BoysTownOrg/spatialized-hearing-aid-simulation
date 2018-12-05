@@ -1,6 +1,8 @@
 #pragma once
 
+#include <dsl-prescription/DslPrescription.h>
 #include <common-includes/Interface.h>
+#include <memory>
 
 class FilterbankCompressor {
 public:
@@ -39,9 +41,6 @@ public:
 	virtual int channels() const = 0;
 	virtual bool failed() const = 0;
 };
-
-#include <dsl-prescription/DslPrescription.h>
-#include <memory>
 
 class FilterbankCompressorFactory {
 public:
