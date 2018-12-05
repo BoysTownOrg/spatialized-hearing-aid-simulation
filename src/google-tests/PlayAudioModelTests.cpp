@@ -150,13 +150,20 @@ TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenCom
 
 TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	const auto device = std::make_shared<AudioDeviceStub>();
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	const auto processor = std::make_shared<AudioFrameProcessorStub>();
-	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameProcessorStubFactory>(processor) };
+	PlayAudioModelFacade model{ 
+		device, 
+		std::make_shared<AudioFrameProcessorStubFactory>(processor),
+		std::make_shared<AudioFrameReaderStubFactory>(reader) 
+	};
 	model.play();
 	float left{};
 	float right{};
 	float *x[]{ &left, &right };
 	device->fillStreamBuffer(x, 1);
+	EXPECT_EQ(x, reader->audioBuffer());
+	EXPECT_EQ(1, reader->frames());
 	EXPECT_EQ(x, processor->audioBuffer());
 	EXPECT_EQ(1, processor->frames());
 }
