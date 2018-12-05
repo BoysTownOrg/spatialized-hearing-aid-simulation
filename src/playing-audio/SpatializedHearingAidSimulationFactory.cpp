@@ -17,7 +17,7 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p)
 {
 	if (p.channels != 2)
-		throw Failure{ "Can't process other than two audioBuffer." };
+		throw Failure{ "Can't process other than two channels." };
 
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = p.attack_ms;
@@ -33,9 +33,9 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 
 	return std::make_shared<ChannelProcessingGroup>(
 		std::vector<std::shared_ptr<SignalProcessor>>{
-		makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor),
+			makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor),
 			makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor)
-	}
+		}
 	);
 }
 
@@ -61,7 +61,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	try {
 		return std::make_shared<HearingAidProcessor>(
 			compressorFactory->make(prescription, parameters)
-			);
+		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
 		throw Failure{ e.what() };

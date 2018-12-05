@@ -63,8 +63,9 @@ void PlayAudioModel::play(PlayRequest request) {
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
-	frameReader->read(static_cast<float **>(channels), frames);
-	frameProcessor->process(static_cast<float **>(channels), frames);
+	const auto audio = static_cast<float **>(channels);
+	frameReader->read(audio, frames);
+	frameProcessor->process(audio, frames);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 }
