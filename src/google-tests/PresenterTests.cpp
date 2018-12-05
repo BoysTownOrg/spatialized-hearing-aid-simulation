@@ -192,6 +192,10 @@ public:
 	void setAudioDevice(std::string s) {
 		_audioDevice = s;
 	}
+
+	std::string audioDevice() const override {
+		return _audioDevice;
+	}
 };
 
 class PresenterFacade {
