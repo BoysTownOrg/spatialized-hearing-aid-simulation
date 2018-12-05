@@ -27,7 +27,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
-	frameReader = makeAudioFrameReader(makeAudioFileReader(request.audioFilePath));
+	frameReader = makeAudioFrameReader(request.audioFilePath);
 	frameProcessor = makeAudioFrameProcessor(request, frameReader->sampleRate());
 
 	AudioDevice::StreamParameters forStreaming;
@@ -119,8 +119,9 @@ std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string
 }
 
 std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(
-	std::shared_ptr<AudioFileReader> reader
+	std::string filePath
 ) {
+	const auto reader = makeAudioFileReader(filePath);
 	const auto inMemory = std::make_shared<AudioFileInMemory>(*reader);
 	if (reader->channels() == 1)
 		return std::make_shared<ChannelCopier>(inMemory);
