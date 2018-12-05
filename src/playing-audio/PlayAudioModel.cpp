@@ -45,14 +45,15 @@ void PlayAudioModel::play(PlayRequest request) {
 		std::make_shared<ChannelProcessingGroup>(
 			std::vector<std::shared_ptr<SignalProcessor>>{ 
 				makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
-				makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) }
+				makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) 
+			}
 		)
 	);
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = reader->sampleRate();
-	forStreaming.channels = { 0, 1 };
+	forStreaming.channels = 2;
 
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)

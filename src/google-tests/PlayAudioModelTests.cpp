@@ -148,7 +148,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	EXPECT_EQ(5, compressorFactory->parameters().chunkSize);
 	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(48000, device->streamParameters().sampleRate);
-	assertEqual({ 0, 1 }, device->streamParameters().channels);
+	EXPECT_EQ(2, device->streamParameters().channels);
 	EXPECT_EQ(4, device->streamParameters().deviceIndex);
 }
 

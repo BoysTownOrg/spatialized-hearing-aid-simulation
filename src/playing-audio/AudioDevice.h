@@ -8,8 +8,8 @@
 class AudioDevice {
 public:
 	struct StreamParameters {
-		std::vector<int> channels;
 		unsigned long framesPerBuffer;
+		int channels;
 		int sampleRate;
 		int deviceIndex;
 	};
