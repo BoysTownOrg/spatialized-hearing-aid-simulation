@@ -12,7 +12,7 @@ public:
 		std::shared_ptr<AudioDevice> device =
 			std::make_shared<AudioDeviceStub>(),
 		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
-		std::make_shared<AudioFrameProcessorStubFactory>(),
+			std::make_shared<AudioFrameProcessorStubFactory>(),
 		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
 			std::make_shared<AudioFileReaderStubFactory>()
 	) :
@@ -22,7 +22,7 @@ public:
 			std::move(processorFactory)
 		} {}
 
-	void play(PlayAudioModel::PlayRequest r) {
+	void play(PlayAudioModel::PlayRequest r = {}) {
 		model.play(r);
 	}
 
@@ -69,7 +69,7 @@ TEST(
 TEST(PlayAudioModelTestCase, playFirstClosesStreamThenOpensThenStarts) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
-	model.play({});
+	model.play();
 	assertEqual("close open start ", device->streamLog());
 }
 
@@ -82,7 +82,7 @@ TEST(
 		PlayAudioModelFacade model{ device };
 		device->fail();
 		device->setErrorMessage("error.");
-		model.play({});
+		model.play();
 		FAIL() << "Expected PlayAudioModel::RequestFailure";
 	}
 	catch (const PlayAudioModel::RequestFailure &e) {
@@ -94,7 +94,7 @@ TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
 	device->setStreaming();
-	model.play({});
+	model.play();
 	EXPECT_TRUE(device->streamLog().empty());
 }
 
@@ -137,7 +137,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
-	model.play({});
+	model.play();
 	float left{};
 	float right{};
 	float *x[]{ &left, &right };
@@ -149,7 +149,7 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto processor = std::make_shared<AudioFrameProcessorStub>();
 	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameProcessorStubFactory>(processor) };
-	model.play({});
+	model.play();
 	float left{};
 	float right{};
 	float *x[]{ &left, &right };
@@ -161,7 +161,7 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 TEST(PlayAudioModelTestCase, playSetsCallbackResultToContinue) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
-	model.play({});
+	model.play();
 	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
 }
 
@@ -209,15 +209,5 @@ TEST(PlayAudioModelTestCase, fillBufferPassesParametersToReaderAndProcessor) {
 	EXPECT_EQ(1, reader->frames());
 	EXPECT_EQ(&x, processor->audioBuffer());
 	EXPECT_EQ(1, processor->frames());
-}
-
-TEST(PlayAudioModelTestCase, fillStreamBufferFillsFromStream) {
-	const auto device = std::make_shared<AudioDeviceStub>();
-	const auto stream = std::make_shared<AudioFrameReaderStub>();
-	AudioDeviceController model{ device, stream };
-	float *channel{};
-	device->fillStreamBuffer(&channel, 1);
-	EXPECT_EQ(&channel, stream->audioBuffer());
-	EXPECT_EQ(1, stream->frames());
 }
 */
