@@ -34,6 +34,14 @@ int PortAudioDevice::audioCallback(
 	return self->callbackResult;
 }
 
+int PortAudioDevice::count() {
+	return Pa_GetDeviceCount();
+}
+
+std::string PortAudioDevice::description(int i) {
+	return Pa_GetDeviceInfo(i)->name;
+}
+
 bool PortAudioDevice::supportsAsio() {
 	return Pa_HostApiTypeIdToHostApiIndex(paASIO) != paHostApiNotFound;
 }

@@ -8,6 +8,7 @@
 #include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/Fl_Choice.H>
 #include <FL/Fl.H>
 
 class FltkWindow : public SpatializedHearingAidSimulationView
@@ -28,6 +29,7 @@ class FltkWindow : public SpatializedHearingAidSimulationView
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
+	Fl_Choice audioDevice;
 	Fl_Button play;
 	SpatializedHearingAidSimulationPresenter *presenter{};
 	int browseResult{};
@@ -51,6 +53,7 @@ public:
 	std::string windowSize() const override;
 	std::string chunkSize() const override;
 	void showErrorDialog(std::string message) override;
+	void populateAudioDeviceMenu(std::vector<std::string> items) override;
 
 private:
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);

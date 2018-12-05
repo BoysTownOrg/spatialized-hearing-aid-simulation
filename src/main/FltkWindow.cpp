@@ -23,7 +23,7 @@ void FltkWindow::onPlay(Fl_Widget *, void *self) {
 }
 
 FltkWindow::FltkWindow() :
-	window(800, 200, 600, 550),
+	window(800, 200, 600, 600),
 	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
 	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
 	_audioFilePath(250, 150, 200, 45, "audio file path"),
@@ -37,7 +37,8 @@ FltkWindow::FltkWindow() :
 	_release_ms(250, 350, 200, 45, "release (ms)"),
 	_windowSize(250, 400, 200, 45, "window size (samples)"),
 	_chunkSize(250, 450, 200, 45, "chunk size (samples)"),
-	play(250, 500, 60, 45, "play")
+	audioDevice(250, 500, 200, 45, "audio device"),
+	play(250, 550, 60, 45, "play")
 {
 	window.end();
 	window.show();
@@ -46,6 +47,11 @@ FltkWindow::FltkWindow() :
 	browseAudio.callback(onBrowseAudio, this);
 	browseBrir.callback(onBrowseBrir, this);
 	play.callback(onPlay, this);
+}
+
+void FltkWindow::populateAudioDeviceMenu(std::vector<std::string> items) {
+	for (const auto &s : items)
+		audioDevice.add(s.c_str());
 }
 
 void FltkWindow::runEventLoop() {
