@@ -28,12 +28,20 @@ void PlayAudioModel::play(PlayRequest request) {
 		return;
 
 	frameReader = makeAudioFrameReader(request.audioFilePath);
-	frameProcessor = makeAudioFrameProcessor(request, frameReader->sampleRate(), frameReader->channels());
+	auto channels = frameReader->channels();
+	if (channels == 1) {
+		frameReader = std::make_shared<ChannelCopier>(frameReader);
+		channels = 2;
+	}
+	frameProcessor = makeAudioFrameProcessor(
+		request, 
+		frameReader->sampleRate(), 
+		channels);
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = frameReader->sampleRate();
-	forStreaming.channels = frameReader->channels();
+	forStreaming.channels = channels;
 
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
@@ -55,15 +63,8 @@ void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
 		device->setCallbackResultToComplete();
 }
 
-std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(
-	std::string filePath
-) {
-	const auto reader = makeAudioFileReader(filePath);
-	const auto inMemory = std::make_shared<AudioFileInMemory>(*reader);
-	if (reader->channels() == 1)
-		return std::make_shared<ChannelCopier>(inMemory);
-	else
-		return inMemory;
+std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(std::string filePath) {
+	return std::make_shared<AudioFileInMemory>(*makeAudioFileReader(filePath));
 }
 
 std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string filePath) {
