@@ -11,10 +11,10 @@ public:
 	explicit PlayAudioModelFacade(
 		std::shared_ptr<AudioDevice> device =
 			std::make_shared<AudioDeviceStub>(),
-		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
-			std::make_shared<AudioFileReaderStubFactory>(),
 		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
-			std::make_shared<AudioFrameProcessorStubFactory>()
+		std::make_shared<AudioFrameProcessorStubFactory>(),
+		std::shared_ptr<AudioFileReaderFactory> audioFileFactory =
+			std::make_shared<AudioFileReaderStubFactory>()
 	) :
 		model{ 
 			std::move(device),
@@ -105,8 +105,8 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
 		device,
-		audioFactory,
-		processorFactory
+		processorFactory,
+		audioFactory
 	};
 	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	reader->setSampleRate(48000);
@@ -143,6 +143,19 @@ TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenCom
 	float *x[]{ &left, &right };
 	device->fillStreamBuffer(x, 0);
 	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+}
+
+TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
+	const auto device = std::make_shared<AudioDeviceStub>();
+	const auto processor = std::make_shared<AudioFrameProcessorStub>();
+	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameProcessorStubFactory>(processor) };
+	model.play({});
+	float left{};
+	float right{};
+	float *x[]{ &left, &right };
+	device->fillStreamBuffer(x, 1);
+	EXPECT_EQ(x, processor->audioBuffer());
+	EXPECT_EQ(1, processor->frames());
 }
 
 TEST(PlayAudioModelTestCase, playSetsCallbackResultToContinue) {
@@ -193,9 +206,9 @@ TEST(PlayAudioModelTestCase, fillBufferPassesParametersToReaderAndProcessor) {
 	float *x;
 	stream.read(&x, 1);
 	EXPECT_EQ(&x, reader->audioBuffer());
-	EXPECT_EQ(1, reader->frameCount());
+	EXPECT_EQ(1, reader->frames());
 	EXPECT_EQ(&x, processor->audioBuffer());
-	EXPECT_EQ(1, processor->frameCount());
+	EXPECT_EQ(1, processor->frames());
 }
 
 TEST(PlayAudioModelTestCase, fillStreamBufferFillsFromStream) {
@@ -205,6 +218,6 @@ TEST(PlayAudioModelTestCase, fillStreamBufferFillsFromStream) {
 	float *channel{};
 	device->fillStreamBuffer(&channel, 1);
 	EXPECT_EQ(&channel, stream->audioBuffer());
-	EXPECT_EQ(1, stream->frameCount());
+	EXPECT_EQ(1, stream->frames());
 }
 */

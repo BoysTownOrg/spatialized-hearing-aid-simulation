@@ -62,9 +62,9 @@ void PlayAudioModel::play(PlayRequest request) {
 		throw RequestFailure{ device->errorMessage() };
 }
 
-void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
-	frameReader->read(static_cast<float **>(channels), frameCount);
-	frameProcessor->process(static_cast<float **>(channels), frameCount);
+void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
+	frameReader->read(static_cast<float **>(channels), frames);
+	frameProcessor->process(static_cast<float **>(channels), frames);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 }

@@ -6,7 +6,7 @@ class AudioFrameProcessorStub : public AudioFrameProcessor {
 	int _frameCount{};
 	float **_audioBuffer{};
 public:
-	int frameCount() const {
+	int frames() const {
 		return _frameCount;
 	}
 
@@ -14,9 +14,9 @@ public:
 		return _audioBuffer;
 	}
 
-	void process(float ** channels, int frameCount) override {
+	void process(float ** channels, int frames) override {
 		_audioBuffer = channels;
-		_frameCount = frameCount;
+		_frameCount = frames;
 	}
 };
 
@@ -26,7 +26,7 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 public:
 	explicit AudioFrameProcessorStubFactory(
 		std::shared_ptr<AudioFrameProcessor> processor =
-		std::make_shared<AudioFrameProcessorStub>()
+			std::make_shared<AudioFrameProcessorStub>()
 	) :
 		processor{ std::move(processor) } {}
 

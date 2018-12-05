@@ -5,5 +5,5 @@
 class AudioDeviceController {
 public:
 	INTERFACE_OPERATIONS(AudioDeviceController);
-	virtual void fillStreamBuffer(void *channels, int frameCount) = 0;
+	virtual void fillStreamBuffer(void *channels, int frames) = 0;
 };

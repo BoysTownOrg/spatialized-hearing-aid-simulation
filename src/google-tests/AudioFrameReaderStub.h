@@ -17,13 +17,13 @@ public:
 		return _channels;
 	}
 
-	int frameCount() const {
+	int frames() const {
 		return _frameCount;
 	}
 
-	void read(float **audioBuffer, int frameCount) override {
+	void read(float **audioBuffer, int frames) override {
 		_audioBuffer = audioBuffer;
-		_frameCount = frameCount;
+		_frameCount = frames;
 	}
 
 	void setComplete() {

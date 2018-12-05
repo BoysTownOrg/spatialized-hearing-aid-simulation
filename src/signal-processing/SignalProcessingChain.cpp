@@ -1,8 +1,8 @@
 #include "SignalProcessingChain.h"
 
-void SignalProcessingChain::process(float * x, int frameCount) {
+void SignalProcessingChain::process(float * x, int frames) {
 	for (const auto &processor : processors)
-		processor->process(x, frameCount);
+		processor->process(x, frames);
 }
 
 void SignalProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {

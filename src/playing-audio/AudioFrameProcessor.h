@@ -8,7 +8,7 @@
 class AudioFrameProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessor);
-	virtual void process(float **channels, int frameCount) = 0;
+	virtual void process(float **channels, int frames) = 0;
 };
 
 class AudioFrameProcessorFactory {
