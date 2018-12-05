@@ -13,3 +13,8 @@ inline void ChannelCopier::read(float ** channels, int frameCount)
 bool ChannelCopier::complete() const {
 	return reader->complete();
 }
+
+int ChannelCopier::sampleRate() const
+{
+	return 0;
+}

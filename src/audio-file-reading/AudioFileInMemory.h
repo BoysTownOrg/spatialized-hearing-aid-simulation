@@ -11,6 +11,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	using size_type = buffer_type::size_type;
 	buffer_type buffer;
 	int channelCount;
+	int _sampleRate;
 	size_type head = 0;
 public:
 	RUNTIME_ERROR(FileError);
@@ -19,4 +20,5 @@ public:
 	);
 	AUDIO_FILE_READING_API void read(float ** channels, int frameCount) override;
 	AUDIO_FILE_READING_API bool complete() const override;
+	AUDIO_FILE_READING_API int sampleRate() const override;
 };

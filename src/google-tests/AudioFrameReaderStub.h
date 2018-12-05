@@ -4,6 +4,7 @@
 
 class AudioFrameReaderStub : public AudioFrameReader {
 	int _frameCount{};
+	int _sampleRate{};
 	float **_channels{};
 	bool _complete{};
 public:
@@ -26,5 +27,9 @@ public:
 
 	bool complete() const override {
 		return _complete;
+	}
+
+	int sampleRate() const override {
+		return _sampleRate;
 	}
 };

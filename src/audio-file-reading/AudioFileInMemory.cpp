@@ -24,3 +24,7 @@ void AudioFileInMemory::read(float ** channels, int frameCount) {
 bool AudioFileInMemory::complete() const {
 	return head == buffer.size();
 }
+
+int AudioFileInMemory::sampleRate() const {
+	return _sampleRate;
+}

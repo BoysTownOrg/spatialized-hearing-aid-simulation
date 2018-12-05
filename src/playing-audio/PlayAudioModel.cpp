@@ -27,9 +27,10 @@ void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
-	const auto reader = makeAudioFileReader(request.audioFilePath);
+	frameReader = makeAudioFrameReader(makeAudioFileReader(request.audioFilePath));
+
 	const auto brir = makeBrir(request.brirFilePath);
-	if (brir.sampleRate() != reader->sampleRate())
+	if (brir.sampleRate() != frameReader->sampleRate())
 		throw RequestFailure{ "Not sure what to do with different sample rates." };
 
 	FilterbankCompressor::Parameters forCompressor;
@@ -37,10 +38,9 @@ void PlayAudioModel::play(PlayRequest request) {
 	forCompressor.release_ms = request.release_ms;
 	forCompressor.chunkSize = request.chunkSize;
 	forCompressor.windowSize = request.windowSize;
-	forCompressor.sampleRate = reader->sampleRate();
+	forCompressor.sampleRate = frameReader->sampleRate();
 	forCompressor.max_dB = 119;
 
-	frameReader = makeAudioFrameReader(reader);
 	frameProcessor = std::make_shared<ChannelProcessingGroup>(
 		std::vector<std::shared_ptr<SignalProcessor>>{ 
 			makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
@@ -50,7 +50,7 @@ void PlayAudioModel::play(PlayRequest request) {
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
-	forStreaming.sampleRate = reader->sampleRate();
+	forStreaming.sampleRate = frameReader->sampleRate();
 	forStreaming.channels = 2;
 
 	for (int i = 0; i < device->count(); ++i)
