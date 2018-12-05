@@ -123,7 +123,10 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	request.windowSize = 4;
 	request.chunkSize = 5;
 	model.play(request);
-	EXPECT_EQ("c", audioFactory->filePath());
+	assertEqual("a", processorFactory->parameters().leftDslPrescriptionFilePath);
+	assertEqual("b", processorFactory->parameters().rightDslPrescriptionFilePath);
+	assertEqual("c", audioFactory->filePath());
+	assertEqual("d", processorFactory->parameters().brirFilePath);
 	EXPECT_EQ(1, processorFactory->parameters().level_dB_Spl);
 	EXPECT_EQ(2, processorFactory->parameters().attack_ms);
 	EXPECT_EQ(3, processorFactory->parameters().release_ms);
