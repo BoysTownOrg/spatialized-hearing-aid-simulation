@@ -114,6 +114,7 @@ TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStrea
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto device = std::make_shared<AudioDeviceStub>();
+	device->setDescriptions({ "a", "b", "c", "d", "e" });
 	const auto reader = std::make_shared<AudioFileReaderStub>();
 	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<FakeConfigurationFileParser>();
@@ -133,6 +134,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	request.rightDslPrescriptionFilePath = "b";
 	request.audioFilePath = "c";
 	request.brirFilePath = "d";
+	request.audioDevice = "e";
 	request.level_dB_Spl = 1;
 	request.attack_ms = 2;
 	request.release_ms = 3;
@@ -147,6 +149,7 @@ TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(48000, device->streamParameters().sampleRate);
 	assertEqual({ 0, 1 }, device->streamParameters().channels);
+	EXPECT_EQ(4, device->streamParameters().deviceIndex);
 }
 
 TEST(AudioPlayerModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
