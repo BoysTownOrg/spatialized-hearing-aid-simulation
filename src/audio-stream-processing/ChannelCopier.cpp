@@ -3,23 +3,21 @@
 ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) :
 	reader{ std::move(reader) } {}
 
-inline void ChannelCopier::read(float ** channels, int frameCount)
+inline void ChannelCopier::read(float **audio, int frames)
 {
-	reader->read(channels, frameCount);
-	for (int i = 0; i < frameCount; ++i)
-		channels[1][i] = channels[0][i];
+	reader->read(audio, frames);
+	for (int i = 0; i < frames; ++i)
+		audio[1][i] = audio[0][i];
 }
 
 bool ChannelCopier::complete() const {
 	return reader->complete();
 }
 
-int ChannelCopier::sampleRate() const
-{
-	return 0;
+int ChannelCopier::sampleRate() const {
+	return reader->sampleRate();
 }
 
-int ChannelCopier::channels() const
-{
-	return 0;
+int ChannelCopier::channels() const {
+	return reader->channels();
 }

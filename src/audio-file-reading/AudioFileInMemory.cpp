@@ -3,7 +3,8 @@
 
 AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	buffer(gsl::narrow<size_type>(reader.frames() * reader.channels())),
-	channelCount(reader.channels())
+	_channels(reader.channels()),
+	_sampleRate(reader.sampleRate())
 {
 	if (reader.failed())
 		throw FileError{ reader.errorMessage() };
@@ -12,12 +13,12 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	reader.readFrames(&buffer[0], reader.frames());
 }
 
-void AudioFileInMemory::read(float ** channels, int frameCount) {
-	for (int i = 0; i < frameCount; ++i)
-		for (int j = 0; j < channelCount; ++j) {
+void AudioFileInMemory::read(float **audio, int frames) {
+	for (int i = 0; i < frames; ++i)
+		for (int j = 0; j < _channels; ++j) {
 			if (head == buffer.size())
 				return;
-			channels[j][i] = buffer[head++];
+			audio[j][i] = buffer[head++];
 		}
 }
 
@@ -29,7 +30,6 @@ int AudioFileInMemory::sampleRate() const {
 	return _sampleRate;
 }
 
-int AudioFileInMemory::channels() const
-{
-	return 0;
+int AudioFileInMemory::channels() const {
+	return _channels;
 }

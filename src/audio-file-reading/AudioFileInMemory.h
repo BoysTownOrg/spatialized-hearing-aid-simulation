@@ -10,7 +10,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	using buffer_type = std::vector<float>;
 	using size_type = buffer_type::size_type;
 	buffer_type buffer;
-	int channelCount;
+	int _channels;
 	int _sampleRate;
 	size_type head = 0;
 public:
