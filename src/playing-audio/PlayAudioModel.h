@@ -31,6 +31,10 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override;
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
+	std::shared_ptr<SignalProcessor> makeChannel(
+		std::vector<float> b, 
+		std::string filePath,
+		FilterbankCompressor::Parameters);
 	DslPrescription makeDslPrescription(std::string filePath);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 	std::shared_ptr<SignalProcessor> makeHearingAid(

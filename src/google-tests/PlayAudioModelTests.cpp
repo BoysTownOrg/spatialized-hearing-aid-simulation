@@ -154,7 +154,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	auto model = PlayAudioModelFacade::withValidParser(device);
+	const auto model = PlayAudioModelFacade::withValidParser(device);
 	model->play({});
 	float left{};
 	float right{};
