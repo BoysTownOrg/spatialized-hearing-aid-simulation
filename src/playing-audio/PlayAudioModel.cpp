@@ -147,7 +147,6 @@ std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(
 		return inMemory;
 }
 
-std::vector<std::string> PlayAudioModel::audioDeviceDescriptions()
-{
+std::vector<std::string> PlayAudioModel::audioDeviceDescriptions() {
 	return std::vector<std::string>();
 }

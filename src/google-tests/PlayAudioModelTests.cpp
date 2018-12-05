@@ -172,6 +172,13 @@ TEST(AudioPlayerModelTestCase, playRequestSetsCallbackResultToContinue) {
 	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
 }
 
+TEST(AudioPlayerModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
+	const auto device = std::make_shared<AudioDeviceStub>();
+	device->setDescriptions({ "a", "b", "c" });
+	PlayAudioModelFacade model{ device };
+	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
+}
+
 /*
 TEST(AudioPlayerModelTestCase, fillStreamBufferFillsFromStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
