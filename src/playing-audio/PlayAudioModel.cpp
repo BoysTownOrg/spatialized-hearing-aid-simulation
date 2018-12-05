@@ -1,22 +1,15 @@
 #include "PlayAudioModel.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
-#include <signal-processing/ChannelProcessingGroup.h>
-#include <signal-processing/SignalProcessingChain.h>
-#include <signal-processing/ScalingProcessor.h>
-#include <hearing-aid-processing/HearingAidProcessor.h>
-#include <fir-filtering/FirFilter.h>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDevice> device,
-	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory,
-	std::shared_ptr<ConfigurationFileParserFactory> parserFactory
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory
 ) :
 	device{ std::move(device) },
-	compressorFactory{ std::move(compressorFactory) },
 	audioFileFactory{ std::move(audioFileFactory) },
-	parserFactory{ std::move(parserFactory) }
+	processorFactory{ std::move(processorFactory) }
 {
 	if (this->device->failed())
 		throw DeviceFailure{ this->device->errorMessage() };
@@ -33,10 +26,23 @@ void PlayAudioModel::play(PlayRequest request) {
 		frameReader = std::make_shared<ChannelCopier>(frameReader);
 		channels = 2;
 	}
-	frameProcessor = makeAudioFrameProcessor(
-		request, 
-		frameReader->sampleRate(), 
-		channels);
+	AudioFrameProcessorFactory::Parameters forProcessor;
+	forProcessor.attack_ms = request.attack_ms;
+	forProcessor.release_ms = request.release_ms;
+	forProcessor.channels = channels;
+	forProcessor.brirFilePath = request.brirFilePath;
+	forProcessor.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+	forProcessor.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
+	forProcessor.level_dB_Spl = request.level_dB_Spl;
+	forProcessor.sampleRate = frameReader->sampleRate();
+	forProcessor.chunkSize = request.chunkSize;
+	forProcessor.windowSize = request.windowSize;
+	try {
+		frameProcessor = processorFactory->make(forProcessor);
+	}
+	catch (const AudioFrameProcessorFactory::Failure &e) {
+		throw RequestFailure{ e.what() };
+	}
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
@@ -72,90 +78,6 @@ std::shared_ptr<AudioFileReader> PlayAudioModel::makeAudioFileReader(std::string
 	if (reader->failed())
 		throw RequestFailure{ reader->errorMessage() };
 	return reader;
-}
-
-std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeAudioFrameProcessor(
-	PlayRequest request, 
-	int sampleRate,
-	int channels
-) {
-	if (channels != 2)
-		throw RequestFailure{ "Can't process other than two channels." };
-
-	FilterbankCompressor::Parameters forCompressor;
-	forCompressor.attack_ms = request.attack_ms;
-	forCompressor.release_ms = request.release_ms;
-	forCompressor.chunkSize = request.chunkSize;
-	forCompressor.windowSize = request.windowSize;
-	forCompressor.sampleRate = sampleRate;
-	forCompressor.max_dB = 119;
-
-	const auto brir = makeBrir(request.brirFilePath);
-	if (brir.sampleRate() != sampleRate)
-		throw RequestFailure{ "Not sure what to do with different sample rates." };
-
-	return std::make_shared<ChannelProcessingGroup>(
-		std::vector<std::shared_ptr<SignalProcessor>>{
-			makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor),
-			makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor)
-		}
-	);
-}
-
-std::shared_ptr<SignalProcessor> PlayAudioModel::makeChannel(
-	std::vector<float> b,
-	std::string prescriptionFilePath,
-	FilterbankCompressor::Parameters forCompressor
-) {
-	const auto channel = std::make_shared<SignalProcessingChain>();
-	channel->add(std::make_shared<ScalingProcessor>(0.5f));
-	channel->add(makeFilter(b));
-	channel->add(
-		makeHearingAid(
-			makeDslPrescription(prescriptionFilePath),
-			forCompressor));
-	return channel;
-}
-
-std::shared_ptr<SignalProcessor> PlayAudioModel::makeHearingAid(
-	const DslPrescription &prescription,
-	FilterbankCompressor::Parameters parameters)
-{
-	try {
-		return std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(prescription, parameters)
-		);
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		throw RequestFailure{ e.what() };
-	}
-}
-
-DslPrescription PlayAudioModel::makeDslPrescription(std::string filePath) {
-	try {
-		return DslPrescription{ *parserFactory->make(filePath) };
-	}
-	catch (const DslPrescription::InvalidPrescription &e) {
-		throw RequestFailure{ e.what() };
-	}
-}
-
-std::shared_ptr<SignalProcessor> PlayAudioModel::makeFilter(std::vector<float> b) {
-	try {
-		return std::make_shared<FirFilter>(b);
-	}
-	catch (const FirFilter::InvalidCoefficients &) {
-		throw RequestFailure{ "The impulse response is empty?" };
-	}
-}
-
-BinauralRoomImpulseResponse PlayAudioModel::makeBrir(std::string filePath) {
-	try {
-		return BinauralRoomImpulseResponse{ *parserFactory->make(filePath) };
-	}
-	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
-		throw RequestFailure{ e.what() };
-	}
 }
 
 std::vector<std::string> PlayAudioModel::audioDeviceDescriptions() {

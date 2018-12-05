@@ -1,7 +1,7 @@
 #pragma once
 
 #include "signal-processing-exports.h"
-#include <audio-stream-processing/AudioFrameProcessor.h>
+#include <playing-audio/AudioFrameProcessor.h>
 #include <signal-processing/SignalProcessor.h>
 #include <vector>
 #include <memory>
