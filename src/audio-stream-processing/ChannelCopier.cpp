@@ -18,5 +18,5 @@ int ChannelCopier::sampleRate() const {
 }
 
 int ChannelCopier::channels() const {
-	return reader->channels();
+	return 2;
 }
