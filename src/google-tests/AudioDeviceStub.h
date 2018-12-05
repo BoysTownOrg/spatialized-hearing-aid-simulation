@@ -1,6 +1,7 @@
 #pragma once
 
 #include <playing-audio/AudioDevice.h>
+#include <gsl/gsl>
 #include <vector>
 
 class AudioDeviceStub : public AudioDevice {
@@ -80,5 +81,11 @@ public:
 	}
 	void setDescriptions(std::vector<std::string> d) {
 		_descriptions = d;
+	}
+	std::string description(int i) override {
+		return _descriptions[i];
+	}
+	int count() override {
+		return gsl::narrow_cast<int>(_descriptions.size());
 	}
 };
