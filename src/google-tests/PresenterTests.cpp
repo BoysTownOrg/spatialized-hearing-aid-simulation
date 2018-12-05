@@ -12,10 +12,15 @@ public:
 	void playRequest(PlayRequest request) override {
 		_request = request;
 	}
+
+	void setAudioDeviceDescriptions(std::vector<std::string>) {
+
+	}
 };
 
 class MockView : public SpatializedHearingAidSimulationView {
 	std::vector<std::string> _browseFilters{};
+	std::vector<std::string> _audioDeviceMenuItems{};
 	std::string _leftDslPrescriptionFilePath{};
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
@@ -168,6 +173,10 @@ public:
 
 	void showErrorDialog(std::string message) override {
 		_errorMessage = message;
+	}
+
+	std::vector<std::string> audioDeviceMenuItems() const {
+		return _audioDeviceMenuItems;
 	}
 };
 
