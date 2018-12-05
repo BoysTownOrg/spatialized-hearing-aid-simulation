@@ -4,6 +4,7 @@
 #include "PortAudioDevice.h"
 #include <google-tests/FakeConfigurationFileParser.h>
 #include <presentation/SpatializedHearingAidSimulationPresenter.h>
+#include <playing-audio/SpatializedHearingAidSimulationFactory.h>
 #include <playing-audio/PlayAudioModel.h>
 
 int main() {
@@ -73,9 +74,11 @@ int main() {
 	SpatializedHearingAidSimulationPresenter presenter{
 		std::make_shared<PlayAudioModel>(
 			std::make_shared<PortAudioDevice>(),
-			std::make_shared<ChaproFactory>(),
 			std::make_shared<LibsndfileReaderFactory>(),
-			std::make_shared<MockParserFactory>(parser)
+			std::make_shared<SpatializedHearingAidSimulationFactory>(
+				std::make_shared<ChaproFactory>(),
+				std::make_shared<MockParserFactory>(parser)
+			)
 		),
 		std::make_shared<FltkWindow>()
 	};
