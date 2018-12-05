@@ -37,4 +37,12 @@ public:
 	int sampleRate() const override {
 		return _sampleRate;
 	}
+
+	void setSampleRate(int r) {
+		_sampleRate = r;
+	}
+
+	void setChannels(int c) {
+		_channels = c;
+	}
 };
