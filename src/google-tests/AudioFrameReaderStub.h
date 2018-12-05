@@ -49,10 +49,10 @@ public:
 
 class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {
 	std::string _filePath{};
-	std::shared_ptr<AudioFrameReaderStub> reader;
+	std::shared_ptr<AudioFrameReader> reader;
 public:
 	explicit AudioFrameReaderStubFactory(
-		std::shared_ptr<AudioFrameReaderStub> reader =
+		std::shared_ptr<AudioFrameReader> reader =
 			std::make_shared<AudioFrameReaderStub>()
 	) :
 		reader{ std::move(reader) } {}

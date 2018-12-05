@@ -182,42 +182,39 @@ TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
-/*
 class ReadsAOne : public AudioFrameReader {
-	void read(float ** audioBuffer, int) override {
-		*audioBuffer[0] = 1;
+	void read(float **audio, int) override {
+		*audio[0] = 1;
 	}
-	bool complete() const override
-	{
+	bool complete() const override {
 		return false;
+	}
+	int sampleRate() const override {
+		return 0;
+	}
+	int channels() const override {
+		return 1;
 	}
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
-	void process(float ** audioBuffer, int) override {
-		*audioBuffer[0] *= 2;
+	void process(float **audio, int) override {
+		*audio[0] *= 2;
 	}
 };
 
 TEST(PlayAudioModelTestCase, fillBufferReadsThenProcesses) {
+	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto reader = std::make_shared<ReadsAOne>();
 	const auto processor = std::make_shared<AudioTimesTwo>();
-	ProcessedAudioFrameReader stream{ reader, processor };
+	PlayAudioModelFacade model{
+		device,
+		std::make_shared<AudioFrameProcessorStubFactory>(processor),
+		std::make_shared<AudioFrameReaderStubFactory>(reader)
+	};
+	model.play();
 	float x{};
-	float *audioBuffer[] = { &x };
-	stream.read(audioBuffer, 0);
+	float *audio[] = { &x };
+	device->fillStreamBuffer(audio, 1);
 	EXPECT_EQ(2, x);
 }
-
-TEST(PlayAudioModelTestCase, fillBufferPassesParametersToReaderAndProcessor) {
-	const auto reader = std::make_shared<AudioFrameReaderStub>();
-	const auto processor = std::make_shared<AudioFrameProcessorStub>();
-	ProcessedAudioFrameReader stream{ reader, processor };
-	float *x;
-	stream.read(&x, 1);
-	EXPECT_EQ(&x, reader->audioBuffer());
-	EXPECT_EQ(1, reader->frames());
-	EXPECT_EQ(&x, processor->audioBuffer());
-	EXPECT_EQ(1, processor->frames());
-}
-*/
