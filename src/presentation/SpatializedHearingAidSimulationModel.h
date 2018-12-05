@@ -22,5 +22,5 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
-	virtual void playRequest(PlayRequest) = 0;
+	virtual void play(PlayRequest) = 0;
 };

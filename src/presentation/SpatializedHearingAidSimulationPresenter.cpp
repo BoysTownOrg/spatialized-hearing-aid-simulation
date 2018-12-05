@@ -61,7 +61,7 @@ void SpatializedHearingAidSimulationPresenter::play() {
 		request.release_ms = convertToDouble(view->release_ms(), "release time");
 		request.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 		request.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		model->playRequest(request);
+		model->play(request);
 	}
 	catch (const BadInput &e) {
 		view->showErrorDialog(e.what());

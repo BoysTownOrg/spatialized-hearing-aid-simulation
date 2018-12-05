@@ -10,7 +10,7 @@ public:
 		return _request;
 	}
 
-	void playRequest(PlayRequest request) override {
+	void play(PlayRequest request) override {
 		_request = request;
 	}
 
@@ -367,7 +367,7 @@ public:
 	explicit ErrorModel(std::string message) :
 		message{std::move(message)} {}
 
-	void playRequest(PlayRequest) override {
+	void play(PlayRequest) override {
 		throw RequestFailure{ message };
 	}
 

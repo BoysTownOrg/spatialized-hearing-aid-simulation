@@ -23,7 +23,7 @@ PlayAudioModel::PlayAudioModel(
 	this->device->setController(this);
 }
 
-void PlayAudioModel::playRequest(PlayRequest request) {
+void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
