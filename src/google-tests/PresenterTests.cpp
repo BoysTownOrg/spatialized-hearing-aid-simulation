@@ -333,6 +333,7 @@ TEST(
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioFilePath("c");
 	view->setBrirFilePath("d");
+	view->setAudioDevice("e");
 	view->setLevel_dB_Spl("1.1");
 	view->setAttack_ms("2.2");
 	view->setRelease_ms("3.3");
@@ -343,6 +344,7 @@ TEST(
 	assertEqual("b", model->request().rightDslPrescriptionFilePath);
 	assertEqual("c", model->request().audioFilePath);
 	assertEqual("d", model->request().brirFilePath);
+	assertEqual("e", model->request().audioDevice);
 	EXPECT_EQ(1.1, model->request().level_dB_Spl);
 	EXPECT_EQ(2.2, model->request().attack_ms);
 	EXPECT_EQ(3.3, model->request().release_ms);
