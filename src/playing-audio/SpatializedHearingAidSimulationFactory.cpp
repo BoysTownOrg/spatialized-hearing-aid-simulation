@@ -17,7 +17,7 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p)
 {
 	if (p.channels != 2)
-		throw Failure{ "Can't process other than two channels." };
+		throw Failure{ "Can't process other than two audioBuffer." };
 
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = p.attack_ms;

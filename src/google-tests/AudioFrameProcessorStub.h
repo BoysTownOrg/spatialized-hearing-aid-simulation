@@ -4,18 +4,18 @@
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
 	int _frameCount{};
-	float **_channels{};
+	float **_audioBuffer{};
 public:
 	int frameCount() const {
 		return _frameCount;
 	}
 
-	const float *const *channels() const {
-		return _channels;
+	const float *const *audioBuffer() const {
+		return _audioBuffer;
 	}
 
 	void process(float ** channels, int frameCount) override {
-		_channels = channels;
+		_audioBuffer = channels;
 		_frameCount = frameCount;
 	}
 };

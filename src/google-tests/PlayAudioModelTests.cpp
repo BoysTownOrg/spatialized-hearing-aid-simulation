@@ -1,8 +1,6 @@
 #include "assert-utility.h"
 #include "AudioFileReaderStub.h"
 #include "AudioFrameProcessorStub.h"
-#include "FakeConfigurationFileParser.h"
-#include "FilterbankCompressorSpy.h"
 #include "AudioDeviceStub.h"
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
@@ -163,8 +161,8 @@ TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 
 /*
 class ReadsAOne : public AudioFrameReader {
-	void read(float ** channels, int) override {
-		*channels[0] = 1;
+	void read(float ** audioBuffer, int) override {
+		*audioBuffer[0] = 1;
 	}
 	bool complete() const override
 	{
@@ -173,8 +171,8 @@ class ReadsAOne : public AudioFrameReader {
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
-	void process(float ** channels, int) override {
-		*channels[0] *= 2;
+	void process(float ** audioBuffer, int) override {
+		*audioBuffer[0] *= 2;
 	}
 };
 
@@ -183,8 +181,8 @@ TEST(PlayAudioModelTestCase, fillBufferReadsThenProcesses) {
 	const auto processor = std::make_shared<AudioTimesTwo>();
 	ProcessedAudioFrameReader stream{ reader, processor };
 	float x{};
-	float *channels[] = { &x };
-	stream.read(channels, 0);
+	float *audioBuffer[] = { &x };
+	stream.read(audioBuffer, 0);
 	EXPECT_EQ(2, x);
 }
 
@@ -194,9 +192,9 @@ TEST(PlayAudioModelTestCase, fillBufferPassesParametersToReaderAndProcessor) {
 	ProcessedAudioFrameReader stream{ reader, processor };
 	float *x;
 	stream.read(&x, 1);
-	EXPECT_EQ(&x, reader->channels());
+	EXPECT_EQ(&x, reader->audioBuffer());
 	EXPECT_EQ(1, reader->frameCount());
-	EXPECT_EQ(&x, processor->channels());
+	EXPECT_EQ(&x, processor->audioBuffer());
 	EXPECT_EQ(1, processor->frameCount());
 }
 
@@ -206,7 +204,7 @@ TEST(PlayAudioModelTestCase, fillStreamBufferFillsFromStream) {
 	AudioDeviceController model{ device, stream };
 	float *channel{};
 	device->fillStreamBuffer(&channel, 1);
-	EXPECT_EQ(&channel, stream->channels());
+	EXPECT_EQ(&channel, stream->audioBuffer());
 	EXPECT_EQ(1, stream->frameCount());
 }
 */
