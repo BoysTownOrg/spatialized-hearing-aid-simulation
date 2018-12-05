@@ -40,9 +40,6 @@ void PlayAudioModel::play(PlayRequest request) {
 	forCompressor.sampleRate = reader->sampleRate();
 	forCompressor.max_dB = 119;
 
-	const auto leftChannel = makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor);
-	const auto rightChannel = makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor);
-
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = reader->sampleRate();
@@ -55,7 +52,9 @@ void PlayAudioModel::play(PlayRequest request) {
 	streamProcessor = std::make_shared<ProcessedAudioFrameReader>(
 		makeAudioFrameReader(reader),
 		std::make_shared<ChannelProcessingGroup>(
-			std::vector<std::shared_ptr<SignalProcessor>>{ leftChannel, rightChannel }
+			std::vector<std::shared_ptr<SignalProcessor>>{ 
+				makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
+				makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) }
 		)
 	);
 	device->closeStream();
@@ -85,7 +84,7 @@ BinauralRoomImpulseResponse PlayAudioModel::makeBrir(std::string filePath) {
 
 std::shared_ptr<SignalProcessor> PlayAudioModel::makeChannel(
 	std::vector<float> b, 
-	std::string filePath,
+	std::string prescriptionFilePath,
 	FilterbankCompressor::Parameters forCompressor
 ) {
 	const auto channel = std::make_shared<SignalProcessingChain>();
@@ -93,7 +92,7 @@ std::shared_ptr<SignalProcessor> PlayAudioModel::makeChannel(
 	channel->add(makeFilter(b));
 	channel->add(
 		makeHearingAid(
-			makeDslPrescription(filePath),
+			makeDslPrescription(prescriptionFilePath),
 			forCompressor));
 	return channel;
 }
