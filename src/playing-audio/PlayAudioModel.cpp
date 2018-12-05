@@ -28,25 +28,7 @@ void PlayAudioModel::play(PlayRequest request) {
 		return;
 
 	frameReader = makeAudioFrameReader(makeAudioFileReader(request.audioFilePath));
-
-	const auto brir = makeBrir(request.brirFilePath);
-	if (brir.sampleRate() != frameReader->sampleRate())
-		throw RequestFailure{ "Not sure what to do with different sample rates." };
-
-	FilterbankCompressor::Parameters forCompressor;
-	forCompressor.attack_ms = request.attack_ms;
-	forCompressor.release_ms = request.release_ms;
-	forCompressor.chunkSize = request.chunkSize;
-	forCompressor.windowSize = request.windowSize;
-	forCompressor.sampleRate = frameReader->sampleRate();
-	forCompressor.max_dB = 119;
-
-	frameProcessor = std::make_shared<ChannelProcessingGroup>(
-		std::vector<std::shared_ptr<SignalProcessor>>{ 
-			makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
-			makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) 
-		}
-	);
+	frameProcessor = makeAudioFrameProcessor(request, frameReader->sampleRate());
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
@@ -144,6 +126,30 @@ std::shared_ptr<AudioFrameReader> PlayAudioModel::makeAudioFrameReader(
 		return std::make_shared<ChannelCopier>(inMemory);
 	else
 		return inMemory;
+}
+
+std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeAudioFrameProcessor(
+	PlayRequest request, 
+	int sampleRate
+) {
+	FilterbankCompressor::Parameters forCompressor;
+	forCompressor.attack_ms = request.attack_ms;
+	forCompressor.release_ms = request.release_ms;
+	forCompressor.chunkSize = request.chunkSize;
+	forCompressor.windowSize = request.windowSize;
+	forCompressor.sampleRate = sampleRate;
+	forCompressor.max_dB = 119;
+
+	const auto brir = makeBrir(request.brirFilePath);
+	if (brir.sampleRate() != sampleRate)
+		throw RequestFailure{ "Not sure what to do with different sample rates." };
+
+	return std::make_shared<ChannelProcessingGroup>(
+		std::vector<std::shared_ptr<SignalProcessor>>{
+			makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor),
+			makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor)
+		}
+	);
 }
 
 std::vector<std::string> PlayAudioModel::audioDeviceDescriptions() {
