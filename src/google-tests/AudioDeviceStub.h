@@ -1,8 +1,10 @@
 #pragma once
 
 #include <playing-audio/AudioDevice.h>
+#include <vector>
 
 class AudioDeviceStub : public AudioDevice {
+	std::vector<std::string> _descriptions{};
 	std::string _errorMessage{};
 	std::string _streamLog{};
 	StreamParameters _streamParameters{};
@@ -75,5 +77,8 @@ public:
 	}
 	void setCallbackResultToContinue() override {
 		_setCallbackResultToContinueCalled = true;
+	}
+	void setDescriptions(std::vector<std::string> d) {
+		_descriptions = d;
 	}
 };

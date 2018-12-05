@@ -43,6 +43,10 @@ public:
 	const PlayAudioModel *get() const {
 		return &model;
 	}
+
+	std::vector<std::string> audioDeviceDescriptions() {
+		return model.audioDeviceDescriptions();
+	}
 };
 
 class AudioPlayerModelTestCase : public ::testing::TestCase {};
