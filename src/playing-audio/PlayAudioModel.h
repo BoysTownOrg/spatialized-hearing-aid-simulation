@@ -17,7 +17,8 @@ class PlayAudioModel : public SpatializedHearingAidSimulationModel, public Audio
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<AudioFileReaderFactory> audioFileFactory;
 	std::shared_ptr<ConfigurationFileParserFactory> parserFactory;
-	std::shared_ptr<ProcessedAudioFrameReader> streamProcessor{};
+	std::shared_ptr<AudioFrameReader> frameReader{};
+	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 public:
 	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API PlayAudioModel(

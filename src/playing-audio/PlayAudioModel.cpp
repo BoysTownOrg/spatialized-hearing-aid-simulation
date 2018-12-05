@@ -40,14 +40,12 @@ void PlayAudioModel::play(PlayRequest request) {
 	forCompressor.sampleRate = reader->sampleRate();
 	forCompressor.max_dB = 119;
 
-	streamProcessor = std::make_shared<ProcessedAudioFrameReader>(
-		makeAudioFrameReader(reader),
-		std::make_shared<ChannelProcessingGroup>(
-			std::vector<std::shared_ptr<SignalProcessor>>{ 
-				makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
-				makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) 
-			}
-		)
+	frameReader = makeAudioFrameReader(reader);
+	frameProcessor = std::make_shared<ChannelProcessingGroup>(
+		std::vector<std::shared_ptr<SignalProcessor>>{ 
+			makeChannel(brir.left(), request.leftDslPrescriptionFilePath, forCompressor), 
+			makeChannel(brir.right(), request.rightDslPrescriptionFilePath, forCompressor) 
+		}
 	);
 
 	AudioDevice::StreamParameters forStreaming;
@@ -69,8 +67,9 @@ void PlayAudioModel::play(PlayRequest request) {
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frameCount) {
-	streamProcessor->read(static_cast<float **>(channels), frameCount);
-	if (streamProcessor->complete())
+	frameReader->read(static_cast<float **>(channels), frameCount);
+	frameProcessor->process(static_cast<float **>(channels), frameCount);
+	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 }
 
