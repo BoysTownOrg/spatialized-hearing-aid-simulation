@@ -18,9 +18,6 @@
     <ClInclude Include="AudioFrameReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessedAudioFrameReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFrameProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -32,9 +29,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ProcessedAudioFrameReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ChannelCopier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -30,9 +30,6 @@
     <ClCompile Include="SignalProcessingChainTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessedAudioFrameReaderTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DslPrescriptionTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -2,7 +2,8 @@
 
 #include "playing-audio-exports.h"
 #include "AudioDevice.h"
-#include <audio-stream-processing/ProcessedAudioFrameReader.h>
+#include <audio-stream-processing/AudioFrameReader.h>
+#include <audio-stream-processing/AudioFrameProcessor.h>
 #include <presentation/SpatializedHearingAidSimulationModel.h>
 #include <audio-file-reading/AudioFileReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
