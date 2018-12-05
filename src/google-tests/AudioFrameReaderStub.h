@@ -5,10 +5,15 @@
 class AudioFrameReaderStub : public AudioFrameReader {
 	int _frameCount{};
 	int _sampleRate{};
-	float **_channels{};
+	int _channels{};
+	float **_audioBuffer{};
 	bool _complete{};
 public:
-	const float * const * channels() const {
+	const float * const * audioBuffer() const {
+		return _audioBuffer;
+	}
+
+	int channels() const override {
 		return _channels;
 	}
 
@@ -16,8 +21,8 @@ public:
 		return _frameCount;
 	}
 
-	void read(float **channels, int frameCount) override {
-		_channels = channels;
+	void read(float **audioBuffer, int frameCount) override {
+		_audioBuffer = audioBuffer;
 		_frameCount = frameCount;
 	}
 

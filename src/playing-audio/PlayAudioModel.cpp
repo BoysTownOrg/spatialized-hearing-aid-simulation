@@ -33,7 +33,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = frameReader->sampleRate();
-	forStreaming.channels = 2;
+	forStreaming.channels = frameReader->channels();
 
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)

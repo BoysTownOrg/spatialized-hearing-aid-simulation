@@ -28,3 +28,8 @@ bool AudioFileInMemory::complete() const {
 int AudioFileInMemory::sampleRate() const {
 	return _sampleRate;
 }
+
+int AudioFileInMemory::channels() const
+{
+	return 0;
+}

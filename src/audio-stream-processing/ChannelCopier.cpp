@@ -18,3 +18,8 @@ int ChannelCopier::sampleRate() const
 {
 	return 0;
 }
+
+int ChannelCopier::channels() const
+{
+	return 0;
+}

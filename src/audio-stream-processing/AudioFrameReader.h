@@ -8,5 +8,6 @@ public:
 	virtual void read(float **channels, int frameCount) = 0;
 	virtual bool complete() const = 0;
 	virtual int sampleRate() const = 0;
+	virtual int channels() const = 0;
 };
 
