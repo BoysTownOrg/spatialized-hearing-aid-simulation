@@ -1,48 +1,11 @@
 #include "assert-utility.h"
 #include "AudioFileReaderStub.h"
+#include "AudioFrameProcessorStub.h"
 #include "FakeConfigurationFileParser.h"
 #include "FilterbankCompressorSpy.h"
 #include "AudioDeviceStub.h"
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
-
-class AudioFrameProcessorStub : public AudioFrameProcessor {
-	int _frameCount{};
-	float **_channels{};
-public:
-	int frameCount() const {
-		return _frameCount;
-	}
-
-	const float *const *channels() const {
-		return _channels;
-	}
-
-	void process(float ** channels, int frameCount) override {
-		_channels = channels;
-		_frameCount = frameCount;
-	}
-};
-
-class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
-	Parameters _parameters{};
-	std::shared_ptr<AudioFrameProcessor> processor;
-public:
-	explicit AudioFrameProcessorStubFactory(
-		std::shared_ptr<AudioFrameProcessor> processor =
-			std::make_shared<AudioFrameProcessorStub>()
-	) :
-		processor{ std::move(processor) } {}
-
-	const Parameters &parameters() const {
-		return _parameters;
-	}
-
-	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
-		_parameters = p;
-		return processor;
-	}
-};
 
 class PlayAudioModelFacade {
 	PlayAudioModel model;
@@ -139,9 +102,7 @@ TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
 
 TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	device->setDescriptions({ "a", "b", "c", "d", "e", "f", "g" });
 	const auto reader = std::make_shared<AudioFileReaderStub>();
-	reader->setSampleRate(48000);
 	const auto audioFactory = std::make_shared<AudioFileReaderStubFactory>(reader);
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
@@ -149,12 +110,14 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 		audioFactory,
 		processorFactory
 	};
+	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
+	reader->setSampleRate(48000);
 	PlayAudioModel::PlayRequest request;
 	request.leftDslPrescriptionFilePath = "a";
 	request.rightDslPrescriptionFilePath = "b";
 	request.audioFilePath = "c";
 	request.brirFilePath = "d";
-	request.audioDevice = "e";
+	request.audioDevice = "gamma";
 	request.level_dB_Spl = 1;
 	request.attack_ms = 2;
 	request.release_ms = 3;
@@ -170,7 +133,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(48000, device->streamParameters().sampleRate);
 	EXPECT_EQ(2, device->streamParameters().channels);
-	EXPECT_EQ(4, device->streamParameters().deviceIndex);
+	EXPECT_EQ(2, device->streamParameters().deviceIndex);
 }
 
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
@@ -199,24 +162,6 @@ TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 }
 
 /*
-class AudioFrameProcessorStub : public AudioFrameProcessor {
-	int _frameCount{};
-	float **_channels{};
-public:
-	int frameCount() const {
-		return _frameCount;
-	}
-
-	const float *const *channels() const {
-		return _channels;
-	}
-
-	void process(float ** channels, int frameCount) override {
-		_channels = channels;
-		_frameCount = frameCount;
-	}
-};
-
 class ReadsAOne : public AudioFrameReader {
 	void read(float ** channels, int) override {
 		*channels[0] = 1;

@@ -4,9 +4,9 @@
 #include "AudioDevice.h"
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
-#include <presentation/SpatializedHearingAidSimulationModel.h>
 #include <audio-file-reading/AudioFileReader.h>
 #include <common-includes/RuntimeError.h>
+#include <presentation/SpatializedHearingAidSimulationModel.h>
 
 class PlayAudioModel : public SpatializedHearingAidSimulationModel, public AudioDeviceController {
 	std::shared_ptr<AudioDevice> device;

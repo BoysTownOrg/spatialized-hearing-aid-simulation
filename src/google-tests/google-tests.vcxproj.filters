@@ -71,5 +71,8 @@
     <ClInclude Include="AudioFrameReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFrameProcessorStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
