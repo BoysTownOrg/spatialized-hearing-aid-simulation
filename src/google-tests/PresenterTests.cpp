@@ -30,6 +30,7 @@ class MockView : public SpatializedHearingAidSimulationView {
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _audioFilePath{};
 	std::string _brirFilePath{};
+	std::string _audioDevice{};
 	std::string _browseFilePath{};
 	std::string _level_dB_Spl{ "0" };
 	std::string _attack_ms{ "0" };
@@ -186,6 +187,10 @@ public:
 
 	void populateAudioDeviceMenu(std::vector<std::string> d) override {
 		_audioDeviceMenuItems = d;
+	}
+
+	void setAudioDevice(std::string s) {
+		_audioDevice = s;
 	}
 };
 
