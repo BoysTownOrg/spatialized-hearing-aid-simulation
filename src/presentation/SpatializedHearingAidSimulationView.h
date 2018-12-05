@@ -27,4 +27,5 @@ public:
 	virtual std::string windowSize() const = 0;
 	virtual std::string chunkSize() const = 0;
 	virtual void showErrorDialog(std::string message) = 0;
+	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
 };

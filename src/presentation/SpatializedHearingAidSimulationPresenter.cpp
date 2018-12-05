@@ -8,6 +8,7 @@ SpatializedHearingAidSimulationPresenter::SpatializedHearingAidSimulationPresent
 	view{ std::move(view) }
 {
 	this->view->setPresenter(this);
+	this->view->populateAudioDeviceMenu(this->model->audioDeviceDescriptions());
 }
 
 void SpatializedHearingAidSimulationPresenter::loop() {

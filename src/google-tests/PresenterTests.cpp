@@ -4,6 +4,7 @@
 
 class MockModel : public SpatializedHearingAidSimulationModel {
 	PlayRequest _request{};
+	std::vector<std::string> _audioDeviceDescriptions{};
 public:
 	const PlayRequest &request() const {
 		return _request;
@@ -13,8 +14,12 @@ public:
 		_request = request;
 	}
 
-	void setAudioDeviceDescriptions(std::vector<std::string>) {
+	void setAudioDeviceDescriptions(std::vector<std::string> d) {
+		_audioDeviceDescriptions = d;
+	}
 
+	std::vector<std::string> audioDeviceDescriptions() override {
+		return _audioDeviceDescriptions;
 	}
 };
 
@@ -177,6 +182,10 @@ public:
 
 	std::vector<std::string> audioDeviceMenuItems() const {
 		return _audioDeviceMenuItems;
+	}
+
+	void populateAudioDeviceMenu(std::vector<std::string> d) override {
+		_audioDeviceMenuItems = d;
 	}
 };
 
@@ -349,6 +358,10 @@ public:
 
 	void playRequest(PlayRequest) override {
 		throw RequestFailure{ message };
+	}
+
+	std::vector<std::string> audioDeviceDescriptions() override {
+		return {};
 	}
 };
 

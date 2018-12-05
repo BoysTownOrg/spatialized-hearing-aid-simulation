@@ -28,6 +28,7 @@ public:
 	);
 	PLAYING_AUDIO_API void playRequest(PlayRequest) override;
 	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frameCount) override;
+	std::vector<std::string> audioDeviceDescriptions() override;
 private:
 	BinauralRoomImpulseResponse makeBrir(std::string filePath);
 	DslPrescription makeDslPrescription(std::string filePath);
