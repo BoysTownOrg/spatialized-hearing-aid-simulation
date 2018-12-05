@@ -20,8 +20,6 @@ PlayAudioModel::PlayAudioModel(
 {
 	if (this->device->failed())
 		throw DeviceFailure{ this->device->errorMessage() };
-	if (!this->device->supportsAsio())
-		throw DeviceFailure{ "This device does not support ASIO." };
 	this->device->setController(this);
 }
 

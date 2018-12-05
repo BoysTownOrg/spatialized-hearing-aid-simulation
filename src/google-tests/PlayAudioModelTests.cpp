@@ -80,15 +80,6 @@ TEST(
 	assertDeviceFailureOnConstruction(device, "error.");
 }
 
-TEST(
-	AudioPlayerModelTestCase,
-	constructorThrowsDeviceFailureWhenDeviceDoesNotSupportAsio)
-{
-	const auto device = std::make_shared<AudioDeviceStub>();
-	device->setSupportsAsioFalse();
-	assertDeviceFailureOnConstruction(device, "This device does not support ASIO.");
-}
-
 TEST(AudioPlayerModelTestCase, playRequestFirstClosesStreamThenOpensThenStarts) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto model = PlayAudioModelFacade::withValidParser(device);
