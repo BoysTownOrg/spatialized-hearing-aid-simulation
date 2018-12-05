@@ -11,6 +11,7 @@ public:
 		std::vector<int> channels;
 		unsigned long framesPerBuffer;
 		int sampleRate;
+		int deviceIndex;
 	};
 	INTERFACE_OPERATIONS(AudioDevice);
 	virtual void setController(AudioDeviceController *) = 0;

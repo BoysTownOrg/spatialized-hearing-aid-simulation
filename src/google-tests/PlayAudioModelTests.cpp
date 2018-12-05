@@ -114,7 +114,7 @@ TEST(AudioPlayerModelTestCase, playRequestWhileStreamingDoesNotAlterCurrentStrea
 
 TEST(AudioPlayerModelTestCase, playRequestPassesParametersToFactories) {
 	const auto device = std::make_shared<AudioDeviceStub>();
-	device->setDescriptions({ "a", "b", "c", "d", "e" });
+	device->setDescriptions({ "a", "b", "c", "d", "e", "f", "g" });
 	const auto reader = std::make_shared<AudioFileReaderStub>();
 	reader->setSampleRate(48000);
 	const auto parser = std::make_shared<FakeConfigurationFileParser>();
