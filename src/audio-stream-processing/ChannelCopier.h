@@ -19,7 +19,7 @@ public:
 class ChannelCopierFactory : public AudioFrameReaderFactory {
 	std::shared_ptr<AudioFrameReaderFactory> factory;
 public:
-	explicit ChannelCopierFactory(
+	AUDIO_STREAM_PROCESSING_API explicit ChannelCopierFactory(
 		std::shared_ptr<AudioFrameReaderFactory> factory
 	);
 	std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
