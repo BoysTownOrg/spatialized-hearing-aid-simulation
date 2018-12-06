@@ -8,6 +8,7 @@ class AudioDeviceStub : public AudioDevice {
 	std::vector<std::string> _descriptions{};
 	std::string _errorMessage{};
 	std::string _streamLog{};
+	std::string _callbackLog{};
 	StreamParameters _streamParameters{};
 	AudioDeviceController *_controller{};
 	bool _streaming{};
@@ -30,6 +31,7 @@ public:
 	}
 	void startStream() override {
 		_streamLog += "start ";
+		_callbackLog += "start ";
 	}
 	void stopStream() override {
 	}
@@ -77,6 +79,7 @@ public:
 		return _setCallbackResultToContinueCalled;
 	}
 	void setCallbackResultToContinue() override {
+		_callbackLog += "setCallbackResultToContinue ";
 		_setCallbackResultToContinueCalled = true;
 	}
 	void setDescriptions(std::vector<std::string> d) {
@@ -87,5 +90,8 @@ public:
 	}
 	int count() override {
 		return gsl::narrow_cast<int>(_descriptions.size());
+	}
+	std::string callbackLog() const {
+		return _callbackLog;
 	}
 };
