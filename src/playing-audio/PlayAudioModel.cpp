@@ -36,15 +36,16 @@ void PlayAudioModel::play(PlayRequest request) {
 
 	frameProcessor = makeProcessor(forProcessor);
 
+	device->closeStream();
+
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = frameReader->sampleRate();
 	forStreaming.channels = frameReader->channels();
-
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
 			forStreaming.deviceIndex = i;
-	device->closeStream();
+
 	device->openStream(forStreaming);
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
