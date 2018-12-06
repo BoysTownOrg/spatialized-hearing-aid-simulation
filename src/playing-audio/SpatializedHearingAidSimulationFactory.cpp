@@ -14,11 +14,7 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 {
 }
 
-std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p)
-{
-	if (p.channels != 2)
-		throw CreateError{ "Can't process other than two channels." };
-
+std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = p.attack_ms;
 	forCompressor.release_ms = p.release_ms;
@@ -31,12 +27,13 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 	if (brir.sampleRate() != p.sampleRate)
 		throw CreateError{ "Not sure what to do with different sample rates." };
 
-	return std::make_shared<ChannelProcessingGroup>(
-		std::vector<std::shared_ptr<SignalProcessor>>{
-			makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor),
-			makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor)
-		}
-	);
+	std::vector<std::shared_ptr<SignalProcessor>> processors{};
+	if (p.channels > 0)
+		processors.push_back(makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor));
+	if (p.channels > 1)
+		processors.push_back(makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor));
+
+	return std::make_shared<ChannelProcessingGroup>(processors);
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeChannel(
