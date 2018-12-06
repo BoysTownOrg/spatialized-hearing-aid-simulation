@@ -1,5 +1,6 @@
 #include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
+#include "FakeAudioFrameReader.h"
 #include "AudioFrameProcessorStub.h"
 #include "AudioDeviceStub.h"
 #include <playing-audio/PlayAudioModel.h>
@@ -266,4 +267,25 @@ TEST(PlayAudioModelTestCase, fillBufferReadsThenProcesses) {
 	float *audio[] = { &x };
 	device->fillStreamBuffer(audio, 1);
 	EXPECT_EQ(2, x);
+}
+
+TEST(PlayAudioModelTestCase, playPassesComputedRmsToProcessorFactory) {
+	const auto reader = std::make_shared<FakeAudioFileReader>(
+		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 
+		2);
+	const auto audioFactory = 
+		std::make_shared<AudioFrameReaderStubFactory>(
+			std::make_shared<FakeAudioFrameReader>(reader));
+	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
+	PlayAudioModelFacade model{
+		audioFactory,
+		processorFactory
+	};
+	model.play();
+	assertEqual(
+		{ 
+			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
+			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
+		}, 
+		processorFactory->parameters().stimulusRms);
 }
