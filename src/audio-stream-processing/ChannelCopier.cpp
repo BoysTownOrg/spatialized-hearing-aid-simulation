@@ -22,6 +22,10 @@ int ChannelCopier::channels() const {
 	return reader->channels() == 1 ? 2 : reader->channels();
 }
 
+long long ChannelCopier::frames() const {
+	return 0;
+}
+
 ChannelCopierFactory::ChannelCopierFactory(
 	std::shared_ptr<AudioFrameReaderFactory> factory
 ) :

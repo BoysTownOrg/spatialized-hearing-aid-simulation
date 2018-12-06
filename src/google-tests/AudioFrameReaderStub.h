@@ -3,7 +3,8 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioFrameReaderStub : public AudioFrameReader {
-	int _frameCount{};
+	long long _frames{};
+	int _framesRequested{};
 	int _sampleRate{};
 	int _channels{};
 	float **_audioBuffer{};
@@ -17,13 +18,13 @@ public:
 		return _channels;
 	}
 
-	int frames() const {
-		return _frameCount;
+	int framesRequested() const {
+		return _framesRequested;
 	}
 
 	void read(float **audioBuffer, int frames) override {
 		_audioBuffer = audioBuffer;
-		_frameCount = frames;
+		_framesRequested = frames;
 	}
 
 	void setComplete() {
@@ -44,6 +45,10 @@ public:
 
 	void setChannels(int c) {
 		_channels = c;
+	}
+
+	long long frames() const override {
+		return _frames;
 	}
 };
 

@@ -209,7 +209,7 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	float *x[]{ &left, &right };
 	device->fillStreamBuffer(x, 1);
 	EXPECT_EQ(x, reader->audioBuffer());
-	EXPECT_EQ(1, reader->frames());
+	EXPECT_EQ(1, reader->framesRequested());
 	EXPECT_EQ(x, processor->audioBuffer());
 	EXPECT_EQ(1, processor->frames());
 }
@@ -240,6 +240,9 @@ class ReadsAOne : public AudioFrameReader {
 	}
 	int channels() const override {
 		return 1;
+	}
+	long long frames() const override {
+		return 0;
 	}
 };
 

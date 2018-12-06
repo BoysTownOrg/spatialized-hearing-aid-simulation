@@ -34,6 +34,10 @@ int AudioFileInMemory::channels() const {
 	return _channels;
 }
 
+long long AudioFileInMemory::frames() const {
+	return 0;
+}
+
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 	std::shared_ptr<AudioFileReaderFactory> factory
 ) :
