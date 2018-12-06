@@ -7,7 +7,7 @@
 
 class ChannelCopierTestCase : public ::testing::TestCase {};
 
-TEST(ChannelCopierTestCase, copiesFirstChannelToSecond) {
+TEST(ChannelCopierTestCase, copiesFirstChannelToSecondWhenOnlyOneChannel) {
 	AudioFileReaderStub reader{ std::vector<float>{ 1, 2, 3 } };
 	ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
 	std::vector<float> left(3);
@@ -35,17 +35,15 @@ TEST(ChannelCopierTestCase, returnsParameters) {
 	EXPECT_EQ(2, copier.channels());
 }
 
-TEST(ChannelCopierTestCase, factoryPassesFilePath) {
-	const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
-	ChannelCopierFactory adapter{ factory };
-	adapter.make("a");
-	assertEqual("a", factory->filePath());
-}
-
-TEST(ChannelCopierTestCase, factoryReturnsChannelCopierWhenOnlyOneChannel) {
+TEST(ChannelCopierTestCase, returnsTwoIfOneChannel) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	reader->setChannels(1);
-	const auto factory = std::make_shared<AudioFrameReaderStubFactory>(reader);
+	ChannelCopier copier{ reader };
+	EXPECT_EQ(2, copier.channels());
+}
+
+TEST(ChannelCopierTestCase, factoryPassesFilePath) {
+	const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
 	ChannelCopierFactory adapter{ factory };
 	adapter.make("a");
 	assertEqual("a", factory->filePath());
