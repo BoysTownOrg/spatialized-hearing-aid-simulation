@@ -22,6 +22,15 @@ public:
 			std::move(processorFactory)
 		} {}
 
+	explicit PlayAudioModelFacade(
+		std::shared_ptr<AudioFrameReaderFactory> audioFactory =
+			std::make_shared<AudioFrameReaderStubFactory>()
+	) :
+		PlayAudioModelFacade{
+			std::make_shared<AudioDeviceStub>(),
+			std::move(audioFactory)
+		} {}
+
 	void play(PlayAudioModel::PlayRequest r = {}) {
 		model.play(r);
 	}
