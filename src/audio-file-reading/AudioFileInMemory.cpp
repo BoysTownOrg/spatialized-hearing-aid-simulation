@@ -42,5 +42,10 @@ AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 }
 
 std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(std::string filePath) {
-	return std::make_shared<AudioFileInMemory>(*factory->make(filePath));
+	try {
+		return std::make_shared<AudioFileInMemory>(*factory->make(filePath));
+	}
+	catch (const AudioFileInMemory::FileError &e) {
+		throw CreateError{ e.what() };
+	}
 }
