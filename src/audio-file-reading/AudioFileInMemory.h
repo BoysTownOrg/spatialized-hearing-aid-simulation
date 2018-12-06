@@ -11,6 +11,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	using size_type = buffer_type::size_type;
 	buffer_type buffer;
 	size_type head = 0;
+	long long _frames;
 	int _channels;
 	int _sampleRate;
 public:

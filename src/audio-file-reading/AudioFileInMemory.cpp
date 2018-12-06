@@ -3,6 +3,7 @@
 
 AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	buffer(gsl::narrow<size_type>(reader.frames() * reader.channels())),
+	_frames{ reader.frames() },
 	_channels(reader.channels()),
 	_sampleRate(reader.sampleRate())
 {
@@ -35,7 +36,7 @@ int AudioFileInMemory::channels() const {
 }
 
 long long AudioFileInMemory::frames() const {
-	return 0;
+	return _frames;
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
