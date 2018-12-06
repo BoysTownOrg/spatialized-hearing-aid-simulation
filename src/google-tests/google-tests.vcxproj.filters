@@ -65,13 +65,13 @@
     <ClInclude Include="AudioDeviceStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioFileReaderStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFrameReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioFrameProcessorStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeAudioFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,12 @@
 #include "assert-utility.h"
-#include "AudioFileReaderStub.h"
+#include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 class AudioFileInMemoryTestCase : public ::testing::TestCase {};
 
 TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
-	AudioFileReaderStub reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+	FakeAudioFileReader reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
 	reader.setChannels(3);
 	AudioFileInMemory adapter{ reader };
 	std::vector<float> a(4);
@@ -20,12 +20,12 @@ TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
 }
 
 TEST(AudioFileInMemoryTestCase, emptyFileDoesNotThrowException) {
-	AudioFileReaderStub reader{ {} };
+	FakeAudioFileReader reader{ {} };
 	AudioFileInMemory adapter{ reader };
 }
 
 TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
-	AudioFileReaderStub reader{ { 3, 4 } };
+	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	float *channels[] { &x };
@@ -38,7 +38,7 @@ TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 }
 
 TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
-	AudioFileReaderStub reader{ { 3, 4 } };
+	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	float *channels[]{ &x };
@@ -49,7 +49,7 @@ TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
 }
 
 TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
-	AudioFileReaderStub reader{ { 4, 5, 6 } };
+	FakeAudioFileReader reader{ { 4, 5, 6 } };
 	reader.setChannels(3);
 	reader.setSampleRate(2);
 	AudioFileInMemory adapter{ reader };
@@ -60,10 +60,10 @@ TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
 
 TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
 	try {
-		const auto reader = std::make_shared<AudioFileReaderStub>();
+		const auto reader = std::make_shared<FakeAudioFileReader>();
 		reader->fail();
 		reader->setErrorMessage("error.");
-		AudioFileInMemoryFactory factory{ std::make_shared<AudioFileReaderStubFactory>(reader) };
+		AudioFileInMemoryFactory factory{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
 		factory.make("");
 		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
 	}
@@ -73,7 +73,7 @@ TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
 }
 
 TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
-	const auto factory = std::make_shared<AudioFileReaderStubFactory>();
+	const auto factory = std::make_shared<FakeAudioFileReaderFactory>();
 	AudioFileInMemoryFactory adapter{ factory };
 	adapter.make("a");
 	assertEqual("a", factory->filePath());

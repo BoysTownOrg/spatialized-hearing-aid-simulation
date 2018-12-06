@@ -3,14 +3,14 @@
 #include <audio-file-reading/AudioFileReader.h>
 #include <vector>
 
-class AudioFileReaderStub : public AudioFileReader {
+class FakeAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	std::string _errorMessage{};
 	int _channels;
 	int _sampleRate{};
 	bool _failed{};
 public:
-	explicit AudioFileReaderStub(
+	explicit FakeAudioFileReader(
 		std::vector<float> contents = {},
 		int _channels = 1
 	) :
@@ -63,13 +63,13 @@ public:
 	}
 };
 
-class AudioFileReaderStubFactory : public AudioFileReaderFactory {
+class FakeAudioFileReaderFactory : public AudioFileReaderFactory {
 	std::string _filePath{};
 	std::shared_ptr<AudioFileReader> reader;
 public:
-	explicit AudioFileReaderStubFactory(
+	explicit FakeAudioFileReaderFactory(
 		std::shared_ptr<AudioFileReader> reader =
-			std::make_shared<AudioFileReaderStub>()
+			std::make_shared<FakeAudioFileReader>()
 	) :
 		reader{ std::move(reader) } {}
 
