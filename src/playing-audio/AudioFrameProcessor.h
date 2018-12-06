@@ -4,6 +4,7 @@
 #include <common-includes/RuntimeError.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 class AudioFrameProcessor {
 public:
@@ -16,6 +17,7 @@ public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
+		std::vector<double> stimulusRms;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
