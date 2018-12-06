@@ -24,11 +24,14 @@ public:
 
 	explicit PlayAudioModelFacade(
 		std::shared_ptr<AudioFrameReaderFactory> audioFactory =
-			std::make_shared<AudioFrameReaderStubFactory>()
+			std::make_shared<AudioFrameReaderStubFactory>(),
+		std::shared_ptr<AudioFrameProcessorFactory> processorFactory =
+			std::make_shared<AudioFrameProcessorStubFactory>()
 	) :
 		PlayAudioModelFacade{
 			std::make_shared<AudioDeviceStub>(),
-			std::move(audioFactory)
+			std::move(audioFactory),
+			std::move(processorFactory)
 		} {}
 
 	explicit PlayAudioModelFacade(
@@ -36,7 +39,6 @@ public:
 			std::make_shared<AudioFrameProcessorStubFactory>()
 	) :
 		PlayAudioModelFacade{
-			std::make_shared<AudioDeviceStub>(),
 			std::make_shared<AudioFrameReaderStubFactory>(),
 			std::move(processorFactory)
 	} {}
