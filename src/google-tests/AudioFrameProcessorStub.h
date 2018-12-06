@@ -39,3 +39,16 @@ public:
 		return processor;
 	}
 };
+
+class ErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
+	std::string errorMessage{};
+public:
+	explicit ErrorAudioFrameProcessorFactory(
+		std::string errorMessage
+	) :
+		errorMessage{ std::move(errorMessage) } {}
+
+	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
+		throw CreateError{ errorMessage };
+	}
+};

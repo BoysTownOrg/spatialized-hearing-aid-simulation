@@ -42,7 +42,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	try {
 		frameProcessor = processorFactory->make(forProcessor);
 	}
-	catch (const AudioFrameProcessorFactory::Failure &e) {
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
 

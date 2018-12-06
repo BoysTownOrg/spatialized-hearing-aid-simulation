@@ -17,7 +17,7 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p)
 {
 	if (p.channels != 2)
-		throw Failure{ "Can't process other than two channels." };
+		throw CreateError{ "Can't process other than two channels." };
 
 	FilterbankCompressor::Parameters forCompressor;
 	forCompressor.attack_ms = p.attack_ms;
@@ -29,7 +29,7 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 
 	const auto brir = makeBrir(p.brirFilePath);
 	if (brir.sampleRate() != p.sampleRate)
-		throw Failure{ "Not sure what to do with different sample rates." };
+		throw CreateError{ "Not sure what to do with different sample rates." };
 
 	return std::make_shared<ChannelProcessingGroup>(
 		std::vector<std::shared_ptr<SignalProcessor>>{
@@ -64,7 +64,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
-		throw Failure{ e.what() };
+		throw CreateError{ e.what() };
 	}
 }
 
@@ -73,7 +73,7 @@ DslPrescription SpatializedHearingAidSimulationFactory::makeDslPrescription(std:
 		return DslPrescription{ *parserFactory->make(filePath) };
 	}
 	catch (const DslPrescription::InvalidPrescription &e) {
-		throw Failure{ e.what() };
+		throw CreateError{ e.what() };
 	}
 }
 
@@ -82,7 +82,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFil
 		return std::make_shared<FirFilter>(b);
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
-		throw Failure{ "The impulse response is empty?" };
+		throw CreateError{ "The impulse response is empty?" };
 	}
 }
 
@@ -91,6 +91,6 @@ BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::makeBrir(std
 		return BinauralRoomImpulseResponse{ *parserFactory->make(filePath) };
 	}
 	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
-		throw Failure{ e.what() };
+		throw CreateError{ e.what() };
 	}
 }

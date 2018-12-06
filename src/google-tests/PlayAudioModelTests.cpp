@@ -114,6 +114,14 @@ TEST(
 	assertPlayThrowsRequestError(model, "error.");
 }
 
+TEST(
+	PlayAudioModelTestCase,
+	playThrowsRequestErrorWhenProcessorFactoryThrowsCreateError)
+{
+	PlayAudioModelFacade model{ std::make_shared<ErrorAudioFrameProcessorFactory>("error.") };
+	assertPlayThrowsRequestError(model, "error.");
+}
+
 TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };

@@ -14,7 +14,7 @@ public:
 class AudioFrameProcessorFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
-	RUNTIME_ERROR(Failure);
+	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
