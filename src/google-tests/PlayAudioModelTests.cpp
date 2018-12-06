@@ -214,11 +214,11 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	EXPECT_EQ(1, processor->frames());
 }
 
-TEST(PlayAudioModelTestCase, playSetsCallbackResultToContinue) {
+TEST(PlayAudioModelTestCase, playSetsCallbackResultToContinueBeforeStartingStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
 	model.play();
-	EXPECT_TRUE(device->setCallbackResultToContinueCalled());
+	assertEqual("setCallbackResultToContinue start ", device->callbackLog());
 }
 
 TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
