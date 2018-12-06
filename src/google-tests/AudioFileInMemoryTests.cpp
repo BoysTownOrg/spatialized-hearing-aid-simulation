@@ -70,3 +70,10 @@ TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
 		assertEqual("error.", e.what());
 	}
 }
+
+TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
+	const auto factory = std::make_shared<AudioFileReaderStubFactory>();
+	AudioFileInMemoryFactory adapter{ factory };
+	adapter.make("a");
+	assertEqual("a", factory->filePath());
+}
