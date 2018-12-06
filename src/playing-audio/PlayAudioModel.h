@@ -21,7 +21,9 @@ public:
 		std::shared_ptr<AudioFrameReaderFactory> readerFactory,
 		std::shared_ptr<AudioFrameProcessorFactory> processorFactory
 	);
-	PLAYING_AUDIO_API void play(PlayRequest) override;
+	PLAYING_AUDIO_API void play(PlayRequest) override; 
 	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frames) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
+private:
+	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 };

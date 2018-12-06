@@ -20,12 +20,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
-	try {
-		frameReader = readerFactory->make(request.audioFilePath);
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
-	}
+	frameReader = makeReader(request.audioFilePath);
 
 	AudioFrameProcessorFactory::Parameters forProcessor;
 	forProcessor.attack_ms = request.attack_ms;
@@ -62,6 +57,15 @@ void PlayAudioModel::play(PlayRequest request) {
 	device->startStream();
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
+}
+
+std::shared_ptr<AudioFrameReader> PlayAudioModel::makeReader(std::string filePath) {
+	try {
+		return readerFactory->make(filePath);
+	}
+	catch (const AudioFrameReaderFactory::CreateError &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
