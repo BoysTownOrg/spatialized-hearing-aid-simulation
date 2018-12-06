@@ -23,7 +23,7 @@ int ChannelCopier::channels() const {
 }
 
 long long ChannelCopier::frames() const {
-	return 0;
+	return reader->frames();
 }
 
 ChannelCopierFactory::ChannelCopierFactory(
