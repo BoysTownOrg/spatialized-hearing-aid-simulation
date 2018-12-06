@@ -50,6 +50,10 @@ public:
 	long long frames() const override {
 		return _frames;
 	}
+
+	void setFrames(long long f) {
+		_frames = f;
+	}
 };
 
 class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {

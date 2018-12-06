@@ -30,9 +30,11 @@ TEST(ChannelCopierTestCase, returnsParameters) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	reader->setSampleRate(1);
 	reader->setChannels(2);
+	reader->setFrames(3);
 	ChannelCopier copier{ reader };
 	EXPECT_EQ(1, copier.sampleRate());
 	EXPECT_EQ(2, copier.channels());
+	EXPECT_EQ(3, copier.frames());
 }
 
 TEST(ChannelCopierTestCase, returnsTwoIfOneChannel) {
