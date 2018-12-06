@@ -23,7 +23,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	try {
 		frameReader = readerFactory->make(request.audioFilePath);
 	}
-	catch (const AudioFrameReaderFactory::FileError &e) {
+	catch (const AudioFrameReaderFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
 

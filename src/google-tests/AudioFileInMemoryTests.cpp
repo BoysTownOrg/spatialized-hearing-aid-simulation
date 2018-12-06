@@ -56,3 +56,16 @@ TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
 	EXPECT_EQ(1, adapter.channels());
 	EXPECT_EQ(2, adapter.sampleRate());
 }
+
+TEST(AudioFileInMemoryTestCase, constructorThrowsFileError) {
+	try {
+		AudioFileReaderStub reader{};
+		reader.fail();
+		reader.setErrorMessage("error.");
+		AudioFileInMemory adapter{ reader };
+		FAIL() << "Expected AudioFileInMemory::FileError";
+	}
+	catch (const AudioFileInMemory::FileError &e) {
+		assertEqual("error.", e.what());
+	}
+}

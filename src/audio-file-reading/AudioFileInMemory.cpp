@@ -42,8 +42,5 @@ AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 }
 
 std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(std::string filePath) {
-	const auto reader = factory->make(filePath);
-	if (reader->failed())
-		throw FileError{ reader->errorMessage() };
-	return std::make_shared<AudioFileInMemory>(*reader);
+	return std::make_shared<AudioFileInMemory>(*factory->make(filePath));
 }
