@@ -5,8 +5,9 @@ ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) :
 
 void ChannelCopier::read(float **audio, int frames) {
 	reader->read(audio, frames);
-	for (int i = 0; i < frames; ++i)
-		audio[1][i] = audio[0][i];
+	if (reader->channels() == 1)
+		for (int i = 0; i < frames; ++i)
+			audio[1][i] = audio[0][i];
 }
 
 bool ChannelCopier::complete() const {
@@ -18,7 +19,7 @@ int ChannelCopier::sampleRate() const {
 }
 
 int ChannelCopier::channels() const {
-	return 2;
+	return reader->channels() == 1 ? 2 : reader->channels();
 }
 
 ChannelCopierFactory::ChannelCopierFactory(
@@ -29,8 +30,5 @@ ChannelCopierFactory::ChannelCopierFactory(
 }
 
 std::shared_ptr<AudioFrameReader> ChannelCopierFactory::make(std::string filePath) {
-	auto frameReader = factory->make(filePath);
-	if (frameReader->channels() == 1)
-		frameReader = std::make_shared<ChannelCopier>(frameReader);
-	return frameReader;
+	return std::make_shared<ChannelCopier>(factory->make(filePath));
 }

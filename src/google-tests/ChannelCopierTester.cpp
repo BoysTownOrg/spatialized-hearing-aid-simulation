@@ -29,6 +29,7 @@ TEST(ChannelCopierTestCase, returnsCompleteWhenComplete) {
 TEST(ChannelCopierTestCase, returnsParameters) {
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
 	reader->setSampleRate(1);
+	reader->setChannels(2);
 	ChannelCopier copier{ reader };
 	EXPECT_EQ(1, copier.sampleRate());
 	EXPECT_EQ(2, copier.channels());
@@ -36,6 +37,15 @@ TEST(ChannelCopierTestCase, returnsParameters) {
 
 TEST(ChannelCopierTestCase, factoryPassesFilePath) {
 	const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
+	ChannelCopierFactory adapter{ factory };
+	adapter.make("a");
+	assertEqual("a", factory->filePath());
+}
+
+TEST(ChannelCopierTestCase, factoryReturnsChannelCopierWhenOnlyOneChannel) {
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	reader->setChannels(1);
+	const auto factory = std::make_shared<AudioFrameReaderStubFactory>(reader);
 	ChannelCopierFactory adapter{ factory };
 	adapter.make("a");
 	assertEqual("a", factory->filePath());
