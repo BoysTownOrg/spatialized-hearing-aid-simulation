@@ -22,5 +22,5 @@ public:
 	AUDIO_STREAM_PROCESSING_API explicit ChannelCopierFactory(
 		std::shared_ptr<AudioFrameReaderFactory> factory
 	);
-	std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+	AUDIO_STREAM_PROCESSING_API std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
 };

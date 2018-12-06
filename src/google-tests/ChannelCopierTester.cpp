@@ -33,3 +33,10 @@ TEST(ChannelCopierTestCase, returnsParameters) {
 	EXPECT_EQ(1, copier.sampleRate());
 	EXPECT_EQ(2, copier.channels());
 }
+
+TEST(ChannelCopierTestCase, factoryPassesFilePath) {
+	const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
+	ChannelCopierFactory adapter{ factory };
+	adapter.make("a");
+	assertEqual("a", factory->filePath());
+}
