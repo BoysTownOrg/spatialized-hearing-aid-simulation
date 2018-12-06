@@ -1,8 +1,9 @@
 #include "assert-utility.h"
+#include "FakeAudioFileReader.h"
 #include "AudioFrameReaderStub.h"
-#include "FakeAudioFrameReader.h"
 #include "AudioFrameProcessorStub.h"
 #include "AudioDeviceStub.h"
+#include <audio-file-reading/AudioFileInMemory.h>
 #include <playing-audio/PlayAudioModel.h>
 #include <gtest/gtest.h>
 
@@ -270,12 +271,13 @@ TEST(PlayAudioModelTestCase, fillBufferReadsThenProcesses) {
 }
 
 TEST(PlayAudioModelTestCase, playPassesComputedRmsToProcessorFactory) {
-	const auto reader = std::make_shared<FakeAudioFileReader>(
-		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 
-		2);
+	FakeAudioFileReader reader{
+		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+		2
+	};
 	const auto audioFactory = 
 		std::make_shared<AudioFrameReaderStubFactory>(
-			std::make_shared<FakeAudioFrameReader>(reader));
+			std::make_shared<AudioFileInMemory>(reader));
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
 		audioFactory,
@@ -287,5 +289,6 @@ TEST(PlayAudioModelTestCase, playPassesComputedRmsToProcessorFactory) {
 			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
 			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
 		}, 
-		processorFactory->parameters().stimulusRms);
+		processorFactory->parameters().stimulusRms,
+		1e-6);
 }

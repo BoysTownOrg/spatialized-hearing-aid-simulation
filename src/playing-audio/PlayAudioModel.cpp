@@ -1,6 +1,7 @@
 #include "PlayAudioModel.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
+#include <gsl/gsl>
 
 PlayAudioModel::PlayAudioModel(
 	std::shared_ptr<AudioDevice> device,
@@ -33,6 +34,22 @@ void PlayAudioModel::play(PlayRequest request) {
 	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
+
+	std::vector<std::vector<float>> audio(frameReader->channels());
+	std::vector<float *> pointers;
+	for (auto &channel : audio)
+		channel.resize(gsl::narrow<std::vector<float>::size_type>(frameReader->frames()));
+	for (auto &channel : audio)
+		if (channel.size() > 0)
+			pointers.push_back(&channel[0]);
+	if (pointers.size() > 0)
+		frameReader->read(&pointers[0], gsl::narrow<int>(frameReader->frames()));
+	for (const auto &channel : audio) {
+		float squaredSum{};
+		for (const auto sample : channel)
+			squaredSum += sample * sample;
+		forProcessor.stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
+	}
 
 	frameProcessor = makeProcessor(forProcessor);
 
