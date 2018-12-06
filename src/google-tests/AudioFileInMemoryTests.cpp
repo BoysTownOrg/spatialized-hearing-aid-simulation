@@ -49,12 +49,13 @@ TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
 }
 
 TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
-	AudioFileReaderStub reader{};
-	reader.setChannels(1);
+	AudioFileReaderStub reader{ { 4, 5, 6 } };
+	reader.setChannels(3);
 	reader.setSampleRate(2);
 	AudioFileInMemory adapter{ reader };
-	EXPECT_EQ(1, adapter.channels());
+	EXPECT_EQ(3, adapter.channels());
 	EXPECT_EQ(2, adapter.sampleRate());
+	EXPECT_EQ(1, adapter.frames());
 }
 
 TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
