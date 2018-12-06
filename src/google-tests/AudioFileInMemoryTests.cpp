@@ -57,15 +57,16 @@ TEST(AudioFileInMemoryTestCase, returnsFileParameters) {
 	EXPECT_EQ(2, adapter.sampleRate());
 }
 
-TEST(AudioFileInMemoryTestCase, constructorThrowsFileError) {
+TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
 	try {
-		AudioFileReaderStub reader{};
-		reader.fail();
-		reader.setErrorMessage("error.");
-		AudioFileInMemory adapter{ reader };
-		FAIL() << "Expected AudioFileInMemory::FileError";
+		const auto reader = std::make_shared<AudioFileReaderStub>();
+		reader->fail();
+		reader->setErrorMessage("error.");
+		AudioFileInMemoryFactory factory{ std::make_shared<AudioFileReaderStubFactory>(reader) };
+		factory.make("");
+		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
 	}
-	catch (const AudioFileInMemory::FileError &e) {
+	catch (const AudioFrameReaderFactory::CreateError &e) {
 		assertEqual("error.", e.what());
 	}
 }

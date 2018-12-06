@@ -30,5 +30,5 @@ public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemoryFactory(
 		std::shared_ptr<AudioFileReaderFactory> factory
 	);
-	std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+	AUDIO_FILE_READING_API std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
 };
