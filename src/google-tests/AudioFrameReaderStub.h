@@ -66,3 +66,16 @@ public:
 		return _filePath;
 	}
 };
+
+class ErrorAudioFrameReaderFactory : public AudioFrameReaderFactory {
+	std::string errorMessage{};
+public:
+	explicit ErrorAudioFrameReaderFactory(
+		std::string errorMessage
+	) : 
+		errorMessage{ std::move(errorMessage) } {}
+
+	std::shared_ptr<AudioFrameReader> make(std::string) override {
+		throw CreateError{ errorMessage };
+	}
+};

@@ -90,6 +90,21 @@ TEST(
 	}
 }
 
+TEST(
+	PlayAudioModelTestCase,
+	playThrowsRequestErrorWhenReaderFactoryThrowsCreateError)
+{
+	try {
+		const auto factory = std::make_shared<ErrorAudioFrameReaderFactory>("error.");
+		PlayAudioModelFacade model{ factory };
+		model.play();
+		FAIL() << "Expected PlayAudioModel::RequestFailure";
+	}
+	catch (const PlayAudioModel::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	PlayAudioModelFacade model{ device };
