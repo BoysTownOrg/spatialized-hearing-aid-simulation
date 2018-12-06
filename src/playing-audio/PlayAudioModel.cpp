@@ -34,12 +34,7 @@ void PlayAudioModel::play(PlayRequest request) {
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
 
-	try {
-		frameProcessor = processorFactory->make(forProcessor);
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
-	}
+	frameProcessor = makeProcessor(forProcessor);
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
@@ -64,6 +59,15 @@ std::shared_ptr<AudioFrameReader> PlayAudioModel::makeReader(std::string filePat
 		return readerFactory->make(filePath);
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
+		throw RequestFailure{ e.what() };
+	}
+}
+
+std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
+	try {
+		return processorFactory->make(p);
+	}
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
