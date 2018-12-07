@@ -40,16 +40,19 @@ public:
 	}
 };
 
+#include "assert-utility.h"
 #include "FakeAudioFileReader.h"
 #include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <gtest/gtest.h>
 
 class BrirAdapterTestCase : public ::testing::TestCase {};
 
-TEST(BrirAdapterTestCase, tbd) {
+TEST(BrirAdapterTestCase, interpretsAudioFileAsBrir) {
 	FakeAudioFileReader reader{ { 1, 2, 3, 4 } };
 	reader.setChannels(2);
 	reader.setSampleRate(5);
 	BrirAdapter adapter{ reader };
 	EXPECT_EQ(5, adapter.asInt(propertyName(binaural_room_impulse_response::Property::sampleRate)));
+	assertEqual({ 1, 3 }, adapter.asVector(propertyName(binaural_room_impulse_response::Property::leftImpulseResponse)));
+	assertEqual({ 2, 4 }, adapter.asVector(propertyName(binaural_room_impulse_response::Property::rightImpulseResponse)));
 }
