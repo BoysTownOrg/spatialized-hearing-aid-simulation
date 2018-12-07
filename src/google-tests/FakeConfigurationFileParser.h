@@ -1,7 +1,6 @@
 #pragma once
 
 #include <dsl-prescription/DslPrescription.h>
-#include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <map>
 
 class FakeConfigurationFileParser : public ConfigurationFileParser {
@@ -16,13 +15,6 @@ public:
 		vectors[propertyName(Property::kneepointGains_dB)] = { 0 };
 		vectors[propertyName(Property::kneepoints_dBSpl)] = { 0 };
 		vectors[propertyName(Property::broadbandOutputLimitingThresholds_dBSpl)] = { 0 };
-	}
-
-	void setValidBrirProperties() {
-		using binaural_room_impulse_response::Property;
-		vectors[propertyName(Property::leftImpulseResponse)] = { 0 };
-		vectors[propertyName(Property::rightImpulseResponse)] = { 0 };
-		ints[propertyName(Property::sampleRate)] = 0;
 	}
 
 	void setVectorProperty(std::string property, std::vector<double> v) {

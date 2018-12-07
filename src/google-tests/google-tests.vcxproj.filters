@@ -45,9 +45,6 @@
     <ClCompile Include="ChannelCopierTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinauralRoomImpulseResponseTester.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayAudioModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -3,40 +3,29 @@
 #include <binaural-room-impulse-response/BinauralRoomImpulseResponse.h>
 #include <gsl/gsl>
 
-class BrirAdapter : public ConfigurationFileParser {
-	using vector_type = std::vector<double>;
-	using size_type = vector_type::size_type;
-	std::vector<double> left{};
-	std::vector<double> right{};
-	int sampleRate;
+class BrirAdapter {
+	std::shared_ptr<AudioFileReaderFactory> factory;
 public:
-	explicit BrirAdapter(AudioFileReader &reader) :
-		sampleRate(reader.sampleRate()) 
+	explicit BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory) :
+		factory{ std::move(factory) }
 	{
-		std::vector<double> buffer(gsl::narrow<size_type>(reader.frames() * reader.channels()));
-		reader.readFrames(&buffer[0], buffer.size());
+	}
+
+	BinauralRoomImpulseResponse read(std::string filePath) {
+		BinauralRoomImpulseResponse brir{};
+		const auto reader = factory->make(filePath);
+		using vector_type = decltype(brir.left);
+		vector_type buffer(gsl::narrow<vector_type::size_type>(reader->frames() * reader->channels()));
+		reader->readFrames(&buffer[0], buffer.size());
 		bool oddSample = false;
 		std::partition_copy(
 			buffer.begin(),
 			buffer.end(),
-			std::back_inserter(left),
-			std::back_inserter(right),
+			std::back_inserter(brir.left),
+			std::back_inserter(brir.right),
 			[&oddSample](double) { return oddSample = !oddSample; });
-	}
-
-	std::vector<double> asVector(std::string property) const override {
-		if (property == propertyName(binaural_room_impulse_response::Property::leftImpulseResponse))
-			return left;
-		else
-			return right;
-	}
-
-	double asDouble(std::string ) const override {
-		return 0.0;
-	}
-
-	int asInt(std::string) const override {
-		return sampleRate;
+		brir.sampleRate = reader->sampleRate();
+		return brir;
 	}
 };
 
@@ -48,11 +37,12 @@ public:
 class BrirAdapterTestCase : public ::testing::TestCase {};
 
 TEST(BrirAdapterTestCase, interpretsAudioFileAsBrir) {
-	FakeAudioFileReader reader{ { 1, 2, 3, 4 } };
-	reader.setChannels(2);
-	reader.setSampleRate(5);
-	BrirAdapter adapter{ reader };
-	EXPECT_EQ(5, adapter.asInt(propertyName(binaural_room_impulse_response::Property::sampleRate)));
-	assertEqual({ 1, 3 }, adapter.asVector(propertyName(binaural_room_impulse_response::Property::leftImpulseResponse)));
-	assertEqual({ 2, 4 }, adapter.asVector(propertyName(binaural_room_impulse_response::Property::rightImpulseResponse)));
+	const auto reader = std::make_shared<FakeAudioFileReader>( std::vector<float>{ 1, 2, 3, 4 } );
+	reader->setChannels(2);
+	reader->setSampleRate(5);
+	BrirAdapter adapter{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
+	const auto brir = adapter.read("");
+	EXPECT_EQ(5, brir.sampleRate);
+	assertEqual({ 1, 3 }, brir.left);
+	assertEqual({ 2, 4 }, brir.right);
 }

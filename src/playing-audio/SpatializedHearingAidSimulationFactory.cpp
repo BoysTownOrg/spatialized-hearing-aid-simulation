@@ -25,14 +25,14 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 	forCompressor.max_dB = 119;
 
 	const auto brir = makeBrir(p.brirFilePath);
-	if (brir.sampleRate() != p.sampleRate)
+	if (brir.sampleRate != p.sampleRate)
 		throw CreateError{ "Not sure what to do with different sample rates." };
 
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 	if (p.channels > 0)
-		processors.push_back(makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor, p.stimulusRms[0], p.level_dB_Spl));
+		processors.push_back(makeChannel(brir.left, p.leftDslPrescriptionFilePath, forCompressor, p.stimulusRms[0], p.level_dB_Spl));
 	if (p.channels > 1)
-		processors.push_back(makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor, p.stimulusRms[1], p.level_dB_Spl));
+		processors.push_back(makeChannel(brir.right, p.rightDslPrescriptionFilePath, forCompressor, p.stimulusRms[1], p.level_dB_Spl));
 
 	return std::make_shared<ChannelProcessingGroup>(processors);
 }
@@ -88,10 +88,6 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFil
 }
 
 BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::makeBrir(std::string filePath) {
-	try {
-		return BinauralRoomImpulseResponse{ *parserFactory->make(filePath) };
-	}
-	catch (const BinauralRoomImpulseResponse::InvalidResponse &e) {
-		throw CreateError{ e.what() };
-	}
+	filePath;
+	return BinauralRoomImpulseResponse{};
 }

@@ -132,9 +132,6 @@
   <ItemGroup>
     <ClInclude Include="BinauralRoomImpulseResponse.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BinauralRoomImpulseResponse.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
