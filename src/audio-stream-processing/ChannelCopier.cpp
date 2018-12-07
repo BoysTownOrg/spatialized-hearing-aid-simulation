@@ -26,8 +26,8 @@ long long ChannelCopier::frames() const {
 	return reader->frames();
 }
 
-void ChannelCopier::reset()
-{
+void ChannelCopier::reset() {
+	reader->reset();
 }
 
 ChannelCopierFactory::ChannelCopierFactory(
