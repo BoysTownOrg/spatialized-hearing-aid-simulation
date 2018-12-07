@@ -14,7 +14,6 @@ public:
 	LibsndfileReader(const LibsndfileReader &) = delete;
 	LibsndfileReader &operator=(const LibsndfileReader &) = delete;
 	void readFrames(float *, long long) override;
-	void readFrames(double *, long long) override;
 	long long frames() override;
 	int channels() override;
 	bool failed() const override;

@@ -20,6 +20,7 @@ public:
 	);
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override;
 private:
+	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(
 		std::vector<float> b,
 		std::string filePath,

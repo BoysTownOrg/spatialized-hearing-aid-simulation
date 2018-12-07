@@ -12,10 +12,6 @@ void LibsndfileReader::readFrames(float *x, long long count) {
 	sf_readf_float(file, x, count);
 }
 
-void LibsndfileReader::readFrames(double *x, long long count) {
-	sf_readf_double(file, x, count);
-}
-
 long long LibsndfileReader::frames() {
 	return info.frames;
 }

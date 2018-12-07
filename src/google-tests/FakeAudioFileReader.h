@@ -38,13 +38,6 @@ public:
 			static_cast<std::size_t>(n) * sizeof(float) * _channels);
 	}
 
-	void readFrames(double *x, long long n) override {
-		if (contents.size() == 0)
-			return;
-		for (int i = 0; i < n; ++i)
-			x[i] = contents[i];
-	}
-
 	void fail() {
 		_failed = true;
 	}

@@ -26,7 +26,7 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 	forCompressor.sampleRate = p.sampleRate;
 	forCompressor.max_dB = 119;
 
-	const auto brir = brirReader->read(p.brirFilePath);
+	const auto brir = readBrir(p.brirFilePath);
 	if (brir.sampleRate != p.sampleRate)
 		throw CreateError{ "Not sure what to do with different sample rates." };
 
@@ -37,6 +37,17 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 		processors.push_back(makeChannel(brir.right, p.rightDslPrescriptionFilePath, forCompressor, p.stimulusRms[1], p.level_dB_Spl));
 
 	return std::make_shared<ChannelProcessingGroup>(processors);
+}
+
+BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::readBrir(
+	std::string filePath)
+{
+	try {
+		return brirReader->read(filePath);
+	}
+	catch (const BrirReader::ReadError &e) {
+		throw CreateError{ e.what() };
+	}
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeChannel(
