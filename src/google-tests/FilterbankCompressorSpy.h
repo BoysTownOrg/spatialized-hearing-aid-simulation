@@ -16,27 +16,27 @@ public:
 		return _processingLog;
 	}
 
-	virtual void compressInput(real_type *, real_type *, int chunkSize) override {
+	void compressInput(real_type *, real_type *, int chunkSize) override {
 		_compressInputChunkSize = chunkSize;
 		_processingLog += "compressInput";
 	}
 
-	virtual void analyzeFilterbank(real_type *, complex_type *, int chunkSize) override {
+	void analyzeFilterbank(real_type *, complex_type *, int chunkSize) override {
 		_filterbankAnalyzeChunkSize = chunkSize;
 		_processingLog += "analyzeFilterbank";
 	}
 
-	virtual void compressChannels(complex_type *, complex_type *, int chunkSize) override {
+	void compressChannels(complex_type *, complex_type *, int chunkSize) override {
 		_compressChannelsChunkSize = chunkSize;
 		_processingLog += "compressChannels";
 	}
 
-	virtual void synthesizeFilterbank(complex_type *, real_type *, int chunkSize) override {
+	void synthesizeFilterbank(complex_type *, real_type *, int chunkSize) override {
 		_filterbankSynthesizeChunkSize = chunkSize;
 		_processingLog += "synthesizeFilterbank";
 	}
 
-	virtual void compressOutput(real_type *, real_type *, int chunkSize) override {
+	void compressOutput(real_type *, real_type *, int chunkSize) override {
 		_compressOutputChunkSize = chunkSize;
 		_processingLog += "compressOutput";
 	}
@@ -97,9 +97,8 @@ public:
 	}
 
 	std::shared_ptr<FilterbankCompressor> make(
-		const PrescriptionAdapter &,
-		FilterbankCompressor::Parameters p) override
-	{
+		FilterbankCompressor::Parameters p
+	) override {
 		_parameters = p;
 		return compressor;
 	}

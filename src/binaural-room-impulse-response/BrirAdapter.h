@@ -12,6 +12,10 @@
 class BrirAdapter : public BrirReader {
 	std::shared_ptr<AudioFileReaderFactory> factory;
 public:
-	BINAURAL_ROOM_IMPULSE_RESPONSE_API explicit BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory);
-	BINAURAL_ROOM_IMPULSE_RESPONSE_API BinauralRoomImpulseResponse read(std::string filePath) override;
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API explicit BrirAdapter(
+		std::shared_ptr<AudioFileReaderFactory> factory
+	);
+	BINAURAL_ROOM_IMPULSE_RESPONSE_API BinauralRoomImpulseResponse read(
+		std::string filePath
+	) override;
 };
