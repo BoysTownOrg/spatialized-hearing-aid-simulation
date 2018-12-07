@@ -39,8 +39,8 @@ long long AudioFileInMemory::frames() const {
 	return _frames;
 }
 
-void AudioFileInMemory::reset()
-{
+void AudioFileInMemory::reset() {
+	head = 0;
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
