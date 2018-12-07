@@ -3,32 +3,29 @@ extern "C" {
 #include <cha_ff.h>
 }
 
-Chapro::Chapro(
-	const PrescriptionAdapter &prescription,
-	Parameters parameters
-) :
+Chapro::Chapro(Parameters parameters) :
 	_chunkSize(parameters.chunkSize),
-	_channels(prescription.channels())
+	_channels(parameters.channels)
 {
 	CHA_DSL dsl;
 	dsl.attack = parameters.attack_ms;
 	dsl.release = parameters.release_ms;
 	dsl.nchannel = _channels;
 	using size_type = std::vector<double>::size_type;
-	for (size_type i = 0; i < prescription.crossFrequenciesHz().size(); ++i)
-		dsl.cross_freq[i] = prescription.crossFrequenciesHz()[i];
-	for (size_type i = 0; i < prescription.compressionRatios().size(); ++i)
-		dsl.cr[i] = prescription.compressionRatios()[i];
-	for (size_type i = 0; i < prescription.kneepoints_dBSpl().size(); ++i)
-		dsl.tk[i] = prescription.kneepoints_dBSpl()[i];
-	for (size_type i = 0; i < prescription.kneepointGains_dB().size(); ++i)
-		dsl.tkgain[i] = prescription.kneepointGains_dB()[i];
+	for (size_type i = 0; i < parameters.crossFrequenciesHz.size(); ++i)
+		dsl.cross_freq[i] = parameters.crossFrequenciesHz[i];
+	for (size_type i = 0; i < parameters.compressionRatios.size(); ++i)
+		dsl.cr[i] = parameters.compressionRatios[i];
+	for (size_type i = 0; i < parameters.kneepoints_dBSpl.size(); ++i)
+		dsl.tk[i] = parameters.kneepoints_dBSpl[i];
+	for (size_type i = 0; i < parameters.kneepointGains_dB.size(); ++i)
+		dsl.tkgain[i] = parameters.kneepointGains_dB[i];
 	for (
 		size_type i = 0;
-		i < prescription.broadbandOutputLimitingThresholds_dBSpl().size();
+		i < parameters.broadbandOutputLimitingThresholds_dBSpl.size();
 		++i
 	)
-		dsl.bolt[i] = prescription.broadbandOutputLimitingThresholds_dBSpl()[i];
+		dsl.bolt[i] = parameters.broadbandOutputLimitingThresholds_dBSpl[i];
 	CHA_WDRC wdrc;
 	wdrc.attack = 1;
 	wdrc.release = 50;

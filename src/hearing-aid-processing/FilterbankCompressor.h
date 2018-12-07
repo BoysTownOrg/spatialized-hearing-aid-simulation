@@ -18,6 +18,7 @@ public:
 		double max_dB;
 		int windowSize;
 		int chunkSize;
+		int channels;
 	};
 	INTERFACE_OPERATIONS(FilterbankCompressor);
 	using real_type = float;

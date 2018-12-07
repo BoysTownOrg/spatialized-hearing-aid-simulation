@@ -1,6 +1,5 @@
 #pragma once
 
-#include <dsl-prescription/DslPrescription.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 extern "C" {
 #include <chapro.h>
@@ -13,9 +12,7 @@ class Chapro : public FilterbankCompressor {
 	const int _chunkSize;
 	int error = 0;
 public:
-	Chapro(
-		const PrescriptionAdapter &,
-		Parameters);
+	explicit Chapro(Parameters);
 	~Chapro() noexcept;
 	Chapro(Chapro &&) = delete;
 	Chapro &operator=(Chapro &&) = delete;
@@ -32,10 +29,7 @@ public:
 };
 
 class ChaproFactory : public FilterbankCompressorFactory {
-	std::shared_ptr<FilterbankCompressor> make(
-		const PrescriptionAdapter &prescription,
-		FilterbankCompressor::Parameters parameters) override 
-	{
-		return std::make_shared<Chapro>(prescription, parameters);
+	std::shared_ptr<FilterbankCompressor> make(FilterbankCompressor::Parameters parameters) override {
+		return std::make_shared<Chapro>(parameters);
 	}
 };
