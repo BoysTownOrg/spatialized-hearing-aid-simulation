@@ -50,6 +50,7 @@ void PlayAudioModel::play(PlayRequest request) {
 			squaredSum += sample * sample;
 		forProcessor.stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
 	}
+	frameReader->reset();
 
 	frameProcessor = makeProcessor(forProcessor);
 

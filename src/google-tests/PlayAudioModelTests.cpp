@@ -246,6 +246,8 @@ class ReadsAOne : public AudioFrameReader {
 	long long frames() const override {
 		return 0;
 	}
+	void reset() override {
+	}
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {

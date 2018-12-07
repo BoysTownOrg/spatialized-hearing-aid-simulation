@@ -24,6 +24,7 @@ public:
 	AUDIO_FILE_READING_API int sampleRate() const override;
 	AUDIO_FILE_READING_API int channels() const override;
 	AUDIO_FILE_READING_API long long frames() const override;
+	AUDIO_FILE_READING_API void reset() override;
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {

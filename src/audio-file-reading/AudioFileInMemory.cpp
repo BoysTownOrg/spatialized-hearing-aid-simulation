@@ -39,6 +39,10 @@ long long AudioFileInMemory::frames() const {
 	return _frames;
 }
 
+void AudioFileInMemory::reset()
+{
+}
+
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 	std::shared_ptr<AudioFileReaderFactory> factory
 ) :

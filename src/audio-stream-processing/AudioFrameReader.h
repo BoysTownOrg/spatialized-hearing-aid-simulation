@@ -12,6 +12,7 @@ public:
 	virtual int sampleRate() const = 0;
 	virtual int channels() const = 0;
 	virtual long long frames() const = 0;
+	virtual void reset() = 0;
 };
 
 class AudioFrameReaderFactory {

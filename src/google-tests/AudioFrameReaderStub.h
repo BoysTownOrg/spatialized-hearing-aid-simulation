@@ -61,6 +61,10 @@ public:
 	LogString readingLog() const {
 		return _readingLog;
 	}
+
+	void reset() override {
+		_readingLog += LogString{ "reset " };
+	}
 };
 
 class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {
