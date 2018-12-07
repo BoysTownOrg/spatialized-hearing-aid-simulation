@@ -78,3 +78,19 @@ TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
 	adapter.make("a");
 	assertEqual("a", factory->filePath());
 }
+
+TEST(AudioFileInMemoryTestCase, reset) {
+	FakeAudioFileReader reader{ { 3, 4 } };
+	AudioFileInMemory adapter{ reader };
+	float x{};
+	float *channels[]{ &x };
+	adapter.read(channels, 1);
+	EXPECT_EQ(3, x);
+	adapter.read(channels, 1);
+	EXPECT_EQ(4, x);
+	adapter.reset();
+	adapter.read(channels, 1);
+	EXPECT_EQ(3, x);
+	adapter.read(channels, 1);
+	EXPECT_EQ(4, x);
+}
