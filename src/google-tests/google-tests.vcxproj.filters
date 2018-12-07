@@ -51,6 +51,9 @@
     <ClCompile Include="PlayAudioModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BrirAdapterTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FakeConfigurationFileParser.h">
