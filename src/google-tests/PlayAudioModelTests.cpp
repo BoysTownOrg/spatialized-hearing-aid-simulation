@@ -275,12 +275,10 @@ TEST(PlayAudioModelTestCase, playPassesComputedRmsToProcessorFactory) {
 		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
 		2
 	};
-	const auto audioFactory = 
-		std::make_shared<AudioFrameReaderStubFactory>(
-			std::make_shared<AudioFileInMemory>(reader));
 	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
 	PlayAudioModelFacade model{
-		audioFactory,
+		std::make_shared<AudioFrameReaderStubFactory>(
+			std::make_shared<AudioFileInMemory>(reader)),
 		processorFactory
 	};
 	model.play();
@@ -291,4 +289,13 @@ TEST(PlayAudioModelTestCase, playPassesComputedRmsToProcessorFactory) {
 		}, 
 		processorFactory->parameters().stimulusRms,
 		1e-6);
+}
+
+TEST(PlayAudioModelTestCase, playResetsReaderAfterComputingRms) {
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	PlayAudioModelFacade model{
+		std::make_shared<AudioFrameReaderStubFactory>(reader),
+	};
+	model.play();
+	EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 }
