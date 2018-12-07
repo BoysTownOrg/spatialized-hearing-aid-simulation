@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BinauralRoomImpulseResponse.h">
+    <ClInclude Include="BrirAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BrirAdapter.h">
+    <ClInclude Include="BrirReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

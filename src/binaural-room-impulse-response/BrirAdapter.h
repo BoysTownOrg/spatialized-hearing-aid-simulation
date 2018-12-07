@@ -6,10 +6,10 @@
 #define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
 #endif
 
-#include "BinauralRoomImpulseResponse.h"
+#include "BrirReader.h"
 #include <audio-file-reading/AudioFileReader.h>
 
-class BrirAdapter : BrirReader {
+class BrirAdapter : public BrirReader {
 	std::shared_ptr<AudioFileReaderFactory> factory;
 public:
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API explicit BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory);

@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BinauralRoomImpulseResponse.h" />
+    <ClInclude Include="BrirReader.h" />
     <ClInclude Include="BrirAdapter.h" />
   </ItemGroup>
   <ItemGroup>

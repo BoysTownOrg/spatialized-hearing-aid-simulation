@@ -8,10 +8,12 @@
 
 SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
-	std::shared_ptr<ConfigurationFileParserFactory> parserFactory
+	std::shared_ptr<ConfigurationFileParserFactory> parserFactory,
+	std::shared_ptr<BrirReader> brirReader
 ) :
 	compressorFactory{ std::move(compressorFactory) },
-	parserFactory{ std::move(parserFactory) }
+	parserFactory{ std::move(parserFactory) },
+	brirReader{ std::move(brirReader) }
 {
 }
 
@@ -24,7 +26,7 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 	forCompressor.sampleRate = p.sampleRate;
 	forCompressor.max_dB = 119;
 
-	const auto brir = makeBrir(p.brirFilePath);
+	const auto brir = brirReader->read(p.brirFilePath);
 	if (brir.sampleRate != p.sampleRate)
 		throw CreateError{ "Not sure what to do with different sample rates." };
 
@@ -85,9 +87,4 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFil
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw CreateError{ "The impulse response is empty?" };
 	}
-}
-
-BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::makeBrir(std::string filePath) {
-	filePath;
-	return BrirReader::BinauralRoomImpulseResponse{};
 }

@@ -5,6 +5,7 @@
 #include <google-tests/FakeConfigurationFileParser.h>
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
+#include <binaural-room-impulse-response/BrirAdapter.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/SpatializedHearingAidSimulationFactory.h>
 #include <playing-audio/PlayAudioModel.h>
@@ -80,7 +81,10 @@ int main() {
 			),
 			std::make_shared<SpatializedHearingAidSimulationFactory>(
 				std::make_shared<ChaproFactory>(),
-				std::make_shared<MockParserFactory>(parser)
+				std::make_shared<MockParserFactory>(parser),
+				std::make_shared<BrirAdapter>(
+					std::make_shared<LibsndfileReaderFactory>()
+				)
 			)
 		),
 		std::make_shared<FltkWindow>()
