@@ -15,3 +15,17 @@ TEST(BrirAdapterTestCase, interpretsAudioFileAsBrir) {
 	assertEqual({ 1, 3 }, brir.left);
 	assertEqual({ 2, 4 }, brir.right);
 }
+
+TEST(BrirAdapterTestCase, failedReaderThrowsReadError) {
+	try {
+		const auto reader = std::make_shared<FakeAudioFileReader>();
+		reader->fail();
+		reader->setErrorMessage("error.");
+		BrirAdapter adapter{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
+		adapter.read("");
+		FAIL() << "Expected BrirReader::ReadError";
+	}
+	catch (const BrirReader::ReadError &e) {
+		assertEqual("error.", e.what());
+	}
+}
