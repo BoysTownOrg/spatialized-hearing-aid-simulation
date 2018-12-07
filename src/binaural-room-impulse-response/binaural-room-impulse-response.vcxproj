@@ -133,6 +133,9 @@
     <ClInclude Include="BinauralRoomImpulseResponse.h" />
     <ClInclude Include="BrirAdapter.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BrirAdapter.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
