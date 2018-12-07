@@ -27,10 +27,10 @@
     <ClCompile Include="Chapro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fake-properties-main.cpp">
+    <ClCompile Include="NlohmannJsonParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NlohmannJsonParser.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,13 +17,13 @@ void Presenter::loop() {
 
 void Presenter::browseForLeftDslPrescription() {
 	browseAndUpdateIfNotCancelled(
-		{},
+		{ "*.json" },
 		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
 }
 
 void Presenter::browseForRightDslPrescription() {
 	browseAndUpdateIfNotCancelled(
-		{},
+		{ "*.json" },
 		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(p); });
 }
 

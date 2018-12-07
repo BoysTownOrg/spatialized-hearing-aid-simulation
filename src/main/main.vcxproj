@@ -141,7 +141,7 @@
     <ClCompile Include="Chapro.cpp" />
     <ClCompile Include="FltkWindow.cpp" />
     <ClCompile Include="LibsndfileReader.cpp" />
-    <ClCompile Include="fake-properties-main.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />
   </ItemGroup>
