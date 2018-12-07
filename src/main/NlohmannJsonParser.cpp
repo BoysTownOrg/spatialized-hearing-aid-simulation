@@ -21,3 +21,7 @@ double NlohmannJsonParser::asDouble(std::string property) const {
 int NlohmannJsonParser::asInt(std::string property) const {
 	return at<int>(property);
 }
+
+std::shared_ptr<ConfigurationFileParser> NlohmannJsonParserFactory::make(std::string filePath) {
+	return std::make_shared<NlohmannJsonParser>(filePath);
+}

@@ -11,7 +11,7 @@ public:
 	double asDouble(std::string property) const override;
 	int asInt(std::string property) const override;
 private:
-	template <typename T>
+	template<typename T>
 	T at(std::string property) const {
 		try {
 			return json.at(property);
@@ -20,4 +20,8 @@ private:
 			throw ParseError{ e.what() };
 		}
 	}
+};
+
+class NlohmannJsonParserFactory : public ConfigurationFileParserFactory {
+	std::shared_ptr<ConfigurationFileParser> make(std::string filePath) override;
 };
