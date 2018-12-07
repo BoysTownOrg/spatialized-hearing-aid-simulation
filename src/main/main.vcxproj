@@ -142,12 +142,14 @@
     <ClCompile Include="FltkWindow.cpp" />
     <ClCompile Include="LibsndfileReader.cpp" />
     <ClCompile Include="fake-properties-main.cpp" />
+    <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapro.h" />
     <ClInclude Include="FltkWindow.h" />
     <ClInclude Include="LibsndfileReader.h" />
+    <ClInclude Include="NlohmannJsonParser.h" />
     <ClInclude Include="PortAudioDevice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
