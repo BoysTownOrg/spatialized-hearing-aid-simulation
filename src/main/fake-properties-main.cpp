@@ -81,7 +81,7 @@ int main() {
 			),
 			std::make_shared<SpatializedHearingAidSimulationFactory>(
 				std::make_shared<ChaproFactory>(),
-				std::make_shared<MockParserFactory>(parser),
+				std::make_shared<FakeConfigurationFileParserFactory>(parser),
 				std::make_shared<BrirAdapter>(
 					std::make_shared<LibsndfileReaderFactory>()
 				)

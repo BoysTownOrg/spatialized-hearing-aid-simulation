@@ -1,12 +1,17 @@
 #pragma once
 
-#include <dsl-prescription/DslPrescription.h>
 #include <common-includes/Interface.h>
 #include <memory>
+#include <vector>
 
 class FilterbankCompressor {
 public:
 	struct Parameters {
+		std::vector<double> crossFrequenciesHz;
+		std::vector<double> compressionRatios;
+		std::vector<double> kneepointGains_dB;
+		std::vector<double> kneepoints_dBSpl;
+		std::vector<double> broadbandOutputLimitingThresholds_dBSpl;
 		double attack_ms;
 		double release_ms;
 		double sampleRate;
@@ -46,6 +51,5 @@ class FilterbankCompressorFactory {
 public:
 	INTERFACE_OPERATIONS(FilterbankCompressorFactory);
 	virtual std::shared_ptr<FilterbankCompressor> make(
-		const DslPrescription &,
 		FilterbankCompressor::Parameters) = 0;
 };

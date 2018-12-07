@@ -14,7 +14,7 @@ class Chapro : public FilterbankCompressor {
 	int error = 0;
 public:
 	Chapro(
-		const DslPrescription &,
+		const PrescriptionAdapter &,
 		Parameters);
 	~Chapro() noexcept;
 	Chapro(Chapro &&) = delete;
@@ -33,7 +33,7 @@ public:
 
 class ChaproFactory : public FilterbankCompressorFactory {
 	std::shared_ptr<FilterbankCompressor> make(
-		const DslPrescription &prescription,
+		const PrescriptionAdapter &prescription,
 		FilterbankCompressor::Parameters parameters) override 
 	{
 		return std::make_shared<Chapro>(prescription, parameters);

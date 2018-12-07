@@ -1,6 +1,6 @@
 #pragma once
 
-#include <dsl-prescription/DslPrescription.h>
+#include <dsl-prescription/PrescriptionAdapter.h>
 #include <map>
 
 class FakeConfigurationFileParser : public ConfigurationFileParser {
@@ -42,12 +42,12 @@ public:
 	}
 };
 
-class MockParserFactory : public ConfigurationFileParserFactory {
+class FakeConfigurationFileParserFactory : public ConfigurationFileParserFactory {
 	std::shared_ptr<ConfigurationFileParser> parser;
 public:
-	explicit MockParserFactory(
+	explicit FakeConfigurationFileParserFactory(
 		std::shared_ptr<ConfigurationFileParser> parser =
-		std::make_shared<FakeConfigurationFileParser>()
+			std::make_shared<FakeConfigurationFileParser>()
 	) :
 		parser{ std::move(parser) } {}
 

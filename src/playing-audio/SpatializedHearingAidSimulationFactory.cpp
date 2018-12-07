@@ -8,11 +8,11 @@
 
 SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
-	std::shared_ptr<ConfigurationFileParserFactory> parserFactory,
+	std::shared_ptr<PrescriptionReader> prescriptionReader,
 	std::shared_ptr<BrirReader> brirReader
 ) :
 	compressorFactory{ std::move(compressorFactory) },
-	parserFactory{ std::move(parserFactory) },
+	prescriptionReader{ std::move(prescriptionReader) },
 	brirReader{ std::move(brirReader) }
 {
 }
@@ -61,20 +61,16 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeCha
 	const auto scale = std::pow(10.0, (level_dB_Spl - forCompressor.max_dB) / 20.0) / rms;
 	channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(scale)));
 	channel->add(makeFilter(b));
-	channel->add(
-		makeHearingAid(
-			makeDslPrescription(prescriptionFilePath),
-			forCompressor));
+	channel->add(makeHearingAid(forCompressor));
 	return channel;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAid(
-	const DslPrescription &prescription,
 	FilterbankCompressor::Parameters parameters)
 {
 	try {
 		return std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(prescription, parameters)
+			compressorFactory->make(parameters)
 		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
@@ -82,11 +78,11 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	}
 }
 
-DslPrescription SpatializedHearingAidSimulationFactory::makeDslPrescription(std::string filePath) {
+PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription(std::string filePath) {
 	try {
-		return DslPrescription{ *parserFactory->make(filePath) };
+		return prescriptionReader->read(filePath);
 	}
-	catch (const DslPrescription::InvalidPrescription &e) {
+	catch (const PrescriptionReader::ReadError &e) {
 		throw CreateError{ e.what() };
 	}
 }

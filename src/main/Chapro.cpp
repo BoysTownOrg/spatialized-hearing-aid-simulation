@@ -4,7 +4,7 @@ extern "C" {
 }
 
 Chapro::Chapro(
-	const DslPrescription &prescription,
+	const PrescriptionAdapter &prescription,
 	Parameters parameters
 ) :
 	_chunkSize(parameters.chunkSize),

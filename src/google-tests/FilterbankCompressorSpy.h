@@ -97,7 +97,7 @@ public:
 	}
 
 	std::shared_ptr<FilterbankCompressor> make(
-		const DslPrescription &,
+		const PrescriptionAdapter &,
 		FilterbankCompressor::Parameters p) override
 	{
 		_parameters = p;
