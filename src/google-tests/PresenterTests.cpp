@@ -323,12 +323,12 @@ TEST(
 
 TEST(
 	PresenterTestCase,
-	browseForBrirFiltersMatFiles)
+	browseForBrirFiltersWavFiles)
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
 	view->browseForBrir();
-	assertEqual({ "*.mat" }, view->browseFilters());
+	assertEqual({ "*.wav" }, view->browseFilters());
 }
 
 TEST(
