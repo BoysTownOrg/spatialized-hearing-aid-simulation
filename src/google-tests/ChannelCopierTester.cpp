@@ -50,3 +50,10 @@ TEST(ChannelCopierTestCase, factoryPassesFilePath) {
 	adapter.make("a");
 	assertEqual("a", factory->filePath());
 }
+
+TEST(ChannelCopierTestCase, reset) {
+	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	ChannelCopier copier{ reader };
+	copier.reset();
+	EXPECT_TRUE(reader->readingLog().contains("reset "));
+}
