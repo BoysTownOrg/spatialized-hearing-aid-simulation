@@ -23,11 +23,11 @@ private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(
 		std::vector<float> b,
-		std::string filePath,
 		FilterbankCompressor::Parameters,
 		double rms,
 		double level_dB_Spl);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
+	FilterbankCompressor::Parameters toCompressorParameters(Parameters, PrescriptionReader::Dsl);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 	std::shared_ptr<SignalProcessor> makeHearingAid(
 		FilterbankCompressor::Parameters
