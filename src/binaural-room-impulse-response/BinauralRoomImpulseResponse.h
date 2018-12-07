@@ -1,16 +1,18 @@
 #pragma once
 
-#ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
-#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
-#else
-#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
-#endif
-
+#include <common-includes/Interface.h>
+#include <common-includes/RuntimeError.h>
 #include <vector>
 
-struct BinauralRoomImpulseResponse {
-	std::vector<float> left;
-	std::vector<float> right;
-	int sampleRate;
+class BrirReader {
+public:
+	INTERFACE_OPERATIONS(BrirReader);
+	RUNTIME_ERROR(ReadError);
+	struct BinauralRoomImpulseResponse {
+		std::vector<float> left;
+		std::vector<float> right;
+		int sampleRate;
+	};
+	virtual BinauralRoomImpulseResponse read(std::string filePath) = 0;
 };
 

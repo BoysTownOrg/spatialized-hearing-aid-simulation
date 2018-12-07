@@ -87,7 +87,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFil
 	}
 }
 
-BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::makeBrir(std::string filePath) {
+BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::makeBrir(std::string filePath) {
 	filePath;
-	return BinauralRoomImpulseResponse{};
+	return BrirReader::BinauralRoomImpulseResponse{};
 }

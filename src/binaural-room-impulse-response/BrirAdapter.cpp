@@ -7,7 +7,7 @@ BrirAdapter::BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory) :
 {
 }
 
-BinauralRoomImpulseResponse BrirAdapter::read(std::string filePath) {
+BrirReader::BinauralRoomImpulseResponse BrirAdapter::read(std::string filePath) {
 	BinauralRoomImpulseResponse brir{};
 	const auto reader = factory->make(filePath);
 	using vector_type = decltype(brir.left);
