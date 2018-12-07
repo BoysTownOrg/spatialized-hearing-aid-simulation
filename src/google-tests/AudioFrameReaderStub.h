@@ -1,8 +1,10 @@
 #pragma once
 
+#include "LogString.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioFrameReaderStub : public AudioFrameReader {
+	LogString _readingLog{};
 	long long _frames{};
 	int _framesRequested{};
 	int _sampleRate{};
@@ -25,6 +27,7 @@ public:
 	void read(float **audioBuffer, int frames) override {
 		_audioBuffer = audioBuffer;
 		_framesRequested = frames;
+		_readingLog += LogString{ "read " };
 	}
 
 	void setComplete() {
@@ -53,6 +56,10 @@ public:
 
 	void setFrames(long long f) {
 		_frames = f;
+	}
+
+	LogString readingLog() const {
+		return _readingLog;
 	}
 };
 

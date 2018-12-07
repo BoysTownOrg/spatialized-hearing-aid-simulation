@@ -74,5 +74,8 @@
     <ClInclude Include="FakeAudioFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LogString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
