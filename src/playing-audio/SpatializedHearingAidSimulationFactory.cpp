@@ -4,6 +4,7 @@
 #include <signal-processing/ScalingProcessor.h>
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <fir-filtering/FirFilter.h>
+#include <gsl/gsl>
 
 SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
@@ -29,9 +30,9 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 	if (p.channels > 0)
-		processors.push_back(makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor));
+		processors.push_back(makeChannel(brir.left(), p.leftDslPrescriptionFilePath, forCompressor, p.stimulusRms[0], p.level_dB_Spl));
 	if (p.channels > 1)
-		processors.push_back(makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor));
+		processors.push_back(makeChannel(brir.right(), p.rightDslPrescriptionFilePath, forCompressor, p.stimulusRms[1], p.level_dB_Spl));
 
 	return std::make_shared<ChannelProcessingGroup>(processors);
 }
@@ -39,10 +40,13 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeChannel(
 	std::vector<float> b,
 	std::string prescriptionFilePath,
-	FilterbankCompressor::Parameters forCompressor
+	FilterbankCompressor::Parameters forCompressor,
+	double rms,
+	double level_dB_Spl
 ) {
 	const auto channel = std::make_shared<SignalProcessingChain>();
-	channel->add(std::make_shared<ScalingProcessor>(0.5f));
+	const auto scale = std::pow(10.0, (level_dB_Spl - forCompressor.max_dB) / 20.0) / rms;
+	channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(scale)));
 	channel->add(makeFilter(b));
 	channel->add(
 		makeHearingAid(

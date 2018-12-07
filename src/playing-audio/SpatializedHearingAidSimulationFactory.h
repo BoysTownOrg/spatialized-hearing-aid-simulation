@@ -22,7 +22,9 @@ private:
 	std::shared_ptr<SignalProcessor> makeChannel(
 		std::vector<float> b,
 		std::string filePath,
-		FilterbankCompressor::Parameters);
+		FilterbankCompressor::Parameters,
+		double rms,
+		double level_dB_Spl);
 	DslPrescription makeDslPrescription(std::string filePath);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 	std::shared_ptr<SignalProcessor> makeHearingAid(
