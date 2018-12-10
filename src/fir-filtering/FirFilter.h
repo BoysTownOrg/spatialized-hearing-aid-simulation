@@ -7,14 +7,26 @@
 #endif
 
 #include <signal-processing/SignalProcessor.h>
+#include <fftw3.h>
 #include <vector>
+#include <complex>
 
 class FirFilter : public SignalProcessor {
 	using vector_type = std::vector<float>;
 	using size_type = vector_type::size_type;
 	// Order important for construction.
-	const vector_type b;
-	vector_type delayLine;
+	std::vector<std::complex<float>> H{};
+	std::vector<std::complex<float>> fftOut{};
+	std::vector<float> fftIn{};
+	std::vector<std::complex<float>> ifftIn{};
+	std::vector<float> ifftOut{};
+	std::vector<float> buffer{};
+	fftwf_plan fftPlan{};
+	fftwf_plan ifftPlan{};
+	std::vector<float>::size_type head{};
+	long N{};
+	long L{};
+	long M{};
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(vector_type b);

@@ -2,23 +2,35 @@
 #include <gsl/gsl>
 #include <algorithm>
 
-FirFilter::FirFilter(vector_type b) :
-	b(std::move(b)),
-	delayLine(this->b.size(), 0)
+FirFilter::FirFilter(vector_type b)
 {
-	if (this->b.size() == 0)
+	if (b.size() == 0)
 		throw InvalidCoefficients{};
+	M = b.size();
+	L = 256;
+	N = L + M - 1;
+	buffer.resize(N);
+	fftIn = b;
+	fftIn.resize(N);
+	fftOut.resize(N / 2 + 1);
+	ifftOut.resize(N);
+	ifftIn.resize(N / 2 + 1);
+	fftPlan = fftwf_plan_dft_r2c_1d(N, &fftIn[0], reinterpret_cast<fftwf_complex *>(&fftOut[0]), FFTW_ESTIMATE);
+	ifftPlan = fftwf_plan_dft_c2r_1d(N, reinterpret_cast<fftwf_complex *>(&ifftIn[0]), &ifftOut[0], FFTW_ESTIMATE);
+	fftwf_execute(fftPlan);
+	H = fftOut;
 }
 
 void FirFilter::process(float *x, int n) {
-	const auto size = gsl::narrow_cast<size_type>(n);
-	for (size_type i = 0; i < size; ++i) {
-		for (size_type j = 0; j + 1 < delayLine.size(); ++j)
-			delayLine[j] = delayLine[j + 1];
-		delayLine.back() = x[i];
-		float accumulate = 0;
-		for (size_type j = 0; j < b.size(); ++j)
-			accumulate += b[j] * *(delayLine.end() - j - 1);
-		x[i] = accumulate;
-	}
+	std::fill(fftIn.begin(), fftIn.end(), 0.0f);
+	for (int j = 0; j < n; ++j)
+		fftIn[head++] = x[j];
+	fftwf_execute(fftPlan);
+	for (int j = 0; j < N / 2 + 1; ++j)
+		ifftIn[j] = H[j] * fftOut[j];
+	fftwf_execute(ifftPlan);
+	for (int j = 0; j < N; ++j)
+		buffer[j] += ifftOut[j];
+	for (int i = 0; i < n; ++i)
+		x[i] = buffer[i+head-n] / N;
 }
