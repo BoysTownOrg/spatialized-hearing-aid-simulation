@@ -7,7 +7,7 @@ FirFilter::FirFilter(vector_type b)
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	M = b.size();
-	L = 16;
+	L = 4;
 	N = L + M - 1;
 	buffer.resize(N);
 	fftIn = b;
@@ -22,19 +22,37 @@ FirFilter::FirFilter(vector_type b)
 }
 
 void FirFilter::process(float *x, int n) {
+	for (int i = 0; i < n / L; ++i) {
+		std::fill(fftIn.begin(), fftIn.end(), 0.0f);
+		for (int j = 0; j < L; ++j)
+			fftIn[j] = x[j + i * L];
+		fftwf_execute(fftPlan);
+		for (int j = 0; j < N / 2 + 1; ++j)
+			ifftIn[j] = H[j] * fftOut[j];
+		fftwf_execute(ifftPlan);
+		for (int j = 0; j < N; ++j)
+			buffer[j] += ifftOut[j];
+		for (int j = 0; j < L; ++j)
+			x[j + i * L] = buffer[j] / N;
+		for (int j = 0; j < N - L; ++j)
+			buffer[j] = buffer[j + L];
+		for (int j = N - L; j < N; ++j)
+			buffer[j] = 0;
+	}
+	int samplesLeft = n % L;
 	std::fill(fftIn.begin(), fftIn.end(), 0.0f);
-	for (int j = 0; j < n; ++j)
-		fftIn[j] = x[j];
+	for (int j = 0; j < samplesLeft; ++j)
+		fftIn[j] = x[n - samplesLeft + j];
 	fftwf_execute(fftPlan);
 	for (int j = 0; j < N / 2 + 1; ++j)
 		ifftIn[j] = H[j] * fftOut[j];
 	fftwf_execute(ifftPlan);
 	for (int j = 0; j < N; ++j)
 		buffer[j] += ifftOut[j];
-	for (int i = 0; i < n; ++i)
-		x[i] = buffer[i] / N;
-	for (int i = 0; i < N - n; ++i)
-		buffer[i] = buffer[i + n];
-	for (int i = N - n; i < N; ++i)
+	for (int i = 0; i < samplesLeft; ++i)
+		x[n - samplesLeft + i] = buffer[i] / N;
+	for (int i = 0; i < N - samplesLeft; ++i)
+		buffer[i] = buffer[i + samplesLeft];
+	for (int i = N - samplesLeft; i < N; ++i)
 		buffer[i] = 0;
 }
