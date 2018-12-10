@@ -32,7 +32,6 @@ TEST(BrirAdapterTestCase, threeOrMoreChannelsIgnoresBeyondTheFirstTwo) {
 	const auto brir = adapter.read("");
 	assertEqual({ 1, 4 }, brir.left);
 	assertEqual({ 2, 5 }, brir.right);
-	EXPECT_TRUE(brir.right.empty());
 }
 
 TEST(BrirAdapterTestCase, failedReaderThrowsReadError) {

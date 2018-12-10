@@ -16,14 +16,11 @@ auto BrirAdapter::read(std::string filePath) -> BinauralRoomImpulseResponse {
 	vector_type buffer(gsl::narrow<vector_type::size_type>(reader->frames() * reader->channels()));
 	if (buffer.size())
 		reader->readFrames(&buffer[0], reader->frames());
-	if (reader->channels() == 2) {
-		bool oddSample = false;
-		std::partition_copy(
-			buffer.begin(),
-			buffer.end(),
-			std::back_inserter(brir.left),
-			std::back_inserter(brir.right),
-			[&oddSample](double) { return oddSample = !oddSample; });
+	if (reader->channels() > 1) {
+		for (vector_type::size_type i = 0; i < reader->frames(); ++i) {
+			brir.left.push_back(buffer[i * reader->channels()]);
+			brir.right.push_back(buffer[i * reader->channels() + 1]);
+		}
 	}
 	else if (reader->channels() == 1)
 		brir.left = buffer;
