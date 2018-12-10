@@ -12,9 +12,6 @@
 #include <complex>
 
 class FirFilter : public SignalProcessor {
-	using vector_type = std::vector<float>;
-	using size_type = vector_type::size_type;
-	// Order important for construction.
 	std::vector<std::complex<float>> H{};
 	std::vector<std::complex<float>> fftOut{};
 	std::vector<float> fftIn{};
@@ -26,7 +23,7 @@ class FirFilter : public SignalProcessor {
 	long M{};
 public:
 	class InvalidCoefficients {};
-	FIR_FILTERING_API explicit FirFilter(vector_type b);
+	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
 	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(float *, int) override;
 };

@@ -2,7 +2,7 @@
 #include <gsl/gsl>
 #include <algorithm>
 
-FirFilter::FirFilter(vector_type b) {
+FirFilter::FirFilter(std::vector<float> b) {
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	M = b.size();
