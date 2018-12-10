@@ -7,7 +7,7 @@ FirFilter::FirFilter(vector_type b)
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	M = b.size();
-	L = 256;
+	L = 16;
 	N = L + M - 1;
 	buffer.resize(N);
 	fftIn = b;
@@ -24,7 +24,7 @@ FirFilter::FirFilter(vector_type b)
 void FirFilter::process(float *x, int n) {
 	std::fill(fftIn.begin(), fftIn.end(), 0.0f);
 	for (int j = 0; j < n; ++j)
-		fftIn[head++] = x[j];
+		fftIn[j] = x[j];
 	fftwf_execute(fftPlan);
 	for (int j = 0; j < N / 2 + 1; ++j)
 		ifftIn[j] = H[j] * fftOut[j];
@@ -32,5 +32,9 @@ void FirFilter::process(float *x, int n) {
 	for (int j = 0; j < N; ++j)
 		buffer[j] += ifftOut[j];
 	for (int i = 0; i < n; ++i)
-		x[i] = buffer[i+head-n] / N;
+		x[i] = buffer[i] / N;
+	for (int i = 0; i < N - n; ++i)
+		buffer[i] = buffer[i + n];
+	for (int i = N - n; i < N; ++i)
+		buffer[i] = 0;
 }

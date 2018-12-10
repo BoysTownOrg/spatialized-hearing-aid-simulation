@@ -23,7 +23,6 @@ class FirFilter : public SignalProcessor {
 	std::vector<float> buffer{};
 	fftwf_plan fftPlan{};
 	fftwf_plan ifftPlan{};
-	std::vector<float>::size_type head{};
 	long N{};
 	long L{};
 	long M{};
