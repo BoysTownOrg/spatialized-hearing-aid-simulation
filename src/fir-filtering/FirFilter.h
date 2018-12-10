@@ -29,5 +29,6 @@ class FirFilter : public SignalProcessor {
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(vector_type b);
+	~FirFilter();
 	FIR_FILTERING_API void process(float *, int) override;
 };

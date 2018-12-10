@@ -7,7 +7,7 @@ FirFilter::FirFilter(vector_type b)
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	M = b.size();
-	L = 4;
+	L = 256;
 	N = L + M - 1;
 	buffer.resize(N);
 	fftIn = b;
@@ -19,6 +19,12 @@ FirFilter::FirFilter(vector_type b)
 	ifftPlan = fftwf_plan_dft_c2r_1d(N, reinterpret_cast<fftwf_complex *>(&ifftIn[0]), &ifftOut[0], FFTW_ESTIMATE);
 	fftwf_execute(fftPlan);
 	H = fftOut;
+}
+
+FirFilter::~FirFilter()
+{
+	fftwf_destroy_plan(fftPlan);
+	fftwf_destroy_plan(ifftPlan);
 }
 
 void FirFilter::process(float *x, int n) {
