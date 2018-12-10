@@ -34,6 +34,13 @@ TEST(BrirAdapterTestCase, threeOrMoreChannelsIgnoresBeyondTheFirstTwo) {
 	assertEqual({ 2, 5 }, brir.right);
 }
 
+TEST(BrirAdapterTestCase, readPassesFilePathToFactory) {
+	const auto factory = std::make_shared<FakeAudioFileReaderFactory>();
+	BrirAdapter adapter{ factory };
+	adapter.read("a");
+	assertEqual("a", factory->filePath());
+}
+
 TEST(BrirAdapterTestCase, failedReaderThrowsReadError) {
 	try {
 		const auto reader = std::make_shared<FakeAudioFileReader>();
