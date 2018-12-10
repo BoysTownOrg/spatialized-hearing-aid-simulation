@@ -25,6 +25,16 @@ TEST(BrirAdapterTestCase, singleChannelOnlyAppliesToLeftResponse) {
 	EXPECT_TRUE(brir.right.empty());
 }
 
+TEST(BrirAdapterTestCase, threeOrMoreChannelsIgnoresBeyondTheFirstTwo) {
+	const auto reader = std::make_shared<FakeAudioFileReader>(std::vector<float>{ 1, 2, 3, 4, 5, 6 });
+	reader->setChannels(3);
+	BrirAdapter adapter{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
+	const auto brir = adapter.read("");
+	assertEqual({ 1, 4 }, brir.left);
+	assertEqual({ 2, 5 }, brir.right);
+	EXPECT_TRUE(brir.right.empty());
+}
+
 TEST(BrirAdapterTestCase, failedReaderThrowsReadError) {
 	try {
 		const auto reader = std::make_shared<FakeAudioFileReader>();
