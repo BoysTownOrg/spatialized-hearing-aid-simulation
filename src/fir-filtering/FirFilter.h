@@ -18,8 +18,6 @@ class FirFilter : public SignalProcessor {
 	std::vector<std::complex<float>> H{};
 	std::vector<std::complex<float>> fftOut{};
 	std::vector<float> fftIn{};
-	std::vector<std::complex<float>> ifftIn{};
-	std::vector<float> ifftOut{};
 	std::vector<float> buffer{};
 	fftwf_plan fftPlan{};
 	fftwf_plan ifftPlan{};
@@ -29,6 +27,6 @@ class FirFilter : public SignalProcessor {
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(vector_type b);
-	~FirFilter();
+	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(float *, int) override;
 };
