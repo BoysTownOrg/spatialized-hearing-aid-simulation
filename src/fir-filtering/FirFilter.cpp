@@ -22,13 +22,13 @@ FirFilter::FirFilter(std::vector<float> b) {
 	const auto to_fftw = reinterpret_cast<fftwf_complex *>(&dftComplex[0]);
 	fftPlan = fftwf_plan_dft_r2c_1d(
 		N, 
-		&dftReal[0], 
+		&dftReal[0],
 		to_fftw,
 		FFTW_ESTIMATE);
 	ifftPlan = fftwf_plan_dft_c2r_1d(
 		N, 
 		to_fftw,
-		&dftReal[0], 
+		&dftReal[0],
 		FFTW_ESTIMATE);
 	fftwf_execute(fftPlan);
 	H = dftComplex;
