@@ -2,15 +2,18 @@
 #include <gsl/gsl>
 #include <algorithm>
 
+static long nextPowerOfTwo(unsigned int x) {
+	int power{};
+	while (x /= 2)
+		++power;
+	return 1 << (power + 1);
+}
+
 FirFilter::FirFilter(std::vector<float> b) {
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	const auto M = b.size();
-	int s{};
-	auto dividend = M - 1;
-	while (dividend /= 2)
-		++s;
-	N = 1 << (s + 1);
+	N = nextPowerOfTwo(M - 1);
 	L = N - M + 1;
 	overlap.resize(N);
 	dftReal = b;
@@ -43,28 +46,28 @@ void FirFilter::process(float *x, int n) {
 	filter(x + n - samplesLeft, samplesLeft);
 }
 
-void FirFilter::filter(float *x, int samples) {
+void FirFilter::filter(float *x, int n) {
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
-	for (int j = 0; j < samples; ++j)
-		dftReal[j] = x[j];
-	updateOverlap();
-	for (int i = 0; i < samples; ++i)
+	for (int i = 0; i < n; ++i)
+		dftReal[i] = x[i];
+	overlapAdd();
+	for (int i = 0; i < n; ++i)
 		x[i] = overlap[i] / N;
-	shiftOverlap(samples);
+	shiftOverlap(n);
 }
 
-void FirFilter::updateOverlap() {
+void FirFilter::overlapAdd() {
 	fftwf_execute(fftPlan);
-	for (int j = 0; j < N / 2 + 1; ++j)
-		dftComplex[j] *= H[j];
+	for (int i = 0; i < N / 2 + 1; ++i)
+		dftComplex[i] *= H[i];
 	fftwf_execute(ifftPlan);
-	for (int j = 0; j < N; ++j)
-		overlap[j] += dftReal[j];
+	for (int i = 0; i < N; ++i)
+		overlap[i] += dftReal[i];
 }
 
-void FirFilter::shiftOverlap(int x) {
-	for (int i = 0; i < N - x; ++i)
-		overlap[i] = overlap[i + x];
-	for (int i = N - x; i < N; ++i)
+void FirFilter::shiftOverlap(int n) {
+	for (int i = 0; i < N - n; ++i)
+		overlap[i] = overlap[i + n];
+	for (int i = N - n; i < N; ++i)
 		overlap[i] = 0;
 }
