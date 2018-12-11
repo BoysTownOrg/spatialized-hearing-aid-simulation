@@ -43,7 +43,7 @@ void FirFilter::process(gsl::span<float> signal) {
 	for (int i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 	int samplesLeft = signal.size() % L;
-	filter(signal.subspan(signal.size() - samplesLeft, samplesLeft));
+	filter(signal.last(samplesLeft));
 }
 
 void FirFilter::filter(gsl::span<float> signal) {
