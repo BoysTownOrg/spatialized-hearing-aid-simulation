@@ -9,6 +9,7 @@
 #include <common-includes/RuntimeError.h>
 
 class PlayAudioModel : public Model, public AudioDeviceController {
+	std::vector<gsl::span<float>> audio;
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<AudioFrameReaderFactory> readerFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;

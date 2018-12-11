@@ -10,7 +10,7 @@
 class AudioFrameProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessor);
-	virtual void process(gsl::span<float *> channels, int) = 0;
+	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 };
 
 class AudioFrameProcessorFactory {

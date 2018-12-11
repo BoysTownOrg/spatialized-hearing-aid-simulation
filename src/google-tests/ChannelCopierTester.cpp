@@ -12,8 +12,8 @@ TEST(ChannelCopierTestCase, copiesFirstChannelToSecondWhenOnlyOneChannel) {
 	ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
 	std::vector<float> left(3);
 	std::vector<float> right(3);
-	float *x[]{ &left[0], &right[0] };
-	copier.read({ x, 2 }, 3);
+	std::vector<gsl::span<float>> x{ left, right };
+	copier.read(x);
 	assertEqual({ 1, 2, 3 }, left);
 	assertEqual({ 1, 2, 3 }, right);
 }

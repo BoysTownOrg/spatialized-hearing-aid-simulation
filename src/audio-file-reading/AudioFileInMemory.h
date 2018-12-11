@@ -19,7 +19,7 @@ public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(
 		AudioFileReader &reader
 	);
-	AUDIO_FILE_READING_API void read(gsl::span<float *> audio, int frames) override;
+	AUDIO_FILE_READING_API void read(gsl::span<gsl::span<float>> audio) override;
 	AUDIO_FILE_READING_API bool complete() const override;
 	AUDIO_FILE_READING_API int sampleRate() const override;
 	AUDIO_FILE_READING_API int channels() const override;

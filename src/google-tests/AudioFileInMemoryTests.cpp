@@ -12,8 +12,8 @@ TEST(AudioFileInMemoryTestCase, readFillsEachChannel) {
 	std::vector<float> a(4);
 	std::vector<float> b(4);
 	std::vector<float> c(4);
-	float *channels[] { &a[0], &b[0], &c[0] };
-	adapter.read({ channels, 3 }, 4);
+	std::vector<gsl::span<float>> channels{ a, b, c };
+	adapter.read(channels);
 	assertEqual({ 1, 4, 7, 10 }, a);
 	assertEqual({ 2, 5, 8, 11 }, b);
 	assertEqual({ 3, 6, 9, 12 }, c);
@@ -28,12 +28,12 @@ TEST(AudioFileInMemoryTestCase, readNothingWhenExhausted) {
 	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
-	float *channels[] { &x };
-	adapter.read({ channels, 1 }, 1);
+	gsl::span<float> channels{ &x, 1 };
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(3, x);
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(4, x);
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(4, x);
 }
 
@@ -41,10 +41,10 @@ TEST(AudioFileInMemoryTestCase, completeWhenExhausted) {
 	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
-	float *channels[]{ &x };
-	adapter.read({ channels, 1 }, 1);
+	gsl::span<float> channels{ &x, 1 };
+	adapter.read({ &channels, 1 });
 	EXPECT_FALSE(adapter.complete());
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_TRUE(adapter.complete());
 }
 
@@ -83,14 +83,14 @@ TEST(AudioFileInMemoryTestCase, reset) {
 	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
-	float *channels[]{ &x };
-	adapter.read({ channels, 1 }, 1);
+	gsl::span<float> channels{ &x, 1 };
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(3, x);
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(4, x);
 	adapter.reset();
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(3, x);
-	adapter.read({ channels, 1 }, 1);
+	adapter.read({ &channels, 1 });
 	EXPECT_EQ(4, x);
 }

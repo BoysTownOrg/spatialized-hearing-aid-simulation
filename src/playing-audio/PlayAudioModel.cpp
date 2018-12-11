@@ -35,22 +35,24 @@ void PlayAudioModel::play(PlayRequest request) {
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
 
-	std::vector<std::vector<float>> audio(frameReader->channels());
-	std::vector<float *> pointers;
-	for (auto &channel : audio)
+	std::vector<std::vector<float>> entireAudioFile(frameReader->channels());
+	std::vector<gsl::span<float>> pointers;
+	for (auto &channel : entireAudioFile)
 		channel.resize(gsl::narrow<std::vector<float>::size_type>(frameReader->frames()));
-	for (auto &channel : audio)
+	for (auto &channel : entireAudioFile)
 		if (channel.size() > 0)
-			pointers.push_back(&channel[0]);
+			pointers.push_back({ &channel[0], gsl::narrow<int>(frameReader->frames()) });
 	if (pointers.size() > 0)
-		frameReader->read(pointers, gsl::narrow<int>(frameReader->frames()));
-	for (const auto &channel : audio) {
+		frameReader->read(pointers);
+	for (const auto &channel : entireAudioFile) {
 		float squaredSum{};
 		for (const auto sample : channel)
 			squaredSum += sample * sample;
 		forProcessor.stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
 	}
 	frameReader->reset();
+
+	audio.resize(frameReader->channels());
 
 	frameProcessor = makeProcessor(forProcessor);
 
@@ -92,9 +94,12 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
-	const auto audio = static_cast<float **>(channels);
-	frameReader->read({ audio, frameReader->channels() }, frames);
-	frameProcessor->process({ audio, frameReader->channels() }, frames);
+	const auto pointers = static_cast<float **>(channels);
+	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
+		audio[i] = { pointers[i], frames };
+		
+	frameReader->read(audio);
+	frameProcessor->process(audio);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 }

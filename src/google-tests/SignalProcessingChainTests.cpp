@@ -34,7 +34,7 @@ TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
 	const auto processor = std::make_shared<SignalProcessorStub>();
 	chain.add(processor);
 	float x{};
-	chain.process({ &x, 1 });
-	EXPECT_EQ(&x, processor->signal());
-	EXPECT_EQ(1, processor->samples());
+	gsl::span<float> channel{ &x, 1 };
+	chain.process(channel);
+	EXPECT_EQ(channel, processor->signal());
 }

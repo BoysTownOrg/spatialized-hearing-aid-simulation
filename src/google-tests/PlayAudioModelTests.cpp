@@ -200,6 +200,7 @@ TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenCom
 TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	reader->setChannels(2);
 	const auto processor = std::make_shared<AudioFrameProcessorStub>();
 	PlayAudioModelFacade model{ 
 		device,
@@ -211,10 +212,14 @@ TEST(PlayAudioModelTestCase, fillStreamBufferPassesAudio) {
 	float right{};
 	float *x[]{ &left, &right };
 	device->fillStreamBuffer(x, 1);
-	EXPECT_EQ(x, reader->audioBuffer());
-	EXPECT_EQ(1, reader->framesRequested());
-	EXPECT_EQ(x, processor->audioBuffer());
-	EXPECT_EQ(1, processor->frames());
+	EXPECT_EQ(&left, reader->audioBuffer()[0].data());
+	EXPECT_EQ(&right, reader->audioBuffer()[1].data());
+	EXPECT_EQ(1, reader->audioBuffer()[0].size());
+	EXPECT_EQ(1, reader->audioBuffer()[1].size());
+	EXPECT_EQ(&left, processor->audioBuffer()[0].data());
+	EXPECT_EQ(&right, processor->audioBuffer()[1].data());
+	EXPECT_EQ(1, processor->audioBuffer()[0].size());
+	EXPECT_EQ(1, processor->audioBuffer()[1].size());
 }
 
 TEST(PlayAudioModelTestCase, playSetsCallbackResultToContinueBeforeStartingStream) {
@@ -232,10 +237,10 @@ TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 }
 
 class ReadsAOne : public AudioFrameReader {
-	void read(gsl::span<float *> audio, int frames) override {
+	void read(gsl::span<gsl::span<float>> audio) override {
 		for (const auto channel : audio)
-			for (int i = 0; i < frames; ++i)
-				channel[i] = 1;
+			for (auto &x : channel)
+				x = 1;
 	}
 	bool complete() const override {
 		return false;
@@ -254,10 +259,10 @@ class ReadsAOne : public AudioFrameReader {
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
-	void process(gsl::span<float *> channels, int frames) override {
-		for (const auto channel : channels)
-			for (int i = 0; i < frames; ++i)
-				channel[i] *= 2;
+	void process(gsl::span<gsl::span<float>> audio) override {
+		for (const auto channel : audio)
+			for (auto &x : channel)
+				x *= 2;
 	}
 };
 

@@ -12,6 +12,6 @@ public:
 	SIGNAL_PROCESSING_API explicit ChannelProcessingGroup(
 		std::vector<std::shared_ptr<SignalProcessor>> processors
 	);
-	SIGNAL_PROCESSING_API void process(gsl::span<float *> channels, int) override;
+	SIGNAL_PROCESSING_API void process(gsl::span<gsl::span<float>> audio) override;
 };
 

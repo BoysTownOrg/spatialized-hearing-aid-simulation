@@ -3,19 +3,14 @@
 #include <signal-processing/SignalProcessor.h>
 
 class SignalProcessorStub : public SignalProcessor {
-	float *_signal{};
+	gsl::span<float> _signal{};
 	int _samples{};
 public:
-	const float *signal() const {
+	const gsl::span<float> signal() const {
 		return _signal;
 	}
 
-	int samples() const {
-		return _samples;
-	}
-
 	void process(gsl::span<float> signal) override {
-		_signal = signal.data();
-		_samples = signal.size();
+		_signal = signal;
 	}
 };

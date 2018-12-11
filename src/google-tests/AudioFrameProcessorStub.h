@@ -3,20 +3,14 @@
 #include <playing-audio/AudioFrameProcessor.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
-	int _frameCount{};
-	float **_audioBuffer{};
+	gsl::span<gsl::span<float>> _audioBuffer{};
 public:
-	int frames() const {
-		return _frameCount;
-	}
-
-	const float *const *audioBuffer() const {
+	const gsl::span<gsl::span<float>> audioBuffer() const {
 		return _audioBuffer;
 	}
 
-	void process(gsl::span<float *> channels, int frames) override {
-		_audioBuffer = channels.data();
-		_frameCount = frames;
+	void process(gsl::span<gsl::span<float>> audio) override {
+		_audioBuffer = audio;
 	}
 };
 
