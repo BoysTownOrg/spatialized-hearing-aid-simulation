@@ -4,15 +4,17 @@
 
 class AddOne : public SignalProcessor {
 public:
-	void process(float *x, int) override {
-		*x += 1;
+	void process(gsl::span<float> signal) override {
+		for (auto &x : signal)
+			x += 1;
 	}
 };
 
 class TimesTwo : public SignalProcessor {
 public:
-	void process(float *x, int) override {
-		*x *= 2;
+	void process(gsl::span<float> signal) override {
+		for (auto &x : signal)
+			x *= 2;
 	}
 };
 
@@ -23,7 +25,7 @@ TEST(SignalProcessingChainTestCase, chainCallsProcessorsInOrder) {
 	chain.add(std::make_shared<AddOne>());
 	chain.add(std::make_shared<TimesTwo>());
 	float x = 1;
-	chain.process(&x, 0);
+	chain.process({ &x, 1 });
 	EXPECT_EQ(4, x);
 }
 
@@ -32,7 +34,7 @@ TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
 	const auto processor = std::make_shared<SignalProcessorStub>();
 	chain.add(processor);
 	float x{};
-	chain.process(&x, 1);
+	chain.process({ &x, 1 });
 	EXPECT_EQ(&x, processor->signal());
 	EXPECT_EQ(1, processor->samples());
 }

@@ -1,8 +1,8 @@
 #include "SignalProcessingChain.h"
 
-void SignalProcessingChain::process(float * x, int frames) {
+void SignalProcessingChain::process(gsl::span<float> signal) {
 	for (const auto &processor : processors)
-		processor->process(x, frames);
+		processor->process(signal);
 }
 
 void SignalProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {

@@ -14,16 +14,22 @@ public:
 		compressor{ compressor } {}
 
 	void processUnequalChunk() {
-		processor.process(nullptr, compressor->chunkSize() + 1);
+		std::vector<float> x(compressor->chunkSize() + 1);
+		_process(x);
 	}
 
-	void process(float *x = nullptr) {
+	void process() {
+		std::vector<float> x(compressor->chunkSize());
+		_process(x);
+	}
+
+	void process(gsl::span<float> x) {
 		_process(x);
 	}
 
 private:
-	void _process(float *x) {
-		processor.process(x, compressor->chunkSize());
+	void _process(gsl::span<float> x) {
+		processor.process(x);
 	}
 };
 
@@ -125,7 +131,7 @@ TEST(
 	const auto compressor = std::make_shared<MultipliesRealSignalsByPrimes>();
 	HearingAidProcessorFacade processor{ compressor };
 	std::vector<float> x = { 4 };
-	processor.process(&x[0]);
+	processor.process(x);
 	assertEqual({ 4 * 2 * 3 * 5 * 7 * 11 * 13 }, x);
 }
 

@@ -9,7 +9,7 @@ public:
 		filter{ std::move(b) } {}
 
 	std::vector<float> process(std::vector<float> x) {
-		filter.process(&x[0], x.size());
+		filter.process(x);
 		return x;
 	}
 };
@@ -37,7 +37,7 @@ void assertCoefficientsYieldFilteredOutput(
 	std::vector<float> output)
 {
 	FirFilter filter{ std::move(b) };
-	filter.process(&input[0], input.size());
+	filter.process(input);
 	assertEqual(output, input);
 }
 

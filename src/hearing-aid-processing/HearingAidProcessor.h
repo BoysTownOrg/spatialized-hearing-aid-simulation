@@ -21,6 +21,6 @@ public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
 		std::shared_ptr<FilterbankCompressor>
 	);
-	HEARING_AID_PROCESSING_API void process(float *, int) override;
+	HEARING_AID_PROCESSING_API void process(gsl::span<float>) override;
 };
 

@@ -39,11 +39,11 @@ FirFilter::~FirFilter() {
 	fftwf_destroy_plan(ifftPlan);
 }
 
-void FirFilter::process(float *x, int n) {
-	for (int i = 0; i < n / L; ++i)
-		filter(x + i * L, L);
-	int samplesLeft = n % L;
-	filter(x + n - samplesLeft, samplesLeft);
+void FirFilter::process(gsl::span<float> signal) {
+	for (int i = 0; i < signal.size() / L; ++i)
+		filter(signal.data() + i * L, L);
+	int samplesLeft = signal.size() % L;
+	filter(signal.data() + signal.size() - samplesLeft, samplesLeft);
 }
 
 void FirFilter::filter(float *x, int n) {

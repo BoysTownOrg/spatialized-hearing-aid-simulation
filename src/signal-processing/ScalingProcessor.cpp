@@ -2,7 +2,7 @@
 
 ScalingProcessor::ScalingProcessor(float scale) : scale{ scale } {}
 
-void ScalingProcessor::process(float * signal, int samples) {
-	for (int i = 0; i < samples; ++i)
-		signal[i] *= scale;
+void ScalingProcessor::process(gsl::span<float> signal) {
+	for (auto &x : signal)
+		x *= scale;
 }

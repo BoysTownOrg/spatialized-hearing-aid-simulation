@@ -10,14 +10,14 @@ HearingAidProcessor::HearingAidProcessor(
 		throw CompressorError{ "The compressor failed to initialize." };
 }
 
-void HearingAidProcessor::process(float *signal, int samples) {
+void HearingAidProcessor::process(gsl::span<float> signal) {
 	const auto chunkSize = compressor->chunkSize();
-	if (samples == chunkSize) {
+	if (signal.size() == chunkSize) {
 		const auto complex = &complexBuffer[0];
-		compressor->compressInput(signal, signal, chunkSize);
-		compressor->analyzeFilterbank(signal, complex, chunkSize);
+		compressor->compressInput(signal.data(), signal.data(), chunkSize);
+		compressor->analyzeFilterbank(signal.data(), complex, chunkSize);
 		compressor->compressChannels(complex, complex, chunkSize);
-		compressor->synthesizeFilterbank(complex, signal, chunkSize);
-		compressor->compressOutput(signal, signal, chunkSize);
+		compressor->synthesizeFilterbank(complex, signal.data(), chunkSize);
+		compressor->compressOutput(signal.data(), signal.data(), chunkSize);
 	}
 }

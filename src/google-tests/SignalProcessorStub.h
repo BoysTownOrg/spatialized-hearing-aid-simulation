@@ -14,8 +14,8 @@ public:
 		return _samples;
 	}
 
-	void process(float *x, int samples) override {
-		_signal = x;
-		_samples = samples;
+	void process(gsl::span<float> signal) override {
+		_signal = signal.data();
+		_samples = signal.size();
 	}
 };
