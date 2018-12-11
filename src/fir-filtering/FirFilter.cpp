@@ -1,5 +1,4 @@
 #include "FirFilter.h"
-#include <gsl/gsl>
 #include <algorithm>
 
 static long nextPowerOfTwo(unsigned int x) {
@@ -42,8 +41,7 @@ FirFilter::~FirFilter() {
 void FirFilter::process(gsl::span<float> signal) {
 	for (int i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
-	int samplesLeft = signal.size() % L;
-	filter(signal.last(samplesLeft));
+	filter(signal.last(signal.size() % L));
 }
 
 void FirFilter::filter(gsl::span<float> signal) {
