@@ -17,6 +17,24 @@ PlayAudioModel::PlayAudioModel(
 	this->device->setController(this);
 }
 
+static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameReader> &reader) {
+	std::vector<std::vector<float>> entireAudioFile(reader->channels());
+	std::vector<gsl::span<float>> pointers;
+	for (auto &channel : entireAudioFile) {
+		channel.resize(gsl::narrow<std::vector<float>::size_type>(reader->frames()));
+		pointers.push_back({ channel });
+	}
+	reader->read(pointers);
+	std::vector<double> stimulusRms;
+	for (const auto &channel : entireAudioFile) {
+		float squaredSum{};
+		for (const auto sample : channel)
+			squaredSum += sample * sample;
+		stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
+	}
+	return stimulusRms;
+}
+
 void PlayAudioModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
@@ -34,25 +52,11 @@ void PlayAudioModel::play(PlayRequest request) {
 	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
-
-	std::vector<std::vector<float>> entireAudioFile(frameReader->channels());
-	std::vector<gsl::span<float>> pointers;
-	for (auto &channel : entireAudioFile) {
-		channel.resize(gsl::narrow<std::vector<float>::size_type>(frameReader->frames()));
-		pointers.push_back({ channel });
-	}
-	frameReader->read(pointers);
-	for (const auto &channel : entireAudioFile) {
-		float squaredSum{};
-		for (const auto sample : channel)
-			squaredSum += sample * sample;
-		forProcessor.stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
-	}
-	frameReader->reset();
-
-	audio.resize(frameReader->channels());
-
+	forProcessor.stimulusRms = computeStimulusRms(frameReader);
 	frameProcessor = makeProcessor(forProcessor);
+
+	frameReader->reset();
+	audio.resize(frameReader->channels());
 
 	device->closeStream();
 
@@ -92,9 +96,8 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
-	const auto pointers = static_cast<float **>(channels);
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
-		audio[i] = { pointers[i], frames };
+		audio[i] = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
 	frameProcessor->process(audio);
 	if (frameReader->complete())
