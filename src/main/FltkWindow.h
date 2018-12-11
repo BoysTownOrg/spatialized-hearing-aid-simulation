@@ -1,7 +1,6 @@
 #pragma once
 
 #include <presentation/Presenter.h>
-#define WIN32
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Int_Input.H>
