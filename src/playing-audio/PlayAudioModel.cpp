@@ -37,13 +37,11 @@ void PlayAudioModel::play(PlayRequest request) {
 
 	std::vector<std::vector<float>> entireAudioFile(frameReader->channels());
 	std::vector<gsl::span<float>> pointers;
-	for (auto &channel : entireAudioFile)
+	for (auto &channel : entireAudioFile) {
 		channel.resize(gsl::narrow<std::vector<float>::size_type>(frameReader->frames()));
-	for (auto &channel : entireAudioFile)
-		if (channel.size() > 0)
-			pointers.push_back({ &channel[0], gsl::narrow<int>(frameReader->frames()) });
-	if (pointers.size() > 0)
-		frameReader->read(pointers);
+		pointers.push_back({ channel });
+	}
+	frameReader->read(pointers);
 	for (const auto &channel : entireAudioFile) {
 		float squaredSum{};
 		for (const auto sample : channel)
@@ -97,7 +95,6 @@ void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 	const auto pointers = static_cast<float **>(channels);
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio[i] = { pointers[i], frames };
-		
 	frameReader->read(audio);
 	frameProcessor->process(audio);
 	if (frameReader->complete())

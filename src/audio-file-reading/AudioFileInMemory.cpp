@@ -16,10 +16,10 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 
 void AudioFileInMemory::read(gsl::span<gsl::span<float>> audio) {
 	for (int i = 0; i < audio[0].size(); ++i)
-		for (int j = 0; j < _channels; ++j) {
+		for (const auto channel : audio) {
 			if (head == buffer.size())
 				return;
-			audio[j][i] = buffer[head++];
+			channel[i] = buffer[head++];
 		}
 }
 
