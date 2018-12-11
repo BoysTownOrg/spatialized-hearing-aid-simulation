@@ -26,6 +26,7 @@ public:
 	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(float *, int) override;
 private:
+	void filter(float *, int samples);
 	void updateOverlap();
 	void shiftOverlap(int x);
 };
