@@ -13,14 +13,13 @@
 
 class FirFilter : public SignalProcessor {
 	std::vector<std::complex<float>> H{};
-	std::vector<std::complex<float>> fftOut{};
-	std::vector<float> fftIn{};
-	std::vector<float> buffer{};
+	std::vector<std::complex<float>> dftComplex{};
+	std::vector<float> dftReal{};
+	std::vector<float> overlap{};
 	fftwf_plan fftPlan{};
 	fftwf_plan ifftPlan{};
 	long N{};
 	long L{};
-	long M{};
 public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
