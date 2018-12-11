@@ -3,7 +3,7 @@
 ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) :
 	reader{ std::move(reader) } {}
 
-void ChannelCopier::read(float **audio, int frames) {
+void ChannelCopier::read(gsl::span<float *> audio, int frames) {
 	reader->read(audio, frames);
 	if (reader->channels() == 1)
 		for (int i = 0; i < frames; ++i)

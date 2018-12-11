@@ -14,7 +14,7 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	reader.readFrames(&buffer[0], reader.frames());
 }
 
-void AudioFileInMemory::read(float **audio, int frames) {
+void AudioFileInMemory::read(gsl::span<float *> audio, int frames) {
 	for (int i = 0; i < frames; ++i)
 		for (int j = 0; j < _channels; ++j) {
 			if (head == buffer.size())

@@ -43,7 +43,7 @@ void PlayAudioModel::play(PlayRequest request) {
 		if (channel.size() > 0)
 			pointers.push_back(&channel[0]);
 	if (pointers.size() > 0)
-		frameReader->read(&pointers[0], gsl::narrow<int>(frameReader->frames()));
+		frameReader->read(pointers, gsl::narrow<int>(frameReader->frames()));
 	for (const auto &channel : audio) {
 		float squaredSum{};
 		for (const auto sample : channel)
@@ -93,7 +93,7 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 	const auto audio = static_cast<float **>(channels);
-	frameReader->read(audio, frames);
+	frameReader->read({ audio, frameReader->channels() }, frames);
 	frameProcessor->process(audio, frames);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();

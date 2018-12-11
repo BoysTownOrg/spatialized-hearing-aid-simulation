@@ -187,6 +187,7 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
+	reader->setChannels(0);
 	PlayAudioModelFacade model{ device, std::make_shared<AudioFrameReaderStubFactory>(reader) };
 	model.play();
 	device->fillStreamBuffer(nullptr, 0);
@@ -231,8 +232,10 @@ TEST(PlayAudioModelTestCase, audioDeviceDescriptionsReturnsDescriptions) {
 }
 
 class ReadsAOne : public AudioFrameReader {
-	void read(float **audio, int) override {
-		*audio[0] = 1;
+	void read(gsl::span<float *> audio, int frames) override {
+		for (const auto channel : audio)
+			for (int i = 0; i < frames; ++i)
+				channel[i] = 1;
 	}
 	bool complete() const override {
 		return false;

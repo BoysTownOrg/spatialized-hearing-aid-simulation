@@ -13,7 +13,7 @@ TEST(ChannelCopierTestCase, copiesFirstChannelToSecondWhenOnlyOneChannel) {
 	std::vector<float> left(3);
 	std::vector<float> right(3);
 	float *x[]{ &left[0], &right[0] };
-	copier.read(x, 3);
+	copier.read({ x, 2 }, 3);
 	assertEqual({ 1, 2, 3 }, left);
 	assertEqual({ 1, 2, 3 }, right);
 }

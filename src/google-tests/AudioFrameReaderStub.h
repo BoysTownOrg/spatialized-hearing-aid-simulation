@@ -12,7 +12,7 @@ class AudioFrameReaderStub : public AudioFrameReader {
 	float **_audioBuffer{};
 	bool _complete{};
 public:
-	const float * const * audioBuffer() const {
+	const float * const *audioBuffer() const {
 		return _audioBuffer;
 	}
 
@@ -24,8 +24,8 @@ public:
 		return _framesRequested;
 	}
 
-	void read(float **audioBuffer, int frames) override {
-		_audioBuffer = audioBuffer;
+	void read(gsl::span<float *> audio, int frames) override {
+		_audioBuffer = audio.data();
 		_framesRequested = frames;
 		_readingLog += LogString{ "read " };
 	}
