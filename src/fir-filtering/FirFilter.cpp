@@ -41,19 +41,19 @@ FirFilter::~FirFilter() {
 
 void FirFilter::process(gsl::span<float> signal) {
 	for (int i = 0; i < signal.size() / L; ++i)
-		filter(signal.data() + i * L, L);
+		filter(signal.subspan(i * L, L));
 	int samplesLeft = signal.size() % L;
-	filter(signal.data() + signal.size() - samplesLeft, samplesLeft);
+	filter(signal.subspan(signal.size() - samplesLeft, samplesLeft));
 }
 
-void FirFilter::filter(float *x, int n) {
+void FirFilter::filter(gsl::span<float> signal) {
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
-	for (int i = 0; i < n; ++i)
-		dftReal[i] = x[i];
+	for (int i = 0; i < signal.size(); ++i)
+		dftReal[i] = signal[i];
 	overlapAdd();
-	for (int i = 0; i < n; ++i)
-		x[i] = overlap[i] / N;
-	shiftOverlap(n);
+	for (int i = 0; i < signal.size(); ++i)
+		signal[i] = overlap[i] / N;
+	shiftOverlap(signal.size());
 }
 
 void FirFilter::overlapAdd() {

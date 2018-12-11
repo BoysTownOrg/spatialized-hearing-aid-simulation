@@ -26,7 +26,7 @@ public:
 	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(gsl::span<float>) override;
 private:
-	void filter(float *, int samples);
+	void filter(gsl::span<float>);
 	void overlapAdd();
 	void shiftOverlap(int x);
 };
