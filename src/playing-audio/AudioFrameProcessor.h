@@ -2,6 +2,7 @@
 
 #include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
+#include <gsl/gsl>
 #include <memory>
 #include <string>
 #include <vector>
@@ -9,7 +10,7 @@
 class AudioFrameProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessor);
-	virtual void process(float **channels, int frames) = 0;
+	virtual void process(gsl::span<float *> channels, int) = 0;
 };
 
 class AudioFrameProcessorFactory {

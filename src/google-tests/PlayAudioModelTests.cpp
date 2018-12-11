@@ -254,8 +254,10 @@ class ReadsAOne : public AudioFrameReader {
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
-	void process(float **audio, int) override {
-		*audio[0] *= 2;
+	void process(gsl::span<float *> channels, int frames) override {
+		for (const auto channel : channels)
+			for (int i = 0; i < frames; ++i)
+				channel[i] *= 2;
 	}
 };
 

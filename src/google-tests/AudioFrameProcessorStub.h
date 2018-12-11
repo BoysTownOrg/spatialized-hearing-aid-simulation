@@ -14,8 +14,8 @@ public:
 		return _audioBuffer;
 	}
 
-	void process(float ** channels, int frames) override {
-		_audioBuffer = channels;
+	void process(gsl::span<float *> channels, int frames) override {
+		_audioBuffer = channels.data();
 		_frameCount = frames;
 	}
 };

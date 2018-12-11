@@ -94,7 +94,7 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 	const auto audio = static_cast<float **>(channels);
 	frameReader->read({ audio, frameReader->channels() }, frames);
-	frameProcessor->process(audio, frames);
+	frameProcessor->process({ audio, frameReader->channels() }, frames);
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 }
