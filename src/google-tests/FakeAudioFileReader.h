@@ -1,6 +1,7 @@
 #pragma once
 
 #include <audio-file-reading/AudioFileReader.h>
+#include <gsl/gsl>
 #include <vector>
 
 class FakeAudioFileReader : public AudioFileReader {
@@ -35,7 +36,7 @@ public:
 		std::memcpy(
 			x,
 			&contents[0],
-			static_cast<std::size_t>(n) * sizeof(float) * _channels);
+			gsl::narrow<std::size_t>(n) * sizeof(float) * _channels);
 	}
 
 	void fail() {
