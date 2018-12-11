@@ -25,4 +25,6 @@ public:
 	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
 	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(float *, int) override;
+private:
+	void updateOverlap();
 };

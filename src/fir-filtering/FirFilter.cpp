@@ -31,8 +31,7 @@ FirFilter::FirFilter(std::vector<float> b) {
 	H = dftComplex;
 }
 
-FirFilter::~FirFilter()
-{
+FirFilter::~FirFilter() {
 	fftwf_destroy_plan(fftPlan);
 	fftwf_destroy_plan(ifftPlan);
 }
@@ -42,12 +41,7 @@ void FirFilter::process(float *x, int n) {
 		std::fill(dftReal.begin(), dftReal.end(), 0.0f);
 		for (int j = 0; j < L; ++j)
 			dftReal[j] = x[j + i * L];
-		fftwf_execute(fftPlan);
-		for (int j = 0; j < N / 2 + 1; ++j)
-			dftComplex[j] *= H[j];
-		fftwf_execute(ifftPlan);
-		for (int j = 0; j < N; ++j)
-			overlap[j] += dftReal[j];
+		updateOverlap();
 		for (int j = 0; j < L; ++j)
 			x[j + i * L] = overlap[j] / N;
 		for (int j = 0; j < N - L; ++j)
@@ -59,16 +53,20 @@ void FirFilter::process(float *x, int n) {
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
 	for (int j = 0; j < samplesLeft; ++j)
 		dftReal[j] = x[n - samplesLeft + j];
-	fftwf_execute(fftPlan);
-	for (int j = 0; j < N / 2 + 1; ++j)
-		dftComplex[j] *= H[j];
-	fftwf_execute(ifftPlan);
-	for (int j = 0; j < N; ++j)
-		overlap[j] += dftReal[j];
+	updateOverlap();
 	for (int i = 0; i < samplesLeft; ++i)
 		x[n - samplesLeft + i] = overlap[i] / N;
 	for (int i = 0; i < N - samplesLeft; ++i)
 		overlap[i] = overlap[i + samplesLeft];
 	for (int i = N - samplesLeft; i < N; ++i)
 		overlap[i] = 0;
+}
+
+void FirFilter::updateOverlap() {
+	fftwf_execute(fftPlan);
+	for (int j = 0; j < N / 2 + 1; ++j)
+		dftComplex[j] *= H[j];
+	fftwf_execute(ifftPlan);
+	for (int j = 0; j < N; ++j)
+		overlap[j] += dftReal[j];
 }
