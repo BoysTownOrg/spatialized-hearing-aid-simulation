@@ -44,10 +44,7 @@ void FirFilter::process(float *x, int n) {
 		updateOverlap();
 		for (int j = 0; j < L; ++j)
 			x[j + i * L] = overlap[j] / N;
-		for (int j = 0; j < N - L; ++j)
-			overlap[j] = overlap[j + L];
-		for (int j = N - L; j < N; ++j)
-			overlap[j] = 0;
+		shiftOverlap(L);
 	}
 	int samplesLeft = n % L;
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
@@ -56,9 +53,13 @@ void FirFilter::process(float *x, int n) {
 	updateOverlap();
 	for (int i = 0; i < samplesLeft; ++i)
 		x[n - samplesLeft + i] = overlap[i] / N;
-	for (int i = 0; i < N - samplesLeft; ++i)
-		overlap[i] = overlap[i + samplesLeft];
-	for (int i = N - samplesLeft; i < N; ++i)
+	shiftOverlap(samplesLeft);
+}
+
+void FirFilter::shiftOverlap(int x) {
+	for (int i = 0; i < N - x; ++i)
+		overlap[i] = overlap[i + x];
+	for (int i = N - x; i < N; ++i)
 		overlap[i] = 0;
 }
 

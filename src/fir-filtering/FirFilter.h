@@ -27,4 +27,5 @@ public:
 	FIR_FILTERING_API void process(float *, int) override;
 private:
 	void updateOverlap();
+	void shiftOverlap(int x);
 };
