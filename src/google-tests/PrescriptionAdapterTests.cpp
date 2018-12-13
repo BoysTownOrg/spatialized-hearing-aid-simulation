@@ -5,8 +5,8 @@
 #include <map>
 
 static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
-	std::string property)
-{
+	std::string property
+) {
 	try {
 		const auto parser = std::make_shared<FakeConfigurationFileParser>();
 		parser->setValidSingleChannelDslProperties();
@@ -20,9 +20,9 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 	}
 }
 
-class DslPrescriptionTestCase : public ::testing::TestCase {};
+class PrescriptionAdapterTestCase : public ::testing::TestCase {};
 
-TEST(DslPrescriptionTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
+TEST(PrescriptionAdapterTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
 	using namespace dsl_prescription;
 	for (const std::string property :
 		{
@@ -35,9 +35,9 @@ TEST(DslPrescriptionTestCase, constructorThrowsInvalidPrescriptionOnChannelCount
 }
 
 TEST(
-	DslPrescriptionTestCase,
-	parametersReceivedAsParsed)
-{
+	PrescriptionAdapterTestCase,
+	parametersReceivedAsParsed
+) {
 	using namespace dsl_prescription;
 	const auto parser = std::make_shared<FakeConfigurationFileParser>();
 	parser->setVectorProperty(propertyName(Property::crossFrequenciesHz), { 3 });
@@ -61,7 +61,7 @@ TEST(
 }
 
 TEST(
-	DslPrescriptionTestCase,
+	PrescriptionAdapterTestCase,
 	throwsWhenParserThrows)
 {
 	try {

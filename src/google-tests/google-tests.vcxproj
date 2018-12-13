@@ -156,7 +156,7 @@
     <ClCompile Include="PlayAudioModelTests.cpp" />
     <ClCompile Include="ChannelCopierTester.cpp" />
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />
-    <ClCompile Include="DslPrescriptionTests.cpp" />
+    <ClCompile Include="PrescriptionAdapterTests.cpp" />
     <ClCompile Include="ScalingProcessorTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />

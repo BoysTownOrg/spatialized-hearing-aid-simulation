@@ -30,9 +30,6 @@
     <ClCompile Include="SignalProcessingChainTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DslPrescriptionTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ChannelProcessingGroupTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BrirAdapterTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrescriptionAdapterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
