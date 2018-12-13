@@ -25,7 +25,6 @@ public:
 	void setCallbackResultToContinue() override;
 	void openStream(StreamParameters parameters) override;
 	void closeStream() override;
-	bool supportsAsio() override;
 	int count() override;
 	std::string description(int) override;
 private:

@@ -42,10 +42,6 @@ std::string PortAudioDevice::description(int i) {
 	return Pa_GetDeviceInfo(i)->name;
 }
 
-bool PortAudioDevice::supportsAsio() {
-	return Pa_HostApiTypeIdToHostApiIndex(paASIO) != paHostApiNotFound;
-}
-
 void PortAudioDevice::closeStream() {
 	lastError = Pa_CloseStream(stream);
 }
