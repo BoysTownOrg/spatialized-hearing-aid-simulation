@@ -5,10 +5,10 @@
 
 class AudioFrameReaderStub : public AudioFrameReader {
 	LogString _readingLog{};
+	gsl::span<gsl::span<float>> _audioBuffer{};
 	long long _frames{};
 	int _sampleRate{};
 	int _channels{};
-	gsl::span<gsl::span<float>> _audioBuffer{};
 	bool _complete{};
 public:
 	const gsl::span<gsl::span<float>> audioBuffer() const {

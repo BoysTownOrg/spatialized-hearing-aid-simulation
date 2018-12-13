@@ -24,7 +24,6 @@ public:
 	virtual void setCallbackResultToContinue() = 0;
 	virtual void openStream(StreamParameters) = 0;
 	virtual void closeStream() = 0;
-	virtual bool supportsAsio() = 0;
 	virtual int count() = 0;
 	virtual std::string description(int) = 0;
 };

@@ -27,11 +27,13 @@ auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 	try {
 		const auto parser = factory->make(filePath);
 		Dsl dsl{};
-		dsl.crossFrequenciesHz = parser->asVector(propertyName(dsl_prescription::Property::crossFrequenciesHz));
-		dsl.compressionRatios = parser->asVector(propertyName(dsl_prescription::Property::compressionRatios));
-		dsl.kneepointGains_dB = parser->asVector(propertyName(dsl_prescription::Property::kneepointGains_dB));
-		dsl.kneepoints_dBSpl = parser->asVector(propertyName(dsl_prescription::Property::kneepoints_dBSpl));
-		dsl.broadbandOutputLimitingThresholds_dBSpl = parser->asVector(propertyName(dsl_prescription::Property::broadbandOutputLimitingThresholds_dBSpl));
+		using namespace dsl_prescription;
+		dsl.crossFrequenciesHz = parser->asVector(propertyName(Property::crossFrequenciesHz));
+		dsl.compressionRatios = parser->asVector(propertyName(Property::compressionRatios));
+		dsl.kneepointGains_dB = parser->asVector(propertyName(Property::kneepointGains_dB));
+		dsl.kneepoints_dBSpl = parser->asVector(propertyName(Property::kneepoints_dBSpl));
+		dsl.broadbandOutputLimitingThresholds_dBSpl = 
+			parser->asVector(propertyName(Property::broadbandOutputLimitingThresholds_dBSpl));
 		dsl.channels = gsl::narrow<int>(dsl.crossFrequenciesHz.size() + 1);
 		const auto channels = dsl.crossFrequenciesHz.size() + 1;
 		if (

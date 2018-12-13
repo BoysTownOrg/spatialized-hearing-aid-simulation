@@ -36,7 +36,7 @@ public:
 		std::memcpy(
 			x,
 			&contents[0],
-			gsl::narrow<std::size_t>(n) * sizeof(float) * _channels);
+			gsl::narrow<decltype(contents)::size_type>(n) * sizeof(float) * _channels);
 	}
 
 	void fail() {

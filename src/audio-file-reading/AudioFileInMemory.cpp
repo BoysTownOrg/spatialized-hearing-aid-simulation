@@ -4,8 +4,8 @@
 AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	buffer(gsl::narrow<size_type>(reader.frames() * reader.channels())),
 	_frames{ reader.frames() },
-	_channels(reader.channels()),
-	_sampleRate(reader.sampleRate())
+	_channels{ reader.channels() },
+	_sampleRate{ reader.sampleRate() }
 {
 	if (reader.failed())
 		throw FileError{ reader.errorMessage() };

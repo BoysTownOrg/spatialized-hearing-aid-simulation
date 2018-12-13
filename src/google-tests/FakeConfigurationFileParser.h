@@ -9,7 +9,7 @@ class FakeConfigurationFileParser : public ConfigurationFileParser {
 	std::map<std::string, int> ints{};
 public:
 	void setValidSingleChannelDslProperties() {
-		using dsl_prescription::Property;
+		using namespace dsl_prescription;
 		vectors[propertyName(Property::crossFrequenciesHz)] = {};
 		vectors[propertyName(Property::compressionRatios)] = { 0 };
 		vectors[propertyName(Property::kneepointGains_dB)] = { 0 };
