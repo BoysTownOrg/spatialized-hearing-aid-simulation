@@ -24,17 +24,13 @@ public:
 	void playTrial() override;
 
 private:
-	RUNTIME_ERROR(BadInput);
-	void prepareTest();
-	void initializeModel();
-	void browseAndUpdateIfNotCancelled(
-		std::vector<std::string> filters,
-		std::function<void(std::string)>
-	);
 	void applyIfBrowseNotCancelled(
 		std::string,
 		std::function<void(std::string)>
 	);
+	void prepareTest();
+	void initializeModel();
+	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);
 };

@@ -22,21 +22,14 @@ void Presenter::browseForLeftDslPrescription() {
 	);
 }
 
-void Presenter::browseAndUpdateIfNotCancelled(
-	std::vector<std::string> filters,
-	std::function<void(std::string)> update
-) {
-	applyIfBrowseNotCancelled(view->browseForFile(filters), update);
-}
-
 void Presenter::applyIfBrowseNotCancelled(std::string s, std::function<void(std::string)> f) {
 	if (!view->browseCancelled())
-		f(s);
+		f(std::move(s));
 }
 
 void Presenter::browseForRightDslPrescription() {
-	browseAndUpdateIfNotCancelled(
-		{ "*.json" },
+	applyIfBrowseNotCancelled(
+		view->browseForFile({ "*.json" }), 
 		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(std::move(p)); }
 	);
 }
@@ -49,8 +42,8 @@ void Presenter::browseForAudio() {
 }
 
 void Presenter::browseForBrir() {
-	browseAndUpdateIfNotCancelled(
-		{ "*.wav" },
+	applyIfBrowseNotCancelled(
+		view->browseForFile({ "*.wav" }), 
 		[=](std::string p) { this->view->setBrirFilePath(std::move(p)); }
 	);
 }
