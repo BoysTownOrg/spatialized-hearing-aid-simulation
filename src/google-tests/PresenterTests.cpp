@@ -249,19 +249,9 @@ protected:
 
 	PresenterTests() : presenter{ model, view } {}
 
-	void confirmTestSetupWithChunkSizeDoesNotHideSetupView(std::string s) {
-		view->setChunkSize(std::move(s));
-		confirmTestSetupDoesNotHideSetupView();
-	}
-
 	void confirmTestSetupDoesNotHideSetupView() {
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testSetupHidden());
-	}
-	
-	void confirmTestSetupWithWindowSizeDoesNotHideSetupView(std::string s) {
-		view->setWindowSize(std::move(s));
-		confirmTestSetupDoesNotHideSetupView();
 	}
 };
 
@@ -382,9 +372,14 @@ TEST_F(
 	EXPECT_EQ(5, model->testParameters().chunkSize);
 }
 
-TEST_F(PresenterTests, confirmTestSetupWithInvalidInputDoesNotHideSetupView) {
-	confirmTestSetupWithChunkSizeDoesNotHideSetupView("?");
-	confirmTestSetupWithWindowSizeDoesNotHideSetupView("a");
+TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
+	view->setChunkSize("?");
+	confirmTestSetupDoesNotHideSetupView();
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotHideSetupView) {
+	view->setWindowSize("a");
+	confirmTestSetupDoesNotHideSetupView();
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
