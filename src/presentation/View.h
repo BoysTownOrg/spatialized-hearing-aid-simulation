@@ -42,4 +42,5 @@ public:
 	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
 	virtual void showTestSetup() = 0;
 	virtual void hideTestSetup() = 0;
+	virtual void showTesterView() = 0;
 };

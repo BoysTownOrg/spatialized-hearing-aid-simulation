@@ -122,6 +122,7 @@ void Presenter::confirmTestSetup() {
 		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 		model->initializeTest(p);
 		view->hideTestSetup();
+		view->showTesterView();
 	}
 	catch (const BadInput &) {
 	}

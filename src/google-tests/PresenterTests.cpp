@@ -244,6 +244,10 @@ public:
 	bool testerViewShown() const {
 		return _testerViewShown;
 	}
+
+	void showTesterView() override {
+		_testerViewShown = true;
+	}
 };
 
 class PresenterTests : public ::testing::Test {
