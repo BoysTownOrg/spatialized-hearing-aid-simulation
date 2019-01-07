@@ -258,6 +258,22 @@ protected:
 		view->setChunkSize("?");
 	}
 
+	void setInvalidWindowSize() {
+		view->setWindowSize("a");
+	}
+
+	void setInvalidReleaseTime() {
+		view->setRelease_ms("b");
+	}
+
+	void setInvalidAttackTime() {
+		view->setAttack_ms("c");
+	}
+
+	void setInvalidLevel() {
+		view->setLevel_dB_Spl("d");
+	}
+
 	void confirmTestSetupDoesNotHideSetupView() {
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testSetupHidden());
@@ -392,22 +408,22 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView)
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotHideSetupView) {
-	view->setWindowSize("a");
+	setInvalidWindowSize();
 	confirmTestSetupDoesNotHideSetupView();
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotHideSetupView) {
-	view->setRelease_ms("b");
+	setInvalidReleaseTime();
 	confirmTestSetupDoesNotHideSetupView();
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotHideSetupView) {
-	view->setAttack_ms("c");
+	setInvalidAttackTime();
 	confirmTestSetupDoesNotHideSetupView();
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
-	view->setLevel_dB_Spl("d");
+	setInvalidLevel();
 	confirmTestSetupDoesNotHideSetupView();
 }
 
