@@ -225,6 +225,11 @@ TEST_F(PresenterTests, runRunsEventLoop) {
 	EXPECT_TRUE(view->runningEventLoop());
 }
 
+TEST_F(PresenterTests, newTestShowsTestSetupView) {
+    view->newTest();
+    EXPECT_TRUE(view->testSetupShown());
+}
+
 TEST_F(
 	PresenterTests, 
 	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
