@@ -3,11 +3,12 @@
 #include "presentation-exports.h"
 #include "View.h"
 #include "Model.h"
+#include "EventListener.h"
 #include <common-includes/RuntimeError.h>
 #include <memory>
 #include <functional>
 
-class Presenter {
+class Presenter : public EventListener {
 	std::shared_ptr<Model> model;
 	std::shared_ptr<View> view;
 public:
