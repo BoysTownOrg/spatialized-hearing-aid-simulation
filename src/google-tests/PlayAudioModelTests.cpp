@@ -124,7 +124,7 @@ TEST(
 	}
 }
 
-TEST_F(PlayAudioModelTests, playWhileStreamingDoesNotAlterCurrentStream) {
+TEST_F(PlayAudioModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
 	device->setStreaming();
 	model.playTrial();
 	EXPECT_TRUE(device->streamLog().empty());

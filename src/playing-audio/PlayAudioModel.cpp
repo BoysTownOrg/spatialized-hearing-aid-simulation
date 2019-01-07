@@ -109,6 +109,8 @@ void PlayAudioModel::initializeTest(TestParameters p) {
 }
 
 void PlayAudioModel::playTrial() {
+	if (device->streaming())
+		return;
 	device->closeStream();
 	device->openStream({});
 	device->startStream();
