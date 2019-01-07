@@ -491,6 +491,18 @@ TEST_F(PresenterTests, playingTrialPlaysTrial) {
     EXPECT_TRUE(model->trialPlayed());
 }
 
+TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
+	view->setChunkSize("a");
+	view->confirmTestSetup();
+	assertEqual("'a' is not a valid chunk size.", view->errorMessage());
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
+	view->setWindowSize("a");
+	view->confirmTestSetup();
+	assertEqual("'a' is not a valid window size.", view->errorMessage());
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
@@ -574,7 +586,7 @@ static void expectBadChunkSize(std::string size) {
 }
 
 TEST(PresenterErrorTests, nonPositiveIntegersThrowRequestFailures) {
-	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" }) {
+	for (const auto s : std::vector<std::string>{ "0.1", "-1" }) {
 		expectBadWindowSize(s);
 		expectBadChunkSize(s);
 	}
