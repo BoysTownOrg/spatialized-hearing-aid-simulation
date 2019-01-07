@@ -214,6 +214,10 @@ public:
 	bool testSetupShown() const {
 		return _testSetupShown;
 	}
+
+	void showTestSetup() override {
+		_testSetupShown = true;
+	}
 };
 
 class PresenterTests : public ::testing::Test {

@@ -103,6 +103,6 @@ int Presenter::convertToPositiveInteger(std::string x, std::string identifier)
 	}
 }
 
-void Presenter::newTest()
-{
+void Presenter::newTest() {
+	view->showTestSetup();
 }
