@@ -11,11 +11,11 @@ public:
 	}
 
 	void play(PlayRequest request) override {
-		_request = request;
+		_request = std::move(request);
 	}
 
 	void setAudioDeviceDescriptions(std::vector<std::string> d) {
-		_audioDeviceDescriptions = d;
+		_audioDeviceDescriptions = std::move(d);
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override {
@@ -62,12 +62,12 @@ public:
 	virtual std::string browseForFile(
 		std::vector<std::string> filters) override 
 	{
-		_browseFilters = filters;
+		_browseFilters = std::move(filters);
 		return _browseFilePath;
 	}
 
 	void setBrowseFilePath(std::string p) {
-		_browseFilePath = p;
+		_browseFilePath = std::move(p);
 	}
 
 	bool browseCancelled() override {
@@ -83,7 +83,7 @@ public:
 	}
 
 	void setLeftDslPrescriptionFilePath(std::string p) override {
-		_leftDslPrescriptionFilePath = p;
+		_leftDslPrescriptionFilePath = std::move(p);
 	}
 
 	std::string leftDslPrescriptionFilePath() const override {
@@ -99,7 +99,7 @@ public:
 	}
 
 	void setRightDslPrescriptionFilePath(std::string p) override {
-		_rightDslPrescriptionFilePath = p;
+		_rightDslPrescriptionFilePath = std::move(p);
 	}
 
 	void browseForAudio() {
@@ -111,7 +111,7 @@ public:
 	}
 
 	void setBrirFilePath(std::string p) override {
-		_brirFilePath = p;
+		_brirFilePath = std::move(p);
 	}
 
 	std::string brirFilePath() const override {
@@ -123,7 +123,7 @@ public:
 	}
 
 	void setLevel_dB_Spl(std::string level) {
-		_level_dB_Spl = level;
+		_level_dB_Spl = std::move(level);
 	}
 
 	std::string level_dB_Spl() const override {
@@ -131,7 +131,7 @@ public:
 	}
 
 	void setAttack_ms(std::string a) {
-		_attack_ms = a;
+		_attack_ms = std::move(a);
 	}
 
 	std::string attack_ms() const override {
@@ -139,7 +139,7 @@ public:
 	}
 
 	void setRelease_ms(std::string r) {
-		_release_ms = r;
+		_release_ms = std::move(r);
 	}
 
 	std::string release_ms() const override {
@@ -147,7 +147,7 @@ public:
 	}
 
 	void setWindowSize(std::string s) {
-		_windowSize = s;
+		_windowSize = std::move(s);
 	}
 
 	std::string windowSize() const override {
@@ -155,7 +155,7 @@ public:
 	}
 
 	void setChunkSize(std::string s) {
-		_chunkSize = s;
+		_chunkSize = std::move(s);
 	}
 
 	std::string chunkSize() const override {
@@ -171,7 +171,7 @@ public:
 	}
 
 	void showErrorDialog(std::string message) override {
-		_errorMessage = message;
+		_errorMessage = std::move(message);
 	}
 
 	std::vector<std::string> audioDeviceMenuItems() const {
@@ -179,11 +179,11 @@ public:
 	}
 
 	void populateAudioDeviceMenu(std::vector<std::string> d) override {
-		_audioDeviceMenuItems = d;
+		_audioDeviceMenuItems = std::move(d);
 	}
 
 	void setAudioDevice(std::string s) {
-		_audioDevice = s;
+		_audioDevice = std::move(s);
 	}
 
 	std::string audioDevice() const override {
@@ -209,8 +209,8 @@ public:
 
 class PresenterTests : public ::testing::Test {
 protected:
-	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
 	std::shared_ptr<ModelStub> model = std::make_shared<ModelStub>();
+	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
 	Presenter presenter;
 
 	PresenterTests() : presenter{ model, view } {}
