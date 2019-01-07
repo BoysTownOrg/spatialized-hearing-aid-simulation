@@ -432,6 +432,26 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView
 	confirmTestSetupDoesNotShowTesterView();
 }
 
+TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotShowTesterView) {
+	setInvalidWindowSize();
+	confirmTestSetupDoesNotShowTesterView();
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotShowTesterView) {
+	setInvalidReleaseTime();
+	confirmTestSetupDoesNotShowTesterView();
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotShowTesterView) {
+	setInvalidAttackTime();
+	confirmTestSetupDoesNotShowTesterView();
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotShowTesterView) {
+	setInvalidLevel();
+	confirmTestSetupDoesNotShowTesterView();
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
