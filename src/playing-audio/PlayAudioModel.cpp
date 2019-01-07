@@ -58,8 +58,6 @@ void PlayAudioModel::play(PlayRequest request) {
 	frameReader->reset();
 	audio.resize(frameReader->channels());
 
-	device->closeStream();
-
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.framesPerBuffer = request.chunkSize;
 	forStreaming.sampleRate = frameReader->sampleRate();
