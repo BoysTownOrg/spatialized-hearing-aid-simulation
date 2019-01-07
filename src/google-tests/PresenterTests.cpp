@@ -321,6 +321,21 @@ protected:
 		view->setWindowSize(s);
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid window size.");
 	}
+
+	void confirmTestSetupWithAttackTimeShowsErrorMessage(std::string s) {
+		view->setAttack_ms(s);
+		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid attack time.");
+	}
+
+	void confirmTestSetupWithReleaseTimeShowsErrorMessage(std::string s) {
+		view->setRelease_ms(s);
+		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid release time.");
+	}
+
+	void confirmTestSetupWithLevelShowsErrorMessage(std::string s) {
+		view->setLevel_dB_Spl(s);
+		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid level.");
+	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -516,6 +531,18 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
 		confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 }
 
+TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeShowsErrorMessage) {
+	confirmTestSetupWithAttackTimeShowsErrorMessage("a");
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
+	confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
+}
+
+TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelShowsErrorMessage) {
+	confirmTestSetupWithLevelShowsErrorMessage("c");
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
@@ -551,33 +578,4 @@ TEST(PresenterErrorTests, initializationFailureShowsErrorMessage) {
 	Presenter presenter{ model, view };
 	view->confirmTestSetup();
 	assertEqual("error.", view->errorMessage());
-}
-
-static void expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-	std::function<void(ViewStub &)> transformation,
-	std::string message)
-{
-	const auto view = std::make_shared<ViewStub>();
-	Presenter presenter{ std::make_shared<ModelStub>(), view };
-	transformation(*view);
-	view->confirmTestSetup();
-	assertEqual(message, view->errorMessage());
-}
-
-TEST(PresenterErrorTests, nonFloatsThrowRequestFailures) {
-	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-		[](ViewStub & view) {
-			view.setLevel_dB_Spl("a");
-		},
-		"'a' is not a valid level.");
-	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-		[](ViewStub & view) {
-			view.setAttack_ms("b");
-		},
-		"'b' is not a valid attack time.");
-	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-		[](ViewStub & view) {
-			view.setRelease_ms("c");
-		},
-		"'c' is not a valid release time.");
 }
