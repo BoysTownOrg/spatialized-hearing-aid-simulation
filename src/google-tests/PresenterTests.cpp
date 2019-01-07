@@ -3,8 +3,8 @@
 #include <gtest/gtest.h>
 
 class ModelStub : public Model {
-	PlayRequest _request{};
 	std::vector<std::string> _audioDeviceDescriptions{};
+	PlayRequest _request{};
 public:
 	const PlayRequest &request() const {
 		return _request;
@@ -220,14 +220,6 @@ TEST_F(PresenterTests, constructorSetsItself) {
 	EXPECT_EQ(&presenter, view->presenter());
 }
 
-TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
-	const auto view = std::make_shared<ViewStub>();
-	const auto model = std::make_shared<ModelStub>();
-	model->setAudioDeviceDescriptions({ "a", "b", "c" });
-	Presenter presenter{ model, view };
-	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
-}
-
 TEST_F(PresenterTests, loopRunsEventLoop) {
 	presenter.loop();
 	EXPECT_TRUE(view->runningEventLoop());
@@ -235,8 +227,8 @@ TEST_F(PresenterTests, loopRunsEventLoop) {
 
 TEST_F(
 	PresenterTests, 
-	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) 
-{
+	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
+) {
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
 	view->setBrowseCancelled();
@@ -248,8 +240,8 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory)
-{
+	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
+) {
 	view->setAudioDirectory("a");
 	view->setBrowseCancelled();
 	view->browseForAudio();
@@ -258,8 +250,8 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	cancellingBrowseForBrirDoesNotChangeBrirFilePath)
-{
+	cancellingBrowseForBrirDoesNotChangeBrirFilePath
+) {
 	view->setBrirFilePath("a");
 	view->setBrowseCancelled();
 	view->browseForBrir();
@@ -268,8 +260,8 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
-{
+	browseForDslPrescriptionUpdatesDslPrescriptionFilePath
+) {
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
 	assertEqual("a", view->leftDslPrescriptionFilePath());
@@ -280,8 +272,8 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	browseForAudioDirectoryUpdatesAudioDirectory)
-{
+	browseForAudioDirectoryUpdatesAudioDirectory
+) {
 	view->setBrowseDirectory("a");
 	view->browseForAudio();
 	assertEqual("a", view->audioDirectory());
@@ -289,8 +281,8 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	browseForBrirUpdatesBrirFilePath)
-{
+	browseForBrirUpdatesBrirFilePath
+) {
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
 	assertEqual("a", view->brirFilePath());
@@ -298,16 +290,16 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	browseForBrirFiltersWavFiles)
-{
+	browseForBrirFiltersWavFiles
+) {
 	view->browseForBrir();
 	assertEqual({ "*.wav" }, view->browseFilters());
 }
 
 TEST_F(
 	PresenterTests,
-	playPassesParametersToPlayRequest)
-{
+	playPassesParametersToPlayRequest
+) {
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioDirectory("c");
@@ -329,6 +321,14 @@ TEST_F(
 	EXPECT_EQ(3.3, model->request().release_ms);
 	EXPECT_EQ(4, model->request().windowSize);
 	EXPECT_EQ(5, model->request().chunkSize);
+}
+
+TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
+	const auto view = std::make_shared<ViewStub>();
+	const auto model = std::make_shared<ModelStub>();
+	model->setAudioDeviceDescriptions({ "a", "b", "c" });
+	Presenter presenter{ model, view };
+	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
 }
 
 class ErrorModel : public Model {
