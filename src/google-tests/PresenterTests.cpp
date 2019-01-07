@@ -207,21 +207,6 @@ public:
 	}
 };
 
-class PresenterFacade {
-	Presenter presenter;
-public:
-	PresenterFacade(std::shared_ptr<View> view) :
-		presenter{ std::make_shared<ModelStub>(), std::move(view) } {}
-
-	const Presenter *get() const {
-		return &presenter;
-	}
-
-	void loop() {
-		presenter.loop();
-	}
-};
-
 class PresenterTests : public ::testing::Test {
 protected:
 	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
@@ -374,7 +359,7 @@ static void expectViewSettingYieldsErrorMessageOnPlay(
 	std::string message)
 {
 	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
+	Presenter presenter{ std::make_shared<ModelStub>(), view };
 	transformation(*view);
 	view->play();
 	assertEqual(message, view->errorMessage());
