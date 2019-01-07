@@ -586,3 +586,8 @@ TEST_F(PresenterErrorTests, confirmTestSetupShowsErrorMessageWhenModelInitializa
 	view->confirmTestSetup();
 	assertEqual("error.", view->errorMessage());
 }
+
+TEST_F(PresenterErrorTests, confirmTestSetupDoesNotShowTesterView) {
+	view->confirmTestSetup();
+	EXPECT_FALSE(view->testerViewShown());
+}
