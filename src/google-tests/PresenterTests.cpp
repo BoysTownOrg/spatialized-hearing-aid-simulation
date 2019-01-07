@@ -572,27 +572,27 @@ public:
 	void playTrial() override {}
 };
 
-class PresenterErrorTests : public ::testing::Test {
+class PresenterWithInitializationFailingModel : public ::testing::Test {
 protected:
 	std::shared_ptr<ErrorModel> model = std::make_shared<ErrorModel>();
 	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
 	Presenter presenter;
 
-	PresenterErrorTests() : presenter{ model, view } {}
+	PresenterWithInitializationFailingModel() : presenter{ model, view } {}
 };
 
-TEST_F(PresenterErrorTests, confirmTestSetupShowsErrorMessageWhenModelInitializationFails) {
+TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupShowsErrorMessage) {
 	model->setErrorMessage("error.");
 	view->confirmTestSetup();
 	assertEqual("error.", view->errorMessage());
 }
 
-TEST_F(PresenterErrorTests, confirmTestSetupDoesNotShowTesterView) {
+TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotShowTesterView) {
 	view->confirmTestSetup();
 	EXPECT_FALSE(view->testerViewShown());
 }
 
-TEST_F(PresenterErrorTests, confirmTestSetupDoesNotHideSetupView) {
+TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetupView) {
 	view->confirmTestSetup();
 	EXPECT_FALSE(view->testSetupHidden());
 }
