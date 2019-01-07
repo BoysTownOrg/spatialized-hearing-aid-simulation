@@ -171,7 +171,6 @@
     <ClInclude Include="FakeConfigurationFileParser.h" />
     <ClInclude Include="FilterbankCompressorSpy.h" />
     <ClInclude Include="LogString.h" />
-    <ClInclude Include="PresenterTests.h" />
     <ClInclude Include="SignalProcessorStub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
