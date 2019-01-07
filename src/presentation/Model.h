@@ -14,6 +14,7 @@ public:
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
 		std::string audioFilePath;
+		std::string audioDirectory;
 		std::string audioDevice;
 		double level_dB_Spl;
 		double attack_ms;
