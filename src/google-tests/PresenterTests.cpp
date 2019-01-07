@@ -551,30 +551,26 @@ TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
 }
 
-class ErrorModel : public Model {
+class InitializationFailingModel : public Model {
 	std::string message{};
 public:
-
 	void setErrorMessage(std::string s) {
 		message = std::move(s);
-	}
-
-	void play(PlayRequest) override {}
-
-	std::vector<std::string> audioDeviceDescriptions() override {
-		return {};
 	}
 
 	void initializeTest(TestParameters) override {
 		throw TestInitializationFailure{ message };
 	}
 
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	void play(PlayRequest) override {}
 	void playTrial() override {}
 };
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {
 protected:
-	std::shared_ptr<ErrorModel> model = std::make_shared<ErrorModel>();
+	std::shared_ptr<InitializationFailingModel> model = 
+		std::make_shared<InitializationFailingModel>();
 	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
 	Presenter presenter;
 
