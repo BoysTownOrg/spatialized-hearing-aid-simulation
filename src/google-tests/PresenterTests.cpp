@@ -348,7 +348,7 @@ TEST(
 	Presenter presenter{ model, view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
-	view->setAudioFilePath("c");
+	view->setAudioDirectory("c");
 	view->setBrirFilePath("d");
 	view->setAudioDevice("e");
 	view->setLevel_dB_Spl("1.1");
@@ -359,7 +359,7 @@ TEST(
 	view->play();
 	assertEqual("a", model->request().leftDslPrescriptionFilePath);
 	assertEqual("b", model->request().rightDslPrescriptionFilePath);
-	assertEqual("c", model->request().audioFilePath);
+	assertEqual("c", model->request().audioDirectory);
 	assertEqual("d", model->request().brirFilePath);
 	assertEqual("e", model->request().audioDevice);
 	EXPECT_EQ(1.1, model->request().level_dB_Spl);
