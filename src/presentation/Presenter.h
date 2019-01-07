@@ -21,6 +21,7 @@ public:
 	PRESENTATION_API void browseForBrir() override;
 	PRESENTATION_API void play() override;
 	PRESENTATION_API void newTest() override;
+	PRESENTATION_API void confirmTestSetup() override;
 
 private:
 	RUNTIME_ERROR(BadInput);

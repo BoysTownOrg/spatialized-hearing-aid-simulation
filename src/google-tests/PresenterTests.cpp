@@ -43,6 +43,7 @@ class ViewStub : public View {
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
 	bool _testSetupShown{};
+	bool _testSetupHidden{};
 public:
 	void subscribe(EventListener * listener) override {
 		_listener = listener;
@@ -217,6 +218,14 @@ public:
 
 	void showTestSetup() override {
 		_testSetupShown = true;
+	}
+
+	void confirmTestSetup() {
+		_listener->confirmTestSetup();
+	}
+
+	bool testSetupHidden() const {
+		return _testSetupHidden;
 	}
 };
 

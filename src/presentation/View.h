@@ -13,6 +13,7 @@ public:
 	virtual void browseForBrir() = 0;
 	virtual void play() = 0;
 	virtual void newTest() = 0;
+	virtual void confirmTestSetup() = 0;
 };
 
 class View {
