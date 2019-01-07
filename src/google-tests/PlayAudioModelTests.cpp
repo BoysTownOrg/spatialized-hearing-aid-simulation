@@ -184,7 +184,7 @@ TEST_F(PlayAudioModelTests, initializeTestPassesParametersToProcessorFactory) {
 
 TEST_F(PlayAudioModelTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	frameReader->setChannels(0);
-	model.play({});
+	model.playTrial();
 	device->fillStreamBuffer(nullptr, 0);
 	EXPECT_FALSE(device->setCallbackResultToCompleteCalled());
 	frameReader->setComplete();
