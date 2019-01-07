@@ -227,6 +227,10 @@ public:
 	bool testSetupHidden() const {
 		return _testSetupHidden;
 	}
+
+	void hideTestSetup() override {
+		_testSetupHidden = true;
+	}
 };
 
 class PresenterTests : public ::testing::Test {

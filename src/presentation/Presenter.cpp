@@ -108,5 +108,5 @@ void Presenter::newTest() {
 }
 
 void Presenter::confirmTestSetup() {
-
+	view->hideTestSetup();
 }
