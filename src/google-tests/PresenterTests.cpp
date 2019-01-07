@@ -25,6 +25,10 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override {
 		return _audioDeviceDescriptions;
 	}
+
+	void initializeTest(TestParameters p) override {
+		_testParameters = std::move(p);
+	}
 };
 
 class ViewStub : public View {
@@ -383,6 +387,9 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override {
 		return {};
+	}
+
+	void initializeTest(TestParameters) override {
 	}
 };
 

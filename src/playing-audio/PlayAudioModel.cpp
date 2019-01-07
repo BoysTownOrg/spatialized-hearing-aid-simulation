@@ -95,6 +95,10 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 	}
 }
 
+void PlayAudioModel::initializeTest(TestParameters)
+{
+}
+
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio[i] = { static_cast<float **>(channels)[i], frames };

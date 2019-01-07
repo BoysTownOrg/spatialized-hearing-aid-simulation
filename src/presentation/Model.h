@@ -22,6 +22,8 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
+	virtual void play(PlayRequest) = 0;
+
 	struct TestParameters {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -34,6 +36,6 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
-	virtual void play(PlayRequest) = 0;
+	virtual void initializeTest(TestParameters) = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };
