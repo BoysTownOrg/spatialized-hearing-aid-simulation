@@ -243,6 +243,11 @@ TEST_F(PresenterTests, newTestShowsTestSetupView) {
     EXPECT_TRUE(view->testSetupShown());
 }
 
+TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
+    view->confirmTestSetup();
+    EXPECT_TRUE(view->testSetupHidden());
+}
+
 TEST_F(
 	PresenterTests, 
 	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
