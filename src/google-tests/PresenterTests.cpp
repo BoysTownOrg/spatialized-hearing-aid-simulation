@@ -39,16 +39,16 @@ class ViewStub : public View {
 	std::string _errorMessage{};
 	std::string _browseDirectory{};
 	std::string _audioDirectory{};
-	Presenter *_presenter{};
+	EventListener *_listener{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
 public:
-	void setPresenter(Presenter *p) override {
-		_presenter = p;
+	void subscribe(EventListener * listener) override {
+		_listener = listener;
 	}
 
-	Presenter *presenter() const {
-		return _presenter;
+	EventListener *listener() const {
+		return _listener;
 	}
 
 	void runEventLoop() override {
@@ -79,7 +79,7 @@ public:
 	}
 
 	void browseForLeftDslPrescription() {
-		_presenter->browseForLeftDslPrescription();
+		_listener->browseForLeftDslPrescription();
 	}
 
 	void setLeftDslPrescriptionFilePath(std::string p) override {
@@ -91,7 +91,7 @@ public:
 	}
 
 	void browseForRightDslPrescription() {
-		_presenter->browseForRightDslPrescription();
+		_listener->browseForRightDslPrescription();
 	}
 
 	std::string rightDslPrescriptionFilePath() const override {
@@ -103,11 +103,11 @@ public:
 	}
 
 	void browseForAudio() {
-		_presenter->browseForAudio();
+		_listener->browseForAudio();
 	}
 
 	void browseForBrir() {
-		_presenter->browseForBrir();
+		_listener->browseForBrir();
 	}
 
 	void setBrirFilePath(std::string p) override {
@@ -163,7 +163,7 @@ public:
 	}
 
 	void play() {
-		_presenter->play();
+		_listener->play();
 	}
 
 	std::string errorMessage() const {
@@ -217,7 +217,7 @@ protected:
 };
 
 TEST_F(PresenterTests, constructorSetsItself) {
-	EXPECT_EQ(&presenter, view->presenter());
+	EXPECT_EQ(&presenter, view->listener());
 }
 
 TEST_F(PresenterTests, loopRunsEventLoop) {

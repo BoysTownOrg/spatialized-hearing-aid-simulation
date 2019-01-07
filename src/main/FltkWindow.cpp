@@ -3,23 +3,23 @@
 #include <sstream>
 
 void FltkWindow::onBrowseLeftPrescription(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->browseForLeftDslPrescription();
+	static_cast<FltkWindow *>(self)->listener->browseForLeftDslPrescription();
 }
 
 void FltkWindow::onBrowseRightPrescription(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->browseForRightDslPrescription();
+	static_cast<FltkWindow *>(self)->listener->browseForRightDslPrescription();
 }
 
 void FltkWindow::onBrowseAudio(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->browseForAudio();
+	static_cast<FltkWindow *>(self)->listener->browseForAudio();
 }
 
 void FltkWindow::onBrowseBrir(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->browseForBrir();
+	static_cast<FltkWindow *>(self)->listener->browseForBrir();
 }
 
 void FltkWindow::onPlay(Fl_Widget *, void *self) {
-	static_cast<FltkWindow *>(self)->presenter->play();
+	static_cast<FltkWindow *>(self)->listener->play();
 }
 
 FltkWindow::FltkWindow() :
@@ -63,8 +63,8 @@ void FltkWindow::runEventLoop() {
 	Fl::run();
 }
 
-void FltkWindow::setPresenter(Presenter *c) {
-	presenter = c;
+void FltkWindow::subscribe(EventListener * listener) {
+	listener = c;
 }
 
 static std::string formatFilters(std::vector<std::string> filters) {

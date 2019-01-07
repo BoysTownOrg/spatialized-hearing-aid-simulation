@@ -30,11 +30,11 @@ class FltkWindow : public View
 	Fl_Button browseBrir;
 	Fl_Choice _audioDevice;
 	Fl_Button play;
-	Presenter *presenter{};
+	Presenter *listener{};
 	int browseResult{};
 public:
 	FltkWindow();
-	void setPresenter(Presenter *) override;
+	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
 	std::string browseForFile(std::vector<std::string> filters) override;
 	bool browseCancelled() override;

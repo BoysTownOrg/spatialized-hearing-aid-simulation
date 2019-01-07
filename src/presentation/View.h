@@ -1,15 +1,14 @@
 #pragma once
 
+#include "EventListener.h"
 #include <common-includes/Interface.h>
 #include <string>
 #include <vector>
 
-class Presenter;
-
 class View {
 public:
 	INTERFACE_OPERATIONS(View);
-	virtual void setPresenter(Presenter *) = 0;
+	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
 	virtual std::string browseForDirectory() = 0;

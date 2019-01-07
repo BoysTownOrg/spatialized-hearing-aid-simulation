@@ -7,7 +7,7 @@ Presenter::Presenter(
 	model{ std::move(model) },
 	view{ std::move(view) }
 {
-	this->view->setPresenter(this);
+	this->view->subscribe(this);
 	this->view->populateAudioDeviceMenu(this->model->audioDeviceDescriptions());
 }
 
