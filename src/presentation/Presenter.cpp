@@ -50,16 +50,20 @@ void Presenter::browseAndUpdateIfNotCancelled(
 
 void Presenter::confirmTestSetup() {
 	try {
-		initializeTest();
-		view->hideTestSetup();
-		view->showTesterView();
+		prepareTest();
 	}
 	catch (const std::runtime_error &failure) {
 		view->showErrorDialog(failure.what());
 	}
 }
 
-void Presenter::initializeTest() {
+void Presenter::prepareTest() {
+	initializeModel();
+	view->hideTestSetup();
+	view->showTesterView();
+}
+
+void Presenter::initializeModel() {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
 	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
@@ -80,8 +84,8 @@ static std::string badInputMessage(std::string x, std::string identifier) {
 
 double Presenter::convertToDouble(
 	std::string x, 
-	std::string identifier)
-{
+	std::string identifier
+) {
 	try {
 		return std::stod(x);
 	}
@@ -94,8 +98,7 @@ static bool onlyContainsDigits(const std::string s) {
 	return s.find_first_not_of("0123456789") == std::string::npos;
 }
 
-int Presenter::convertToPositiveInteger(std::string x, std::string identifier)
-{
+int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
 	if (!onlyContainsDigits(x))
 		throw BadInput{ badInputMessage(x, identifier) };
 	try {
