@@ -452,6 +452,11 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotShowTesterView) {
 	confirmTestSetupDoesNotShowTesterView();
 }
 
+TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
+	view->confirmTestSetup();
+    EXPECT_TRUE(view->testerViewShown());
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
