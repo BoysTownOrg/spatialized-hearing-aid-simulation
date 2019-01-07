@@ -334,7 +334,7 @@ TEST_F(
 
 TEST_F(
 	PresenterTests,
-	playPassesParametersToPlayRequest
+	confirmTestSetupPassesParametersToModel
 ) {
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
@@ -346,17 +346,17 @@ TEST_F(
 	view->setRelease_ms("3.3");
 	view->setWindowSize("4");
 	view->setChunkSize("5");
-	view->play();
-	assertEqual("a", model->request().leftDslPrescriptionFilePath);
-	assertEqual("b", model->request().rightDslPrescriptionFilePath);
-	assertEqual("c", model->request().audioDirectory);
-	assertEqual("d", model->request().brirFilePath);
-	assertEqual("e", model->request().audioDevice);
-	EXPECT_EQ(1.1, model->request().level_dB_Spl);
-	EXPECT_EQ(2.2, model->request().attack_ms);
-	EXPECT_EQ(3.3, model->request().release_ms);
-	EXPECT_EQ(4, model->request().windowSize);
-	EXPECT_EQ(5, model->request().chunkSize);
+	view->confirmTestSetup();
+	assertEqual("a", model->testParameters().leftDslPrescriptionFilePath);
+	assertEqual("b", model->testParameters().rightDslPrescriptionFilePath);
+	assertEqual("c", model->testParameters().audioDirectory);
+	assertEqual("d", model->testParameters().brirFilePath);
+	assertEqual("e", model->testParameters().audioDevice);
+	EXPECT_EQ(1.1, model->testParameters().level_dB_Spl);
+	EXPECT_EQ(2.2, model->testParameters().attack_ms);
+	EXPECT_EQ(3.3, model->testParameters().release_ms);
+	EXPECT_EQ(4, model->testParameters().windowSize);
+	EXPECT_EQ(5, model->testParameters().chunkSize);
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
