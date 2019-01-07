@@ -39,6 +39,10 @@ public:
 	bool trialPlayed() const {
 		return _trialPlayed;
 	}
+
+	void playTrial() override {
+		_trialPlayed = true;
+	}
 };
 
 class ViewStub : public View {
@@ -515,6 +519,8 @@ public:
 
 	void initializeTest(TestParameters) override {
 	}
+
+	void playTrial() override {}
 };
 
 TEST(PresenterErrorTests, requestFailureShowsErrorMessage) {

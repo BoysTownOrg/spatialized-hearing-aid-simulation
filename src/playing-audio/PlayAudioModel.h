@@ -25,6 +25,7 @@ public:
 	PLAYING_AUDIO_API void play(PlayRequest) override;
 	PLAYING_AUDIO_API void fillStreamBuffer(void *channels, int frames) override;
 	void initializeTest(TestParameters) override;
+	void playTrial() override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
