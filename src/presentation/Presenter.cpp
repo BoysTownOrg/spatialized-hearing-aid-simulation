@@ -108,7 +108,7 @@ void Presenter::newTest() {
 }
 
 void Presenter::confirmTestSetup() {
-	view->hideTestSetup();
+	try {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
 	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
@@ -121,4 +121,8 @@ void Presenter::confirmTestSetup() {
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	model->initializeTest(p);
+	view->hideTestSetup();
+	}
+	catch (const BadInput &) {
+	}
 }
