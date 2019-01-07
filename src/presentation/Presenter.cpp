@@ -49,32 +49,29 @@ void Presenter::browseAndUpdateIfNotCancelled(
 }
 
 void Presenter::confirmTestSetup() {
+	try {
+		initializeTest();
+		view->hideTestSetup();
+		view->showTesterView();
+	}
+	catch (const std::runtime_error &failure) {
+		view->showErrorDialog(failure.what());
+	}
+}
+
+void Presenter::initializeTest() {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
 	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 	p.brirFilePath = view->brirFilePath();
 	p.audioDirectory = view->audioDirectory();
 	p.audioDevice = view->audioDevice();
-	try {
-		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-		p.release_ms = convertToDouble(view->release_ms(), "release time");
-		p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-	}
-	catch (const BadInput &e) {
-		view->showErrorDialog(e.what());
-		return;
-	}
-	try {
-		model->initializeTest(p);
-	}
-	catch (const Model::TestInitializationFailure &failure) {
-		view->showErrorDialog(failure.what());
-		return;
-	}
-	view->hideTestSetup();
-	view->showTesterView();
+	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+	p.release_ms = convertToDouble(view->release_ms(), "release time");
+	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	model->initializeTest(p);
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {

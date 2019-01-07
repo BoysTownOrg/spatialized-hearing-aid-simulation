@@ -25,6 +25,7 @@ public:
 
 private:
 	RUNTIME_ERROR(BadInput);
+	void initializeTest();
 	void browseAndUpdateIfNotCancelled(
 		std::vector<std::string> filters,
 		std::function<void(std::string)>);
