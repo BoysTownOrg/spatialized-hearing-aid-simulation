@@ -461,6 +461,12 @@ TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
     EXPECT_TRUE(view->testerViewShown());
 }
 
+TEST_F(PresenterTests, playingTrialDoesNotHideViewWhileTestInProgress) {
+    model->setTestIncomplete();
+    view->playTrial();
+    EXPECT_FALSE(view->testerViewHidden());
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
