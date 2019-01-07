@@ -17,7 +17,7 @@ class FltkWindow : public View
 	Fl_Double_Window window;
 	Fl_Input _leftPrescriptionFilePath;
 	Fl_Input _rightPrescriptionFilePath;
-	Fl_Input _audioFilePath;
+	Fl_Input _audioDirectory;
 	Fl_Input _brirFilePath;
 	Fl_Float_Input _level_dB_Spl;
 	Fl_Float_Input _attack_ms;
@@ -30,21 +30,22 @@ class FltkWindow : public View
 	Fl_Button browseBrir;
 	Fl_Choice _audioDevice;
 	Fl_Button play;
-	Presenter *listener{};
+	EventListener *listener{};
 	int browseResult{};
 public:
 	FltkWindow();
 	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
 	std::string browseForFile(std::vector<std::string> filters) override;
+	std::string browseForDirectory() override;
 	bool browseCancelled() override;
+	void setAudioDirectory(std::string) override;
 	void setLeftDslPrescriptionFilePath(std::string) override;
 	void setRightDslPrescriptionFilePath(std::string) override;
-	void setAudioFilePath(std::string) override;
 	void setBrirFilePath(std::string) override;
+	std::string audioDirectory() const override;
 	std::string leftDslPrescriptionFilePath() const override;
 	std::string rightDslPrescriptionFilePath() const override;
-	std::string audioFilePath() const override;
 	std::string brirFilePath() const override;
 	std::string audioDevice() const override;
 	std::string level_dB_Spl() const override;

@@ -26,7 +26,7 @@ FltkWindow::FltkWindow() :
 	window(800, 200, 600, 600),
 	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
 	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
-	_audioFilePath(250, 150, 200, 45, "audio file path"),
+	_audioDirectory(250, 150, 200, 45, "audio directory"),
 	_brirFilePath(250, 200, 200, 45, "BRIR file path"),
 	browseLeftPrescription(460, 50, 60, 45, "browse"),
 	browseRightPrescription(460, 100, 60, 45, "browse"),
@@ -64,7 +64,7 @@ void FltkWindow::runEventLoop() {
 }
 
 void FltkWindow::subscribe(EventListener * listener) {
-	listener = c;
+	this->listener = listener;
 }
 
 static std::string formatFilters(std::vector<std::string> filters) {
@@ -90,6 +90,17 @@ bool FltkWindow::browseCancelled() {
 	return browseResult == static_cast<int>(BrowseResult::cancelled);
 }
 
+std::string FltkWindow::browseForDirectory() {
+	Fl_Native_File_Chooser chooser{};
+	chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+	browseResult = chooser.show();
+	return chooser.filename();
+}
+
+void FltkWindow::setAudioDirectory(std::string d) {
+	_audioDirectory.value(d.c_str());
+}
+
 void FltkWindow::setLeftDslPrescriptionFilePath(std::string p) {
 	_leftPrescriptionFilePath.value(p.c_str());
 }
@@ -98,12 +109,12 @@ void FltkWindow::setRightDslPrescriptionFilePath(std::string p) {
 	_rightPrescriptionFilePath.value(p.c_str());
 }
 
-void FltkWindow::setAudioFilePath(std::string p) {
-	_audioFilePath.value(p.c_str());
-}
-
 void FltkWindow::setBrirFilePath(std::string p) {
 	_brirFilePath.value(p.c_str());
+}
+
+std::string FltkWindow::audioDirectory() const {
+	return _audioDirectory.value();
 }
 
 std::string FltkWindow::leftDslPrescriptionFilePath() const {
@@ -112,10 +123,6 @@ std::string FltkWindow::leftDslPrescriptionFilePath() const {
 
 std::string FltkWindow::rightDslPrescriptionFilePath() const {
 	return _rightPrescriptionFilePath.value();
-}
-
-std::string FltkWindow::audioFilePath() const {
-	return _audioFilePath.value();
 }
 
 std::string FltkWindow::brirFilePath() const {
