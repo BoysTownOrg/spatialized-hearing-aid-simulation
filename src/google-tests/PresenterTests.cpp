@@ -397,6 +397,11 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
 	confirmTestSetupDoesNotHideSetupView();
 }
 
+TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
+	view->setChunkSize("?");
+    EXPECT_FALSE(view->testerViewShown());
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
