@@ -105,6 +105,10 @@ void Presenter::confirmTestSetup() {
 		view->hideTestSetup();
 		view->showTesterView();
 	}
-	catch (const BadInput &) {
+	catch (const BadInput &e) {
+		view->showErrorDialog(e.what());
+	}
+	catch (const Model::RequestFailure &failure) {
+		view->showErrorDialog(failure.what());
 	}
 }

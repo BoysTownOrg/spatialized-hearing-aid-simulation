@@ -514,6 +514,7 @@ public:
 	}
 
 	void initializeTest(TestParameters) override {
+		throw RequestFailure{ message };
 	}
 
 	void playTrial() override {}
