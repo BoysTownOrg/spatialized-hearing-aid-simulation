@@ -367,6 +367,12 @@ TEST_F(
 	EXPECT_EQ(5, model->testParameters().chunkSize);
 }
 
+TEST_F(PresenterTests, confirmTestSetupWithInvalidInputDoesNotHideSetupView) {
+	view->setChunkSize("?");
+	view->confirmTestSetup();
+    EXPECT_FALSE(view->testSetupHidden());
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
