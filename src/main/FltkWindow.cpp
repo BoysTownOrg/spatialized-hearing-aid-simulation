@@ -55,7 +55,7 @@ void FltkWindow::populateAudioDeviceMenu(std::vector<std::string> items) {
 	_audioDevice.value(0);
 }
 
-std::string FltkWindow::audioDevice() const {
+std::string FltkWindow::audioDevice() {
 	return _audioDevice.text();
 }
 
@@ -113,39 +113,39 @@ void FltkWindow::setBrirFilePath(std::string p) {
 	_brirFilePath.value(p.c_str());
 }
 
-std::string FltkWindow::audioDirectory() const {
+std::string FltkWindow::audioDirectory() {
 	return _audioDirectory.value();
 }
 
-std::string FltkWindow::leftDslPrescriptionFilePath() const {
+std::string FltkWindow::leftDslPrescriptionFilePath() {
 	return _leftPrescriptionFilePath.value();
 }
 
-std::string FltkWindow::rightDslPrescriptionFilePath() const {
+std::string FltkWindow::rightDslPrescriptionFilePath() {
 	return _rightPrescriptionFilePath.value();
 }
 
-std::string FltkWindow::brirFilePath() const {
+std::string FltkWindow::brirFilePath() {
 	return _brirFilePath.value();
 }
 
-std::string FltkWindow::level_dB_Spl() const {
+std::string FltkWindow::level_dB_Spl() {
 	return _level_dB_Spl.value();
 }
 
-std::string FltkWindow::attack_ms() const {
+std::string FltkWindow::attack_ms() {
 	return _attack_ms.value();
 }
 
-std::string FltkWindow::release_ms() const {
+std::string FltkWindow::release_ms() {
 	return _release_ms.value();
 }
 
-std::string FltkWindow::windowSize() const {
+std::string FltkWindow::windowSize() {
 	return _windowSize.value();
 }
 
-std::string FltkWindow::chunkSize() const {
+std::string FltkWindow::chunkSize() {
 	return _chunkSize.value();
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <presentation/Presenter.h>
+#include <presentation/View.h>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Int_Input.H>
@@ -43,16 +43,16 @@ public:
 	void setLeftDslPrescriptionFilePath(std::string) override;
 	void setRightDslPrescriptionFilePath(std::string) override;
 	void setBrirFilePath(std::string) override;
-	std::string audioDirectory() const override;
-	std::string leftDslPrescriptionFilePath() const override;
-	std::string rightDslPrescriptionFilePath() const override;
-	std::string brirFilePath() const override;
-	std::string audioDevice() const override;
-	std::string level_dB_Spl() const override;
-	std::string attack_ms() const override;
-	std::string release_ms() const override;
-	std::string windowSize() const override;
-	std::string chunkSize() const override;
+	std::string audioDirectory() override;
+	std::string leftDslPrescriptionFilePath() override;
+	std::string rightDslPrescriptionFilePath() override;
+	std::string brirFilePath() override;
+	std::string audioDevice() override;
+	std::string level_dB_Spl() override;
+	std::string attack_ms() override;
+	std::string release_ms() override;
+	std::string windowSize() override;
+	std::string chunkSize() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
 
