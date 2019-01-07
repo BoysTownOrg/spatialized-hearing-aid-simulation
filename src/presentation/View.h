@@ -14,6 +14,7 @@ public:
 	virtual void play() = 0;
 	virtual void newTest() = 0;
 	virtual void confirmTestSetup() = 0;
+	virtual void playTrial() = 0;
 };
 
 class View {

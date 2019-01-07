@@ -6,6 +6,7 @@ class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
 	PlayRequest _request{};
 	TestParameters _testParameters{};
+	bool _testComplete{};
 public:
 	const PlayRequest &request() const {
 		return _request;
@@ -28,6 +29,10 @@ public:
 
 	void initializeTest(TestParameters p) override {
 		_testParameters = std::move(p);
+	}
+
+	void setTestIncomplete() {
+		_testComplete = false;
 	}
 };
 
@@ -53,6 +58,7 @@ class ViewStub : public View {
 	bool _testSetupShown{};
 	bool _testSetupHidden{};
 	bool _testerViewShown{};
+	bool _testerViewHidden{};
 public:
 	void subscribe(EventListener * listener) override {
 		_listener = listener;
@@ -247,6 +253,14 @@ public:
 
 	void showTesterView() override {
 		_testerViewShown = true;
+	}
+
+	void playTrial() {
+		_listener->playTrial();
+	}
+
+	bool testerViewHidden() const {
+		return _testerViewHidden;
 	}
 };
 

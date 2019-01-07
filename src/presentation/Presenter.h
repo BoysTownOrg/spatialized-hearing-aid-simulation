@@ -22,6 +22,7 @@ public:
 	PRESENTATION_API void play() override;
 	PRESENTATION_API void newTest() override;
 	PRESENTATION_API void confirmTestSetup() override;
+	void playTrial() override;
 
 private:
 	RUNTIME_ERROR(BadInput);
