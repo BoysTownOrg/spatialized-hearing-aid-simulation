@@ -306,6 +306,12 @@ protected:
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testerViewShown());
 	}
+
+	void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
+		view->setChunkSize(s);
+		view->confirmTestSetup();
+		assertEqual("'" + s + "' is not a valid chunk size.", view->errorMessage());
+	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -492,9 +498,8 @@ TEST_F(PresenterTests, playingTrialPlaysTrial) {
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
-	view->setChunkSize("a");
-	view->confirmTestSetup();
-	assertEqual("'a' is not a valid chunk size.", view->errorMessage());
+	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+		confirmTestSetupWithChunkSizeShowsErrorMessage(s);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
