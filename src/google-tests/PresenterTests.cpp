@@ -216,12 +216,12 @@ protected:
 	PresenterTests() : presenter{ model, view } {}
 };
 
-TEST_F(PresenterTests, constructorSetsItself) {
+TEST_F(PresenterTests, subscribesToViewEvents) {
 	EXPECT_EQ(&presenter, view->listener());
 }
 
-TEST_F(PresenterTests, loopRunsEventLoop) {
-	presenter.loop();
+TEST_F(PresenterTests, runRunsEventLoop) {
+	presenter.run();
 	EXPECT_TRUE(view->runningEventLoop());
 }
 

@@ -32,5 +32,5 @@ int main() {
 		),
 		std::make_shared<FltkWindow>()
 	};
-	presenter.loop();
+	presenter.run();
 }

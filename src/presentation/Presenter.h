@@ -14,7 +14,7 @@ public:
 	PRESENTATION_API Presenter(
 		std::shared_ptr<Model> model, 
 		std::shared_ptr<View> view);
-	PRESENTATION_API void loop();
+	PRESENTATION_API void run();
 	PRESENTATION_API void browseForLeftDslPrescription() override;
 	PRESENTATION_API void browseForRightDslPrescription() override;
 	PRESENTATION_API void browseForAudio() override;

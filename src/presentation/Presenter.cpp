@@ -11,7 +11,7 @@ Presenter::Presenter(
 	this->view->populateAudioDeviceMenu(this->model->audioDeviceDescriptions());
 }
 
-void Presenter::loop() {
+void Presenter::run() {
 	view->runEventLoop();
 }
 
