@@ -5,6 +5,7 @@
 class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
 	PlayRequest _request{};
+	TestParameters _testParameters{};
 public:
 	const PlayRequest &request() const {
 		return _request;
@@ -12,6 +13,9 @@ public:
 
 	void play(PlayRequest request) override {
 		_request = std::move(request);
+	}
+	const TestParameters &testParameters() const {
+		return _testParameters;
 	}
 
 	void setAudioDeviceDescriptions(std::vector<std::string> d) {
