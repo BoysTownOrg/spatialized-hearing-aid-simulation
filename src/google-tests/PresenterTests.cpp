@@ -312,6 +312,12 @@ protected:
 		view->confirmTestSetup();
 		assertEqual("'" + s + "' is not a valid chunk size.", view->errorMessage());
 	}
+
+	void confirmTestSetupWithWindowSizeShowsErrorMessage(std::string s) {
+		view->setWindowSize(s);
+		view->confirmTestSetup();
+		assertEqual("'" + s + "' is not a valid window size.", view->errorMessage());
+	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -503,9 +509,8 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
-	view->setWindowSize("a");
-	view->confirmTestSetup();
-	assertEqual("'a' is not a valid window size.", view->errorMessage());
+	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+		confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
@@ -572,27 +577,4 @@ TEST(PresenterErrorTests, nonFloatsThrowRequestFailures) {
 			view.setRelease_ms("c");
 		},
 		"'c' is not a valid release time.");
-}
-
-static void expectBadWindowSize(std::string size) {
-	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-		[=](ViewStub & view) {
-			view.setWindowSize(size);
-		},
-		"'" + size + "' is not a valid window size.");
-}
-
-static void expectBadChunkSize(std::string size) {
-	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
-		[=](ViewStub & view) {
-			view.setChunkSize(size);
-		},
-		"'" + size + "' is not a valid chunk size.");
-}
-
-TEST(PresenterErrorTests, nonPositiveIntegersThrowRequestFailures) {
-	for (const auto s : std::vector<std::string>{ "0.1", "-1" }) {
-		expectBadWindowSize(s);
-		expectBadChunkSize(s);
-	}
 }
