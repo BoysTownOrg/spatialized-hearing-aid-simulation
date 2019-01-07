@@ -56,6 +56,10 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() {
 		return model.audioDeviceDescriptions();
 	}
+
+	void initializeTest() {
+		model.initializeTest({});
+	}
 };
 
 class PlayAudioModelTestCase : public ::testing::TestCase {};
