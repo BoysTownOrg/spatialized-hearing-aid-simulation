@@ -111,6 +111,9 @@ void PlayAudioModel::initializeTest(TestParameters p) {
 }
 
 void PlayAudioModel::playTrial() {
+	device->closeStream();
+	device->openStream({});
+	device->startStream();
 }
 
 void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
