@@ -206,6 +206,14 @@ public:
 	std::string audioDirectory() const {
 		return _audioDirectory;
 	}
+
+	std::string browseForDirectory() override {
+		return _browseDirectory;
+	}
+
+	void setAudioDirectory(std::string d) override {
+		_audioDirectory = std::move(d);
+	}
 };
 
 class PresenterFacade {

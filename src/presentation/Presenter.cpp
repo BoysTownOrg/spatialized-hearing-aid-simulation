@@ -28,9 +28,9 @@ void Presenter::browseForRightDslPrescription() {
 }
 
 void Presenter::browseForAudio() {
-	browseAndUpdateIfNotCancelled(
-		{ "*.wav" },
-		[=](std::string p) { this->view->setAudioFilePath(p); });
+	const auto directory = view->browseForDirectory();
+	if (!view->browseCancelled())
+		view->setAudioDirectory(directory);
 }
 
 void Presenter::browseForBrir() {

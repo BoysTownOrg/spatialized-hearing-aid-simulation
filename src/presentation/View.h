@@ -12,10 +12,12 @@ public:
 	virtual void setPresenter(Presenter *) = 0;
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
+	virtual std::string browseForDirectory() = 0;
 	virtual bool browseCancelled() = 0;
 	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
+	virtual void setAudioDirectory(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string leftDslPrescriptionFilePath() const = 0;
 	virtual std::string rightDslPrescriptionFilePath() const = 0;
