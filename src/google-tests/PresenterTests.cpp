@@ -188,10 +188,6 @@ public:
 		return _chunkSize;
 	}
 
-	void play() {
-		_listener->play();
-	}
-
 	std::string errorMessage() const {
 		return _errorMessage;
 	}
@@ -523,37 +519,37 @@ public:
 	void playTrial() override {}
 };
 
-TEST(PresenterErrorTests, requestFailureShowsErrorMessage) {
+TEST(PresenterErrorTests, initializationFailureShowsErrorMessage) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ErrorModel>("error.");
 	Presenter presenter{ model, view };
-	view->play();
+	view->confirmTestSetup();
 	assertEqual("error.", view->errorMessage());
 }
 
-static void expectViewSettingYieldsErrorMessageOnPlay(
+static void expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 	std::function<void(ViewStub &)> transformation,
 	std::string message)
 {
 	const auto view = std::make_shared<ViewStub>();
 	Presenter presenter{ std::make_shared<ModelStub>(), view };
 	transformation(*view);
-	view->play();
+	view->confirmTestSetup();
 	assertEqual(message, view->errorMessage());
 }
 
 TEST(PresenterErrorTests, nonFloatsThrowRequestFailures) {
-	expectViewSettingYieldsErrorMessageOnPlay(
+	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 		[](ViewStub & view) {
 			view.setLevel_dB_Spl("a");
 		},
 		"'a' is not a valid level.");
-	expectViewSettingYieldsErrorMessageOnPlay(
+	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 		[](ViewStub & view) {
 			view.setAttack_ms("b");
 		},
 		"'b' is not a valid attack time.");
-	expectViewSettingYieldsErrorMessageOnPlay(
+	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 		[](ViewStub & view) {
 			view.setRelease_ms("c");
 		},
@@ -561,7 +557,7 @@ TEST(PresenterErrorTests, nonFloatsThrowRequestFailures) {
 }
 
 static void expectBadWindowSize(std::string size) {
-	expectViewSettingYieldsErrorMessageOnPlay(
+	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 		[=](ViewStub & view) {
 			view.setWindowSize(size);
 		},
@@ -569,7 +565,7 @@ static void expectBadWindowSize(std::string size) {
 }
 
 static void expectBadChunkSize(std::string size) {
-	expectViewSettingYieldsErrorMessageOnPlay(
+	expectViewSettingYieldsErrorMessageOnConfirmTestSetup(
 		[=](ViewStub & view) {
 			view.setChunkSize(size);
 		},

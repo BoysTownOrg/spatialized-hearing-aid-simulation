@@ -19,7 +19,6 @@ public:
 	PRESENTATION_API void browseForRightDslPrescription() override;
 	PRESENTATION_API void browseForAudio() override;
 	PRESENTATION_API void browseForBrir() override;
-	PRESENTATION_API void play() override;
 	PRESENTATION_API void newTest() override;
 	PRESENTATION_API void confirmTestSetup() override;
 	void playTrial() override;

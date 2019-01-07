@@ -48,29 +48,6 @@ void Presenter::browseAndUpdateIfNotCancelled(
 		update(filePath);
 }
 
-void Presenter::play() {
-	try {
-		Model::PlayRequest request;
-		request.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-		request.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-		request.brirFilePath = view->brirFilePath();
-		request.audioDirectory = view->audioDirectory();
-		request.audioDevice = view->audioDevice();
-		request.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		request.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-		request.release_ms = convertToDouble(view->release_ms(), "release time");
-		request.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		request.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		model->play(request);
-	}
-	catch (const BadInput &e) {
-		view->showErrorDialog(e.what());
-	}
-	catch (const Model::RequestFailure &failure) {
-		view->showErrorDialog(failure.what());
-	}
-}
-
 static std::string badInputMessage(std::string x, std::string identifier) {
 	return { "'" + x + "' is not a valid " + identifier + "." };
 }
