@@ -15,11 +15,11 @@ public:
 		std::shared_ptr<Model> model, 
 		std::shared_ptr<View> view);
 	PRESENTATION_API void loop();
-	PRESENTATION_API void browseForLeftDslPrescription();
-	PRESENTATION_API void browseForRightDslPrescription();
-	PRESENTATION_API void browseForAudio();
-	PRESENTATION_API void browseForBrir();
-	PRESENTATION_API void play();
+	PRESENTATION_API void browseForLeftDslPrescription() override;
+	PRESENTATION_API void browseForRightDslPrescription() override;
+	PRESENTATION_API void browseForAudio() override;
+	PRESENTATION_API void browseForBrir() override;
+	PRESENTATION_API void play() override;
 
 private:
 	RUNTIME_ERROR(BadInput);
