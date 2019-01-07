@@ -291,13 +291,13 @@ TEST(
 
 TEST(
 	PresenterTestCase,
-	browseForAudioUpdatesAudioFilePath)
+	browseForAudioDirectoryUpdatesAudioDirectory)
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
-	view->setBrowseFilePath("a");
+	view->setBrowseDirectory("a");
 	view->browseForAudio();
-	assertEqual("a", view->audioFilePath());
+	assertEqual("a", view->audioDirectory());
 }
 
 TEST(
