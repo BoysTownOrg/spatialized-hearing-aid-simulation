@@ -28,7 +28,6 @@ class MockView : public View {
 	std::vector<std::string> _audioDeviceMenuItems{};
 	std::string _leftDslPrescriptionFilePath{};
 	std::string _rightDslPrescriptionFilePath{};
-	std::string _audioFilePath{};
 	std::string _brirFilePath{};
 	std::string _audioDevice{};
 	std::string _browseFilePath{};
@@ -105,14 +104,6 @@ public:
 
 	void browseForAudio() {
 		_presenter->browseForAudio();
-	}
-
-	void setAudioFilePath(std::string p) override {
-		_audioFilePath = p;
-	}
-
-	std::string audioFilePath() const {
-		return _audioFilePath;
 	}
 
 	void browseForBrir() {

@@ -16,7 +16,6 @@ public:
 	virtual bool browseCancelled() = 0;
 	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
-	virtual void setAudioFilePath(std::string) = 0;
 	virtual void setAudioDirectory(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string leftDslPrescriptionFilePath() const = 0;
