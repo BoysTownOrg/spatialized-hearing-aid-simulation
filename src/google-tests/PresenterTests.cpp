@@ -309,14 +309,17 @@ protected:
 
 	void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
 		view->setChunkSize(s);
+		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid chunk size.");
+	}
+
+	void confirmTestSetupShowsErrorMessage(std::string s) {
 		view->confirmTestSetup();
-		assertEqual("'" + s + "' is not a valid chunk size.", view->errorMessage());
+		assertEqual(std::move(s), view->errorMessage());
 	}
 
 	void confirmTestSetupWithWindowSizeShowsErrorMessage(std::string s) {
 		view->setWindowSize(s);
-		view->confirmTestSetup();
-		assertEqual("'" + s + "' is not a valid window size.", view->errorMessage());
+		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid window size.");
 	}
 };
 
@@ -504,12 +507,12 @@ TEST_F(PresenterTests, playingTrialPlaysTrial) {
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
-	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+	for (auto s : std::vector<std::string>{ "a", "0.1", "-1" })
 		confirmTestSetupWithChunkSizeShowsErrorMessage(s);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
-	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+	for (auto s : std::vector<std::string>{ "a", "0.1", "-1" })
 		confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 }
 
