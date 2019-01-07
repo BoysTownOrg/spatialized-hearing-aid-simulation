@@ -94,12 +94,12 @@ double Presenter::convertToDouble(
 	}
 }
 
-static bool onlyContainsDigits(const std::string s) {
+static bool containsOnlyDigits(std::string s) {
 	return s.find_first_not_of("0123456789") == std::string::npos;
 }
 
 int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
-	if (!onlyContainsDigits(x))
+	if (!containsOnlyDigits(x))
 		throw BadInput{ badInputMessage(x, identifier) };
 	try {
 		return std::stoi(x);

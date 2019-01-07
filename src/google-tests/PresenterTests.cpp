@@ -4,18 +4,12 @@
 
 class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
-	PlayRequest _request{};
 	TestParameters _testParameters{};
 	bool _testComplete{};
 	bool _trialPlayed{};
 public:
-	const PlayRequest &request() const {
-		return _request;
-	}
+	void play(PlayRequest) override {}
 
-	void play(PlayRequest request) override {
-		_request = std::move(request);
-	}
 	const TestParameters &testParameters() const {
 		return _testParameters;
 	}
@@ -48,19 +42,19 @@ public:
 class ViewStub : public View {
 	std::vector<std::string> _browseFilters{};
 	std::vector<std::string> _audioDeviceMenuItems{};
+	std::string _audioDirectory{};
 	std::string _leftDslPrescriptionFilePath{};
 	std::string _rightDslPrescriptionFilePath{};
 	std::string _brirFilePath{};
 	std::string _audioDevice{};
-	std::string _browseFilePath{};
 	std::string _level_dB_Spl{ "0" };
 	std::string _attack_ms{ "0" };
 	std::string _release_ms{ "0" };
 	std::string _windowSize{ "0" };
 	std::string _chunkSize{ "0" };
 	std::string _errorMessage{};
+	std::string _browseFilePath{};
 	std::string _browseDirectory{};
-	std::string _audioDirectory{};
 	EventListener *_listener{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -85,9 +79,9 @@ public:
 		return _runningEventLoop;
 	}
 
-	virtual std::string browseForFile(
-		std::vector<std::string> filters) override 
-	{
+	std::string browseForFile(
+		std::vector<std::string> filters
+	) override {
 		_browseFilters = std::move(filters);
 		return _browseFilePath;
 	}
