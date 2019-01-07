@@ -222,15 +222,20 @@ public:
 	}
 };
 
-class PresenterTestCase : public ::testing::TestCase {};
+class PresenterTests : public ::testing::Test {
+protected:
+	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
+	std::shared_ptr<ModelStub> model = std::make_shared<ModelStub>();
+	Presenter presenter;
 
-TEST(PresenterTestCase, constructorSetsItself) {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
-	EXPECT_EQ(presenter.get(), view->presenter());
+	PresenterTests() : presenter{ model, view } {}
+};
+
+TEST_F(PresenterTests, constructorSetsItself) {
+	EXPECT_EQ(&presenter, view->presenter());
 }
 
-TEST(PresenterTestCase, constructorPopulatesAudioDeviceMenu) {
+TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
 	model->setAudioDeviceDescriptions({ "a", "b", "c" });
@@ -238,19 +243,15 @@ TEST(PresenterTestCase, constructorPopulatesAudioDeviceMenu) {
 	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
 }
 
-TEST(PresenterTestCase, loopRunsEventLoop) {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
+TEST_F(PresenterTests, loopRunsEventLoop) {
 	presenter.loop();
 	EXPECT_TRUE(view->runningEventLoop());
 }
 
-TEST(
-	PresenterTestCase, 
+TEST_F(
+	PresenterTests, 
 	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) 
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
 	view->setBrowseCancelled();
@@ -260,36 +261,30 @@ TEST(
 	assertEqual("b", view->rightDslPrescriptionFilePath());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setAudioDirectory("a");
 	view->setBrowseCancelled();
 	view->browseForAudio();
 	assertEqual("a", view->audioDirectory());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	cancellingBrowseForBrirDoesNotChangeBrirFilePath)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setBrirFilePath("a");
 	view->setBrowseCancelled();
 	view->browseForBrir();
 	assertEqual("a", view->brirFilePath());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
 	assertEqual("a", view->leftDslPrescriptionFilePath());
@@ -298,45 +293,36 @@ TEST(
 	assertEqual("b", view->rightDslPrescriptionFilePath());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	browseForAudioDirectoryUpdatesAudioDirectory)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setBrowseDirectory("a");
 	view->browseForAudio();
 	assertEqual("a", view->audioDirectory());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	browseForBrirUpdatesBrirFilePath)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
 	assertEqual("a", view->brirFilePath());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	browseForBrirFiltersWavFiles)
 {
-	const auto view = std::make_shared<ViewStub>();
-	PresenterFacade presenter{ view };
 	view->browseForBrir();
 	assertEqual({ "*.wav" }, view->browseFilters());
 }
 
-TEST(
-	PresenterTestCase,
+TEST_F(
+	PresenterTests,
 	playPassesParametersToPlayRequest)
 {
-	const auto view = std::make_shared<ViewStub>();
-	const auto model = std::make_shared<ModelStub>();
-	Presenter presenter{ model, view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioDirectory("c");
@@ -375,7 +361,7 @@ public:
 	}
 };
 
-TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
+TEST(PresenterErrorTests, requestFailureShowsErrorMessage) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ErrorModel>("error.");
 	Presenter presenter{ model, view };
@@ -394,7 +380,7 @@ static void expectViewSettingYieldsErrorMessageOnPlay(
 	assertEqual(message, view->errorMessage());
 }
 
-TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
+TEST(PresenterErrorTests, nonFloatsThrowRequestFailures) {
 	expectViewSettingYieldsErrorMessageOnPlay(
 		[](ViewStub & view) {
 			view.setLevel_dB_Spl("a");
@@ -428,7 +414,7 @@ static void expectBadChunkSize(std::string size) {
 		"'" + size + "' is not a valid chunk size.");
 }
 
-TEST(PresenterTestCase, nonPositiveIntegersThrowRequestFailures) {
+TEST(PresenterErrorTests, nonPositiveIntegersThrowRequestFailures) {
 	for (const auto s : std::vector<std::string>{ "a", "0.1", "-1" }) {
 		expectBadWindowSize(s);
 		expectBadChunkSize(s);
