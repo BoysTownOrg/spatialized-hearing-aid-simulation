@@ -248,6 +248,12 @@ protected:
 	Presenter presenter;
 
 	PresenterTests() : presenter{ model, view } {}
+
+	void confirmTestSetupWithChunkSizeDoesNotHideSetupView(std::string s) {
+		view->setChunkSize(std::move(s));
+		view->confirmTestSetup();
+		EXPECT_FALSE(view->testSetupHidden());
+	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -368,9 +374,7 @@ TEST_F(
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidInputDoesNotHideSetupView) {
-	view->setChunkSize("?");
-	view->confirmTestSetup();
-    EXPECT_FALSE(view->testSetupHidden());
+	confirmTestSetupWithChunkSizeDoesNotHideSetupView("?");
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
