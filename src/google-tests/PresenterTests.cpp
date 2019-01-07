@@ -111,7 +111,7 @@ public:
 		_audioFilePath = p;
 	}
 
-	std::string audioFilePath() const override {
+	std::string audioFilePath() const {
 		return _audioFilePath;
 	}
 
