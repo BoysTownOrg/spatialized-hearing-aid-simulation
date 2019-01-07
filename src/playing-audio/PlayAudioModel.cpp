@@ -95,8 +95,9 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 	}
 }
 
-void PlayAudioModel::initializeTest(TestParameters)
-{
+void PlayAudioModel::initializeTest(TestParameters) {
+	if (device->failed())
+		throw TestInitializationFailure{ device->errorMessage() };
 }
 
 void PlayAudioModel::playTrial() {
