@@ -404,6 +404,7 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
 	view->setChunkSize("?");
+    view->confirmTestSetup();
     EXPECT_FALSE(view->testerViewShown());
 }
 
