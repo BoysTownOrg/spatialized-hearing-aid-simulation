@@ -212,6 +212,31 @@ TEST(PlayAudioModelTestCase, playPassesParametersToFactories) {
 	EXPECT_EQ(7, device->streamParameters().sampleRate);
 }
 
+TEST(PlayAudioModelTestCase, initializeTestPassesParametersToProcessorFactory) {
+	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
+	PlayAudioModelFacade model{
+		processorFactory
+	};
+	Model::TestParameters p;
+	p.leftDslPrescriptionFilePath = "a";
+	p.rightDslPrescriptionFilePath = "b";
+	p.brirFilePath = "d";
+	p.level_dB_Spl = 1;
+	p.attack_ms = 2;
+	p.release_ms = 3;
+	p.windowSize = 4;
+	p.chunkSize = 5;
+	model.initializeTest(p);
+	assertEqual("a", processorFactory->parameters().leftDslPrescriptionFilePath);
+	assertEqual("b", processorFactory->parameters().rightDslPrescriptionFilePath);
+	assertEqual("d", processorFactory->parameters().brirFilePath);
+	EXPECT_EQ(1, processorFactory->parameters().level_dB_Spl);
+	EXPECT_EQ(2, processorFactory->parameters().attack_ms);
+	EXPECT_EQ(3, processorFactory->parameters().release_ms);
+	EXPECT_EQ(4, processorFactory->parameters().windowSize);
+	EXPECT_EQ(5, processorFactory->parameters().chunkSize);
+}
+
 TEST(PlayAudioModelTestCase, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	const auto device = std::make_shared<AudioDeviceStub>();
 	const auto reader = std::make_shared<AudioFrameReaderStub>();
