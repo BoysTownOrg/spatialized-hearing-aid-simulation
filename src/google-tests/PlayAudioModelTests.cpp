@@ -120,6 +120,30 @@ TEST(
 	assertPlayThrowsRequestError(model, "error.");
 }
 
+static void assertInitializeTestThrowsInitializationFailure(
+	PlayAudioModelFacade &model, 
+	std::string errorMessage
+) {
+	try {
+		model.initializeTest();
+		FAIL() << "Expected PlayAudioModel::TestInitializationFailure";
+	}
+	catch (const PlayAudioModel::TestInitializationFailure &e) {
+		assertEqual(errorMessage, e.what());
+	}
+}
+
+TEST(
+	PlayAudioModelTestCase,
+	initializeTestThrowsInitializationFailureWhenDeviceFails
+) {
+	const auto device = std::make_shared<AudioDeviceStub>();
+	PlayAudioModelFacade model{ device };
+	device->fail();
+	device->setErrorMessage("error.");
+	assertInitializeTestThrowsInitializationFailure(model, "error.");
+}
+
 TEST(
 	PlayAudioModelTestCase,
 	playThrowsRequestErrorWhenReaderFactoryThrowsCreateError)
