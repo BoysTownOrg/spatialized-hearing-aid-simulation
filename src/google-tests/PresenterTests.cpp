@@ -86,7 +86,7 @@ public:
 		_leftDslPrescriptionFilePath = std::move(p);
 	}
 
-	std::string leftDslPrescriptionFilePath() const override {
+	std::string leftDslPrescriptionFilePath() override {
 		return _leftDslPrescriptionFilePath;
 	}
 
@@ -94,7 +94,7 @@ public:
 		_listener->browseForRightDslPrescription();
 	}
 
-	std::string rightDslPrescriptionFilePath() const override {
+	std::string rightDslPrescriptionFilePath() override {
 		return _rightDslPrescriptionFilePath;
 	}
 
@@ -114,7 +114,7 @@ public:
 		_brirFilePath = std::move(p);
 	}
 
-	std::string brirFilePath() const override {
+	std::string brirFilePath() override {
 		return _brirFilePath;
 	}
 
@@ -126,7 +126,7 @@ public:
 		_level_dB_Spl = std::move(level);
 	}
 
-	std::string level_dB_Spl() const override {
+	std::string level_dB_Spl() override {
 		return _level_dB_Spl;
 	}
 
@@ -134,7 +134,7 @@ public:
 		_attack_ms = std::move(a);
 	}
 
-	std::string attack_ms() const override {
+	std::string attack_ms() override {
 		return _attack_ms;
 	}
 
@@ -142,7 +142,7 @@ public:
 		_release_ms = std::move(r);
 	}
 
-	std::string release_ms() const override {
+	std::string release_ms() override {
 		return _release_ms;
 	}
 
@@ -150,7 +150,7 @@ public:
 		_windowSize = std::move(s);
 	}
 
-	std::string windowSize() const override {
+	std::string windowSize() override {
 		return _windowSize;
 	}
 
@@ -158,7 +158,7 @@ public:
 		_chunkSize = std::move(s);
 	}
 
-	std::string chunkSize() const override {
+	std::string chunkSize() override {
 		return _chunkSize;
 	}
 
@@ -186,7 +186,7 @@ public:
 		_audioDevice = std::move(s);
 	}
 
-	std::string audioDevice() const override {
+	std::string audioDevice() override {
 		return _audioDevice;
 	}
 
@@ -194,7 +194,7 @@ public:
 		_browseDirectory = std::move(d);
 	}
 
-	std::string audioDirectory() const override {
+	std::string audioDirectory() override {
 		return _audioDirectory;
 	}
 
