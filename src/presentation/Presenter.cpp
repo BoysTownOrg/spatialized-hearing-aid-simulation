@@ -108,7 +108,7 @@ void Presenter::confirmTestSetup() {
 	catch (const BadInput &e) {
 		view->showErrorDialog(e.what());
 	}
-	catch (const Model::RequestFailure &failure) {
+	catch (const Model::TestInitializationFailure &failure) {
 		view->showErrorDialog(failure.what());
 	}
 }

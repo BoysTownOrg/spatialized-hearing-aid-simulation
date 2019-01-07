@@ -557,22 +557,20 @@ public:
 	explicit ErrorModel(std::string message) :
 		message{std::move(message)} {}
 
-	void play(PlayRequest) override {
-		throw RequestFailure{ message };
-	}
+	void play(PlayRequest) override {}
 
 	std::vector<std::string> audioDeviceDescriptions() override {
 		return {};
 	}
 
 	void initializeTest(TestParameters) override {
-		throw RequestFailure{ message };
+		throw TestInitializationFailure{ message };
 	}
 
 	void playTrial() override {}
 };
 
-TEST(PresenterErrorTests, initializationFailureShowsErrorMessage) {
+TEST(PresenterErrorTests, confirmTestSetupShowsErrorMessageWhenModelInitializationFails) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ErrorModel>("error.");
 	Presenter presenter{ model, view };
