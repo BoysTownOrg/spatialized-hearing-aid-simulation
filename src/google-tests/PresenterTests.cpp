@@ -271,14 +271,14 @@ TEST(
 
 TEST(
 	PresenterTestCase,
-	cancellingBrowseForAudioDoesNotChangeAudioFilePath)
+	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory)
 {
 	const auto view = std::make_shared<MockView>();
 	PresenterFacade presenter{ view };
-	view->setAudioFilePath("a");
+	view->setAudioDirectory("a");
 	view->setBrowseCancelled();
 	view->browseForAudio();
-	assertEqual("a", view->audioFilePath());
+	assertEqual("a", view->audioDirectory());
 }
 
 TEST(
