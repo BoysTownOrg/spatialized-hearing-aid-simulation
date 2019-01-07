@@ -12,6 +12,7 @@ public:
 	virtual void browseForAudio() = 0;
 	virtual void browseForBrir() = 0;
 	virtual void play() = 0;
+	virtual void newTest() = 0;
 };
 
 class View {

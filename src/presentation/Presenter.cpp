@@ -102,3 +102,7 @@ int Presenter::convertToPositiveInteger(std::string x, std::string identifier)
 		throw BadInput{ badInputMessage(x, identifier) };
 	}
 }
+
+void Presenter::newTest()
+{
+}

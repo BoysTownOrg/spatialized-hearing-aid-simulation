@@ -20,6 +20,7 @@ public:
 	PRESENTATION_API void browseForAudio() override;
 	PRESENTATION_API void browseForBrir() override;
 	PRESENTATION_API void play() override;
+	PRESENTATION_API void newTest() override;
 
 private:
 	RUNTIME_ERROR(BadInput);

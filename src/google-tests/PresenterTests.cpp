@@ -42,6 +42,7 @@ class ViewStub : public View {
 	EventListener *_listener{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
+	bool _testSetupShown{};
 public:
 	void subscribe(EventListener * listener) override {
 		_listener = listener;
@@ -204,6 +205,14 @@ public:
 
 	void setAudioDirectory(std::string d) override {
 		_audioDirectory = std::move(d);
+	}
+
+	void newTest() {
+		_listener->newTest();
+	}
+
+	bool testSetupShown() const {
+		return _testSetupShown;
 	}
 };
 
