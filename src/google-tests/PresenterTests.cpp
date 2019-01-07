@@ -52,6 +52,7 @@ class ViewStub : public View {
 	bool _browseCancelled{};
 	bool _testSetupShown{};
 	bool _testSetupHidden{};
+	bool _testerViewShown{};
 public:
 	void subscribe(EventListener * listener) override {
 		_listener = listener;
@@ -238,6 +239,10 @@ public:
 
 	void hideTestSetup() override {
 		_testSetupHidden = true;
+	}
+
+	bool testerViewShown() const {
+		return _testerViewShown;
 	}
 };
 
