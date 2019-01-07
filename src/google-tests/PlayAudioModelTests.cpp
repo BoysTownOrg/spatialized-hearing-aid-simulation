@@ -65,8 +65,8 @@ TEST(
 	}
 }
 
-TEST_F(PlayAudioModelTests, playFirstClosesStreamThenOpensThenStarts) {
-	model.play({});
+TEST_F(PlayAudioModelTests, playTrialFirstClosesStreamThenOpensThenStarts) {
+	model.playTrial();
 	assertEqual("close open start ", device->streamLog());
 }
 
