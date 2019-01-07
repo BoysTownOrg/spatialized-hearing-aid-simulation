@@ -48,6 +48,34 @@ void Presenter::browseAndUpdateIfNotCancelled(
 		update(filePath);
 }
 
+void Presenter::confirmTestSetup() {
+	Model::TestParameters p;
+	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	p.brirFilePath = view->brirFilePath();
+	p.audioDirectory = view->audioDirectory();
+	p.audioDevice = view->audioDevice();
+	try {
+		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		p.release_ms = convertToDouble(view->release_ms(), "release time");
+		p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	}
+	catch (const BadInput &e) {
+		view->showErrorDialog(e.what());
+		return;
+	}
+	try {
+		model->initializeTest(p);
+	}
+	catch (const Model::TestInitializationFailure &failure) {
+		view->showErrorDialog(failure.what());
+	}
+	view->hideTestSetup();
+	view->showTesterView();
+}
+
 static std::string badInputMessage(std::string x, std::string identifier) {
 	return { "'" + x + "' is not a valid " + identifier + "." };
 }
@@ -86,29 +114,4 @@ void Presenter::playTrial() {
 
 void Presenter::newTest() {
 	view->showTestSetup();
-}
-
-void Presenter::confirmTestSetup() {
-	try {
-		Model::TestParameters p;
-		p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-		p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-		p.brirFilePath = view->brirFilePath();
-		p.audioDirectory = view->audioDirectory();
-		p.audioDevice = view->audioDevice();
-		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-		p.release_ms = convertToDouble(view->release_ms(), "release time");
-		p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		model->initializeTest(p);
-		view->hideTestSetup();
-		view->showTesterView();
-	}
-	catch (const BadInput &e) {
-		view->showErrorDialog(e.what());
-	}
-	catch (const Model::TestInitializationFailure &failure) {
-		view->showErrorDialog(failure.what());
-	}
 }

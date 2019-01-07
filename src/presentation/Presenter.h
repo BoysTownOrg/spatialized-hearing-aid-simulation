@@ -15,12 +15,12 @@ public:
 		std::shared_ptr<Model> model, 
 		std::shared_ptr<View> view);
 	PRESENTATION_API void run();
-	PRESENTATION_API void browseForLeftDslPrescription() override;
-	PRESENTATION_API void browseForRightDslPrescription() override;
-	PRESENTATION_API void browseForAudio() override;
-	PRESENTATION_API void browseForBrir() override;
-	PRESENTATION_API void newTest() override;
-	PRESENTATION_API void confirmTestSetup() override;
+	void browseForLeftDslPrescription() override;
+	void browseForRightDslPrescription() override;
+	void browseForAudio() override;
+	void browseForBrir() override;
+	void newTest() override;
+	void confirmTestSetup() override;
 	void playTrial() override;
 
 private:
