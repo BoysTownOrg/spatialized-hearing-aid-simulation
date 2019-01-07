@@ -57,8 +57,8 @@ public:
 		return model.audioDeviceDescriptions();
 	}
 
-	void initializeTest() {
-		model.initializeTest({});
+	void initializeTest(Model::TestParameters p = {}) {
+		model.initializeTest(std::move(p));
 	}
 };
 
