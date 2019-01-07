@@ -71,6 +71,7 @@ void Presenter::confirmTestSetup() {
 	}
 	catch (const Model::TestInitializationFailure &failure) {
 		view->showErrorDialog(failure.what());
+		return;
 	}
 	view->hideTestSetup();
 	view->showTesterView();
