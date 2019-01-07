@@ -552,10 +552,12 @@ TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 }
 
 class ErrorModel : public Model {
-	std::string message;
+	std::string message{};
 public:
-	explicit ErrorModel(std::string message) :
-		message{std::move(message)} {}
+
+	void setErrorMessage(std::string s) {
+		message = std::move(s);
+	}
 
 	void play(PlayRequest) override {}
 
@@ -570,10 +572,17 @@ public:
 	void playTrial() override {}
 };
 
-TEST(PresenterErrorTests, confirmTestSetupShowsErrorMessageWhenModelInitializationFails) {
-	const auto view = std::make_shared<ViewStub>();
-	const auto model = std::make_shared<ErrorModel>("error.");
-	Presenter presenter{ model, view };
+class PresenterErrorTests : public ::testing::Test {
+protected:
+	std::shared_ptr<ErrorModel> model = std::make_shared<ErrorModel>();
+	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
+	Presenter presenter;
+
+	PresenterErrorTests() : presenter{ model, view } {}
+};
+
+TEST_F(PresenterErrorTests, confirmTestSetupShowsErrorMessageWhenModelInitializationFails) {
+	model->setErrorMessage("error.");
 	view->confirmTestSetup();
 	assertEqual("error.", view->errorMessage());
 }
