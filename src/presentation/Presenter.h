@@ -29,7 +29,12 @@ private:
 	void initializeModel();
 	void browseAndUpdateIfNotCancelled(
 		std::vector<std::string> filters,
-		std::function<void(std::string)>);
+		std::function<void(std::string)>
+	);
+	void applyIfBrowseNotCancelled(
+		std::string,
+		std::function<void(std::string)>
+	);
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);
 };

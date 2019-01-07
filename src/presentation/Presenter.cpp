@@ -16,36 +16,43 @@ void Presenter::run() {
 }
 
 void Presenter::browseForLeftDslPrescription() {
-	browseAndUpdateIfNotCancelled(
-		{ "*.json" },
-		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(p); });
+	applyIfBrowseNotCancelled(
+		view->browseForFile({ "*.json" }), 
+		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(std::move(p)); }
+	);
+}
+
+void Presenter::browseAndUpdateIfNotCancelled(
+	std::vector<std::string> filters,
+	std::function<void(std::string)> update
+) {
+	applyIfBrowseNotCancelled(view->browseForFile(filters), update);
+}
+
+void Presenter::applyIfBrowseNotCancelled(std::string s, std::function<void(std::string)> f) {
+	if (!view->browseCancelled())
+		f(s);
 }
 
 void Presenter::browseForRightDslPrescription() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.json" },
-		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(p); });
+		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(std::move(p)); }
+	);
 }
 
 void Presenter::browseForAudio() {
-	const auto directory = view->browseForDirectory();
-	if (!view->browseCancelled())
-		view->setAudioDirectory(directory);
+	applyIfBrowseNotCancelled(
+		view->browseForDirectory(), 
+		[=](std::string p) { this->view->setAudioDirectory(std::move(p)); }
+	);
 }
 
 void Presenter::browseForBrir() {
 	browseAndUpdateIfNotCancelled(
 		{ "*.wav" },
-		[=](std::string p) { this->view->setBrirFilePath(p); });
-}
-
-void Presenter::browseAndUpdateIfNotCancelled(
-	std::vector<std::string> filters,
-	std::function<void(std::string)> update)
-{
-	const auto filePath = view->browseForFile(filters);
-	if (!view->browseCancelled())
-		update(filePath);
+		[=](std::string p) { this->view->setBrirFilePath(std::move(p)); }
+	);
 }
 
 void Presenter::confirmTestSetup() {
