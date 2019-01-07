@@ -100,30 +100,6 @@ TEST(PlayAudioModelTestCase, playFirstClosesStreamThenOpensThenStarts) {
 	assertEqual("close open start ", device->streamLog());
 }
 
-static void assertPlayThrowsRequestError(
-	PlayAudioModelFacade &model, 
-	std::string errorMessage
-) {
-	try {
-		model.play();
-		FAIL() << "Expected PlayAudioModel::RequestFailure";
-	}
-	catch (const PlayAudioModel::RequestFailure &e) {
-		assertEqual(errorMessage, e.what());
-	}
-}
-
-TEST(
-	PlayAudioModelTestCase,
-	playThrowsRequestErrorWhenDeviceFailure)
-{
-	const auto device = std::make_shared<AudioDeviceStub>();
-	PlayAudioModelFacade model{ device };
-	device->fail();
-	device->setErrorMessage("error.");
-	assertPlayThrowsRequestError(model, "error.");
-}
-
 static void assertInitializeTestThrowsInitializationFailure(
 	PlayAudioModelFacade &model, 
 	std::string errorMessage
@@ -150,18 +126,18 @@ TEST(
 
 TEST(
 	PlayAudioModelTestCase,
-	playThrowsRequestErrorWhenReaderFactoryThrowsCreateError)
+	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError)
 {
 	PlayAudioModelFacade model{ std::make_shared<ErrorAudioFrameReaderFactory>("error.") };
-	assertPlayThrowsRequestError(model, "error.");
+	assertInitializeTestThrowsInitializationFailure(model, "error.");
 }
 
 TEST(
 	PlayAudioModelTestCase,
-	playThrowsRequestErrorWhenProcessorFactoryThrowsCreateError)
+	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
 {
 	PlayAudioModelFacade model{ std::make_shared<ErrorAudioFrameProcessorFactory>("error.") };
-	assertPlayThrowsRequestError(model, "error.");
+	assertInitializeTestThrowsInitializationFailure(model, "error.");
 }
 
 TEST(PlayAudioModelTestCase, playWhileStreamingDoesNotAlterCurrentStream) {
