@@ -38,6 +38,8 @@ class MockView : public View {
 	std::string _windowSize{ "0" };
 	std::string _chunkSize{ "0" };
 	std::string _errorMessage{};
+	std::string _browseDirectory{};
+	std::string _audioDirectory{};
 	Presenter *_presenter{};
 	bool _runningEventLoop{};
 	bool _browseCancelled{};
@@ -195,6 +197,14 @@ public:
 
 	std::string audioDevice() const override {
 		return _audioDevice;
+	}
+
+	void setBrowseDirectory(std::string d) {
+		_browseDirectory = std::move(d);
+	}
+
+	std::string audioDirectory() const {
+		return _audioDirectory;
 	}
 };
 
