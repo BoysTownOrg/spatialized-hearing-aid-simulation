@@ -254,6 +254,10 @@ protected:
 
 	PresenterTests() : presenter{ model, view } {}
 
+	void setInvalidChunkSize() {
+		view->setChunkSize("?");
+	}
+
 	void confirmTestSetupDoesNotHideSetupView() {
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testSetupHidden());
@@ -383,7 +387,7 @@ TEST_F(
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
-	view->setChunkSize("?");
+	setInvalidChunkSize();
 	confirmTestSetupDoesNotHideSetupView();
 }
 
@@ -408,7 +412,7 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
-	view->setChunkSize("?");
+	setInvalidChunkSize();
 	confirmTestSetupDoesNotShowTesterView();
 }
 
