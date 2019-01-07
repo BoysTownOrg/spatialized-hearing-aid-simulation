@@ -591,3 +591,8 @@ TEST_F(PresenterErrorTests, confirmTestSetupDoesNotShowTesterView) {
 	view->confirmTestSetup();
 	EXPECT_FALSE(view->testerViewShown());
 }
+
+TEST_F(PresenterErrorTests, confirmTestSetupDoesNotHideSetupView) {
+	view->confirmTestSetup();
+	EXPECT_FALSE(view->testSetupHidden());
+}
