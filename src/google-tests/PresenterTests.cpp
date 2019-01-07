@@ -331,16 +331,6 @@ TEST(
 
 TEST(
 	PresenterTestCase,
-	browseForAudioFiltersWavFiles)
-{
-	const auto view = std::make_shared<MockView>();
-	PresenterFacade presenter{ view };
-	view->browseForAudio();
-	assertEqual({ "*.wav" }, view->browseFilters());
-}
-
-TEST(
-	PresenterTestCase,
 	browseForBrirFiltersWavFiles)
 {
 	const auto view = std::make_shared<MockView>();
