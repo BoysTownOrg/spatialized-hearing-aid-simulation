@@ -258,6 +258,11 @@ protected:
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testSetupHidden());
 	}
+
+	void confirmTestSetupDoesNotShowTesterView() {
+		view->confirmTestSetup();
+		EXPECT_FALSE(view->testerViewShown());
+	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -404,8 +409,7 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
 	view->setChunkSize("?");
-    view->confirmTestSetup();
-    EXPECT_FALSE(view->testerViewShown());
+	confirmTestSetupDoesNotShowTesterView();
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
