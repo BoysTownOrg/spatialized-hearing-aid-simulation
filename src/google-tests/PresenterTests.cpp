@@ -2,7 +2,7 @@
 #include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
-class MockModel : public Model {
+class ModelStub : public Model {
 	PlayRequest _request{};
 	std::vector<std::string> _audioDeviceDescriptions{};
 public:
@@ -23,7 +23,7 @@ public:
 	}
 };
 
-class MockView : public View {
+class ViewStub : public View {
 	std::vector<std::string> _browseFilters{};
 	std::vector<std::string> _audioDeviceMenuItems{};
 	std::string _leftDslPrescriptionFilePath{};
@@ -211,7 +211,7 @@ class PresenterFacade {
 	Presenter presenter;
 public:
 	PresenterFacade(std::shared_ptr<View> view) :
-		presenter{ std::make_shared<MockModel>(), std::move(view) } {}
+		presenter{ std::make_shared<ModelStub>(), std::move(view) } {}
 
 	const Presenter *get() const {
 		return &presenter;
@@ -225,21 +225,21 @@ public:
 class PresenterTestCase : public ::testing::TestCase {};
 
 TEST(PresenterTestCase, constructorSetsItself) {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	EXPECT_EQ(presenter.get(), view->presenter());
 }
 
 TEST(PresenterTestCase, constructorPopulatesAudioDeviceMenu) {
-	const auto view = std::make_shared<MockView>();
-	const auto model = std::make_shared<MockModel>();
+	const auto view = std::make_shared<ViewStub>();
+	const auto model = std::make_shared<ModelStub>();
 	model->setAudioDeviceDescriptions({ "a", "b", "c" });
 	Presenter presenter{ model, view };
 	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
 }
 
 TEST(PresenterTestCase, loopRunsEventLoop) {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	presenter.loop();
 	EXPECT_TRUE(view->runningEventLoop());
@@ -249,7 +249,7 @@ TEST(
 	PresenterTestCase, 
 	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) 
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
@@ -264,7 +264,7 @@ TEST(
 	PresenterTestCase,
 	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setAudioDirectory("a");
 	view->setBrowseCancelled();
@@ -276,7 +276,7 @@ TEST(
 	PresenterTestCase,
 	cancellingBrowseForBrirDoesNotChangeBrirFilePath)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setBrirFilePath("a");
 	view->setBrowseCancelled();
@@ -288,7 +288,7 @@ TEST(
 	PresenterTestCase,
 	browseForDslPrescriptionUpdatesDslPrescriptionFilePath)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForLeftDslPrescription();
@@ -302,7 +302,7 @@ TEST(
 	PresenterTestCase,
 	browseForAudioDirectoryUpdatesAudioDirectory)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setBrowseDirectory("a");
 	view->browseForAudio();
@@ -313,7 +313,7 @@ TEST(
 	PresenterTestCase,
 	browseForBrirUpdatesBrirFilePath)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->setBrowseFilePath("a");
 	view->browseForBrir();
@@ -324,7 +324,7 @@ TEST(
 	PresenterTestCase,
 	browseForBrirFiltersWavFiles)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	view->browseForBrir();
 	assertEqual({ "*.wav" }, view->browseFilters());
@@ -334,8 +334,8 @@ TEST(
 	PresenterTestCase,
 	playPassesParametersToPlayRequest)
 {
-	const auto view = std::make_shared<MockView>();
-	const auto model = std::make_shared<MockModel>();
+	const auto view = std::make_shared<ViewStub>();
+	const auto model = std::make_shared<ModelStub>();
 	Presenter presenter{ model, view };
 	view->setLeftDslPrescriptionFilePath("a");
 	view->setRightDslPrescriptionFilePath("b");
@@ -376,7 +376,7 @@ public:
 };
 
 TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ErrorModel>("error.");
 	Presenter presenter{ model, view };
 	view->play();
@@ -384,10 +384,10 @@ TEST(PresenterTestCase, requestFailureShowsErrorMessage) {
 }
 
 static void expectViewSettingYieldsErrorMessageOnPlay(
-	std::function<void(MockView &)> transformation,
+	std::function<void(ViewStub &)> transformation,
 	std::string message)
 {
-	const auto view = std::make_shared<MockView>();
+	const auto view = std::make_shared<ViewStub>();
 	PresenterFacade presenter{ view };
 	transformation(*view);
 	view->play();
@@ -396,17 +396,17 @@ static void expectViewSettingYieldsErrorMessageOnPlay(
 
 TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
 	expectViewSettingYieldsErrorMessageOnPlay(
-		[](MockView & view) {
+		[](ViewStub & view) {
 			view.setLevel_dB_Spl("a");
 		},
 		"'a' is not a valid level.");
 	expectViewSettingYieldsErrorMessageOnPlay(
-		[](MockView & view) {
+		[](ViewStub & view) {
 			view.setAttack_ms("b");
 		},
 		"'b' is not a valid attack time.");
 	expectViewSettingYieldsErrorMessageOnPlay(
-		[](MockView & view) {
+		[](ViewStub & view) {
 			view.setRelease_ms("c");
 		},
 		"'c' is not a valid release time.");
@@ -414,7 +414,7 @@ TEST(PresenterTestCase, nonFloatsThrowRequestFailures) {
 
 static void expectBadWindowSize(std::string size) {
 	expectViewSettingYieldsErrorMessageOnPlay(
-		[=](MockView & view) {
+		[=](ViewStub & view) {
 			view.setWindowSize(size);
 		},
 		"'" + size + "' is not a valid window size.");
@@ -422,7 +422,7 @@ static void expectBadWindowSize(std::string size) {
 
 static void expectBadChunkSize(std::string size) {
 	expectViewSettingYieldsErrorMessageOnPlay(
-		[=](MockView & view) {
+		[=](ViewStub & view) {
 			view.setChunkSize(size);
 		},
 		"'" + size + "' is not a valid chunk size.");
