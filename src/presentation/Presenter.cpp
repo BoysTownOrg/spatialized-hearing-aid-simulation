@@ -54,7 +54,7 @@ void Presenter::play() {
 		request.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
 		request.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 		request.brirFilePath = view->brirFilePath();
-		request.audioFilePath = view->audioFilePath();
+		request.audioDirectory = view->audioDirectory();
 		request.audioDevice = view->audioDevice();
 		request.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 		request.attack_ms = convertToDouble(view->attack_ms(), "attack time");

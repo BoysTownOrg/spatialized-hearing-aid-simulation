@@ -203,7 +203,7 @@ public:
 		_browseDirectory = std::move(d);
 	}
 
-	std::string audioDirectory() const {
+	std::string audioDirectory() const override {
 		return _audioDirectory;
 	}
 
