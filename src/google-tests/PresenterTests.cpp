@@ -251,8 +251,17 @@ protected:
 
 	void confirmTestSetupWithChunkSizeDoesNotHideSetupView(std::string s) {
 		view->setChunkSize(std::move(s));
+		confirmTestSetupDoesNotHideSetupView();
+	}
+
+	void confirmTestSetupDoesNotHideSetupView() {
 		view->confirmTestSetup();
 		EXPECT_FALSE(view->testSetupHidden());
+	}
+	
+	void confirmTestSetupWithWindowSizeDoesNotHideSetupView(std::string s) {
+		view->setWindowSize(std::move(s));
+		confirmTestSetupDoesNotHideSetupView();
 	}
 };
 
@@ -375,6 +384,7 @@ TEST_F(
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidInputDoesNotHideSetupView) {
 	confirmTestSetupWithChunkSizeDoesNotHideSetupView("?");
+	confirmTestSetupWithWindowSizeDoesNotHideSetupView("a");
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
