@@ -7,6 +7,7 @@ class ModelStub : public Model {
 	PlayRequest _request{};
 	TestParameters _testParameters{};
 	bool _testComplete{};
+	bool _trialPlayed{};
 public:
 	const PlayRequest &request() const {
 		return _request;
@@ -33,6 +34,10 @@ public:
 
 	void setTestIncomplete() {
 		_testComplete = false;
+	}
+
+	bool trialPlayed() const {
+		return _trialPlayed;
 	}
 };
 
