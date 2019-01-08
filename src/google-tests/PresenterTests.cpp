@@ -5,6 +5,7 @@
 class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
 	TestParameters _testParameters{};
+	TrialRequest trialParameters_{};
 	bool _testComplete{};
 	bool _trialPlayed{};
 public:
@@ -38,6 +39,10 @@ public:
 
 	bool testComplete() override {
 		return _testComplete;
+	}
+
+	const TrialRequest &trialParameters() const {
+		return trialParameters_;
 	}
 };
 
@@ -447,7 +452,7 @@ TEST_F(
 	EXPECT_EQ(5, model->testParameters().chunkSize);
 }
 
-TEST_F(PresenterTests, DISABLED_playTrialPassesParametersToModel) {
+TEST_F(PresenterTests, playTrialPassesParametersToModel) {
 	view->setAudioDevice("e");
 	view->setLevel_dB_Spl("1.1");
 	view->playTrial();
