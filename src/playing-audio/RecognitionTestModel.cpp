@@ -42,10 +42,9 @@ void RecognitionTestModel::play(PlayRequest request) {
 	forProcessor.channels = frameReader->channels();
 	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.stimulusRms = computeStimulusRms(frameReader);
-	frameProcessor = makeProcessor(forProcessor);
+	makeProcessor(forProcessor);
 
 	frameReader->reset();
-	audio.resize(frameReader->channels());
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
 	device->setCallbackResultToContinue();
