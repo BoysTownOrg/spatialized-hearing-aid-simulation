@@ -63,6 +63,8 @@ void AudioPlayer::play(PlayRequest request) {
 	forProcessor.stimulusRms = computeStimulusRms(frameReader);
 	frameProcessor = makeProcessor(forProcessor);
 
+	frameReader->reset();
+
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.sampleRate = frameReader->sampleRate();
 	forStreaming.channels = frameReader->channels();
