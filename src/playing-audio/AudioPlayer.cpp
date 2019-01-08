@@ -59,3 +59,8 @@ void AudioPlayer::play(PlayRequest request) {
 	device->setCallbackResultToContinue();
 	device->startStream();
 }
+
+std::vector<std::string> AudioPlayer::audioDeviceDescriptions()
+{
+	return std::vector<std::string>();
+}

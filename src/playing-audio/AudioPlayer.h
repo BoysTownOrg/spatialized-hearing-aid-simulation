@@ -18,5 +18,6 @@ public:
 	PLAYING_AUDIO_API AudioPlayer(AudioDevice *, AudioFrameReaderFactory *, AudioFrameProcessorFactory *);
 	void fillStreamBuffer(void * channels, int frames) override;
 	void play(PlayRequest) override;
+	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions();
 };
 
