@@ -101,11 +101,19 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 		throw TestInitializationFailure{ device->errorMessage() };
 }
 
-void RecognitionTestModel::playTrial(PlayRequest) {
+void RecognitionTestModel::playTrial(PlayRequest request) {
+	frameReader = makeReader({});
+	AudioDevice::StreamParameters forStreaming;
+	forStreaming.sampleRate = frameReader->sampleRate();
+	forStreaming.channels = frameReader->channels();
+	for (int i = 0; i < device->count(); ++i)
+		if (device->description(i) == request.audioDevice)
+			forStreaming.deviceIndex = i;
+
 	if (device->streaming())
 		return;
 	device->closeStream();
-	device->openStream({});
+	device->openStream(forStreaming);
 	device->startStream();
 }
 
