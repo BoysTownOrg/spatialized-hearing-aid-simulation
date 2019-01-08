@@ -18,9 +18,14 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::playTrial(TrialParameters request) {
-	StimulusPlayer::PlayRequest adapted;
-	adapted.audioFilePath = list->next();
-	player->play(adapted);
+	try {
+		StimulusPlayer::PlayRequest adapted;
+		adapted.audioFilePath = list->next();
+		player->play(adapted);
+	}
+	catch (const StimulusPlayer::RequestFailure &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
