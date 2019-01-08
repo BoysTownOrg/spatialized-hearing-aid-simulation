@@ -126,10 +126,6 @@ protected:
 	}
 };
 
-TEST_F(RecognitionTestModelTests, constructorSetsItself) {
-	EXPECT_EQ(&model, device.controller());
-}
-
 TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts) {
 	model.playTrial({});
 	assertEqual("close open start ", device.streamLog());
