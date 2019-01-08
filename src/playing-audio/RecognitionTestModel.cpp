@@ -39,8 +39,6 @@ void RecognitionTestModel::play(PlayRequest request) {
 	frameReader = makeReader(request.audioFilePath);
 
 	AudioFrameProcessorFactory::Parameters forProcessor;
-	forProcessor.channels = frameReader->channels();
-	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.stimulusRms = computeStimulusRms(frameReader);
 	makeProcessor(forProcessor);
 

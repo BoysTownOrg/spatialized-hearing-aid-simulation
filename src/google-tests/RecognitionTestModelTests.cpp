@@ -17,17 +17,7 @@ protected:
 	std::shared_ptr<AudioFrameProcessorStubFactory> processorFactory =
 		std::make_shared<AudioFrameProcessorStubFactory>(processor);
 	RecognitionTestModel model{ device, readerFactory, processorFactory };
-
-	void assertPlayTrialThrowsRequestError(std::string errorMessage) {
-		try {
-			model.playTrial({});
-			FAIL() << "Expected RecognitionTestModel::RequestFailure";
-		}
-		catch (const RecognitionTestModel::RequestFailure &e) {
-			assertEqual(errorMessage, e.what());
-		}
-	}
-
+	
 	void assertInitializeTestThrowsInitializationFailure(
 		std::string errorMessage
 	) {
@@ -36,6 +26,16 @@ protected:
 			FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
 		}
 		catch (const RecognitionTestModel::TestInitializationFailure &e) {
+			assertEqual(errorMessage, e.what());
+		}
+	}
+
+	void assertPlayTrialThrowsRequestFailure(std::string errorMessage) {
+		try {
+			model.playTrial({});
+			FAIL() << "Expected RecognitionTestModel::RequestFailure";
+		}
+		catch (const RecognitionTestModel::RequestFailure &e) {
 			assertEqual(errorMessage, e.what());
 		}
 	}
@@ -72,11 +72,11 @@ TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts)
 
 TEST_F(
 	RecognitionTestModelTests,
-	playTrialThrowsRequestErrorWhenDeviceFails
+	playTrialThrowsRequestFailureWhenDeviceFails
 ) {
 	device->fail();
 	device->setErrorMessage("error.");
-	assertPlayTrialThrowsRequestError("error.");
+	assertPlayTrialThrowsRequestFailure("error.");
 }
 
 TEST(
