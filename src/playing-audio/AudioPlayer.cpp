@@ -46,7 +46,7 @@ void AudioPlayer::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 	
-	frameReader = readerFactory->make(request.audioFilePath);
+	frameReader = makeReader(request.audioFilePath);
 	audio.resize(frameReader->channels());
 
 	AudioFrameProcessorFactory::Parameters forProcessor;
@@ -61,7 +61,7 @@ void AudioPlayer::play(PlayRequest request) {
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
 	forProcessor.stimulusRms = computeStimulusRms(frameReader);
-	frameProcessor = processorFactory->make(forProcessor);
+	frameProcessor = makeProcessor(forProcessor);
 
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.sampleRate = frameReader->sampleRate();
@@ -75,6 +75,24 @@ void AudioPlayer::play(PlayRequest request) {
 	device->openStream(forStreaming);
 	device->setCallbackResultToContinue();
 	device->startStream();
+}
+
+std::shared_ptr<AudioFrameReader> AudioPlayer::makeReader(std::string filePath) {
+	try {
+		return readerFactory->make(filePath);
+	}
+	catch (const AudioFrameReaderFactory::CreateError &e) {
+		throw RequestFailure{ e.what() };
+	}
+}
+
+std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
+	try {
+		return processorFactory->make(p);
+	}
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
 
 std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {

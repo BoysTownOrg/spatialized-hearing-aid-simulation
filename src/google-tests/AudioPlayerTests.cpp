@@ -217,7 +217,7 @@ TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
 
 TEST(
 	AudioPlayerOtherTests,
-	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
+	playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
 ) {
 	ErrorAudioFrameReaderFactory factory{ "error." };
 	AudioPlayerFacade player{ &factory };
@@ -232,7 +232,7 @@ TEST(
 
 TEST(
 	AudioPlayerOtherTests,
-	playThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
+	playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
 ) {
 	ErrorAudioFrameProcessorFactory factory{ "error." };
 	AudioPlayerFacade player{ &factory };
