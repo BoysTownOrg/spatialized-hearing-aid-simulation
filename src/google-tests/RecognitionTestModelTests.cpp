@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include <playing-audio/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 
 class StimulusListStub : public StimulusList {

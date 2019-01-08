@@ -22,7 +22,7 @@ class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
-	RUNTIME_ERROR(RequestFailure);
+
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -36,6 +36,7 @@ public:
 		int chunkSize;
 	};
 	virtual void play(PlayRequest) = 0;
+	RUNTIME_ERROR(RequestFailure);
 };
 
 class RecognitionTestModel : public Model {

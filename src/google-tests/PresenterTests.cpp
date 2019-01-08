@@ -432,8 +432,6 @@ TEST_F(
 	view->setRightDslPrescriptionFilePath("b");
 	view->setAudioDirectory("c");
 	view->setBrirFilePath("d");
-	view->setAudioDevice("e");
-	view->setLevel_dB_Spl("1.1");
 	view->setAttack_ms("2.2");
 	view->setRelease_ms("3.3");
 	view->setWindowSize("4");
@@ -443,12 +441,16 @@ TEST_F(
 	assertEqual("b", model->testParameters().rightDslPrescriptionFilePath);
 	assertEqual("c", model->testParameters().audioDirectory);
 	assertEqual("d", model->testParameters().brirFilePath);
-	assertEqual("e", model->testParameters().audioDevice);
-	EXPECT_EQ(1.1, model->testParameters().level_dB_Spl);
 	EXPECT_EQ(2.2, model->testParameters().attack_ms);
 	EXPECT_EQ(3.3, model->testParameters().release_ms);
 	EXPECT_EQ(4, model->testParameters().windowSize);
 	EXPECT_EQ(5, model->testParameters().chunkSize);
+}
+
+TEST_F(PresenterTests, DISABLED_playTrialPassesParametersToModel) {
+	FAIL();
+	//assertEqual("e", model->testParameters().audioDevice);
+	//EXPECT_EQ(1.1, model->testParameters().level_dB_Spl);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
@@ -471,11 +473,6 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotHideSetupView
 	confirmTestSetupDoesNotHideSetupView();
 }
 
-TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotHideSetupView) {
-	setInvalidLevel();
-	confirmTestSetupDoesNotHideSetupView();
-}
-
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
 	setInvalidChunkSize();
 	confirmTestSetupDoesNotShowTesterView();
@@ -493,11 +490,6 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotShowTesterVi
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotShowTesterView) {
 	setInvalidAttackTime();
-	confirmTestSetupDoesNotShowTesterView();
-}
-
-TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelDoesNotShowTesterView) {
-	setInvalidLevel();
 	confirmTestSetupDoesNotShowTesterView();
 }
 
@@ -533,10 +525,6 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeShowsErrorMessage) {
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
 	confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
-}
-
-TEST_F(PresenterTests, confirmTestSetupWithInvalidLevelShowsErrorMessage) {
-	confirmTestSetupWithLevelShowsErrorMessage("c");
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {

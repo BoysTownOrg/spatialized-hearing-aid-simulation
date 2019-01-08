@@ -69,8 +69,6 @@ void Presenter::initializeModel() {
 	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 	p.brirFilePath = view->brirFilePath();
 	p.audioDirectory = view->audioDirectory();
-	p.audioDevice = view->audioDevice();
-	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 	p.release_ms = convertToDouble(view->release_ms(), "release time");
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
