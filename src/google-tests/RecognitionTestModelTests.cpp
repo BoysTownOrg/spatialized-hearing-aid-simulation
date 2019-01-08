@@ -137,6 +137,15 @@ TEST_F(
     assertEqual("a", list.directory());
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    playTrialPassesNextStimulusToStimulusPlayer
+) {
+    list.setNext("a");
+    model.playTrial();
+    assertEqual("a", stimulusPlayer.filePath());
+}
+
 TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFactory) {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = "a";
