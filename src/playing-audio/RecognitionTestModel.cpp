@@ -42,16 +42,8 @@ void RecognitionTestModel::play(PlayRequest request) {
 	frameReader = makeReader(request.audioFilePath);
 
 	AudioFrameProcessorFactory::Parameters forProcessor;
-	forProcessor.attack_ms = request.attack_ms;
-	forProcessor.release_ms = request.release_ms;
 	forProcessor.channels = frameReader->channels();
-	forProcessor.brirFilePath = request.brirFilePath;
-	forProcessor.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
-	forProcessor.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-	forProcessor.level_dB_Spl = request.level_dB_Spl;
 	forProcessor.sampleRate = frameReader->sampleRate();
-	forProcessor.chunkSize = request.chunkSize;
-	forProcessor.windowSize = request.windowSize;
 	forProcessor.stimulusRms = computeStimulusRms(frameReader);
 	frameProcessor = makeProcessor(forProcessor);
 
