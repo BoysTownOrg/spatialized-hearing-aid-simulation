@@ -22,11 +22,11 @@ public:
 	virtual void initializeTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);
 
-	struct TrialRequest {
+	struct TrialParameters {
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void playTrial(TrialRequest) = 0;
+	virtual void playTrial(TrialParameters) = 0;
 	RUNTIME_ERROR(RequestFailure);
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;

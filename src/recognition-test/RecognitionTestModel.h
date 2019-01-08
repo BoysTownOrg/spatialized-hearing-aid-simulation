@@ -48,7 +48,7 @@ public:
 		StimulusPlayer *player
 	);
 	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
-	RECOGNITION_TEST_API void playTrial(TrialRequest) override;
+	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 };

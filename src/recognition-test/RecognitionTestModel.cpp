@@ -17,7 +17,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	list->initialize(p.audioDirectory);
 }
 
-void RecognitionTestModel::playTrial(TrialRequest request) {
+void RecognitionTestModel::playTrial(TrialParameters request) {
 	StimulusPlayer::PlayRequest adapted;
 	adapted.audioFilePath = list->next();
 	player->play(adapted);

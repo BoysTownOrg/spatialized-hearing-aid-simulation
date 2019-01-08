@@ -5,7 +5,7 @@
 class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
 	TestParameters _testParameters{};
-	TrialRequest trialParameters_{};
+	TrialParameters trialParameters_{};
 	bool _testComplete{};
 	bool _trialPlayed{};
 public:
@@ -33,7 +33,7 @@ public:
 		return _trialPlayed;
 	}
 
-	void playTrial(TrialRequest p) override {
+	void playTrial(TrialParameters p) override {
 		trialParameters_ = std::move(p);
 		_trialPlayed = true;
 	}
@@ -42,7 +42,7 @@ public:
 		return _testComplete;
 	}
 
-	const TrialRequest &trialParameters() const {
+	const TrialParameters &trialParameters() const {
 		return trialParameters_;
 	}
 };
@@ -555,7 +555,7 @@ public:
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void playTrial(TrialRequest) override {}
+	void playTrial(TrialParameters) override {}
 
 	bool testComplete() override {
 		return {};
