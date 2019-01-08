@@ -1,6 +1,7 @@
 #include <playing-audio/AudioPlayer.h>
 #include "AudioDeviceStub.h"
 #include "AudioFrameReaderStub.h"
+#include "AudioFrameProcessorStub.h"
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
@@ -9,7 +10,9 @@ protected:
 	AudioDeviceStub device{};
 	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{ frameReader };
-	AudioPlayer player{ &device, &readerFactory };
+	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
+	AudioFrameProcessorStubFactory processorFactory{ processor };
+	AudioPlayer player{ &device, &readerFactory, &processorFactory };
 
 	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 		try {

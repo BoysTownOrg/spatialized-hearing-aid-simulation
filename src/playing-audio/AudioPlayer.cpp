@@ -1,6 +1,10 @@
 #include "AudioPlayer.h"
 
-AudioPlayer::AudioPlayer(AudioDevice *device, AudioFrameReaderFactory *readerFactory) :
+AudioPlayer::AudioPlayer(
+	AudioDevice *device, 
+	AudioFrameReaderFactory *readerFactory, 
+	AudioFrameProcessorFactory *
+) :
 	device{ device },
 	readerFactory{ readerFactory }
 {
