@@ -172,6 +172,14 @@ TEST_F(
     assertEqual("a", stimulusPlayer.filePath());
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    testCompleteWhenListEmpty
+) {
+    list.setEmpty();
+    EXPECT_TRUE(model.testComplete());
+}
+
 TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFactory) {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = "a";
