@@ -124,6 +124,24 @@ TEST(
 	}
 }
 
+TEST(
+	PlayAudioModelErroredProcessorFactoryTest,
+	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
+{
+	RecognitionTestModel model{ 
+		std::make_shared<AudioDeviceStub>(), 
+		std::make_shared<AudioFrameReaderStubFactory>(), 
+		std::make_shared<ErrorAudioFrameProcessorFactory>("error.") 
+	};
+	try {
+		model.initializeTest({});
+		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+	}
+	catch (const RecognitionTestModel::TestInitializationFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
 	device->setStreaming();
 	model.playTrial();
