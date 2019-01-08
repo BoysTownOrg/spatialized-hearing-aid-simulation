@@ -110,3 +110,8 @@ TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
 	player.play({});
 	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 }
+
+TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
+	device.setDescriptions({ "a", "b", "c" });
+	assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
+}
