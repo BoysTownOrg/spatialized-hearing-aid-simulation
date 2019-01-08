@@ -121,18 +121,14 @@ TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStre
 	EXPECT_TRUE(device->streamLog().empty());
 }
 
-TEST_F(RecognitionTestModelTests, playPassesParametersToFactories) {
+TEST_F(RecognitionTestModelTests, playTrialPassesParametersToFactories) {
 	RecognitionTestModel::PlayRequest request;
-	request.audioFilePath = "c";
 	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	request.audioDevice = "gamma";
-	request.chunkSize = 5;
 	frameReader->setChannels(6);
 	frameReader->setSampleRate(7);
-	model.play(request);
-	assertEqual("c", readerFactory->filePath());
+	model.playTrial(request);
 	EXPECT_EQ(2, device->streamParameters().deviceIndex);
-	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(6, device->streamParameters().channels);
 	EXPECT_EQ(7, device->streamParameters().sampleRate);
 }
