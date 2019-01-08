@@ -47,7 +47,6 @@ void RecognitionTestModel::play(PlayRequest request) {
 	frameReader->reset();
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
-	device->setCallbackResultToContinue();
 	device->startStream();
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
@@ -103,6 +102,7 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 		return;
 	device->closeStream();
 	device->openStream(forStreaming);
+	device->setCallbackResultToContinue();
 	device->startStream();
 }
 
