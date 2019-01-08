@@ -7,6 +7,16 @@ class AudioPlayerTests : public ::testing::Test {
 protected:
 	AudioDeviceStub device{};
 	AudioPlayer player{ &device };
+
+	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
+		try {
+			player.play({});
+			FAIL() << "Expected AudioPlayer::DeviceFailure";
+		}
+		catch (const AudioPlayer::DeviceFailure &e) {
+			assertEqual(errorMessage, e.what());
+		}
+	}
 };
 
 TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
@@ -16,4 +26,13 @@ TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
 TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
 	player.play({});
 	assertEqual("close open start ", device.streamLog());
+}
+
+TEST_F(
+	AudioPlayerTests,
+	playThrowsDeviceFailureWhenDeviceFails
+) {
+	device.fail();
+	device.setErrorMessage("error.");
+	assertPlayThrowsDeviceFailureWithMessage("error.");
 }
