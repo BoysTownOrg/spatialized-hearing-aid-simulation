@@ -69,6 +69,11 @@ std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(
 	}
 }
 
+bool RecognitionTestModel::testComplete()
+{
+	return false;
+}
+
 void RecognitionTestModel::initializeTest(TestParameters p) {
 	AudioFrameProcessorFactory::Parameters forProcessor;
 	forProcessor.attack_ms = p.attack_ms;

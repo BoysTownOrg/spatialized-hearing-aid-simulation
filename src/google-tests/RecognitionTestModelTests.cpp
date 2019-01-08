@@ -10,6 +10,7 @@
 class StimulusListStub : public StimulusList {
 	std::string directory_{};
 	std::string next_{};
+	bool empty_{};
 public:
 	void setNext(std::string s) {
 		next_ = std::move(s);
@@ -25,6 +26,10 @@ public:
 
 	std::string next() override {
 		return next_;
+	}
+
+	void setEmpty() {
+		empty_ = true;
 	}
 };
 
