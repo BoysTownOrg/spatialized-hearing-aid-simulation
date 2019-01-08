@@ -18,9 +18,9 @@ protected:
 		std::make_shared<AudioFrameProcessorStubFactory>(processor);
 	RecognitionTestModel model{ device, readerFactory, processorFactory };
 
-	void assertPlayThrowsRequestError(std::string errorMessage) {
+	void assertPlayTrialThrowsRequestError(std::string errorMessage) {
 		try {
-			model.play({});
+			model.playTrial({});
 			FAIL() << "Expected RecognitionTestModel::RequestFailure";
 		}
 		catch (const RecognitionTestModel::RequestFailure &e) {
@@ -72,11 +72,11 @@ TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts)
 
 TEST_F(
 	RecognitionTestModelTests,
-	playTrialThrowsInitializationFailureWhenDeviceFails
+	playTrialThrowsRequestErrorWhenDeviceFails
 ) {
 	device->fail();
 	device->setErrorMessage("error.");
-	assertPlayThrowsRequestError("error.");
+	assertPlayTrialThrowsRequestError("error.");
 }
 
 TEST(

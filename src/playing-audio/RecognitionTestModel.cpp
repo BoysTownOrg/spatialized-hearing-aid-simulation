@@ -79,8 +79,6 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forProcessor.windowSize = p.windowSize;
 	frameProcessor = makeProcessor(forProcessor);
 	makeReader({});
-	if (device->failed())
-		throw TestInitializationFailure{ device->errorMessage() };
 }
 
 void RecognitionTestModel::playTrial(PlayRequest request) {
