@@ -110,7 +110,7 @@ int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
 }
 
 void Presenter::playTrial() {
-	model->playTrial();
+	model->playTrial({});
 }
 
 void Presenter::newTest() {

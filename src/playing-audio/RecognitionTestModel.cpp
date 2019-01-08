@@ -101,7 +101,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 		throw TestInitializationFailure{ device->errorMessage() };
 }
 
-void RecognitionTestModel::playTrial() {
+void RecognitionTestModel::playTrial(PlayRequest) {
 	if (device->streaming())
 		return;
 	device->closeStream();

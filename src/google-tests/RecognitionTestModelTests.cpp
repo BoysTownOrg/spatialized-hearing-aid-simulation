@@ -66,7 +66,7 @@ TEST(
 }
 
 TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts) {
-	model.playTrial();
+	model.playTrial({});
 	assertEqual("close open start ", device->streamLog());
 }
 
@@ -117,7 +117,7 @@ TEST(
 
 TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
 	device->setStreaming();
-	model.playTrial();
+	model.playTrial({});
 	EXPECT_TRUE(device->streamLog().empty());
 }
 

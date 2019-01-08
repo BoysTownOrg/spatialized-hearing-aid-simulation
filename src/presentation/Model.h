@@ -38,6 +38,6 @@ public:
 	};
 	RUNTIME_ERROR(TestInitializationFailure);
 	virtual void initializeTest(TestParameters) = 0;
-	virtual void playTrial() = 0;
+	virtual void playTrial(PlayRequest) = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };

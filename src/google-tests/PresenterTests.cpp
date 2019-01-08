@@ -34,7 +34,7 @@ public:
 		return _trialPlayed;
 	}
 
-	void playTrial() override {
+	void playTrial(PlayRequest) override {
 		_trialPlayed = true;
 	}
 };
@@ -558,7 +558,7 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void play(PlayRequest) override {}
-	void playTrial() override {}
+	void playTrial(PlayRequest) override {}
 };
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {
