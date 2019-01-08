@@ -233,7 +233,7 @@ TEST_F(RecognitionTestModelTests, playPassesComputedRmsToProcessorFactory) {
 }
 
 TEST(
-	PlayAudioModelDeviceFailureTests,
+	RecognitionTestModelOtherTests,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 ) {
 	const auto device = std::make_shared<AudioDeviceStub>();
@@ -249,10 +249,12 @@ TEST(
 }
 
 TEST(
-	PlayAudioModelErroredFrameReaderFactoryTest,
+	RecognitionTestModelOtherTests,
 	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
 ) {
-	RecognitionTestModelFacade model{ std::make_shared<ErrorAudioFrameReaderFactory>("error.") };
+	RecognitionTestModelFacade model{ 
+		std::make_shared<ErrorAudioFrameReaderFactory>("error.") 
+	};
 	try {
 		model.initializeTest();
 		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
@@ -263,10 +265,12 @@ TEST(
 }
 
 TEST(
-	PlayAudioModelErroredProcessorFactoryTest,
+	RecognitionTestModelOtherTests,
 	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
 {
-	RecognitionTestModelFacade model{ std::make_shared<ErrorAudioFrameProcessorFactory>("error.") };
+	RecognitionTestModelFacade model{ 
+		std::make_shared<ErrorAudioFrameProcessorFactory>("error.") 
+	};
 	try {
 		model.initializeTest();
 		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
