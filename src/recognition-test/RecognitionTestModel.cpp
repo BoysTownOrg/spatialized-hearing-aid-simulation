@@ -24,7 +24,7 @@ void RecognitionTestModel::playTrial(TrialParameters request) {
 		player->play(adapted);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
-		throw RequestFailure{ e.what() };
+		throw TrialFailure{ e.what() };
 	}
 }
 

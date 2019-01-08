@@ -102,7 +102,7 @@ TEST(
 		model.playTrial({});
 		FAIL() << "Expected RecognitionTestModel::TrialFailure";
 	}
-	catch (const RecognitionTestModel::RequestFailure &e) {
+	catch (const RecognitionTestModel::TrialFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }

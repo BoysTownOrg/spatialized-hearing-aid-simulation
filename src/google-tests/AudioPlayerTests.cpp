@@ -1,10 +1,10 @@
-#include <playing-audio/AudioPlayer.h>
-#include <audio-file-reading/AudioFileInMemory.h>
 #include "AudioDeviceStub.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include "assert-utility.h"
+#include <playing-audio/AudioPlayer.h>
+#include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 class AudioPlayerFacade {
@@ -54,7 +54,7 @@ protected:
 	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 		try {
 			player.play({});
-			FAIL() << "Expected AudioPlayer::RequestFailure";
+			FAIL() << "Expected AudioPlayer::TrialFailure";
 		}
 		catch (const AudioPlayer::RequestFailure &e) {
 			assertEqual(errorMessage, e.what());
@@ -224,7 +224,7 @@ TEST(
 	device.setErrorMessage("error.");
 	try {
 		AudioPlayerFacade player{ &device };
-		FAIL() << "Expected RecognitionTestModel::RequestFailure";
+		FAIL() << "Expected RecognitionTestModel::TrialFailure";
 	}
 	catch (const AudioPlayer::DeviceFailure &e) {
 		assertEqual("error.", e.what());
@@ -239,7 +239,7 @@ TEST(
 	AudioPlayerFacade player{ &factory };
 	try {
 		player.play();
-		FAIL() << "Expected AudioPlayer::RequestFailure";
+		FAIL() << "Expected AudioPlayer::TrialFailure";
 	}
 	catch (const AudioPlayer::RequestFailure &e) {
 		assertEqual("error.", e.what());
@@ -254,7 +254,7 @@ TEST(
 	AudioPlayerFacade player{ &factory };
 	try {
 		player.play();
-		FAIL() << "Expected AudioPlayer::RequestFailure";
+		FAIL() << "Expected AudioPlayer::TrialFailure";
 	}
 	catch (const AudioPlayer::RequestFailure &e) {
 		assertEqual("error.", e.what());
