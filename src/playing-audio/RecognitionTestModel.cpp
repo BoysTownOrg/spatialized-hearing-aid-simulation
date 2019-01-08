@@ -45,11 +45,6 @@ void RecognitionTestModel::play(PlayRequest request) {
 	makeProcessor(forProcessor);
 
 	frameReader->reset();
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
-	device->startStream();
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
 }
 
 std::shared_ptr<AudioFrameReader> RecognitionTestModel::makeReader(std::string filePath) {
