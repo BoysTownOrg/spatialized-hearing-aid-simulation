@@ -2,7 +2,9 @@
 
 class AudioPlayer : public AudioDeviceController {
 public:
-	AudioPlayer(AudioDevice *) {}
+	AudioPlayer(AudioDevice *device) {
+		device->setController(this);
+	}
 
 	void fillStreamBuffer(void * channels, int frames) override {
 		channels;
