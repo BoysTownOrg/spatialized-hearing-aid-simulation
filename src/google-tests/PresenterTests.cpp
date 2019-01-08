@@ -32,7 +32,7 @@ public:
 		return _trialPlayed;
 	}
 
-	void playTrial(PlayRequest) override {
+	void playTrial(TrialRequest) override {
 		_trialPlayed = true;
 	}
 
@@ -559,7 +559,7 @@ public:
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void playTrial(PlayRequest) override {}
+	void playTrial(TrialRequest) override {}
 
 	bool testComplete() override {
 		return {};

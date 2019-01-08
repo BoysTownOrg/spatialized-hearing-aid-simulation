@@ -42,7 +42,7 @@ public:
 		StimulusPlayer *player
 	);
 	PLAYING_AUDIO_API void initializeTest(TestParameters) override;
-	PLAYING_AUDIO_API void playTrial(PlayRequest) override;
+	PLAYING_AUDIO_API void playTrial(TrialRequest) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 };
