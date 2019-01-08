@@ -72,11 +72,11 @@ TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts)
 
 TEST_F(
 	RecognitionTestModelTests,
-	initializeTestThrowsInitializationFailureWhenDeviceFails
+	playTrialThrowsInitializationFailureWhenDeviceFails
 ) {
 	device->fail();
 	device->setErrorMessage("error.");
-	assertInitializeTestThrowsInitializationFailure("error.");
+	assertPlayTrialThrowsInitializationFailure("error.");
 }
 
 TEST(
