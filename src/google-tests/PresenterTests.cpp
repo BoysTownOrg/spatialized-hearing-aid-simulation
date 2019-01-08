@@ -448,9 +448,11 @@ TEST_F(
 }
 
 TEST_F(PresenterTests, DISABLED_playTrialPassesParametersToModel) {
-	FAIL();
-	//assertEqual("e", model->testParameters().audioDevice);
-	//EXPECT_EQ(1.1, model->testParameters().level_dB_Spl);
+	view->setAudioDevice("e");
+	view->setLevel_dB_Spl("1.1");
+	view->playTrial();
+	assertEqual("e", model->trialParameters().audioDevice);
+	EXPECT_EQ(1.1, model->trialParameters().level_dB_Spl);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
