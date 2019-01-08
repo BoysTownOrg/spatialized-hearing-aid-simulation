@@ -535,6 +535,10 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) 
 	confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
 }
 
+TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
+	playTrialWithLevelShowsErrorMessage("b");
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	const auto view = std::make_shared<ViewStub>();
 	const auto model = std::make_shared<ModelStub>();
