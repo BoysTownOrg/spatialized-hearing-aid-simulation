@@ -20,6 +20,7 @@ public:
 class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
+	RUNTIME_ERROR(DeviceFailure);
 	RUNTIME_ERROR(RequestFailure);
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;

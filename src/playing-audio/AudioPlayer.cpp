@@ -10,6 +10,8 @@ AudioPlayer::AudioPlayer(
 	processorFactory{ processorFactory }
 {
 	device->setController(this);
+	if (device->failed())
+		throw DeviceFailure{ device->errorMessage() };
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {

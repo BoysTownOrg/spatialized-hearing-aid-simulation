@@ -216,7 +216,7 @@ TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
 }
 
 TEST(
-	RecognitionTestModelOtherTests,
+	AudioPlayerOtherTests,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 ) {
 	AudioDeviceStub device{};
