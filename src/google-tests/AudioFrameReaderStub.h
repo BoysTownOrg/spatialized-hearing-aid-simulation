@@ -71,6 +71,10 @@ public:
 	) :
 		reader{ std::move(reader) } {}
 
+	void setReader(std::shared_ptr<AudioFrameReader> r) {
+		this->reader = std::move(r);
+	}
+
 	std::shared_ptr<AudioFrameReader> make(std::string filePath) override {
 		_filePath = filePath;
 		return reader;

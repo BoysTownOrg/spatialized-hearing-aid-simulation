@@ -24,6 +24,10 @@ public:
 	) :
 		processor{ std::move(processor) } {}
 
+	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+		this->processor = std::move(p);
+	}
+
 	const Parameters &parameters() const {
 		return _parameters;
 	}
