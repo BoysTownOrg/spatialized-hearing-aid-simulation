@@ -128,11 +128,9 @@ protected:
 
 TEST_F(
 	RecognitionTestModelTests,
-	playTrialThrowsRequestFailureWhenDeviceFails
+	DISABLED_playTrialThrowsRequestFailureWhenPlayerThrowsDeviceFailure
 ) {
-	device.fail();
-	device.setErrorMessage("error.");
-	assertPlayTrialThrowsRequestFailure("error.");
+	FAIL();
 }
 
 TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
