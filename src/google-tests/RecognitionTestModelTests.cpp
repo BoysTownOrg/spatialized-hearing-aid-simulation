@@ -49,49 +49,6 @@ public:
 	}
 };
 
-class RecognitionTestModelFacade {
-	AudioDeviceStub device{};
-	AudioFrameReaderStubFactory readerFactory{};
-	AudioFrameProcessorStubFactory processorFactory{};
-	StimulusListStub list{};
-	StimulusPlayerStub player{};
-	RecognitionTestModel model;
-public:
-	RecognitionTestModelFacade(AudioDevice *device) :
-		model{
-			device,
-			&readerFactory,
-			&processorFactory,
-			&list,
-			&player
-		}
-	{}
-
-	RecognitionTestModelFacade(AudioFrameReaderFactory *readerFactory) :
-		model{
-			&device,
-			readerFactory,
-			&processorFactory,
-			&list,
-			&player
-		}
-	{}
-
-	RecognitionTestModelFacade(AudioFrameProcessorFactory *processorFactory) :
-		model{
-			&device,
-			&readerFactory,
-			processorFactory,
-			&list,
-			&player
-		}
-	{}
-
-	void initializeTest() {
-		model.initializeTest({});
-	}
-};
-
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
 	AudioDeviceStub device{};
@@ -158,20 +115,4 @@ TEST_F(
 ) {
     list.setEmpty();
     EXPECT_TRUE(model.testComplete());
-}
-
-TEST(
-	RecognitionTestModelOtherTests,
-	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
-) {
-	AudioDeviceStub device{};
-	device.fail();
-	device.setErrorMessage("error.");
-	try {
-		RecognitionTestModelFacade model{ &device };
-		FAIL() << "Expected RecognitionTestModel::RequestFailure";
-	}
-	catch (const RecognitionTestModel::DeviceFailure &e) {
-		assertEqual("error.", e.what());
-	}
 }
