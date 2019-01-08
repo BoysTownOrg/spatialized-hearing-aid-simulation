@@ -160,11 +160,6 @@ TEST_F(
     EXPECT_TRUE(model.testComplete());
 }
 
-TEST_F(RecognitionTestModelTests, audioDeviceDescriptionsReturnsDescriptions) {
-	device.setDescriptions({ "a", "b", "c" });
-	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
-}
-
 TEST_F(RecognitionTestModelTests, playResetsReaderAfterComputingRms) {
 	model.play({});
 	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));

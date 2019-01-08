@@ -105,8 +105,5 @@ void RecognitionTestModel::fillStreamBuffer(void *channels, int frames) {
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
-	std::vector<std::string> descriptions{};
-	for (int i = 0; i < device->count(); ++i)
-		descriptions.push_back(device->description(i));
-	return descriptions;
+	return {};
 }
