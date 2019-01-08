@@ -109,6 +109,16 @@ TEST_F(RecognitionTestModelTests, playTrialPassesParametersToFactories) {
 	EXPECT_EQ(7, device->streamParameters().sampleRate);
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    initializeTestPassesStimulusListDirectoryToStimulusList
+) {
+    Model::TestParameters parameters;
+    parameters.stimulusListDirectory = "a";
+    model.initializeTest(parameters);
+    assertEqual("a", list.directory());
+}
+
 TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFactory) {
 	Model::TestParameters p;
 	p.leftDslPrescriptionFilePath = "a";
