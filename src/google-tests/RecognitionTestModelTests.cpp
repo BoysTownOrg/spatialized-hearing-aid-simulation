@@ -52,40 +52,16 @@ public:
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
 	AudioDeviceStub device{};
-	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-	AudioFrameReaderStubFactory readerFactory{ frameReader };
-	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-	AudioFrameProcessorStubFactory processorFactory{ processor };
+	AudioFrameReaderStubFactory readerFactory{};
+	AudioFrameProcessorStubFactory processorFactory{};
 	StimulusListStub list{};
 	StimulusPlayerStub stimulusPlayer{};
 	RecognitionTestModel model{ &device, &readerFactory, &processorFactory, &list, &stimulusPlayer };
-	
-	void assertInitializeTestThrowsInitializationFailure(
-		std::string errorMessage
-	) {
-		try {
-			model.initializeTest({});
-			FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-		}
-		catch (const RecognitionTestModel::TestInitializationFailure &e) {
-			assertEqual(errorMessage, e.what());
-		}
-	}
-
-	void assertPlayTrialThrowsRequestFailure(std::string errorMessage) {
-		try {
-			model.playTrial({});
-			FAIL() << "Expected RecognitionTestModel::RequestFailure";
-		}
-		catch (const RecognitionTestModel::RequestFailure &e) {
-			assertEqual(errorMessage, e.what());
-		}
-	}
 };
 
 TEST_F(
 	RecognitionTestModelTests,
-	DISABLED_playTrialThrowsRequestFailureWhenPlayerThrowsDeviceFailure
+	DISABLED_playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
 	FAIL();
 }
