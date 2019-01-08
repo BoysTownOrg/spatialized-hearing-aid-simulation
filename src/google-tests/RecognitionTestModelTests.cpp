@@ -232,7 +232,8 @@ TEST(PlayAudioModelProcessOrderTest, fillBufferReadsThenProcesses) {
 		std::make_shared<AudioFrameReaderStubFactory>(reader),
 		std::make_shared<AudioFrameProcessorStubFactory>(processor)
 	};
-	model.play({});
+	model.initializeTest({});
+	model.playTrial({});
 	float x{};
 	float *audio[] = { &x };
 	device->fillStreamBuffer(audio, 1);
