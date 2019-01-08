@@ -56,5 +56,6 @@ void AudioPlayer::play(PlayRequest request) {
 
 	device->closeStream();
 	device->openStream(forStreaming);
+	device->setCallbackResultToContinue();
 	device->startStream();
 }
