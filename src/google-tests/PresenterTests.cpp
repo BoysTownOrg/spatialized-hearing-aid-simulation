@@ -33,7 +33,8 @@ public:
 		return _trialPlayed;
 	}
 
-	void playTrial(TrialRequest) override {
+	void playTrial(TrialRequest p) override {
+		trialParameters_ = std::move(p);
 		_trialPlayed = true;
 	}
 

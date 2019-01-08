@@ -108,7 +108,10 @@ int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
 }
 
 void Presenter::playTrial() {
-	model->playTrial({});
+	Model::TrialRequest p;
+	p.audioDevice = view->audioDevice();
+	p.level_dB_Spl = std::stod(view->level_dB_Spl());
+	model->playTrial(p);
 }
 
 void Presenter::newTest() {
