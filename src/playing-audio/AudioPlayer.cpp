@@ -1,7 +1,8 @@
 #include "AudioPlayer.h"
 
-AudioPlayer::AudioPlayer(AudioDevice * device) :
-	device{ device }
+AudioPlayer::AudioPlayer(AudioDevice *device, AudioFrameReaderFactory *readerFactory) :
+	device{ device },
+	readerFactory{ readerFactory }
 {
 	device->setController(this);
 }

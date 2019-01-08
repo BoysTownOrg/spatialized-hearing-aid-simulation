@@ -1,12 +1,15 @@
 #include <playing-audio/AudioPlayer.h>
 #include "AudioDeviceStub.h"
+#include "AudioFrameReaderStub.h"
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
 class AudioPlayerTests : public ::testing::Test {
 protected:
 	AudioDeviceStub device{};
-	AudioPlayer player{ &device };
+	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
+	AudioFrameReaderStubFactory readerFactory{ frameReader };
+	AudioPlayer player{ &device, &readerFactory };
 
 	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 		try {
