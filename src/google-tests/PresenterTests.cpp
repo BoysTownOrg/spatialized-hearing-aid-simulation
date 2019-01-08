@@ -334,9 +334,14 @@ protected:
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid release time.");
 	}
 
-	void confirmTestSetupWithLevelShowsErrorMessage(std::string s) {
+	void playTrialWithLevelShowsErrorMessage(std::string s) {
 		view->setLevel_dB_Spl(s);
-		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid level.");
+		playTrialShowsErrorMessage("'" + s + "' is not a valid level.");
+	}
+
+	void playTrialShowsErrorMessage(std::string s) {
+		view->playTrial();
+		assertEqual(std::move(s), view->errorMessage());
 	}
 };
 
