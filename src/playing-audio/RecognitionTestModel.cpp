@@ -95,8 +95,6 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	frameReader = makeReader({});
 	
 	audio.resize(frameReader->channels());
-	device->setCallbackResultToContinue();
-	device->startStream();
 }
 
 void RecognitionTestModel::fillStreamBuffer(void *channels, int frames) {

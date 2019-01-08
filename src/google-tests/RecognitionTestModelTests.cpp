@@ -160,11 +160,6 @@ TEST_F(
     EXPECT_TRUE(model.testComplete());
 }
 
-TEST_F(RecognitionTestModelTests, playTrialSetsCallbackResultToContinueBeforeStartingStream) {
-	model.playTrial({});
-	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
-}
-
 TEST_F(RecognitionTestModelTests, audioDeviceDescriptionsReturnsDescriptions) {
 	device.setDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
