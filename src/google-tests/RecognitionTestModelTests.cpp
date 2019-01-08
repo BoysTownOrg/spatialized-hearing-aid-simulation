@@ -72,15 +72,6 @@ TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts)
 
 TEST_F(
 	RecognitionTestModelTests,
-	playThrowsRequestErrorWhenDeviceFailure
-) {
-	device->fail();
-	device->setErrorMessage("error.");
-	assertPlayThrowsRequestError("error.");
-}
-
-TEST_F(
-	RecognitionTestModelTests,
 	initializeTestThrowsInitializationFailureWhenDeviceFails
 ) {
 	device->fail();
