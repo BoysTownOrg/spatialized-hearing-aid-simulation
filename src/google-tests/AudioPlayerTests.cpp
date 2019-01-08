@@ -54,3 +54,20 @@ TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplet
 	device.fillStreamBuffer({}, {});
 	EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
 }
+
+TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
+	frameReader->setChannels(2);
+	player.play({});
+	float left{};
+	float right{};
+	float *x[]{ &left, &right };
+	device.fillStreamBuffer(x, 1);
+	EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
+	EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
+	EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
+	EXPECT_EQ(1, frameReader->audioBuffer()[1].size());
+	EXPECT_EQ(&left, processor->audioBuffer()[0].data());
+	EXPECT_EQ(&right, processor->audioBuffer()[1].data());
+	EXPECT_EQ(1, processor->audioBuffer()[0].size());
+	EXPECT_EQ(1, processor->audioBuffer()[1].size());
+}
