@@ -48,6 +48,10 @@ public:
 	std::string directory() const {
 		return directory_;
 	}
+
+	void initialize(std::string d) override {
+		directory_ = d;
+	}
 };
 
 class RecognitionTestModelTests : public ::testing::Test {

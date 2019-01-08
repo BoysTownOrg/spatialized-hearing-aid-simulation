@@ -1,7 +1,5 @@
 #pragma once
 
-class StimulusList {};
-
 #include "playing-audio-exports.h"
 #include "AudioDevice.h"
 #include "AudioFrameProcessor.h"
@@ -9,6 +7,13 @@ class StimulusList {};
 #include <audio-file-reading/AudioFileReader.h>
 #include <presentation/Model.h>
 #include <common-includes/RuntimeError.h>
+#include <common-includes/Interface.h>
+
+class StimulusList {
+public:
+	INTERFACE_OPERATIONS(StimulusList);
+	virtual void initialize(std::string directory) = 0;
+};
 
 class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
@@ -17,6 +22,7 @@ class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;
 	std::shared_ptr<AudioFrameReader> frameReader{};
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
+	StimulusList *list;
 public:
 	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API RecognitionTestModel(

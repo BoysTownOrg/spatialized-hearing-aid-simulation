@@ -7,11 +7,12 @@ RecognitionTestModel::RecognitionTestModel(
 	std::shared_ptr<AudioDevice> device,
 	std::shared_ptr<AudioFrameReaderFactory> readerFactory,
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory,
-	StimulusList *
+	StimulusList *list
 ) :
 	device{ std::move(device) },
 	readerFactory{ std::move(readerFactory) },
-	processorFactory{ std::move(processorFactory) }
+	processorFactory{ std::move(processorFactory) },
+	list{ list }
 {
 	if (this->device->failed())
 		throw DeviceFailure{ this->device->errorMessage() };
@@ -78,6 +79,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forProcessor.windowSize = p.windowSize;
 	frameProcessor = makeProcessor(forProcessor);
 	makeReader({});
+	list->initialize(p.audioDirectory);
 }
 
 void RecognitionTestModel::playTrial(PlayRequest request) {
