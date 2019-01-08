@@ -28,15 +28,6 @@ bool RecognitionTestModel::testComplete() {
 }
 
 void RecognitionTestModel::initializeTest(TestParameters p) {
-	AudioFrameProcessorFactory::Parameters forProcessor;
-	forProcessor.attack_ms = p.attack_ms;
-	forProcessor.release_ms = p.release_ms;
-	forProcessor.brirFilePath = p.brirFilePath;
-	forProcessor.leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
-	forProcessor.rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
-	forProcessor.level_dB_Spl = p.level_dB_Spl;
-	forProcessor.chunkSize = p.chunkSize;
-	forProcessor.windowSize = p.windowSize;
 	list->initialize(p.audioDirectory);
 }
 
