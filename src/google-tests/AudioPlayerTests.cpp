@@ -42,3 +42,12 @@ TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
 	player.play({});
 	EXPECT_TRUE(device.streamLog().empty());
 }
+
+TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	player.play({});
+	device.fillStreamBuffer({}, {});
+	EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+	frameReader->setComplete();
+	device.fillStreamBuffer({}, {});
+	EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
+}
