@@ -19,8 +19,8 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 		device->setCallbackResultToComplete();
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio[i] = { static_cast<float **>(channels)[i], frames };
-	frameProcessor->process(audio);
 	frameReader->read(audio);
+	frameProcessor->process(audio);
 }
 
 void AudioPlayer::play(PlayRequest request) {
