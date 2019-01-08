@@ -115,3 +115,43 @@ TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
 	device.setDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 }
+
+class ReadsAOne : public AudioFrameReader {
+	void read(gsl::span<gsl::span<float>> audio) override {
+		for (const auto channel : audio)
+			for (auto &x : channel)
+				x = 1;
+	}
+	bool complete() const override {
+		return false;
+	}
+	int sampleRate() const override {
+		return 0;
+	}
+	int channels() const override {
+		return 1;
+	}
+	long long frames() const override {
+		return 0;
+	}
+	void reset() override {
+	}
+};
+
+class AudioTimesTwo : public AudioFrameProcessor {
+	void process(gsl::span<gsl::span<float>> audio) override {
+		for (const auto channel : audio)
+			for (auto &x : channel)
+				x *= 2;
+	}
+};
+
+TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
+	readerFactory.setReader(std::make_shared<ReadsAOne>());
+	processorFactory.setProcessor(std::make_shared<AudioTimesTwo>());
+	player.play({});
+	float x{};
+	float *audio[] = { &x };
+	device.fillStreamBuffer(audio, 1);
+	EXPECT_EQ(2, x);
+}

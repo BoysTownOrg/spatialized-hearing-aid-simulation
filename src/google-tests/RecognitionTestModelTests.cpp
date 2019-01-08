@@ -165,47 +165,6 @@ TEST_F(RecognitionTestModelTests, playResetsReaderAfterComputingRms) {
 	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
 }
 
-class ReadsAOne : public AudioFrameReader {
-	void read(gsl::span<gsl::span<float>> audio) override {
-		for (const auto channel : audio)
-			for (auto &x : channel)
-				x = 1;
-	}
-	bool complete() const override {
-		return false;
-	}
-	int sampleRate() const override {
-		return 0;
-	}
-	int channels() const override {
-		return 1;
-	}
-	long long frames() const override {
-		return 0;
-	}
-	void reset() override {
-	}
-};
-
-class AudioTimesTwo : public AudioFrameProcessor {
-	void process(gsl::span<gsl::span<float>> audio) override {
-		for (const auto channel : audio)
-			for (auto &x : channel)
-				x *= 2;
-	}
-};
-
-TEST_F(RecognitionTestModelTests, fillBufferReadsThenProcesses) {
-	readerFactory.setReader(std::make_shared<ReadsAOne>());
-	processorFactory.setProcessor(std::make_shared<AudioTimesTwo>());
-	model.initializeTest({});
-	model.playTrial({});
-	float x{};
-	float *audio[] = { &x };
-	device.fillStreamBuffer(audio, 1);
-	EXPECT_EQ(2, x);
-}
-
 TEST_F(RecognitionTestModelTests, playPassesComputedRmsToProcessorFactory) {
 	FakeAudioFileReader fake{
 		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
