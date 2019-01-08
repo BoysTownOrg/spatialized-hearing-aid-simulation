@@ -5,8 +5,10 @@
 #include "RecognitionTestModel.h"
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
+#include <gsl/gsl>
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
+	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
 	std::shared_ptr<AudioFrameReader> frameReader{};

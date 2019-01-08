@@ -3,10 +3,11 @@
 AudioPlayer::AudioPlayer(
 	AudioDevice *device, 
 	AudioFrameReaderFactory *readerFactory, 
-	AudioFrameProcessorFactory *
+	AudioFrameProcessorFactory *processorFactory
 ) :
 	device{ device },
-	readerFactory{ readerFactory }
+	readerFactory{ readerFactory },
+	processorFactory{ processorFactory }
 {
 	device->setController(this);
 }
@@ -16,6 +17,10 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	frames;
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
+	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
+		audio[i] = { static_cast<float **>(channels)[i], frames };
+	frameProcessor->process(audio);
+	frameReader->read(audio);
 }
 
 void AudioPlayer::play(std::string filePath)
@@ -29,4 +34,6 @@ void AudioPlayer::play(std::string filePath)
 	device->openStream({});
 	device->startStream();
 	frameReader = readerFactory->make({});
+	audio.resize(frameReader->channels());
+	frameProcessor = processorFactory->make({});
 }
