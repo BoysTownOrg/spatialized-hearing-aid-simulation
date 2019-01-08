@@ -1,9 +1,9 @@
-#include "PlayAudioModel.h"
+#include "RecognitionTestModel.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gsl/gsl>
 
-PlayAudioModel::PlayAudioModel(
+RecognitionTestModel::RecognitionTestModel(
 	std::shared_ptr<AudioDevice> device,
 	std::shared_ptr<AudioFrameReaderFactory> readerFactory,
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory
@@ -35,7 +35,7 @@ static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameRe
 	return stimulusRms;
 }
 
-void PlayAudioModel::play(PlayRequest request) {
+void RecognitionTestModel::play(PlayRequest request) {
 	if (device->streaming())
 		return;
 
@@ -75,7 +75,7 @@ void PlayAudioModel::play(PlayRequest request) {
 		throw RequestFailure{ device->errorMessage() };
 }
 
-std::shared_ptr<AudioFrameReader> PlayAudioModel::makeReader(std::string filePath) {
+std::shared_ptr<AudioFrameReader> RecognitionTestModel::makeReader(std::string filePath) {
 	try {
 		return readerFactory->make(filePath);
 	}
@@ -84,7 +84,7 @@ std::shared_ptr<AudioFrameReader> PlayAudioModel::makeReader(std::string filePat
 	}
 }
 
-std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
+std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
 	try {
 		return processorFactory->make(p);
 	}
@@ -93,7 +93,7 @@ std::shared_ptr<AudioFrameProcessor> PlayAudioModel::makeProcessor(AudioFramePro
 	}
 }
 
-void PlayAudioModel::initializeTest(TestParameters p) {
+void RecognitionTestModel::initializeTest(TestParameters p) {
 	AudioFrameProcessorFactory::Parameters forProcessor;
 	forProcessor.attack_ms = p.attack_ms;
 	forProcessor.release_ms = p.release_ms;
@@ -108,7 +108,7 @@ void PlayAudioModel::initializeTest(TestParameters p) {
 		throw TestInitializationFailure{ device->errorMessage() };
 }
 
-void PlayAudioModel::playTrial() {
+void RecognitionTestModel::playTrial() {
 	if (device->streaming())
 		return;
 	device->closeStream();
@@ -116,7 +116,7 @@ void PlayAudioModel::playTrial() {
 	device->startStream();
 }
 
-void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
+void RecognitionTestModel::fillStreamBuffer(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio[i] = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
@@ -125,7 +125,7 @@ void PlayAudioModel::fillStreamBuffer(void * channels, int frames) {
 		device->setCallbackResultToComplete();
 }
 
-std::vector<std::string> PlayAudioModel::audioDeviceDescriptions() {
+std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
 	std::vector<std::string> descriptions{};
 	for (int i = 0; i < device->count(); ++i)
 		descriptions.push_back(device->description(i));

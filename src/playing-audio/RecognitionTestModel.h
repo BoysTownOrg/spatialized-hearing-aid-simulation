@@ -8,7 +8,7 @@
 #include <presentation/Model.h>
 #include <common-includes/RuntimeError.h>
 
-class PlayAudioModel : public Model, public AudioDeviceController {
+class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
 	std::shared_ptr<AudioDevice> device;
 	std::shared_ptr<AudioFrameReaderFactory> readerFactory;
@@ -17,7 +17,7 @@ class PlayAudioModel : public Model, public AudioDeviceController {
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 public:
 	RUNTIME_ERROR(DeviceFailure);
-	PLAYING_AUDIO_API PlayAudioModel(
+	PLAYING_AUDIO_API RecognitionTestModel(
 		std::shared_ptr<AudioDevice> device,
 		std::shared_ptr<AudioFrameReaderFactory> readerFactory,
 		std::shared_ptr<AudioFrameProcessorFactory> processorFactory

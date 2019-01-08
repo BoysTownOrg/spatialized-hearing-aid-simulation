@@ -9,11 +9,11 @@
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/SpatializedHearingAidSimulationFactory.h>
-#include <playing-audio/PlayAudioModel.h>
+#include <playing-audio/RecognitionTestModel.h>
 
 int main() {
 	Presenter presenter{
-		std::make_shared<PlayAudioModel>(
+		std::make_shared<RecognitionTestModel>(
 			std::make_shared<PortAudioDevice>(),
 			std::make_shared<ChannelCopierFactory>(
 				std::make_shared<AudioFileInMemoryFactory>(

@@ -42,13 +42,13 @@
     <ClCompile Include="ChannelCopierTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayAudioModelTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BrirAdapterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PrescriptionAdapterTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecognitionTestModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

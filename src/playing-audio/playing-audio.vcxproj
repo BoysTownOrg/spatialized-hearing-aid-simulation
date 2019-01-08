@@ -153,12 +153,12 @@
     <ClInclude Include="AudioDevice.h" />
     <ClInclude Include="AudioDeviceController.h" />
     <ClInclude Include="AudioFrameProcessor.h" />
-    <ClInclude Include="PlayAudioModel.h" />
+    <ClInclude Include="RecognitionTestModel.h" />
     <ClInclude Include="playing-audio-exports.h" />
     <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PlayAudioModel.cpp" />
+    <ClCompile Include="RecognitionTestModel.cpp" />
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
