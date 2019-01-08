@@ -33,12 +33,18 @@
     <ClInclude Include="RecognitionTestModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RecognitionTestModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

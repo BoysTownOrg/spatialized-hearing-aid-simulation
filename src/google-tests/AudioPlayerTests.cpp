@@ -1,17 +1,4 @@
-#include <playing-audio/AudioDevice.h>
-
-class AudioPlayer : public AudioDeviceController {
-public:
-	AudioPlayer(AudioDevice *device) {
-		device->setController(this);
-	}
-
-	void fillStreamBuffer(void * channels, int frames) override {
-		channels;
-		frames;
-	}
-};
-
+#include <playing-audio/AudioPlayer.h>
 #include "AudioDeviceStub.h"
 #include <gtest/gtest.h>
 
