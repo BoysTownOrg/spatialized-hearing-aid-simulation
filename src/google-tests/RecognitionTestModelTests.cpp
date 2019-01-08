@@ -155,8 +155,9 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFacto
 }
 
 TEST_F(RecognitionTestModelTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+	model.initializeTest({});
 	frameReader->setChannels(0);
-	model.play({});
+	model.playTrial({});
 	device->fillStreamBuffer(nullptr, 0);
 	EXPECT_FALSE(device->setCallbackResultToCompleteCalled());
 	frameReader->setComplete();
