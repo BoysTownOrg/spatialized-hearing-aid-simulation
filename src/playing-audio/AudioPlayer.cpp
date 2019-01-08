@@ -10,6 +10,8 @@ AudioPlayer::AudioPlayer(AudioDevice *device, AudioFrameReaderFactory *readerFac
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	channels;
 	frames;
+	if (frameReader->complete())
+		device->setCallbackResultToComplete();
 }
 
 void AudioPlayer::play(std::string filePath)
@@ -22,4 +24,5 @@ void AudioPlayer::play(std::string filePath)
 	device->closeStream();
 	device->openStream({});
 	device->startStream();
+	frameReader = readerFactory->make({});
 }
