@@ -9,7 +9,12 @@
 
 class StimulusListStub : public StimulusList {
 	std::string directory_{};
+	std::string next_{};
 public:
+	void setNext(std::string s) {
+		next_ = std::move(s);
+	}
+
 	std::string directory() const {
 		return directory_;
 	}
@@ -19,11 +24,20 @@ public:
 	}
 };
 
+class StimulusPlayerStub : public StimulusPlayer {
+	std::string filePath_{};
+public:
+	std::string filePath() const {
+		return filePath_;
+	}
+};
+
 class RecognitionTestModelFacade {
 	AudioDeviceStub device{};
 	AudioFrameReaderStubFactory readerFactory{};
 	AudioFrameProcessorStubFactory processorFactory{};
 	StimulusListStub list{};
+	StimulusPlayer player{};
 	RecognitionTestModel model;
 public:
 	RecognitionTestModelFacade(AudioDevice *device) :
@@ -31,7 +45,8 @@ public:
 			device,
 			&readerFactory,
 			&processorFactory,
-			&list
+			&list,
+			&player
 		}
 	{}
 
@@ -40,7 +55,8 @@ public:
 			&device,
 			readerFactory,
 			&processorFactory,
-			&list
+			&list,
+			&player
 		}
 	{}
 
@@ -49,7 +65,8 @@ public:
 			&device,
 			&readerFactory,
 			processorFactory,
-			&list
+			&list,
+			&player
 		}
 	{}
 
@@ -66,7 +83,8 @@ protected:
 	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
 	AudioFrameProcessorStubFactory processorFactory{ processor };
 	StimulusListStub list{};
-	RecognitionTestModel model{ &device, &readerFactory, &processorFactory, &list };
+	StimulusPlayerStub stimulusPlayer{};
+	RecognitionTestModel model{ &device, &readerFactory, &processorFactory, &list, &stimulusPlayer };
 	
 	void assertInitializeTestThrowsInitializationFailure(
 		std::string errorMessage
@@ -142,7 +160,7 @@ TEST_F(
     playTrialPassesNextStimulusToStimulusPlayer
 ) {
     list.setNext("a");
-    model.playTrial();
+	model.playTrial({});
     assertEqual("a", stimulusPlayer.filePath());
 }
 

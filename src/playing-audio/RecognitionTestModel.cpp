@@ -7,7 +7,8 @@ RecognitionTestModel::RecognitionTestModel(
 	AudioDevice *device,
 	AudioFrameReaderFactory *readerFactory,
 	AudioFrameProcessorFactory *processorFactory,
-	StimulusList *list
+	StimulusList *list,
+	StimulusPlayer *
 ) :
 	device{ device },
 	readerFactory{ readerFactory },

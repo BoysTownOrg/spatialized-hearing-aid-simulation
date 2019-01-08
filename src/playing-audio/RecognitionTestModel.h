@@ -15,6 +15,11 @@ public:
 	virtual void initialize(std::string directory) = 0;
 };
 
+class StimulusPlayer {
+public:
+	INTERFACE_OPERATIONS(StimulusPlayer);
+};
+
 class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
@@ -29,7 +34,8 @@ public:
 		AudioDevice *device,
 		AudioFrameReaderFactory *readerFactory,
 		AudioFrameProcessorFactory *processorFactory,
-		StimulusList *list
+		StimulusList *list,
+		StimulusPlayer *player
 	);
 	PLAYING_AUDIO_API void play(PlayRequest) override;
 	void fillStreamBuffer(void *channels, int frames) override;
