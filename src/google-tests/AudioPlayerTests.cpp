@@ -105,3 +105,8 @@ TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
 	EXPECT_EQ(6, device.streamParameters().channels);
 	EXPECT_EQ(7, device.streamParameters().sampleRate);
 }
+
+TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
+	player.play({});
+	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
+}
