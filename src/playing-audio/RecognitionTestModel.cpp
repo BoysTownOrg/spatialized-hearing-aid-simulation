@@ -82,6 +82,8 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::playTrial(PlayRequest request) {
+	if (device->failed())
+		throw RequestFailure{ device->errorMessage() };
 	frameReader = makeReader({});
 	AudioDevice::StreamParameters forStreaming;
 	forStreaming.sampleRate = frameReader->sampleRate();
