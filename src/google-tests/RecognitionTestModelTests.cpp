@@ -193,24 +193,6 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFacto
 	EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 }
 
-TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
-	model.initializeTest({});
-	frameReader->setChannels(2);
-	model.playTrial({});
-	float left{};
-	float right{};
-	float *x[]{ &left, &right };
-	device.fillStreamBuffer(x, 1);
-	EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
-	EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
-	EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
-	EXPECT_EQ(1, frameReader->audioBuffer()[1].size());
-	EXPECT_EQ(&left, processor->audioBuffer()[0].data());
-	EXPECT_EQ(&right, processor->audioBuffer()[1].data());
-	EXPECT_EQ(1, processor->audioBuffer()[0].size());
-	EXPECT_EQ(1, processor->audioBuffer()[1].size());
-}
-
 TEST_F(RecognitionTestModelTests, playTrialSetsCallbackResultToContinueBeforeStartingStream) {
 	model.playTrial({});
 	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
