@@ -1,5 +1,7 @@
 #pragma once
 
+class StimulusList {};
+
 #include "playing-audio-exports.h"
 #include "AudioDevice.h"
 #include "AudioFrameProcessor.h"
@@ -20,7 +22,8 @@ public:
 	PLAYING_AUDIO_API RecognitionTestModel(
 		std::shared_ptr<AudioDevice> device,
 		std::shared_ptr<AudioFrameReaderFactory> readerFactory,
-		std::shared_ptr<AudioFrameProcessorFactory> processorFactory
+		std::shared_ptr<AudioFrameProcessorFactory> processorFactory,
+		StimulusList *list
 	);
 	PLAYING_AUDIO_API void play(PlayRequest) override;
 	void fillStreamBuffer(void *channels, int frames) override;

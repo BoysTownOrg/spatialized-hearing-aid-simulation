@@ -6,7 +6,8 @@
 RecognitionTestModel::RecognitionTestModel(
 	std::shared_ptr<AudioDevice> device,
 	std::shared_ptr<AudioFrameReaderFactory> readerFactory,
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory,
+	StimulusList *
 ) :
 	device{ std::move(device) },
 	readerFactory{ std::move(readerFactory) },

@@ -14,7 +14,8 @@ public:
 		model{
 			std::move(device),
 			std::make_shared<AudioFrameReaderStubFactory>(),
-			std::make_shared<AudioFrameProcessorStubFactory>()
+			std::make_shared<AudioFrameProcessorStubFactory>(),
+			{}
 		}
 	{}
 
@@ -22,7 +23,8 @@ public:
 		model{
 			std::make_shared<AudioDeviceStub>(),
 			std::move(factory),
-			std::make_shared<AudioFrameProcessorStubFactory>()
+			std::make_shared<AudioFrameProcessorStubFactory>(),
+			{}
 		}
 	{}
 
@@ -31,11 +33,20 @@ public:
 			std::make_shared<AudioDeviceStub>(),
 			std::make_shared<AudioFrameReaderStubFactory>(),
 			std::move(factory),
+			{}
 		}
 	{}
 
 	void initializeTest() {
 		model.initializeTest({});
+	}
+};
+
+class StimulusListStub : public StimulusList {
+	std::string directory_{};
+public:
+	std::string directory() const {
+		return directory_;
 	}
 };
 
@@ -48,7 +59,8 @@ protected:
 	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
 	std::shared_ptr<AudioFrameProcessorStubFactory> processorFactory =
 		std::make_shared<AudioFrameProcessorStubFactory>(processor);
-	RecognitionTestModel model{ device, readerFactory, processorFactory };
+	StimulusListStub list{};
+	RecognitionTestModel model{ device, readerFactory, processorFactory, &list };
 	
 	void assertInitializeTestThrowsInitializationFailure(
 		std::string errorMessage
@@ -114,7 +126,7 @@ TEST_F(
     initializeTestPassesStimulusListDirectoryToStimulusList
 ) {
     Model::TestParameters parameters;
-    parameters.stimulusListDirectory = "a";
+    parameters.audioDirectory = "a";
     model.initializeTest(parameters);
     assertEqual("a", list.directory());
 }
