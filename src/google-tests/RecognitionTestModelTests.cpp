@@ -21,10 +21,8 @@ public:
 
 class RecognitionTestModelFacade {
 	AudioDeviceStub device{};
-	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-	AudioFrameReaderStubFactory readerFactory{ frameReader };
-	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-	AudioFrameProcessorStubFactory processorFactory{ processor };
+	AudioFrameReaderStubFactory readerFactory{};
+	AudioFrameProcessorStubFactory processorFactory{};
 	StimulusListStub list{};
 	RecognitionTestModel model;
 public:
