@@ -36,9 +36,6 @@ static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameRe
 }
 
 void RecognitionTestModel::play(PlayRequest request) {
-	if (device->streaming())
-		return;
-
 	frameReader = makeReader(request.audioFilePath);
 
 	AudioFrameProcessorFactory::Parameters forProcessor;
@@ -66,7 +63,9 @@ std::shared_ptr<AudioFrameReader> RecognitionTestModel::makeReader(std::string f
 	}
 }
 
-std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
+std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(
+	AudioFrameProcessorFactory::Parameters p
+) {
 	try {
 		return processorFactory->make(p);
 	}
@@ -107,7 +106,7 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	device->startStream();
 }
 
-void RecognitionTestModel::fillStreamBuffer(void * channels, int frames) {
+void RecognitionTestModel::fillStreamBuffer(void *channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio[i] = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
