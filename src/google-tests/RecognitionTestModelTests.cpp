@@ -183,8 +183,8 @@ TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
 	EXPECT_EQ(1, processor->audioBuffer()[1].size());
 }
 
-TEST_F(RecognitionTestModelTests, playSetsCallbackResultToContinueBeforeStartingStream) {
-	model.play({});
+TEST_F(RecognitionTestModelTests, playTrialSetsCallbackResultToContinueBeforeStartingStream) {
+	model.playTrial({});
 	assertEqual("setCallbackResultToContinue start ", device->callbackLog());
 }
 
