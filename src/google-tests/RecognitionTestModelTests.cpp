@@ -76,7 +76,7 @@ TEST_F(
 ) {
 	device->fail();
 	device->setErrorMessage("error.");
-	assertPlayTrialThrowsInitializationFailure("error.");
+	assertPlayThrowsRequestError("error.");
 }
 
 TEST(
