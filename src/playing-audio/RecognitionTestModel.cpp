@@ -92,20 +92,9 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	StimulusPlayer::PlayRequest adapted;
 	adapted.audioFilePath = list->next();
 	player->play(adapted);
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
 	frameReader = makeReader({});
-	AudioDevice::StreamParameters forStreaming;
-	forStreaming.sampleRate = frameReader->sampleRate();
-	forStreaming.channels = frameReader->channels();
-	for (int i = 0; i < device->count(); ++i)
-		if (device->description(i) == request.audioDevice)
-			forStreaming.deviceIndex = i;
 	
 	audio.resize(frameReader->channels());
-	if (device->streaming())
-		return;
-	device->openStream(forStreaming);
 	device->setCallbackResultToContinue();
 	device->startStream();
 }

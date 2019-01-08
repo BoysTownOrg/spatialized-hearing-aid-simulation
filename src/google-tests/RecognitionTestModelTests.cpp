@@ -133,18 +133,6 @@ TEST_F(
 	FAIL();
 }
 
-TEST_F(RecognitionTestModelTests, playTrialPassesParametersToFactories) {
-	RecognitionTestModel::PlayRequest request;
-	device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
-	request.audioDevice = "gamma";
-	frameReader->setChannels(6);
-	frameReader->setSampleRate(7);
-	model.playTrial(request);
-	EXPECT_EQ(2, device.streamParameters().deviceIndex);
-	EXPECT_EQ(6, device.streamParameters().channels);
-	EXPECT_EQ(7, device.streamParameters().sampleRate);
-}
-
 TEST_F(
     RecognitionTestModelTests,
     initializeTestPassesStimulusListDirectoryToStimulusList
@@ -170,27 +158,6 @@ TEST_F(
 ) {
     list.setEmpty();
     EXPECT_TRUE(model.testComplete());
-}
-
-TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFactory) {
-	Model::TestParameters p;
-	p.leftDslPrescriptionFilePath = "a";
-	p.rightDslPrescriptionFilePath = "b";
-	p.brirFilePath = "c";
-	p.level_dB_Spl = 1;
-	p.attack_ms = 2;
-	p.release_ms = 3;
-	p.windowSize = 4;
-	p.chunkSize = 5;
-	model.initializeTest(p);
-	assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-	assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-	assertEqual("c", processorFactory.parameters().brirFilePath);
-	EXPECT_EQ(1, processorFactory.parameters().level_dB_Spl);
-	EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-	EXPECT_EQ(3, processorFactory.parameters().release_ms);
-	EXPECT_EQ(4, processorFactory.parameters().windowSize);
-	EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialSetsCallbackResultToContinueBeforeStartingStream) {
