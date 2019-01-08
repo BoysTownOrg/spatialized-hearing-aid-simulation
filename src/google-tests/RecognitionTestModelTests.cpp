@@ -17,6 +17,17 @@ public:
 			std::make_shared<AudioFrameProcessorStubFactory>()
 		}
 	{}
+	RecognitionTestModelFacade(std::shared_ptr<AudioFrameReaderFactory> factory) :
+		model{
+			std::make_shared<AudioDeviceStub>(),
+			std::move(factory),
+			std::make_shared<AudioFrameProcessorStubFactory>()
+		}
+	{}
+
+	void initializeTest() {
+		model.initializeTest({});
+	}
 };
 
 class RecognitionTestModelTests : public ::testing::Test {
@@ -91,13 +102,9 @@ TEST(
 	PlayAudioModelErroredFrameReaderFactoryTest,
 	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
 ) {
-	RecognitionTestModel model{ 
-		std::make_shared<AudioDeviceStub>(), 
-		std::make_shared<ErrorAudioFrameReaderFactory>("error."), 
-		std::make_shared<AudioFrameProcessorStubFactory>() 
-	};
+	RecognitionTestModelFacade model{ std::make_shared<ErrorAudioFrameReaderFactory>("error.") };
 	try {
-		model.initializeTest({});
+		model.initializeTest();
 		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
 	}
 	catch (const RecognitionTestModel::TestInitializationFailure &e) {
