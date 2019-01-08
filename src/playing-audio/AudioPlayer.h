@@ -5,6 +5,7 @@
 #include "RecognitionTestModel.h"
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
+	AudioDevice *device;
 public:
 	PLAYING_AUDIO_API AudioPlayer(AudioDevice *device);
 	void fillStreamBuffer(void * channels, int frames) override;
