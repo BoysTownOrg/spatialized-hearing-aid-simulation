@@ -41,7 +41,6 @@ public:
 		StimulusList *list,
 		StimulusPlayer *player
 	);
-	PLAYING_AUDIO_API void play(PlayRequest) override;
 	PLAYING_AUDIO_API void initializeTest(TestParameters) override;
 	PLAYING_AUDIO_API void playTrial(PlayRequest) override;
 	std::vector<std::string> audioDeviceDescriptions() override;

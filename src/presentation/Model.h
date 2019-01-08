@@ -14,7 +14,6 @@ public:
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void play(PlayRequest) = 0;
 
 	struct TestParameters {
 		std::string leftDslPrescriptionFilePath;

@@ -8,8 +8,6 @@ class ModelStub : public Model {
 	bool _testComplete{};
 	bool _trialPlayed{};
 public:
-	void play(PlayRequest) override {}
-
 	const TestParameters &testParameters() const {
 		return _testParameters;
 	}
@@ -36,6 +34,10 @@ public:
 
 	void playTrial(PlayRequest) override {
 		_trialPlayed = true;
+	}
+
+	bool testComplete() override {
+		return _testComplete;
 	}
 };
 
@@ -557,8 +559,11 @@ public:
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void play(PlayRequest) override {}
 	void playTrial(PlayRequest) override {}
+
+	bool testComplete() override {
+		return {};
+	}
 };
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {

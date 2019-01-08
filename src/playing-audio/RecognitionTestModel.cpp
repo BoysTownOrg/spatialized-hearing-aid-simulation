@@ -9,9 +9,6 @@ RecognitionTestModel::RecognitionTestModel(
 {
 }
 
-void RecognitionTestModel::play(PlayRequest request) {
-}
-
 bool RecognitionTestModel::testComplete() {
 	return list->empty();
 }
