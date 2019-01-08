@@ -108,24 +108,6 @@ TEST(
 
 TEST(
 	PlayAudioModelErroredProcessorFactoryTest,
-	playThrowsRequestErrorWhenProcessorFactoryThrowsCreateError)
-{
-	RecognitionTestModel model{ 
-		std::make_shared<AudioDeviceStub>(), 
-		std::make_shared<AudioFrameReaderStubFactory>(), 
-		std::make_shared<ErrorAudioFrameProcessorFactory>("error.") 
-	};
-	try {
-		model.play({});
-		FAIL() << "Expected RecognitionTestModel::RequestFailure";
-	}
-	catch (const RecognitionTestModel::RequestFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	PlayAudioModelErroredProcessorFactoryTest,
 	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
 {
 	RecognitionTestModel model{ 
