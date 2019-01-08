@@ -7,6 +7,18 @@
 #include <playing-audio/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 
+class RecognitionTestModelFacade {
+	RecognitionTestModel model;
+public:
+	RecognitionTestModelFacade(std::shared_ptr<AudioDevice> device) :
+		model{
+			std::move(device),
+			std::make_shared<AudioFrameReaderStubFactory>(),
+			std::make_shared<AudioFrameProcessorStubFactory>()
+		}
+	{}
+};
+
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
 	std::shared_ptr<AudioDeviceStub> device = std::make_shared<AudioDeviceStub>();
@@ -53,11 +65,7 @@ TEST(
 	device->fail();
 	device->setErrorMessage("error.");
 	try {
-		RecognitionTestModel model{ 
-			device, 
-			std::make_shared<AudioFrameReaderStubFactory>(), 
-			std::make_shared<AudioFrameProcessorStubFactory>() 
-		};
+		RecognitionTestModelFacade model{ device };
 		FAIL() << "Expected RecognitionTestModel::DeviceFailure";
 	}
 	catch (const RecognitionTestModel::DeviceFailure &e) {
