@@ -36,3 +36,9 @@ TEST_F(
 	device.setErrorMessage("error.");
 	assertPlayThrowsDeviceFailureWithMessage("error.");
 }
+
+TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
+	device.setStreaming();
+	player.play({});
+	EXPECT_TRUE(device.streamLog().empty());
+}
