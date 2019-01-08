@@ -133,12 +133,6 @@ TEST_F(
 	FAIL();
 }
 
-TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
-	device.setStreaming();
-	model.playTrial({});
-	EXPECT_TRUE(device.streamLog().empty());
-}
-
 TEST_F(RecognitionTestModelTests, playTrialPassesParametersToFactories) {
 	RecognitionTestModel::PlayRequest request;
 	device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
