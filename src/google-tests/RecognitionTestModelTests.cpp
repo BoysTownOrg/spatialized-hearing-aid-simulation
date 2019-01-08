@@ -41,7 +41,31 @@ protected:
 	}
 };
 
-TEST_F(RecognitionTestModelTests, constructorSetsItself) {
+class RecognitionTestModelTests_constructorSetsItself_Test : public RecognitionTestModelTests {
+public:
+	RecognitionTestModelTests_constructorSetsItself_Test() {}
+private:
+	virtual void TestBody();
+	static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;
+	GTEST_DISALLOW_COPY_AND_ASSIGN_(RecognitionTestModelTests_constructorSetsItself_Test);
+};
+
+::testing::TestInfo* const RecognitionTestModelTests_constructorSetsItself_Test::test_info_ =
+    ::testing::internal::MakeAndRegisterTestInfo(
+		"RecognitionTestModelTests", "constructorSetsItself", 
+		NULL, 
+		NULL,
+        ::testing::internal::CodeLocation(__FILE__, __LINE__),
+        ::testing::internal::GetTypeId<RecognitionTestModelTests>(),
+        RecognitionTestModelTests::SetUpTestCase,
+        RecognitionTestModelTests::TearDownTestCase,
+        new ::testing::internal::TestFactoryImpl<
+            RecognitionTestModelTests_constructorSetsItself_Test
+		>
+	);
+
+void RecognitionTestModelTests_constructorSetsItself_Test::TestBody()
+{
 	EXPECT_EQ(&model, device->controller());
 }
 
