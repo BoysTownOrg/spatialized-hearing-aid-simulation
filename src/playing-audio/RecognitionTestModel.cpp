@@ -103,7 +103,6 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	audio.resize(frameReader->channels());
 	if (device->streaming())
 		return;
-	device->closeStream();
 	device->openStream(forStreaming);
 	device->setCallbackResultToContinue();
 	device->startStream();
@@ -114,8 +113,6 @@ void RecognitionTestModel::fillStreamBuffer(void *channels, int frames) {
 		audio[i] = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
 	frameProcessor->process(audio);
-	if (frameReader->complete())
-		device->setCallbackResultToComplete();
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
