@@ -31,6 +31,10 @@ public:
 	void setEmpty() {
 		empty_ = true;
 	}
+
+	bool empty() override {
+		return empty_;
+	}
 };
 
 class StimulusPlayerStub : public StimulusPlayer {

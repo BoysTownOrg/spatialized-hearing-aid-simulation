@@ -69,9 +69,8 @@ std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(
 	}
 }
 
-bool RecognitionTestModel::testComplete()
-{
-	return false;
+bool RecognitionTestModel::testComplete() {
+	return list->empty();
 }
 
 void RecognitionTestModel::initializeTest(TestParameters p) {
