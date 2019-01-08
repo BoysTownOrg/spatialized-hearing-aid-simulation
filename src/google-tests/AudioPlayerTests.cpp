@@ -1,7 +1,9 @@
 #include <playing-audio/AudioPlayer.h>
+#include <audio-file-reading/AudioFileInMemory.h>
 #include "AudioDeviceStub.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
+#include "FakeAudioFileReader.h"
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
@@ -154,4 +156,21 @@ TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
 	float *audio[] = { &x };
 	device.fillStreamBuffer(audio, 1);
 	EXPECT_EQ(2, x);
+}
+
+TEST_F(AudioPlayerTests, playPassesComputedRmsToProcessorFactory) {
+	FakeAudioFileReader fake{
+		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+		2
+	};
+	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
+	player.play({});
+	assertEqual(
+		{ 
+			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
+			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
+		}, 
+		processorFactory.parameters().stimulusRms,
+		1e-6
+	);
 }
