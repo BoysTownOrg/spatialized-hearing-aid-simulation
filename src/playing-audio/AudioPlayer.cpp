@@ -14,6 +14,8 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 void AudioPlayer::play(std::string filePath)
 {
 	filePath;
+	if (device->failed())
+		throw DeviceFailure{ device->errorMessage() };
 	device->closeStream();
 	device->openStream({});
 	device->startStream();
