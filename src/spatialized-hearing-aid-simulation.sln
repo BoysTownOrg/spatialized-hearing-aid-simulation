@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-tests\google-tests.vcxproj", "{03E08837-A004-40B9-8FD2-4CDA51994ED1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,6 +14,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-test
 		{8E991A8E-5FA0-492A-8273-A0626CB15164} = {8E991A8E-5FA0-492A-8273-A0626CB15164}
 		{49E34B8E-1578-4405-A9D4-3A01039A0543} = {49E34B8E-1578-4405-A9D4-3A01039A0543}
 		{6BBA7599-D602-4142-896C-01ED0F532AC6} = {6BBA7599-D602-4142-896C-01ED0F532AC6}
+		{B782D7D5-2300-42D5-A611-A5121124B527} = {B782D7D5-2300-42D5-A611-A5121124B527}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "presentation", "presentation\presentation.vcxproj", "{6E368A0E-612A-4A30-A18D-145E6341FE31}"
@@ -59,6 +60,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fir-filtering-profiling", "
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "binaural-room-impulse-response", "binaural-room-impulse-response\binaural-room-impulse-response.vcxproj", "{27FD3D17-8E94-4152-B8AF-E40A34C3414F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recognition-test", "recognition-test\recognition-test.vcxproj", "{B782D7D5-2300-42D5-A611-A5121124B527}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -164,6 +167,14 @@ Global
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x64.Build.0 = Release|x64
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.ActiveCfg = Release|Win32
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F}.Release|x86.Build.0 = Release|Win32
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Debug|x64.ActiveCfg = Debug|x64
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Debug|x64.Build.0 = Debug|x64
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Debug|x86.ActiveCfg = Debug|Win32
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Debug|x86.Build.0 = Debug|Win32
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Release|x64.ActiveCfg = Release|x64
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Release|x64.Build.0 = Release|x64
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Release|x86.ActiveCfg = Release|Win32
+		{B782D7D5-2300-42D5-A611-A5121124B527}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

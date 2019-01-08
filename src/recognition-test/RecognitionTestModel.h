@@ -1,6 +1,11 @@
 #pragma once
 
-#include "playing-audio-exports.h"
+#ifdef RECOGNITION_TEST_EXPORTS
+	#define RECOGNITION_TEST_API __declspec(dllexport)
+#else
+	#define RECOGNITION_TEST_API __declspec(dllimport)
+#endif
+
 #include <presentation/Model.h>
 #include <common-includes/RuntimeError.h>
 #include <common-includes/Interface.h>
@@ -37,12 +42,12 @@ class RecognitionTestModel : public Model {
 	StimulusList *list;
 	StimulusPlayer *player;
 public:
-	PLAYING_AUDIO_API RecognitionTestModel(
+	RECOGNITION_TEST_API RecognitionTestModel(
 		StimulusList *list,
 		StimulusPlayer *player
 	);
-	PLAYING_AUDIO_API void initializeTest(TestParameters) override;
-	PLAYING_AUDIO_API void playTrial(TrialRequest) override;
+	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
+	RECOGNITION_TEST_API void playTrial(TrialRequest) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 };

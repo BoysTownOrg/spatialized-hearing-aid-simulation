@@ -2,9 +2,9 @@
 
 #include "AudioDevice.h"
 #include "playing-audio-exports.h"
-#include "RecognitionTestModel.h"
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
+#include <recognition-test/RecognitionTestModel.h>
 #include <gsl/gsl>
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
