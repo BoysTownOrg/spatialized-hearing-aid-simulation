@@ -20,6 +20,7 @@ public:
 class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
+	RUNTIME_ERROR(DeviceFailure);
 	virtual void play(std::string filePath) = 0;
 };
 
