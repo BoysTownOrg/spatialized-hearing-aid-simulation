@@ -7,6 +7,41 @@
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
+class AudioPlayerFacade {
+	AudioDeviceStub device{};
+	AudioFrameReaderStubFactory readerFactory{};
+	AudioFrameProcessorStubFactory processorFactory{};
+	AudioPlayer player;
+public:
+	AudioPlayerFacade(AudioDevice *device) :
+		player{
+			device,
+			&readerFactory,
+			&processorFactory
+		}
+	{}
+
+	AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
+		player{
+			&device,
+			readerFactory,
+			&processorFactory
+		}
+	{}
+
+	AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
+		player{
+			&device,
+			&readerFactory,
+			processorFactory
+		}
+	{}
+
+	void play() {
+		player.play({});
+	}
+};
+
 class AudioPlayerTests : public ::testing::Test {
 protected:
 	AudioDeviceStub device{};
@@ -19,9 +54,9 @@ protected:
 	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 		try {
 			player.play({});
-			FAIL() << "Expected AudioPlayer::DeviceFailure";
+			FAIL() << "Expected AudioPlayer::RequestFailure";
 		}
-		catch (const AudioPlayer::DeviceFailure &e) {
+		catch (const AudioPlayer::RequestFailure &e) {
 			assertEqual(errorMessage, e.what());
 		}
 	}
@@ -173,4 +208,39 @@ TEST_F(AudioPlayerTests, playPassesComputedRmsToProcessorFactory) {
 		processorFactory.parameters().stimulusRms,
 		1e-6
 	);
+}
+
+TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
+	player.play({});
+	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
+}
+
+TEST(
+	AudioPlayerOtherTests,
+	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
+) {
+	ErrorAudioFrameReaderFactory factory{ "error." };
+	AudioPlayerFacade player{ &factory };
+	try {
+		player.play();
+		FAIL() << "Expected AudioPlayer::RequestFailure";
+	}
+	catch (const AudioPlayer::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
+TEST(
+	AudioPlayerOtherTests,
+	playThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
+) {
+	ErrorAudioFrameProcessorFactory factory{ "error." };
+	AudioPlayerFacade player{ &factory };
+	try {
+		player.play();
+		FAIL() << "Expected AudioPlayer::RequestFailure";
+	}
+	catch (const AudioPlayer::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
 }

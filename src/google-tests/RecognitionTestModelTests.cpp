@@ -160,28 +160,6 @@ TEST_F(
     EXPECT_TRUE(model.testComplete());
 }
 
-TEST_F(RecognitionTestModelTests, playResetsReaderAfterComputingRms) {
-	model.play({});
-	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
-}
-
-TEST_F(RecognitionTestModelTests, playPassesComputedRmsToProcessorFactory) {
-	FakeAudioFileReader fake{
-		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-		2
-	};
-	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
-	model.play({});
-	assertEqual(
-		{ 
-			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
-			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
-		}, 
-		processorFactory.parameters().stimulusRms,
-		1e-6
-	);
-}
-
 TEST(
 	RecognitionTestModelOtherTests,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
@@ -191,39 +169,9 @@ TEST(
 	device.setErrorMessage("error.");
 	try {
 		RecognitionTestModelFacade model{ &device };
-		FAIL() << "Expected RecognitionTestModel::DeviceFailure";
+		FAIL() << "Expected RecognitionTestModel::RequestFailure";
 	}
 	catch (const RecognitionTestModel::DeviceFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	RecognitionTestModelOtherTests,
-	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
-) {
-	ErrorAudioFrameReaderFactory factory{ "error." };
-	RecognitionTestModelFacade model{ &factory };
-	try {
-		model.initializeTest();
-		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-	}
-	catch (const RecognitionTestModel::TestInitializationFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	RecognitionTestModelOtherTests,
-	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
-{
-	ErrorAudioFrameProcessorFactory factory{ "error." };
-	RecognitionTestModelFacade model{ &factory };
-	try {
-		model.initializeTest();
-		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-	}
-	catch (const RecognitionTestModel::TestInitializationFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }

@@ -20,7 +20,7 @@ public:
 class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
-	RUNTIME_ERROR(DeviceFailure);
+	RUNTIME_ERROR(RequestFailure);
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -59,7 +59,4 @@ public:
 	PLAYING_AUDIO_API void playTrial(PlayRequest) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
-private:
-	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
-	std::shared_ptr<AudioFrameProcessor> makeProcessor(AudioFrameProcessorFactory::Parameters p);
 };

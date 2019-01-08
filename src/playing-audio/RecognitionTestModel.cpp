@@ -20,52 +20,7 @@ RecognitionTestModel::RecognitionTestModel(
 		throw DeviceFailure{ this->device->errorMessage() };
 }
 
-static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameReader> &reader) {
-	std::vector<std::vector<float>> entireAudioFile(reader->channels());
-	std::vector<gsl::span<float>> pointers;
-	for (auto &channel : entireAudioFile) {
-		channel.resize(gsl::narrow<std::vector<float>::size_type>(reader->frames()));
-		pointers.push_back({ channel });
-	}
-	reader->read(pointers);
-	std::vector<double> stimulusRms;
-	for (const auto &channel : entireAudioFile) {
-		float squaredSum{};
-		for (const auto sample : channel)
-			squaredSum += sample * sample;
-		stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
-	}
-	return stimulusRms;
-}
-
 void RecognitionTestModel::play(PlayRequest request) {
-	frameReader = makeReader(request.audioFilePath);
-
-	AudioFrameProcessorFactory::Parameters forProcessor;
-	forProcessor.stimulusRms = computeStimulusRms(frameReader);
-	makeProcessor(forProcessor);
-
-	frameReader->reset();
-}
-
-std::shared_ptr<AudioFrameReader> RecognitionTestModel::makeReader(std::string filePath) {
-	try {
-		return readerFactory->make(filePath);
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
-}
-
-std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(
-	AudioFrameProcessorFactory::Parameters p
-) {
-	try {
-		return processorFactory->make(p);
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
 }
 
 bool RecognitionTestModel::testComplete() {
@@ -82,8 +37,6 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forProcessor.level_dB_Spl = p.level_dB_Spl;
 	forProcessor.chunkSize = p.chunkSize;
 	forProcessor.windowSize = p.windowSize;
-	frameProcessor = makeProcessor(forProcessor);
-	makeReader({});
 	list->initialize(p.audioDirectory);
 }
 
@@ -91,9 +44,6 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	StimulusPlayer::PlayRequest adapted;
 	adapted.audioFilePath = list->next();
 	player->play(adapted);
-	frameReader = makeReader({});
-	
-	audio.resize(frameReader->channels());
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {

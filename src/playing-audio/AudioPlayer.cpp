@@ -41,7 +41,7 @@ static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameRe
 
 void AudioPlayer::play(PlayRequest request) {
 	if (device->failed())
-		throw DeviceFailure{ device->errorMessage() };
+		throw RequestFailure{ device->errorMessage() };
 	
 	if (device->streaming())
 		return;
