@@ -16,6 +16,8 @@ void AudioPlayer::play(std::string filePath)
 	filePath;
 	if (device->failed())
 		throw DeviceFailure{ device->errorMessage() };
+	if (device->streaming())
+		return;
 	device->closeStream();
 	device->openStream({});
 	device->startStream();
