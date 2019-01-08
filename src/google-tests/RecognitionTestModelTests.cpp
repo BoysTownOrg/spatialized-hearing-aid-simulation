@@ -126,11 +126,6 @@ protected:
 	}
 };
 
-TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts) {
-	model.playTrial({});
-	assertEqual("close open start ", device.streamLog());
-}
-
 TEST_F(
 	RecognitionTestModelTests,
 	playTrialThrowsRequestFailureWhenDeviceFails
