@@ -80,7 +80,7 @@ std::shared_ptr<AudioFrameReader> RecognitionTestModel::makeReader(std::string f
 		return readerFactory->make(filePath);
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
+		throw TestInitializationFailure{ e.what() };
 	}
 }
 
@@ -104,6 +104,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forProcessor.chunkSize = p.chunkSize;
 	forProcessor.windowSize = p.windowSize;
 	makeProcessor(forProcessor);
+	makeReader({});
 	if (device->failed())
 		throw TestInitializationFailure{ device->errorMessage() };
 }
