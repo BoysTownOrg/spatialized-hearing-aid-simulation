@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioFileInMemoryTests.cpp" />
+    <ClCompile Include="AudioPlayerTests.cpp" />
     <ClCompile Include="BrirAdapterTests.cpp" />
     <ClCompile Include="RecognitionTestModelTests.cpp" />
     <ClCompile Include="ChannelCopierTester.cpp" />
