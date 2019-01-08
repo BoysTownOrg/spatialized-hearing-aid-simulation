@@ -4,14 +4,14 @@
 #include <gsl/gsl>
 
 RecognitionTestModel::RecognitionTestModel(
-	std::shared_ptr<AudioDevice> device,
-	std::shared_ptr<AudioFrameReaderFactory> readerFactory,
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory,
+	AudioDevice *device,
+	AudioFrameReaderFactory *readerFactory,
+	AudioFrameProcessorFactory *processorFactory,
 	StimulusList *list
 ) :
-	device{ std::move(device) },
-	readerFactory{ std::move(readerFactory) },
-	processorFactory{ std::move(processorFactory) },
+	device{ device },
+	readerFactory{ readerFactory },
+	processorFactory{ processorFactory },
 	list{ list }
 {
 	if (this->device->failed())

@@ -7,41 +7,6 @@
 #include <playing-audio/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 
-class RecognitionTestModelFacade {
-	RecognitionTestModel model;
-public:
-	RecognitionTestModelFacade(std::shared_ptr<AudioDevice> device) :
-		model{
-			std::move(device),
-			std::make_shared<AudioFrameReaderStubFactory>(),
-			std::make_shared<AudioFrameProcessorStubFactory>(),
-			{}
-		}
-	{}
-
-	RecognitionTestModelFacade(std::shared_ptr<AudioFrameReaderFactory> factory) :
-		model{
-			std::make_shared<AudioDeviceStub>(),
-			std::move(factory),
-			std::make_shared<AudioFrameProcessorStubFactory>(),
-			{}
-		}
-	{}
-
-	RecognitionTestModelFacade(std::shared_ptr<AudioFrameProcessorFactory> factory) :
-		model{
-			std::make_shared<AudioDeviceStub>(),
-			std::make_shared<AudioFrameReaderStubFactory>(),
-			std::move(factory),
-			{}
-		}
-	{}
-
-	void initializeTest() {
-		model.initializeTest({});
-	}
-};
-
 class StimulusListStub : public StimulusList {
 	std::string directory_{};
 public:
@@ -54,17 +19,56 @@ public:
 	}
 };
 
+class RecognitionTestModelFacade {
+	AudioDeviceStub device{};
+	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
+	AudioFrameReaderStubFactory readerFactory{ frameReader };
+	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
+	AudioFrameProcessorStubFactory processorFactory{ processor };
+	StimulusListStub list{};
+	RecognitionTestModel model;
+public:
+	RecognitionTestModelFacade(AudioDevice *device) :
+		model{
+			device,
+			&readerFactory,
+			&processorFactory,
+			&list
+		}
+	{}
+
+	RecognitionTestModelFacade(AudioFrameReaderFactory *readerFactory) :
+		model{
+			&device,
+			readerFactory,
+			&processorFactory,
+			&list
+		}
+	{}
+
+	RecognitionTestModelFacade(AudioFrameProcessorFactory *processorFactory) :
+		model{
+			&device,
+			&readerFactory,
+			processorFactory,
+			&list
+		}
+	{}
+
+	void initializeTest() {
+		model.initializeTest({});
+	}
+};
+
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
-	std::shared_ptr<AudioDeviceStub> device = std::make_shared<AudioDeviceStub>();
+	AudioDeviceStub device{};
 	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-	std::shared_ptr<AudioFrameReaderStubFactory> readerFactory =
-		std::make_shared<AudioFrameReaderStubFactory>(frameReader);
+	AudioFrameReaderStubFactory readerFactory{ frameReader };
 	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-	std::shared_ptr<AudioFrameProcessorStubFactory> processorFactory =
-		std::make_shared<AudioFrameProcessorStubFactory>(processor);
+	AudioFrameProcessorStubFactory processorFactory{ processor };
 	StimulusListStub list{};
-	RecognitionTestModel model{ device, readerFactory, processorFactory, &list };
+	RecognitionTestModel model{ &device, &readerFactory, &processorFactory, &list };
 	
 	void assertInitializeTestThrowsInitializationFailure(
 		std::string errorMessage
@@ -90,39 +94,39 @@ protected:
 };
 
 TEST_F(RecognitionTestModelTests, constructorSetsItself) {
-	EXPECT_EQ(&model, device->controller());
+	EXPECT_EQ(&model, device.controller());
 }
 
 TEST_F(RecognitionTestModelTests, playTrialFirstClosesStreamThenOpensThenStarts) {
 	model.playTrial({});
-	assertEqual("close open start ", device->streamLog());
+	assertEqual("close open start ", device.streamLog());
 }
 
 TEST_F(
 	RecognitionTestModelTests,
 	playTrialThrowsRequestFailureWhenDeviceFails
 ) {
-	device->fail();
-	device->setErrorMessage("error.");
+	device.fail();
+	device.setErrorMessage("error.");
 	assertPlayTrialThrowsRequestFailure("error.");
 }
 
 TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStream) {
-	device->setStreaming();
+	device.setStreaming();
 	model.playTrial({});
-	EXPECT_TRUE(device->streamLog().empty());
+	EXPECT_TRUE(device.streamLog().empty());
 }
 
 TEST_F(RecognitionTestModelTests, playTrialPassesParametersToFactories) {
 	RecognitionTestModel::PlayRequest request;
-	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
+	device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	request.audioDevice = "gamma";
 	frameReader->setChannels(6);
 	frameReader->setSampleRate(7);
 	model.playTrial(request);
-	EXPECT_EQ(2, device->streamParameters().deviceIndex);
-	EXPECT_EQ(6, device->streamParameters().channels);
-	EXPECT_EQ(7, device->streamParameters().sampleRate);
+	EXPECT_EQ(2, device.streamParameters().deviceIndex);
+	EXPECT_EQ(6, device.streamParameters().channels);
+	EXPECT_EQ(7, device.streamParameters().sampleRate);
 }
 
 TEST_F(
@@ -146,25 +150,25 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToProcessorFacto
 	p.windowSize = 4;
 	p.chunkSize = 5;
 	model.initializeTest(p);
-	assertEqual("a", processorFactory->parameters().leftDslPrescriptionFilePath);
-	assertEqual("b", processorFactory->parameters().rightDslPrescriptionFilePath);
-	assertEqual("c", processorFactory->parameters().brirFilePath);
-	EXPECT_EQ(1, processorFactory->parameters().level_dB_Spl);
-	EXPECT_EQ(2, processorFactory->parameters().attack_ms);
-	EXPECT_EQ(3, processorFactory->parameters().release_ms);
-	EXPECT_EQ(4, processorFactory->parameters().windowSize);
-	EXPECT_EQ(5, processorFactory->parameters().chunkSize);
+	assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
+	assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
+	assertEqual("c", processorFactory.parameters().brirFilePath);
+	EXPECT_EQ(1, processorFactory.parameters().level_dB_Spl);
+	EXPECT_EQ(2, processorFactory.parameters().attack_ms);
+	EXPECT_EQ(3, processorFactory.parameters().release_ms);
+	EXPECT_EQ(4, processorFactory.parameters().windowSize);
+	EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 }
 
 TEST_F(RecognitionTestModelTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 	model.initializeTest({});
 	frameReader->setChannels(0);
 	model.playTrial({});
-	device->fillStreamBuffer(nullptr, 0);
-	EXPECT_FALSE(device->setCallbackResultToCompleteCalled());
+	device.fillStreamBuffer(nullptr, 0);
+	EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
 	frameReader->setComplete();
-	device->fillStreamBuffer(nullptr, 0);
-	EXPECT_TRUE(device->setCallbackResultToCompleteCalled());
+	device.fillStreamBuffer(nullptr, 0);
+	EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
 }
 
 TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
@@ -174,7 +178,7 @@ TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
 	float left{};
 	float right{};
 	float *x[]{ &left, &right };
-	device->fillStreamBuffer(x, 1);
+	device.fillStreamBuffer(x, 1);
 	EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
 	EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
 	EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
@@ -187,11 +191,11 @@ TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
 
 TEST_F(RecognitionTestModelTests, playTrialSetsCallbackResultToContinueBeforeStartingStream) {
 	model.playTrial({});
-	assertEqual("setCallbackResultToContinue start ", device->callbackLog());
+	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 }
 
 TEST_F(RecognitionTestModelTests, audioDeviceDescriptionsReturnsDescriptions) {
-	device->setDescriptions({ "a", "b", "c" });
+	device.setDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
@@ -231,29 +235,29 @@ class AudioTimesTwo : public AudioFrameProcessor {
 };
 
 TEST_F(RecognitionTestModelTests, fillBufferReadsThenProcesses) {
-	readerFactory->setReader(std::make_shared<ReadsAOne>());
-	processorFactory->setProcessor(std::make_shared<AudioTimesTwo>());
+	readerFactory.setReader(std::make_shared<ReadsAOne>());
+	processorFactory.setProcessor(std::make_shared<AudioTimesTwo>());
 	model.initializeTest({});
 	model.playTrial({});
 	float x{};
 	float *audio[] = { &x };
-	device->fillStreamBuffer(audio, 1);
+	device.fillStreamBuffer(audio, 1);
 	EXPECT_EQ(2, x);
 }
 
 TEST_F(RecognitionTestModelTests, playPassesComputedRmsToProcessorFactory) {
-	FakeAudioFileReader reader{
+	FakeAudioFileReader fake{
 		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
 		2
 	};
-	readerFactory->setReader(std::make_shared<AudioFileInMemory>(reader));
+	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 	model.play({});
 	assertEqual(
 		{ 
 			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
 			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
 		}, 
-		processorFactory->parameters().stimulusRms,
+		processorFactory.parameters().stimulusRms,
 		1e-6
 	);
 }
@@ -262,11 +266,11 @@ TEST(
 	RecognitionTestModelOtherTests,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 ) {
-	const auto device = std::make_shared<AudioDeviceStub>();
-	device->fail();
-	device->setErrorMessage("error.");
+	AudioDeviceStub device{};
+	device.fail();
+	device.setErrorMessage("error.");
 	try {
-		RecognitionTestModelFacade model{ device };
+		RecognitionTestModelFacade model{ &device };
 		FAIL() << "Expected RecognitionTestModel::DeviceFailure";
 	}
 	catch (const RecognitionTestModel::DeviceFailure &e) {
@@ -278,9 +282,8 @@ TEST(
 	RecognitionTestModelOtherTests,
 	initializeTestThrowsInitializationFailureWhenReaderFactoryThrowsCreateError
 ) {
-	RecognitionTestModelFacade model{ 
-		std::make_shared<ErrorAudioFrameReaderFactory>("error.") 
-	};
+	ErrorAudioFrameReaderFactory factory{ "error." };
+	RecognitionTestModelFacade model{ &factory };
 	try {
 		model.initializeTest();
 		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
@@ -294,9 +297,8 @@ TEST(
 	RecognitionTestModelOtherTests,
 	initializeTestThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError)
 {
-	RecognitionTestModelFacade model{ 
-		std::make_shared<ErrorAudioFrameProcessorFactory>("error.") 
-	};
+	ErrorAudioFrameProcessorFactory factory{ "error." };
+	RecognitionTestModelFacade model{ &factory };
 	try {
 		model.initializeTest();
 		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";

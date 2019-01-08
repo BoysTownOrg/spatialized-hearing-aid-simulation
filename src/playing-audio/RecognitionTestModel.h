@@ -17,18 +17,18 @@ public:
 
 class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
-	std::shared_ptr<AudioDevice> device;
-	std::shared_ptr<AudioFrameReaderFactory> readerFactory;
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;
+	AudioDevice *device;
+	AudioFrameReaderFactory *readerFactory;
+	AudioFrameProcessorFactory *processorFactory;
 	std::shared_ptr<AudioFrameReader> frameReader{};
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	StimulusList *list;
 public:
 	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API RecognitionTestModel(
-		std::shared_ptr<AudioDevice> device,
-		std::shared_ptr<AudioFrameReaderFactory> readerFactory,
-		std::shared_ptr<AudioFrameProcessorFactory> processorFactory,
+		AudioDevice *device,
+		AudioFrameReaderFactory *readerFactory,
+		AudioFrameProcessorFactory *processorFactory,
 		StimulusList *list
 	);
 	PLAYING_AUDIO_API void play(PlayRequest) override;

@@ -45,7 +45,7 @@ TEST(ChannelCopierTestCase, returnsTwoIfOneChannel) {
 }
 
 TEST(ChannelCopierTestCase, factoryPassesFilePath) {
-	const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
+	const auto factory = std::make_shared<AudioFrameReaderStubFactory>(nullptr);
 	ChannelCopierFactory adapter{ factory };
 	adapter.make("a");
 	assertEqual("a", factory->filePath());
