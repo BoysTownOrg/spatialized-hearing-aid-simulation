@@ -36,7 +36,7 @@ public:
 	virtual void play(PlayRequest) = 0;
 };
 
-class RecognitionTestModel : public Model, public AudioDeviceController {
+class RecognitionTestModel : public Model {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
@@ -55,7 +55,6 @@ public:
 		StimulusPlayer *player
 	);
 	PLAYING_AUDIO_API void play(PlayRequest) override;
-	void fillStreamBuffer(void *channels, int frames) override;
 	PLAYING_AUDIO_API void initializeTest(TestParameters) override;
 	PLAYING_AUDIO_API void playTrial(PlayRequest) override;
 	std::vector<std::string> audioDeviceDescriptions() override;

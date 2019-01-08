@@ -13,8 +13,6 @@ AudioPlayer::AudioPlayer(
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
-	channels;
-	frames;
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)

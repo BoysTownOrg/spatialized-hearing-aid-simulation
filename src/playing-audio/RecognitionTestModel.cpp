@@ -18,7 +18,6 @@ RecognitionTestModel::RecognitionTestModel(
 {
 	if (this->device->failed())
 		throw DeviceFailure{ this->device->errorMessage() };
-	this->device->setController(this);
 }
 
 static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameReader> &reader) {
@@ -95,13 +94,6 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	frameReader = makeReader({});
 	
 	audio.resize(frameReader->channels());
-}
-
-void RecognitionTestModel::fillStreamBuffer(void *channels, int frames) {
-	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
-		audio[i] = { static_cast<float **>(channels)[i], frames };
-	frameReader->read(audio);
-	frameProcessor->process(audio);
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
