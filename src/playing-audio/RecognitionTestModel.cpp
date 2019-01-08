@@ -98,7 +98,8 @@ void RecognitionTestModel::playTrial(PlayRequest request) {
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
 			forStreaming.deviceIndex = i;
-
+	
+	audio.resize(frameReader->channels());
 	if (device->streaming())
 		return;
 	device->closeStream();

@@ -166,8 +166,9 @@ TEST_F(RecognitionTestModelTests, fillStreamBufferSetsCallbackResultToCompleteWh
 }
 
 TEST_F(RecognitionTestModelTests, fillStreamBufferPassesAudio) {
+	model.initializeTest({});
 	frameReader->setChannels(2);
-	model.play({});
+	model.playTrial({});
 	float left{};
 	float right{};
 	float *x[]{ &left, &right };
