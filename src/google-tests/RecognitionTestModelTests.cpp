@@ -132,30 +132,15 @@ TEST_F(RecognitionTestModelTests, playTrialWhileStreamingDoesNotAlterCurrentStre
 
 TEST_F(RecognitionTestModelTests, playPassesParametersToFactories) {
 	RecognitionTestModel::PlayRequest request;
-	request.leftDslPrescriptionFilePath = "a";
-	request.rightDslPrescriptionFilePath = "b";
 	request.audioFilePath = "c";
-	request.brirFilePath = "d";
 	device->setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	request.audioDevice = "gamma";
-	request.level_dB_Spl = 1;
-	request.attack_ms = 2;
-	request.release_ms = 3;
-	request.windowSize = 4;
 	request.chunkSize = 5;
 	frameReader->setChannels(6);
 	frameReader->setSampleRate(7);
 	model.play(request);
-	assertEqual("a", processorFactory->parameters().leftDslPrescriptionFilePath);
-	assertEqual("b", processorFactory->parameters().rightDslPrescriptionFilePath);
 	assertEqual("c", readerFactory->filePath());
-	assertEqual("d", processorFactory->parameters().brirFilePath);
 	EXPECT_EQ(2, device->streamParameters().deviceIndex);
-	EXPECT_EQ(1, processorFactory->parameters().level_dB_Spl);
-	EXPECT_EQ(2, processorFactory->parameters().attack_ms);
-	EXPECT_EQ(3, processorFactory->parameters().release_ms);
-	EXPECT_EQ(4, processorFactory->parameters().windowSize);
-	EXPECT_EQ(5, processorFactory->parameters().chunkSize);
 	EXPECT_EQ(5, device->streamParameters().framesPerBuffer);
 	EXPECT_EQ(6, device->streamParameters().channels);
 	EXPECT_EQ(7, device->streamParameters().sampleRate);
