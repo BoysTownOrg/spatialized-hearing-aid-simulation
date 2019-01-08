@@ -52,13 +52,6 @@ protected:
 };
 
 TEST_F(
-	RecognitionTestModelTests,
-	DISABLED_playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
-) {
-	FAIL();
-}
-
-TEST_F(
     RecognitionTestModelTests,
     initializeTestPassesStimulusListDirectoryToStimulusList
 ) {
@@ -83,4 +76,33 @@ TEST_F(
 ) {
     list.setEmpty();
     EXPECT_TRUE(model.testComplete());
+}
+
+class FailingStimulusPlayer : public StimulusPlayer {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	void play(PlayRequest) override {
+		throw RequestFailure{ errorMessage };
+	}
+};
+
+TEST(
+	RecognitionTestModelOtherTests,
+	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+) {
+	StimulusListStub list{};
+	FailingStimulusPlayer stimulusPlayer{};
+	stimulusPlayer.setErrorMessage("error.");
+	RecognitionTestModel model{ &list, &stimulusPlayer };
+	try {
+		model.playTrial({});
+		FAIL() << "Expected RecognitionTestModel::TrialFailure";
+	}
+	catch (const RecognitionTestModel::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
 }
