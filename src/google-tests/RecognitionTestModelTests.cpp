@@ -1,9 +1,4 @@
 #include "assert-utility.h"
-#include "FakeAudioFileReader.h"
-#include "AudioFrameReaderStub.h"
-#include "AudioFrameProcessorStub.h"
-#include "AudioDeviceStub.h"
-#include <audio-file-reading/AudioFileInMemory.h>
 #include <playing-audio/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 

@@ -1,10 +1,6 @@
 #pragma once
 
 #include "playing-audio-exports.h"
-#include "AudioDevice.h"
-#include "AudioFrameProcessor.h"
-#include <audio-stream-processing/AudioFrameReader.h>
-#include <audio-file-reading/AudioFileReader.h>
 #include <presentation/Model.h>
 #include <common-includes/RuntimeError.h>
 #include <common-includes/Interface.h>
