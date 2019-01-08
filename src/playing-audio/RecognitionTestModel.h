@@ -13,11 +13,13 @@ class StimulusList {
 public:
 	INTERFACE_OPERATIONS(StimulusList);
 	virtual void initialize(std::string directory) = 0;
+	virtual std::string next() = 0;
 };
 
 class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
+	virtual void play(std::string filePath) = 0;
 };
 
 class RecognitionTestModel : public Model, public AudioDeviceController {
@@ -28,6 +30,7 @@ class RecognitionTestModel : public Model, public AudioDeviceController {
 	std::shared_ptr<AudioFrameReader> frameReader{};
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	StimulusList *list;
+	StimulusPlayer *player;
 public:
 	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API RecognitionTestModel(

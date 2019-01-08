@@ -8,12 +8,13 @@ RecognitionTestModel::RecognitionTestModel(
 	AudioFrameReaderFactory *readerFactory,
 	AudioFrameProcessorFactory *processorFactory,
 	StimulusList *list,
-	StimulusPlayer *
+	StimulusPlayer *player
 ) :
 	device{ device },
 	readerFactory{ readerFactory },
 	processorFactory{ processorFactory },
-	list{ list }
+	list{ list },
+	player{ player }
 {
 	if (this->device->failed())
 		throw DeviceFailure{ this->device->errorMessage() };
@@ -84,6 +85,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::playTrial(PlayRequest request) {
+	player->play(list->next());
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
 	frameReader = makeReader({});

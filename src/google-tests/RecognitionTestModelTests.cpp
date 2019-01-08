@@ -22,6 +22,10 @@ public:
 	void initialize(std::string d) override {
 		directory_ = d;
 	}
+
+	std::string next() override {
+		return next_;
+	}
 };
 
 class StimulusPlayerStub : public StimulusPlayer {
@@ -30,6 +34,10 @@ public:
 	std::string filePath() const {
 		return filePath_;
 	}
+
+	void play(std::string filePath) override {
+		filePath_ = filePath;
+	}
 };
 
 class RecognitionTestModelFacade {
@@ -37,7 +45,7 @@ class RecognitionTestModelFacade {
 	AudioFrameReaderStubFactory readerFactory{};
 	AudioFrameProcessorStubFactory processorFactory{};
 	StimulusListStub list{};
-	StimulusPlayer player{};
+	StimulusPlayerStub player{};
 	RecognitionTestModel model;
 public:
 	RecognitionTestModelFacade(AudioDevice *device) :
