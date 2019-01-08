@@ -89,7 +89,7 @@ std::shared_ptr<AudioFrameProcessor> RecognitionTestModel::makeProcessor(AudioFr
 		return processorFactory->make(p);
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
+		throw TestInitializationFailure{ e.what() };
 	}
 }
 
