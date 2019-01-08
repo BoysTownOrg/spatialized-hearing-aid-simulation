@@ -215,18 +215,12 @@ TEST_F(RecognitionTestModelTests, fillBufferReadsThenProcesses) {
 	EXPECT_EQ(2, x);
 }
 
-TEST(PlayAudioModelRmsTest, playPassesComputedRmsToProcessorFactory) {
+TEST_F(RecognitionTestModelTests, playPassesComputedRmsToProcessorFactory) {
 	FakeAudioFileReader reader{
 		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
 		2
 	};
-	const auto processorFactory = std::make_shared<AudioFrameProcessorStubFactory>();
-	RecognitionTestModel model{
-		std::make_shared<AudioDeviceStub>(),
-		std::make_shared<AudioFrameReaderStubFactory>(
-			std::make_shared<AudioFileInMemory>(reader)),
-		processorFactory
-	};
+	readerFactory->setReader(std::make_shared<AudioFileInMemory>(reader));
 	model.play({});
 	assertEqual(
 		{ 
@@ -234,7 +228,8 @@ TEST(PlayAudioModelRmsTest, playPassesComputedRmsToProcessorFactory) {
 			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
 		}, 
 		processorFactory->parameters().stimulusRms,
-		1e-6);
+		1e-6
+	);
 }
 
 TEST(
