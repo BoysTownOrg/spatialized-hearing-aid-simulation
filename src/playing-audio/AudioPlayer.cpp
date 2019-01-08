@@ -9,18 +9,9 @@ AudioPlayer::AudioPlayer(
 	readerFactory{ readerFactory },
 	processorFactory{ processorFactory }
 {
-	device->setController(this);
 	if (device->failed())
 		throw DeviceFailure{ device->errorMessage() };
-}
-
-void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
-	if (frameReader->complete())
-		device->setCallbackResultToComplete();
-	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
-		audio[i] = { static_cast<float **>(channels)[i], frames };
-	frameReader->read(audio);
-	frameProcessor->process(audio);
+	device->setController(this);
 }
 
 static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameReader> &reader) {
@@ -83,20 +74,31 @@ void AudioPlayer::play(PlayRequest request) {
 
 std::shared_ptr<AudioFrameReader> AudioPlayer::makeReader(std::string filePath) {
 	try {
-		return readerFactory->make(filePath);
+		return readerFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
 
-std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
+std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
+	AudioFrameProcessorFactory::Parameters p
+) {
 	try {
-		return processorFactory->make(p);
+		return processorFactory->make(std::move(p));
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
+}
+
+void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
+	if (frameReader->complete())
+		device->setCallbackResultToComplete();
+	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
+		audio[i] = { static_cast<float **>(channels)[i], frames };
+	frameReader->read(audio);
+	frameProcessor->process(audio);
 }
 
 std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {

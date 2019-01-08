@@ -15,12 +15,18 @@ class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	AudioFrameProcessorFactory *processorFactory;
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 public:
-	PLAYING_AUDIO_API AudioPlayer(AudioDevice *, AudioFrameReaderFactory *, AudioFrameProcessorFactory *);
+	PLAYING_AUDIO_API AudioPlayer(
+		AudioDevice *, 
+		AudioFrameReaderFactory *, 
+		AudioFrameProcessorFactory *
+	);
 	void fillStreamBuffer(void * channels, int frames) override;
 	void play(PlayRequest) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions();
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
-	std::shared_ptr<AudioFrameProcessor> makeProcessor(AudioFrameProcessorFactory::Parameters p);
+	std::shared_ptr<AudioFrameProcessor> makeProcessor(
+		AudioFrameProcessorFactory::Parameters p
+	);
 };
 
