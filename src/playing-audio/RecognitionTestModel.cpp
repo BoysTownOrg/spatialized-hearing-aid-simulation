@@ -84,7 +84,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forProcessor.level_dB_Spl = p.level_dB_Spl;
 	forProcessor.chunkSize = p.chunkSize;
 	forProcessor.windowSize = p.windowSize;
-	makeProcessor(forProcessor);
+	frameProcessor = makeProcessor(forProcessor);
 	makeReader({});
 	if (device->failed())
 		throw TestInitializationFailure{ device->errorMessage() };
