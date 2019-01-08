@@ -89,7 +89,9 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::playTrial(PlayRequest request) {
-	player->play(list->next());
+	StimulusPlayer::PlayRequest adapted;
+	adapted.audioFilePath = list->next();
+	player->play(adapted);
 	if (device->failed())
 		throw RequestFailure{ device->errorMessage() };
 	frameReader = makeReader({});

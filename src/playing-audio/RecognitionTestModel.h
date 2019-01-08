@@ -21,7 +21,19 @@ class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
-	virtual void play(std::string filePath) = 0;
+	struct PlayRequest {
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
+		std::string audioFilePath;
+		std::string audioDevice;
+		double level_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+	};
+	virtual void play(PlayRequest) = 0;
 };
 
 class RecognitionTestModel : public Model, public AudioDeviceController {

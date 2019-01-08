@@ -23,9 +23,9 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	frameReader->read(audio);
 }
 
-void AudioPlayer::play(std::string filePath)
+void AudioPlayer::play(PlayRequest request)
 {
-	filePath;
+	request;
 	if (device->failed())
 		throw DeviceFailure{ device->errorMessage() };
 	if (device->streaming())

@@ -17,6 +17,6 @@ class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 public:
 	PLAYING_AUDIO_API AudioPlayer(AudioDevice *, AudioFrameReaderFactory *, AudioFrameProcessorFactory *);
 	void fillStreamBuffer(void * channels, int frames) override;
-	void play(std::string filePath) override;
+	void play(PlayRequest) override;
 };
 

@@ -44,8 +44,8 @@ public:
 		return filePath_;
 	}
 
-	void play(std::string filePath) override {
-		filePath_ = filePath;
+	void play(PlayRequest request) override {
+		filePath_ = request.audioFilePath;
 	}
 };
 
