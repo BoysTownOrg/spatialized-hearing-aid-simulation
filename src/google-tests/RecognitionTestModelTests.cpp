@@ -51,12 +51,9 @@ public:
 
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
-	AudioDeviceStub device{};
-	AudioFrameReaderStubFactory readerFactory{};
-	AudioFrameProcessorStubFactory processorFactory{};
 	StimulusListStub list{};
 	StimulusPlayerStub stimulusPlayer{};
-	RecognitionTestModel model{ &device, &readerFactory, &processorFactory, &list, &stimulusPlayer };
+	RecognitionTestModel model{ &list, &stimulusPlayer };
 };
 
 TEST_F(

@@ -38,20 +38,10 @@ public:
 };
 
 class RecognitionTestModel : public Model {
-	std::vector<gsl::span<float>> audio;
-	AudioDevice *device;
-	AudioFrameReaderFactory *readerFactory;
-	AudioFrameProcessorFactory *processorFactory;
-	std::shared_ptr<AudioFrameReader> frameReader{};
-	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	StimulusList *list;
 	StimulusPlayer *player;
 public:
-	RUNTIME_ERROR(DeviceFailure);
 	PLAYING_AUDIO_API RecognitionTestModel(
-		AudioDevice *device,
-		AudioFrameReaderFactory *readerFactory,
-		AudioFrameProcessorFactory *processorFactory,
 		StimulusList *list,
 		StimulusPlayer *player
 	);
