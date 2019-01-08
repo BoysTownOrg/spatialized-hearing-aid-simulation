@@ -216,6 +216,22 @@ TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
 }
 
 TEST(
+	RecognitionTestModelOtherTests,
+	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
+) {
+	AudioDeviceStub device{};
+	device.fail();
+	device.setErrorMessage("error.");
+	try {
+		AudioPlayerFacade player{ &device };
+		FAIL() << "Expected RecognitionTestModel::RequestFailure";
+	}
+	catch (const AudioPlayer::DeviceFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
+TEST(
 	AudioPlayerOtherTests,
 	playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
 ) {
