@@ -8,11 +8,11 @@ class DirectoryReaderStub : public DirectoryReader {
     std::string directory_{};
 public:
     void setFileNames(std::vector<std::string> files) {
-        fileNames_ = files;
+        fileNames_ = std::move(files);
     }
     
     std::vector<std::string> filesIn(std::string directory) override {
-        directory_ = directory;
+        directory_ = std::move(directory);
         return fileNames_;
     }
     
