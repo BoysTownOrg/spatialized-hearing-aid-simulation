@@ -71,13 +71,55 @@ TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
 	assertEqual("close open start ", device.streamLog());
 }
 
-TEST_F(
-	AudioPlayerTests,
+class FailsToOpenStream : public AudioDevice {
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	void openStream(StreamParameters) override {
+		failed_ = true;
+	}
+
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+
+	void setController(AudioDeviceController *) override {}
+	void startStream() override {}
+	void stopStream() override {}
+	bool streaming() const override { return {}; }
+	void setCallbackResultToComplete() override {}
+	void setCallbackResultToContinue() override {}
+	void closeStream() override {}
+	int count() override { return {}; }
+	std::string description(int) override { return {}; }
+};
+
+TEST(
+	AudioPlayerWithFailingToOpenStreamDevice,
 	playThrowsDeviceFailureWhenDeviceFails
 ) {
-	device.fail();
+	FailsToOpenStream device{};
+	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
+	AudioFrameReaderStubFactory readerFactory{ frameReader };
+	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
+	AudioFrameProcessorStubFactory processorFactory{ processor };
+	AudioPlayer player{ &device, &readerFactory, &processorFactory };
 	device.setErrorMessage("error.");
-	assertPlayThrowsDeviceFailureWithMessage("error.");
+	try {
+		player.play({});
+		FAIL() << "Expected AudioPlayer::RequestFailure";
+	}
+	catch (const AudioPlayer::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
 }
 
 TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
