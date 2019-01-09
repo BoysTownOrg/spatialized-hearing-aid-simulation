@@ -54,7 +54,7 @@ protected:
 	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 		try {
 			player.play({});
-			FAIL() << "Expected AudioPlayer::TrialFailure";
+			FAIL() << "Expected AudioPlayer::RequestFailure";
 		}
 		catch (const AudioPlayer::RequestFailure &e) {
 			assertEqual(errorMessage, e.what());
@@ -69,57 +69,6 @@ TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
 TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
 	player.play({});
 	assertEqual("close open start ", device.streamLog());
-}
-
-class FailsToOpenStream : public AudioDevice {
-	std::string errorMessage_{};
-	bool failed_{};
-public:
-	void setErrorMessage(std::string s) {
-		errorMessage_ = std::move(s);
-	}
-
-	void openStream(StreamParameters) override {
-		failed_ = true;
-	}
-
-	bool failed() override {
-		return failed_;
-	}
-
-	std::string errorMessage() override {
-		return errorMessage_;
-	}
-
-	void setController(AudioDeviceController *) override {}
-	void startStream() override {}
-	void stopStream() override {}
-	bool streaming() const override { return {}; }
-	void setCallbackResultToComplete() override {}
-	void setCallbackResultToContinue() override {}
-	void closeStream() override {}
-	int count() override { return {}; }
-	std::string description(int) override { return {}; }
-};
-
-TEST(
-	AudioPlayerWithFailingToOpenStreamDevice,
-	playThrowsDeviceFailureWhenDeviceFails
-) {
-	FailsToOpenStream device{};
-	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-	AudioFrameReaderStubFactory readerFactory{ frameReader };
-	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-	AudioFrameProcessorStubFactory processorFactory{ processor };
-	AudioPlayer player{ &device, &readerFactory, &processorFactory };
-	device.setErrorMessage("error.");
-	try {
-		player.play({});
-		FAIL() << "Expected AudioPlayer::RequestFailure";
-	}
-	catch (const AudioPlayer::RequestFailure &e) {
-		assertEqual("error.", e.what());
-	}
 }
 
 TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
@@ -252,6 +201,53 @@ TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
 	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
 }
 
+class FailsToOpenStream : public AudioDevice {
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	void openStream(StreamParameters) override {
+		failed_ = true;
+	}
+
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+
+	void setController(AudioDeviceController *) override {}
+	void startStream() override {}
+	void stopStream() override {}
+	bool streaming() const override { return {}; }
+	void setCallbackResultToComplete() override {}
+	void setCallbackResultToContinue() override {}
+	void closeStream() override {}
+	int count() override { return {}; }
+	std::string description(int) override { return {}; }
+};
+
+TEST(
+	AudioPlayerOtherTests,
+	playThrowsDeviceFailureWhenDeviceFailsToOpenStream
+) {
+	FailsToOpenStream device{};
+	AudioPlayerFacade player{ &device };
+	device.setErrorMessage("error.");
+	try {
+		player.play();
+		FAIL() << "Expected AudioPlayer::RequestFailure";
+	}
+	catch (const AudioPlayer::RequestFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
 TEST(
 	AudioPlayerOtherTests,
 	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
@@ -261,7 +257,7 @@ TEST(
 	device.setErrorMessage("error.");
 	try {
 		AudioPlayerFacade player{ &device };
-		FAIL() << "Expected RecognitionTestModel::TrialFailure";
+		FAIL() << "Expected AudioPlayer::DeviceFailure";
 	}
 	catch (const AudioPlayer::DeviceFailure &e) {
 		assertEqual("error.", e.what());
@@ -276,7 +272,7 @@ TEST(
 	AudioPlayerFacade player{ &factory };
 	try {
 		player.play();
-		FAIL() << "Expected AudioPlayer::TrialFailure";
+		FAIL() << "Expected AudioPlayer::RequestFailure";
 	}
 	catch (const AudioPlayer::RequestFailure &e) {
 		assertEqual("error.", e.what());
@@ -291,7 +287,7 @@ TEST(
 	AudioPlayerFacade player{ &factory };
 	try {
 		player.play();
-		FAIL() << "Expected AudioPlayer::TrialFailure";
+		FAIL() << "Expected AudioPlayer::RequestFailure";
 	}
 	catch (const AudioPlayer::RequestFailure &e) {
 		assertEqual("error.", e.what());
