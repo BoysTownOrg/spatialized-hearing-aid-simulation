@@ -5,6 +5,14 @@ extern "C" {
 #include <chapro.h>
 }
 #undef _size
+#undef fmin
+#undef fmove
+#undef fcopy
+#undef fzero
+#undef dcopy
+#undef dzero
+#undef round
+#undef log2
 
 class Chapro : public FilterbankCompressor {
 	void *cha_pointer[NPTR]{};

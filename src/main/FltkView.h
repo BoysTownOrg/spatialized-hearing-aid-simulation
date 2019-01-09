@@ -10,16 +10,11 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl.H>
 
-class FltkWindow : public View
-{
-	// FLTK forms widget groups at construction.
-	// Therefore window is declared first.
-	Fl_Double_Window window;
+struct FltkSetupView : public Fl_Group {
 	Fl_Input _leftPrescriptionFilePath;
 	Fl_Input _rightPrescriptionFilePath;
 	Fl_Input _audioDirectory;
 	Fl_Input _brirFilePath;
-	Fl_Float_Input _level_dB_Spl;
 	Fl_Float_Input _attack_ms;
 	Fl_Float_Input _release_ms;
 	Fl_Input _windowSize;
@@ -28,12 +23,29 @@ class FltkWindow : public View
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
+	Fl_Button confirm;
+	FltkSetupView();
+};
+
+struct FltkTesterView : public Fl_Group {
+	Fl_Float_Input _level_dB_Spl;
 	Fl_Choice _audioDevice;
 	Fl_Button play;
+	FltkTesterView();
+};
+
+struct FltkWindow : public Fl_Double_Window {
+	FltkSetupView setupView;
+	FltkTesterView testerView;
+	FltkWindow();
+};
+
+class FltkView : public View {
+	FltkWindow window;
 	EventListener *listener{};
 	int browseResult{};
 public:
-	FltkWindow();
+	FltkView();
 	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
 	std::string browseForFile(std::vector<std::string> filters) override;
@@ -64,5 +76,6 @@ private:
 	static void onBrowseRightPrescription(Fl_Widget *, void *);
 	static void onBrowseAudio(Fl_Widget *, void *);
 	static void onBrowseBrir(Fl_Widget *, void *);
+	static void onConfirmTestSetup(Fl_Widget *, void *);
 	static void onPlay(Fl_Widget *, void *);
 };

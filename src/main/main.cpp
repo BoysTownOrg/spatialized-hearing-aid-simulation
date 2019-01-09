@@ -1,5 +1,5 @@
 #include "Chapro.h"
-#include "FltkWindow.h"
+#include "FltkView.h"
 #include "LibsndfileReader.h"
 #include "PortAudioDevice.h"
 #include "NlohmannJsonParser.h"
@@ -52,7 +52,7 @@ int main() {
 	};
 	AudioPlayer player{&device, &frameReaderFactory, &processorFactory};
 	RecognitionTestModel model{ &list, &player };
-	FltkWindow view{};
+	FltkView view{};
 	Presenter presenter{ &model, &view };
 	presenter.run();
 }
