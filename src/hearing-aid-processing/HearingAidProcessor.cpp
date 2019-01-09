@@ -13,7 +13,7 @@ HearingAidProcessor::HearingAidProcessor(
 void HearingAidProcessor::process(gsl::span<float> signal) {
 	const auto chunkSize = compressor->chunkSize();
 	if (signal.size() == chunkSize) {
-		const auto complex = &complexBuffer[0];
+		const auto complex = &complexBuffer.at(0);
 		compressor->compressInput(signal.data(), signal.data(), chunkSize);
 		compressor->analyzeFilterbank(signal.data(), complex, chunkSize);
 		compressor->compressChannels(complex, complex, chunkSize);

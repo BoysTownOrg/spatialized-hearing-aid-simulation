@@ -26,13 +26,13 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 		processors.push_back(makeChannel(
 			brir.left,
 			toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
-			p.stimulusRms[0],
+			p.stimulusRms.at(0),
 			p.level_dB_Spl));
 		if (p.channels > 1)
 			processors.push_back(makeChannel(
 				brir.right,
 				toCompressorParameters(p, readPrescription(p.rightDslPrescriptionFilePath)),
-				p.stimulusRms[1],
+				p.stimulusRms.at(1),
 				p.level_dB_Spl));
 	}
 
