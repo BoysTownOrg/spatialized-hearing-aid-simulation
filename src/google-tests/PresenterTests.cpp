@@ -563,10 +563,7 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void playTrial(TrialParameters) override {}
-
-	bool testComplete() override {
-		return {};
-	}
+	bool testComplete() override { return {}; }
 };
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {

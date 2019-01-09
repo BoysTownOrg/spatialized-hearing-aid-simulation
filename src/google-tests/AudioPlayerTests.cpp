@@ -159,20 +159,15 @@ class ReadsAOne : public AudioFrameReader {
 			for (auto &x : channel)
 				x = 1;
 	}
-	bool complete() const override {
-		return false;
-	}
-	int sampleRate() const override {
-		return 0;
-	}
+
 	int channels() const override {
 		return 1;
 	}
-	long long frames() const override {
-		return 0;
-	}
-	void reset() override {
-	}
+	
+	bool complete() const override { return {}; }
+	int sampleRate() const override { return {}; }
+	long long frames() const override { return {}; }
+	void reset() override {}
 };
 
 class AudioTimesTwo : public AudioFrameProcessor {
