@@ -29,5 +29,5 @@ void RecognitionTestModel::playTrial(TrialParameters request) {
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
-	return {};
+	return player->audioDeviceDescriptions();
 }

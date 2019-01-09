@@ -47,6 +47,10 @@ public:
 	void setAudioDeviceDescriptions(std::vector<std::string> v) {
 		audioDeviceDescriptions_ = std::move(v);
 	}
+
+	std::vector<std::string> audioDeviceDescriptions() override {
+		return audioDeviceDescriptions_;
+	}
 };
 
 class RecognitionTestModelTests : public ::testing::Test {
@@ -101,6 +105,8 @@ public:
 	void play(PlayRequest) override {
 		throw RequestFailure{ errorMessage };
 	}
+
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };
 
 TEST(
