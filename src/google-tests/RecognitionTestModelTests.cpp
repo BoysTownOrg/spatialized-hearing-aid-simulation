@@ -35,13 +35,19 @@ public:
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	std::string filePath_{};
+	PlayRequest request_{};
 public:
 	std::string filePath() const {
 		return filePath_;
 	}
 
+	const PlayRequest &request() const {
+		return request_;
+	}
+
 	void play(PlayRequest request) override {
 		filePath_ = request.audioFilePath;
+		request_ = std::move(request);
 	}
 
 	void setAudioDeviceDescriptions(std::vector<std::string> v) {
