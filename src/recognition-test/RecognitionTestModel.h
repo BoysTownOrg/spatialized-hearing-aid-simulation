@@ -42,6 +42,7 @@ public:
 };
 
 class RecognitionTestModel : public Model {
+	TestParameters forTest{};
 	StimulusList *list;
 	StimulusPlayer *player;
 public:
