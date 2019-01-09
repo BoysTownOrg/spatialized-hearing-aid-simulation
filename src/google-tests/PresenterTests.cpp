@@ -273,197 +273,195 @@ public:
 
 class PresenterTests : public ::testing::Test {
 protected:
-	std::shared_ptr<ModelStub> model = std::make_shared<ModelStub>();
-	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
-	Presenter presenter;
-
-	PresenterTests() : presenter{ model, view } {}
+	ModelStub model;
+	ViewStub view;
+	Presenter presenter{ &model, &view };
 
 	void setInvalidChunkSize() {
-		view->setChunkSize("?");
+		view.setChunkSize("?");
 	}
 
 	void setInvalidWindowSize() {
-		view->setWindowSize("a");
+		view.setWindowSize("a");
 	}
 
 	void setInvalidReleaseTime() {
-		view->setRelease_ms("b");
+		view.setRelease_ms("b");
 	}
 
 	void setInvalidAttackTime() {
-		view->setAttack_ms("c");
+		view.setAttack_ms("c");
 	}
 
 	void setInvalidLevel() {
-		view->setLevel_dB_Spl("d");
+		view.setLevel_dB_Spl("d");
 	}
 
 	void confirmTestSetupDoesNotHideSetupView() {
-		view->confirmTestSetup();
-		EXPECT_FALSE(view->testSetupHidden());
+		view.confirmTestSetup();
+		EXPECT_FALSE(view.testSetupHidden());
 	}
 
 	void confirmTestSetupDoesNotShowTesterView() {
-		view->confirmTestSetup();
-		EXPECT_FALSE(view->testerViewShown());
+		view.confirmTestSetup();
+		EXPECT_FALSE(view.testerViewShown());
 	}
 
 	void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
-		view->setChunkSize(s);
+		view.setChunkSize(s);
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid chunk size.");
 	}
 
 	void confirmTestSetupShowsErrorMessage(std::string s) {
-		view->confirmTestSetup();
-		assertEqual(std::move(s), view->errorMessage());
+		view.confirmTestSetup();
+		assertEqual(std::move(s), view.errorMessage());
 	}
 
 	void confirmTestSetupWithWindowSizeShowsErrorMessage(std::string s) {
-		view->setWindowSize(s);
+		view.setWindowSize(s);
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid window size.");
 	}
 
 	void confirmTestSetupWithAttackTimeShowsErrorMessage(std::string s) {
-		view->setAttack_ms(s);
+		view.setAttack_ms(s);
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid attack time.");
 	}
 
 	void confirmTestSetupWithReleaseTimeShowsErrorMessage(std::string s) {
-		view->setRelease_ms(s);
+		view.setRelease_ms(s);
 		confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid release time.");
 	}
 
 	void playTrialWithLevelShowsErrorMessage(std::string s) {
-		view->setLevel_dB_Spl(s);
+		view.setLevel_dB_Spl(s);
 		playTrialShowsErrorMessage("'" + s + "' is not a valid level.");
 	}
 
 	void playTrialShowsErrorMessage(std::string s) {
-		view->playTrial();
-		assertEqual(std::move(s), view->errorMessage());
+		view.playTrial();
+		assertEqual(std::move(s), view.errorMessage());
 	}
 };
 
 TEST_F(PresenterTests, subscribesToViewEvents) {
-	EXPECT_EQ(&presenter, view->listener());
+	EXPECT_EQ(&presenter, view.listener());
 }
 
 TEST_F(PresenterTests, runRunsEventLoop) {
 	presenter.run();
-	EXPECT_TRUE(view->runningEventLoop());
+	EXPECT_TRUE(view.runningEventLoop());
 }
 
 TEST_F(PresenterTests, newTestShowsTestSetupView) {
-    view->newTest();
-    EXPECT_TRUE(view->testSetupShown());
+    view.newTest();
+    EXPECT_TRUE(view.testSetupShown());
 }
 
 TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
-    view->confirmTestSetup();
-    EXPECT_TRUE(view->testSetupHidden());
+    view.confirmTestSetup();
+    EXPECT_TRUE(view.testSetupHidden());
 }
 
 TEST_F(
 	PresenterTests, 
 	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
 ) {
-	view->setLeftDslPrescriptionFilePath("a");
-	view->setRightDslPrescriptionFilePath("b");
-	view->setBrowseCancelled();
-	view->browseForLeftDslPrescription();
-	assertEqual("a", view->leftDslPrescriptionFilePath());
-	view->browseForRightDslPrescription();
-	assertEqual("b", view->rightDslPrescriptionFilePath());
+	view.setLeftDslPrescriptionFilePath("a");
+	view.setRightDslPrescriptionFilePath("b");
+	view.setBrowseCancelled();
+	view.browseForLeftDslPrescription();
+	assertEqual("a", view.leftDslPrescriptionFilePath());
+	view.browseForRightDslPrescription();
+	assertEqual("b", view.rightDslPrescriptionFilePath());
 }
 
 TEST_F(
 	PresenterTests,
 	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
 ) {
-	view->setAudioDirectory("a");
-	view->setBrowseCancelled();
-	view->browseForAudio();
-	assertEqual("a", view->audioDirectory());
+	view.setAudioDirectory("a");
+	view.setBrowseCancelled();
+	view.browseForAudio();
+	assertEqual("a", view.audioDirectory());
 }
 
 TEST_F(
 	PresenterTests,
 	cancellingBrowseForBrirDoesNotChangeBrirFilePath
 ) {
-	view->setBrirFilePath("a");
-	view->setBrowseCancelled();
-	view->browseForBrir();
-	assertEqual("a", view->brirFilePath());
+	view.setBrirFilePath("a");
+	view.setBrowseCancelled();
+	view.browseForBrir();
+	assertEqual("a", view.brirFilePath());
 }
 
 TEST_F(
 	PresenterTests,
 	browseForDslPrescriptionUpdatesDslPrescriptionFilePath
 ) {
-	view->setBrowseFilePath("a");
-	view->browseForLeftDslPrescription();
-	assertEqual("a", view->leftDslPrescriptionFilePath());
-	view->setBrowseFilePath("b");
-	view->browseForRightDslPrescription();
-	assertEqual("b", view->rightDslPrescriptionFilePath());
+	view.setBrowseFilePath("a");
+	view.browseForLeftDslPrescription();
+	assertEqual("a", view.leftDslPrescriptionFilePath());
+	view.setBrowseFilePath("b");
+	view.browseForRightDslPrescription();
+	assertEqual("b", view.rightDslPrescriptionFilePath());
 }
 
 TEST_F(
 	PresenterTests,
 	browseForAudioDirectoryUpdatesAudioDirectory
 ) {
-	view->setBrowseDirectory("a");
-	view->browseForAudio();
-	assertEqual("a", view->audioDirectory());
+	view.setBrowseDirectory("a");
+	view.browseForAudio();
+	assertEqual("a", view.audioDirectory());
 }
 
 TEST_F(
 	PresenterTests,
 	browseForBrirUpdatesBrirFilePath
 ) {
-	view->setBrowseFilePath("a");
-	view->browseForBrir();
-	assertEqual("a", view->brirFilePath());
+	view.setBrowseFilePath("a");
+	view.browseForBrir();
+	assertEqual("a", view.brirFilePath());
 }
 
 TEST_F(
 	PresenterTests,
 	browseForBrirFiltersWavFiles
 ) {
-	view->browseForBrir();
-	assertEqual({ "*.wav" }, view->browseFilters());
+	view.browseForBrir();
+	assertEqual({ "*.wav" }, view.browseFilters());
 }
 
 TEST_F(
 	PresenterTests,
 	confirmTestSetupPassesParametersToModel
 ) {
-	view->setLeftDslPrescriptionFilePath("a");
-	view->setRightDslPrescriptionFilePath("b");
-	view->setAudioDirectory("c");
-	view->setBrirFilePath("d");
-	view->setAttack_ms("2.2");
-	view->setRelease_ms("3.3");
-	view->setWindowSize("4");
-	view->setChunkSize("5");
-	view->confirmTestSetup();
-	assertEqual("a", model->testParameters().leftDslPrescriptionFilePath);
-	assertEqual("b", model->testParameters().rightDslPrescriptionFilePath);
-	assertEqual("c", model->testParameters().audioDirectory);
-	assertEqual("d", model->testParameters().brirFilePath);
-	EXPECT_EQ(2.2, model->testParameters().attack_ms);
-	EXPECT_EQ(3.3, model->testParameters().release_ms);
-	EXPECT_EQ(4, model->testParameters().windowSize);
-	EXPECT_EQ(5, model->testParameters().chunkSize);
+	view.setLeftDslPrescriptionFilePath("a");
+	view.setRightDslPrescriptionFilePath("b");
+	view.setAudioDirectory("c");
+	view.setBrirFilePath("d");
+	view.setAttack_ms("2.2");
+	view.setRelease_ms("3.3");
+	view.setWindowSize("4");
+	view.setChunkSize("5");
+	view.confirmTestSetup();
+	assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
+	assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
+	assertEqual("c", model.testParameters().audioDirectory);
+	assertEqual("d", model.testParameters().brirFilePath);
+	EXPECT_EQ(2.2, model.testParameters().attack_ms);
+	EXPECT_EQ(3.3, model.testParameters().release_ms);
+	EXPECT_EQ(4, model.testParameters().windowSize);
+	EXPECT_EQ(5, model.testParameters().chunkSize);
 }
 
 TEST_F(PresenterTests, playTrialPassesParametersToModel) {
-	view->setAudioDevice("e");
-	view->setLevel_dB_Spl("1.1");
-	view->playTrial();
-	assertEqual("e", model->trialParameters().audioDevice);
-	EXPECT_EQ(1.1, model->trialParameters().level_dB_Spl);
+	view.setAudioDevice("e");
+	view.setLevel_dB_Spl("1.1");
+	view.playTrial();
+	assertEqual("e", model.trialParameters().audioDevice);
+	EXPECT_EQ(1.1, model.trialParameters().level_dB_Spl);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
@@ -507,19 +505,19 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotShowTesterVie
 }
 
 TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
-	view->confirmTestSetup();
-    EXPECT_TRUE(view->testerViewShown());
+	view.confirmTestSetup();
+    EXPECT_TRUE(view.testerViewShown());
 }
 
 TEST_F(PresenterTests, playingTrialDoesNotHideViewWhileTestInProgress) {
-    model->setTestIncomplete();
-    view->playTrial();
-    EXPECT_FALSE(view->testerViewHidden());
+    model.setTestIncomplete();
+    view.playTrial();
+    EXPECT_FALSE(view.testerViewHidden());
 }
 
 TEST_F(PresenterTests, playingTrialPlaysTrial) {
-    view->playTrial();
-    EXPECT_TRUE(model->trialPlayed());
+    view.playTrial();
+    EXPECT_TRUE(model.trialPlayed());
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
@@ -545,11 +543,11 @@ TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 }
 
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
-	const auto view = std::make_shared<ViewStub>();
-	const auto model = std::make_shared<ModelStub>();
-	model->setAudioDeviceDescriptions({ "a", "b", "c" });
-	Presenter presenter{ model, view };
-	assertEqual({ "a", "b", "c" }, view->audioDeviceMenuItems());
+	ViewStub view;
+	ModelStub model;
+	model.setAudioDeviceDescriptions({ "a", "b", "c" });
+	Presenter presenter{ &model, &view };
+	assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
 }
 
 class InitializationFailingModel : public Model {
@@ -573,28 +571,25 @@ public:
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {
 protected:
-	std::shared_ptr<InitializationFailingModel> model = 
-		std::make_shared<InitializationFailingModel>();
-	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
-	Presenter presenter;
-
-	PresenterWithInitializationFailingModel() : presenter{ model, view } {}
+	InitializationFailingModel model;
+	ViewStub view;
+	Presenter presenter{ &model, &view };
 };
 
 TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupShowsErrorMessage) {
-	model->setErrorMessage("error.");
-	view->confirmTestSetup();
-	assertEqual("error.", view->errorMessage());
+	model.setErrorMessage("error.");
+	view.confirmTestSetup();
+	assertEqual("error.", view.errorMessage());
 }
 
 TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotShowTesterView) {
-	view->confirmTestSetup();
-	EXPECT_FALSE(view->testerViewShown());
+	view.confirmTestSetup();
+	EXPECT_FALSE(view.testerViewShown());
 }
 
 TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetupView) {
-	view->confirmTestSetup();
-	EXPECT_FALSE(view->testSetupHidden());
+	view.confirmTestSetup();
+	EXPECT_FALSE(view.testSetupHidden());
 }
 
 class TrialFailingModel : public Model {
@@ -615,14 +610,13 @@ public:
 
 class PresenterWithTrialFailingModel : public ::testing::Test {
 protected:
-	std::shared_ptr<TrialFailingModel> model = 
-		std::make_shared<TrialFailingModel>();
-	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
-	Presenter presenter{ model, view };
+	TrialFailingModel model;
+	ViewStub view;
+	Presenter presenter{ &model, &view };
 };
 
 TEST_F(PresenterWithTrialFailingModel, playTrialShowsErrorMessage) {
-	model->setErrorMessage("error.");
-	view->playTrial();
-	assertEqual("error.", view->errorMessage());
+	model.setErrorMessage("error.");
+	view.playTrial();
+	assertEqual("error.", view.errorMessage());
 }

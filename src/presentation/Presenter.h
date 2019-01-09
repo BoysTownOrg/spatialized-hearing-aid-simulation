@@ -8,12 +8,10 @@
 #include <functional>
 
 class Presenter : public EventListener {
-	std::shared_ptr<Model> model;
-	std::shared_ptr<View> view;
+	Model *model;
+	View *view;
 public:
-	PRESENTATION_API Presenter(
-		std::shared_ptr<Model> model, 
-		std::shared_ptr<View> view);
+	PRESENTATION_API Presenter(Model *model, View *view);
 	PRESENTATION_API void run();
 	void browseForLeftDslPrescription() override;
 	void browseForRightDslPrescription() override;

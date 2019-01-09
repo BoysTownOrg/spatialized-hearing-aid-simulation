@@ -1,14 +1,11 @@
 #include "Presenter.h"
 
-Presenter::Presenter(
-	std::shared_ptr<Model> model, 
-	std::shared_ptr<View> view
-) :
-	model{ std::move(model) },
-	view{ std::move(view) }
+Presenter::Presenter(Model *model, View *view) :
+	model{ model },
+	view{ view }
 {
-	this->view->subscribe(this);
-	this->view->populateAudioDeviceMenu(this->model->audioDeviceDescriptions());
+	view->subscribe(this);
+	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
 }
 
 void Presenter::run() {
