@@ -55,6 +55,9 @@ public:
 	std::string chunkSize() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
+	void showTestSetup() override;
+	void hideTestSetup() override;
+	void showTesterView() override;
 
 private:
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);

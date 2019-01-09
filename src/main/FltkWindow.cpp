@@ -49,6 +49,18 @@ FltkWindow::FltkWindow() :
 	play.callback(onPlay, this);
 }
 
+void FltkWindow::showTestSetup()
+{
+}
+
+void FltkWindow::hideTestSetup()
+{
+}
+
+void FltkWindow::showTesterView()
+{
+}
+
 void FltkWindow::populateAudioDeviceMenu(std::vector<std::string> items) {
 	for (const auto &s : items)
 		_audioDevice.add(s.c_str());
