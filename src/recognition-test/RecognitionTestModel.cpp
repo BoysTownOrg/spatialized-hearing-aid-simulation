@@ -18,20 +18,20 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	forTest = std::move(p);
 }
 
-void RecognitionTestModel::playTrial(TrialParameters request) {
+void RecognitionTestModel::playTrial(TrialParameters p) {
 	try {
-		StimulusPlayer::PlayRequest adapted;
-		adapted.audioFilePath = list->next();
-		adapted.attack_ms = forTest.attack_ms;
-		adapted.audioDevice = request.audioDevice;
-		adapted.brirFilePath = forTest.brirFilePath;
-		adapted.chunkSize = forTest.chunkSize;
-		adapted.leftDslPrescriptionFilePath = forTest.leftDslPrescriptionFilePath;
-		adapted.level_dB_Spl = request.level_dB_Spl;
-		adapted.release_ms = forTest.release_ms;
-		adapted.rightDslPrescriptionFilePath = forTest.rightDslPrescriptionFilePath;
-		adapted.windowSize = forTest.windowSize;
-		player->play(adapted);
+		StimulusPlayer::PlayRequest request;
+		request.audioFilePath = list->next();
+		request.attack_ms = forTest.attack_ms;
+		request.audioDevice = p.audioDevice;
+		request.brirFilePath = forTest.brirFilePath;
+		request.chunkSize = forTest.chunkSize;
+		request.leftDslPrescriptionFilePath = forTest.leftDslPrescriptionFilePath;
+		request.level_dB_Spl = p.level_dB_Spl;
+		request.release_ms = forTest.release_ms;
+		request.rightDslPrescriptionFilePath = forTest.rightDslPrescriptionFilePath;
+		request.windowSize = forTest.windowSize;
+		player->play(request);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
 		throw TrialFailure{ e.what() };

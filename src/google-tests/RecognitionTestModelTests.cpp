@@ -34,19 +34,13 @@ public:
 
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
-	std::string filePath_{};
 	PlayRequest request_{};
 public:
-	std::string filePath() const {
-		return filePath_;
-	}
-
 	const PlayRequest &request() const {
 		return request_;
 	}
 
 	void play(PlayRequest request) override {
-		filePath_ = request.audioFilePath;
 		request_ = std::move(request);
 	}
 
@@ -82,7 +76,7 @@ TEST_F(
 ) {
     list.setNext("a");
 	model.playTrial({});
-    assertEqual("a", stimulusPlayer.filePath());
+    assertEqual("a", stimulusPlayer.request().audioFilePath);
 }
 
 TEST_F(
@@ -102,29 +96,28 @@ TEST_F(
 }
 
 TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
-	RecognitionTestModel::TestParameters p;
-	p.leftDslPrescriptionFilePath = "a";
-	p.rightDslPrescriptionFilePath = "b";
-	p.brirFilePath = "d";
-	p.attack_ms = 2;
-	p.release_ms = 3;
-	p.windowSize = 4;
-	p.chunkSize = 5;
-	model.initializeTest(p);
+	RecognitionTestModel::TestParameters test;
+	test.leftDslPrescriptionFilePath = "a";
+	test.rightDslPrescriptionFilePath = "b";
+	test.brirFilePath = "c";
+	test.attack_ms = 1;
+	test.release_ms = 2;
+	test.windowSize = 3;
+	test.chunkSize = 4;
+	model.initializeTest(test);
 	RecognitionTestModel::TrialParameters trial;
-	trial.audioDevice = "gamma";
-	trial.level_dB_Spl = 1;
-	trial.audioDevice = "gamma";
+	trial.audioDevice = "d";
+	trial.level_dB_Spl = 5;
 	model.playTrial(trial);
 	assertEqual("a", stimulusPlayer.request().leftDslPrescriptionFilePath);
 	assertEqual("b", stimulusPlayer.request().rightDslPrescriptionFilePath);
-	assertEqual("d", stimulusPlayer.request().brirFilePath);
-	assertEqual("gamma", stimulusPlayer.request().audioDevice);
-	EXPECT_EQ(1, stimulusPlayer.request().level_dB_Spl);
-	EXPECT_EQ(2, stimulusPlayer.request().attack_ms);
-	EXPECT_EQ(3, stimulusPlayer.request().release_ms);
-	EXPECT_EQ(4, stimulusPlayer.request().windowSize);
-	EXPECT_EQ(5, stimulusPlayer.request().chunkSize);
+	assertEqual("c", stimulusPlayer.request().brirFilePath);
+	assertEqual("d", stimulusPlayer.request().audioDevice);
+	EXPECT_EQ(1, stimulusPlayer.request().attack_ms);
+	EXPECT_EQ(2, stimulusPlayer.request().release_ms);
+	EXPECT_EQ(3, stimulusPlayer.request().windowSize);
+	EXPECT_EQ(4, stimulusPlayer.request().chunkSize);
+	EXPECT_EQ(5, stimulusPlayer.request().level_dB_Spl);
 }
 
 class FailingStimulusPlayer : public StimulusPlayer {
