@@ -27,7 +27,7 @@ void FltkView::onPlay(Fl_Widget *, void *self) {
 }
 
 FltkSetupView::FltkSetupView() :
-	Fl_Group{ 800, 200, 600, 600 },
+	Fl_Group{ 0, 0, 600, 600 },
 	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
 	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
 	_audioDirectory(250, 150, 200, 45, "audio directory"),
@@ -46,7 +46,7 @@ FltkSetupView::FltkSetupView() :
 }
 
 FltkTesterView::FltkTesterView() :
-	Fl_Group{ 800, 200, 600, 600 },
+	Fl_Group{ 0, 0, 600, 600 },
 	_level_dB_Spl(250, 250, 200, 45, "level (dB SPL)"),
 	_audioDevice(250, 500, 200, 45, "audio device"),
 	play(250, 550, 60, 45, "play trial")
@@ -62,6 +62,7 @@ FltkWindow::FltkWindow():
 
 FltkView::FltkView() {
 	window.show();
+	window.testerView.hide();
 	window.setupView.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.setupView.browseRightPrescription.callback(onBrowseRightPrescription, this);
 	window.setupView.browseAudio.callback(onBrowseAudio, this);
