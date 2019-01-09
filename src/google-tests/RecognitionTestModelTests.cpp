@@ -95,6 +95,32 @@ TEST_F(
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
+TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
+	RecognitionTestModel::TestParameters p;
+	p.leftDslPrescriptionFilePath = "a";
+	p.rightDslPrescriptionFilePath = "b";
+	p.brirFilePath = "d";
+	p.attack_ms = 2;
+	p.release_ms = 3;
+	p.windowSize = 4;
+	p.chunkSize = 5;
+	model.initializeTest(p);
+	RecognitionTestModel::TrialParameters trial;
+	trial.audioDevice = "gamma";
+	trial.level_dB_Spl = 1;
+	trial.audioDevice = "gamma";
+	model.playTrial(trial);
+	assertEqual("a", stimulusPlayer.request().leftDslPrescriptionFilePath);
+	assertEqual("b", stimulusPlayer.request().rightDslPrescriptionFilePath);
+	assertEqual("d", stimulusPlayer.request().brirFilePath);
+	assertEqual("gamma", stimulusPlayer.request().audioDevice);
+	EXPECT_EQ(1, stimulusPlayer.request().level_dB_Spl);
+	EXPECT_EQ(2, stimulusPlayer.request().attack_ms);
+	EXPECT_EQ(3, stimulusPlayer.request().release_ms);
+	EXPECT_EQ(4, stimulusPlayer.request().windowSize);
+	EXPECT_EQ(5, stimulusPlayer.request().chunkSize);
+}
+
 class FailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
