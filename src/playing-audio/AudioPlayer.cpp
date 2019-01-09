@@ -14,14 +14,14 @@ AudioPlayer::AudioPlayer(
 	device->setController(this);
 }
 
-static std::vector<double> computeStimulusRms(const std::shared_ptr<AudioFrameReader> &reader) {
-	std::vector<std::vector<float>> entireAudioFile(reader->channels());
+static std::vector<double> computeStimulusRms(AudioFrameReader &reader) {
+	std::vector<std::vector<float>> entireAudioFile(reader.channels());
 	std::vector<gsl::span<float>> pointers;
 	for (auto &channel : entireAudioFile) {
-		channel.resize(gsl::narrow<std::vector<float>::size_type>(reader->frames()));
+		channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
 		pointers.push_back({ channel });
 	}
-	reader->read(pointers);
+	reader.read(pointers);
 	std::vector<double> stimulusRms;
 	for (const auto &channel : entireAudioFile) {
 		float squaredSum{};
@@ -53,7 +53,7 @@ void AudioPlayer::play(PlayRequest request) {
 	forProcessor.sampleRate = frameReader->sampleRate();
 	forProcessor.chunkSize = request.chunkSize;
 	forProcessor.windowSize = request.windowSize;
-	forProcessor.stimulusRms = computeStimulusRms(frameReader);
+	forProcessor.stimulusRms = computeStimulusRms(*frameReader);
 	frameProcessor = makeProcessor(forProcessor);
 
 	frameReader->reset();
@@ -96,7 +96,7 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	if (frameReader->complete())
 		device->setCallbackResultToComplete();
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
-		audio[i] = { static_cast<float **>(channels)[i], frames };
+		audio.at(i) = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
 	frameProcessor->process(audio);
 }
