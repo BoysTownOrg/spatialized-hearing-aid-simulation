@@ -1,6 +1,7 @@
 #pragma once
 
 #include <presentation/View.h>
+#pragma warning (push, 0)
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Int_Input.H>
@@ -9,6 +10,7 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl.H>
+#pragma warning (pop)
 
 struct FltkSetupView : public Fl_Group {
 	Fl_Input _leftPrescriptionFilePath;

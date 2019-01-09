@@ -31,6 +31,11 @@ public:
 	~WindowsFileSearch() {
 		FindClose(hFind);
 	}
+
+	WindowsFileSearch(WindowsFileSearch &&) = delete;
+	WindowsFileSearch &operator=(WindowsFileSearch &&) = delete;
+	WindowsFileSearch(const WindowsFileSearch &) = delete;
+	WindowsFileSearch &operator=(const WindowsFileSearch &) = delete;
 };
 
 class WindowsDirectoryReader : public DirectoryReader {

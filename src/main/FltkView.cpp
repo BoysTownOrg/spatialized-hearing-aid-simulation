@@ -100,8 +100,8 @@ void FltkView::runEventLoop() {
 	Fl::run();
 }
 
-void FltkView::subscribe(EventListener * listener) {
-	this->listener = listener;
+void FltkView::subscribe(EventListener * e) {
+	this->listener = e;
 }
 
 static std::string formatFilters(std::vector<std::string> filters) {

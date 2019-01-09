@@ -42,32 +42,32 @@ void AudioPlayer::play(PlayRequest request) {
 	frameReader = makeReader(request.audioFilePath);
 	audio.resize(frameReader->channels());
 
-	AudioFrameProcessorFactory::Parameters forProcessor;
-	forProcessor.attack_ms = request.attack_ms;
-	forProcessor.release_ms = request.release_ms;
-	forProcessor.channels = frameReader->channels();
-	forProcessor.brirFilePath = request.brirFilePath;
-	forProcessor.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
-	forProcessor.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-	forProcessor.level_dB_Spl = request.level_dB_Spl;
-	forProcessor.sampleRate = frameReader->sampleRate();
-	forProcessor.chunkSize = request.chunkSize;
-	forProcessor.windowSize = request.windowSize;
-	forProcessor.stimulusRms = computeStimulusRms(*frameReader);
-	frameProcessor = makeProcessor(forProcessor);
+	AudioFrameProcessorFactory::Parameters processing;
+	processing.attack_ms = request.attack_ms;
+	processing.release_ms = request.release_ms;
+	processing.channels = frameReader->channels();
+	processing.brirFilePath = request.brirFilePath;
+	processing.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+	processing.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
+	processing.level_dB_Spl = request.level_dB_Spl;
+	processing.sampleRate = frameReader->sampleRate();
+	processing.chunkSize = request.chunkSize;
+	processing.windowSize = request.windowSize;
+	processing.stimulusRms = computeStimulusRms(*frameReader);
+	frameProcessor = makeProcessor(processing);
 
 	frameReader->reset();
 
-	AudioDevice::StreamParameters forStreaming;
-	forStreaming.sampleRate = frameReader->sampleRate();
-	forStreaming.channels = frameReader->channels();
-	forStreaming.framesPerBuffer = request.chunkSize;
+	AudioDevice::StreamParameters streaming;
+	streaming.sampleRate = frameReader->sampleRate();
+	streaming.channels = frameReader->channels();
+	streaming.framesPerBuffer = request.chunkSize;
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
-			forStreaming.deviceIndex = i;
+			streaming.deviceIndex = i;
 
 	device->closeStream();
-	device->openStream(forStreaming);
+	device->openStream(streaming);
 	device->setCallbackResultToContinue();
 	device->startStream();
 }
