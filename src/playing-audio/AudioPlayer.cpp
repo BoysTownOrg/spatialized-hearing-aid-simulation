@@ -33,9 +33,6 @@ static std::vector<double> computeStimulusRms(AudioFrameReader &reader) {
 }
 
 void AudioPlayer::play(PlayRequest request) {
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
-	
 	if (device->streaming())
 		return;
 	
@@ -68,6 +65,8 @@ void AudioPlayer::play(PlayRequest request) {
 
 	device->closeStream();
 	device->openStream(streaming);
+	if (device->failed())
+		throw RequestFailure{ device->errorMessage() };
 	device->setCallbackResultToContinue();
 	device->startStream();
 }
