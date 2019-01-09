@@ -78,6 +78,14 @@ TEST_F(
     EXPECT_TRUE(model.testComplete());
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    audioDeviceDescriptionsReturnsThatOfTheAudioPlayer
+) {
+	stimulusPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
+	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
+}
+
 class FailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
