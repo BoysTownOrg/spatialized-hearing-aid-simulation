@@ -596,3 +596,33 @@ TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetup
 	view->confirmTestSetup();
 	EXPECT_FALSE(view->testSetupHidden());
 }
+
+class TrialFailingModel : public Model {
+	std::string message{};
+public:
+	void setErrorMessage(std::string s) {
+		message = std::move(s);
+	}
+
+	void playTrial(TrialParameters) override {
+		throw TrialFailure{ message };
+	}
+
+	void initializeTest(TestParameters) override {}
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	bool testComplete() override { return {}; }
+};
+
+class PresenterWithTrialFailingModel : public ::testing::Test {
+protected:
+	std::shared_ptr<TrialFailingModel> model = 
+		std::make_shared<TrialFailingModel>();
+	std::shared_ptr<ViewStub> view = std::make_shared<ViewStub>();
+	Presenter presenter{ model, view };
+};
+
+TEST_F(PresenterWithTrialFailingModel, playTrialShowsErrorMessage) {
+	model->setErrorMessage("error.");
+	view->playTrial();
+	assertEqual("error.", view->errorMessage());
+}
