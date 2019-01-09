@@ -33,6 +33,7 @@ public:
 };
 
 class StimulusPlayerStub : public StimulusPlayer {
+	std::vector<std::string> audioDeviceDescriptions_{};
 	std::string filePath_{};
 public:
 	std::string filePath() const {
@@ -41,6 +42,10 @@ public:
 
 	void play(PlayRequest request) override {
 		filePath_ = request.audioFilePath;
+	}
+
+	void setAudioDeviceDescriptions(std::vector<std::string> v) {
+		audioDeviceDescriptions_ = std::move(v);
 	}
 };
 
