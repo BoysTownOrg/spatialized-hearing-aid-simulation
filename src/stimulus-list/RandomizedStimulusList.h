@@ -19,6 +19,7 @@ public:
 
 class RandomizedStimulusList : public StimulusList {
     std::vector<std::string> files{};
+    std::string current_{};
     std::string directory_{};
     DirectoryReader *reader;
     Randomizer *randomizer;
