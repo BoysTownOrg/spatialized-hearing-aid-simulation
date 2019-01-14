@@ -195,8 +195,8 @@ TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
 	player.play(request);
 	assertEqual(
 		{ 
-			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3),
-			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3)
+			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3.0),
+			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3.0)
 		}, 
 		processorFactory.parameters().channelScalars,
 		1e-6
