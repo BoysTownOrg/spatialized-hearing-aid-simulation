@@ -54,6 +54,7 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.sampleRate = frameReader->sampleRate();
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
+	processing.max_dB = request.max_dB;
 	const auto something = std::pow(10.0, (request.level_dB_Spl - 119) / 20.0);
 	RmsComputer computer{ *frameReader };
 	for (int i = 0; i < frameReader->channels(); ++i)
