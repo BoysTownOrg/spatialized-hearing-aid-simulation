@@ -33,6 +33,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 		request.release_ms = forTest.release_ms;
 		request.rightDslPrescriptionFilePath = forTest.rightDslPrescriptionFilePath;
 		request.windowSize = forTest.windowSize;
+		request.max_dB_Spl = 119;
 		player->play(request);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
