@@ -42,6 +42,7 @@ class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	PlayRequest request_{};
 	bool playing_{};
+	bool playCalled_{};
 public:
 	const PlayRequest &request() const {
 		return request_;
@@ -49,6 +50,7 @@ public:
 
 	void play(PlayRequest request) override {
 		request_ = std::move(request);
+		playCalled_ = true;
 	}
 
 	void setAudioDeviceDescriptions(std::vector<std::string> v) {
@@ -65,6 +67,10 @@ public:
 	
 	bool isPlaying() override {
 		return playing_;
+	}
+
+	bool playCalled() {
+		return playCalled_;
 	}
 };
 
