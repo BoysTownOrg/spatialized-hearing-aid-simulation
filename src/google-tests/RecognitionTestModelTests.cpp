@@ -141,6 +141,12 @@ TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) 
 	EXPECT_FALSE(list.nextCalled());
 }
 
+TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerPlaying) {
+	stimulusPlayer.setPlaying();
+	model.playTrial({});
+	EXPECT_FALSE(stimulusPlayer.playCalled());
+}
+
 class FailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
