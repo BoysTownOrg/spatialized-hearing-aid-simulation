@@ -7,7 +7,7 @@
 class FakeAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	std::string errorMessage_{};
-	int channels_{};
+	int channels_{ 1 };
 	int sampleRate_{};
 	bool failed_{};
 public:
