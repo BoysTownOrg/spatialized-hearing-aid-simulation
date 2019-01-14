@@ -7,16 +7,14 @@
 class FakeAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
 	std::string errorMessage_{};
-	int channels_;
+	int channels_{};
 	int sampleRate_{};
 	bool failed_{};
 public:
 	explicit FakeAudioFileReader(
-		std::vector<float> contents = {},
-		int channels_ = 1
+		std::vector<float> contents = {}
 	) :
-		contents{ std::move(contents) },
-		channels_{ channels_ } {}
+		contents{ std::move(contents) } {}
 
 	void setChannels(int c) {
 		channels_ = c;
@@ -42,7 +40,7 @@ public:
 	}
 
 	void setErrorMessage(std::string s) {
-		errorMessage_ = s;
+		errorMessage_ = std::move(s);
 	}
 
 	bool failed() const override {
@@ -63,7 +61,7 @@ public:
 };
 
 class FakeAudioFileReaderFactory : public AudioFileReaderFactory {
-	std::string _filePath{};
+	std::string filePath_{};
 	std::shared_ptr<AudioFileReader> reader;
 public:
 	explicit FakeAudioFileReaderFactory(
@@ -73,11 +71,11 @@ public:
 		reader{ std::move(reader) } {}
 
 	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
-		_filePath = filePath;
+		filePath_ = filePath;
 		return reader;
 	}
 
 	std::string filePath() const {
-		return _filePath;
+		return filePath_;
 	}
 };

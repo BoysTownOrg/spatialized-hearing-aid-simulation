@@ -185,10 +185,8 @@ TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
 }
 
 TEST_F(AudioPlayerTests, playPassesComputedRmsToProcessorFactory) {
-	FakeAudioFileReader fake{
-		std::vector<float>{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-		2
-	};
+	FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } };
+	fake.setChannels(2);
 	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 	player.play({});
 	assertEqual(
