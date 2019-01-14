@@ -235,6 +235,7 @@ public:
 	void closeStream() override {}
 	int count() override { return {}; }
 	std::string description(int) override { return {}; }
+	bool isPlaying() override { return {}; }
 };
 
 TEST(

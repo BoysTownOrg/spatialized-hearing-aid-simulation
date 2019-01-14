@@ -108,4 +108,8 @@ public:
 	void setPlaying() {
 		playing_ = true;
 	}
+
+	bool isPlaying() override {
+		return playing_;
+	}
 };

@@ -26,4 +26,5 @@ public:
 	virtual void closeStream() = 0;
 	virtual int count() = 0;
 	virtual std::string description(int) = 0;
+	virtual bool isPlaying() = 0;
 };

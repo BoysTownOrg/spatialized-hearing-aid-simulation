@@ -108,5 +108,5 @@ std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {
 }
 
 bool AudioPlayer::isPlaying() {
-	return {};
+	return device->isPlaying();
 }
