@@ -139,6 +139,10 @@ TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
 	EXPECT_EQ(3, stimulusPlayer.request().windowSize);
 	EXPECT_EQ(4, stimulusPlayer.request().chunkSize);
 	EXPECT_EQ(5, stimulusPlayer.request().level_dB_Spl);
+
+	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
+	// I don't think it's crucial for chapro, but I'll leave it as it was.
+	EXPECT_EQ(119, stimulusPlayer.request().max_dB_Spl);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
