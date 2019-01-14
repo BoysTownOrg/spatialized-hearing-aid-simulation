@@ -184,17 +184,19 @@ TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
 	EXPECT_EQ(2, x);
 }
 
-TEST_F(AudioPlayerTests, playPassesComputedRmsToProcessorFactory) {
-	FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 } };
+TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
+	FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
 	fake.setChannels(2);
 	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
-	player.play({});
+	AudioPlayer::PlayRequest request{};
+	request.level_dB_Spl = 7;
+	player.play(request);
 	assertEqual(
 		{ 
-			std::sqrt((1*1 + 3*3 + 5*5 + 7*7 + 9*9) / 5),
-			std::sqrt((2*2 + 4*4 + 6*6 + 8*8 + 10*10) / 5)
+			std::pow(10.0, (7 - 119) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3),
+			std::pow(10.0, (7 - 119) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3)
 		}, 
-		processorFactory.parameters().stimulusRms,
+		processorFactory.parameters().channelScalars,
 		1e-6
 	);
 }
