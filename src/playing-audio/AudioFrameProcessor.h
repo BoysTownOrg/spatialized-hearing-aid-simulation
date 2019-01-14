@@ -22,6 +22,7 @@ public:
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
+		double max_dB;
 		double attack_ms;
 		double release_ms;
 		int chunkSize;
