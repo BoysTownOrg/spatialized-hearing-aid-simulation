@@ -99,7 +99,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib;dsl-prescription.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,7 +112,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib;dsl-prescription.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +129,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib;dsl-prescription.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,7 +146,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib;dsl-prescription.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>audio-file-reading.lib;audio-stream-processing.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -155,11 +155,9 @@
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="playing-audio-exports.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioPlayer.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

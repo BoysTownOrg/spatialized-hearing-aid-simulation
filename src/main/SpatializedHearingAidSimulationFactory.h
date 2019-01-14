@@ -1,7 +1,6 @@
 #pragma once
 
-#include "playing-audio-exports.h"
-#include "AudioFrameProcessor.h"
+#include <playing-audio/AudioFrameProcessor.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
 #include <dsl-prescription/PrescriptionReader.h>
@@ -13,7 +12,7 @@ class SpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory
 	std::shared_ptr<PrescriptionReader> prescriptionReader;
 	std::shared_ptr<BrirReader> brirReader;
 public:
-	PLAYING_AUDIO_API SpatializedHearingAidSimulationFactory(
+	SpatializedHearingAidSimulationFactory(
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
 		std::shared_ptr<PrescriptionReader> prescriptionReader,
 		std::shared_ptr<BrirReader> brirReader

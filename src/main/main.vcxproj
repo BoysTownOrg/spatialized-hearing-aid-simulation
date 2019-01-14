@@ -99,7 +99,7 @@
       <PreprocessorDefinitions>NOMINMAX;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,7 +112,7 @@
       <PreprocessorDefinitions>NOMINMAX;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +129,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,7 +146,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>presentation.lib;dsl-prescription.lib;chapro_dll.lib;playing-audio.lib;audio-stream-processing.lib;audio-file-reading.lib;binaural-room-impulse-response.lib;recognition-test.lib;stimulus-list.lib;fir-filtering.lib;hearing-aid-processing.lib;signal-processing.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +156,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />
+    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapro.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="LibsndfileReader.h" />
     <ClInclude Include="NlohmannJsonParser.h" />
     <ClInclude Include="PortAudioDevice.h" />
+    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

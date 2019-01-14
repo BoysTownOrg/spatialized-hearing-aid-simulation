@@ -3,13 +3,13 @@
 #include "LibsndfileReader.h"
 #include "PortAudioDevice.h"
 #include "NlohmannJsonParser.h"
+#include "SpatializedHearingAidSimulationFactory.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
-#include <playing-audio/SpatializedHearingAidSimulationFactory.h>
 #include <recognition-test/RecognitionTestModel.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
