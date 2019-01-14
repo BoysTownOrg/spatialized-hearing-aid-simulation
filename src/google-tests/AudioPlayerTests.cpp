@@ -139,8 +139,8 @@ TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
 	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 }
 
-TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsPlaying) {
-	device.setPlaying();
+TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
+	device.setStreaming();
 	EXPECT_TRUE(player.isPlaying());
 }
 
@@ -235,7 +235,6 @@ public:
 	void closeStream() override {}
 	int count() override { return {}; }
 	std::string description(int) override { return {}; }
-	bool isPlaying() override { return {}; }
 };
 
 TEST(

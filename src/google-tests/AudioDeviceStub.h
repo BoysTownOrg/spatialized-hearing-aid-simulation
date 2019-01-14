@@ -14,7 +14,6 @@ class AudioDeviceStub : public AudioDevice {
 	bool _streaming{};
 	bool _failed{};
 	bool _setCallbackResultToCompleteCalled{};
-	bool playing_{};
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -103,13 +102,5 @@ public:
 
 	std::string callbackLog() const {
 		return _callbackLog;
-	}
-
-	void setPlaying() {
-		playing_ = true;
-	}
-
-	bool isPlaying() override {
-		return playing_;
 	}
 };
