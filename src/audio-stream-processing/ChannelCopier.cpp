@@ -7,8 +7,8 @@ void ChannelCopier::read(gsl::span<gsl::span<float>> audio) {
 	if (reader->channels() == 1) {
 		reader->read(audio.first(1));
 		for (const auto channel : audio.last(audio.size() - 1))
-			for (int i = 0; i < audio[0].size(); ++i)
-				channel[i] = audio[0][i];
+			for (int i = 0; i < audio.begin()->size(); ++i)
+				channel[i] = (*audio.begin())[i];
 	}
 	else
 		reader->read(audio);
