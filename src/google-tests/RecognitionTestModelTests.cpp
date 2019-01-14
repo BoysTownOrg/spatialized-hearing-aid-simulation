@@ -120,6 +120,12 @@ TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
 	EXPECT_EQ(5, stimulusPlayer.request().level_dB_Spl);
 }
 
+TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
+	stimulusPlayer.setPlaying();
+	model.playTrial({});
+	EXPECT_FALSE(list.nextCalled());
+}
+
 class FailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
