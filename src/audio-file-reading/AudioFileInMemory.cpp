@@ -3,19 +3,19 @@
 
 AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 	buffer(gsl::narrow<size_type>(reader.frames() * reader.channels())),
-	_frames{ reader.frames() },
-	_channels{ reader.channels() },
-	_sampleRate{ reader.sampleRate() }
+	frames_{ reader.frames() },
+	channels_{ reader.channels() },
+	sampleRate_{ reader.sampleRate() }
 {
 	if (reader.failed())
 		throw FileError{ reader.errorMessage() };
 	if (buffer.size() == 0)
 		return;
-	reader.readFrames(&buffer[0], reader.frames());
+	reader.readFrames(&buffer.front(), reader.frames());
 }
 
 void AudioFileInMemory::read(gsl::span<gsl::span<float>> audio) {
-	for (int i = 0; i < audio[0].size(); ++i)
+	for (int i = 0; i < audio.begin()->size(); ++i)
 		for (const auto channel : audio) {
 			if (head == buffer.size())
 				return;
@@ -28,15 +28,15 @@ bool AudioFileInMemory::complete() const {
 }
 
 int AudioFileInMemory::sampleRate() const {
-	return _sampleRate;
+	return sampleRate_;
 }
 
 int AudioFileInMemory::channels() const {
-	return _channels;
+	return channels_;
 }
 
 long long AudioFileInMemory::frames() const {
-	return _frames;
+	return frames_;
 }
 
 void AudioFileInMemory::reset() {

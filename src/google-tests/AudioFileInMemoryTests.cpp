@@ -64,7 +64,7 @@ TEST(AudioFileInMemoryTestCase, factoryThrowsCreateErrorOnFileError) {
 		reader->fail();
 		reader->setErrorMessage("error.");
 		AudioFileInMemoryFactory factory{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
-		factory.make("");
+		factory.make({});
 		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
@@ -79,7 +79,7 @@ TEST(AudioFileInMemoryTestCase, factoryPassesFilePath) {
 	assertEqual("a", factory->filePath());
 }
 
-TEST(AudioFileInMemoryTestCase, reset) {
+TEST(AudioFileInMemoryTestCase, seeksBeginningOnReset) {
 	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
 	float x{};
