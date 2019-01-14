@@ -29,8 +29,6 @@ public:
 	}
 
 	void readFrames(float *x, long long n) override {
-		if (contents.size() == 0)
-			return;
 		for (int i = 0; i < n * channels_; ++i)
 			x[i] = contents[i];
 	}
