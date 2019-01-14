@@ -6,6 +6,7 @@ class StimulusListStub : public StimulusList {
 	std::string directory_{};
 	std::string next_{};
 	bool empty_{};
+	bool nextCalled_{true};
 public:
 	void setNext(std::string s) {
 		next_ = std::move(s);
@@ -30,11 +31,16 @@ public:
 	bool empty() override {
 		return empty_;
 	}
+
+	bool nextCalled() const {
+		return nextCalled_;
+	}
 };
 
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	PlayRequest request_{};
+	bool playing_{};
 public:
 	const PlayRequest &request() const {
 		return request_;
@@ -50,6 +56,10 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override {
 		return audioDeviceDescriptions_;
+	}
+
+	void setPlaying() {
+		playing_ = true;
 	}
 };
 
