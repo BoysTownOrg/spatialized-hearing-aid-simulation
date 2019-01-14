@@ -6,61 +6,59 @@
 
 class FakeAudioFileReader : public AudioFileReader {
 	std::vector<float> contents;
-	std::string _errorMessage{};
-	int _channels;
-	int _sampleRate{};
-	bool _failed{};
+	std::string errorMessage_{};
+	int channels_;
+	int sampleRate_{};
+	bool failed_{};
 public:
 	explicit FakeAudioFileReader(
 		std::vector<float> contents = {},
-		int _channels = 1
+		int channels_ = 1
 	) :
 		contents{ std::move(contents) },
-		_channels(_channels) {}
+		channels_{ channels_ } {}
 
 	void setChannels(int c) {
-		_channels = c;
+		channels_ = c;
 	}
 
 	long long frames() override {
-		return _channels == 0 ? 0 : contents.size() / _channels;
+		return channels_ == 0 ? 0 : contents.size() / channels_;
 	}
 
 	int channels() override {
-		return _channels;
+		return channels_;
 	}
 
 	void readFrames(float *x, long long n) override {
 		if (contents.size() == 0)
 			return;
-		std::memcpy(
-			x,
-			&contents[0],
-			gsl::narrow<decltype(contents)::size_type>(n) * sizeof(float) * _channels);
+		for (int i = 0; i < n * channels_; ++i)
+			x[i] = contents[i];
 	}
 
 	void fail() {
-		_failed = true;
+		failed_ = true;
 	}
 
 	void setErrorMessage(std::string s) {
-		_errorMessage = s;
+		errorMessage_ = s;
 	}
 
 	bool failed() const override {
-		return _failed;
+		return failed_;
 	}
 
 	std::string errorMessage() const override {
-		return _errorMessage;
+		return errorMessage_;
 	}
 
 	void setSampleRate(int s) {
-		_sampleRate = s;
+		sampleRate_ = s;
 	}
 
 	int sampleRate() override {
-		return _sampleRate;
+		return sampleRate_;
 	}
 };
 
