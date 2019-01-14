@@ -4,11 +4,11 @@ FileFilterDecorator::FileFilterDecorator(
     DirectoryReader *reader,
     std::string filter
 ) :
-    filter{filter},
-    reader{reader} {}
+    filter{ std::move(filter) },
+    reader{ reader } {}
 
 std::vector<std::string> FileFilterDecorator::filesIn(std::string directory) {
-    return filtered(reader->filesIn(directory));
+    return filtered(reader->filesIn(std::move(directory)));
 }
 
 std::vector<std::string> FileFilterDecorator::filtered(std::vector<std::string> files) {

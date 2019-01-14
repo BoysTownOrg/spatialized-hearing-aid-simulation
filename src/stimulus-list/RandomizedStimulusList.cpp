@@ -4,8 +4,8 @@ RandomizedStimulusList::RandomizedStimulusList(
     DirectoryReader *reader,
     Randomizer *randomizer
 ) :
-    reader{reader},
-    randomizer{randomizer} {}
+    reader{ reader },
+    randomizer{ randomizer } {}
 
 void RandomizedStimulusList::initialize(std::string directory) {
     directory_ = std::move(directory);
