@@ -19,6 +19,7 @@ public:
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> stimulusRms;
+		std::vector<double> channelScalars;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
