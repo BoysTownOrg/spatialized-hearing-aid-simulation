@@ -26,15 +26,13 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 		processors.push_back(makeChannel(
 			brir.left,
 			toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
-			p.stimulusRms.at(0),
-			p.level_dB_Spl)
+			p.channelScalars.at(0))
 		);
 		if (p.channels > 1)
 			processors.push_back(makeChannel(
 				brir.right,
 				toCompressorParameters(p, readPrescription(p.rightDslPrescriptionFilePath)),
-				p.stimulusRms.at(1),
-				p.level_dB_Spl)
+				p.channelScalars.at(1))
 			);
 	}
 
@@ -55,11 +53,9 @@ BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeChannel(
 	std::vector<float> b,
 	FilterbankCompressor::Parameters compression,
-	double rms,
-	double level_dB_Spl
+	double scale
 ) {
 	const auto channel = std::make_shared<SignalProcessingChain>();
-	const auto scale = std::pow(10.0, (level_dB_Spl - compression.max_dB) / 20.0) / rms;
 	channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(scale)));
 	channel->add(makeFilter(b));
 	channel->add(makeHearingAid(compression));

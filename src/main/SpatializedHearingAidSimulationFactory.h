@@ -23,8 +23,8 @@ private:
 	std::shared_ptr<SignalProcessor> makeChannel(
 		std::vector<float> b,
 		FilterbankCompressor::Parameters,
-		double rms,
-		double level_dB_Spl);
+		double
+	);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	FilterbankCompressor::Parameters toCompressorParameters(Parameters, PrescriptionReader::Dsl);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
