@@ -14,23 +14,28 @@ AudioPlayer::AudioPlayer(
 	device->setController(this);
 }
 
-static std::vector<double> computeStimulusRms(AudioFrameReader &reader) {
-	std::vector<std::vector<float>> entireAudioFile(reader.channels());
-	std::vector<gsl::span<float>> pointers;
-	for (auto &channel : entireAudioFile) {
-		channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
-		pointers.push_back({ channel });
+class RmsComputer {
+	std::vector<std::vector<float>> entireAudioFile;
+public:
+	explicit RmsComputer(AudioFrameReader &reader) :
+		entireAudioFile{ reader.channels() }
+	{
+		std::vector<gsl::span<float>> pointers;
+		for (auto &channel : entireAudioFile) {
+			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
+			pointers.push_back({ channel });
+		}
+		reader.read(pointers);
 	}
-	reader.read(pointers);
-	std::vector<double> stimulusRms;
-	for (const auto &channel : entireAudioFile) {
+
+	double compute(int channel) {
 		float squaredSum{};
-		for (const auto sample : channel)
+		const auto channel_ = entireAudioFile.at(channel);
+		for (const auto sample : channel_)
 			squaredSum += sample * sample;
-		stimulusRms.push_back(std::sqrt(squaredSum / channel.size()));
+		return std::sqrt(squaredSum / channel_.size());
 	}
-	return stimulusRms;
-}
+};
 
 void AudioPlayer::play(PlayRequest request) {
 	if (device->streaming())
@@ -50,7 +55,9 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.sampleRate = frameReader->sampleRate();
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
-	processing.stimulusRms = computeStimulusRms(*frameReader);
+	RmsComputer computer{ *frameReader };
+	for (int i = 0; i < frameReader->channels(); ++i)
+		processing.stimulusRms.push_back(computer.compute(i));
 	frameProcessor = makeProcessor(processing);
 
 	frameReader->reset();

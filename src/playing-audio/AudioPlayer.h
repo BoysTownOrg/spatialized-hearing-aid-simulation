@@ -9,11 +9,11 @@
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
+	std::shared_ptr<AudioFrameReader> frameReader{};
+	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
-	std::shared_ptr<AudioFrameReader> frameReader{};
 	AudioFrameProcessorFactory *processorFactory;
-	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 public:
 	PLAYING_AUDIO_API AudioPlayer(
 		AudioDevice *, 

@@ -26,23 +26,28 @@ public:
 	virtual void compressInput(
 		real_type *input,
 		real_type *output,
-		int chunkSize) = 0;
+		int chunkSize
+	) = 0;
 	virtual void analyzeFilterbank(
 		real_type *input,
 		complex_type *output,
-		int chunkSize) = 0;
+		int chunkSize
+	) = 0;
 	virtual void compressChannels(
 		complex_type *input,
 		complex_type *output,
-		int chunkSize) = 0;
+		int chunkSize
+	) = 0;
 	virtual void synthesizeFilterbank(
 		complex_type *input,
 		real_type *output,
-		int chunkSize) = 0;
+		int chunkSize
+	) = 0;
 	virtual void compressOutput(
 		real_type *input,
 		real_type *output,
-		int chunkSize) = 0;
+		int chunkSize
+	) = 0;
 	virtual int chunkSize() const = 0;
 	virtual int channels() const = 0;
 	virtual bool failed() const = 0;
@@ -52,5 +57,6 @@ class FilterbankCompressorFactory {
 public:
 	INTERFACE_OPERATIONS(FilterbankCompressorFactory);
 	virtual std::shared_ptr<FilterbankCompressor> make(
-		FilterbankCompressor::Parameters) = 0;
+		FilterbankCompressor::Parameters
+	) = 0;
 };

@@ -14,7 +14,7 @@
 
 class HearingAidProcessor : public SignalProcessor {
 	// Order important for construction.
-	std::vector<float> complexBuffer;
+	std::vector<float> buffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	RUNTIME_ERROR(CompressorError);

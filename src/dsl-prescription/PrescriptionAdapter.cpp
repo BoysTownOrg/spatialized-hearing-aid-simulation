@@ -25,7 +25,7 @@ PrescriptionAdapter::PrescriptionAdapter(std::shared_ptr<ConfigurationFileParser
 
 auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 	try {
-		const auto parser = factory->make(filePath);
+		const auto parser = factory->make(std::move(filePath));
 		Dsl dsl{};
 		using namespace dsl_prescription;
 		dsl.crossFrequenciesHz = parser->asVector(propertyName(Property::crossFrequenciesHz));
@@ -34,7 +34,6 @@ auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 		dsl.kneepoints_dBSpl = parser->asVector(propertyName(Property::kneepoints_dBSpl));
 		dsl.broadbandOutputLimitingThresholds_dBSpl = 
 			parser->asVector(propertyName(Property::broadbandOutputLimitingThresholds_dBSpl));
-		dsl.channels = gsl::narrow<int>(dsl.crossFrequenciesHz.size() + 1);
 		const auto channels = dsl.crossFrequenciesHz.size() + 1;
 		if (
 			dsl.compressionRatios.size() != channels ||
@@ -43,6 +42,7 @@ auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 			dsl.broadbandOutputLimitingThresholds_dBSpl.size() != channels
 		)
 			throw ReadError{ "channel count mismatch in prescription." };
+		dsl.channels = gsl::narrow<int>(channels);
 		return dsl;
 	}
 	catch (const ConfigurationFileParser::ParseError &e) {

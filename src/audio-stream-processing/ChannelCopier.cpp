@@ -42,5 +42,5 @@ ChannelCopierFactory::ChannelCopierFactory(
 }
 
 std::shared_ptr<AudioFrameReader> ChannelCopierFactory::make(std::string filePath) {
-	return std::make_shared<ChannelCopier>(factory->make(filePath));
+	return std::make_shared<ChannelCopier>(factory->make(std::move(filePath)));
 }
