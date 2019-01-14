@@ -191,11 +191,12 @@ TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
 	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 	AudioPlayer::PlayRequest request{};
 	request.level_dB_Spl = 7;
+	request.max_dB = 8;
 	player.play(request);
 	assertEqual(
 		{ 
-			std::pow(10.0, (7 - 119) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3),
-			std::pow(10.0, (7 - 119) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3)
+			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3),
+			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3)
 		}, 
 		processorFactory.parameters().channelScalars,
 		1e-6
