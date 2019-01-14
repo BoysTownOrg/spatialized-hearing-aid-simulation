@@ -34,10 +34,6 @@ int PortAudioDevice::audioCallback(
 	return self->callbackResult;
 }
 
-bool PortAudioDevice::isPlaying() {
-	return Pa_IsStreamActive(stream);
-}
-
 int PortAudioDevice::count() {
 	return Pa_GetDeviceCount();
 }
