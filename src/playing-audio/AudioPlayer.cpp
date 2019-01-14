@@ -51,7 +51,6 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.brirFilePath = request.brirFilePath;
 	processing.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
 	processing.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-	processing.level_dB_Spl = request.level_dB_Spl;
 	processing.sampleRate = frameReader->sampleRate();
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
