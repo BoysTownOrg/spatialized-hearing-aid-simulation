@@ -76,6 +76,18 @@ TEST_F(
 
 TEST_F(
     RandomizedStimulusListTests,
+    nextReturnsFullPathToPreviousFileWhenExhausted
+) {
+    reader.setFileNames({ "a", "b", "c" });
+    list.initialize({"C:"});
+	list.next();
+	list.next();
+	list.next();
+    assertEqual("C:/c", list.next());
+}
+
+TEST_F(
+    RandomizedStimulusListTests,
     initializeShufflesFileNames
 ) {
     reader.setFileNames({ "a", "b", "c" });
