@@ -29,7 +29,7 @@ public:
 		std::string brirFilePath;
 		std::string audioFilePath;
 		std::string audioDevice;
-		double max_dB;
+		double max_dB_Spl;
 		double level_dB_Spl;
 		double attack_ms;
 		double release_ms;

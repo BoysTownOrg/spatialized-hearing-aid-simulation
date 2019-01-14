@@ -30,7 +30,7 @@ Chapro::Chapro(Parameters parameters) :
 	wdrc.attack = 1;
 	wdrc.release = 50;
 	wdrc.fs = parameters.sampleRate;
-	wdrc.maxdB = parameters.max_dB;
+	wdrc.maxdB = parameters.max_dB_Spl;
 	wdrc.tkgain = 0;
 	wdrc.tk = 105;
 	wdrc.cr = 10;

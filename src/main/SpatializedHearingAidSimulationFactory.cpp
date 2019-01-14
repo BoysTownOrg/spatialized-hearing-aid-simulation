@@ -90,7 +90,7 @@ FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompr
 	compression.chunkSize = p.chunkSize;
 	compression.windowSize = p.windowSize;
 	compression.sampleRate = p.sampleRate;
-	compression.max_dB = 119;
+	compression.max_dB_Spl = p.max_dB_Spl;
 	compression.compressionRatios = prescription.compressionRatios;
 	compression.crossFrequenciesHz = prescription.crossFrequenciesHz;
 	compression.kneepointGains_dB = prescription.kneepointGains_dB;

@@ -15,7 +15,7 @@ public:
 		double attack_ms;
 		double release_ms;
 		double sampleRate;
-		double max_dB;
+		double max_dB_Spl;
 		int windowSize;
 		int chunkSize;
 		int channels;

@@ -111,7 +111,7 @@ TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
 	request.brirFilePath = "d";
 	device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 	request.audioDevice = "gamma";
-	request.max_dB = 1;
+	request.max_dB_Spl = 1;
 	request.attack_ms = 2;
 	request.release_ms = 3;
 	request.windowSize = 4;
@@ -124,7 +124,7 @@ TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
 	assertEqual("c", readerFactory.filePath());
 	assertEqual("d", processorFactory.parameters().brirFilePath);
 	EXPECT_EQ(2, device.streamParameters().deviceIndex);
-	EXPECT_EQ(1, processorFactory.parameters().max_dB);
+	EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
 	EXPECT_EQ(2, processorFactory.parameters().attack_ms);
 	EXPECT_EQ(3, processorFactory.parameters().release_ms);
 	EXPECT_EQ(4, processorFactory.parameters().windowSize);
@@ -191,7 +191,7 @@ TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
 	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 	AudioPlayer::PlayRequest request{};
 	request.level_dB_Spl = 7;
-	request.max_dB = 8;
+	request.max_dB_Spl = 8;
 	player.play(request);
 	assertEqual(
 		{ 
