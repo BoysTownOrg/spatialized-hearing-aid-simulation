@@ -27,6 +27,7 @@ public:
 	void closeStream() override;
 	int count() override;
 	std::string description(int) override;
+	bool isPlaying() override;
 private:
 	static int audioCallback(
 		const void *,

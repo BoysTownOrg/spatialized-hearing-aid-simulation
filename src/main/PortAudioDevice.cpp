@@ -5,11 +5,10 @@ PortAudioDevice::PortAudioDevice() {
 }
 
 void PortAudioDevice::openStream(StreamParameters parameters) {
-	PaStreamParameters outputParameters;
+	PaStreamParameters outputParameters{};
 	outputParameters.device = parameters.deviceIndex;
 	outputParameters.channelCount = parameters.channels;
 	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
-	outputParameters.hostApiSpecificStreamInfo = nullptr;
 	lastError = Pa_OpenStream(
 		&stream,
 		nullptr,
@@ -18,7 +17,8 @@ void PortAudioDevice::openStream(StreamParameters parameters) {
 		parameters.framesPerBuffer,
 		paNoFlag,
 		audioCallback,
-		this);
+		this
+	);
 }
 
 int PortAudioDevice::audioCallback(
@@ -27,11 +27,15 @@ int PortAudioDevice::audioCallback(
 	const unsigned long frames,
 	const PaStreamCallbackTimeInfo *,
 	PaStreamCallbackFlags,
-	void *streamObject)
-{
-	const auto self = static_cast<PortAudioDevice *>(streamObject);
+	void *self_
+) {
+	auto self = static_cast<PortAudioDevice *>(self_);
 	self->controller->fillStreamBuffer(output, frames);
 	return self->callbackResult;
+}
+
+bool PortAudioDevice::isPlaying() {
+	return Pa_IsStreamActive(stream);
 }
 
 int PortAudioDevice::count() {
