@@ -19,23 +19,19 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
-	if (p.channels) {
-		const auto brir = readBrir(p.brirFilePath);
-		if (brir.sampleRate != p.sampleRate)
-			throw CreateError{ "Not sure what to do with different sample rates." };
-		processors.push_back(makeChannel(
-			brir.left,
-			toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
-			p.channelScalars.at(0))
-		);
-		if (p.channels > 1)
-			processors.push_back(makeChannel(
-				brir.right,
-				toCompressorParameters(p, readPrescription(p.rightDslPrescriptionFilePath)),
-				p.channelScalars.at(1))
-			);
-	}
-
+	const auto brir = readBrir(p.brirFilePath);
+	if (brir.sampleRate != p.sampleRate)
+		throw CreateError{ "Not sure what to do with different sample rates." };
+	processors.push_back(makeChannel(
+		brir.left,
+		toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
+		p.channelScalars.at(0))
+	);
+	processors.push_back(makeChannel(
+		brir.right,
+		toCompressorParameters(p, readPrescription(p.rightDslPrescriptionFilePath)),
+		p.channelScalars.at(1))
+	);
 	return std::make_shared<ChannelProcessingGroup>(processors);
 }
 
@@ -43,7 +39,7 @@ BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::
 	std::string filePath
 ) {
 	try {
-		return brirReader->read(filePath);
+		return brirReader->read(std::move(filePath));
 	}
 	catch (const BrirReader::ReadError &e) {
 		throw CreateError{ e.what() };
@@ -57,8 +53,8 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeCha
 ) {
 	const auto channel = std::make_shared<SignalProcessingChain>();
 	channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(scale)));
-	channel->add(makeFilter(b));
-	channel->add(makeHearingAid(compression));
+	channel->add(makeFilter(std::move(b)));
+	channel->add(makeHearingAid(std::move(compression)));
 	return channel;
 }
 
@@ -67,7 +63,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 ) {
 	try {
 		return std::make_shared<HearingAidProcessor>(
-			compressorFactory->make(p)
+			compressorFactory->make(std::move(p))
 		);
 	}
 	catch (const HearingAidProcessor::CompressorError &e) {
@@ -77,7 +73,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 
 PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription(std::string filePath) {
 	try {
-		return prescriptionReader->read(filePath);
+		return prescriptionReader->read(std::move(filePath));
 	}
 	catch (const PrescriptionReader::ReadError &e) {
 		throw CreateError{ e.what() };
@@ -99,14 +95,15 @@ FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompr
 	compression.crossFrequenciesHz = prescription.crossFrequenciesHz;
 	compression.kneepointGains_dB = prescription.kneepointGains_dB;
 	compression.kneepoints_dBSpl = prescription.kneepoints_dBSpl;
-	compression.broadbandOutputLimitingThresholds_dBSpl = prescription.broadbandOutputLimitingThresholds_dBSpl;
+	compression.broadbandOutputLimitingThresholds_dBSpl = 
+		prescription.broadbandOutputLimitingThresholds_dBSpl;
 	compression.channels = prescription.channels;
 	return compression;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFilter(std::vector<float> b) {
 	try {
-		return std::make_shared<FirFilter>(b);
+		return std::make_shared<FirFilter>(std::move(b));
 	}
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw CreateError{ "Invalid filter coefficients." };

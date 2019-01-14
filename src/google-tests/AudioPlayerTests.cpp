@@ -138,6 +138,7 @@ TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
 }
 
 TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
+	EXPECT_FALSE(player.isPlaying());
 	device.setStreaming();
 	EXPECT_TRUE(player.isPlaying());
 }
