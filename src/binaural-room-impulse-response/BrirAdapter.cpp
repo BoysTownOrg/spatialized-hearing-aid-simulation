@@ -1,18 +1,17 @@
 #include "BrirAdapter.h"
 #include <gsl/gsl>
-#include <algorithm>
 
-class ChannelReader {
-	std::vector<float> contents;
+class BrirAdapter::ChannelReader {
+	vector_type contents;
 	int channels;
 public:
-	ChannelReader(std::vector<float> contents, int channels) :
+	ChannelReader(vector_type contents, int channels) :
 		contents{ std::move(contents) },
 		channels{ channels } {}
 
-	std::vector<float> read(int channel) {
-		std::vector<float> x{};
-		std::vector<float>::size_type i = channel;
+	vector_type read(int channel) {
+		vector_type x{};
+		vector_type::size_type i = channel;
 		while (i < contents.size()) {
 			x.push_back(contents[i]);
 			i += channels;
