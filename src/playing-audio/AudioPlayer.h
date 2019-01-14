@@ -23,6 +23,7 @@ public:
 	void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API void play(PlayRequest) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
+	bool isPlaying() override;
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(

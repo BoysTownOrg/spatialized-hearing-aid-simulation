@@ -106,3 +106,7 @@ std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {
 		descriptions.push_back(device->description(i));
 	return descriptions;
 }
+
+bool AudioPlayer::isPlaying() {
+	return {};
+}

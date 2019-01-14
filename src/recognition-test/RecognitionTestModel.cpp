@@ -19,6 +19,8 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {
+	if (player->isPlaying())
+		return;
 	try {
 		StimulusPlayer::PlayRequest request;
 		request.audioFilePath = list->next();

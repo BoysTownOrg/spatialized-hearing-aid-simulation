@@ -6,7 +6,7 @@ class StimulusListStub : public StimulusList {
 	std::string directory_{};
 	std::string next_{};
 	bool empty_{};
-	bool nextCalled_{true};
+	bool nextCalled_{};
 public:
 	void setNext(std::string s) {
 		next_ = std::move(s);
@@ -21,6 +21,7 @@ public:
 	}
 
 	std::string next() override {
+		nextCalled_ = true;
 		return next_;
 	}
 
@@ -60,6 +61,10 @@ public:
 
 	void setPlaying() {
 		playing_ = true;
+	}
+	
+	bool isPlaying() override {
+		return playing_;
 	}
 };
 
@@ -148,6 +153,7 @@ public:
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	bool isPlaying() override { return {}; }
 };
 
 TEST(

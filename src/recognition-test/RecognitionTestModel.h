@@ -39,6 +39,7 @@ public:
 	RUNTIME_ERROR(RequestFailure);
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
+	virtual bool isPlaying() = 0;
 };
 
 class RecognitionTestModel : public Model {
