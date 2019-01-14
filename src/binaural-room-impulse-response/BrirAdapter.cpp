@@ -2,6 +2,25 @@
 #include <gsl/gsl>
 #include <algorithm>
 
+class ChannelReader {
+	std::vector<float> contents;
+	int channels;
+public:
+	ChannelReader(std::vector<float> contents, int channels) :
+		contents{ std::move(contents) },
+		channels{ channels } {}
+
+	std::vector<float> read(int channel) {
+		std::vector<float> x{};
+		std::vector<float>::size_type i = channel;
+		while (i < contents.size()) {
+			x.push_back(contents[i]);
+			i += channels;
+		}
+		return x;
+	}
+};
+
 BrirAdapter::BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory) :
 	factory{ std::move(factory) }
 {
@@ -24,11 +43,10 @@ auto BrirAdapter::makeBrir(AudioFileReader &reader) -> BinauralRoomImpulseRespon
 	vector_type buffer(gsl::narrow<vector_type::size_type>(reader.frames() * reader.channels()));
 	if (buffer.size()) {
 		reader.readFrames(&buffer.front(), reader.frames());
-		for (vector_type::size_type i = 0; i < reader.frames(); ++i)
-			brir.left.push_back(buffer[i * reader.channels()]);
+		ChannelReader channelReader{ buffer, reader.channels() };
+		brir.left = channelReader.read(0);
 		if (reader.channels() > 1)
-			for (vector_type::size_type i = 0; i < reader.frames(); ++i)
-				brir.right.push_back(buffer[i * reader.channels() + 1]);
+			brir.right = channelReader.read(1);
 	}
 	return brir;
 }
