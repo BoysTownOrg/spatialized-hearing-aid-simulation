@@ -10,9 +10,9 @@ static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
 	try {
 		const auto parser = std::make_shared<FakeConfigurationFileParser>();
 		parser->setValidSingleChannelDslProperties();
-		parser->setVectorProperty(property, {});
+		parser->setVectorProperty(std::move(property), {});
 		PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
-		adapter.read("");
+		adapter.read({});
 		FAIL() << "Expected PrescriptionAdapter::InvalidPrescription.";
 	}
 	catch (const PrescriptionAdapter::ReadError &e) {
@@ -24,13 +24,14 @@ class PrescriptionAdapterTestCase : public ::testing::TestCase {};
 
 TEST(PrescriptionAdapterTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
 	using namespace dsl_prescription;
-	for (const std::string property :
+	for (auto property :
 		{
 			propertyName(Property::compressionRatios),
 			propertyName(Property::kneepointGains_dB),
 			propertyName(Property::kneepoints_dBSpl),
 			propertyName(Property::broadbandOutputLimitingThresholds_dBSpl)
-		})
+		}
+	)
 		assertInvalidPrescriptionThrownOnChannelCountMismatch(property);
 }
 
@@ -51,7 +52,7 @@ TEST(
 	PrescriptionAdapter prescription{ 
 		std::make_shared<FakeConfigurationFileParserFactory>(parser) 
 	};
-	const auto dsl = prescription.read("");
+	const auto dsl = prescription.read({});
 	EXPECT_EQ(2, dsl.channels);
 	assertEqual({ 3 }, dsl.crossFrequenciesHz);
 	assertEqual({ 4, 4 }, dsl.compressionRatios);
@@ -67,7 +68,7 @@ TEST(
 	try {
 		const auto parser = std::make_shared<ErrorParser>("error.");
 		PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
-		adapter.read("");
+		adapter.read({});
 		FAIL() << "Expected DslPrescriptionFileReader::InvalidPrescription.";
 	}
 	catch (const PrescriptionAdapter::ReadError &e) {

@@ -17,7 +17,7 @@ public:
 	}
 
 	void initialize(std::string d) override {
-		directory_ = d;
+		directory_ = std::move(d);
 	}
 
 	std::string next() override {

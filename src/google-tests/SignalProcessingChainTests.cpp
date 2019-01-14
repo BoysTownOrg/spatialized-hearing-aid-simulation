@@ -2,26 +2,36 @@
 #include <signal-processing/SignalProcessingChain.h>
 #include <gtest/gtest.h>
 
-class AddOne : public SignalProcessor {
-public:
-	void process(gsl::span<float> signal) override {
-		for (auto &x : signal)
-			x += 1;
-	}
-};
+namespace {
+	class AddOne : public SignalProcessor {
+	public:
+		void process(gsl::span<float> signal) override {
+			for (auto &x : signal)
+				x += 1;
+		}
+	};
 
-class TimesTwo : public SignalProcessor {
-public:
-	void process(gsl::span<float> signal) override {
-		for (auto &x : signal)
-			x *= 2;
-	}
-};
+	class TimesTwo : public SignalProcessor {
+	public:
+		void process(gsl::span<float> signal) override {
+			for (auto &x : signal)
+				x *= 2;
+		}
+	};
+}
 
-class SignalProcessingChainTestCase : public ::testing::TestCase {};
-
-TEST(SignalProcessingChainTestCase, chainCallsProcessorsInOrder) {
+class SignalProcessingChainTests : public ::testing::Test {
+protected:
 	SignalProcessingChain chain{};
+	std::shared_ptr<SignalProcessorStub> processor = 
+		std::make_shared<SignalProcessorStub>();
+
+	SignalProcessingChainTests() {
+		chain.add(processor);
+	}
+};
+
+TEST_F(SignalProcessingChainTests, chainCallsProcessorsInOrder) {
 	chain.add(std::make_shared<AddOne>());
 	chain.add(std::make_shared<TimesTwo>());
 	float x = 1;
@@ -29,10 +39,7 @@ TEST(SignalProcessingChainTestCase, chainCallsProcessorsInOrder) {
 	EXPECT_EQ(4, x);
 }
 
-TEST(SignalProcessingChainTestCase, chainPassesParametersToProcessor) {
-	SignalProcessingChain chain{};
-	const auto processor = std::make_shared<SignalProcessorStub>();
-	chain.add(processor);
+TEST_F(SignalProcessingChainTests, chainPassesParametersToProcessor) {
 	float x{};
 	gsl::span<float> channel{ &x, 1 };
 	chain.process(channel);
