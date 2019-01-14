@@ -84,6 +84,8 @@ TEST_F(
 	list.next();
 	list.next();
     assertEqual("C:/c", list.next());
+    assertEqual("C:/c", list.next());
+    assertEqual("C:/c", list.next());
 }
 
 TEST_F(
