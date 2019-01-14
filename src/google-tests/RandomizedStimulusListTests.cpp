@@ -76,7 +76,7 @@ TEST_F(
 
 TEST_F(
     RandomizedStimulusListTests,
-    nextReturnsFullPathToPreviousFileWhenExhausted
+    nextReturnsFullPathToLastFileWhenExhausted
 ) {
     reader.setFileNames({ "a", "b", "c" });
     list.initialize({"C:"});
