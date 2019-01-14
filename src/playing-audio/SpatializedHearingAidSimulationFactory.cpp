@@ -27,21 +27,23 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 			brir.left,
 			toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
 			p.stimulusRms.at(0),
-			p.level_dB_Spl));
+			p.level_dB_Spl)
+		);
 		if (p.channels > 1)
 			processors.push_back(makeChannel(
 				brir.right,
 				toCompressorParameters(p, readPrescription(p.rightDslPrescriptionFilePath)),
 				p.stimulusRms.at(1),
-				p.level_dB_Spl));
+				p.level_dB_Spl)
+			);
 	}
 
 	return std::make_shared<ChannelProcessingGroup>(processors);
 }
 
 BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::readBrir(
-	std::string filePath)
-{
+	std::string filePath
+) {
 	try {
 		return brirReader->read(filePath);
 	}
