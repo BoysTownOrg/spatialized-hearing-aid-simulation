@@ -5,18 +5,26 @@ class BrirAdapter::ChannelReader {
 	vector_type contents;
 	int channels;
 public:
-	ChannelReader(vector_type contents, int channels) :
-		contents{ std::move(contents) },
-		channels{ channels } {}
+	ChannelReader(AudioFileReader &reader) :
+		contents(gsl::narrow<vector_type::size_type>(reader.frames() * reader.channels())),
+		channels{ reader.channels() } 
+	{
+		if (contents.size())
+			reader.readFrames(&contents.front(), reader.frames());
+	}
 
 	vector_type read(int channel) {
-		vector_type x{};
+		vector_type result{};
 		vector_type::size_type i = channel;
 		while (i < contents.size()) {
-			x.push_back(contents[i]);
+			result.push_back(contents[i]);
 			i += channels;
 		}
-		return x;
+		return result;
+	}
+
+	bool empty() {
+		return contents.empty();
 	}
 };
 
@@ -39,10 +47,8 @@ std::shared_ptr<AudioFileReader> BrirAdapter::makeReader(std::string filePath) {
 auto BrirAdapter::makeBrir(AudioFileReader &reader) -> BinauralRoomImpulseResponse {
 	BinauralRoomImpulseResponse brir{};
 	brir.sampleRate = reader.sampleRate();
-	vector_type buffer(gsl::narrow<vector_type::size_type>(reader.frames() * reader.channels()));
-	if (buffer.size()) {
-		reader.readFrames(&buffer.front(), reader.frames());
-		ChannelReader channelReader{ buffer, reader.channels() };
+	ChannelReader channelReader{ reader };
+	if (!channelReader.empty()) {
 		brir.left = channelReader.read(0);
 		if (reader.channels() > 1)
 			brir.right = channelReader.read(1);
