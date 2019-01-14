@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
-#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
+	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
 #else
-#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
+	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
 #endif
 
 #include "BrirReader.h"
@@ -18,4 +18,8 @@ public:
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API BinauralRoomImpulseResponse read(
 		std::string filePath
 	) override;
+private:
+	using vector_type = decltype(BinauralRoomImpulseResponse::left);
+	std::shared_ptr<AudioFileReader> makeReader(std::string filePath);
+	BinauralRoomImpulseResponse makeBrir(AudioFileReader &);
 };
