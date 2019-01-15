@@ -63,6 +63,7 @@ namespace {
 	TEST_F(AudioPlayerTests, fillStreamBufferPadsZeroToEndOfInput) {
 		frameReader->setChannels(1);
 		play();
+		frameReader->setComplete();
 		std::vector<float> audio(3, -1);
 		float *x[]{ &audio[0] };
 		fillStreamBuffer(x, 3);
