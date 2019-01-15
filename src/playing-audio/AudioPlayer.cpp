@@ -108,8 +108,10 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 			for (auto &x : channel)
 				x = 0;
 		paddedZeroes += frames;
-		if (paddedZeroes >= frameProcessor->groupDelay())
+		if (paddedZeroes >= frameProcessor->groupDelay()) {
 			device->setCallbackResultToComplete();
+			paddedZeroes = 0;
+		}
 	}
 	frameProcessor->process(audio);
 }
