@@ -99,28 +99,28 @@ TEST(FirFilterTestCase, identityFilterWithSuccessiveCalls) {
 	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
 }
 
-TEST(FirFilterTestCase, simpleMovingSumWithSuccessiveCalls) {
+TEST(FirFilterTestCase, movingSumWithSuccessiveCalls) {
 	FirFilterFacade filter{ { 1, 1 } };
 	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
 	assertEqual({ 4, 3, 5 }, filter.process({ 1, 2, 3 }));
 	assertEqual({ 4, 3, 5 }, filter.process({ 1, 2, 3 }));
 }
 
-TEST(FirFilterTestCase, simpleMovingSumWithIncreasingInputSize) {
+TEST(FirFilterTestCase, movingSumWithIncreasingInputSize) {
 	FirFilterFacade filter({ 1, 1 });
 	assertEqual({ 1, 3 }, filter.process({ 1, 2 }));
 	assertEqual({ 5, 7, 9 }, filter.process({ 3, 4, 5 }));
 	assertEqual({ 11, 13, 15, 17 }, filter.process({ 6, 7, 8, 9 }));
 }
 
-TEST(FirFilterTestCase, simpleMovingSumWithDecreasingInputSize) {
+TEST(FirFilterTestCase, movingSumWithDecreasingInputSize) {
 	FirFilterFacade filter({ 1, 1 });
 	assertEqual({ 1, 3, 5, 7 }, filter.process({ 1, 2, 3, 4 }));
 	assertEqual({ 9, 11, 13 }, filter.process({ 5, 6, 7 }));
 	assertEqual({ 15, 17 }, filter.process({ 8, 9 }));
 }
 
-TEST(FirFilterTestCase, simpleMovingSumWithChangingInputSize) {
+TEST(FirFilterTestCase, movingSumWithChangingInputSize) {
 	FirFilterFacade filter({ 1, 1 });
 	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
 	assertEqual({ 7, 9, 11, 13 }, filter.process({ 4, 5, 6, 7 }));
@@ -129,8 +129,8 @@ TEST(FirFilterTestCase, simpleMovingSumWithChangingInputSize) {
 
 TEST(
 	FirFilterTestCase, 
-	simpleMovingSumWithInputSizeGoingAboveAndBelowCoefficientLength) 
-{
+	movingSumWithInputSizeGoingAboveAndBelowCoefficientLength
+) {
 	FirFilterFacade filter({ 1, 1 });
 	assertEqual({ 1 }, filter.process({ 1 }));
 	assertEqual({ 3, 5 }, filter.process({ 2, 3 }));
@@ -152,17 +152,20 @@ TEST(FirFilterTestCase, secondOrderMovingSumOneCall) {
 	FirFilterFacade filter({ 1, 1, 1 });
 	assertEqual(
 		{ 1, 3, 6, 9, 12, 15, 18, 21, 24 },
-		filter.process({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
+		filter.process({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })
+	);
 }
 
 TEST(FirFilterTestCase, delayedIdentity) {
 	FirFilterFacade filter({ 0, 0, 1 });
 	assertEqual(
 		{ 0, 0, 1, 2, 3, },
-		filter.process({ 1, 2, 3, 4, 5 }));
+		filter.process({ 1, 2, 3, 4, 5 })
+	);
 	assertEqual(
 		{ 4, 5 },
-		filter.process({ 0, 0 }));
+		filter.process({ 0, 0 })
+	);
 }
 
 TEST(FirFilterTestCase, positiveCoefficients) {
@@ -176,7 +179,8 @@ TEST(FirFilterTestCase, negativeCoefficients) {
 	assertEqual({ -4, -10, -19 }, filter.process({ 1, 2, 3 }));
 	assertEqual(
 		{ -33, -47, -61, -75, -89, -103, -117 }, 
-		filter.process({ 4, 5, 6, 7, 8, 9, 10 }));
+		filter.process({ 4, 5, 6, 7, 8, 9, 10 })
+	);
 }
 
 TEST(FirFilterTestCase, positiveAndNegativeCoefficients) {
