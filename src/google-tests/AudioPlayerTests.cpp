@@ -7,296 +7,298 @@
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
-class AudioPlayerFacade {
-	AudioDeviceStub device{};
-	AudioFrameReaderStubFactory readerFactory{};
-	AudioFrameProcessorStubFactory processorFactory{};
-	AudioPlayer player;
-public:
-	AudioPlayerFacade(AudioDevice *device) :
-		player{
-			device,
-			&readerFactory,
-			&processorFactory
+namespace {
+	class AudioPlayerFacade {
+		AudioDeviceStub device{};
+		AudioFrameReaderStubFactory readerFactory{};
+		AudioFrameProcessorStubFactory processorFactory{};
+		AudioPlayer player;
+	public:
+		AudioPlayerFacade(AudioDevice *device) :
+			player{
+				device,
+				&readerFactory,
+				&processorFactory
 		}
-	{}
+		{}
 
-	AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
-		player{
-			&device,
-			readerFactory,
-			&processorFactory
+		AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
+			player{
+				&device,
+				readerFactory,
+				&processorFactory
 		}
-	{}
+		{}
 
-	AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
-		player{
-			&device,
-			&readerFactory,
-			processorFactory
+		AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
+			player{
+				&device,
+				&readerFactory,
+				processorFactory
 		}
-	{}
+		{}
 
-	void play() {
-		player.play({});
-	}
-};
-
-class AudioPlayerTests : public ::testing::Test {
-protected:
-	AudioDeviceStub device{};
-	std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-	AudioFrameReaderStubFactory readerFactory{ frameReader };
-	std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-	AudioFrameProcessorStubFactory processorFactory{ processor };
-	AudioPlayer player{ &device, &readerFactory, &processorFactory };
-
-	void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
-		try {
+		void play() {
 			player.play({});
+		}
+	};
+
+	class AudioPlayerTests : public ::testing::Test {
+	protected:
+		AudioDeviceStub device{};
+		std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
+		AudioFrameReaderStubFactory readerFactory{ frameReader };
+		std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
+		AudioFrameProcessorStubFactory processorFactory{ processor };
+		AudioPlayer player{ &device, &readerFactory, &processorFactory };
+
+		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
+			try {
+				player.play({});
+				FAIL() << "Expected AudioPlayer::RequestFailure";
+			}
+			catch (const AudioPlayer::RequestFailure &e) {
+				assertEqual(errorMessage, e.what());
+			}
+		}
+	};
+
+	TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
+		EXPECT_EQ(&player, device.controller());
+	}
+
+	TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
+		player.play({});
+		assertEqual("close open start ", device.streamLog());
+	}
+
+	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
+		device.setStreaming();
+		player.play({});
+		EXPECT_TRUE(device.streamLog().empty());
+	}
+
+	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
+		player.play({});
+		device.fillStreamBuffer({}, {});
+		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+		frameReader->setComplete();
+		device.fillStreamBuffer({}, {});
+		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
+	}
+
+	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
+		frameReader->setChannels(2);
+		player.play({});
+		float left{};
+		float right{};
+		float *x[]{ &left, &right };
+		device.fillStreamBuffer(x, 1);
+		EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
+		EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
+		EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
+		EXPECT_EQ(1, frameReader->audioBuffer()[1].size());
+		EXPECT_EQ(&left, processor->audioBuffer()[0].data());
+		EXPECT_EQ(&right, processor->audioBuffer()[1].data());
+		EXPECT_EQ(1, processor->audioBuffer()[0].size());
+		EXPECT_EQ(1, processor->audioBuffer()[1].size());
+	}
+
+	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
+		StimulusPlayer::PlayRequest request;
+		request.leftDslPrescriptionFilePath = "a";
+		request.rightDslPrescriptionFilePath = "b";
+		request.audioFilePath = "c";
+		request.brirFilePath = "d";
+		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
+		request.audioDevice = "gamma";
+		request.max_dB_Spl = 1;
+		request.attack_ms = 2;
+		request.release_ms = 3;
+		request.windowSize = 4;
+		request.chunkSize = 5;
+		frameReader->setChannels(6);
+		frameReader->setSampleRate(7);
+		player.play(request);
+		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", readerFactory.filePath());
+		assertEqual("d", processorFactory.parameters().brirFilePath);
+		EXPECT_EQ(2, device.streamParameters().deviceIndex);
+		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
+		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
+		EXPECT_EQ(3, processorFactory.parameters().release_ms);
+		EXPECT_EQ(4, processorFactory.parameters().windowSize);
+		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
+		EXPECT_EQ(6, device.streamParameters().channels);
+		EXPECT_EQ(7, device.streamParameters().sampleRate);
+	}
+
+	TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
+		player.play({});
+		assertEqual("setCallbackResultToContinue start ", device.callbackLog());
+	}
+
+	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
+		EXPECT_FALSE(player.isPlaying());
+		device.setStreaming();
+		EXPECT_TRUE(player.isPlaying());
+	}
+
+	TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
+		device.setDescriptions({ "a", "b", "c" });
+		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
+	}
+
+	class ReadsAOne : public AudioFrameReader {
+		void read(gsl::span<gsl::span<float>> audio) override {
+			for (const auto channel : audio)
+				for (auto &x : channel)
+					x = 1;
+		}
+
+		int channels() const override {
+			return 1;
+		}
+
+		bool complete() const override { return {}; }
+		int sampleRate() const override { return {}; }
+		long long frames() const override { return {}; }
+		void reset() override {}
+	};
+
+	class TimesTwo : public AudioFrameProcessor {
+		void process(gsl::span<gsl::span<float>> audio) override {
+			for (const auto channel : audio)
+				for (auto &x : channel)
+					x *= 2;
+		}
+	};
+
+	TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
+		readerFactory.setReader(std::make_shared<ReadsAOne>());
+		processorFactory.setProcessor(std::make_shared<TimesTwo>());
+		player.play({});
+		float x{};
+		float *audio[] = { &x };
+		device.fillStreamBuffer(audio, 1);
+		EXPECT_EQ(2, x);
+	}
+
+	TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
+		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
+		fake.setChannels(2);
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
+		AudioPlayer::PlayRequest request{};
+		request.level_dB_Spl = 7;
+		request.max_dB_Spl = 8;
+		player.play(request);
+		assertEqual(
+			{
+				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
+				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3.0)
+			},
+			processorFactory.parameters().channelScalars,
+			1e-6
+		);
+	}
+
+	TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
+		player.play({});
+		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
+	}
+
+	class FailsToOpenStream : public AudioDevice {
+		std::string errorMessage_{};
+		bool failed_{};
+	public:
+		void setErrorMessage(std::string s) {
+			errorMessage_ = std::move(s);
+		}
+
+		void openStream(StreamParameters) override {
+			failed_ = true;
+		}
+
+		bool failed() override {
+			return failed_;
+		}
+
+		std::string errorMessage() override {
+			return errorMessage_;
+		}
+
+		void setController(AudioDeviceController *) override {}
+		void startStream() override {}
+		void stopStream() override {}
+		bool streaming() const override { return {}; }
+		void setCallbackResultToComplete() override {}
+		void setCallbackResultToContinue() override {}
+		void closeStream() override {}
+		int count() override { return {}; }
+		std::string description(int) override { return {}; }
+	};
+
+	TEST(
+		AudioPlayerOtherTests,
+		playThrowsDeviceFailureWhenDeviceFailsToOpenStream
+	) {
+		FailsToOpenStream device{};
+		AudioPlayerFacade player{ &device };
+		device.setErrorMessage("error.");
+		try {
+			player.play();
 			FAIL() << "Expected AudioPlayer::RequestFailure";
 		}
 		catch (const AudioPlayer::RequestFailure &e) {
-			assertEqual(errorMessage, e.what());
+			assertEqual("error.", e.what());
 		}
 	}
-};
 
-TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
-	EXPECT_EQ(&player, device.controller());
-}
-
-TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
-	player.play({});
-	assertEqual("close open start ", device.streamLog());
-}
-
-TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
-	device.setStreaming();
-	player.play({});
-	EXPECT_TRUE(device.streamLog().empty());
-}
-
-TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-	player.play({});
-	device.fillStreamBuffer({}, {});
-	EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
-	frameReader->setComplete();
-	device.fillStreamBuffer({}, {});
-	EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
-}
-
-TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
-	frameReader->setChannels(2);
-	player.play({});
-	float left{};
-	float right{};
-	float *x[]{ &left, &right };
-	device.fillStreamBuffer(x, 1);
-	EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
-	EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
-	EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
-	EXPECT_EQ(1, frameReader->audioBuffer()[1].size());
-	EXPECT_EQ(&left, processor->audioBuffer()[0].data());
-	EXPECT_EQ(&right, processor->audioBuffer()[1].data());
-	EXPECT_EQ(1, processor->audioBuffer()[0].size());
-	EXPECT_EQ(1, processor->audioBuffer()[1].size());
-}
-
-TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
-	StimulusPlayer::PlayRequest request;
-	request.leftDslPrescriptionFilePath = "a";
-	request.rightDslPrescriptionFilePath = "b";
-	request.audioFilePath = "c";
-	request.brirFilePath = "d";
-	device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
-	request.audioDevice = "gamma";
-	request.max_dB_Spl = 1;
-	request.attack_ms = 2;
-	request.release_ms = 3;
-	request.windowSize = 4;
-	request.chunkSize = 5;
-	frameReader->setChannels(6);
-	frameReader->setSampleRate(7);
-	player.play(request);
-	assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-	assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-	assertEqual("c", readerFactory.filePath());
-	assertEqual("d", processorFactory.parameters().brirFilePath);
-	EXPECT_EQ(2, device.streamParameters().deviceIndex);
-	EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-	EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-	EXPECT_EQ(3, processorFactory.parameters().release_ms);
-	EXPECT_EQ(4, processorFactory.parameters().windowSize);
-	EXPECT_EQ(5, processorFactory.parameters().chunkSize);
-	EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
-	EXPECT_EQ(6, device.streamParameters().channels);
-	EXPECT_EQ(7, device.streamParameters().sampleRate);
-}
-
-TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
-	player.play({});
-	assertEqual("setCallbackResultToContinue start ", device.callbackLog());
-}
-
-TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
-	EXPECT_FALSE(player.isPlaying());
-	device.setStreaming();
-	EXPECT_TRUE(player.isPlaying());
-}
-
-TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
-	device.setDescriptions({ "a", "b", "c" });
-	assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
-}
-
-class ReadsAOne : public AudioFrameReader {
-	void read(gsl::span<gsl::span<float>> audio) override {
-		for (const auto channel : audio)
-			for (auto &x : channel)
-				x = 1;
+	TEST(
+		AudioPlayerOtherTests,
+		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
+	) {
+		AudioDeviceStub device{};
+		device.fail();
+		device.setErrorMessage("error.");
+		try {
+			AudioPlayerFacade player{ &device };
+			FAIL() << "Expected AudioPlayer::DeviceFailure";
+		}
+		catch (const AudioPlayer::DeviceFailure &e) {
+			assertEqual("error.", e.what());
+		}
 	}
 
-	int channels() const override {
-		return 1;
-	}
-	
-	bool complete() const override { return {}; }
-	int sampleRate() const override { return {}; }
-	long long frames() const override { return {}; }
-	void reset() override {}
-};
-
-class AudioTimesTwo : public AudioFrameProcessor {
-	void process(gsl::span<gsl::span<float>> audio) override {
-		for (const auto channel : audio)
-			for (auto &x : channel)
-				x *= 2;
-	}
-};
-
-TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
-	readerFactory.setReader(std::make_shared<ReadsAOne>());
-	processorFactory.setProcessor(std::make_shared<AudioTimesTwo>());
-	player.play({});
-	float x{};
-	float *audio[] = { &x };
-	device.fillStreamBuffer(audio, 1);
-	EXPECT_EQ(2, x);
-}
-
-TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
-	FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
-	fake.setChannels(2);
-	readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
-	AudioPlayer::PlayRequest request{};
-	request.level_dB_Spl = 7;
-	request.max_dB_Spl = 8;
-	player.play(request);
-	assertEqual(
-		{ 
-			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1*1 + 3*3 + 5*5) / 3.0),
-			std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2*2 + 4*4 + 6*6) / 3.0)
-		}, 
-		processorFactory.parameters().channelScalars,
-		1e-6
-	);
-}
-
-TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
-	player.play({});
-	EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
-}
-
-class FailsToOpenStream : public AudioDevice {
-	std::string errorMessage_{};
-	bool failed_{};
-public:
-	void setErrorMessage(std::string s) {
-		errorMessage_ = std::move(s);
+	TEST(
+		AudioPlayerOtherTests,
+		playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameReaderFactory factory{ "error." };
+		AudioPlayerFacade player{ &factory };
+		try {
+			player.play();
+			FAIL() << "Expected AudioPlayer::RequestFailure";
+		}
+		catch (const AudioPlayer::RequestFailure &e) {
+			assertEqual("error.", e.what());
+		}
 	}
 
-	void openStream(StreamParameters) override {
-		failed_ = true;
-	}
-
-	bool failed() override {
-		return failed_;
-	}
-
-	std::string errorMessage() override {
-		return errorMessage_;
-	}
-
-	void setController(AudioDeviceController *) override {}
-	void startStream() override {}
-	void stopStream() override {}
-	bool streaming() const override { return {}; }
-	void setCallbackResultToComplete() override {}
-	void setCallbackResultToContinue() override {}
-	void closeStream() override {}
-	int count() override { return {}; }
-	std::string description(int) override { return {}; }
-};
-
-TEST(
-	AudioPlayerOtherTests,
-	playThrowsDeviceFailureWhenDeviceFailsToOpenStream
-) {
-	FailsToOpenStream device{};
-	AudioPlayerFacade player{ &device };
-	device.setErrorMessage("error.");
-	try {
-		player.play();
-		FAIL() << "Expected AudioPlayer::RequestFailure";
-	}
-	catch (const AudioPlayer::RequestFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	AudioPlayerOtherTests,
-	constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
-) {
-	AudioDeviceStub device{};
-	device.fail();
-	device.setErrorMessage("error.");
-	try {
-		AudioPlayerFacade player{ &device };
-		FAIL() << "Expected AudioPlayer::DeviceFailure";
-	}
-	catch (const AudioPlayer::DeviceFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	AudioPlayerOtherTests,
-	playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
-) {
-	ErrorAudioFrameReaderFactory factory{ "error." };
-	AudioPlayerFacade player{ &factory };
-	try {
-		player.play();
-		FAIL() << "Expected AudioPlayer::RequestFailure";
-	}
-	catch (const AudioPlayer::RequestFailure &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(
-	AudioPlayerOtherTests,
-	playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
-) {
-	ErrorAudioFrameProcessorFactory factory{ "error." };
-	AudioPlayerFacade player{ &factory };
-	try {
-		player.play();
-		FAIL() << "Expected AudioPlayer::RequestFailure";
-	}
-	catch (const AudioPlayer::RequestFailure &e) {
-		assertEqual("error.", e.what());
+	TEST(
+		AudioPlayerOtherTests,
+		playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameProcessorFactory factory{ "error." };
+		AudioPlayerFacade player{ &factory };
+		try {
+			player.play();
+			FAIL() << "Expected AudioPlayer::RequestFailure";
+		}
+		catch (const AudioPlayer::RequestFailure &e) {
+			assertEqual("error.", e.what());
+		}
 	}
 }
