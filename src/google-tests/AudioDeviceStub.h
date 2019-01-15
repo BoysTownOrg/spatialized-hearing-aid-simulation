@@ -14,6 +14,7 @@ class AudioDeviceStub : public AudioDevice {
 	bool _streaming{};
 	bool _failed{};
 	bool _setCallbackResultToCompleteCalled{};
+	bool complete_{};
 public:
 	const AudioDeviceController *controller() const {
 		return _controller;
@@ -65,6 +66,7 @@ public:
 
 	void setCallbackResultToComplete() override {
 		_setCallbackResultToCompleteCalled = true;
+		complete_ = true;
 	}
 
 	std::string streamLog() const {
@@ -86,6 +88,7 @@ public:
 
 	void setCallbackResultToContinue() override {
 		_callbackLog += "setCallbackResultToContinue ";
+		complete_ = false;
 	}
 
 	void setDescriptions(std::vector<std::string> d) {
@@ -102,5 +105,9 @@ public:
 
 	std::string callbackLog() const {
 		return _callbackLog;
+	}
+
+	bool complete() const {
+		return complete_;
 	}
 };

@@ -77,6 +77,7 @@ namespace {
 		fillStreamBuffer(x, 1);
 		EXPECT_TRUE(device.complete());
 		play();
+		fillStreamBuffer(x, 1);
 		EXPECT_FALSE(device.complete());
 	}
 
