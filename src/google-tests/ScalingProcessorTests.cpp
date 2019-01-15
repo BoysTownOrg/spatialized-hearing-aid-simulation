@@ -10,3 +10,8 @@ TEST(ScalingProcessorTestCase, processScalesAccordingToScalar) {
 	processor.process({ x });
 	assertEqual({ 1 * 0.5, 2 * 0.5, 3 * 0.5 }, x);
 }
+
+TEST(ScalingProcessorTestCase, groupDelayReturnsZero) {
+	ScalingProcessor processor{ {} };
+	EXPECT_EQ(0, processor.groupDelay());
+};
