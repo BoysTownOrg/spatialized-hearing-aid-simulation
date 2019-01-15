@@ -8,3 +8,7 @@ void SignalProcessingChain::process(gsl::span<float> signal) {
 void SignalProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {
 	processors.push_back(processor);
 }
+
+int SignalProcessingChain::groupDelay() {
+	return {};
+}

@@ -9,6 +9,8 @@ namespace {
 			for (auto &x : signal)
 				x += 1;
 		}
+
+		int groupDelay() override { return {}; }
 	};
 
 	class TimesTwo : public SignalProcessor {
@@ -17,6 +19,8 @@ namespace {
 			for (auto &x : signal)
 				x *= 2;
 		}
+		
+		int groupDelay() override { return {}; }
 	};
 }
 

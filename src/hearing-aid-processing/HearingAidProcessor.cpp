@@ -21,3 +21,8 @@ void HearingAidProcessor::process(gsl::span<float> signal) {
 		compressor->compressOutput(signal.data(), signal.data(), chunkSize);
 	}
 }
+
+int HearingAidProcessor::groupDelay()
+{
+	return 0;
+}

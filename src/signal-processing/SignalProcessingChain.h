@@ -10,4 +10,5 @@ class SignalProcessingChain : public SignalProcessor {
 public:
 	SIGNAL_PROCESSING_API void process(gsl::span<float> signal) override;
 	SIGNAL_PROCESSING_API void add(std::shared_ptr<SignalProcessor>);
+	SIGNAL_PROCESSING_API int groupDelay() override;
 };

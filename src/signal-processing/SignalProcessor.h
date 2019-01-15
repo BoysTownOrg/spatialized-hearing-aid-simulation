@@ -7,4 +7,5 @@ class SignalProcessor {
 public:
 	INTERFACE_OPERATIONS(SignalProcessor);
 	virtual void process(gsl::span<float> signal) = 0;
+	virtual int groupDelay() = 0;
 };

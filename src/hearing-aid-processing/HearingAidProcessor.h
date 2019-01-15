@@ -22,5 +22,6 @@ public:
 		std::shared_ptr<FilterbankCompressor>
 	);
 	HEARING_AID_PROCESSING_API void process(gsl::span<float>) override;
+	int groupDelay() override;
 };
 

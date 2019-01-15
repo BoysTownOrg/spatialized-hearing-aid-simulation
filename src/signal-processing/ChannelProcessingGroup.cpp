@@ -1,4 +1,5 @@
 #include "ChannelProcessingGroup.h"
+#include <algorithm>
 
 ChannelProcessingGroup::ChannelProcessingGroup(
 	std::vector<std::shared_ptr<SignalProcessor>> processors
@@ -12,5 +13,11 @@ void ChannelProcessingGroup::process(gsl::span<gsl::span<float>> audio) {
 }
 
 int ChannelProcessingGroup::groupDelay() {
-	return 0;
+	return (*std::max_element(
+		processors.begin(),
+		processors.end(),
+		[](std::shared_ptr<SignalProcessor> a, std::shared_ptr<SignalProcessor> b) { 
+			return a->groupDelay() < b->groupDelay(); 
+		}
+	))->groupDelay();
 }

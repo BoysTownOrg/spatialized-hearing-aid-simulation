@@ -18,4 +18,8 @@ public:
 	void setGroupDelay(int n) {
 		groupDelay_ = n;
 	}
+
+	int groupDelay() override {
+		return groupDelay_;
+	}
 };
