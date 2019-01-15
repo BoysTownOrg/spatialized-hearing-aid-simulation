@@ -20,6 +20,11 @@ TEST(FirFilterTestCase, emptyCoefficientsThrowsException) {
 	EXPECT_THROW(FirFilter{ {} }, FirFilter::InvalidCoefficients);
 }
 
+TEST(FirFilterTestCase, groupDelayReturnsHalfFilterOrder) {
+	FirFilter filter{ std::vector<float>(256 + 1) };
+	EXPECT_EQ(256 / 2, filter.groupDelay());
+}
+
 static void assertCoefficientsYieldFilteredOutput(
 	std::vector<float> b,
 	std::vector<float> input,
