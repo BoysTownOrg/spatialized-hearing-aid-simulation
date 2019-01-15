@@ -58,6 +58,14 @@ TEST_F(HearingAidProcessorTests, processPassesChunkSize) {
 	EXPECT_EQ(1, compressor->compressOutputChunkSize());
 }
 
+TEST_F(
+	HearingAidProcessorTests,
+	groupDelayReturnsHalfWindowSize
+) {
+	compressor->setWindowSize(512);
+	EXPECT_EQ(256, processor.groupDelay());
+}
+
 TEST(
 	HearingAidProcessorOtherTests,
 	failedCompressorThrowsCompressorError
