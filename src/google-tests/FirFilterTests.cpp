@@ -40,16 +40,6 @@ TEST(FirFilterTestCase, zeroIRSecondOrder) {
 	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
 }
 
-static void assertCoefficientsYieldFilteredOutput(
-	std::vector<float> b,
-	std::vector<float> input,
-	std::vector<float> output
-) {
-	FirFilter filter{ std::move(b) };
-	filter.process(input);
-	assertEqual(output, input);
-}
-
 TEST(FirFilterTestCase, identityFilterZeroOrder) {
 	FirFilterFacade filter{ { 1 } };
 	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
@@ -80,10 +70,19 @@ TEST(FirFilterTestCase, doublingFilterSecondOrder) {
 	assertEqual({ 2, 4, 6 }, filter.process({ 1, 2, 3 }));
 }
 
-TEST(FirFilterTestCase, simpleMovingSum) {
-	assertCoefficientsYieldFilteredOutput({ 1, 1 }, { 1, 2, 3 }, { 1, 3, 5 });
-	assertCoefficientsYieldFilteredOutput({ 1, 1, 0 }, { 1, 2, 3 }, { 1, 3, 5 });
-	assertCoefficientsYieldFilteredOutput({ 1, 1, 0, 0 }, { 1, 2, 3 }, { 1, 3, 5 });
+TEST(FirFilterTestCase, movingSumFirstOrder) {
+	FirFilterFacade filter{ { 1, 1 } };
+	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, movingSumSecondOrder) {
+	FirFilterFacade filter{ { 1, 1, 0 } };
+	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, movingSumThirdOrder) {
+	FirFilterFacade filter{ { 1, 1, 0, 0 } };
+	assertEqual({ 1, 3, 5 }, filter.process({ 1, 2, 3 }));
 }
 
 TEST(FirFilterTestCase, zeroIRWithSuccessiveCalls) {
