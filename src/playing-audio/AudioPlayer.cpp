@@ -100,11 +100,15 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
-	if (frameReader->complete())
-		device->setCallbackResultToComplete();
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
+	if (frameReader->complete()) {
+		device->setCallbackResultToComplete();
+		for (auto channel : audio)
+			for (auto &x : channel)
+				x = 0;
+	}
 	frameProcessor->process(audio);
 }
 
