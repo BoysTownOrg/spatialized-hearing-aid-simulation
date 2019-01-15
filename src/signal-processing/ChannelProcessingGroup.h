@@ -13,6 +13,6 @@ public:
 		std::vector<std::shared_ptr<SignalProcessor>> processors
 	);
 	SIGNAL_PROCESSING_API void process(gsl::span<gsl::span<float>> audio) override;
-	int groupDelay() override;
+	SIGNAL_PROCESSING_API int groupDelay() override;
 };
 
