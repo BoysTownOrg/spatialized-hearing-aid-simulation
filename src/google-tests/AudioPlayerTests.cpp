@@ -60,6 +60,17 @@ namespace {
 		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
 	}
 
+	TEST_F(AudioPlayerTests, fillStreamBufferPadsZeroToEndOfInput) {
+		frameReader->setChannels(1);
+		play();
+		std::vector<float> audio(3, -1);
+		float *x[]{ &audio[0] };
+		fillStreamBuffer(x, 3);
+		EXPECT_EQ(0, processor->audioBuffer()[0][0]);
+		EXPECT_EQ(0, processor->audioBuffer()[0][1]);
+		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
+	}
+
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
 		frameReader->setChannels(2);
 		play();
