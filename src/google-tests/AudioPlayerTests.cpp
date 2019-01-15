@@ -72,6 +72,21 @@ namespace {
 		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
 	}
 
+	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteAfterProcessingPaddedZeroes) {
+		frameReader->setChannels(1);
+		play();
+		frameReader->setComplete();
+		processor->setGroupDelay(3);
+		float left{};
+		float *x[]{ &left };
+		fillStreamBuffer(x, 1);
+		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+		fillStreamBuffer(x, 1);
+		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+		fillStreamBuffer(x, 1);
+		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
+	}
+
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
 		frameReader->setChannels(2);
 		play();
