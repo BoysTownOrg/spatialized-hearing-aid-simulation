@@ -56,27 +56,6 @@ TEST(AudioFileInMemoryTests, returnsFileParameters) {
 	EXPECT_EQ(1, adapter.frames());
 }
 
-TEST(AudioFileInMemoryTests, factoryThrowsCreateErrorOnFileError) {
-	try {
-		const auto reader = std::make_shared<FakeAudioFileReader>();
-		reader->fail();
-		reader->setErrorMessage("error.");
-		AudioFileInMemoryFactory factory{ std::make_shared<FakeAudioFileReaderFactory>(reader) };
-		factory.make({});
-		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		assertEqual("error.", e.what());
-	}
-}
-
-TEST(AudioFileInMemoryTests, factoryPassesFilePath) {
-	const auto factory = std::make_shared<FakeAudioFileReaderFactory>();
-	AudioFileInMemoryFactory adapter{ factory };
-	adapter.make("a");
-	assertEqual("a", factory->filePath());
-}
-
 TEST(AudioFileInMemoryTests, seeksBeginningOnReset) {
 	FakeAudioFileReader reader{ { 3, 4 } };
 	AudioFileInMemory adapter{ reader };
@@ -91,4 +70,34 @@ TEST(AudioFileInMemoryTests, seeksBeginningOnReset) {
 	EXPECT_EQ(3, x);
 	adapter.read({ &channels, 1 });
 	EXPECT_EQ(4, x);
+}
+
+class AudioFileInMemoryFactoryTests : public ::testing::Test {
+protected:
+	std::shared_ptr<FakeAudioFileReader> reader = 
+		std::make_shared<FakeAudioFileReader>();
+	std::shared_ptr<FakeAudioFileReaderFactory> factory = 
+		std::make_shared<FakeAudioFileReaderFactory>(reader);
+	AudioFileInMemoryFactory adapter{ factory };
+
+	void make(std::string f = {}) {
+		adapter.make(std::move(f));
+	}
+};
+
+TEST_F(AudioFileInMemoryFactoryTests, factoryThrowsCreateErrorOnFileError) {
+	reader->fail();
+	reader->setErrorMessage("error.");
+	try {
+		make();
+		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
+	}
+	catch (const AudioFrameReaderFactory::CreateError &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
+TEST_F(AudioFileInMemoryFactoryTests, factoryPassesFilePath) {
+	make("a");
+	assertEqual("a", factory->filePath());
 }
