@@ -22,7 +22,7 @@ TEST(FirFilterTestCase, emptyCoefficientsThrowsException) {
 
 TEST(FirFilterTestCase, groupDelayReturnsHalfFilterOrder) {
 	FirFilter filter{ std::vector<float>(256 + 1) };
-	EXPECT_EQ(256 / 2, filter.groupDelay());
+	EXPECT_EQ(128, filter.groupDelay());
 }
 
 static void assertCoefficientsYieldFilteredOutput(

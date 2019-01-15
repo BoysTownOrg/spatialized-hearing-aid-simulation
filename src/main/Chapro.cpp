@@ -4,8 +4,9 @@ extern "C" {
 }
 
 Chapro::Chapro(Parameters parameters) :
-	_chunkSize(parameters.chunkSize),
-	_channels(parameters.channels)
+	_chunkSize{ parameters.chunkSize },
+	_channels{ parameters.channels },
+	windowSize_{ parameters.windowSize }
 {
 	CHA_DSL dsl;
 	dsl.attack = parameters.attack_ms;
@@ -81,4 +82,8 @@ int Chapro::channels() const {
 
 bool Chapro::failed() const {
 	return error != 0;
+}
+
+int Chapro::windowSize() const {
+	return windowSize_;
 }

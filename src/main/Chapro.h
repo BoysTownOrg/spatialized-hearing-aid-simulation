@@ -18,6 +18,7 @@ class Chapro : public FilterbankCompressor {
 	void *cha_pointer[NPTR]{};
 	const int _channels;
 	const int _chunkSize;
+	const int windowSize_;
 	int error = 0;
 public:
 	explicit Chapro(Parameters);
@@ -34,6 +35,7 @@ public:
 	int chunkSize() const override;
 	int channels() const override;
 	bool failed() const override;
+	int windowSize() const override;
 };
 
 class ChaproFactory : public FilterbankCompressorFactory {
