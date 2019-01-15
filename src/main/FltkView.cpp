@@ -39,7 +39,7 @@ FltkSetupView::FltkSetupView() :
 	_attack_ms(250, 300, 200, 45, "attack (ms)"),
 	_release_ms(250, 350, 200, 45, "release (ms)"),
 	_windowSize(250, 400, 200, 45, "window size (samples)"),
-	_chunkSize(250, 450, 200, 45, "chunk size (samples)"),
+	chunkSize_(250, 450, 200, 45, "chunk size (samples)"),
 	confirm(250, 550, 60, 45, "confirm")
 {
 	end();
@@ -183,7 +183,7 @@ std::string FltkView::windowSize() {
 }
 
 std::string FltkView::chunkSize() {
-	return window.setupView._chunkSize.value();
+	return window.setupView.chunkSize_.value();
 }
 
 void FltkView::showErrorDialog(std::string message) {

@@ -16,8 +16,8 @@ extern "C" {
 
 class Chapro : public FilterbankCompressor {
 	void *cha_pointer[NPTR]{};
-	const int _channels;
-	const int _chunkSize;
+	const int channels_;
+	const int chunkSize_;
 	const int windowSize_;
 	int error = 0;
 public:

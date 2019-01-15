@@ -59,7 +59,7 @@ class ViewStub : public View {
 	std::string _attack_ms{ "0" };
 	std::string _release_ms{ "0" };
 	std::string _windowSize{ "0" };
-	std::string _chunkSize{ "0" };
+	std::string chunkSize_{ "0" };
 	std::string _errorMessage{};
 	std::string _browseFilePath{};
 	std::string _browseDirectory{};
@@ -183,11 +183,11 @@ public:
 	}
 
 	void setChunkSize(std::string s) {
-		_chunkSize = std::move(s);
+		chunkSize_ = std::move(s);
 	}
 
 	std::string chunkSize() override {
-		return _chunkSize;
+		return chunkSize_;
 	}
 
 	std::string errorMessage() const {

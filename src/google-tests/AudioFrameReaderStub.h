@@ -8,7 +8,7 @@ class AudioFrameReaderStub : public AudioFrameReader {
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	long long _frames{};
 	int _sampleRate{};
-	int _channels{};
+	int channels_{};
 	bool _complete{};
 public:
 	const gsl::span<gsl::span<float>> audioBuffer() const {
@@ -16,7 +16,7 @@ public:
 	}
 
 	int channels() const override {
-		return _channels;
+		return channels_;
 	}
 
 	void read(gsl::span<gsl::span<float>> audio) override {
@@ -41,7 +41,7 @@ public:
 	}
 
 	void setChannels(int c) {
-		_channels = c;
+		channels_ = c;
 	}
 
 	long long frames() const override {

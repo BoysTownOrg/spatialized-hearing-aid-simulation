@@ -4,14 +4,14 @@ extern "C" {
 }
 
 Chapro::Chapro(Parameters parameters) :
-	_chunkSize{ parameters.chunkSize },
-	_channels{ parameters.channels },
+	chunkSize_{ parameters.chunkSize },
+	channels_{ parameters.channels },
 	windowSize_{ parameters.windowSize }
 {
 	CHA_DSL dsl;
 	dsl.attack = parameters.attack_ms;
 	dsl.release = parameters.release_ms;
-	dsl.nchannel = _channels;
+	dsl.nchannel = channels_;
 	using size_type = std::vector<double>::size_type;
 	for (size_type i = 0; i < parameters.crossFrequenciesHz.size(); ++i)
 		dsl.cross_freq[i] = parameters.crossFrequenciesHz[i];
@@ -40,11 +40,11 @@ Chapro::Chapro(Parameters parameters) :
 	error = cha_firfb_prepare(
 		cha_pointer,
 		dsl.cross_freq,
-		_channels,
+		channels_,
 		parameters.sampleRate,
 		parameters.windowSize,
 		hamming,
-		_chunkSize);
+		chunkSize_);
 	error = cha_agc_prepare(cha_pointer, &dsl, &wdrc);
 }
 
@@ -73,11 +73,11 @@ void Chapro::compressOutput(float *input, float *output, int chunkSize) {
 }
 
 int Chapro::chunkSize() const {
-	return _chunkSize;
+	return chunkSize_;
 }
 
 int Chapro::channels() const {
-	return _channels;
+	return channels_;
 }
 
 bool Chapro::failed() const {

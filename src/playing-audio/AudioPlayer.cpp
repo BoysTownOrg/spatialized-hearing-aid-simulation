@@ -55,10 +55,10 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
 	processing.max_dB_Spl = request.max_dB_Spl;
-	const auto something = std::pow(10.0, (request.level_dB_Spl - request.max_dB_Spl) / 20.0);
-	RmsComputer computer{ *frameReader };
+	const auto desiredRms = std::pow(10.0, (request.level_dB_Spl - request.max_dB_Spl) / 20.0);
+	RmsComputer rms{ *frameReader };
 	for (int i = 0; i < frameReader->channels(); ++i)
-		processing.channelScalars.push_back(something / computer.compute(i));
+		processing.channelScalars.push_back(desiredRms / rms.compute(i));
 	frameProcessor = makeProcessor(processing);
 
 	frameReader->reset();

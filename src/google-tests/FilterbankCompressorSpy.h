@@ -4,7 +4,7 @@
 
 class FilterbankCompressorSpy : public FilterbankCompressor {
 	std::string _processingLog{};
-	int _chunkSize = 1;
+	int chunkSize_ = 1;
 	int _compressInputChunkSize{};
 	int _filterbankAnalyzeChunkSize{};
 	int _compressChannelsChunkSize{};
@@ -43,7 +43,7 @@ public:
 	}
 
 	void setChunkSize(int s) {
-		_chunkSize = s;
+		chunkSize_ = s;
 	}
 
 	int compressInputChunkSize() const {
@@ -67,7 +67,7 @@ public:
 	}
 
 	int chunkSize() const override {
-		return _chunkSize;
+		return chunkSize_;
 	}
 
 	int channels() const override {

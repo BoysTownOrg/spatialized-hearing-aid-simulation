@@ -11,16 +11,16 @@ protected:
 
 	void processUnequalChunk() {
 		std::vector<float> x(compressor->chunkSize() + 1);
-		_process(x);
+		process_(x);
 	}
 
 	void process() {
 		std::vector<float> x(compressor->chunkSize());
-		_process(x);
+		process_(x);
 	}
 
 private:
-	void _process(gsl::span<float> x) {
+	void process_(gsl::span<float> x) {
 		processor.process(x);
 	}
 };
@@ -92,8 +92,6 @@ public:
 		*input *= 5;
 	}
 
-	void compressChannels(complex_type *, complex_type *, int) override {}
-
 	void synthesizeFilterbank(complex_type *, real_type *output, int) override {
 		*output *= 7;
 	}
@@ -116,6 +114,7 @@ public:
 	}
 
 	int windowSize() const override { return {}; }
+	void compressChannels(complex_type *, complex_type *, int) override {}
 };
 
 TEST(
@@ -130,52 +129,48 @@ TEST(
 }
 
 class ForComplexSignalTests : public FilterbankCompressor {
-	int _chunkSize{ 1 };
-	int _channels{ 1 };
-	int _pointerOffset{};
-	complex_type _postSynthesizeFilterbankComplexResult{};
+	complex_type postSynthesizeFilterbankComplexResult_{};
+	int chunkSize_{ 1 };
+	int channels_{ 1 };
+	int pointerOffset_{};
 public:
-	void compressInput(real_type *, real_type *, int) override {}
-
 	void analyzeFilterbank(real_type *, complex_type *output, int) override {
-		*(output + _pointerOffset) += 7;
-		*(output + _pointerOffset) *= 11;
+		*(output + pointerOffset_) += 7;
+		*(output + pointerOffset_) *= 11;
 	}
 
 	void compressChannels(complex_type *input, complex_type *output, int) override {
-		*(input + _pointerOffset) *= 13;
-		*(output + _pointerOffset) *= 17;
+		*(input + pointerOffset_) *= 13;
+		*(output + pointerOffset_) *= 17;
 	}
 
 	void synthesizeFilterbank(complex_type *input, real_type *, int) override {
-		*(input + _pointerOffset) *= 19;
-		_postSynthesizeFilterbankComplexResult = *(input + _pointerOffset);
+		*(input + pointerOffset_) *= 19;
+		postSynthesizeFilterbankComplexResult_ = *(input + pointerOffset_);
 	}
 
-	void compressOutput(real_type *, real_type *, int) override {}
-
 	int chunkSize() const override {
-		return _chunkSize;
+		return chunkSize_;
 	}
 
 	int channels() const override {
-		return _channels;
+		return channels_;
 	}
 
 	void setChunkSize(int s) {
-		_chunkSize = s;
+		chunkSize_ = s;
 	}
 
 	void setChannels(int c) {
-		_channels = c;
+		channels_ = c;
 	}
 
 	void setPointerOffset(int offset) {
-		_pointerOffset = offset;
+		pointerOffset_ = offset;
 	}
 
 	complex_type postSynthesizeFilterbankComplexResult() const {
-		return _postSynthesizeFilterbankComplexResult;
+		return postSynthesizeFilterbankComplexResult_;
 	}
 
 	bool failed() const override {
@@ -183,6 +178,8 @@ public:
 	}
 
 	int windowSize() const override { return {}; }
+	void compressInput(real_type *, real_type *, int) override {}
+	void compressOutput(real_type *, real_type *, int) override {}
 };
 
 class HearingAidProcessorFacade {
@@ -195,22 +192,8 @@ public:
 		processor{ compressor },
 		compressor{ compressor } {}
 
-	void processUnequalChunk() {
-		std::vector<float> x(compressor->chunkSize() + 1);
-		_process(x);
-	}
-
 	void process() {
 		std::vector<float> x(compressor->chunkSize());
-		_process(x);
-	}
-
-	void process(gsl::span<float> x) {
-		_process(x);
-	}
-
-private:
-	void _process(gsl::span<float> x) {
 		processor.process(x);
 	}
 };

@@ -20,7 +20,7 @@ struct FltkSetupView : public Fl_Group {
 	Fl_Float_Input _attack_ms;
 	Fl_Float_Input _release_ms;
 	Fl_Input _windowSize;
-	Fl_Input _chunkSize;
+	Fl_Input chunkSize_;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
