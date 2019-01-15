@@ -158,7 +158,6 @@
     <ClInclude Include="AudioDeviceController.h" />
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
-    <ClInclude Include="playing-audio-exports.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioPlayer.cpp" />

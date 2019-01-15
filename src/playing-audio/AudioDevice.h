@@ -7,12 +7,6 @@
 
 class AudioDevice {
 public:
-	struct StreamParameters {
-		unsigned long framesPerBuffer;
-		int channels;
-		int sampleRate;
-		int deviceIndex;
-	};
 	INTERFACE_OPERATIONS(AudioDevice);
 	virtual void setController(AudioDeviceController *) = 0;
 	virtual void startStream() = 0;
@@ -22,6 +16,12 @@ public:
 	virtual bool streaming() const = 0;
 	virtual void setCallbackResultToComplete() = 0;
 	virtual void setCallbackResultToContinue() = 0;
+	struct StreamParameters {
+		unsigned long framesPerBuffer;
+		int channels;
+		int sampleRate;
+		int deviceIndex;
+	};
 	virtual void openStream(StreamParameters) = 0;
 	virtual void closeStream() = 0;
 	virtual int count() = 0;

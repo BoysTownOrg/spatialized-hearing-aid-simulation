@@ -1,11 +1,16 @@
 #pragma once
 
 #include "AudioDevice.h"
-#include "playing-audio-exports.h"
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <recognition-test/RecognitionTestModel.h>
 #include <gsl/gsl>
+
+#ifdef PLAYING_AUDIO_EXPORTS
+	#define PLAYING_AUDIO_API __declspec(dllexport)
+#else
+	#define PLAYING_AUDIO_API __declspec(dllimport)
+#endif
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
