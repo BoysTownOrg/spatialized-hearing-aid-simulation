@@ -3,7 +3,7 @@
 #include "AudioDevice.h"
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/StimulusPlayer.h>
 #include <gsl/gsl>
 
 #ifdef PLAYING_AUDIO_EXPORTS

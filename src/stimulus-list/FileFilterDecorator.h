@@ -1,5 +1,6 @@
 #pragma once
-#include "RandomizedStimulusList.h"
+
+#include "DirectoryReader.h"
 #include "stimulus-list-exports.h"
 
 class FileFilterDecorator : public DirectoryReader {

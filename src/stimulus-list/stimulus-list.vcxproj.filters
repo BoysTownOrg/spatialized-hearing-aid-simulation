@@ -24,6 +24,12 @@
     <ClInclude Include="stimulus-list-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DirectoryReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Randomizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RandomizedStimulusList.cpp">

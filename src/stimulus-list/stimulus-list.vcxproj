@@ -134,8 +134,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DirectoryReader.h" />
     <ClInclude Include="FileFilterDecorator.h" />
     <ClInclude Include="RandomizedStimulusList.h" />
+    <ClInclude Include="Randomizer.h" />
     <ClInclude Include="stimulus-list-exports.h" />
   </ItemGroup>
   <ItemGroup>
