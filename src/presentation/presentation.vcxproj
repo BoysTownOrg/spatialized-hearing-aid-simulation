@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="presentation-exports.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Presenter.h" />
     <ClInclude Include="View.h" />

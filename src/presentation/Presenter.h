@@ -1,11 +1,16 @@
 #pragma once
 
-#include "presentation-exports.h"
 #include "View.h"
 #include "Model.h"
 #include <common-includes/RuntimeError.h>
 #include <memory>
 #include <functional>
+
+#ifdef PRESENTATION_EXPORTS
+	#define PRESENTATION_API __declspec(dllexport)
+#else
+	#define PRESENTATION_API __declspec(dllimport)
+#endif
 
 class Presenter : public EventListener {
 	Model *model;

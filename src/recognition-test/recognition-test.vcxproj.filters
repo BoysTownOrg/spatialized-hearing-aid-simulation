@@ -18,6 +18,12 @@
     <ClInclude Include="RecognitionTestModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StimulusList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StimulusPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RecognitionTestModel.cpp">
