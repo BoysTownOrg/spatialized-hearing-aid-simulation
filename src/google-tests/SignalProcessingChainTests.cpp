@@ -45,7 +45,7 @@ TEST_F(SignalProcessingChainTests, chainCallsProcessorsInOrder) {
 
 TEST_F(SignalProcessingChainTests, chainPassesParametersToProcessor) {
 	float x{};
-	gsl::span<float> channel{ &x, 1 };
+	const gsl::span<float> channel{ &x, 1 };
 	chain.process(channel);
 	EXPECT_EQ(channel, processor->signal());
 }

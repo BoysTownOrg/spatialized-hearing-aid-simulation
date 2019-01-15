@@ -13,19 +13,19 @@ protected:
 };
 
 TEST_F(ChannelProcessingGroupTests, processesChannelsInOrder) {
-	gsl::span<float> a{};
-	gsl::span<float> b{};
-	gsl::span<float> c{};
+	const gsl::span<float> a{};
+	const gsl::span<float> b{};
+	const gsl::span<float> c{};
 	std::vector<gsl::span<float>> channels{ a, b, c };
 	group.process(channels);
-	EXPECT_EQ(a, processors[0]->signal());
-	EXPECT_EQ(b, processors[1]->signal());
-	EXPECT_EQ(c, processors[2]->signal());
+	EXPECT_EQ(a, processors.at(0)->signal());
+	EXPECT_EQ(b, processors.at(1)->signal());
+	EXPECT_EQ(c, processors.at(2)->signal());
 }
 
 TEST_F(ChannelProcessingGroupTests, groupDelayReturnsMaxGroupDelay) {
-	processors[0]->setGroupDelay(1);
-	processors[1]->setGroupDelay(2);
-	processors[2]->setGroupDelay(3);
+	processors.at(0)->setGroupDelay(1);
+	processors.at(1)->setGroupDelay(2);
+	processors.at(2)->setGroupDelay(3);
 	EXPECT_EQ(3, group.groupDelay());
 }

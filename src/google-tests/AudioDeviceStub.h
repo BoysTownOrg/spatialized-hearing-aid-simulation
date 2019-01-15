@@ -96,7 +96,7 @@ public:
 	}
 
 	std::string description(int i) override {
-		return _descriptions[i];
+		return _descriptions.at(i);
 	}
 
 	int count() override {

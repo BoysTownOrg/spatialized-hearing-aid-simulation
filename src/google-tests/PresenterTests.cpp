@@ -521,12 +521,12 @@ TEST_F(PresenterTests, playingTrialPlaysTrial) {
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
-	for (auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+	for (auto s : { "a", "0.1", "-1" })
 		confirmTestSetupWithChunkSizeShowsErrorMessage(s);
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
-	for (auto s : std::vector<std::string>{ "a", "0.1", "-1" })
+	for (auto s : { "a", "0.1", "-1" })
 		confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 }
 

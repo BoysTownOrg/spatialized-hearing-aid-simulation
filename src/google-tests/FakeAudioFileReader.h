@@ -34,7 +34,7 @@ public:
 
 	void readFrames(float *x, long long n) override {
 		for (int i = 0; i < n * channels_; ++i)
-			x[i] = contents[i];
+			x[i] = contents.at(i);
 	}
 
 	void fail() {

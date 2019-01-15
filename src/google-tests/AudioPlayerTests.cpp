@@ -56,7 +56,7 @@ namespace {
 		play();
 		frameReader->setComplete();
 		std::vector<float> audio(3, -1);
-		float *x[]{ &audio[0] };
+		float *x[]{ &audio.front() };
 		fillStreamBuffer(x, 3);
 		EXPECT_EQ(0, processor->audioBuffer()[0][0]);
 		EXPECT_EQ(0, processor->audioBuffer()[0][1]);

@@ -3,7 +3,8 @@
 
 NlohmannJsonParser::NlohmannJsonParser(std::string filePath) {
 	try {
-		std::ifstream{ std::move(filePath) } >> json;
+		std::ifstream file{ std::move(filePath) };
+		file >> json;
 	}
 	catch (const nlohmann::json::parse_error &e) {
 		throw ParseError{ e.what() };

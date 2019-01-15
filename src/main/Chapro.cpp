@@ -14,19 +14,19 @@ Chapro::Chapro(Parameters parameters) :
 	dsl.nchannel = channels_;
 	using size_type = std::vector<double>::size_type;
 	for (size_type i = 0; i < parameters.crossFrequenciesHz.size(); ++i)
-		dsl.cross_freq[i] = parameters.crossFrequenciesHz[i];
+		dsl.cross_freq[i] = parameters.crossFrequenciesHz.at(i);
 	for (size_type i = 0; i < parameters.compressionRatios.size(); ++i)
-		dsl.cr[i] = parameters.compressionRatios[i];
+		dsl.cr[i] = parameters.compressionRatios.at(i);
 	for (size_type i = 0; i < parameters.kneepoints_dBSpl.size(); ++i)
-		dsl.tk[i] = parameters.kneepoints_dBSpl[i];
+		dsl.tk[i] = parameters.kneepoints_dBSpl.at(i);
 	for (size_type i = 0; i < parameters.kneepointGains_dB.size(); ++i)
-		dsl.tkgain[i] = parameters.kneepointGains_dB[i];
+		dsl.tkgain[i] = parameters.kneepointGains_dB.at(i);
 	for (
 		size_type i = 0;
 		i < parameters.broadbandOutputLimitingThresholds_dBSpl.size();
 		++i
 	)
-		dsl.bolt[i] = parameters.broadbandOutputLimitingThresholds_dBSpl[i];
+		dsl.bolt[i] = parameters.broadbandOutputLimitingThresholds_dBSpl.at(i);
 	CHA_WDRC wdrc;
 	wdrc.attack = 1;
 	wdrc.release = 50;
