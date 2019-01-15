@@ -1,4 +1,5 @@
 #include "SignalProcessingChain.h"
+#include <algorithm>
 
 void SignalProcessingChain::process(gsl::span<float> signal) {
 	for (const auto &processor : processors)
@@ -10,5 +11,12 @@ void SignalProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {
 }
 
 int SignalProcessingChain::groupDelay() {
-	return {};
+	return std::accumulate(
+		processors.begin(),
+		processors.end(),
+		0,
+		[](int x, std::shared_ptr<SignalProcessor> processor) { 
+			return x + processor->groupDelay(); 
+		}
+	);
 }
