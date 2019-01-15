@@ -1,7 +1,7 @@
 #pragma once
 
+#include "SignalProcessor.h"
 #include "signal-processing-exports.h"
-#include <signal-processing/SignalProcessor.h>
 
 class ScalingProcessor : public SignalProcessor {
 	float scale;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "signal-processing-exports.h"
 #include "SignalProcessor.h"
+#include "signal-processing-exports.h"
 #include <memory>
 #include <vector>
 
