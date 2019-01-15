@@ -4,6 +4,8 @@
 extern "C" {
 #include <chapro.h>
 }
+
+// These are (unfortunately) defined in chapro.h but appear in some standard headers
 #undef _size
 #undef fmin
 #undef fmove
@@ -40,6 +42,6 @@ public:
 
 class ChaproFactory : public FilterbankCompressorFactory {
 	std::shared_ptr<FilterbankCompressor> make(FilterbankCompressor::Parameters parameters) override {
-		return std::make_shared<Chapro>(parameters);
+		return std::make_shared<Chapro>(std::move(parameters));
 	}
 };

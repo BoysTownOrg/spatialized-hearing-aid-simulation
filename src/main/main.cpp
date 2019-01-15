@@ -28,7 +28,7 @@ public:
 		return ::FindNextFileA(hFind, lpFindFileData);
 	}
 
-	~WindowsFileSearch() {
+	~WindowsFileSearch() noexcept {
 		FindClose(hFind);
 	}
 

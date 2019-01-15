@@ -23,6 +23,6 @@ public:
 
 class LibsndfileReaderFactory : public AudioFileReaderFactory {
 	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
-		return std::make_shared<LibsndfileReader>(filePath);
+		return std::make_shared<LibsndfileReader>(std::move(filePath));
 	}
 };

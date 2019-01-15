@@ -14,7 +14,7 @@ private:
 	template<typename T>
 	T at(std::string property) const {
 		try {
-			return json.at(property);
+			return json.at(std::move(property));
 		}
 		catch (const nlohmann::json::out_of_range &e) {
 			throw ParseError{ e.what() };

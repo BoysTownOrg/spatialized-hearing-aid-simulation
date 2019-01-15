@@ -10,7 +10,7 @@ class PortAudioDevice : public AudioDevice {
 	PaStreamCallbackResult callbackResult{};
 public:
 	PortAudioDevice();
-	~PortAudioDevice();
+	~PortAudioDevice() noexcept;
 	PortAudioDevice(const PortAudioDevice &) = delete;
 	PortAudioDevice(PortAudioDevice &&) = delete;
 	PortAudioDevice &operator=(const PortAudioDevice &) = delete;

@@ -71,23 +71,20 @@ FltkView::FltkView() {
 	window.testerView.play.callback(onPlay, this);
 }
 
-void FltkView::showTestSetup()
-{
+void FltkView::showTestSetup() {
 	window.setupView.show();
 }
 
-void FltkView::hideTestSetup()
-{
+void FltkView::hideTestSetup() {
 	window.setupView.hide();
 }
 
-void FltkView::showTesterView()
-{
+void FltkView::showTesterView() {
 	window.testerView.show();
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
-	for (const auto &s : items)
+	for (auto s : items)
 		window.testerView._audioDevice.add(s.c_str());
 	window.testerView._audioDevice.value(0);
 }
@@ -106,7 +103,7 @@ void FltkView::subscribe(EventListener * e) {
 
 static std::string formatFilters(std::vector<std::string> filters) {
 	std::stringstream stream;
-	for (const auto &filter : filters)
+	for (auto filter : filters)
 		stream << filter << "\n";
 	return stream.str();
 }
@@ -114,7 +111,7 @@ static std::string formatFilters(std::vector<std::string> filters) {
 std::string FltkView::browseForFile(std::vector<std::string> filters) {
 	Fl_Native_File_Chooser chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_FILE);
-	chooser.filter(formatFilters(filters).c_str());
+	chooser.filter(formatFilters(std::move(filters)).c_str());
 	browseResult = chooser.show();
 	return chooser.filename();
 }

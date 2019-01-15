@@ -8,7 +8,7 @@ Chapro::Chapro(Parameters parameters) :
 	channels_{ parameters.channels },
 	windowSize_{ parameters.windowSize }
 {
-	CHA_DSL dsl;
+	CHA_DSL dsl{};
 	dsl.attack = parameters.attack_ms;
 	dsl.release = parameters.release_ms;
 	dsl.nchannel = channels_;
@@ -44,7 +44,8 @@ Chapro::Chapro(Parameters parameters) :
 		parameters.sampleRate,
 		parameters.windowSize,
 		hamming,
-		chunkSize_);
+		chunkSize_
+	);
 	error = cha_agc_prepare(cha_pointer, &dsl, &wdrc);
 }
 
