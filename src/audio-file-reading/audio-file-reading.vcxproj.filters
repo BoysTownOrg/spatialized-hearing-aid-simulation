@@ -18,9 +18,6 @@
     <ClInclude Include="AudioFileReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="audio-file-reading-exports.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioFileInMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="audio-file-reading-exports.h" />
     <ClInclude Include="AudioFileInMemory.h" />
     <ClInclude Include="AudioFileReader.h" />
   </ItemGroup>

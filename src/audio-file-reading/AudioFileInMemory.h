@@ -1,10 +1,15 @@
 #pragma once
 
-#include "audio-file-reading-exports.h"
 #include "AudioFileReader.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <common-includes/RuntimeError.h>
 #include <vector>
+
+#ifdef AUDIO_FILE_READING_EXPORTS
+	#define AUDIO_FILE_READING_API __declspec(dllexport)
+#else
+	#define AUDIO_FILE_READING_API __declspec(dllimport)
+#endif
 
 class AudioFileInMemory : public AudioFrameReader {
 	using buffer_type = std::vector<float>;
