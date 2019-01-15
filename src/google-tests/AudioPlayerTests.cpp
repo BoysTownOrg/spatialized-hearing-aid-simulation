@@ -8,41 +8,6 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioPlayerFacade {
-		AudioDeviceStub device{};
-		AudioFrameReaderStubFactory readerFactory{};
-		AudioFrameProcessorStubFactory processorFactory{};
-		AudioPlayer player;
-	public:
-		AudioPlayerFacade(AudioDevice *device) :
-			player{
-				device,
-				&readerFactory,
-				&processorFactory
-		}
-		{}
-
-		AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
-			player{
-				&device,
-				readerFactory,
-				&processorFactory
-		}
-		{}
-
-		AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
-			player{
-				&device,
-				&readerFactory,
-				processorFactory
-		}
-		{}
-
-		void play() {
-			player.play({});
-		}
-	};
-
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
@@ -61,6 +26,10 @@ namespace {
 				assertEqual(errorMessage, e.what());
 			}
 		}
+
+		void play() {
+			player.play({});
+		}
 	};
 
 	TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
@@ -68,18 +37,18 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
-		player.play({});
+		play();
 		assertEqual("close open start ", device.streamLog());
 	}
 
 	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
 		device.setStreaming();
-		player.play({});
+		play();
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-		player.play({});
+		play();
 		device.fillStreamBuffer({}, {});
 		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
 		frameReader->setComplete();
@@ -89,7 +58,7 @@ namespace {
 
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
 		frameReader->setChannels(2);
-		player.play({});
+		play();
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
@@ -136,7 +105,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
-		player.play({});
+		play();
 		assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 	}
 
@@ -208,6 +177,41 @@ namespace {
 		player.play({});
 		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
 	}
+
+	class AudioPlayerFacade {
+		AudioDeviceStub device{};
+		AudioFrameReaderStubFactory readerFactory{};
+		AudioFrameProcessorStubFactory processorFactory{};
+		AudioPlayer player;
+	public:
+		AudioPlayerFacade(AudioDevice *device) :
+			player{
+				device,
+				&readerFactory,
+				&processorFactory
+		}
+		{}
+
+		AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
+			player{
+				&device,
+				readerFactory,
+				&processorFactory
+		}
+		{}
+
+		AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
+			player{
+				&device,
+				&readerFactory,
+				processorFactory
+		}
+		{}
+
+		void play() {
+			player.play({});
+		}
+	};
 
 	class FailsToOpenStream : public AudioDevice {
 		std::string errorMessage_{};
