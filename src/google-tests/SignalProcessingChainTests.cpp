@@ -49,3 +49,14 @@ TEST_F(SignalProcessingChainTests, chainPassesParametersToProcessor) {
 	chain.process(channel);
 	EXPECT_EQ(channel, processor->signal());
 }
+
+TEST_F(SignalProcessingChainTests, groupDelayReturnsSumOfComponents) {
+	processor->setGroupDelay(1);
+	auto processor2 = std::make_shared<SignalProcessorStub>();
+	processor2->setGroupDelay(2);
+	chain.add(processor2);
+	auto processor3 = std::make_shared<SignalProcessorStub>();
+	processor3->setGroupDelay(3);
+	chain.add(processor3);
+	EXPECT_EQ(1 + 2 + 3, chain.groupDelay());
+}
