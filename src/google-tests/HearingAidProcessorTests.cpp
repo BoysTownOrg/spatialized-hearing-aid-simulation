@@ -114,6 +114,8 @@ public:
 	bool failed() const override {
 		return false;
 	}
+
+	int windowSize() const override { return {}; }
 };
 
 TEST(
@@ -179,6 +181,8 @@ public:
 	bool failed() const override {
 		return false;
 	}
+
+	int windowSize() const override { return {}; }
 };
 
 class HearingAidProcessorFacade {

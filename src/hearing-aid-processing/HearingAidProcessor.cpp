@@ -22,7 +22,6 @@ void HearingAidProcessor::process(gsl::span<float> signal) {
 	}
 }
 
-int HearingAidProcessor::groupDelay()
-{
-	return 0;
+int HearingAidProcessor::groupDelay() {
+	return compressor->windowSize() / 2;
 }

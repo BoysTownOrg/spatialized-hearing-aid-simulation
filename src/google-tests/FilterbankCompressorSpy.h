@@ -85,6 +85,10 @@ public:
 	void setWindowSize(int n) {
 		windowSize_ = n;
 	}
+
+	int windowSize() const override {
+		return windowSize_;
+	}
 };
 
 class MockCompressorFactory : public FilterbankCompressorFactory {
