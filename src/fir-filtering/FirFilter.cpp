@@ -69,3 +69,8 @@ void FirFilter::shiftOverlap(int n) {
 	for (int i = N - n; i < N; ++i)
 		overlap[i] = 0;
 }
+
+int FirFilter::groupDelay()
+{
+	return 0;
+}
