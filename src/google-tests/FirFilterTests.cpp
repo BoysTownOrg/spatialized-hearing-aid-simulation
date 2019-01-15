@@ -25,11 +25,6 @@ TEST(FirFilterTestCase, groupDelayReturnsHalfFilterOrder) {
 	EXPECT_EQ(128, filter.groupDelay());
 }
 
-static void assertCoefficientsYieldFilteredOutput(
-	std::vector<float> b,
-	std::vector<float> input,
-	std::vector<float> output);
-
 TEST(FirFilterTestCase, zeroIRZeroOrder) {
 	FirFilterFacade filter{ { 0 } };
 	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
@@ -45,26 +40,44 @@ TEST(FirFilterTestCase, zeroIRSecondOrder) {
 	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
 }
 
-void assertCoefficientsYieldFilteredOutput(
+static void assertCoefficientsYieldFilteredOutput(
 	std::vector<float> b,
 	std::vector<float> input,
-	std::vector<float> output)
-{
+	std::vector<float> output
+) {
 	FirFilter filter{ std::move(b) };
 	filter.process(input);
 	assertEqual(output, input);
 }
 
-TEST(FirFilterTestCase, identityFilter) {
-	assertCoefficientsYieldFilteredOutput({ 1 }, { 1, 2, 3 }, { 1, 2, 3 });
-	assertCoefficientsYieldFilteredOutput({ 1, 0 }, { 1, 2, 3 }, { 1, 2, 3 });
-	assertCoefficientsYieldFilteredOutput({ 1, 0, 0 }, { 1, 2, 3 }, { 1, 2, 3 });
+TEST(FirFilterTestCase, identityFilterZeroOrder) {
+	FirFilterFacade filter{ { 1 } };
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
 }
 
-TEST(FirFilterTestCase, doublingFilter) {
-	assertCoefficientsYieldFilteredOutput({ 2 }, { 1, 2, 3 }, { 2, 4, 6 });
-	assertCoefficientsYieldFilteredOutput({ 2, 0 }, { 1, 2, 3 }, { 2, 4, 6 });
-	assertCoefficientsYieldFilteredOutput({ 2, 0, 0 }, { 1, 2, 3 }, { 2, 4, 6 });
+TEST(FirFilterTestCase, identityFilterFirstOrder) {
+	FirFilterFacade filter{ { 1, 0 } };
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, identityFilterSecondOrder) {
+	FirFilterFacade filter{ { 1, 0, 0 } };
+	assertEqual({ 1, 2, 3 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, doublingFilterZeroOrder) {
+	FirFilterFacade filter{ { 2 } };
+	assertEqual({ 2, 4, 6 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, doublingFilterFirstOrder) {
+	FirFilterFacade filter{ { 2, 0 } };
+	assertEqual({ 2, 4, 6 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, doublingFilterSecondOrder) {
+	FirFilterFacade filter{ { 2, 0, 0 } };
+	assertEqual({ 2, 4, 6 }, filter.process({ 1, 2, 3 }));
 }
 
 TEST(FirFilterTestCase, simpleMovingSum) {
