@@ -1,12 +1,14 @@
 #pragma once
 
+#include "ConfigurationFileParser.h"
+#include "PrescriptionReader.h"
+#include <string>
+
 #ifdef DSL_PRESCRIPTION_EXPORTS
 	#define DSL_PRESCRIPTION_API __declspec(dllexport)
 #else
 	#define DSL_PRESCRIPTION_API __declspec(dllimport)
 #endif
-
-#include <string>
 
 namespace dsl_prescription {
 	enum class Property {
@@ -20,14 +22,12 @@ namespace dsl_prescription {
 	DSL_PRESCRIPTION_API std::string propertyName(Property);
 }
 
-#include "ConfigurationFileParser.h"
-#include "PrescriptionReader.h"
-
 class PrescriptionAdapter : public PrescriptionReader {
 	std::shared_ptr<ConfigurationFileParserFactory> factory;
 public:
 	DSL_PRESCRIPTION_API explicit PrescriptionAdapter(
-		std::shared_ptr<ConfigurationFileParserFactory> factory);
+		std::shared_ptr<ConfigurationFileParserFactory> 
+	);
 	DSL_PRESCRIPTION_API Dsl read(std::string filePath) override;
 };
 

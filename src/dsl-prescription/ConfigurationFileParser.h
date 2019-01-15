@@ -8,11 +8,11 @@
 
 class ConfigurationFileParser {
 public:
-	RUNTIME_ERROR(ParseError);
 	INTERFACE_OPERATIONS(ConfigurationFileParser);
 	virtual std::vector<double> asVector(std::string property) const = 0;
 	virtual double asDouble(std::string property) const = 0;
 	virtual int asInt(std::string property) const = 0;
+	RUNTIME_ERROR(ParseError);
 };
 
 class ConfigurationFileParserFactory {

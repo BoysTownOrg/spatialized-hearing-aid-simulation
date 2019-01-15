@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="audio-stream-processing-exports.h" />
     <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="ChannelCopier.h" />
   </ItemGroup>
