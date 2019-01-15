@@ -20,3 +20,19 @@ TEST(ChannelProcessingGroupTestCase, processesChannelsInOrder) {
 	EXPECT_EQ(b, processors[1]->signal());
 	EXPECT_EQ(c, processors[2]->signal());
 }
+
+TEST(ChannelProcessingGroupTestCase, groupDelayReturnsSumOfGroupDelays) {
+	auto processor1 = std::make_shared<SignalProcessorStub>();
+	processor1->setGroupDelay(1);
+	auto processor2 = std::make_shared<SignalProcessorStub>();
+	processor2->setGroupDelay(2);
+	auto processor3 = std::make_shared<SignalProcessorStub>();
+	processor3->setGroupDelay(3);
+	std::vector<std::shared_ptr<SignalProcessorStub>> processors{
+		processor1,
+		processor2,
+		processor3
+	};
+	ChannelProcessingGroup group{ { processors[0], processors[1], processors[2] } };
+	EXPECT_EQ(1 + 2 + 3, group.groupDelay());
+}
