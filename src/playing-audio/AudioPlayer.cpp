@@ -104,10 +104,12 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
 	frameReader->read(audio);
 	if (frameReader->complete()) {
-		device->setCallbackResultToComplete();
 		for (auto channel : audio)
 			for (auto &x : channel)
 				x = 0;
+		paddedZeroes += frames;
+		if (paddedZeroes >= frameProcessor->groupDelay())
+			device->setCallbackResultToComplete();
 	}
 	frameProcessor->process(audio);
 }

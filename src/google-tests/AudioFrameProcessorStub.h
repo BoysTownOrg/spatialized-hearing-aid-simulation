@@ -17,6 +17,10 @@ public:
 	void setGroupDelay(int n) {
 		groupDelay_ = n;
 	}
+
+	int groupDelay() override {
+		return groupDelay_;
+	}
 };
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {

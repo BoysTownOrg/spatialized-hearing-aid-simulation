@@ -10,3 +10,8 @@ void ChannelProcessingGroup::process(gsl::span<gsl::span<float>> audio) {
 	for (size_type i = 0; i < processors.size(); ++i)
 		processors[i]->process(audio[i]);
 }
+
+int ChannelProcessingGroup::groupDelay()
+{
+	return 0;
+}

@@ -174,6 +174,8 @@ namespace {
 				for (auto &x : channel)
 					x *= 2;
 		}
+
+		int groupDelay() override { return {}; }
 	};
 
 	TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
