@@ -11,6 +11,7 @@ class FilterbankCompressorSpy : public FilterbankCompressor {
 	int _filterbankSynthesizeChunkSize{};
 	int _compressOutputChunkSize{};
 	bool _failed{};
+	int windowSize_{};
 public:
 	std::string processingLog() const {
 		return _processingLog;
@@ -79,6 +80,10 @@ public:
 
 	bool failed() const override {
 		return _failed;
+	}
+
+	void setWindowSize(int n) {
+		windowSize_ = n;
 	}
 };
 
