@@ -152,10 +152,10 @@ namespace {
 	TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
 		readerFactory.setReader(std::make_shared<ReadsAOne>());
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
-		player.play({});
+		play();
 		float x{};
 		float *audio[] = { &x };
-		device.fillStreamBuffer(audio, 1);
+		fillStreamBuffer(audio, 1);
 		EXPECT_EQ(2, x);
 	}
 
@@ -166,7 +166,7 @@ namespace {
 		AudioPlayer::PlayRequest request{};
 		request.level_dB_Spl = 7;
 		request.max_dB_Spl = 8;
-		player.play(request);
+		play(request);
 		assertEqual(
 			{
 				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
@@ -178,7 +178,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
-		player.play({});
+		play();
 		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
 	}
 
