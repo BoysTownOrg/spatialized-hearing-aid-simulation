@@ -30,10 +30,19 @@ static void assertCoefficientsYieldFilteredOutput(
 	std::vector<float> input,
 	std::vector<float> output);
 
-TEST(FirFilterTestCase, zeroIR) {
-	assertCoefficientsYieldFilteredOutput({ 0 }, { 1, 2, 3 }, { 0, 0, 0 });
-	assertCoefficientsYieldFilteredOutput({ 0, 0 }, { 1, 2, 3 }, { 0, 0, 0 });
-	assertCoefficientsYieldFilteredOutput({ 0, 0, 0 }, { 1, 2, 3 }, { 0, 0, 0 });
+TEST(FirFilterTestCase, zeroIRZeroOrder) {
+	FirFilterFacade filter{ { 0 } };
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, zeroIRFirstOrder) {
+	FirFilterFacade filter{ { 0, 0 } };
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
+}
+
+TEST(FirFilterTestCase, zeroIRSecondOrder) {
+	FirFilterFacade filter{ { 0, 0, 0 } };
+	assertEqual({ 0, 0, 0 }, filter.process({ 1, 2, 3 }));
 }
 
 void assertCoefficientsYieldFilteredOutput(
