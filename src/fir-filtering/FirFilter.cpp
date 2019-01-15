@@ -8,7 +8,9 @@ static long nextPowerOfTwo(unsigned int x) {
 	return 1 << (power + 1);
 }
 
-FirFilter::FirFilter(std::vector<float> b) {
+FirFilter::FirFilter(coefficient_type b) :
+	order{ b.size() - 1 }
+{
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
 	const auto M = b.size();
@@ -70,7 +72,6 @@ void FirFilter::shiftOverlap(int n) {
 		overlap[i] = 0;
 }
 
-int FirFilter::groupDelay()
-{
-	return 0;
+int FirFilter::groupDelay() {
+	return order / 2;
 }
