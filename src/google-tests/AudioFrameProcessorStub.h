@@ -4,6 +4,7 @@
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
+	int groupDelay_{};
 public:
 	const gsl::span<gsl::span<float>> audioBuffer() const {
 		return _audioBuffer;
@@ -11,6 +12,10 @@ public:
 
 	void process(gsl::span<gsl::span<float>> audio) override {
 		_audioBuffer = audio;
+	}
+
+	void setGroupDelay(int n) {
+		groupDelay_ = n;
 	}
 };
 
