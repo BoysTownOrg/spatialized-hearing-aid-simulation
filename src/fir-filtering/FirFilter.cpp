@@ -17,7 +17,7 @@ FirFilter::FirFilter(coefficient_type b) :
 	N = nextPowerOfTwo(M - 1);
 	L = N - M + 1;
 	overlap.resize(N);
-	dftReal = b;
+	dftReal = std::move(b);
 	dftReal.resize(N);
 	dftComplex.resize(N / 2 + 1);
 	const auto to_fftw = reinterpret_cast<fftwf_complex *>(&dftComplex[0]);
@@ -25,12 +25,14 @@ FirFilter::FirFilter(coefficient_type b) :
 		N, 
 		&dftReal[0],
 		to_fftw,
-		FFTW_ESTIMATE);
+		FFTW_ESTIMATE
+	);
 	ifftPlan = fftwf_plan_dft_c2r_1d(
 		N, 
 		to_fftw,
 		&dftReal[0],
-		FFTW_ESTIMATE);
+		FFTW_ESTIMATE
+	);
 	fftwf_execute(fftPlan);
 	H = dftComplex;
 }
