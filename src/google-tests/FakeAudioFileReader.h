@@ -16,6 +16,10 @@ public:
 	) :
 		contents{ std::move(contents) } {}
 
+	void setContents(std::vector<float> c) {
+		contents = std::move(c);
+	}
+
 	void setChannels(int c) {
 		channels_ = c;
 	}
