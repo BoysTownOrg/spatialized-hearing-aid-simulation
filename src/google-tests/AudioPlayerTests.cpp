@@ -23,12 +23,16 @@ namespace {
 				FAIL() << "Expected AudioPlayer::RequestFailure";
 			}
 			catch (const AudioPlayer::RequestFailure &e) {
-				assertEqual(errorMessage, e.what());
+				assertEqual(std::move(errorMessage), e.what());
 			}
 		}
 
-		void play() {
-			player.play({});
+		void play(AudioPlayer::PlayRequest r = {}) {
+			player.play(std::move(r));
+		}
+
+		void fillStreamBuffer(void *x = {}, int n = {}) {
+			device.fillStreamBuffer(x, n);
 		}
 	};
 
@@ -49,10 +53,10 @@ namespace {
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 		play();
-		device.fillStreamBuffer({}, {});
+		fillStreamBuffer();
 		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
 		frameReader->setComplete();
-		device.fillStreamBuffer({}, {});
+		fillStreamBuffer();
 		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
 	}
 
@@ -62,7 +66,7 @@ namespace {
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
-		device.fillStreamBuffer(x, 1);
+		fillStreamBuffer(x, 1);
 		EXPECT_EQ(&left, frameReader->audioBuffer()[0].data());
 		EXPECT_EQ(&right, frameReader->audioBuffer()[1].data());
 		EXPECT_EQ(1, frameReader->audioBuffer()[0].size());
@@ -88,7 +92,7 @@ namespace {
 		request.chunkSize = 5;
 		frameReader->setChannels(6);
 		frameReader->setSampleRate(7);
-		player.play(request);
+		play(request);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", readerFactory.filePath());
