@@ -71,11 +71,13 @@ namespace {
 		float left{};
 		float *x[]{ &left };
 		fillStreamBuffer(x, 1);
-		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+		EXPECT_FALSE(device.complete());
 		fillStreamBuffer(x, 1);
-		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
+		EXPECT_FALSE(device.complete());
 		fillStreamBuffer(x, 1);
-		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
+		EXPECT_TRUE(device.complete());
+		play();
+		EXPECT_FALSE(device.complete());
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
