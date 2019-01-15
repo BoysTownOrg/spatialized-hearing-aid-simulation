@@ -8,6 +8,6 @@ class ScalingProcessor : public SignalProcessor {
 public:
 	SIGNAL_PROCESSING_API explicit ScalingProcessor(float scale);
 	SIGNAL_PROCESSING_API void process(gsl::span<float> signal) override;
-	int groupDelay() override;
+	SIGNAL_PROCESSING_API int groupDelay() override;
 };
 
