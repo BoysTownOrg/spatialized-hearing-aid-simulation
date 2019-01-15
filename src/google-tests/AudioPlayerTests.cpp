@@ -51,15 +51,6 @@ namespace {
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-		play();
-		fillStreamBuffer();
-		EXPECT_FALSE(device.setCallbackResultToCompleteCalled());
-		frameReader->setComplete();
-		fillStreamBuffer();
-		EXPECT_TRUE(device.setCallbackResultToCompleteCalled());
-	}
-
 	TEST_F(AudioPlayerTests, fillStreamBufferPadsZeroToEndOfInput) {
 		frameReader->setChannels(1);
 		play();
