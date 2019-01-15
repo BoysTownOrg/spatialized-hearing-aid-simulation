@@ -25,7 +25,7 @@ public:
 	FIR_FILTERING_API explicit FirFilter(std::vector<float> b);
 	FIR_FILTERING_API ~FirFilter();
 	FIR_FILTERING_API void process(gsl::span<float>) override;
-	int groupDelay() override;
+	FIR_FILTERING_API int groupDelay() override;
 private:
 	void filter(gsl::span<float>);
 	void overlapAdd();
