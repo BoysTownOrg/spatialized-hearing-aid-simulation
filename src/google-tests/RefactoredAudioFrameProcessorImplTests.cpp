@@ -28,12 +28,10 @@ TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
-	float x{ 5 };
-	gsl::span<float> y{ &x, 1 };
-	gsl::span<gsl::span<float>> z{ &y, 1 };
-	impl.process(z);
-	EXPECT_EQ(5, reader.audioBuffer().at(0).at(0));
-	EXPECT_EQ(5, processor.audioBuffer().at(0).at(0));
+	gsl::span<float> x{};
+	impl.process({ &x, 0 });
+	EXPECT_EQ(&x, reader.audioBuffer().data());
+	EXPECT_EQ(&x, processor.audioBuffer().data());
 }
 
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
