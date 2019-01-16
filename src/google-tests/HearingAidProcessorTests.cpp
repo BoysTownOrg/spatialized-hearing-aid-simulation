@@ -142,9 +142,7 @@ public:
 	void compressChannels(complex_type *, complex_type *, int) override {}
 };
 
-class HearingAidProcessorRealSignalTests : public ::testing::Test {};
-
-TEST_F(
+TEST(
 	HearingAidProcessorRealSignalTests,
 	processPassesRealInputsAppropriately
 ) {
@@ -199,10 +197,7 @@ public:
 		return postSynthesizeFilterbankComplexResult_;
 	}
 
-	bool failed() const override {
-		return false;
-	}
-
+	bool failed() const override { return false; }
 	int windowSize() const override { return 1; }
 	void compressInput(real_type *, real_type *, int) override {}
 	void compressOutput(real_type *, real_type *, int) override {}
@@ -211,10 +206,10 @@ public:
 class HearingAidProcessorComplexSignalTests : public ::testing::Test {
 protected:
 	std::shared_ptr<ForComplexSignalTests> compressor =
-		std::make_shared<ForComplexSignalTests>();
-	HearingAidProcessor processor{ compressor };
+		std::make_shared<ForComplexSignalTests>();	
 
 	void process() {
+		HearingAidProcessor processor{ compressor };
 		std::vector<float> x(compressor->chunkSize());
 		processor.process(x);
 	}
@@ -231,17 +226,14 @@ TEST_F(
 	);
 }
 
-TEST(
-	HearingAidProcessorOtherTests,
+TEST_F(
+	HearingAidProcessorComplexSignalTests,
 	complexInputSizeIsAtLeastChannelTimesChunkSizeTimesTwo
 ) {
-	const auto compressor = std::make_shared<ForComplexSignalTests>();
 	compressor->setChunkSize(4);
 	compressor->setChannels(5);
 	compressor->setPointerOffset(4 * 5 * 2 - 1);
-	HearingAidProcessor processor{ compressor };
-	std::vector<float> x(compressor->chunkSize());
-	processor.process(x);
+	process();
 	EXPECT_EQ(
 		(0 + 7) * 11 * 13 * 17 * 19,
 		compressor->postSynthesizeFilterbankComplexResult()
