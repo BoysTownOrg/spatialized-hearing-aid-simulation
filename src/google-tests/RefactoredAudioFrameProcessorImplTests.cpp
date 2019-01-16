@@ -36,6 +36,19 @@ TEST(RefactoredAudioFrameProcessorTests, processPassesAudioToReaderAndProcessor)
 	EXPECT_EQ(1, processor.audioBuffer().size());
 }
 
+TEST(RefactoredAudioFrameProcessorTests, processPadsZeroToEndOfInput) {
+	AudioFrameReaderStub reader{};
+	AudioFrameProcessorStub processor{};
+	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+	reader.setComplete();
+	std::vector<float> audio(3, -1);
+	gsl::span<float> x{ audio };
+	impl.process({ &x, 1 });
+	EXPECT_EQ(0, processor.audioBuffer()[0][0]);
+	EXPECT_EQ(0, processor.audioBuffer()[0][1]);
+	EXPECT_EQ(0, processor.audioBuffer()[0][2]);
+}
+
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
 	RefactoredAudioFrameProcessorImplFactory factory{};
 }
