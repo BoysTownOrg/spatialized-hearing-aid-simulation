@@ -19,8 +19,8 @@ struct FltkSetupView : public Fl_Group {
 	Fl_Input _brirFilePath;
 	Fl_Float_Input _attack_ms;
 	Fl_Float_Input _release_ms;
-	Fl_Input _windowSize;
-	Fl_Input chunkSize_;
+	Fl_Choice windowSize_;
+	Fl_Choice chunkSize_;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
@@ -69,6 +69,8 @@ public:
 	std::string chunkSize() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
+	void populateChunkSizeMenu(std::vector<std::string> items) override;
+	void populateWindowSizeMenu(std::vector<std::string> items) override;
 	void showTestSetup() override;
 	void hideTestSetup() override;
 	void showTesterView() override;

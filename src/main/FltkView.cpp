@@ -38,7 +38,7 @@ FltkSetupView::FltkSetupView() :
 	browseBrir(460, 200, 60, 45, "browse"),
 	_attack_ms(250, 300, 200, 45, "attack (ms)"),
 	_release_ms(250, 350, 200, 45, "release (ms)"),
-	_windowSize(250, 400, 200, 45, "window size (samples)"),
+	windowSize_(250, 400, 200, 45, "window size (samples)"),
 	chunkSize_(250, 450, 200, 45, "chunk size (samples)"),
 	confirm(250, 550, 60, 45, "confirm")
 {
@@ -87,6 +87,18 @@ void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
 	for (auto s : items)
 		window.testerView._audioDevice.add(s.c_str());
 	window.testerView._audioDevice.value(0);
+}
+
+void FltkView::populateChunkSizeMenu(std::vector<std::string> items) {
+	for (auto s : items)
+		window.setupView.chunkSize_.add(s.c_str());
+	window.setupView.chunkSize_.value(0);
+}
+
+void FltkView::populateWindowSizeMenu(std::vector<std::string> items) {
+	for (auto s : items)
+		window.setupView.windowSize_.add(s.c_str());
+	window.setupView.windowSize_.value(0);
 }
 
 std::string FltkView::audioDevice() {
@@ -176,11 +188,11 @@ std::string FltkView::release_ms() {
 }
 
 std::string FltkView::windowSize() {
-	return window.setupView._windowSize.value();
+	return window.setupView.windowSize_.text();
 }
 
 std::string FltkView::chunkSize() {
-	return window.setupView.chunkSize_.value();
+	return window.setupView.chunkSize_.text();
 }
 
 void FltkView::showErrorDialog(std::string message) {

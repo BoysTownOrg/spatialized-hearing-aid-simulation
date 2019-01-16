@@ -60,7 +60,7 @@ class ViewStub : public View {
 	std::string _level_dB_Spl{ "0" };
 	std::string _attack_ms{ "0" };
 	std::string _release_ms{ "0" };
-	std::string _windowSize{ "0" };
+	std::string windowSize_{ "0" };
 	std::string chunkSize_{ "0" };
 	std::string _errorMessage{};
 	std::string _browseFilePath{};
@@ -177,11 +177,11 @@ public:
 	}
 
 	void setWindowSize(std::string s) {
-		_windowSize = std::move(s);
+		windowSize_ = std::move(s);
 	}
 
 	std::string windowSize() override {
-		return _windowSize;
+		return windowSize_;
 	}
 
 	void setChunkSize(std::string s) {
