@@ -6,6 +6,8 @@ public:
 	RefactoredAudioFrameProcessor(AudioFrameReader *, AudioFrameProcessor *) {}
 };
 
+class RefactoredAudioFrameProcessorFactory {};
+
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include <gtest/gtest.h>
