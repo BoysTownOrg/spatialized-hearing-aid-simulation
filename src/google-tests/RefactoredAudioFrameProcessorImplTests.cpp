@@ -15,7 +15,11 @@ class RefactoredAudioFrameProcessorImplFactory{};
 TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
-	RefactoredAudioFrameProcessorImpl{&reader, &processor};
+	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+	gsl::span<gsl::span<float>> x{};
+	impl.process(x);
+	EXPECT_EQ(x, reader.audioBuffer());
+	EXPECT_EQ(x, processor.audioBuffer());
 }
 
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
