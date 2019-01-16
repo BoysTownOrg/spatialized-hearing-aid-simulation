@@ -73,49 +73,44 @@ TEST_F(
 	EXPECT_EQ(256, processor.groupDelay());
 }
 
-TEST(
-	HearingAidProcessorOtherTests,
+class CompressorErrorTests : public ::testing::Test {
+protected:
+	std::shared_ptr<FilterbankCompressorSpy> compressor = 
+		std::make_shared<FilterbankCompressorSpy>();
+
+	void assertConstructorThrowsCompressorError(std::string what) {
+		try {
+			HearingAidProcessor processor{ compressor };
+			FAIL() << "Expected HearingAidProcessor::CompressorError";
+		}
+		catch (const HearingAidProcessor::CompressorError &e) {
+			assertEqual(what, e.what());
+		}
+	}
+};
+
+TEST_F(
+	CompressorErrorTests,
 	failedCompressorThrowsCompressorError
 ) {
-	try {
-		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
-		compressor->fail();
-		HearingAidProcessor processor{ compressor };
-		FAIL() << "Expected HearingAidProcessor::CompressorError";
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		assertEqual("The compressor failed to initialize.", e.what());
-	}
+	compressor->fail();
+	assertConstructorThrowsCompressorError("The compressor failed to initialize.");
 }
 
-TEST(
-	HearingAidProcessorOtherTests,
+TEST_F(
+	CompressorErrorTests,
 	nonPowerOfTwoChunkSizeThrowsCompressorError
 ) {
-	try {
-		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
-		compressor->setChunkSize(1023);
-		HearingAidProcessor processor{ compressor };
-		FAIL() << "Expected HearingAidProcessor::CompressorError";
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		assertEqual("The chunk size must be a power of two.", e.what());
-	}
+	compressor->setChunkSize(1023);
+	assertConstructorThrowsCompressorError("The chunk size must be a power of two.");
 }
 
-TEST(
-	HearingAidProcessorOtherTests,
+TEST_F(
+	CompressorErrorTests,
 	nonPowerOfTwoWindowSizeThrowsCompressorError
 ) {
-	try {
-		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
-		compressor->setWindowSize(1023);
-		HearingAidProcessor processor{ compressor };
-		FAIL() << "Expected HearingAidProcessor::CompressorError";
-	}
-	catch (const HearingAidProcessor::CompressorError &e) {
-		assertEqual("The window size must be a power of two.", e.what());
-	}
+	compressor->setWindowSize(1023);
+	assertConstructorThrowsCompressorError("The window size must be a power of two.");
 }
 
 class MultipliesRealSignalsByPrimes : public FilterbankCompressor {
