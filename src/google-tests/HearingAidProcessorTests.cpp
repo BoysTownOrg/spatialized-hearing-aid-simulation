@@ -226,9 +226,9 @@ TEST(
 	complexInputSizeIsAtLeastChannelTimesChunkSizeTimesTwo
 ) {
 	const auto compressor = std::make_shared<ForComplexSignalTests>();
-	compressor->setChunkSize(3);
+	compressor->setChunkSize(4);
 	compressor->setChannels(5);
-	compressor->setPointerOffset(3 * 5 * 2 - 1);
+	compressor->setPointerOffset(4 * 5 * 2 - 1);
 	HearingAidProcessor processor{ compressor };
 	std::vector<float> x(compressor->chunkSize());
 	processor.process(x);
