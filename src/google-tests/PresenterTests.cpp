@@ -50,6 +50,8 @@ public:
 class ViewStub : public View {
 	std::vector<std::string> _browseFilters{};
 	std::vector<std::string> _audioDeviceMenuItems{};
+	std::vector<std::string> chunkSizeItems_{};
+	std::vector<std::string> windowSizeItems_{};
 	std::string _audioDirectory{};
 	std::string _leftDslPrescriptionFilePath{};
 	std::string _rightDslPrescriptionFilePath{};
@@ -268,6 +270,14 @@ public:
 
 	bool testerViewHidden() const {
 		return _testerViewHidden;
+	}
+
+	std::vector<std::string> chunkSizeItems() const {
+		return chunkSizeItems_;
+	}
+
+	std::vector<std::string> windowSizeItems() const {
+		return windowSizeItems_;
 	}
 };
 
