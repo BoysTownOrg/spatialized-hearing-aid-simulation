@@ -14,6 +14,8 @@ HearingAidProcessor::HearingAidProcessor(
 		throw CompressorError{ "The compressor failed to initialize." };
 	if (!powerOfTwo(this->compressor->chunkSize()))
 		throw CompressorError{ "The chunk size must be a power of two." };
+	if (!powerOfTwo(this->compressor->windowSize()))
+		throw CompressorError{ "The window size must be a power of two." };
 }
 
 void HearingAidProcessor::process(gsl::span<float> signal) {
