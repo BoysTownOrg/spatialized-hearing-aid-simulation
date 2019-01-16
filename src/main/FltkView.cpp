@@ -102,15 +102,15 @@ void FltkView::hideTesterView() {
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
-	window.testerView._audioDevice.populate(items);
+	window.testerView._audioDevice.populate(std::move(items));
 }
 
 void FltkView::populateChunkSizeMenu(std::vector<std::string> items) {
-	window.setupView.chunkSize_.populate(items);
+	window.setupView.chunkSize_.populate(std::move(items));
 }
 
 void FltkView::populateWindowSizeMenu(std::vector<std::string> items) {
-	window.setupView.windowSize_.populate(items);
+	window.setupView.windowSize_.populate(std::move(items));
 }
 
 std::string FltkView::audioDevice() {
