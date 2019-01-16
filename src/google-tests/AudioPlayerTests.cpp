@@ -19,7 +19,7 @@ namespace {
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
-				player.play({});
+				play();
 				FAIL() << "Expected AudioPlayer::RequestFailure";
 			}
 			catch (const AudioPlayer::RequestFailure &e) {
