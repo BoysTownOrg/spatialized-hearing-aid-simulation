@@ -273,22 +273,6 @@ namespace {
 
 	TEST(
 		AudioPlayerOtherTests,
-		playThrowsDeviceFailureWhenDeviceFailsToOpenStream
-	) {
-		FailsToOpenStream device{};
-		AudioPlayerFacade player{ &device };
-		device.setErrorMessage("error.");
-		try {
-			player.play();
-			FAIL() << "Expected AudioPlayer::RequestFailure";
-		}
-		catch (const AudioPlayer::RequestFailure &e) {
-			assertEqual("error.", e.what());
-		}
-	}
-
-	TEST(
-		AudioPlayerOtherTests,
 		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 	) {
 		AudioDeviceStub device{};
@@ -303,33 +287,52 @@ namespace {
 		}
 	}
 
-	TEST(
-		AudioPlayerOtherTests,
-		playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
+	class RequestErrorTests : public ::testing::Test {
+	protected:
+		AudioDeviceStub defaultDevice{};
+		AudioFrameReaderStubFactory defaultReaderFactory{};
+		AudioFrameProcessorStubFactory defaultProcessorFactory{};
+		AudioDevice *device{&defaultDevice};
+		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
+		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
+
+		void assertPlayThrowsRequestFailure(std::string what) {
+			AudioPlayer player{ device, readerFactory, processorFactory };
+			try {
+				player.play({});
+				FAIL() << "Expected AudioPlayer::RequestFailure";
+			}
+			catch (const AudioPlayer::RequestFailure &e) {
+				assertEqual(what, e.what());
+			}
+		}
+	};
+
+	TEST_F(
+		RequestErrorTests,
+		playThrowsDeviceFailureWhenDeviceFailsToOpenStream
 	) {
-		ErrorAudioFrameReaderFactory factory{ "error." };
-		AudioPlayerFacade player{ &factory };
-		try {
-			player.play();
-			FAIL() << "Expected AudioPlayer::RequestFailure";
-		}
-		catch (const AudioPlayer::RequestFailure &e) {
-			assertEqual("error.", e.what());
-		}
+		FailsToOpenStream failingDevice{};
+		failingDevice.setErrorMessage("error.");
+		device = &failingDevice;
+		assertPlayThrowsRequestFailure("error.");
 	}
 
-	TEST(
-		AudioPlayerOtherTests,
+	TEST_F(
+		RequestErrorTests,
+		playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameReaderFactory failingFactory{ "error." };
+		readerFactory = &failingFactory;
+		assertPlayThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RequestErrorTests,
 		playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
 	) {
-		ErrorAudioFrameProcessorFactory factory{ "error." };
-		AudioPlayerFacade player{ &factory };
-		try {
-			player.play();
-			FAIL() << "Expected AudioPlayer::RequestFailure";
-		}
-		catch (const AudioPlayer::RequestFailure &e) {
-			assertEqual("error.", e.what());
-		}
+		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		processorFactory = &failingFactory;
+		assertPlayThrowsRequestFailure("error.");
 	}
 }
