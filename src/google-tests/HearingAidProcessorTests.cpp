@@ -81,6 +81,21 @@ TEST(
 	}
 }
 
+TEST(
+	HearingAidProcessorOtherTests,
+	nonPowerOfTwoChunkSizeThrowsCompressorError
+) {
+	try {
+		const auto compressor = std::make_shared<FilterbankCompressorSpy>();
+		compressor->setChunkSize(1023);
+		HearingAidProcessor processor{ compressor };
+		FAIL() << "Expected HearingAidProcessor::CompressorError";
+	}
+	catch (const HearingAidProcessor::CompressorError &e) {
+		assertEqual("The chunk size must be a power of two.", e.what());
+	}
+}
+
 class MultipliesRealSignalsByPrimes : public FilterbankCompressor {
 public:
 	void compressInput(real_type *input, real_type *output, int) override {
