@@ -4,12 +4,16 @@
 
 class ChannelProcessingGroupTests : public ::testing::Test {
 protected:
-	std::vector<std::shared_ptr<SignalProcessorStub>> processors{
-		std::make_shared<SignalProcessorStub>(),
-		std::make_shared<SignalProcessorStub>(),
-		std::make_shared<SignalProcessorStub>()
-	};
+	std::vector<std::shared_ptr<SignalProcessorStub>> processors = makeStubs(3);
 	ChannelProcessingGroup group{ { processors.begin(), processors.end() } };
+
+private:
+	static std::vector<std::shared_ptr<SignalProcessorStub>> makeStubs(int n) {
+		std::vector<std::shared_ptr<SignalProcessorStub>> p;
+		for (int i = 0; i < n; ++i)
+			p.push_back(std::make_shared<SignalProcessorStub>());
+		return p;
+	}
 };
 
 TEST_F(ChannelProcessingGroupTests, processesChannelsInOrder) {
