@@ -4,6 +4,7 @@
 class RefactoredAudioFrameProcessorImpl {
 	AudioFrameReader *reader;
 	AudioFrameProcessor *processor;
+	int paddedZeroes{};
 public:
 	RefactoredAudioFrameProcessorImpl(
 		AudioFrameReader *reader, 
@@ -13,16 +14,19 @@ public:
 		processor{ processor } {}
 
 	void process(gsl::span<gsl::span<float>> audio) {
-		if (reader->complete())
+		if (reader->complete()) {
 			for (auto channel : audio)
-				for (auto &x : channel)
+				for (auto &x : channel) {
+					++paddedZeroes;
 					x = 0;
+				}
+		}
 		processor->process(audio);
 		reader->read(audio);
 	}
 
 	bool complete() {
-		return {};
+		return paddedZeroes >= processor->groupDelay();
 	}
 };
 
