@@ -542,6 +542,17 @@ TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 	playTrialWithLevelShowsErrorMessage("b");
 }
 
+TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
+	assertEqual(
+		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
+		view.chunkSizeItems()
+	);
+	assertEqual(
+		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
+		view.windowSizeItems()
+	);
+}
+
 TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
 	ViewStub view;
 	ModelStub model;
