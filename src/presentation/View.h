@@ -11,7 +11,6 @@ public:
 	virtual void browseForRightDslPrescription() = 0;
 	virtual void browseForAudio() = 0;
 	virtual void browseForBrir() = 0;
-	virtual void newTest() = 0;
 	virtual void confirmTestSetup() = 0;
 	virtual void playTrial() = 0;
 };

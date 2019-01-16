@@ -236,10 +236,6 @@ public:
 		_audioDirectory = std::move(d);
 	}
 
-	void newTest() {
-		_listener->newTest();
-	}
-
 	bool testSetupShown() const {
 		return _testSetupShown;
 	}

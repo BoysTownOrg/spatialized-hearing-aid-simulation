@@ -22,7 +22,6 @@ public:
 	void browseForRightDslPrescription() override;
 	void browseForAudio() override;
 	void browseForBrir() override;
-	void newTest() override;
 	void confirmTestSetup() override;
 	void playTrial() override;
 

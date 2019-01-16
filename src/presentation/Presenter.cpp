@@ -125,7 +125,3 @@ void Presenter::playTrial() {
 		view->showTestSetup();
 	}
 }
-
-void Presenter::newTest() {
-	view->showTestSetup();
-}
