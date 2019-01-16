@@ -11,6 +11,7 @@ Presenter::Presenter(Model *model, View *view) :
 		sizeItems.push_back(std::to_string(1 << i));
 	view->populateChunkSizeMenu(sizeItems);
 	view->populateWindowSizeMenu(sizeItems);
+	view->showTestSetup();
 }
 
 void Presenter::run() {
