@@ -533,6 +533,13 @@ TEST_F(PresenterTests, playingTrialDoesNotHideViewWhileTestInProgress) {
     EXPECT_FALSE(view.testerViewHidden());
 }
 
+TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
+    model.setTestComplete();
+    view.playTrial();
+    EXPECT_TRUE(view.testerViewHidden());
+    EXPECT_TRUE(view.testSetupShown());
+}
+
 TEST_F(PresenterTests, playingTrialPlaysTrial) {
     view.playTrial();
     EXPECT_TRUE(model.trialPlayed());
