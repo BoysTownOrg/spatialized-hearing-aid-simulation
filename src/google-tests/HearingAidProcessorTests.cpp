@@ -150,7 +150,7 @@ public:
 		return false;
 	}
 
-	int windowSize() const override { return {}; }
+	int windowSize() const override { return 1; }
 	void compressChannels(complex_type *, complex_type *, int) override {}
 };
 
@@ -215,7 +215,7 @@ public:
 		return false;
 	}
 
-	int windowSize() const override { return {}; }
+	int windowSize() const override { return 1; }
 	void compressInput(real_type *, real_type *, int) override {}
 	void compressOutput(real_type *, real_type *, int) override {}
 };
