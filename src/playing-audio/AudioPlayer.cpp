@@ -99,6 +99,10 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 	}
 }
 
+void AudioPlayer::initialize(Initialization)
+{
+}
+
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };

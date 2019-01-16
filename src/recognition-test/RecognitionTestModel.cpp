@@ -16,6 +16,18 @@ bool RecognitionTestModel::testComplete() {
 void RecognitionTestModel::initializeTest(TestParameters p) {
 	list->initialize(p.audioDirectory);
 	forTest = std::move(p);
+	StimulusPlayer::Initialization initialization;
+	initialization.attack_ms = forTest.attack_ms;
+	initialization.brirFilePath = forTest.brirFilePath;
+	initialization.chunkSize = forTest.chunkSize;
+	initialization.leftDslPrescriptionFilePath = forTest.leftDslPrescriptionFilePath;
+	initialization.release_ms = forTest.release_ms;
+	initialization.rightDslPrescriptionFilePath = forTest.rightDslPrescriptionFilePath;
+	initialization.windowSize = forTest.windowSize;
+
+	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
+	initialization.max_dB_Spl = 119;
+	player->initialize(initialization);
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {

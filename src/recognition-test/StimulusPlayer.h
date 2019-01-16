@@ -20,6 +20,7 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
+	virtual void initialize(Initialization) = 0;
 
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;

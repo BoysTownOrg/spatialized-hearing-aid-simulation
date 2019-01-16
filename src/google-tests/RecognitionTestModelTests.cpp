@@ -77,6 +77,10 @@ public:
 	bool playCalled() {
 		return playCalled_;
 	}
+
+	void initialize(Initialization i) override {
+		initialization_ = std::move(i);
+	}
 };
 
 class RecognitionTestModelTests : public ::testing::Test {
@@ -198,6 +202,7 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
+	void initialize(Initialization) override {}
 };
 
 TEST(
