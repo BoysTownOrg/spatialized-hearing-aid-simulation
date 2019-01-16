@@ -38,7 +38,8 @@ TEST_F(ChannelCopierTests, reset) {
 }
 
 TEST(ChannelCopierOtherTests, copiesFirstChannelToSecondWhenOnlyOneChannel) {
-	FakeAudioFileReader reader{ std::vector<float>{ 1, 2, 3 } };
+	FakeAudioFileReader reader;
+	reader.setContents({ 1, 2, 3 });
 	ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
 	std::vector<float> left(3);
 	std::vector<float> right(3);
