@@ -120,18 +120,20 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
+		StimulusPlayer::Initialization initialization;
+		initialization.leftDslPrescriptionFilePath = "a";
+		initialization.rightDslPrescriptionFilePath = "b";
+		initialization.brirFilePath = "c";
+		initialization.max_dB_Spl = 1;
+		initialization.attack_ms = 2;
+		initialization.release_ms = 3;
+		initialization.windowSize = 4;
+		initialization.chunkSize = 5;
+		player.initialize(initialization);
 		StimulusPlayer::PlayRequest request;
-		request.leftDslPrescriptionFilePath = "a";
-		request.rightDslPrescriptionFilePath = "b";
-		request.audioFilePath = "c";
 		request.brirFilePath = "d";
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
-		request.max_dB_Spl = 1;
-		request.attack_ms = 2;
-		request.release_ms = 3;
-		request.windowSize = 4;
-		request.chunkSize = 5;
 		frameReader->setChannels(6);
 		frameReader->setSampleRate(7);
 		play(request);
