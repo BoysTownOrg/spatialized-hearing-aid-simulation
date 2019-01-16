@@ -39,7 +39,7 @@ BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::
 	try {
 		return brirReader->read(std::move(filePath));
 	}
-	catch (const BrirReader::ReadError &e) {
+	catch (const BrirReader::ReadFailure &e) {
 		throw CreateError{ e.what() };
 	}
 }
@@ -73,7 +73,7 @@ PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription
 	try {
 		return prescriptionReader->read(std::move(filePath));
 	}
-	catch (const PrescriptionReader::ReadError &e) {
+	catch (const PrescriptionReader::ReadFailure &e) {
 		throw CreateError{ e.what() };
 	}
 }

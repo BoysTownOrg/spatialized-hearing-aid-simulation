@@ -41,11 +41,11 @@ auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 			dsl.kneepoints_dBSpl.size() != channels ||
 			dsl.broadbandOutputLimitingThresholds_dBSpl.size() != channels
 		)
-			throw ReadError{ "channel count mismatch in prescription." };
+			throw ReadFailure{ "channel count mismatch in prescription." };
 		dsl.channels = gsl::narrow<int>(channels);
 		return dsl;
 	}
 	catch (const ConfigurationFileParser::ParseError &e) {
-		throw ReadError{ e.what() };
+		throw ReadFailure{ e.what() };
 	}
 }

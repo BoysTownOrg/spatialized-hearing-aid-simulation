@@ -13,6 +13,6 @@ public:
 		int sampleRate;
 	};
 	virtual BinauralRoomImpulseResponse read(std::string filePath) = 0;
-	RUNTIME_ERROR(ReadError);
+	RUNTIME_ERROR(ReadFailure);
 };
 

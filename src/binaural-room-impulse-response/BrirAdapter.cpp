@@ -40,7 +40,7 @@ auto BrirAdapter::read(std::string filePath) -> BinauralRoomImpulseResponse {
 std::shared_ptr<AudioFileReader> BrirAdapter::makeReader(std::string filePath) {
 	const auto reader = factory->make(std::move(filePath));
 	if (reader->failed())
-		throw ReadError{ reader->errorMessage() };
+		throw ReadFailure{ reader->errorMessage() };
 	return reader;
 }
 

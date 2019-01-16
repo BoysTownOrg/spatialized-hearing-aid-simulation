@@ -4,25 +4,28 @@
 #include <gtest/gtest.h>
 #include <map>
 
-static void assertInvalidPrescriptionThrownOnChannelCountMismatch(
-	std::string property
-) {
-	try {
-		const auto parser = std::make_shared<FakeConfigurationFileParser>();
-		parser->setValidSingleChannelDslProperties();
-		parser->setVectorProperty(std::move(property), {});
-		PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
-		adapter.read({});
-		FAIL() << "Expected PrescriptionAdapter::InvalidPrescription.";
-	}
-	catch (const PrescriptionAdapter::ReadError &e) {
-		assertEqual("channel count mismatch in prescription.", e.what());
-	}
-}
+class PrescriptionAdapterTests : public ::testing::Test {
+protected:
+	std::shared_ptr<FakeConfigurationFileParser> parser = 
+		std::make_shared<FakeConfigurationFileParser>();
+	PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
 
-class PrescriptionAdapterTestCase : public ::testing::TestCase {};
+	void assertReadThrowsReadFailureOnChannelCountMismatch(
+		std::string property
+	) {
+		try {
+			parser->setValidSingleChannelDslProperties();
+			parser->setVectorProperty(std::move(property), {});
+			adapter.read({});
+			FAIL() << "Expected PrescriptionAdapter::ReadFailure.";
+		}
+		catch (const PrescriptionAdapter::ReadFailure &e) {
+			assertEqual("channel count mismatch in prescription.", e.what());
+		}
+	}
+};
 
-TEST(PrescriptionAdapterTestCase, constructorThrowsInvalidPrescriptionOnChannelCountMismatches) {
+TEST_F(PrescriptionAdapterTests, readThrowsReadFailureOnChannelCountMismatches) {
 	using namespace dsl_prescription;
 	for (auto property :
 		{
@@ -32,15 +35,14 @@ TEST(PrescriptionAdapterTestCase, constructorThrowsInvalidPrescriptionOnChannelC
 			propertyName(Property::broadbandOutputLimitingThresholds_dBSpl)
 		}
 	)
-		assertInvalidPrescriptionThrownOnChannelCountMismatch(property);
+		assertReadThrowsReadFailureOnChannelCountMismatch(property);
 }
 
-TEST(
-	PrescriptionAdapterTestCase,
+TEST_F(
+	PrescriptionAdapterTests,
 	parametersReceivedAsParsed
 ) {
 	using namespace dsl_prescription;
-	const auto parser = std::make_shared<FakeConfigurationFileParser>();
 	parser->setVectorProperty(propertyName(Property::crossFrequenciesHz), { 3 });
 	parser->setVectorProperty(propertyName(Property::compressionRatios), { 4, 4 });
 	parser->setVectorProperty(propertyName(Property::kneepointGains_dB), { 5, 5 });
@@ -49,10 +51,7 @@ TEST(
 		propertyName(Property::broadbandOutputLimitingThresholds_dBSpl), 
 		{ 7, 7 }
 	);
-	PrescriptionAdapter prescription{ 
-		std::make_shared<FakeConfigurationFileParserFactory>(parser) 
-	};
-	const auto dsl = prescription.read({});
+	const auto dsl = adapter.read({});
 	EXPECT_EQ(2, dsl.channels);
 	assertEqual({ 3 }, dsl.crossFrequenciesHz);
 	assertEqual({ 4, 4 }, dsl.compressionRatios);
@@ -62,7 +61,7 @@ TEST(
 }
 
 TEST(
-	PrescriptionAdapterTestCase,
+	PrescriptionAdapterFactoryTests,
 	throwsWhenParserThrows)
 {
 	try {
@@ -71,7 +70,7 @@ TEST(
 		adapter.read({});
 		FAIL() << "Expected DslPrescriptionFileReader::InvalidPrescription.";
 	}
-	catch (const PrescriptionAdapter::ReadError &e) {
+	catch (const PrescriptionAdapter::ReadFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }

@@ -18,9 +18,9 @@ protected:
 	void assertReadThrowsReadError(std::string what) {
 		try {
 			read();
-			FAIL() << "Expected BrirReader::ReadError";
+			FAIL() << "Expected BrirReader::ReadFailure";
 		}
-		catch (const BrirReader::ReadError &e) {
+		catch (const BrirReader::ReadFailure &e) {
 			assertEqual(what, e.what());
 		}
 	}

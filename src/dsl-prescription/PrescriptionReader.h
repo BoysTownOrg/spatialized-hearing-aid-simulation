@@ -7,7 +7,7 @@
 class PrescriptionReader {
 public:
 	INTERFACE_OPERATIONS(PrescriptionReader);
-	RUNTIME_ERROR(ReadError);
+	RUNTIME_ERROR(ReadFailure);
 	struct Dsl {
 		std::vector<double> crossFrequenciesHz;
 		std::vector<double> compressionRatios;
