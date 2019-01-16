@@ -20,6 +20,10 @@ public:
 		processor->process(audio);
 		reader->read(audio);
 	}
+
+	bool complete() {
+		return {};
+	}
 };
 
 class RefactoredAudioFrameProcessorImplFactory{};
@@ -59,7 +63,8 @@ TEST(RefactoredAudioFrameProcessorTests, completeAfterProcessingPaddedZeroes) {
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
 	reader.setComplete();
 	processor.setGroupDelay(3);
-	gsl::span<float> x{ nullptr, 1 };
+	float y{};
+	gsl::span<float> x{ &y, 1 };
 	impl.process({ &x, 1 });
 	EXPECT_FALSE(impl.complete());
 	impl.process({ &x, 1 });
