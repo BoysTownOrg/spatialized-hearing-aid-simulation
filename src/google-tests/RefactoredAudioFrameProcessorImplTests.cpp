@@ -1,12 +1,12 @@
 #include <playing-audio/AudioFrameProcessor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 
-class RefactoredAudioFrameProcessor {
+class RefactoredAudioFrameProcessorImpl {
 public:
-	RefactoredAudioFrameProcessor(AudioFrameReader *, AudioFrameProcessor *) {}
+	RefactoredAudioFrameProcessorImpl(AudioFrameReader *, AudioFrameProcessor *) {}
 };
 
-class RefactoredAudioFrameProcessorFactory {};
+class RefactoredAudioFrameProcessorImplFactory{};
 
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
@@ -15,9 +15,9 @@ class RefactoredAudioFrameProcessorFactory {};
 TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
-	RefactoredAudioFrameProcessor{&reader, &processor};
+	RefactoredAudioFrameProcessorImpl{&reader, &processor};
 }
 
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
-	RefactoredAudioFrameProcessorFactory factory{};
+	RefactoredAudioFrameProcessorImplFactory factory{};
 }

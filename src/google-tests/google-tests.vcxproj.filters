@@ -57,7 +57,7 @@
     <ClCompile Include="RandomizedStimulusListTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RefactoredAudioFrameProcessorTests.cpp">
+    <ClCompile Include="RefactoredAudioFrameProcessorImplTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
