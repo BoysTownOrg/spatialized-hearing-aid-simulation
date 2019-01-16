@@ -21,8 +21,8 @@ public:
 					x = 0;
 				}
 		}
-		processor->process(audio);
 		reader->read(audio);
+		processor->process(audio);
 	}
 
 	bool complete() {
