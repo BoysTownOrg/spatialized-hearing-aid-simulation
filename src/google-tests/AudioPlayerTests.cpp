@@ -150,43 +150,6 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
-	class ReadsAOne : public AudioFrameReader {
-		void read(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
-				for (auto &x : channel)
-					x = 1;
-		}
-
-		int channels() const override {
-			return 1;
-		}
-
-		bool complete() const override { return {}; }
-		int sampleRate() const override { return {}; }
-		long long frames() const override { return {}; }
-		void reset() override {}
-	};
-
-	class TimesTwo : public AudioFrameProcessor {
-		void process(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
-				for (auto &x : channel)
-					x *= 2;
-		}
-
-		int groupDelay() override { return {}; }
-	};
-
-	TEST_F(AudioPlayerTests, fillBufferReadsThenProcesses) {
-		readerFactory.setReader(std::make_shared<ReadsAOne>());
-		processorFactory.setProcessor(std::make_shared<TimesTwo>());
-		play();
-		float x{};
-		float *audio[] = { &x };
-		fillStreamBuffer(audio, 1);
-		EXPECT_EQ(2, x);
-	}
-
 	TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
 		AudioPlayer::Initialization initialization;
 		initialization.max_dB_Spl = 8;
