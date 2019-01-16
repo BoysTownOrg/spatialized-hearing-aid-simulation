@@ -1,9 +1,5 @@
 #include "HearingAidProcessor.h"
 
-static bool powerOfTwo(int n) {
-	return n > 0 && (n & (n - 1)) == 0;
-}
-
 HearingAidProcessor::HearingAidProcessor(
 	std::shared_ptr<FilterbankCompressor> compressor
 ) :
@@ -12,10 +8,17 @@ HearingAidProcessor::HearingAidProcessor(
 {
 	if (this->compressor->failed())
 		throw CompressorError{ "The compressor failed to initialize." };
-	if (!powerOfTwo(this->compressor->chunkSize()))
-		throw CompressorError{ "The chunk size must be a power of two." };
-	if (!powerOfTwo(this->compressor->windowSize()))
-		throw CompressorError{ "The window size must be a power of two." };
+	throwIfNotPowerOfTwo(this->compressor->chunkSize(), "chunk size");
+	throwIfNotPowerOfTwo(this->compressor->windowSize(), "window size");
+}
+
+static bool powerOfTwo(int n) {
+	return n > 0 && (n & (n - 1)) == 0;
+}
+
+void HearingAidProcessor::throwIfNotPowerOfTwo(int n, std::string name) {
+	if (!powerOfTwo(n))
+		throw CompressorError{ "The " + name + " must be a power of two." };
 }
 
 void HearingAidProcessor::process(gsl::span<float> signal) {
