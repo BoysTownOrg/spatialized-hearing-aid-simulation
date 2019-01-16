@@ -538,13 +538,13 @@ TEST_F(PresenterTests, playingTrialPlaysTrial) {
     EXPECT_TRUE(model.trialPlayed());
 }
 
-TEST_F(PresenterTests, confirmTestSetupWithNonPowerTwoChunkSizeShowsErrorMessage) {
-	for (auto s : { "a", "0.1", "-1", "1023" })
+TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
+	for (auto s : { "a", "0.1", "-1" })
 		confirmTestSetupWithChunkSizeShowsErrorMessage(s);
 }
 
-TEST_F(PresenterTests, confirmTestSetupWithNonPowerTwoWindowSizeShowsErrorMessage) {
-	for (auto s : { "a", "0.1", "-1", "1023" })
+TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
+	for (auto s : { "a", "0.1", "-1" })
 		confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 }
 
