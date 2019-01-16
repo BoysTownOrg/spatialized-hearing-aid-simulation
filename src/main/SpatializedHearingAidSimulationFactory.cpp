@@ -20,8 +20,6 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 	const auto brir = readBrir(p.brirFilePath);
-	if (brir.sampleRate != p.sampleRate)
-		throw CreateError{ "Not sure what to do with different sample rates." };
 	processors.push_back(makeChannel(
 		brir.left,
 		toCompressorParameters(p, readPrescription(p.leftDslPrescriptionFilePath)),
