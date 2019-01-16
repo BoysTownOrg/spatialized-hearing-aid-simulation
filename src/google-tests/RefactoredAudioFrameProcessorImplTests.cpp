@@ -4,6 +4,7 @@
 class RefactoredAudioFrameProcessorImpl {
 public:
 	RefactoredAudioFrameProcessorImpl(AudioFrameReader *, AudioFrameProcessor *) {}
+	void process(gsl::span<gsl::span<float>>) {}
 };
 
 class RefactoredAudioFrameProcessorImplFactory{};
@@ -16,10 +17,15 @@ TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
-	gsl::span<gsl::span<float>> x{};
+	std::vector<float> y{ 1, 2, 3 };
+	gsl::span<gsl::span<float>> x{ { y } };
 	impl.process(x);
-	EXPECT_EQ(x, reader.audioBuffer());
-	EXPECT_EQ(x, processor.audioBuffer());
+	EXPECT_EQ(1, reader.audioBuffer().at(0).at(0));
+	EXPECT_EQ(2, reader.audioBuffer().at(0).at(1));
+	EXPECT_EQ(3, reader.audioBuffer().at(0).at(2));
+	EXPECT_EQ(1, processor.audioBuffer().at(0).at(0));
+	EXPECT_EQ(2, processor.audioBuffer().at(0).at(1));
+	EXPECT_EQ(3, processor.audioBuffer().at(0).at(2));
 }
 
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
