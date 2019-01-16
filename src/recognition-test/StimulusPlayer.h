@@ -10,6 +10,17 @@ public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
 
+	struct Initialization {
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
+		double max_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+	};
+
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;

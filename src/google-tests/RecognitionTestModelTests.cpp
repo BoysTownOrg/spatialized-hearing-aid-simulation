@@ -40,10 +40,15 @@ public:
 
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
+	Initialization initialization_{};
 	PlayRequest request_{};
 	bool playing_{};
 	bool playCalled_{};
 public:
+	const Initialization &initialization() const {
+		return initialization_;
+	}
+
 	const PlayRequest &request() const {
 		return request_;
 	}
