@@ -168,7 +168,7 @@ TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerPlaying) {
 	EXPECT_FALSE(stimulusPlayer.playCalled());
 }
 
-class FailingStimulusPlayer : public StimulusPlayer {
+class RequestFailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
 	void setErrorMessage(std::string s) {
@@ -189,7 +189,7 @@ TEST(
 	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
 	StimulusListStub list{};
-	FailingStimulusPlayer stimulusPlayer{};
+	RequestFailingStimulusPlayer stimulusPlayer{};
 	stimulusPlayer.setErrorMessage("error.");
 	RecognitionTestModel model{ &list, &stimulusPlayer };
 	try {
@@ -197,6 +197,38 @@ TEST(
 		FAIL() << "Expected RecognitionTestModel::TrialFailure";
 	}
 	catch (const RecognitionTestModel::TrialFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
+
+class InitializationFailingStimulusPlayer : public StimulusPlayer {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+	void initialize(Initialization) override {
+		throw InitializationFailure{ errorMessage };
+	}
+
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	bool isPlaying() override { return {}; }
+	void play(PlayRequest) override {}
+};
+
+TEST(
+	RecognitionTestModelOtherTests,
+	initializeTestThrowsTestInitializationFailureWhenPlayerThrowsInitializationFailure
+) {
+	StimulusListStub list{};
+	InitializationFailingStimulusPlayer stimulusPlayer{};
+	stimulusPlayer.setErrorMessage("error.");
+	RecognitionTestModel model{ &list, &stimulusPlayer };
+	try {
+		model.initializeTest({});
+		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+	}
+	catch (const RecognitionTestModel::TestInitializationFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }
