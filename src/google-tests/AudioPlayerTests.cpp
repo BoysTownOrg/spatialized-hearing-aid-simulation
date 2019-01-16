@@ -11,10 +11,11 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		std::shared_ptr<RefactoredAudioFrameProcessorStub> processor = 
-			std::make_shared<RefactoredAudioFrameProcessorStub>();
-		RefactoredAudioFrameProcessorStubFactory processorFactory{ processor };
-		AudioPlayer player{ &device, &processorFactory };
+		std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
+		AudioFrameReaderStubFactory readerFactory{ frameReader };
+		std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
+		AudioFrameProcessorStubFactory processorFactory{ processor };
+		AudioPlayer player{ &device, &readerFactory, &processorFactory };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
