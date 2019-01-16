@@ -15,3 +15,7 @@ TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessor{&reader, &processor};
 }
+
+TEST(RefactoredAudioFrameProcessorTests, tbd2) {
+	RefactoredAudioFrameProcessorFactory factory{};
+}
