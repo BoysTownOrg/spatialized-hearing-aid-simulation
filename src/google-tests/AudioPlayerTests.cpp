@@ -98,6 +98,32 @@ namespace {
 		EXPECT_EQ(1, processor->audioBuffer()[1].size());
 	}
 
+	TEST_F(AudioPlayerTests, initializePassesParametersToFactories) {
+		StimulusPlayer::Initialization initialization;
+		initialization.leftDslPrescriptionFilePath = "a";
+		initialization.rightDslPrescriptionFilePath = "b";
+		initialization.brirFilePath = "c";
+		initialization.max_dB_Spl = 1;
+		initialization.attack_ms = 2;
+		initialization.release_ms = 3;
+		initialization.windowSize = 4;
+		initialization.chunkSize = 5;
+		frameReader->setChannels(6);
+		frameReader->setSampleRate(7);
+		player.initialize(initialization);
+		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", processorFactory.parameters().brirFilePath);
+		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
+		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
+		EXPECT_EQ(3, processorFactory.parameters().release_ms);
+		EXPECT_EQ(4, processorFactory.parameters().windowSize);
+		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
+		EXPECT_EQ(6, device.streamParameters().channels);
+		EXPECT_EQ(7, device.streamParameters().sampleRate);
+	}
+
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
 		StimulusPlayer::PlayRequest request;
 		request.leftDslPrescriptionFilePath = "a";
