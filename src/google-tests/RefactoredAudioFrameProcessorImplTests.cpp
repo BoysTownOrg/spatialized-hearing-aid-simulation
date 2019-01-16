@@ -2,9 +2,20 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class RefactoredAudioFrameProcessorImpl {
+	AudioFrameReader *reader;
+	AudioFrameProcessor *processor;
 public:
-	RefactoredAudioFrameProcessorImpl(AudioFrameReader *, AudioFrameProcessor *) {}
-	void process(gsl::span<gsl::span<float>>) {}
+	RefactoredAudioFrameProcessorImpl(
+		AudioFrameReader *reader, 
+		AudioFrameProcessor *processor
+	) :
+		reader{ reader },
+		processor{ processor } {}
+
+	void process(gsl::span<gsl::span<float>> audio) {
+		processor->process(audio);
+		reader->read(audio);
+	}
 };
 
 class RefactoredAudioFrameProcessorImplFactory{};
@@ -17,15 +28,12 @@ TEST(RefactoredAudioFrameProcessorTests, tbd) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
-	std::vector<float> y{ 1, 2, 3 };
-	gsl::span<gsl::span<float>> x{ { y } };
-	impl.process(x);
-	EXPECT_EQ(1, reader.audioBuffer().at(0).at(0));
-	EXPECT_EQ(2, reader.audioBuffer().at(0).at(1));
-	EXPECT_EQ(3, reader.audioBuffer().at(0).at(2));
-	EXPECT_EQ(1, processor.audioBuffer().at(0).at(0));
-	EXPECT_EQ(2, processor.audioBuffer().at(0).at(1));
-	EXPECT_EQ(3, processor.audioBuffer().at(0).at(2));
+	float x{ 5 };
+	gsl::span<float> y{ &x, 1 };
+	gsl::span<gsl::span<float>> z{ &y, 1 };
+	impl.process(z);
+	EXPECT_EQ(5, reader.audioBuffer().at(0).at(0));
+	EXPECT_EQ(5, processor.audioBuffer().at(0).at(0));
 }
 
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
