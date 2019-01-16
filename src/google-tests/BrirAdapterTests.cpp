@@ -14,6 +14,16 @@ protected:
 	BrirAdapter::BinauralRoomImpulseResponse read(std::string f = {}) {
 		return adapter.read(std::move(f));
 	}
+
+	void assertReadThrowsReadError(std::string what) {
+		try {
+			read();
+			FAIL() << "Expected BrirReader::ReadError";
+		}
+		catch (const BrirReader::ReadError &e) {
+			assertEqual(what, e.what());
+		}
+	}
 };
 
 TEST_F(BrirAdapterTests, interpretsAudioFileAsBrir) {
@@ -50,11 +60,5 @@ TEST_F(BrirAdapterTests, readPassesFilePathToFactory) {
 TEST_F(BrirAdapterTests, failedReaderThrowsReadError) {
 	reader->fail();
 	reader->setErrorMessage("error.");
-	try {
-		read();
-		FAIL() << "Expected BrirReader::ReadError";
-	}
-	catch (const BrirReader::ReadError &e) {
-		assertEqual("error.", e.what());
-	}
+	assertReadThrowsReadError("error.");
 }
