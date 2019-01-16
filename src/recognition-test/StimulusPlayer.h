@@ -21,6 +21,7 @@ public:
 		int chunkSize;
 	};
 	virtual void initialize(Initialization) = 0;
+	RUNTIME_ERROR(InitializationFailure);
 
 	struct PlayRequest {
 		std::string leftDslPrescriptionFilePath;
