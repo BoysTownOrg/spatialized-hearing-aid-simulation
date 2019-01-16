@@ -131,7 +131,7 @@ namespace {
 		initialization.chunkSize = 5;
 		player.initialize(initialization);
 		StimulusPlayer::PlayRequest request;
-		request.brirFilePath = "d";
+		request.audioFilePath = "d";
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		frameReader->setChannels(6);
@@ -139,8 +139,8 @@ namespace {
 		play(request);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", readerFactory.filePath());
-		assertEqual("d", processorFactory.parameters().brirFilePath);
+		assertEqual("c", processorFactory.parameters().brirFilePath);
+		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
 		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
