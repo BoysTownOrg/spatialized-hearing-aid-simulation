@@ -291,6 +291,10 @@ public:
 	void populateWindowSizeMenu(std::vector<std::string> v) override {
 		windowSizeItems_ = std::move(v);
 	}
+
+	void hideTesterView() override {
+		_testerViewHidden = true;
+	}
 };
 
 class PresenterTests : public ::testing::Test {

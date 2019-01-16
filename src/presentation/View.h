@@ -45,4 +45,5 @@ public:
 	virtual void showTestSetup() = 0;
 	virtual void hideTestSetup() = 0;
 	virtual void showTesterView() = 0;
+	virtual void hideTesterView() = 0;
 };

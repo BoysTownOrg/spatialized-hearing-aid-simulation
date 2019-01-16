@@ -119,6 +119,10 @@ void Presenter::playTrial() {
 	catch (const std::runtime_error &failure) {
 		view->showErrorDialog(failure.what());
 	}
+	if (model->testComplete()) {
+		view->hideTesterView();
+		view->showTestSetup();
+	}
 }
 
 void Presenter::newTest() {
