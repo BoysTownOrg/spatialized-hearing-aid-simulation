@@ -45,6 +45,10 @@ public:
 	const TrialParameters &trialParameters() const {
 		return trialParameters_;
 	}
+
+	void setTestComplete() {
+		_testComplete = true;
+	}
 };
 
 class ViewStub : public View {
