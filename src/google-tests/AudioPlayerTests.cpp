@@ -98,7 +98,7 @@ namespace {
 		EXPECT_EQ(1, processor->audioBuffer()[1].size());
 	}
 
-	TEST_F(AudioPlayerTests, initializePassesParametersToFactories) {
+	TEST_F(AudioPlayerTests, initializePassesParametersToFactoriesForAnExceptionCheck) {
 		StimulusPlayer::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -117,6 +117,7 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
