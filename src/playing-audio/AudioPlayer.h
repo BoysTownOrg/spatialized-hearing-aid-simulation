@@ -20,7 +20,6 @@ class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
 	AudioFrameProcessorFactory *processorFactory;
-	int paddedZeroes{};
 public:
 	PLAYING_AUDIO_API AudioPlayer(
 		AudioDevice *, 
