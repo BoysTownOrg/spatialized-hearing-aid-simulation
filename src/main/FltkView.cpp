@@ -62,6 +62,7 @@ FltkWindow::FltkWindow():
 
 FltkView::FltkView() {
 	window.show();
+	window.setupView.hide();
 	window.testerView.hide();
 	window.setupView.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.setupView.browseRightPrescription.callback(onBrowseRightPrescription, this);
