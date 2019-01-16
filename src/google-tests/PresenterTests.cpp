@@ -378,8 +378,7 @@ TEST_F(PresenterTests, runRunsEventLoop) {
 	EXPECT_TRUE(view.runningEventLoop());
 }
 
-TEST_F(PresenterTests, newTestShowsTestSetupView) {
-    view.newTest();
+TEST_F(PresenterTests, constructorShowsTestSetupView) {
     EXPECT_TRUE(view.testSetupShown());
 }
 
