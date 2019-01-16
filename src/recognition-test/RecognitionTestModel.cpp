@@ -26,7 +26,12 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
 	initialization.max_dB_Spl = 119;
-	player->initialize(initialization);
+	try {
+		player->initialize(initialization);
+	}
+	catch (const StimulusPlayer::InitializationFailure &e) {
+		throw TestInitializationFailure{ e.what() };
+	}
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {
