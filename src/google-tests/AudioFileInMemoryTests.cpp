@@ -80,6 +80,16 @@ protected:
 		std::make_shared<FakeAudioFileReaderFactory>(reader);
 	AudioFileInMemoryFactory adapter{ factory };
 
+	void assertMakeThrowsCreateError(std::string what) {
+		try {
+			make();
+			FAIL() << "Expected AudioFrameReaderFactory::CreateError";
+		}
+		catch (const AudioFrameReaderFactory::CreateError &e) {
+			assertEqual(what, e.what());
+		}
+	}
+
 	void make(std::string f = {}) {
 		adapter.make(std::move(f));
 	}
@@ -88,13 +98,7 @@ protected:
 TEST_F(AudioFileInMemoryFactoryTests, factoryThrowsCreateErrorOnFileError) {
 	reader->fail();
 	reader->setErrorMessage("error.");
-	try {
-		make();
-		FAIL() << "Expected AudioFrameReaderFactory::CreateError";
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		assertEqual("error.", e.what());
-	}
+	assertMakeThrowsCreateError("error.");
 }
 
 TEST_F(AudioFileInMemoryFactoryTests, factoryPassesFilePath) {
