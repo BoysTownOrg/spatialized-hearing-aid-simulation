@@ -36,10 +36,14 @@ class RefactoredAudioFrameProcessorImplFactory{};
 #include "AudioFrameProcessorStub.h"
 #include <gtest/gtest.h>
 
-TEST(RefactoredAudioFrameProcessorTests, processPassesAudioToReaderAndProcessor) {
+class RefactoredAudioFrameProcessorImplTests : public ::testing::Test {
+protected:
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+};
+
+TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
 	gsl::span<float> x{};
 	impl.process({ &x, 1 });
 	EXPECT_EQ(&x, reader.audioBuffer().data());
@@ -48,10 +52,7 @@ TEST(RefactoredAudioFrameProcessorTests, processPassesAudioToReaderAndProcessor)
 	EXPECT_EQ(1, processor.audioBuffer().size());
 }
 
-TEST(RefactoredAudioFrameProcessorTests, processPadsZeroToEndOfInput) {
-	AudioFrameReaderStub reader{};
-	AudioFrameProcessorStub processor{};
-	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+TEST_F(RefactoredAudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
 	reader.setComplete();
 	std::vector<float> audio(3, -1);
 	gsl::span<float> x{ audio };
@@ -61,10 +62,7 @@ TEST(RefactoredAudioFrameProcessorTests, processPadsZeroToEndOfInput) {
 	EXPECT_EQ(0, processor.audioBuffer()[0][2]);
 }
 
-TEST(RefactoredAudioFrameProcessorTests, completeAfterProcessingPaddedZeroes) {
-	AudioFrameReaderStub reader{};
-	AudioFrameProcessorStub processor{};
-	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+TEST_F(RefactoredAudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
 	reader.setComplete();
 	processor.setGroupDelay(3);
 	float y{};
@@ -77,6 +75,6 @@ TEST(RefactoredAudioFrameProcessorTests, completeAfterProcessingPaddedZeroes) {
 	EXPECT_TRUE(impl.complete());
 }
 
-TEST(RefactoredAudioFrameProcessorTests, tbd2) {
+TEST(RefactoredAudioFrameProcessorOtherTests, tbd2) {
 	RefactoredAudioFrameProcessorImplFactory factory{};
 }
