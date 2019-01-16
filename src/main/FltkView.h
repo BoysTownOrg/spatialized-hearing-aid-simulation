@@ -12,34 +12,39 @@
 #include <FL/Fl.H>
 #pragma warning (pop)
 
+struct Fl_ChoiceFacade : public Fl_Choice {
+	Fl_ChoiceFacade(int, int, int, int, const char * = {});
+	void populate(std::vector<std::string> items);
+};
+
 struct FltkSetupView : public Fl_Group {
+	FltkSetupView(int, int, int, int, const char * = {});
 	Fl_Input _leftPrescriptionFilePath;
 	Fl_Input _rightPrescriptionFilePath;
 	Fl_Input _audioDirectory;
 	Fl_Input _brirFilePath;
 	Fl_Float_Input _attack_ms;
 	Fl_Float_Input _release_ms;
-	Fl_Choice windowSize_;
-	Fl_Choice chunkSize_;
+	Fl_ChoiceFacade windowSize_;
+	Fl_ChoiceFacade chunkSize_;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
 	Fl_Button confirm;
-	FltkSetupView();
 };
 
 struct FltkTesterView : public Fl_Group {
+	FltkTesterView(int, int, int, int, const char * = {});
 	Fl_Float_Input _level_dB_Spl;
-	Fl_Choice _audioDevice;
+	Fl_ChoiceFacade _audioDevice;
 	Fl_Button play;
-	FltkTesterView();
 };
 
 struct FltkWindow : public Fl_Double_Window {
+	FltkWindow(int, int, int, int, const char * = {});
 	FltkSetupView setupView;
 	FltkTesterView testerView;
-	FltkWindow();
 };
 
 class FltkView : public View {

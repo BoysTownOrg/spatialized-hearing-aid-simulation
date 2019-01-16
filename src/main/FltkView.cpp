@@ -2,6 +2,15 @@
 #include <FL/fl_ask.H>
 #include <sstream>
 
+Fl_ChoiceFacade::Fl_ChoiceFacade(int x, int y, int w, int h, const char *c) : 
+	Fl_Choice{ x, y, w, h, c } {}
+
+void Fl_ChoiceFacade::populate(std::vector<std::string> items) {
+	for (auto s : items)
+		add(s.c_str());
+	value(0); // If the value is never set then FLTK crashes.
+}
+
 void FltkView::onBrowseLeftPrescription(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->browseForLeftDslPrescription();
 }
@@ -26,8 +35,8 @@ void FltkView::onPlay(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->playTrial();
 }
 
-FltkSetupView::FltkSetupView() :
-	Fl_Group{ 0, 0, 600, 600 },
+FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
+	Fl_Group{ x, y, w, h },
 	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
 	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
 	_audioDirectory(250, 150, 200, 45, "audio directory"),
@@ -45,8 +54,8 @@ FltkSetupView::FltkSetupView() :
 	end();
 }
 
-FltkTesterView::FltkTesterView() :
-	Fl_Group{ 0, 0, 600, 600 },
+FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
+	Fl_Group{ x, y, w, h },
 	_level_dB_Spl(250, 250, 200, 45, "level (dB SPL)"),
 	_audioDevice(250, 500, 200, 45, "audio device"),
 	play(250, 550, 60, 45, "play trial")
@@ -54,13 +63,17 @@ FltkTesterView::FltkTesterView() :
 	end();
 }
 
-FltkWindow::FltkWindow():
-	Fl_Double_Window{ 800, 200, 600, 600 }
+FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
+	Fl_Double_Window{ x, y, w, h },
+	testerView{ 0, 0, 600, 600 },
+	setupView{ 0, 0, 600, 600 }
 {
 	end();
 }
 
-FltkView::FltkView() {
+FltkView::FltkView() :
+	window{ 800, 200, 600, 600 }
+{
 	window.show();
 	window.setupView.hide();
 	window.testerView.hide();
@@ -89,21 +102,15 @@ void FltkView::hideTesterView() {
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
-	for (auto s : items)
-		window.testerView._audioDevice.add(s.c_str());
-	window.testerView._audioDevice.value(0);
+	window.testerView._audioDevice.populate(items);
 }
 
 void FltkView::populateChunkSizeMenu(std::vector<std::string> items) {
-	for (auto s : items)
-		window.setupView.chunkSize_.add(s.c_str());
-	window.setupView.chunkSize_.value(0);
+	window.setupView.chunkSize_.populate(items);
 }
 
 void FltkView::populateWindowSizeMenu(std::vector<std::string> items) {
-	for (auto s : items)
-		window.setupView.windowSize_.add(s.c_str());
-	window.setupView.windowSize_.value(0);
+	window.setupView.windowSize_.populate(items);
 }
 
 std::string FltkView::audioDevice() {
