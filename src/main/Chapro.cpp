@@ -42,11 +42,11 @@ Chapro::Chapro(Parameters parameters) :
 		dsl.cross_freq,
 		channels_,
 		parameters.sampleRate,
-		parameters.windowSize,
+		windowSize_,
 		hamming,
 		chunkSize_
 	);
-	error = cha_agc_prepare(cha_pointer, &dsl, &wdrc);
+	error |= cha_agc_prepare(cha_pointer, &dsl, &wdrc);
 }
 
 Chapro::~Chapro() noexcept {
