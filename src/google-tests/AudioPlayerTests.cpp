@@ -51,22 +51,15 @@ namespace {
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteAfterProcessingPaddedZeroes) {
-		frameReader->setChannels(1);
+	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
 		play();
-		frameReader->setComplete();
-		processor->setGroupDelay(3);
 		float left{};
 		float *x[]{ &left };
 		fillStreamBuffer(x, 1);
 		EXPECT_FALSE(device.complete());
-		fillStreamBuffer(x, 1);
-		EXPECT_FALSE(device.complete());
+		frameReader->setComplete();
 		fillStreamBuffer(x, 1);
 		EXPECT_TRUE(device.complete());
-		play();
-		fillStreamBuffer(x, 1);
-		EXPECT_FALSE(device.complete());
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
