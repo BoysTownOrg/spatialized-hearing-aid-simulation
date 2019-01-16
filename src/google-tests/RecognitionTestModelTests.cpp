@@ -125,35 +125,6 @@ TEST_F(
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
-TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
-	RecognitionTestModel::TestParameters test;
-	test.leftDslPrescriptionFilePath = "a";
-	test.rightDslPrescriptionFilePath = "b";
-	test.brirFilePath = "c";
-	test.attack_ms = 1;
-	test.release_ms = 2;
-	test.windowSize = 3;
-	test.chunkSize = 4;
-	model.initializeTest(test);
-	RecognitionTestModel::TrialParameters trial;
-	trial.audioDevice = "d";
-	trial.level_dB_Spl = 5;
-	model.playTrial(trial);
-	assertEqual("a", stimulusPlayer.request().leftDslPrescriptionFilePath);
-	assertEqual("b", stimulusPlayer.request().rightDslPrescriptionFilePath);
-	assertEqual("c", stimulusPlayer.request().brirFilePath);
-	assertEqual("d", stimulusPlayer.request().audioDevice);
-	EXPECT_EQ(1, stimulusPlayer.request().attack_ms);
-	EXPECT_EQ(2, stimulusPlayer.request().release_ms);
-	EXPECT_EQ(3, stimulusPlayer.request().windowSize);
-	EXPECT_EQ(4, stimulusPlayer.request().chunkSize);
-	EXPECT_EQ(5, stimulusPlayer.request().level_dB_Spl);
-
-	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
-	// I don't think it's crucial for chapro, but I'll leave it as it was.
-	EXPECT_EQ(119, stimulusPlayer.request().max_dB_Spl);
-}
-
 TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
 	RecognitionTestModel::TestParameters test;
 	test.leftDslPrescriptionFilePath = "a";
@@ -175,6 +146,14 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
 	// I don't think it's crucial for chapro, but I'll leave it as it was.
 	EXPECT_EQ(119, stimulusPlayer.initialization().max_dB_Spl);
+}
+
+TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
+	RecognitionTestModel::TrialParameters trial;
+	trial.audioDevice = "a";
+	trial.level_dB_Spl = 1;
+	model.playTrial(trial);
+	EXPECT_EQ(1, stimulusPlayer.request().level_dB_Spl);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
