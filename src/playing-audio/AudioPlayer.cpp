@@ -14,6 +14,25 @@ AudioPlayer::AudioPlayer(
 	device->setController(this);
 }
 
+void AudioPlayer::initialize(Initialization request) {
+	AudioFrameProcessorFactory::Parameters processing;
+	processing.attack_ms = request.attack_ms;
+	processing.release_ms = request.release_ms;
+	processing.brirFilePath = request.brirFilePath;
+	processing.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+	processing.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
+	processing.chunkSize = request.chunkSize;
+	processing.windowSize = request.windowSize;
+	processing.max_dB_Spl = request.max_dB_Spl;
+	try {
+		processorFactory->make(processing);
+	}
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
+		throw InitializationFailure{ e.what() };
+	}
+	initialization_ = std::move(request);
+}
+
 class RmsComputer {
 	std::vector<std::vector<float>> entireAudioFile;
 public:
@@ -97,25 +116,6 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
-}
-
-void AudioPlayer::initialize(Initialization request) {
-	AudioFrameProcessorFactory::Parameters processing;
-	processing.attack_ms = request.attack_ms;
-	processing.release_ms = request.release_ms;
-	processing.brirFilePath = request.brirFilePath;
-	processing.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
-	processing.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-	processing.chunkSize = request.chunkSize;
-	processing.windowSize = request.windowSize;
-	processing.max_dB_Spl = request.max_dB_Spl;
-	try {
-		frameProcessor = processorFactory->make(processing);
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw InitializationFailure{ e.what() };
-	}
-	initialization_ = std::move(request);
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
