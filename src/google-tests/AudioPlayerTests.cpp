@@ -237,7 +237,7 @@ namespace {
 	};
 
 	TEST(
-		AudioPlayerOtherTests,
+		DeviceFailureTests,
 		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 	) {
 		AudioDeviceStub device{};
