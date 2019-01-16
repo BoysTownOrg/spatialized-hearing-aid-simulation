@@ -279,6 +279,14 @@ public:
 	std::vector<std::string> windowSizeItems() const {
 		return windowSizeItems_;
 	}
+
+	void populateChunkSizeMenu(std::vector<std::string> v) override {
+		chunkSizeItems_ = std::move(v);
+	}
+
+	void populateWindowSizeMenu(std::vector<std::string> v) override {
+		windowSizeItems_ = std::move(v);
+	}
 };
 
 class PresenterTests : public ::testing::Test {

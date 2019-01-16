@@ -6,6 +6,11 @@ Presenter::Presenter(Model *model, View *view) :
 {
 	view->subscribe(this);
 	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
+	std::vector<std::string> sizeItems{};
+	for (int i = 6; i < 14; ++i)
+		sizeItems.push_back(std::to_string(1 << i));
+	view->populateChunkSizeMenu(sizeItems);
+	view->populateWindowSizeMenu(sizeItems);
 }
 
 void Presenter::run() {

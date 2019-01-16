@@ -40,6 +40,8 @@ public:
 	virtual std::string chunkSize() = 0;
 	virtual void showErrorDialog(std::string message) = 0;
 	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
+	virtual void populateChunkSizeMenu(std::vector<std::string> items) = 0;
+	virtual void populateWindowSizeMenu(std::vector<std::string> items) = 0;
 	virtual void showTestSetup() = 0;
 	virtual void hideTestSetup() = 0;
 	virtual void showTesterView() = 0;
