@@ -6,8 +6,15 @@
 class HearingAidProcessorTests : public ::testing::Test {
 protected:
 	std::shared_ptr<FilterbankCompressorSpy> compressor =
-		std::make_shared<FilterbankCompressorSpy>();
+		compressorWithValidDefaults();
 	HearingAidProcessor processor{ compressor };
+
+	std::shared_ptr<FilterbankCompressorSpy> compressorWithValidDefaults() {
+		auto compressor_ = std::make_shared<FilterbankCompressorSpy>();
+		compressor_->setChunkSize(1);
+		compressor_->setWindowSize(1);
+		return compressor_;
+	}
 
 	void processUnequalChunk() {
 		std::vector<float> x(compressor->chunkSize() + 1);
