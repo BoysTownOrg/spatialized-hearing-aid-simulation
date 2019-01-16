@@ -15,7 +15,6 @@ AudioPlayer::AudioPlayer(
 }
 
 void AudioPlayer::initialize(Initialization request) {
-	AudioFrameProcessorFactory::Parameters processing;
 	processing.attack_ms = request.attack_ms;
 	processing.release_ms = request.release_ms;
 	processing.brirFilePath = request.brirFilePath;
@@ -30,7 +29,6 @@ void AudioPlayer::initialize(Initialization request) {
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
 	}
-	initialization_ = std::move(request);
 }
 
 class RmsComputer {
@@ -63,18 +61,9 @@ void AudioPlayer::play(PlayRequest request) {
 	frameReader = makeReader(request.audioFilePath);
 	audio.resize(frameReader->channels());
 
-	AudioFrameProcessorFactory::Parameters processing;
-	processing.attack_ms = initialization_.attack_ms;
-	processing.release_ms = initialization_.release_ms;
 	processing.channels = frameReader->channels();
-	processing.brirFilePath = initialization_.brirFilePath;
-	processing.leftDslPrescriptionFilePath = initialization_.leftDslPrescriptionFilePath;
-	processing.rightDslPrescriptionFilePath = initialization_.rightDslPrescriptionFilePath;
 	processing.sampleRate = frameReader->sampleRate();
-	processing.chunkSize = initialization_.chunkSize;
-	processing.windowSize = initialization_.windowSize;
-	processing.max_dB_Spl = initialization_.max_dB_Spl;
-	const auto desiredRms = std::pow(10.0, (request.level_dB_Spl - initialization_.max_dB_Spl) / 20.0);
+	const auto desiredRms = std::pow(10.0, (request.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 	RmsComputer rms{ *frameReader };
 	for (int i = 0; i < frameReader->channels(); ++i)
 		processing.channelScalars.push_back(desiredRms / rms.compute(i));
@@ -85,7 +74,7 @@ void AudioPlayer::play(PlayRequest request) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = frameReader->sampleRate();
 	streaming.channels = frameReader->channels();
-	streaming.framesPerBuffer = initialization_.chunkSize;
+	streaming.framesPerBuffer = processing.chunkSize;
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
 			streaming.deviceIndex = i;

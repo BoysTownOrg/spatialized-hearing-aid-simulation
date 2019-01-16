@@ -14,9 +14,9 @@
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
+	AudioFrameProcessorFactory::Parameters processing;
 	std::shared_ptr<AudioFrameReader> frameReader{};
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
-	Initialization initialization_;
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
 	AudioFrameProcessorFactory *processorFactory;
