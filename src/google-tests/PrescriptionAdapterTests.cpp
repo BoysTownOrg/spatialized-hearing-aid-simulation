@@ -62,13 +62,13 @@ TEST_F(
 
 TEST(
 	PrescriptionAdapterFactoryTests,
-	throwsWhenParserThrows)
-{
+	throwsWhenParserThrows
+) {
+	const auto parser = std::make_shared<ErrorParser>("error.");
+	PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
 	try {
-		const auto parser = std::make_shared<ErrorParser>("error.");
-		PrescriptionAdapter adapter{ std::make_shared<FakeConfigurationFileParserFactory>(parser) };
 		adapter.read({});
-		FAIL() << "Expected DslPrescriptionFileReader::InvalidPrescription.";
+		FAIL() << "Expected PrescriptionAdapter::ReadFailure.";
 	}
 	catch (const PrescriptionAdapter::ReadFailure &e) {
 		assertEqual("error.", e.what());
