@@ -53,6 +53,21 @@ TEST(RefactoredAudioFrameProcessorTests, processPadsZeroToEndOfInput) {
 	EXPECT_EQ(0, processor.audioBuffer()[0][2]);
 }
 
+TEST(RefactoredAudioFrameProcessorTests, completeAfterProcessingPaddedZeroes) {
+	AudioFrameReaderStub reader{};
+	AudioFrameProcessorStub processor{};
+	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
+	reader.setComplete();
+	processor.setGroupDelay(3);
+	gsl::span<float> x{ nullptr, 1 };
+	impl.process({ &x, 1 });
+	EXPECT_FALSE(impl.complete());
+	impl.process({ &x, 1 });
+	EXPECT_FALSE(impl.complete());
+	impl.process({ &x, 1 });
+	EXPECT_TRUE(impl.complete());
+}
+
 TEST(RefactoredAudioFrameProcessorTests, tbd2) {
 	RefactoredAudioFrameProcessorImplFactory factory{};
 }

@@ -51,18 +51,6 @@ namespace {
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferPadsZeroToEndOfInput) {
-		frameReader->setChannels(1);
-		play();
-		frameReader->setComplete();
-		std::vector<float> audio(3, -1);
-		float *x[]{ &audio.front() };
-		fillStreamBuffer(x, 3);
-		EXPECT_EQ(0, processor->audioBuffer()[0][0]);
-		EXPECT_EQ(0, processor->audioBuffer()[0][1]);
-		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
-	}
-
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteAfterProcessingPaddedZeroes) {
 		frameReader->setChannels(1);
 		play();
