@@ -9,13 +9,15 @@ protected:
 		compressorWithValidDefaults();
 	HearingAidProcessor processor{ compressor };
 
-	std::shared_ptr<FilterbankCompressorSpy> compressorWithValidDefaults() {
-		auto compressor_ = std::make_shared<FilterbankCompressorSpy>();
-		compressor_->setChunkSize(1);
-		compressor_->setWindowSize(1);
-		return compressor_;
+private:
+	static std::shared_ptr<FilterbankCompressorSpy> compressorWithValidDefaults() {
+		auto c = std::make_shared<FilterbankCompressorSpy>();
+		c->setChunkSize(1);
+		c->setWindowSize(1);
+		return c;
 	}
 
+protected:
 	void processUnequalChunk() {
 		std::vector<float> x(compressor->chunkSize() + 1);
 		process_(x);
@@ -84,7 +86,7 @@ protected:
 			FAIL() << "Expected HearingAidProcessor::CompressorError";
 		}
 		catch (const HearingAidProcessor::CompressorError &e) {
-			assertEqual(what, e.what());
+			assertEqual(std::move(what), e.what());
 		}
 	}
 };
@@ -133,18 +135,9 @@ public:
 		*output *= 13;
 	}
 
-	int chunkSize() const override {
-		return 1;
-	}
-
-	int channels() const override {
-		return 1;
-	}
-
-	bool failed() const override {
-		return false;
-	}
-
+	bool failed() const override { return false; }
+	int chunkSize() const override { return 1; }
+	int channels() const override { return 1; }
 	int windowSize() const override { return 1; }
 	void compressChannels(complex_type *, complex_type *, int) override {}
 };
