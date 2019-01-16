@@ -108,8 +108,6 @@ namespace {
 		initialization.release_ms = 3;
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
-		frameReader->setChannels(6);
-		frameReader->setSampleRate(7);
 		player.initialize(initialization);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
