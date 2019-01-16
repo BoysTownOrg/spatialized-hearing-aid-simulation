@@ -83,6 +83,10 @@ void FltkView::showTesterView() {
 	window.testerView.show();
 }
 
+void FltkView::hideTesterView() {
+	window.testerView.hide();
+}
+
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
 	for (auto s : items)
 		window.testerView._audioDevice.add(s.c_str());

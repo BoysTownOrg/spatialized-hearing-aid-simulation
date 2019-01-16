@@ -74,6 +74,7 @@ public:
 	void showTestSetup() override;
 	void hideTestSetup() override;
 	void showTesterView() override;
+	void hideTesterView() override;
 
 private:
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);
