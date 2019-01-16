@@ -109,7 +109,12 @@ void AudioPlayer::initialize(Initialization request) {
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
 	processing.max_dB_Spl = request.max_dB_Spl;
-	frameProcessor = makeProcessor(processing);
+	try {
+		frameProcessor = processorFactory->make(processing);
+	}
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
+		throw InitializationFailure{ e.what() };
+	}
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
