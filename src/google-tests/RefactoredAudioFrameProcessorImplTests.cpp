@@ -24,7 +24,7 @@ class RefactoredAudioFrameProcessorImplFactory{};
 #include "AudioFrameProcessorStub.h"
 #include <gtest/gtest.h>
 
-TEST(RefactoredAudioFrameProcessorTests, tbd) {
+TEST(RefactoredAudioFrameProcessorTests, processPassesAudioToReaderAndProcessor) {
 	AudioFrameReaderStub reader{};
 	AudioFrameProcessorStub processor{};
 	RefactoredAudioFrameProcessorImpl impl{&reader, &processor};
