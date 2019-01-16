@@ -294,6 +294,17 @@ namespace {
 				assertEqual(what, e.what());
 			}
 		}
+
+		void assertInitializeThrowsInitializationFailure(std::string what) {
+			AudioPlayer player{ device, readerFactory, processorFactory };
+			try {
+				player.initialize({});
+				FAIL() << "Expected AudioPlayer::InitializationFailure";
+			}
+			catch (const AudioPlayer::InitializationFailure &e) {
+				assertEqual(what, e.what());
+			}
+		}
 	};
 
 	TEST_F(
@@ -322,5 +333,14 @@ namespace {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RequestErrorTests,
+		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		processorFactory = &failingFactory;
+		assertInitializeThrowsInitializationFailure("error.");
 	}
 }
