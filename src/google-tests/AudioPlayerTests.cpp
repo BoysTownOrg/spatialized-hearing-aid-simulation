@@ -206,12 +206,14 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
+		AudioPlayer::Initialization initialization;
+		initialization.max_dB_Spl = 8;
+		player.initialize(initialization);
 		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
 		fake.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 		AudioPlayer::PlayRequest request{};
 		request.level_dB_Spl = 7;
-		request.max_dB_Spl = 8;
 		play(request);
 		assertEqual(
 			{
