@@ -13,6 +13,10 @@ public:
 		processor{ processor } {}
 
 	void process(gsl::span<gsl::span<float>> audio) {
+		if (reader->complete())
+			for (auto channel : audio)
+				for (auto &x : channel)
+					x = 0;
 		processor->process(audio);
 		reader->read(audio);
 	}
