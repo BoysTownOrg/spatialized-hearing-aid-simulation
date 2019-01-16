@@ -205,41 +205,6 @@ namespace {
 		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
 	}
 
-	class AudioPlayerFacade {
-		AudioDeviceStub device{};
-		AudioFrameReaderStubFactory readerFactory{};
-		AudioFrameProcessorStubFactory processorFactory{};
-		AudioPlayer player;
-	public:
-		AudioPlayerFacade(AudioDevice *device) :
-			player{
-				device,
-				&readerFactory,
-				&processorFactory
-		}
-		{}
-
-		AudioPlayerFacade(AudioFrameReaderFactory *readerFactory) :
-			player{
-				&device,
-				readerFactory,
-				&processorFactory
-		}
-		{}
-
-		AudioPlayerFacade(AudioFrameProcessorFactory *processorFactory) :
-			player{
-				&device,
-				&readerFactory,
-				processorFactory
-		}
-		{}
-
-		void play() {
-			player.play({});
-		}
-	};
-
 	class FailsToOpenStream : public AudioDevice {
 		std::string errorMessage_{};
 		bool failed_{};
@@ -279,7 +244,7 @@ namespace {
 		device.fail();
 		device.setErrorMessage("error.");
 		try {
-			AudioPlayerFacade player{ &device };
+			AudioPlayer player{ &device, {}, {} };
 			FAIL() << "Expected AudioPlayer::DeviceFailure";
 		}
 		catch (const AudioPlayer::DeviceFailure &e) {
