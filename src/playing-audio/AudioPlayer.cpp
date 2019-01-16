@@ -99,8 +99,17 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 	}
 }
 
-void AudioPlayer::initialize(Initialization)
-{
+void AudioPlayer::initialize(Initialization request) {
+	AudioFrameProcessorFactory::Parameters processing;
+	processing.attack_ms = request.attack_ms;
+	processing.release_ms = request.release_ms;
+	processing.brirFilePath = request.brirFilePath;
+	processing.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
+	processing.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
+	processing.chunkSize = request.chunkSize;
+	processing.windowSize = request.windowSize;
+	processing.max_dB_Spl = request.max_dB_Spl;
+	frameProcessor = makeProcessor(processing);
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {

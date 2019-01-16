@@ -119,9 +119,6 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
-		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
-		EXPECT_EQ(6, device.streamParameters().channels);
-		EXPECT_EQ(7, device.streamParameters().sampleRate);
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
