@@ -32,12 +32,11 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 void RecognitionTestModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
+	StimulusPlayer::PlayRequest request;
+	request.audioFilePath = list->next();
+	request.audioDevice = p.audioDevice;
+	request.level_dB_Spl = p.level_dB_Spl;
 	try {
-		StimulusPlayer::PlayRequest request;
-		request.audioFilePath = list->next();
-		request.audioDevice = p.audioDevice;
-		request.level_dB_Spl = p.level_dB_Spl;
-
 		player->play(request);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
