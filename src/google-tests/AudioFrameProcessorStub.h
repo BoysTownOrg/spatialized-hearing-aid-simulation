@@ -36,6 +36,8 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	Parameters _parameters{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	std::shared_ptr<AudioFrameProcessor> processor;
+	int _sampleRate{};
+	int channels_{};
 	bool complete_{};
 public:
 	explicit AudioFrameProcessorStubFactory(
@@ -71,6 +73,14 @@ public:
 
 	void process(gsl::span<gsl::span<float>> audio) override {
 		_audioBuffer = audio;
+	}
+
+	void setSampleRate(int r) {
+		_sampleRate = r;
+	}
+
+	void setChannels(int c) {
+		channels_ = c;
 	}
 };
 
