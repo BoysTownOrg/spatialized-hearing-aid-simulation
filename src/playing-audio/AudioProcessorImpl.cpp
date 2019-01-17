@@ -1,5 +1,15 @@
 #include "AudioProcessorImpl.h"
 
+
+AudioProcessorImpl::AudioProcessorImpl(
+	AudioFrameReaderFactory *readerFactory, 
+	RefactoredAudioFrameProcessorFactory *processorFactory
+) :
+	readerFactory{ readerFactory },
+	processorFactory{ processorFactory } 
+{
+}
+
 class RmsComputer {
 	std::vector<std::vector<float>> entireAudioFile;
 public:

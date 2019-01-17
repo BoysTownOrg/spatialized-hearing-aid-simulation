@@ -13,14 +13,10 @@ class AudioProcessorImpl : public AudioProcessor {
 	RefactoredAudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
-	AudioProcessorImpl(
-		AudioFrameReaderFactory *readerFactory, 
+	PLAYING_AUDIO_API AudioProcessorImpl(
+		AudioFrameReaderFactory *readerFactory,
 		RefactoredAudioFrameProcessorFactory *processorFactory
-	) :
-		readerFactory{ readerFactory },
-		processorFactory{ processorFactory } 
-	{
-	}
+	);
 
 	PLAYING_AUDIO_API void initialize(Initialization initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation p) override;
