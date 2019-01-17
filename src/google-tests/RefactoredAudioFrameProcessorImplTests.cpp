@@ -1,5 +1,40 @@
+#include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
-#include <playing-audio/AudioFrameProcessor.h>
+#include <gsl/gsl>
+#include <memory>
+#include <string>
+#include <vector>
+
+class RefactoredAudioFrameProcessor {
+public:
+	INTERFACE_OPERATIONS(RefactoredAudioFrameProcessor);
+	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
+	virtual int groupDelay() = 0;
+	virtual bool complete() = 0;
+};
+
+class RefactoredAudioFrameProcessorFactory {
+public:
+	INTERFACE_OPERATIONS(RefactoredAudioFrameProcessorFactory);
+	RUNTIME_ERROR(CreateError);
+	struct Parameters {
+		std::vector<double> channelScalars;
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
+		double max_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		double level_dB_Spl;
+		int chunkSize;
+		int windowSize;
+		int sampleRate;
+		int channels;
+	};
+	virtual std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) = 0;
+};
+
+#include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class RmsComputer {
@@ -26,16 +61,16 @@ public:
 };
 
 class RefactoredAudioFrameProcessorImpl {
-	AudioFrameProcessorFactory::Parameters processing{};
-	std::shared_ptr<AudioFrameProcessor> processor{};
+	RefactoredAudioFrameProcessorFactory::Parameters processing{};
+	std::shared_ptr<RefactoredAudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
 	AudioFrameReaderFactory *readerFactory;
-	AudioFrameProcessorFactory *processorFactory;
+	RefactoredAudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
 	RefactoredAudioFrameProcessorImpl(
 		AudioFrameReaderFactory *readerFactory, 
-		AudioFrameProcessorFactory *processorFactory
+		RefactoredAudioFrameProcessorFactory *processorFactory
 	) :
 		readerFactory{ readerFactory },
 		processorFactory{ processorFactory } 
@@ -66,7 +101,7 @@ public:
 		try {
 			processorFactory->make(processing);
 		}
-		catch (const AudioFrameProcessorFactory::CreateError &e) {
+		catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
 			throw InitializationFailure{ e.what() };
 		}
 		processing.channelScalars.clear();
@@ -117,13 +152,13 @@ private:
 		}
 	}
 
-	std::shared_ptr<AudioFrameProcessor> makeProcessor(
-		AudioFrameProcessorFactory::Parameters p
+	std::shared_ptr<RefactoredAudioFrameProcessor> makeProcessor(
+		RefactoredAudioFrameProcessorFactory::Parameters p
 	) {
 		try {
 			return processorFactory->make(std::move(p));
 		}
-		catch (const AudioFrameProcessorFactory::CreateError &e) {
+		catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
 			throw PreparationFailure{ e.what() };
 		}
 	}
@@ -131,9 +166,75 @@ private:
 
 class RefactoredAudioFrameProcessorImplFactory{};
 
+class RefactoredAudioFrameProcessorStub : public RefactoredAudioFrameProcessor {
+	gsl::span<gsl::span<float>> _audioBuffer{};
+	int groupDelay_{};
+	bool complete_{};
+public:
+	const gsl::span<gsl::span<float>> audioBuffer() const {
+		return _audioBuffer;
+	}
+
+	void process(gsl::span<gsl::span<float>> audio) override {
+		_audioBuffer = audio;
+	}
+
+	void setGroupDelay(int n) {
+		groupDelay_ = n;
+	}
+
+	int groupDelay() override {
+		return groupDelay_;
+	}
+
+	void setComplete() {
+		complete_ = true;
+	}
+
+	bool complete() override {
+		return complete_;
+	}
+};
+
+class RefactoredAudioFrameProcessorStubFactory : public RefactoredAudioFrameProcessorFactory {
+	Parameters _parameters{};
+	std::shared_ptr<RefactoredAudioFrameProcessor> processor;
+public:
+	explicit RefactoredAudioFrameProcessorStubFactory(
+		std::shared_ptr<RefactoredAudioFrameProcessor> processor =
+			std::make_shared<RefactoredAudioFrameProcessorStub>()
+	) :
+		processor{ std::move(processor) } {}
+
+	void setProcessor(std::shared_ptr<RefactoredAudioFrameProcessor> p) {
+		this->processor = std::move(p);
+	}
+
+	const Parameters &parameters() const {
+		return _parameters;
+	}
+
+	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters p) override {
+		_parameters = p;
+		return processor;
+	}
+};
+
+class RefactoredErrorAudioFrameProcessorFactory : public RefactoredAudioFrameProcessorFactory {
+	std::string errorMessage{};
+public:
+	explicit RefactoredErrorAudioFrameProcessorFactory(
+		std::string errorMessage
+	) :
+		errorMessage{ std::move(errorMessage) } {}
+
+	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) override {
+		throw CreateError{ errorMessage };
+	}
+};
+
 #include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
-#include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
@@ -144,9 +245,9 @@ namespace {
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{reader};
-		std::shared_ptr<AudioFrameProcessorStub> processor =
-			std::make_shared<AudioFrameProcessorStub>();
-		AudioFrameProcessorStubFactory processorFactory{processor};
+		std::shared_ptr<RefactoredAudioFrameProcessorStub> processor =
+			std::make_shared<RefactoredAudioFrameProcessorStub>();
+		RefactoredAudioFrameProcessorStubFactory processorFactory{processor};
 		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
 	};
 
@@ -260,9 +361,9 @@ namespace {
 	class RefactoredAudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
-		AudioFrameProcessorStubFactory defaultProcessorFactory{};
+		RefactoredAudioFrameProcessorStubFactory defaultProcessorFactory{};
 		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
-		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
+		RefactoredAudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPrepareThrowsPreparationFailure(std::string what) {
 			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
@@ -291,7 +392,7 @@ namespace {
 		RefactoredAudioFrameProcessorImplRequestErrorTests,
 		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
 	) {
-		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
@@ -300,7 +401,7 @@ namespace {
 		RefactoredAudioFrameProcessorImplRequestErrorTests,
 		prepareThrowsPreparationFailureWhenProcessorFactoryThrowsCreateError
 	) {
-		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
 		assertPrepareThrowsPreparationFailure("error.");
 	}
@@ -331,7 +432,7 @@ namespace {
 		void reset() override {}
 	};
 
-	class TimesTwo : public AudioFrameProcessor {
+	class TimesTwo : public RefactoredAudioFrameProcessor {
 		void process(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
 				for (auto &x : channel)
@@ -348,7 +449,7 @@ namespace {
 
 	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
 		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
-		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
+		RefactoredAudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
 		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
 		impl.prepare({});
 		float y{};
