@@ -12,7 +12,7 @@ public:
 	}
 
 	void process(gsl::span<float> signal) override {
-		_signal = signal;
+		_signal = std::move(signal);
 	}
 
 	void setGroupDelay(int n) {

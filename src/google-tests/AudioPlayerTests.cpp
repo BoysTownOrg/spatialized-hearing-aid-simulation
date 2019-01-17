@@ -46,13 +46,10 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-		play();
-		float left{};
-		float *x[]{ &left };
-		fillStreamBuffer(x, 1);
+		fillStreamBuffer();
 		EXPECT_FALSE(device.complete());
 		processor.setComplete();
-		fillStreamBuffer(x, 1);
+		fillStreamBuffer();
 		EXPECT_TRUE(device.complete());
 	}
 

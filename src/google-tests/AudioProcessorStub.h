@@ -21,7 +21,7 @@ public:
 	}
 
 	void initialize(Initialization p) override {
-		_parameters = p;
+		_parameters = std::move(p);
 	}
 
 	void setComplete() {
@@ -37,7 +37,7 @@ public:
 	}
 
 	void process(gsl::span<gsl::span<float>> audio) override {
-		_audioBuffer = audio;
+		_audioBuffer = std::move(audio);
 	}
 
 	void setSampleRate(int r) {
