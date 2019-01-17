@@ -83,7 +83,7 @@
     <ClInclude Include="LogString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NoLongerFactoryStub.h">
+    <ClInclude Include="AudioProcessorStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

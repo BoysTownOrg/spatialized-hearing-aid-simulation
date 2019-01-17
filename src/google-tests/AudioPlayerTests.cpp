@@ -1,5 +1,5 @@
 #include "AudioDeviceStub.h"
-#include "NoLongerFactoryStub.h"
+#include "AudioProcessorStub.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
 #include <gtest/gtest.h>

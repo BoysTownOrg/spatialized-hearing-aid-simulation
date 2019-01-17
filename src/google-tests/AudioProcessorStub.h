@@ -1,6 +1,6 @@
 #pragma once
 
-#include <playing-audio/AudioPlayer.h>
+#include <playing-audio/AudioProcessor.h>
 
 class AudioProcessorStub : public AudioProcessor {
 	Initialization _parameters{};
