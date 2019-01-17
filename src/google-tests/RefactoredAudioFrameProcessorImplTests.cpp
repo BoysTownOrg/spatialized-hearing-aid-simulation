@@ -323,6 +323,14 @@ namespace {
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
+	TEST_F(RefactoredAudioFrameProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
+		reader->setChannels(1);
+		reader->setSampleRate(2);
+		impl.prepare({});
+		EXPECT_EQ(1, impl.channels());
+		EXPECT_EQ(2, impl.sampleRate());
+	}
+
 	class RefactoredAudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
