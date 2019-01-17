@@ -200,6 +200,13 @@ namespace {
 		EXPECT_EQ(2, impl.sampleRate());
 	}
 
+	TEST_F(AudioFrameProcessorImplTests, sampleRateAndChannelsAreZeroIfNotPrepared) {
+		reader->setChannels(1);
+		reader->setSampleRate(2);
+		EXPECT_EQ(0, impl.channels());
+		EXPECT_EQ(0, impl.sampleRate());
+	}
+
 	class AudioProcessorImplErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
