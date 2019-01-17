@@ -118,8 +118,6 @@ private:
 	}
 };
 
-class RefactoredAudioFrameProcessorImplFactory{};
-
 class RefactoredAudioFrameProcessorStub : public RefactoredAudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int groupDelay_{};
@@ -418,9 +416,5 @@ namespace {
 		gsl::span<float> x{ &y, 1 };
 		impl.process({ &x, 1 });
 		EXPECT_EQ(2, y);
-	}
-
-	TEST(RefactoredAudioFrameProcessorOtherTests, tbd2) {
-		RefactoredAudioFrameProcessorImplFactory factory{};
 	}
 }
