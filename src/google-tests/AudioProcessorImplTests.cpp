@@ -110,16 +110,16 @@ namespace {
 		impl.prepare({});
 		reader->setComplete();
 		processor->setGroupDelay(3);
-		std::vector<float> y(2);
-		gsl::span<float> x{ y };
-		impl.process({ &x, 1 });
+		std::vector<float> y(1);
+		std::vector<gsl::span<float>> x{ y, y };
+		impl.process(x);
 		EXPECT_FALSE(impl.complete());
-		impl.process({ &x, 1 });
+		impl.process(x);
 		EXPECT_FALSE(impl.complete());
-		impl.process({ &x, 1 });
+		impl.process(x);
 		EXPECT_TRUE(impl.complete());
 		impl.prepare({});
-		impl.process({ &x, 1 });
+		impl.process(x);
 		EXPECT_FALSE(impl.complete());
 	}
 
