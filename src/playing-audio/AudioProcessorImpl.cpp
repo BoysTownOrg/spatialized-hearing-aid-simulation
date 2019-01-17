@@ -3,7 +3,7 @@
 
 AudioProcessorImpl::AudioProcessorImpl(
 	AudioFrameReaderFactory *readerFactory, 
-	RefactoredAudioFrameProcessorFactory *processorFactory
+	AudioFrameProcessorFactory *processorFactory
 ) :
 	readerFactory{ readerFactory },
 	processorFactory{ processorFactory } 
@@ -46,7 +46,7 @@ void AudioProcessorImpl::initialize(Initialization initialization) {
 	try {
 		processorFactory->make(processing);
 	}
-	catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
 	}
 	processing.channelScalars.clear();
@@ -95,11 +95,11 @@ std::shared_ptr<AudioFrameReader> AudioProcessorImpl::makeReader(std::string fil
 	}
 }
 
-std::shared_ptr<RefactoredAudioFrameProcessor> AudioProcessorImpl::makeProcessor(RefactoredAudioFrameProcessorFactory::Parameters p) {
+std::shared_ptr<AudioFrameProcessor> AudioProcessorImpl::makeProcessor(AudioFrameProcessorFactory::Parameters p) {
 	try {
 		return processorFactory->make(std::move(p));
 	}
-	catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw PreparationFailure{ e.what() };
 	}
 }

@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 
-class ChannelProcessingGroup : public RefactoredAudioFrameProcessor {
+class ChannelProcessingGroup : public AudioFrameProcessor {
 	std::vector<std::shared_ptr<SignalProcessor>> processors;
 public:
 	SIGNAL_PROCESSING_API explicit ChannelProcessingGroup(

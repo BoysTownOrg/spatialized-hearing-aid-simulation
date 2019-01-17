@@ -7,17 +7,17 @@
 #include <string>
 #include <vector>
 
-class RefactoredAudioFrameProcessor {
+class AudioFrameProcessor {
 public:
-	INTERFACE_OPERATIONS(RefactoredAudioFrameProcessor);
+	INTERFACE_OPERATIONS(AudioFrameProcessor);
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int groupDelay() = 0;
 	virtual bool complete() = 0;
 };
 
-class RefactoredAudioFrameProcessorFactory {
+class AudioFrameProcessorFactory {
 public:
-	INTERFACE_OPERATIONS(RefactoredAudioFrameProcessorFactory);
+	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> channelScalars;
@@ -33,5 +33,5 @@ public:
 		int sampleRate;
 		int channels;
 	};
-	virtual std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) = 0;
+	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
 };

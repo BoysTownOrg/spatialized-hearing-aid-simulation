@@ -6,16 +6,16 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioProcessorImpl : public AudioProcessor {
-	RefactoredAudioFrameProcessorFactory::Parameters processing{};
-	std::shared_ptr<RefactoredAudioFrameProcessor> processor{};
+	AudioFrameProcessorFactory::Parameters processing{};
+	std::shared_ptr<AudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
 	AudioFrameReaderFactory *readerFactory;
-	RefactoredAudioFrameProcessorFactory *processorFactory;
+	AudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
 	PLAYING_AUDIO_API AudioProcessorImpl(
 		AudioFrameReaderFactory *readerFactory,
-		RefactoredAudioFrameProcessorFactory *processorFactory
+		AudioFrameProcessorFactory *processorFactory
 	);
 
 	PLAYING_AUDIO_API void initialize(Initialization initialization) override;
@@ -27,7 +27,7 @@ public:
 
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
-	std::shared_ptr<RefactoredAudioFrameProcessor> makeProcessor(
-		RefactoredAudioFrameProcessorFactory::Parameters p
+	std::shared_ptr<AudioFrameProcessor> makeProcessor(
+		AudioFrameProcessorFactory::Parameters p
 	);
 };

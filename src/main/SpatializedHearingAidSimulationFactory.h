@@ -17,7 +17,7 @@ public:
 		std::shared_ptr<PrescriptionReader> prescriptionReader,
 		std::shared_ptr<BrirReader> brirReader
 	);
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Initialization) override;
+	std::shared_ptr<AudioFrameProcessor> make(Initialization) override;
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(

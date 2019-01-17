@@ -17,7 +17,7 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 {
 }
 
-std::shared_ptr<RefactoredAudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
+std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 	const auto brir = readBrir(p.brirFilePath);
 	processors.push_back(makeChannel(

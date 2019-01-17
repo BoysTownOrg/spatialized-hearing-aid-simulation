@@ -1,6 +1,6 @@
 #include <playing-audio/AudioProcessorImpl.h>
 
-class RefactoredAudioFrameProcessorStub : public RefactoredAudioFrameProcessor {
+class RefactoredAudioFrameProcessorStub : public AudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int groupDelay_{};
 	bool complete_{};
@@ -30,17 +30,17 @@ public:
 	}
 };
 
-class RefactoredAudioFrameProcessorStubFactory : public RefactoredAudioFrameProcessorFactory {
+class RefactoredAudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	Parameters _parameters{};
-	std::shared_ptr<RefactoredAudioFrameProcessor> processor;
+	std::shared_ptr<AudioFrameProcessor> processor;
 public:
 	explicit RefactoredAudioFrameProcessorStubFactory(
-		std::shared_ptr<RefactoredAudioFrameProcessor> processor =
+		std::shared_ptr<AudioFrameProcessor> processor =
 			std::make_shared<RefactoredAudioFrameProcessorStub>()
 	) :
 		processor{ std::move(processor) } {}
 
-	void setProcessor(std::shared_ptr<RefactoredAudioFrameProcessor> p) {
+	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
 		this->processor = std::move(p);
 	}
 
@@ -48,13 +48,13 @@ public:
 		return _parameters;
 	}
 
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters p) override {
+	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
 		_parameters = p;
 		return processor;
 	}
 };
 
-class RefactoredErrorAudioFrameProcessorFactory : public RefactoredAudioFrameProcessorFactory {
+class RefactoredErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
 	std::string errorMessage{};
 public:
 	explicit RefactoredErrorAudioFrameProcessorFactory(
@@ -62,7 +62,7 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) override {
+	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
 		throw CreateError{ errorMessage };
 	}
 };
@@ -205,7 +205,7 @@ namespace {
 		AudioFrameReaderStubFactory defaultReaderFactory{};
 		RefactoredAudioFrameProcessorStubFactory defaultProcessorFactory{};
 		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
-		RefactoredAudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
+		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPrepareThrowsPreparationFailure(std::string what) {
 			AudioProcessorImpl impl{ readerFactory, processorFactory };
@@ -274,7 +274,7 @@ namespace {
 		void reset() override {}
 	};
 
-	class TimesTwo : public RefactoredAudioFrameProcessor {
+	class TimesTwo : public AudioFrameProcessor {
 		void process(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
 				for (auto &x : channel)
