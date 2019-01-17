@@ -1,5 +1,28 @@
 #include "AudioProcessorImpl.h"
 
+class RmsComputer {
+	std::vector<std::vector<float>> entireAudioFile;
+public:
+	explicit RmsComputer(AudioFrameReader &reader) :
+		entireAudioFile{ reader.channels() }
+	{
+		std::vector<gsl::span<float>> pointers;
+		for (auto &channel : entireAudioFile) {
+			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
+			pointers.push_back({ channel });
+		}
+		reader.read(pointers);
+	}
+
+	double compute(int channel) {
+		double squaredSum{};
+		const auto channel_ = entireAudioFile.at(channel);
+		for (const auto sample : channel_)
+			squaredSum += sample * sample;
+		return std::sqrt(squaredSum / channel_.size());
+	}
+};
+
 void AudioProcessorImpl::initialize(Initialization initialization) {
 	processing.attack_ms = initialization.attack_ms;
 	processing.release_ms = initialization.release_ms;
