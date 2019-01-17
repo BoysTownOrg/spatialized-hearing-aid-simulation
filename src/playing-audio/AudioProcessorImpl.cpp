@@ -98,9 +98,9 @@ bool AudioProcessorImpl::complete() {
 }
 
 int AudioProcessorImpl::channels() {
-	return reader->channels();
+	return reader ? reader->channels() : 0;
 }
 
 int AudioProcessorImpl::sampleRate() {
-	return reader->sampleRate();
+	return reader ? reader->sampleRate() : 0;
 }
