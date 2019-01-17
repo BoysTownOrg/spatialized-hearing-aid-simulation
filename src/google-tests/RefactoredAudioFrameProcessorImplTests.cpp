@@ -219,6 +219,11 @@ namespace {
 		);
 	}
 
+	TEST_F(RefactoredAudioFrameProcessorImplTests, playResetsReaderAfterComputingRms) {
+		impl.read({});
+		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
+	}
+
 	class ReadsAOne : public AudioFrameReader {
 		void read(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
