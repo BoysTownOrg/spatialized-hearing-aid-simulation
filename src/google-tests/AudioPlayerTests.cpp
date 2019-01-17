@@ -14,8 +14,8 @@ namespace {
 		std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{ frameReader };
 		std::shared_ptr<AudioFrameProcessorStub> obsolete_processor = std::make_shared<AudioFrameProcessorStub>();
-		NoLongerFactoryStub processor{ obsolete_processor };
-		AudioPlayer player{ &device, &readerFactory, &processor };
+		NoLongerFactoryStub noLongerFactory{ obsolete_processor };
+		AudioPlayer player{ &device, &readerFactory, &noLongerFactory };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
@@ -57,22 +57,22 @@ namespace {
 		float *x[]{ &left };
 		fillStreamBuffer(x, 1);
 		EXPECT_FALSE(device.complete());
-		processor.setComplete();
+		noLongerFactory.setComplete();
 		fillStreamBuffer(x, 1);
 		EXPECT_TRUE(device.complete());
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
-		frameReader->setChannels(2);
+		noLongerFactory.setChannels(2);
 		play();
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, processor.audioBuffer()[0].data());
-		EXPECT_EQ(&right, processor.audioBuffer()[1].data());
-		EXPECT_EQ(1, processor.audioBuffer()[0].size());
-		EXPECT_EQ(1, processor.audioBuffer()[1].size());
+		EXPECT_EQ(&left, noLongerFactory.audioBuffer()[0].data());
+		EXPECT_EQ(&right, noLongerFactory.audioBuffer()[1].data());
+		EXPECT_EQ(1, noLongerFactory.audioBuffer()[0].size());
+		EXPECT_EQ(1, noLongerFactory.audioBuffer()[1].size());
 	}
 
 	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
@@ -86,14 +86,14 @@ namespace {
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		player.initialize(initialization);
-		assertEqual("a", processor.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processor.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processor.parameters().brirFilePath);
-		EXPECT_EQ(1, processor.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processor.parameters().attack_ms);
-		EXPECT_EQ(3, processor.parameters().release_ms);
-		EXPECT_EQ(4, processor.parameters().windowSize);
-		EXPECT_EQ(5, processor.parameters().chunkSize);
+		assertEqual("a", noLongerFactory.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", noLongerFactory.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", noLongerFactory.parameters().brirFilePath);
+		EXPECT_EQ(1, noLongerFactory.parameters().max_dB_Spl);
+		EXPECT_EQ(2, noLongerFactory.parameters().attack_ms);
+		EXPECT_EQ(3, noLongerFactory.parameters().release_ms);
+		EXPECT_EQ(4, noLongerFactory.parameters().windowSize);
+		EXPECT_EQ(5, noLongerFactory.parameters().chunkSize);
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
@@ -105,11 +105,11 @@ namespace {
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		request.level_dB_Spl = 8;
-		processor.setChannels(6);
-		processor.setSampleRate(7);
+		noLongerFactory.setChannels(6);
+		noLongerFactory.setSampleRate(7);
 		play(request);
 		assertEqual("d", readerFactory.filePath());
-		EXPECT_EQ(8, processor.parameters().level_dB_Spl);
+		EXPECT_EQ(8, noLongerFactory.parameters().level_dB_Spl);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(6, device.streamParameters().channels);
