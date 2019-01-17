@@ -242,6 +242,17 @@ namespace {
 		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
 		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
+		void assertPrepareThrowsPreparationFailure(std::string what) {
+			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
+			try {
+				impl.prepare({});
+				FAIL() << "Expected RefactoredAudioFrameProcessorImpl::PreparationFailure";
+			}
+			catch (const RefactoredAudioFrameProcessorImpl::PreparationFailure &e) {
+				assertEqual(what, e.what());
+			}
+		}
+
 		void assertInitializeThrowsInitializationFailure(std::string what) {
 			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
 			try {
@@ -260,7 +271,16 @@ namespace {
 	) {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
-		assertInitializeThrowsInitializationFailure("error.");
+		assertPrepareThrowsPreparationFailure("error.");
+	}
+
+	TEST_F(
+		RefactoredAudioFrameProcessorImplRequestErrorTests,
+		prepareThrowsPreparationFailureWhenProcessorFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		processorFactory = &failingFactory;
+		assertPlayThrowsRequestFailure("error.");
 	}
 
 	class ReadsAOne : public AudioFrameReader {
