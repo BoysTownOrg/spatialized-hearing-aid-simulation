@@ -132,11 +132,6 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
-	TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
-		play();
-		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));
-	}
-
 	class FailsToOpenStream : public AudioDevice {
 		std::string errorMessage_{};
 		bool failed_{};

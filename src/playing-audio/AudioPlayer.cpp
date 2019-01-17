@@ -45,8 +45,6 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.level_dB_Spl = request.level_dB_Spl;
 	frameProcessor = makeProcessor(processing);
 
-	frameReader->reset();
-
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = frameReader->sampleRate();
 	streaming.channels = frameReader->channels();
