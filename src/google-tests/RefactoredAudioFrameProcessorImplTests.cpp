@@ -38,6 +38,7 @@ public:
 		processing.chunkSize = initialization.chunkSize;
 		processing.windowSize = initialization.windowSize;
 		processing.max_dB_Spl = initialization.max_dB_Spl;
+		processing.channelScalars.resize(2);
 		processorFactory->make(processing);
 	}
 
