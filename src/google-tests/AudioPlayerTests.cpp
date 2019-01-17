@@ -223,15 +223,6 @@ namespace {
 
 	TEST_F(
 		RequestErrorTests,
-		playThrowsRequestFailureWhenReaderFactoryThrowsCreateError
-	) {
-		ErrorAudioFrameReaderFactory failingFactory{ "error." };
-		readerFactory = &failingFactory;
-		assertPlayThrowsRequestFailure("error.");
-	}
-
-	TEST_F(
-		RequestErrorTests,
 		playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
