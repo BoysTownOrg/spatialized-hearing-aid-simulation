@@ -54,10 +54,10 @@ public:
 	}
 };
 
-class RefactoredErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
+class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
 	std::string errorMessage{};
 public:
-	explicit RefactoredErrorAudioFrameProcessorFactory(
+	explicit CreatingErrorAudioFrameProcessorFactory(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}
@@ -120,7 +120,7 @@ namespace {
 		EXPECT_TRUE(impl.complete());
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactory) {
+	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
 		AudioProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -200,7 +200,7 @@ namespace {
 		EXPECT_EQ(2, impl.sampleRate());
 	}
 
-	class AudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
+	class AudioProcessorImplErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
 		AudioFrameProcessorStubFactory defaultProcessorFactory{};
@@ -214,7 +214,7 @@ namespace {
 				FAIL() << "Expected AudioProcessorImpl::PreparationFailure";
 			}
 			catch (const AudioProcessorImpl::PreparationFailure &e) {
-				assertEqual(what, e.what());
+				assertEqual(std::move(what), e.what());
 			}
 		}
 
@@ -225,31 +225,31 @@ namespace {
 				FAIL() << "Expected AudioProcessorImpl::InitializationFailure";
 			}
 			catch (const AudioProcessorImpl::InitializationFailure &e) {
-				assertEqual(what, e.what());
+				assertEqual(std::move(what), e.what());
 			}
 		}
 	};
 
 	TEST_F(
-		AudioFrameProcessorImplRequestErrorTests,
+		AudioProcessorImplErrorTests,
 		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
 	) {
-		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		CreatingErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
 
 	TEST_F(
-		AudioFrameProcessorImplRequestErrorTests,
+		AudioProcessorImplErrorTests,
 		prepareThrowsPreparationFailureWhenProcessorFactoryThrowsCreateError
 	) {
-		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		CreatingErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
 		assertPrepareThrowsPreparationFailure("error.");
 	}
 
 	TEST_F(
-		AudioFrameProcessorImplRequestErrorTests,
+		AudioProcessorImplErrorTests,
 		prepareThrowsPreparationFailureWhenReaderFactoryThrowsCreateError
 	) {
 		ErrorAudioFrameReaderFactory failingFactory{ "error." };
@@ -264,10 +264,7 @@ namespace {
 					x = 1;
 		}
 
-		int channels() const override {
-			return 1;
-		}
-
+		int channels() const override { return 1; }
 		bool complete() const override { return {}; }
 		int sampleRate() const override { return {}; }
 		long long frames() const override { return {}; }
@@ -282,14 +279,10 @@ namespace {
 		}
 
 		int groupDelay() override { return {}; }
-
-		bool complete() override
-		{
-			return false;
-		}
+		bool complete() override { return {}; }
 	};
 
-	TEST(AudioFrameProcessorOtherTests, processReadsThenProcesses) {
+	TEST(AudioProcessorImplOtherTests, processReadsThenProcesses) {
 		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
 		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
 		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
