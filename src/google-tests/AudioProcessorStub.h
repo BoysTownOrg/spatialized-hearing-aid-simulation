@@ -54,6 +54,7 @@ public:
 	}
 
 	int sampleRate() override {
+		log_ += std::string{ "sampleRate " };
 		return _sampleRate;
 	}
 
