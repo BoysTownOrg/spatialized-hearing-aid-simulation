@@ -98,13 +98,6 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
 		StimulusPlayer::Initialization initialization;
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		player.initialize(initialization);
 		StimulusPlayer::PlayRequest request;
@@ -114,16 +107,8 @@ namespace {
 		frameReader->setChannels(6);
 		frameReader->setSampleRate(7);
 		play(request);
-		assertEqual("a", processor.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processor.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processor.parameters().brirFilePath);
 		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
-		EXPECT_EQ(1, processor.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processor.parameters().attack_ms);
-		EXPECT_EQ(3, processor.parameters().release_ms);
-		EXPECT_EQ(4, processor.parameters().windowSize);
-		EXPECT_EQ(5, processor.parameters().chunkSize);
 		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(6, device.streamParameters().channels);
 		EXPECT_EQ(7, device.streamParameters().sampleRate);
