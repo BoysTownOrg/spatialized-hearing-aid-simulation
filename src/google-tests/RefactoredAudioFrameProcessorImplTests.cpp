@@ -2,6 +2,7 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class RefactoredAudioFrameProcessorImpl {
+	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
 	AudioFrameReaderFactory *readerFactory;
@@ -31,7 +32,6 @@ public:
 	};
 
 	void initialize(Initialization initialization) {
-		AudioFrameProcessorFactory::Parameters processing;
 		processing.attack_ms = initialization.attack_ms;
 		processing.release_ms = initialization.release_ms;
 		processing.brirFilePath = initialization.brirFilePath;
@@ -44,7 +44,10 @@ public:
 		processorFactory->make(processing);
 	}
 
-	void read(std::string) {}
+	void read(std::string filePath) {
+		readerFactory->make(filePath);
+		processorFactory->make(processing);
+	}
 
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
