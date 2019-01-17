@@ -18,3 +18,13 @@ void AudioProcessorImpl::initialize(Initialization initialization) {
 	}
 	processing.channelScalars.clear();
 }
+
+void AudioProcessorImpl::prepare(Preparation p) {
+	reader = makeReader(p.audioFilePath);
+	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
+	RmsComputer rms{ *reader };
+	for (int i = 0; i < reader->channels(); ++i)
+		processing.channelScalars.push_back(desiredRms / rms.compute(i));
+	processor = makeProcessor(processing);
+	reader->reset();
+}
