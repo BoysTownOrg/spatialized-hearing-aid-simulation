@@ -158,7 +158,7 @@
     <ClInclude Include="AudioDeviceController.h" />
     <ClInclude Include="AudioProcessor.h" />
     <ClInclude Include="playing-audio-exports.h" />
-    <ClInclude Include="RefactoredAudioFrameProcessor.h" />
+    <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioProcessorImpl.h" />
   </ItemGroup>

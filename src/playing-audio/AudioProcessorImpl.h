@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RefactoredAudioFrameProcessor.h"
+#include "AudioFrameProcessor.h"
 #include "AudioProcessor.h"
 #include "playing-audio-exports.h"
 #include <audio-stream-processing/AudioFrameReader.h>
@@ -18,8 +18,8 @@ public:
 		AudioFrameProcessorFactory *processorFactory
 	);
 
-	PLAYING_AUDIO_API void initialize(Initialization initialization) override;
-	PLAYING_AUDIO_API void prepare(Preparation p) override;
+	PLAYING_AUDIO_API void initialize(Initialization) override;
+	PLAYING_AUDIO_API void prepare(Preparation) override;
 	PLAYING_AUDIO_API void process(gsl::span<gsl::span<float>> audio);
 	PLAYING_AUDIO_API bool complete();
 	PLAYING_AUDIO_API int channels();
@@ -28,6 +28,6 @@ public:
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
-		AudioFrameProcessorFactory::Parameters p
+		AudioFrameProcessorFactory::Parameters
 	);
 };

@@ -1,6 +1,6 @@
 #include <playing-audio/AudioProcessorImpl.h>
 
-class RefactoredAudioFrameProcessorStub : public AudioFrameProcessor {
+class AudioFrameProcessorStub : public AudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int groupDelay_{};
 	bool complete_{};
@@ -30,13 +30,13 @@ public:
 	}
 };
 
-class RefactoredAudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
+class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	Parameters _parameters{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 public:
-	explicit RefactoredAudioFrameProcessorStubFactory(
+	explicit AudioFrameProcessorStubFactory(
 		std::shared_ptr<AudioFrameProcessor> processor =
-			std::make_shared<RefactoredAudioFrameProcessorStub>()
+			std::make_shared<AudioFrameProcessorStub>()
 	) :
 		processor{ std::move(processor) } {}
 
@@ -74,18 +74,18 @@ public:
 #include <gtest/gtest.h>
 
 namespace {
-	class RefactoredAudioFrameProcessorImplTests : public ::testing::Test {
+	class AudioFrameProcessorImplTests : public ::testing::Test {
 	protected:
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{reader};
-		std::shared_ptr<RefactoredAudioFrameProcessorStub> processor =
-			std::make_shared<RefactoredAudioFrameProcessorStub>();
-		RefactoredAudioFrameProcessorStubFactory processorFactory{processor};
+		std::shared_ptr<AudioFrameProcessorStub> processor =
+			std::make_shared<AudioFrameProcessorStub>();
+		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
 	};
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
+	TEST_F(AudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
 		impl.prepare({});
 		gsl::span<float> x{};
 		impl.process({ &x, 1 });
@@ -95,7 +95,7 @@ namespace {
 		EXPECT_EQ(1, processor->audioBuffer().size());
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
+	TEST_F(AudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
 		impl.prepare({});
 		reader->setComplete();
 		std::vector<float> audio(3, -1);
@@ -106,7 +106,7 @@ namespace {
 		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
+	TEST_F(AudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
 		impl.prepare({});
 		reader->setComplete();
 		processor->setGroupDelay(3);
@@ -120,7 +120,7 @@ namespace {
 		EXPECT_TRUE(impl.complete());
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, initializePassesParametersToFactory) {
+	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactory) {
 		AudioProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -142,7 +142,7 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
+	TEST_F(AudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
 		AudioProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -167,7 +167,7 @@ namespace {
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
+	TEST_F(AudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
 		AudioProcessorImpl::Initialization initialization;
 		initialization.max_dB_Spl = 8;
 		impl.initialize(initialization);
@@ -187,12 +187,12 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, prepareResetsReaderAfterComputingRms) {
+	TEST_F(AudioFrameProcessorImplTests, prepareResetsReaderAfterComputingRms) {
 		impl.prepare({});
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
+	TEST_F(AudioFrameProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		impl.prepare({});
@@ -200,10 +200,10 @@ namespace {
 		EXPECT_EQ(2, impl.sampleRate());
 	}
 
-	class RefactoredAudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
+	class AudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
-		RefactoredAudioFrameProcessorStubFactory defaultProcessorFactory{};
+		AudioFrameProcessorStubFactory defaultProcessorFactory{};
 		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
 		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
@@ -231,7 +231,7 @@ namespace {
 	};
 
 	TEST_F(
-		RefactoredAudioFrameProcessorImplRequestErrorTests,
+		AudioFrameProcessorImplRequestErrorTests,
 		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
@@ -240,7 +240,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredAudioFrameProcessorImplRequestErrorTests,
+		AudioFrameProcessorImplRequestErrorTests,
 		prepareThrowsPreparationFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		RefactoredErrorAudioFrameProcessorFactory failingFactory{ "error." };
@@ -249,7 +249,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredAudioFrameProcessorImplRequestErrorTests,
+		AudioFrameProcessorImplRequestErrorTests,
 		prepareThrowsPreparationFailureWhenReaderFactoryThrowsCreateError
 	) {
 		ErrorAudioFrameReaderFactory failingFactory{ "error." };
@@ -289,9 +289,9 @@ namespace {
 		}
 	};
 
-	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
+	TEST(AudioFrameProcessorOtherTests, processReadsThenProcesses) {
 		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
-		RefactoredAudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
+		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
 		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
 		impl.prepare({});
 		float y{};
