@@ -20,10 +20,10 @@ public:
 
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation) override;
-	PLAYING_AUDIO_API void process(gsl::span<gsl::span<float>> audio);
-	PLAYING_AUDIO_API bool complete();
-	PLAYING_AUDIO_API int channels();
-	PLAYING_AUDIO_API int sampleRate();
+	PLAYING_AUDIO_API void process(gsl::span<gsl::span<float>> audio) override;
+	PLAYING_AUDIO_API bool complete() override;
+	PLAYING_AUDIO_API int channels() override;
+	PLAYING_AUDIO_API int sampleRate() override;
 
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
