@@ -1,5 +1,5 @@
 #include "AudioDeviceStub.h"
-#include "AudioFrameProcessorStub.h"
+#include "NoLongerFactoryStub.h"
 #include "FakeAudioFileReader.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
