@@ -67,30 +67,30 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
-		StimulusPlayer::Initialization initialization;
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
-		initialization.chunkSize = 5;
-		player.initialize(initialization);
-		assertEqual("a", processor.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processor.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processor.parameters().brirFilePath);
-		EXPECT_EQ(1, processor.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processor.parameters().attack_ms);
-		EXPECT_EQ(3, processor.parameters().release_ms);
-		EXPECT_EQ(4, processor.parameters().windowSize);
-		EXPECT_EQ(5, processor.parameters().chunkSize);
+		StimulusPlayer::Initialization init;
+		init.leftDslPrescriptionFilePath = "a";
+		init.rightDslPrescriptionFilePath = "b";
+		init.brirFilePath = "c";
+		init.max_dB_Spl = 1;
+		init.attack_ms = 2;
+		init.release_ms = 3;
+		init.windowSize = 4;
+		init.chunkSize = 5;
+		player.initialize(init);
+		assertEqual("a", processor.initialization().leftDslPrescriptionFilePath);
+		assertEqual("b", processor.initialization().rightDslPrescriptionFilePath);
+		assertEqual("c", processor.initialization().brirFilePath);
+		EXPECT_EQ(1, processor.initialization().max_dB_Spl);
+		EXPECT_EQ(2, processor.initialization().attack_ms);
+		EXPECT_EQ(3, processor.initialization().release_ms);
+		EXPECT_EQ(4, processor.initialization().windowSize);
+		EXPECT_EQ(5, processor.initialization().chunkSize);
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToThings) {
-		StimulusPlayer::Initialization initialization;
-		initialization.chunkSize = 5;
-		player.initialize(initialization);
+		StimulusPlayer::Initialization init;
+		init.chunkSize = 5;
+		player.initialize(init);
 		StimulusPlayer::PlayRequest request;
 		request.audioFilePath = "d";
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
@@ -182,17 +182,6 @@ namespace {
 		AudioDevice *device{&defaultDevice};
 		AudioProcessor *processor{&defaultProcessor};
 
-		void assertPlayThrowsRequestFailure(std::string what) {
-			AudioPlayer player{ device, processor };
-			try {
-				player.play({});
-				FAIL() << "Expected AudioPlayer::RequestFailure";
-			}
-			catch (const AudioPlayer::RequestFailure &e) {
-				assertEqual(what, e.what());
-			}
-		}
-
 		void assertInitializeThrowsInitializationFailure(std::string what) {
 			AudioPlayer player{ device, processor };
 			try {
@@ -200,10 +189,30 @@ namespace {
 				FAIL() << "Expected AudioPlayer::InitializationFailure";
 			}
 			catch (const AudioPlayer::InitializationFailure &e) {
-				assertEqual(what, e.what());
+				assertEqual(std::move(what), e.what());
+			}
+		}
+
+		void assertPlayThrowsRequestFailure(std::string what) {
+			AudioPlayer player{ device, processor };
+			try {
+				player.play({});
+				FAIL() << "Expected AudioPlayer::RequestFailure";
+			}
+			catch (const AudioPlayer::RequestFailure &e) {
+				assertEqual(std::move(what), e.what());
 			}
 		}
 	};
+
+	TEST_F(
+		RequestErrorTests,
+		initializeThrowsInitializationFailureWhenAudioProcessorThrowsInitializationFailure
+	) {
+		InitializationFailingAudioProcessor failingFactory{ "error." };
+		processor = &failingFactory;
+		assertInitializeThrowsInitializationFailure("error.");
+	}
 
 	TEST_F(
 		RequestErrorTests,
@@ -222,14 +231,5 @@ namespace {
 		PreparationFailureAudioProcessor failingFactory{ "error." };
 		processor = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
-	}
-
-	TEST_F(
-		RequestErrorTests,
-		initializeThrowsInitializationFailureWhenAudioProcessorThrowsInitializationFailure
-	) {
-		InitializationFailingAudioProcessor failingFactory{ "error." };
-		processor = &failingFactory;
-		assertInitializeThrowsInitializationFailure("error.");
 	}
 }

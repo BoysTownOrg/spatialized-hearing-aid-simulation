@@ -4,7 +4,7 @@
 #include <playing-audio/AudioProcessor.h>
 
 class AudioProcessorStub : public AudioProcessor {
-	Initialization _parameters{};
+	Initialization parameters_{};
 	Preparation preparation_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	LogString log_{};
@@ -12,8 +12,8 @@ class AudioProcessorStub : public AudioProcessor {
 	int channels_{};
 	bool complete_{};
 public:
-	const Initialization &parameters() const {
-		return _parameters;
+	const Initialization &initialization() const {
+		return parameters_;
 	}
 
 	const Preparation &preparation() const {
@@ -21,7 +21,7 @@ public:
 	}
 
 	void initialize(Initialization p) override {
-		_parameters = std::move(p);
+		parameters_ = std::move(p);
 	}
 
 	void setComplete() {

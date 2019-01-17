@@ -92,7 +92,7 @@ public:
 };
 
 class MockCompressorFactory : public FilterbankCompressorFactory {
-	FilterbankCompressor::Parameters _parameters{};
+	FilterbankCompressor::Parameters parameters_{};
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	explicit MockCompressorFactory(
@@ -102,13 +102,13 @@ public:
 		compressor{ std::move(compressor) } {}
 
 	const FilterbankCompressor::Parameters &parameters() const {
-		return _parameters;
+		return parameters_;
 	}
 
 	std::shared_ptr<FilterbankCompressor> make(
 		FilterbankCompressor::Parameters p
 	) override {
-		_parameters = p;
+		parameters_ = p;
 		return compressor;
 	}
 };
