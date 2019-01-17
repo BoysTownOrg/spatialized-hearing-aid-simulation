@@ -27,7 +27,7 @@ public:
 	bool isPlaying() override;
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 private:
-	std::shared_ptr<AudioFrameProcessor> makeProcessor(
+	std::shared_ptr<RefactoredAudioFrameProcessor> makeProcessor(
 		NoLongerFactory::Parameters p
 	);
 };

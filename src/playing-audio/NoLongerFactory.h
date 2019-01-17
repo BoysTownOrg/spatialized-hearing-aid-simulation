@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-class AudioFrameProcessor {
+class RefactoredAudioFrameProcessor {
 public:
-	INTERFACE_OPERATIONS(AudioFrameProcessor);
+	INTERFACE_OPERATIONS(RefactoredAudioFrameProcessor);
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int groupDelay() = 0;
 	virtual bool complete() = 0;
@@ -34,7 +34,7 @@ public:
 		int sampleRate;
 		int channels;
 	};
-	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
+	virtual std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) = 0;
 	virtual bool complete() = 0;
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;

@@ -6,17 +6,17 @@ class NoLongerFactoryStub : public NoLongerFactory {
 	Parameters _parameters{};
 	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
-	std::shared_ptr<AudioFrameProcessor> processor;
+	std::shared_ptr<RefactoredAudioFrameProcessor> processor;
 	int _sampleRate{};
 	int channels_{};
 	bool complete_{};
 public:
 	explicit NoLongerFactoryStub(
-		std::shared_ptr<AudioFrameProcessor> processor = {}
+		std::shared_ptr<RefactoredAudioFrameProcessor> processor = {}
 	) :
 		processor{ std::move(processor) } {}
 
-	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+	void setProcessor(std::shared_ptr<RefactoredAudioFrameProcessor> p) {
 		this->processor = std::move(p);
 	}
 
@@ -24,7 +24,7 @@ public:
 		return _parameters;
 	}
 
-	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
+	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters p) override {
 		_parameters = p;
 		return processor;
 	}
@@ -74,7 +74,7 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
+	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) override {
 		throw CreateError{ errorMessage };
 	}
 
