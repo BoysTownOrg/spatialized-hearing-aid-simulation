@@ -9,18 +9,14 @@ class NoLongerFactory {
 public:
 	INTERFACE_OPERATIONS(NoLongerFactory);
 	struct Initialization {
-		std::vector<double> channelScalars;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
 		double max_dB_Spl;
 		double attack_ms;
 		double release_ms;
-		double level_dB_Spl;
-		int chunkSize;
 		int windowSize;
-		int sampleRate;
-		int channels;
+		int chunkSize;
 	};
 	virtual void initialize(Initialization) = 0;
 	RUNTIME_ERROR(InitializationFailure);
