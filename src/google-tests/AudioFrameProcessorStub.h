@@ -35,6 +35,7 @@ public:
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	Parameters _parameters{};
 	std::shared_ptr<AudioFrameProcessor> processor;
+	bool complete_{};
 public:
 	explicit AudioFrameProcessorStubFactory(
 		std::shared_ptr<AudioFrameProcessor> processor =
@@ -53,6 +54,10 @@ public:
 	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
 		_parameters = p;
 		return processor;
+	}
+
+	void setComplete() {
+		complete_ = true;
 	}
 };
 
