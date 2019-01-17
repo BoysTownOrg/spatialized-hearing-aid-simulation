@@ -157,12 +157,14 @@
     <ClInclude Include="AudioDevice.h" />
     <ClInclude Include="AudioDeviceController.h" />
     <ClInclude Include="AudioProcessor.h" />
+    <ClInclude Include="playing-audio-exports.h" />
     <ClInclude Include="RefactoredAudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioProcessorImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioPlayer.cpp" />
+    <ClCompile Include="AudioProcessorImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

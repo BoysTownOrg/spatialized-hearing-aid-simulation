@@ -33,9 +33,15 @@
     <ClInclude Include="AudioProcessorImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="playing-audio-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioProcessorImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

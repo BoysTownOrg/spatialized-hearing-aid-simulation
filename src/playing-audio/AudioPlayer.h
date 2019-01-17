@@ -2,13 +2,8 @@
 
 #include "AudioDevice.h"
 #include "AudioProcessor.h"
+#include "playing-audio-exports.h"
 #include <recognition-test/StimulusPlayer.h>
-
-#ifdef PLAYING_AUDIO_EXPORTS
-	#define PLAYING_AUDIO_API __declspec(dllexport)
-#else
-	#define PLAYING_AUDIO_API __declspec(dllimport)
-#endif
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
