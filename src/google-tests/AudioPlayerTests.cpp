@@ -13,9 +13,9 @@ namespace {
 		AudioDeviceStub device{};
 		std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{ frameReader };
-		std::shared_ptr<AudioFrameProcessorStub> processor = std::make_shared<AudioFrameProcessorStub>();
-		AudioFrameProcessorStubFactory processorFactory{ processor };
-		AudioPlayer player{ &device, &readerFactory, &processorFactory };
+		std::shared_ptr<AudioFrameProcessorStub> obsolete_processor = std::make_shared<AudioFrameProcessorStub>();
+		AudioFrameProcessorStubFactory processor{ obsolete_processor };
+		AudioPlayer player{ &device, &readerFactory, &processor };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
@@ -69,13 +69,13 @@ namespace {
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, processor->audioBuffer()[0].data());
-		EXPECT_EQ(&right, processor->audioBuffer()[1].data());
-		EXPECT_EQ(1, processor->audioBuffer()[0].size());
-		EXPECT_EQ(1, processor->audioBuffer()[1].size());
+		EXPECT_EQ(&left, obsolete_processor->audioBuffer()[0].data());
+		EXPECT_EQ(&right, obsolete_processor->audioBuffer()[1].data());
+		EXPECT_EQ(1, obsolete_processor->audioBuffer()[0].size());
+		EXPECT_EQ(1, obsolete_processor->audioBuffer()[1].size());
 	}
 
-	TEST_F(AudioPlayerTests, initializePassesParametersToFactoriesForAnExceptionCheck) {
+	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
 		StimulusPlayer::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -86,15 +86,15 @@ namespace {
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		player.initialize(initialization);
-		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processorFactory.parameters().brirFilePath);
-		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-		EXPECT_EQ(3, processorFactory.parameters().release_ms);
-		EXPECT_EQ(4, processorFactory.parameters().windowSize);
-		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
-		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
+		assertEqual("a", processor.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", processor.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", processor.parameters().brirFilePath);
+		EXPECT_EQ(1, processor.parameters().max_dB_Spl);
+		EXPECT_EQ(2, processor.parameters().attack_ms);
+		EXPECT_EQ(3, processor.parameters().release_ms);
+		EXPECT_EQ(4, processor.parameters().windowSize);
+		EXPECT_EQ(5, processor.parameters().chunkSize);
+		EXPECT_EQ(2U, processor.parameters().channelScalars.size());
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
@@ -115,16 +115,16 @@ namespace {
 		frameReader->setChannels(6);
 		frameReader->setSampleRate(7);
 		play(request);
-		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processorFactory.parameters().brirFilePath);
+		assertEqual("a", processor.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", processor.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", processor.parameters().brirFilePath);
 		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
-		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-		EXPECT_EQ(3, processorFactory.parameters().release_ms);
-		EXPECT_EQ(4, processorFactory.parameters().windowSize);
-		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(1, processor.parameters().max_dB_Spl);
+		EXPECT_EQ(2, processor.parameters().attack_ms);
+		EXPECT_EQ(3, processor.parameters().release_ms);
+		EXPECT_EQ(4, processor.parameters().windowSize);
+		EXPECT_EQ(5, processor.parameters().chunkSize);
 		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(6, device.streamParameters().channels);
 		EXPECT_EQ(7, device.streamParameters().sampleRate);
@@ -161,7 +161,7 @@ namespace {
 				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
 				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3.0)
 			},
-			processorFactory.parameters().channelScalars,
+			processor.parameters().channelScalars,
 			1e-6
 		);
 	}
