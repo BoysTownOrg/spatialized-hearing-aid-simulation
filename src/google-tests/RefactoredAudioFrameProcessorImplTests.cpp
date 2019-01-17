@@ -108,11 +108,11 @@ public:
 	}
 
 	int channels() {
-		return {};
+		return reader->channels();
 	}
 
 	int sampleRate() {
-		return {};
+		return reader->sampleRate();
 	}
 
 private:
