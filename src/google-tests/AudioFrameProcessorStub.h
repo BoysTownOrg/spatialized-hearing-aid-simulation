@@ -68,6 +68,10 @@ public:
 	const gsl::span<gsl::span<float>> audioBuffer() const {
 		return _audioBuffer;
 	}
+
+	void process(gsl::span<gsl::span<float>> audio) override {
+		_audioBuffer = audio;
+	}
 };
 
 class ErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -85,4 +89,6 @@ public:
 	bool complete() override {
 		return {};
 	}
+
+	void process(gsl::span<gsl::span<float>>) override {}
 };

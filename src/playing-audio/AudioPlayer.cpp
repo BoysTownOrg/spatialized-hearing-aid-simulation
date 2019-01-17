@@ -84,7 +84,7 @@ void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
 	if (noLongerAFactory->complete())
 		device->setCallbackResultToComplete();
-	frameProcessor->process(audio);
+	noLongerAFactory->process(audio);
 }
 
 std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {

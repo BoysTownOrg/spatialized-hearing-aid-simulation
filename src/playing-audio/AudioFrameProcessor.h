@@ -35,4 +35,5 @@ public:
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
 	virtual bool complete() = 0;
+	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 };
