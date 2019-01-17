@@ -24,10 +24,6 @@ public:
 	void setComplete() {
 		complete_ = true;
 	}
-
-	bool complete() override {
-		return complete_;
-	}
 };
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
@@ -289,7 +285,6 @@ namespace {
 		}
 
 		int groupDelay() override { return {}; }
-		bool complete() override { return {}; }
 	};
 
 	TEST(AudioProcessorImplOtherTests, processReadsThenProcesses) {

@@ -14,8 +14,5 @@ public:
 	);
 	SIGNAL_PROCESSING_API void process(gsl::span<gsl::span<float>> audio) override;
 	SIGNAL_PROCESSING_API int groupDelay() override;
-	bool complete() override {
-		return {};
-	}
 };
 
