@@ -1,3 +1,4 @@
+#include <common-includes/RuntimeError.h>
 #include <playing-audio/AudioFrameProcessor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 
@@ -67,6 +68,8 @@ public:
 		processorFactory->make(processing);
 		processing.channelScalars.clear();
 	}
+
+	RUNTIME_ERROR(InitializationFailure);
 
 	struct Preparation {
 		std::string audioFilePath;
