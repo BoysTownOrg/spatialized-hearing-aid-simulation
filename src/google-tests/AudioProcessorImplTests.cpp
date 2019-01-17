@@ -162,6 +162,8 @@ namespace {
 		impl.initialize(init);
 		AudioProcessorImpl::Preparation p{};
 		p.audioFilePath = "d";
+		reader->setChannels(6);
+		reader->setSampleRate(7);
 		prepare(p);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
@@ -172,6 +174,8 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(6, processorFactory.parameters().channels);
+		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
 	}
 
 	TEST_F(AudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
