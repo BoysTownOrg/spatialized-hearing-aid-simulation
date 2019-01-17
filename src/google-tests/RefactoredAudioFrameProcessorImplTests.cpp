@@ -40,7 +40,6 @@ public:
 		readerFactory{ readerFactory },
 		processorFactory{ processorFactory } 
 	{
-		reader = readerFactory->make({});
 	}
 
 	struct Initialization {
@@ -81,7 +80,7 @@ public:
 	};
 
 	void prepare(Preparation p) {
-		reader = readerFactory->make(p.audioFilePath);
+		reader = makeReader(p.audioFilePath);
 		const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 		RmsComputer rms{ *reader };
 		for (int i = 0; i < reader->channels(); ++i)
@@ -109,6 +108,14 @@ public:
 	}
 
 private:
+	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath) {
+		try {
+			return readerFactory->make(std::move(filePath));
+		}
+		catch (const AudioFrameReaderFactory::CreateError &e) {
+			throw PreparationFailure{ e.what() };
+		}
+	}
 
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
 		AudioFrameProcessorFactory::Parameters p
