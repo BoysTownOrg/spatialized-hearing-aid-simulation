@@ -59,6 +59,10 @@ public:
 	void setComplete() {
 		complete_ = true;
 	}
+
+	bool complete() override {
+		return complete_;
+	}
 };
 
 class ErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -71,5 +75,9 @@ public:
 
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
 		throw CreateError{ errorMessage };
+	}
+
+	bool complete() override {
+		return {};
 	}
 };

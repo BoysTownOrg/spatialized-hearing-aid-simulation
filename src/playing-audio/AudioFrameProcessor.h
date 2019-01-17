@@ -34,4 +34,5 @@ public:
 		int channels;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
+	virtual bool complete() = 0;
 };
