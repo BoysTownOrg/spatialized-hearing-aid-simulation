@@ -8,7 +8,6 @@
 class NoLongerFactory {
 public:
 	INTERFACE_OPERATIONS(NoLongerFactory);
-	RUNTIME_ERROR(CreateError);
 	struct Initialization {
 		std::vector<double> channelScalars;
 		std::string leftDslPrescriptionFilePath;

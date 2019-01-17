@@ -215,16 +215,16 @@ namespace {
 
 	TEST_F(
 		RequestErrorTests,
-		playThrowsRequestFailureWhenNoLongerFactoryThrowsCreateError
+		playThrowsRequestFailureWhenNoLongerFactoryThrowsPreparationFailure
 	) {
-		ErrorNoLongerFactory failingFactory{ "error." };
+		PreparationFailureNoLongerFactory failingFactory{ "error." };
 		noLongerFactory = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}
 
 	TEST_F(
 		RequestErrorTests,
-		initializeThrowsInitializationFailureWhenNoLongerFactoryThrowsCreateError
+		initializeThrowsInitializationFailureWhenNoLongerFactoryThrowsInitializationFailure
 	) {
 		ErrorNoLongerFactory failingFactory{ "error." };
 		noLongerFactory = &failingFactory;
