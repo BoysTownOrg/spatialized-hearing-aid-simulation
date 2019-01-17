@@ -15,6 +15,7 @@ public:
 		readerFactory{ readerFactory },
 		processorFactory{ processorFactory } 
 	{
+		reader = readerFactory->make({});
 		processor = processorFactory->make({});
 	}
 
