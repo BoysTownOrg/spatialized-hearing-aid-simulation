@@ -1,5 +1,4 @@
 #include <playing-audio/RefactoredAudioFrameProcessor.h>
-
 #include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 

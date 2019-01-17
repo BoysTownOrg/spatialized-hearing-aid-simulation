@@ -17,7 +17,7 @@ public:
 		std::shared_ptr<PrescriptionReader> prescriptionReader,
 		std::shared_ptr<BrirReader> brirReader
 	);
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) override;
+	std::shared_ptr<RefactoredAudioFrameProcessor> make(Initialization) override;
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(
@@ -26,7 +26,7 @@ private:
 		double
 	);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
-	FilterbankCompressor::Parameters toCompressorParameters(Parameters, PrescriptionReader::Dsl);
+	FilterbankCompressor::Parameters toCompressorParameters(Initialization, PrescriptionReader::Dsl);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 	std::shared_ptr<SignalProcessor> makeHearingAid(
 		FilterbankCompressor::Parameters

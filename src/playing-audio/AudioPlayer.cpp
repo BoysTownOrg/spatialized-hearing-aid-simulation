@@ -56,7 +56,7 @@ void AudioPlayer::play(PlayRequest request) {
 }
 
 void AudioPlayer::makeProcessor(
-	NoLongerFactory::Parameters p
+	NoLongerFactory::Initialization p
 ) {
 	try {
 		return noLongerAFactory->make(std::move(p));

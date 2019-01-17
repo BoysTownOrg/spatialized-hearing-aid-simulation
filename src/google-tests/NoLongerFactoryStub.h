@@ -3,18 +3,18 @@
 #include <playing-audio/AudioPlayer.h>
 
 class NoLongerFactoryStub : public NoLongerFactory {
-	Parameters _parameters{};
+	Initialization _parameters{};
 	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int _sampleRate{};
 	int channels_{};
 	bool complete_{};
 public:
-	const Parameters &parameters() const {
+	const Initialization &parameters() const {
 		return _parameters;
 	}
 
-	void make(Parameters p) override {
+	void make(Initialization p) override {
 		_parameters = p;
 	}
 
@@ -63,7 +63,7 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	void make(Parameters) override {
+	void make(Initialization) override {
 		throw CreateError{ errorMessage };
 	}
 

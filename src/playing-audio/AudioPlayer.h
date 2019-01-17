@@ -9,7 +9,7 @@ class NoLongerFactory {
 public:
 	INTERFACE_OPERATIONS(NoLongerFactory);
 	RUNTIME_ERROR(CreateError);
-	struct Parameters {
+	struct Initialization {
 		std::vector<double> channelScalars;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -24,7 +24,7 @@ public:
 		int sampleRate;
 		int channels;
 	};
-	virtual void make(Parameters) = 0;
+	virtual void make(Initialization) = 0;
 	virtual bool complete() = 0;
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;
@@ -42,7 +42,7 @@ public:
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
-	NoLongerFactory::Parameters processing;
+	NoLongerFactory::Initialization processing;
 	AudioDevice *device;
 	NoLongerFactory *noLongerAFactory;
 public:
@@ -57,7 +57,7 @@ public:
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 private:
 	void makeProcessor(
-		NoLongerFactory::Parameters p
+		NoLongerFactory::Initialization p
 	);
 };
 
