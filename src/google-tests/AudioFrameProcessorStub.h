@@ -26,6 +26,10 @@ public:
 	void setComplete() {
 		complete_ = true;
 	}
+
+	bool complete() override {
+		return complete_;
+	}
 };
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {

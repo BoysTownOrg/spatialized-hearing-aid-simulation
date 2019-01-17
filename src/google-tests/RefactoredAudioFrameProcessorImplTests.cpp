@@ -339,6 +339,11 @@ namespace {
 		}
 
 		int groupDelay() override { return {}; }
+
+		bool complete() override
+		{
+			return false;
+		}
 	};
 
 	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
