@@ -225,6 +225,34 @@ namespace {
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
+	class RequestErrorTests : public ::testing::Test {
+	protected:
+		AudioFrameReaderStubFactory defaultReaderFactory{};
+		AudioFrameProcessorStubFactory defaultProcessorFactory{};
+		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
+		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
+
+		void assertInitializeThrowsInitializationFailure(std::string what) {
+			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
+			try {
+				impl.initialize({});
+				FAIL() << "Expected RefactoredAudioFrameProcessorImpl::InitializationFailure";
+			}
+			catch (const RefactoredAudioFrameProcessorImpl::InitializationFailure &e) {
+				assertEqual(what, e.what());
+			}
+		}
+	};
+
+	TEST_F(
+		RequestErrorTests,
+		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
+		processorFactory = &failingFactory;
+		assertInitializeThrowsInitializationFailure("error.");
+	}
+
 	class ReadsAOne : public AudioFrameReader {
 		void read(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
