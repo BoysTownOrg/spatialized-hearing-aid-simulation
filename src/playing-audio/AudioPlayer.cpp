@@ -7,7 +7,7 @@ AudioPlayer::AudioPlayer(
 ) :
 	device{ device },
 	readerFactory{ readerFactory },
-	processorFactory{ processorFactory }
+	noLongerAFactory{ processorFactory }
 {
 	if (device->failed())
 		throw DeviceFailure{ device->errorMessage() };
@@ -24,7 +24,7 @@ void AudioPlayer::initialize(Initialization request) {
 	processing.windowSize = request.windowSize;
 	processing.max_dB_Spl = request.max_dB_Spl;
 	try {
-		processorFactory->make(processing);
+		noLongerAFactory->make(processing);
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
@@ -72,7 +72,7 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 	AudioFrameProcessorFactory::Parameters p
 ) {
 	try {
-		return processorFactory->make(std::move(p));
+		return noLongerAFactory->make(std::move(p));
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
@@ -82,7 +82,7 @@ std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
-	if (processorFactory->complete())
+	if (noLongerAFactory->complete())
 		device->setCallbackResultToComplete();
 	frameProcessor->process(audio);
 }

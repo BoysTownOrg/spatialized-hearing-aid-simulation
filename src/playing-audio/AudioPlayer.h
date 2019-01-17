@@ -19,7 +19,7 @@ class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
-	AudioFrameProcessorFactory *processorFactory;
+	AudioFrameProcessorFactory *noLongerAFactory;
 public:
 	PLAYING_AUDIO_API AudioPlayer(
 		AudioDevice *, 
