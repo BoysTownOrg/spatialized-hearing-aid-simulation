@@ -57,15 +57,6 @@ void AudioPlayer::play(PlayRequest request) {
 	device->startStream();
 }
 
-std::shared_ptr<AudioFrameReader> AudioPlayer::makeReader(std::string filePath) {
-	try {
-		return readerFactory->make(std::move(filePath));
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
-	}
-}
-
 std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
 	NoLongerFactory::Parameters p
 ) {

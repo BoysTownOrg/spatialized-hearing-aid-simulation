@@ -32,7 +32,6 @@ public:
 	bool isPlaying() override;
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 private:
-	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
 		NoLongerFactory::Parameters p
 	);
