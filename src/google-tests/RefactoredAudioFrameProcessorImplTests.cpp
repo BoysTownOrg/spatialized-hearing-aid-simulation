@@ -126,6 +126,7 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
 	class ReadsAOne : public AudioFrameReader {
