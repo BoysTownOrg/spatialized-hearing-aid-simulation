@@ -34,6 +34,7 @@ public:
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	Parameters _parameters{};
+	gsl::span<gsl::span<float>> _audioBuffer{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 	bool complete_{};
 public:
@@ -62,6 +63,10 @@ public:
 
 	bool complete() override {
 		return complete_;
+	}
+
+	const gsl::span<gsl::span<float>> audioBuffer() const {
+		return _audioBuffer;
 	}
 };
 
