@@ -41,7 +41,6 @@ public:
 		processorFactory{ processorFactory } 
 	{
 		reader = readerFactory->make({});
-		processor = processorFactory->make({});
 	}
 
 	struct Initialization {
@@ -65,7 +64,12 @@ public:
 		processing.windowSize = initialization.windowSize;
 		processing.max_dB_Spl = initialization.max_dB_Spl;
 		processing.channelScalars.resize(2);
-		processorFactory->make(processing);
+		try {
+			processorFactory->make(processing);
+		}
+		catch (const AudioFrameProcessorFactory::CreateError &e) {
+			throw InitializationFailure{ e.what() };
+		}
 		processing.channelScalars.clear();
 	}
 
@@ -82,7 +86,7 @@ public:
 		RmsComputer rms{ *reader };
 		for (int i = 0; i < reader->channels(); ++i)
 			processing.channelScalars.push_back(desiredRms / rms.compute(i));
-		processorFactory->make(processing);
+		processor = processorFactory->make(processing);
 		reader->reset();
 	}
 
@@ -125,6 +129,7 @@ namespace {
 	};
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
+		impl.prepare({});
 		gsl::span<float> x{};
 		impl.process({ &x, 1 });
 		EXPECT_EQ(&x, reader->audioBuffer().data());
@@ -134,6 +139,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
+		impl.prepare({});
 		reader->setComplete();
 		std::vector<float> audio(3, -1);
 		gsl::span<float> x{ audio };
@@ -144,6 +150,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
+		impl.prepare({});
 		reader->setComplete();
 		processor->setGroupDelay(3);
 		float y{};
@@ -228,7 +235,7 @@ namespace {
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
-	class RequestErrorTests : public ::testing::Test {
+	class RefactoredAudioFrameProcessorImplRequestErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
 		AudioFrameProcessorStubFactory defaultProcessorFactory{};
@@ -248,7 +255,7 @@ namespace {
 	};
 
 	TEST_F(
-		RequestErrorTests,
+		RefactoredAudioFrameProcessorImplRequestErrorTests,
 		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
@@ -287,6 +294,7 @@ namespace {
 		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
 		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
 		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
+		impl.prepare({});
 		float y{};
 		gsl::span<float> x{ &y, 1 };
 		impl.process({ &x, 1 });
