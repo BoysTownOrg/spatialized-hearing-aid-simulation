@@ -1,5 +1,4 @@
 #include "AudioDeviceStub.h"
-#include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include "assert-utility.h"
@@ -11,8 +10,6 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		std::shared_ptr<AudioFrameReaderStub> frameReader = std::make_shared<AudioFrameReaderStub>();
-		AudioFrameReaderStubFactory readerFactory{ frameReader };
 		std::shared_ptr<AudioFrameProcessorStub> obsolete_processor = std::make_shared<AudioFrameProcessorStub>();
 		NoLongerFactoryStub noLongerFactory{ obsolete_processor };
 		AudioPlayer player{ &device, &noLongerFactory };
@@ -182,10 +179,8 @@ namespace {
 	class RequestErrorTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		AudioFrameReaderStubFactory defaultReaderFactory{};
 		NoLongerFactoryStub defaultProcessorFactory{};
 		AudioDevice *device{&defaultDevice};
-		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
 		NoLongerFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPlayThrowsRequestFailure(std::string what) {

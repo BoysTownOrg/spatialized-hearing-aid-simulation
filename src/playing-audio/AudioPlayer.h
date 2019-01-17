@@ -2,7 +2,6 @@
 
 #include "AudioDevice.h"
 #include "AudioFrameProcessor.h"
-#include <audio-stream-processing/AudioFrameReader.h>
 #include <recognition-test/StimulusPlayer.h>
 #include <gsl/gsl>
 
