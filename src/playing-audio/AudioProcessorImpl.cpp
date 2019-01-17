@@ -51,10 +51,10 @@ public:
 };
 
 void AudioProcessorImpl::prepare(Preparation p) {
-	processing.channelScalars.clear();
 	reader = makeReader(p.audioFilePath);
-	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 	RmsComputer rms{ *reader };
+	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
+	processing.channelScalars.clear();
 	for (int i = 0; i < reader->channels(); ++i)
 		processing.channelScalars.push_back(desiredRms / rms.compute(i));
 	processor = makeProcessor(processing);
@@ -83,14 +83,14 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessorImpl::makeProcessor(
 }
 
 void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
-	if (reader->complete()) {
+	if (reader->complete())
 		for (auto channel : audio)
 			for (auto &x : channel) {
 				++paddedZeroes;
 				x = 0;
 			}
-	}
-	reader->read(audio);
+	else
+		reader->read(audio);
 	processor->process(audio);
 }
 

@@ -66,9 +66,9 @@ void AudioPlayer::play(PlayRequest request) {
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
+	processor->process(audio);
 	if (processor->complete())
 		device->setCallbackResultToComplete();
-	processor->process(audio);
 }
 
 std::vector<std::string> AudioPlayer::audioDeviceDescriptions() {
