@@ -118,6 +118,9 @@ namespace {
 		EXPECT_FALSE(impl.complete());
 		impl.process({ &x, 1 });
 		EXPECT_TRUE(impl.complete());
+		impl.prepare({});
+		impl.process({ &x, 1 });
+		EXPECT_FALSE(impl.complete());
 	}
 
 	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
