@@ -73,7 +73,7 @@ public:
 		double level_dB_Spl;
 	};
 
-	void read(Preparation p) {
+	void prepare(Preparation p) {
 		reader = readerFactory->make(p.audioFilePath);
 		const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 		RmsComputer rms{ *reader };
@@ -175,7 +175,7 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, readPassesParametersToFactories) {
+	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
 		RefactoredAudioFrameProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
@@ -188,7 +188,7 @@ namespace {
 		impl.initialize(initialization);
 		RefactoredAudioFrameProcessorImpl::Preparation p{};
 		p.audioFilePath = "d";
-		impl.read(p);
+		impl.prepare(p);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -200,7 +200,7 @@ namespace {
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, playPassesCalibrationScaleToProcessorFactory) {
+	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
 		RefactoredAudioFrameProcessorImpl::Initialization initialization;
 		initialization.max_dB_Spl = 8;
 		impl.initialize(initialization);
@@ -209,7 +209,7 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
 		RefactoredAudioFrameProcessorImpl::Preparation p{};
 		p.level_dB_Spl = 7;
-		impl.read(p);
+		impl.prepare(p);
 		assertEqual(
 			{
 				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
@@ -220,8 +220,8 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredAudioFrameProcessorImplTests, playResetsReaderAfterComputingRms) {
-		impl.read({});
+	TEST_F(RefactoredAudioFrameProcessorImplTests, prepareResetsReaderAfterComputingRms) {
+		impl.prepare({});
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 

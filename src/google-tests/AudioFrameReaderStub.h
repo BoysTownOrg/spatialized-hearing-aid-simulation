@@ -21,7 +21,7 @@ public:
 
 	void read(gsl::span<gsl::span<float>> audio) override {
 		_audioBuffer = audio;
-		_readingLog += LogString{ "read " };
+		_readingLog += LogString{ "prepare " };
 	}
 
 	void setComplete() {
