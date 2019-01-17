@@ -57,7 +57,7 @@ namespace {
 		float *x[]{ &left };
 		fillStreamBuffer(x, 1);
 		EXPECT_FALSE(device.complete());
-		frameReader->setComplete();
+		processor->setComplete();
 		fillStreamBuffer(x, 1);
 		EXPECT_TRUE(device.complete());
 	}

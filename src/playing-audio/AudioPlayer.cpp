@@ -23,14 +23,12 @@ void AudioPlayer::initialize(Initialization request) {
 	processing.chunkSize = request.chunkSize;
 	processing.windowSize = request.windowSize;
 	processing.max_dB_Spl = request.max_dB_Spl;
-	processing.channelScalars.resize(2);
 	try {
 		processorFactory->make(processing);
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
 	}
-	processing.channelScalars.clear();
 }
 
 void AudioPlayer::play(PlayRequest request) {
