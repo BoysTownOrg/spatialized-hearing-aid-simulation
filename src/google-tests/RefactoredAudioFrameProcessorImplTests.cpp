@@ -90,6 +90,8 @@ public:
 		reader->reset();
 	}
 
+	RUNTIME_ERROR(PreparationFailure);
+
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
 			for (auto channel : audio)
@@ -271,7 +273,7 @@ namespace {
 	) {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
-		assertPrepareThrowsPreparationFailure("error.");
+		assertInitializeThrowsInitializationFailure("error.");
 	}
 
 	TEST_F(
@@ -280,7 +282,7 @@ namespace {
 	) {
 		ErrorAudioFrameProcessorFactory failingFactory{ "error." };
 		processorFactory = &failingFactory;
-		assertPlayThrowsRequestFailure("error.");
+		assertPrepareThrowsPreparationFailure("error.");
 	}
 
 	class ReadsAOne : public AudioFrameReader {
