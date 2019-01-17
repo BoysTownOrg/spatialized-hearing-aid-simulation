@@ -82,6 +82,14 @@ public:
 	void setChannels(int c) {
 		channels_ = c;
 	}
+
+	int channels() override {
+		return channels_;
+	}
+
+	int sampleRate() override {
+		return _sampleRate;
+	}
 };
 
 class ErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -101,4 +109,6 @@ public:
 	}
 
 	void process(gsl::span<gsl::span<float>>) override {}
+	int channels() override { return {}; }
+	int sampleRate() override { return {}; }
 };

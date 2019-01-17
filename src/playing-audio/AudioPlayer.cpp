@@ -44,8 +44,8 @@ void AudioPlayer::play(PlayRequest request) {
 	frameProcessor = makeProcessor(processing);
 
 	AudioDevice::StreamParameters streaming;
-	streaming.sampleRate = frameReader->sampleRate();
-	streaming.channels = frameReader->channels();
+	streaming.sampleRate = noLongerAFactory->sampleRate();
+	streaming.channels = noLongerAFactory->channels();
 	streaming.framesPerBuffer = processing.chunkSize;
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
