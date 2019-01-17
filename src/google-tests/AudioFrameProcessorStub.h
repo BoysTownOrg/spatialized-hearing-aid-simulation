@@ -34,6 +34,7 @@ public:
 
 class NoLongerFactoryStub : public NoLongerFactory {
 	Parameters _parameters{};
+	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 	int _sampleRate{};
@@ -89,6 +90,10 @@ public:
 
 	int sampleRate() override {
 		return _sampleRate;
+	}
+
+	std::string audioFilePath() {
+		return audioFilePath_;
 	}
 };
 
