@@ -102,8 +102,8 @@ namespace {
 		noLongerFactory.setChannels(6);
 		noLongerFactory.setSampleRate(7);
 		play(request);
-		assertEqual("d", noLongerFactory.audioFilePath());
-		EXPECT_EQ(8, noLongerFactory.parameters().level_dB_Spl);
+		assertEqual("d", noLongerFactory.preparation().audioFilePath);
+		EXPECT_EQ(8, noLongerFactory.preparation().level_dB_Spl);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(6, device.streamParameters().channels);

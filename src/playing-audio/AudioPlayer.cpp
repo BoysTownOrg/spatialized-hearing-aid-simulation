@@ -56,12 +56,15 @@ void AudioPlayer::play(PlayRequest request) {
 }
 
 void AudioPlayer::makeProcessor(
-	NoLongerFactory::Initialization p
+	NoLongerFactory::Initialization obsolete
 ) {
 	try {
-		return noLongerAFactory->initialize(std::move(p));
+		NoLongerFactory::Preparation p;
+		p.audioFilePath = obsolete.audioFilePath;
+		p.level_dB_Spl = obsolete.level_dB_Spl;
+		return noLongerAFactory->prepare(p);
 	}
-	catch (const NoLongerFactory::InitializationFailure &e) {
+	catch (const NoLongerFactory::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
 }

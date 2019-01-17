@@ -4,6 +4,7 @@
 
 class NoLongerFactoryStub : public NoLongerFactory {
 	Initialization _parameters{};
+	Preparation preparation_{};
 	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int _sampleRate{};
@@ -12,6 +13,10 @@ class NoLongerFactoryStub : public NoLongerFactory {
 public:
 	const Initialization &parameters() const {
 		return _parameters;
+	}
+
+	const Preparation &preparation() const {
+		return preparation_;
 	}
 
 	void initialize(Initialization p) override {
@@ -53,6 +58,10 @@ public:
 	std::string audioFilePath() {
 		return _parameters.audioFilePath;
 	}
+
+	void prepare(Preparation p) override {
+		preparation_ = std::move(p);
+	}
 };
 
 class ErrorNoLongerFactory : public NoLongerFactory {
@@ -74,6 +83,7 @@ public:
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
+	void prepare(Preparation) override {}
 };
 
 class PreparationFailureNoLongerFactory : public NoLongerFactory {
@@ -83,6 +93,10 @@ public:
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}
+
+	void prepare(Preparation) override {
+		throw PreparationFailure{ errorMessage };
+	}
 
 
 	bool complete() override {
