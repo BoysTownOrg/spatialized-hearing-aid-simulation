@@ -128,16 +128,16 @@ namespace {
 	}
 
 	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
-		AudioProcessorImpl::Initialization initialization;
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
-		initialization.chunkSize = 5;
-		impl.initialize(initialization);
+		AudioProcessorImpl::Initialization init;
+		init.leftDslPrescriptionFilePath = "a";
+		init.rightDslPrescriptionFilePath = "b";
+		init.brirFilePath = "c";
+		init.max_dB_Spl = 1;
+		init.attack_ms = 2;
+		init.release_ms = 3;
+		init.windowSize = 4;
+		init.chunkSize = 5;
+		impl.initialize(init);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -150,16 +150,16 @@ namespace {
 	}
 
 	TEST_F(AudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
-		AudioProcessorImpl::Initialization initialization;
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
-		initialization.chunkSize = 5;
-		impl.initialize(initialization);
+		AudioProcessorImpl::Initialization init;
+		init.leftDslPrescriptionFilePath = "a";
+		init.rightDslPrescriptionFilePath = "b";
+		init.brirFilePath = "c";
+		init.max_dB_Spl = 1;
+		init.attack_ms = 2;
+		init.release_ms = 3;
+		init.windowSize = 4;
+		init.chunkSize = 5;
+		impl.initialize(init);
 		AudioProcessorImpl::Preparation p{};
 		p.audioFilePath = "d";
 		prepare(p);
@@ -214,6 +214,40 @@ namespace {
 		EXPECT_EQ(0, impl.channels());
 		EXPECT_EQ(0, impl.sampleRate());
 		EXPECT_TRUE(impl.complete());
+	}
+
+	class ReadsAOne : public AudioFrameReader {
+		void read(gsl::span<gsl::span<float>> audio) override {
+			for (const auto channel : audio)
+				for (auto &x : channel)
+					x = 1;
+		}
+
+		int channels() const override { return 1; }
+		bool complete() const override { return {}; }
+		int sampleRate() const override { return {}; }
+		long long frames() const override { return {}; }
+		void reset() override {}
+	};
+
+	class TimesTwo : public AudioFrameProcessor {
+		void process(gsl::span<gsl::span<float>> audio) override {
+			for (const auto channel : audio)
+				for (auto &x : channel)
+					x *= 2;
+		}
+
+		int groupDelay() override { return {}; }
+	};
+
+	TEST_F(AudioFrameProcessorImplTests, processReadsThenProcesses) {
+		readerFactory.setReader(std::make_shared<ReadsAOne>());
+		processorFactory.setProcessor(std::make_shared<TimesTwo>());
+		prepare();
+		float y{};
+		gsl::span<float> x{ &y, 1 };
+		impl.process({ &x, 1 });
+		EXPECT_EQ(2, y);
 	}
 
 	class AudioProcessorImplErrorTests : public ::testing::Test {
@@ -271,40 +305,5 @@ namespace {
 		ErrorAudioFrameReaderFactory failingFactory{ "error." };
 		readerFactory = &failingFactory;
 		assertPrepareThrowsPreparationFailure("error.");
-	}
-
-	class ReadsAOne : public AudioFrameReader {
-		void read(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
-				for (auto &x : channel)
-					x = 1;
-		}
-
-		int channels() const override { return 1; }
-		bool complete() const override { return {}; }
-		int sampleRate() const override { return {}; }
-		long long frames() const override { return {}; }
-		void reset() override {}
-	};
-
-	class TimesTwo : public AudioFrameProcessor {
-		void process(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
-				for (auto &x : channel)
-					x *= 2;
-		}
-
-		int groupDelay() override { return {}; }
-	};
-
-	TEST(AudioProcessorImplOtherTests, processReadsThenProcesses) {
-		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
-		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
-		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
-		impl.prepare({});
-		float y{};
-		gsl::span<float> x{ &y, 1 };
-		impl.process({ &x, 1 });
-		EXPECT_EQ(2, y);
 	}
 }
