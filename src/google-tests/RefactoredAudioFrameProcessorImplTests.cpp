@@ -1,4 +1,5 @@
 #include <playing-audio/RefactoredAudioFrameProcessor.h>
+#include <playing-audio/AudioProcessor.h>
 #include <common-includes/RuntimeError.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 
@@ -25,7 +26,7 @@ public:
 	}
 };
 
-class RefactoredAudioFrameProcessorImpl {
+class RefactoredAudioFrameProcessorImpl : public AudioProcessor {
 	RefactoredAudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<RefactoredAudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
@@ -42,18 +43,7 @@ public:
 	{
 	}
 
-	struct Initialization {
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
-		double max_dB_Spl;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
-	};
-
-	void initialize(Initialization initialization) {
+	void initialize(Initialization initialization) override {
 		processing.attack_ms = initialization.attack_ms;
 		processing.release_ms = initialization.release_ms;
 		processing.brirFilePath = initialization.brirFilePath;
@@ -72,14 +62,7 @@ public:
 		processing.channelScalars.clear();
 	}
 
-	RUNTIME_ERROR(InitializationFailure);
-
-	struct Preparation {
-		std::string audioFilePath;
-		double level_dB_Spl;
-	};
-
-	void prepare(Preparation p) {
+	void prepare(Preparation p) override {
 		reader = makeReader(p.audioFilePath);
 		const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 		RmsComputer rms{ *reader };
@@ -88,8 +71,6 @@ public:
 		processor = makeProcessor(processing);
 		reader->reset();
 	}
-
-	RUNTIME_ERROR(PreparationFailure);
 
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
