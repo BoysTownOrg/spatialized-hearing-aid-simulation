@@ -86,7 +86,7 @@ public:
 		RmsComputer rms{ *reader };
 		for (int i = 0; i < reader->channels(); ++i)
 			processing.channelScalars.push_back(desiredRms / rms.compute(i));
-		processor = processorFactory->make(processing);
+		processor = makeProcessor(processing);
 		reader->reset();
 	}
 
@@ -106,6 +106,19 @@ public:
 
 	bool complete() {
 		return paddedZeroes >= processor->groupDelay();
+	}
+
+private:
+
+	std::shared_ptr<AudioFrameProcessor> makeProcessor(
+		AudioFrameProcessorFactory::Parameters p
+	) {
+		try {
+			return processorFactory->make(std::move(p));
+		}
+		catch (const AudioFrameProcessorFactory::CreateError &e) {
+			throw PreparationFailure{ e.what() };
+		}
 	}
 };
 
