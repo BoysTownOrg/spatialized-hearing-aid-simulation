@@ -69,10 +69,10 @@ namespace {
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, obsolete_processor->audioBuffer()[0].data());
-		EXPECT_EQ(&right, obsolete_processor->audioBuffer()[1].data());
-		EXPECT_EQ(1, obsolete_processor->audioBuffer()[0].size());
-		EXPECT_EQ(1, obsolete_processor->audioBuffer()[1].size());
+		EXPECT_EQ(&left, processor->audioBuffer()[0].data());
+		EXPECT_EQ(&right, processor->audioBuffer()[1].data());
+		EXPECT_EQ(1, processor->audioBuffer()[0].size());
+		EXPECT_EQ(1, processor->audioBuffer()[1].size());
 	}
 
 	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
