@@ -44,8 +44,13 @@ public:
 		processorFactory->make(processing);
 	}
 
-	void read(std::string filePath) {
-		readerFactory->make(filePath);
+	struct Preparation {
+		std::string audioFilePath;
+		double level_dB_Spl;
+	};
+
+	void read(Preparation p) {
+		readerFactory->make(p.audioFilePath);
 		processorFactory->make(processing);
 	}
 
@@ -152,7 +157,9 @@ namespace {
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		impl.initialize(initialization);
-		impl.read("d");
+		RefactoredAudioFrameProcessorImpl::Preparation p{};
+		p.audioFilePath = "d";
+		impl.read(p);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
