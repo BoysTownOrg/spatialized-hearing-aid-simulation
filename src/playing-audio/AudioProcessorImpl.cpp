@@ -28,3 +28,45 @@ void AudioProcessorImpl::prepare(Preparation p) {
 	processor = makeProcessor(processing);
 	reader->reset();
 }
+
+void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
+	if (reader->complete()) {
+		for (auto channel : audio)
+			for (auto &x : channel) {
+				++paddedZeroes;
+				x = 0;
+			}
+	}
+	reader->read(audio);
+	processor->process(audio);
+}
+
+bool AudioProcessorImpl::complete() {
+	return paddedZeroes >= processor->groupDelay();
+}
+
+int AudioProcessorImpl::channels() {
+	return reader->channels();
+}
+
+int AudioProcessorImpl::sampleRate() {
+	return reader->sampleRate();
+}
+
+std::shared_ptr<AudioFrameReader> AudioProcessorImpl::makeReader(std::string filePath) {
+	try {
+		return readerFactory->make(std::move(filePath));
+	}
+	catch (const AudioFrameReaderFactory::CreateError &e) {
+		throw PreparationFailure{ e.what() };
+	}
+}
+
+std::shared_ptr<RefactoredAudioFrameProcessor> AudioProcessorImpl::makeProcessor(RefactoredAudioFrameProcessorFactory::Parameters p) {
+	try {
+		return processorFactory->make(std::move(p));
+	}
+	catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
+		throw PreparationFailure{ e.what() };
+	}
+}

@@ -48,49 +48,14 @@ public:
 
 	PLAYING_AUDIO_API void initialize(Initialization initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation p) override;
-
-	void process(gsl::span<gsl::span<float>> audio) {
-		if (reader->complete()) {
-			for (auto channel : audio)
-				for (auto &x : channel) {
-					++paddedZeroes;
-					x = 0;
-				}
-		}
-		reader->read(audio);
-		processor->process(audio);
-	}
-
-	bool complete() {
-		return paddedZeroes >= processor->groupDelay();
-	}
-
-	int channels() {
-		return reader->channels();
-	}
-
-	int sampleRate() {
-		return reader->sampleRate();
-	}
+	PLAYING_AUDIO_API void process(gsl::span<gsl::span<float>> audio);
+	PLAYING_AUDIO_API bool complete();
+	PLAYING_AUDIO_API int channels();
+	PLAYING_AUDIO_API int sampleRate();
 
 private:
-	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath) {
-		try {
-			return readerFactory->make(std::move(filePath));
-		}
-		catch (const AudioFrameReaderFactory::CreateError &e) {
-			throw PreparationFailure{ e.what() };
-		}
-	}
-
+	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<RefactoredAudioFrameProcessor> makeProcessor(
 		RefactoredAudioFrameProcessorFactory::Parameters p
-	) {
-		try {
-			return processorFactory->make(std::move(p));
-		}
-		catch (const RefactoredAudioFrameProcessorFactory::CreateError &e) {
-			throw PreparationFailure{ e.what() };
-		}
-	}
+	);
 };
