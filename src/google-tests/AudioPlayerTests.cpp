@@ -1,9 +1,7 @@
 #include "AudioDeviceStub.h"
 #include "NoLongerFactoryStub.h"
-#include "FakeAudioFileReader.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
-#include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 namespace {
