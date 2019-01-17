@@ -38,8 +38,6 @@ void AudioPlayer::play(PlayRequest request) {
 	frameReader = makeReader(request.audioFilePath);
 	audio.resize(noLongerAFactory->channels());
 
-	processing.channels = frameReader->channels();
-	processing.sampleRate = frameReader->sampleRate();
 	processing.level_dB_Spl = request.level_dB_Spl;
 	frameProcessor = makeProcessor(processing);
 
