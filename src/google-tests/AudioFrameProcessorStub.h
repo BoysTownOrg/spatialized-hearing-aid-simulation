@@ -2,36 +2,6 @@
 
 #include <playing-audio/NoLongerFactory.h>
 
-class AudioFrameProcessorStub : public AudioFrameProcessor {
-	gsl::span<gsl::span<float>> _audioBuffer{};
-	int groupDelay_{};
-	bool complete_{};
-public:
-	const gsl::span<gsl::span<float>> audioBuffer() const {
-		return _audioBuffer;
-	}
-
-	void process(gsl::span<gsl::span<float>> audio) override {
-		_audioBuffer = audio;
-	}
-
-	void setGroupDelay(int n) {
-		groupDelay_ = n;
-	}
-
-	int groupDelay() override {
-		return groupDelay_;
-	}
-
-	void setComplete() {
-		complete_ = true;
-	}
-
-	bool complete() override {
-		return complete_;
-	}
-};
-
 class NoLongerFactoryStub : public NoLongerFactory {
 	Parameters _parameters{};
 	std::string audioFilePath_{};
@@ -42,8 +12,7 @@ class NoLongerFactoryStub : public NoLongerFactory {
 	bool complete_{};
 public:
 	explicit NoLongerFactoryStub(
-		std::shared_ptr<AudioFrameProcessor> processor =
-			std::make_shared<AudioFrameProcessorStub>()
+		std::shared_ptr<AudioFrameProcessor> processor = {}
 	) :
 		processor{ std::move(processor) } {}
 
