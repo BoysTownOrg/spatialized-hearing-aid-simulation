@@ -28,7 +28,18 @@ public:
 		int chunkSize;
 	};
 
-	void initialize(Initialization) {}
+	void initialize(Initialization initialization) {
+		AudioFrameProcessorFactory::Parameters processing;
+		processing.attack_ms = initialization.attack_ms;
+		processing.release_ms = initialization.release_ms;
+		processing.brirFilePath = initialization.brirFilePath;
+		processing.leftDslPrescriptionFilePath = initialization.leftDslPrescriptionFilePath;
+		processing.rightDslPrescriptionFilePath = initialization.rightDslPrescriptionFilePath;
+		processing.chunkSize = initialization.chunkSize;
+		processing.windowSize = initialization.windowSize;
+		processing.max_dB_Spl = initialization.max_dB_Spl;
+		processorFactory->make(processing);
+	}
 
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
