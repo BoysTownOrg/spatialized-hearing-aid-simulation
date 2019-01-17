@@ -21,10 +21,10 @@
     <ClInclude Include="AudioDeviceController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioFrameProcessor.h">
+    <ClInclude Include="AudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioPlayer.h">
+    <ClInclude Include="NoLongerFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

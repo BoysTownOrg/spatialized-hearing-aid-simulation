@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AudioDevice.h"
-#include "AudioFrameProcessor.h"
+#include "NoLongerFactory.h"
 #include <recognition-test/StimulusPlayer.h>
 #include <gsl/gsl>
 
