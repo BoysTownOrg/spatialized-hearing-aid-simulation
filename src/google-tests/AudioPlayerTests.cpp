@@ -178,7 +178,7 @@ namespace {
 		AudioDeviceStub defaultDevice{};
 		NoLongerFactoryStub defaultNoLongerFactory{};
 		AudioDevice *device{&defaultDevice};
-		NoLongerFactory *noLongerFactory{&defaultNoLongerFactory};
+		AudioProcessor *noLongerFactory{&defaultNoLongerFactory};
 
 		void assertPlayThrowsRequestFailure(std::string what) {
 			AudioPlayer player{ device, noLongerFactory };

@@ -2,7 +2,7 @@
 
 AudioPlayer::AudioPlayer(
 	AudioDevice *device,
-	NoLongerFactory *processorFactory
+	AudioProcessor *processorFactory
 ) :
 	device{ device },
 	noLongerAFactory{ processorFactory }
@@ -24,7 +24,7 @@ void AudioPlayer::initialize(Initialization request) {
 	try {
 		noLongerAFactory->initialize(processing);
 	}
-	catch (const NoLongerFactory::InitializationFailure &e) {
+	catch (const AudioProcessor::InitializationFailure &e) {
 		throw InitializationFailure{ e.what() };
 	}
 }
@@ -36,12 +36,12 @@ void AudioPlayer::play(PlayRequest request) {
 	audio.resize(noLongerAFactory->channels());
 	
 	try {
-		NoLongerFactory::Preparation p;
+		AudioProcessor::Preparation p;
 		p.audioFilePath = request.audioFilePath;
 		p.level_dB_Spl = request.level_dB_Spl;
 		noLongerAFactory->prepare(p);
 	}
-	catch (const NoLongerFactory::PreparationFailure &e) {
+	catch (const AudioProcessor::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
 

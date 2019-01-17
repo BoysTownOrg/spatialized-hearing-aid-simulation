@@ -7,7 +7,7 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <signal-processing/SignalProcessor.h>
 
-class SpatializedHearingAidSimulationFactory : public NoLongerFactory {
+class SpatializedHearingAidSimulationFactory : public AudioProcessor {
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<PrescriptionReader> prescriptionReader;
 	std::shared_ptr<BrirReader> brirReader;

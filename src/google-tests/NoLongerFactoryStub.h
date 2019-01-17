@@ -2,7 +2,7 @@
 
 #include <playing-audio/AudioPlayer.h>
 
-class NoLongerFactoryStub : public NoLongerFactory {
+class NoLongerFactoryStub : public AudioProcessor {
 	Initialization _parameters{};
 	Preparation preparation_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
@@ -59,7 +59,7 @@ public:
 	}
 };
 
-class ErrorNoLongerFactory : public NoLongerFactory {
+class ErrorNoLongerFactory : public AudioProcessor {
 	std::string errorMessage{};
 public:
 	explicit ErrorNoLongerFactory(
@@ -81,7 +81,7 @@ public:
 	void prepare(Preparation) override {}
 };
 
-class PreparationFailureNoLongerFactory : public NoLongerFactory {
+class PreparationFailureNoLongerFactory : public AudioProcessor {
 	std::string errorMessage{};
 public:
 	explicit PreparationFailureNoLongerFactory(
