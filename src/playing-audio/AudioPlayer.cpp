@@ -3,7 +3,7 @@
 AudioPlayer::AudioPlayer(
 	AudioDevice *device, 
 	AudioFrameReaderFactory *readerFactory, 
-	AudioFrameProcessorFactory *processorFactory
+	NoLongerFactory *processorFactory
 ) :
 	device{ device },
 	readerFactory{ readerFactory },
@@ -26,7 +26,7 @@ void AudioPlayer::initialize(Initialization request) {
 	try {
 		noLongerAFactory->make(processing);
 	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
+	catch (const NoLongerFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
 	}
 }
@@ -69,12 +69,12 @@ std::shared_ptr<AudioFrameReader> AudioPlayer::makeReader(std::string filePath) 
 }
 
 std::shared_ptr<AudioFrameProcessor> AudioPlayer::makeProcessor(
-	AudioFrameProcessorFactory::Parameters p
+	NoLongerFactory::Parameters p
 ) {
 	try {
 		return noLongerAFactory->make(std::move(p));
 	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
+	catch (const NoLongerFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
 }

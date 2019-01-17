@@ -32,7 +32,7 @@ public:
 	}
 };
 
-class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
+class NoLongerFactoryStub : public NoLongerFactory {
 	Parameters _parameters{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	std::shared_ptr<AudioFrameProcessor> processor;
@@ -40,7 +40,7 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	int channels_{};
 	bool complete_{};
 public:
-	explicit AudioFrameProcessorStubFactory(
+	explicit NoLongerFactoryStub(
 		std::shared_ptr<AudioFrameProcessor> processor =
 			std::make_shared<AudioFrameProcessorStub>()
 	) :
@@ -92,10 +92,10 @@ public:
 	}
 };
 
-class ErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
+class ErrorNoLongerFactory : public NoLongerFactory {
 	std::string errorMessage{};
 public:
-	explicit ErrorAudioFrameProcessorFactory(
+	explicit ErrorNoLongerFactory(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}

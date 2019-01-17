@@ -15,9 +15,9 @@ public:
 	virtual bool complete() = 0;
 };
 
-class AudioFrameProcessorFactory {
+class NoLongerFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
+	INTERFACE_OPERATIONS(NoLongerFactory);
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> channelScalars;

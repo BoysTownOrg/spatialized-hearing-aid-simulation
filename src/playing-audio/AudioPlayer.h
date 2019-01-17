@@ -14,17 +14,17 @@
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
-	AudioFrameProcessorFactory::Parameters processing;
+	NoLongerFactory::Parameters processing;
 	std::shared_ptr<AudioFrameReader> frameReader{};
 	std::shared_ptr<AudioFrameProcessor> frameProcessor{};
 	AudioDevice *device;
 	AudioFrameReaderFactory *readerFactory;
-	AudioFrameProcessorFactory *noLongerAFactory;
+	NoLongerFactory *noLongerAFactory;
 public:
 	PLAYING_AUDIO_API AudioPlayer(
 		AudioDevice *, 
 		AudioFrameReaderFactory *, 
-		AudioFrameProcessorFactory *
+		NoLongerFactory *
 	);
 	void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API void play(PlayRequest) override;
@@ -34,7 +34,7 @@ public:
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
-		AudioFrameProcessorFactory::Parameters p
+		NoLongerFactory::Parameters p
 	);
 };
 
