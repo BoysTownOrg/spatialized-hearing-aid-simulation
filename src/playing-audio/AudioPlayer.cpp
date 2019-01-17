@@ -55,7 +55,7 @@ void AudioPlayer::play(PlayRequest request) {
 	device->startStream();
 }
 
-std::shared_ptr<RefactoredAudioFrameProcessor> AudioPlayer::makeProcessor(
+void AudioPlayer::makeProcessor(
 	NoLongerFactory::Parameters p
 ) {
 	try {

@@ -1,32 +1,21 @@
 #pragma once
 
-#include <playing-audio/NoLongerFactory.h>
+#include <playing-audio/AudioPlayer.h>
 
 class NoLongerFactoryStub : public NoLongerFactory {
 	Parameters _parameters{};
 	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
-	std::shared_ptr<RefactoredAudioFrameProcessor> processor;
 	int _sampleRate{};
 	int channels_{};
 	bool complete_{};
 public:
-	explicit NoLongerFactoryStub(
-		std::shared_ptr<RefactoredAudioFrameProcessor> processor = {}
-	) :
-		processor{ std::move(processor) } {}
-
-	void setProcessor(std::shared_ptr<RefactoredAudioFrameProcessor> p) {
-		this->processor = std::move(p);
-	}
-
 	const Parameters &parameters() const {
 		return _parameters;
 	}
 
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters p) override {
+	void make(Parameters p) override {
 		_parameters = p;
-		return processor;
 	}
 
 	void setComplete() {
@@ -74,7 +63,7 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	std::shared_ptr<RefactoredAudioFrameProcessor> make(Parameters) override {
+	void make(Parameters) override {
 		throw CreateError{ errorMessage };
 	}
 

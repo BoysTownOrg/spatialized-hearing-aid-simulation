@@ -92,7 +92,7 @@ namespace {
 		EXPECT_EQ(5, noLongerFactory.parameters().chunkSize);
 	}
 
-	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
+	TEST_F(AudioPlayerTests, playPassesParametersToThings) {
 		StimulusPlayer::Initialization initialization;
 		initialization.chunkSize = 5;
 		player.initialize(initialization);
