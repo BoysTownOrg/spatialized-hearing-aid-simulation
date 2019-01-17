@@ -298,6 +298,15 @@ namespace {
 		assertPrepareThrowsPreparationFailure("error.");
 	}
 
+	TEST_F(
+		RefactoredAudioFrameProcessorImplRequestErrorTests,
+		prepareThrowsPreparationFailureWhenReaderFactoryThrowsCreateError
+	) {
+		ErrorAudioFrameReaderFactory failingFactory{ "error." };
+		readerFactory = &failingFactory;
+		assertPrepareThrowsPreparationFailure("error.");
+	}
+
 	class ReadsAOne : public AudioFrameReader {
 		void read(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
