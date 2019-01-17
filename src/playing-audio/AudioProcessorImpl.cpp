@@ -57,6 +57,8 @@ void AudioProcessorImpl::prepare(Preparation p) {
 	processing.channelScalars.clear();
 	for (int i = 0; i < reader->channels(); ++i)
 		processing.channelScalars.push_back(desiredRms / rms.compute(i));
+	processing.channels = reader->channels();
+	processing.sampleRate = reader->sampleRate();
 	processor = makeProcessor(processing);
 	reader->reset();
 	paddedZeroes = 0;
