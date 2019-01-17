@@ -2,16 +2,30 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class RefactoredAudioFrameProcessorImpl {
+	std::shared_ptr<AudioFrameProcessor> processor{};
 	AudioFrameReader *reader;
-	AudioFrameProcessor *processor;
+	AudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
 	RefactoredAudioFrameProcessorImpl(
 		AudioFrameReader *reader, 
-		AudioFrameProcessor *processor
+		AudioFrameProcessorFactory *processorFactory
 	) :
 		reader{ reader },
-		processor{ processor } {}
+		processorFactory{ processorFactory } {}
+
+	struct Initialization {
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
+		double max_dB_Spl;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+	};
+
+	void initialize(Initialization) {}
 
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
@@ -32,6 +46,7 @@ public:
 
 class RefactoredAudioFrameProcessorImplFactory{};
 
+#include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include <gtest/gtest.h>
@@ -40,8 +55,10 @@ namespace {
 	class RefactoredAudioFrameProcessorImplTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStub reader{};
-		AudioFrameProcessorStub processor{};
-		RefactoredAudioFrameProcessorImpl impl{ &reader, &processor };
+		std::shared_ptr<AudioFrameProcessorStub> processor =
+			std::make_shared<AudioFrameProcessorStub>();
+		AudioFrameProcessorStubFactory processorFactory{processor};
+		RefactoredAudioFrameProcessorImpl impl{ &reader, &processorFactory };
 	};
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
@@ -49,8 +66,8 @@ namespace {
 		impl.process({ &x, 1 });
 		EXPECT_EQ(&x, reader.audioBuffer().data());
 		EXPECT_EQ(1, reader.audioBuffer().size());
-		EXPECT_EQ(&x, processor.audioBuffer().data());
-		EXPECT_EQ(1, processor.audioBuffer().size());
+		EXPECT_EQ(&x, processor->audioBuffer().data());
+		EXPECT_EQ(1, processor->audioBuffer().size());
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
@@ -58,14 +75,14 @@ namespace {
 		std::vector<float> audio(3, -1);
 		gsl::span<float> x{ audio };
 		impl.process({ &x, 1 });
-		EXPECT_EQ(0, processor.audioBuffer()[0][0]);
-		EXPECT_EQ(0, processor.audioBuffer()[0][1]);
-		EXPECT_EQ(0, processor.audioBuffer()[0][2]);
+		EXPECT_EQ(0, processor->audioBuffer()[0][0]);
+		EXPECT_EQ(0, processor->audioBuffer()[0][1]);
+		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
 		reader.setComplete();
-		processor.setGroupDelay(3);
+		processor->setGroupDelay(3);
 		float y{};
 		gsl::span<float> x{ &y, 1 };
 		impl.process({ &x, 1 });
@@ -126,8 +143,8 @@ namespace {
 
 	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
 		ReadsAOne reader{};
-		TimesTwo processor{};
-		RefactoredAudioFrameProcessorImpl impl{ &reader, &processor };
+		AudioFrameProcessorStubFactory factory{ std::make_shared<TimesTwo>() };
+		RefactoredAudioFrameProcessorImpl impl{ &reader, &factory };
 		float y{};
 		gsl::span<float> x{ &y, 1 };
 		impl.process({ &x, 1 });
