@@ -107,6 +107,14 @@ public:
 		return paddedZeroes >= processor->groupDelay();
 	}
 
+	int channels() {
+		return {};
+	}
+
+	int sampleRate() {
+		return {};
+	}
+
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath) {
 		try {
