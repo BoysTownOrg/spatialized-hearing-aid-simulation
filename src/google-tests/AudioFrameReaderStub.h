@@ -59,6 +59,10 @@ public:
 	void reset() override {
 		_readingLog += LogString{ "reset " };
 	}
+
+	void setIncomplete() {
+		_complete = false;
+	}
 };
 
 class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {
