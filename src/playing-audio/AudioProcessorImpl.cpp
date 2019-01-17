@@ -59,6 +59,7 @@ void AudioProcessorImpl::prepare(Preparation p) {
 		processing.channelScalars.push_back(desiredRms / rms.compute(i));
 	processor = makeProcessor(processing);
 	reader->reset();
+	paddedZeroes = 0;
 }
 
 std::shared_ptr<AudioFrameReader> AudioProcessorImpl::makeReader(std::string filePath) {
