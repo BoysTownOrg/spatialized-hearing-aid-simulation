@@ -10,6 +10,7 @@
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
+#include <playing-audio/AudioProcessorImpl.h>
 #include <recognition-test/RecognitionTestModel.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
@@ -84,7 +85,9 @@ int main() {
 			std::make_shared<LibsndfileReaderFactory>()
 		)
 	};
-	AudioPlayer player{&device, &frameReaderFactory, &processorFactory};
+	
+	AudioProcessorImpl impl{&frameReaderFactory, &processorFactory};
+	AudioPlayer player{&device, &impl};
 	RecognitionTestModel model{ &list, &player };
 	FltkView view{};
 	Presenter presenter{ &model, &view };
