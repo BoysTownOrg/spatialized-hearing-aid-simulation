@@ -15,7 +15,7 @@ namespace {
 		AudioFrameReaderStubFactory readerFactory{ frameReader };
 		std::shared_ptr<AudioFrameProcessorStub> obsolete_processor = std::make_shared<AudioFrameProcessorStub>();
 		NoLongerFactoryStub noLongerFactory{ obsolete_processor };
-		AudioPlayer player{ &device, &readerFactory, &noLongerFactory };
+		AudioPlayer player{ &device, &noLongerFactory };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
@@ -171,7 +171,7 @@ namespace {
 		device.fail();
 		device.setErrorMessage("error.");
 		try {
-			AudioPlayer player{ &device, {}, {} };
+			AudioPlayer player{ &device, {} };
 			FAIL() << "Expected AudioPlayer::DeviceFailure";
 		}
 		catch (const AudioPlayer::DeviceFailure &e) {
@@ -189,7 +189,7 @@ namespace {
 		NoLongerFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPlayThrowsRequestFailure(std::string what) {
-			AudioPlayer player{ device, readerFactory, processorFactory };
+			AudioPlayer player{ device, processorFactory };
 			try {
 				player.play({});
 				FAIL() << "Expected AudioPlayer::RequestFailure";
@@ -200,7 +200,7 @@ namespace {
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioPlayer player{ device, readerFactory, processorFactory };
+			AudioPlayer player{ device, processorFactory };
 			try {
 				player.initialize({});
 				FAIL() << "Expected AudioPlayer::InitializationFailure";

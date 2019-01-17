@@ -1,12 +1,10 @@
 #include "AudioPlayer.h"
 
 AudioPlayer::AudioPlayer(
-	AudioDevice *device, 
-	AudioFrameReaderFactory *readerFactory, 
+	AudioDevice *device,
 	NoLongerFactory *processorFactory
 ) :
 	device{ device },
-	readerFactory{ readerFactory },
 	noLongerAFactory{ processorFactory }
 {
 	if (device->failed())
