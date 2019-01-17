@@ -14,7 +14,7 @@ public:
 		return _parameters;
 	}
 
-	void make(Initialization p) override {
+	void initialize(Initialization p) override {
 		_parameters = p;
 	}
 
@@ -63,7 +63,7 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	void make(Initialization) override {
+	void initialize(Initialization) override {
 		throw CreateError{ errorMessage };
 	}
 

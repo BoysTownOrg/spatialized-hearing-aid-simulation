@@ -22,7 +22,7 @@ void AudioPlayer::initialize(Initialization request) {
 	processing.windowSize = request.windowSize;
 	processing.max_dB_Spl = request.max_dB_Spl;
 	try {
-		noLongerAFactory->make(processing);
+		noLongerAFactory->initialize(processing);
 	}
 	catch (const NoLongerFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
@@ -59,7 +59,7 @@ void AudioPlayer::makeProcessor(
 	NoLongerFactory::Initialization p
 ) {
 	try {
-		return noLongerAFactory->make(std::move(p));
+		return noLongerAFactory->initialize(std::move(p));
 	}
 	catch (const NoLongerFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };

@@ -24,7 +24,7 @@ public:
 		int sampleRate;
 		int channels;
 	};
-	virtual void make(Initialization) = 0;
+	virtual void initialize(Initialization) = 0;
 	virtual bool complete() = 0;
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;
