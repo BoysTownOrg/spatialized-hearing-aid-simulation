@@ -3,15 +3,16 @@
 
 class RefactoredAudioFrameProcessorImpl {
 	std::shared_ptr<AudioFrameProcessor> processor{};
-	AudioFrameReader *reader;
+	std::shared_ptr<AudioFrameReader> reader{};
+	AudioFrameReaderFactory *readerFactory;
 	AudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
 	RefactoredAudioFrameProcessorImpl(
-		AudioFrameReader *reader, 
+		AudioFrameReaderFactory *readerFactory, 
 		AudioFrameProcessorFactory *processorFactory
 	) :
-		reader{ reader },
+		readerFactory{ readerFactory },
 		processorFactory{ processorFactory } 
 	{
 		processor = processorFactory->make({});
@@ -42,6 +43,8 @@ public:
 		processorFactory->make(processing);
 	}
 
+	void read(std::string) {}
+
 	void process(gsl::span<gsl::span<float>> audio) {
 		if (reader->complete()) {
 			for (auto channel : audio)
@@ -69,24 +72,26 @@ class RefactoredAudioFrameProcessorImplFactory{};
 namespace {
 	class RefactoredAudioFrameProcessorImplTests : public ::testing::Test {
 	protected:
-		AudioFrameReaderStub reader{};
+		std::shared_ptr<AudioFrameReaderStub> reader =
+			std::make_shared<AudioFrameReaderStub>();
+		AudioFrameReaderStubFactory readerFactory{reader};
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
-		RefactoredAudioFrameProcessorImpl impl{ &reader, &processorFactory };
+		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
 	};
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
 		gsl::span<float> x{};
 		impl.process({ &x, 1 });
-		EXPECT_EQ(&x, reader.audioBuffer().data());
-		EXPECT_EQ(1, reader.audioBuffer().size());
+		EXPECT_EQ(&x, reader->audioBuffer().data());
+		EXPECT_EQ(1, reader->audioBuffer().size());
 		EXPECT_EQ(&x, processor->audioBuffer().data());
 		EXPECT_EQ(1, processor->audioBuffer().size());
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
-		reader.setComplete();
+		reader->setComplete();
 		std::vector<float> audio(3, -1);
 		gsl::span<float> x{ audio };
 		impl.process({ &x, 1 });
@@ -96,7 +101,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
-		reader.setComplete();
+		reader->setComplete();
 		processor->setGroupDelay(3);
 		float y{};
 		gsl::span<float> x{ &y, 1 };
@@ -181,9 +186,9 @@ namespace {
 	};
 
 	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
-		ReadsAOne reader{};
-		AudioFrameProcessorStubFactory factory{ std::make_shared<TimesTwo>() };
-		RefactoredAudioFrameProcessorImpl impl{ &reader, &factory };
+		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
+		AudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
+		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
 		float y{};
 		gsl::span<float> x{ &y, 1 };
 		impl.process({ &x, 1 });
