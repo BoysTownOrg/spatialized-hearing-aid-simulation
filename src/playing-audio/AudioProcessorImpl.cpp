@@ -83,12 +83,12 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessorImpl::makeProcessor(
 }
 
 void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
-	if (reader->complete())
+	if (reader->complete()) {
 		for (auto channel : audio)
-			for (auto &x : channel) {
-				++paddedZeroes;
+			for (auto &x : channel)
 				x = 0;
-			}
+		paddedZeroes += audio.begin()->size();
+	}
 	else
 		reader->read(audio);
 	processor->process(audio);
