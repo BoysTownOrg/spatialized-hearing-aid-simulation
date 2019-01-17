@@ -95,7 +95,7 @@ void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
 }
 
 bool AudioProcessorImpl::complete() {
-	return paddedZeroes >= processor->groupDelay();
+	return processor ? paddedZeroes >= processor->groupDelay() : true;
 }
 
 int AudioProcessorImpl::channels() {
