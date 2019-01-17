@@ -6,10 +6,10 @@ ChannelProcessingGroup::ChannelProcessingGroup(
 ) :
 	processors{ std::move(processors) } {}
 
-void ChannelProcessingGroup::process(gsl::span<gsl::span<float>> audio) {
+void ChannelProcessingGroup::process(gsl::span<gsl::span<float>>) {
 	using size_type = decltype(processors)::size_type;
 	for (size_type i = 0; i < processors.size(); ++i)
-		processors[i]->process(audio[i]);
+		;//processors[i]->process(audio[i]);
 }
 
 int ChannelProcessingGroup::groupDelay() {
