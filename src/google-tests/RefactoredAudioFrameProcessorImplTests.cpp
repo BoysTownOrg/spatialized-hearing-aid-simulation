@@ -130,6 +130,29 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
+	TEST_F(RefactoredAudioFrameProcessorImplTests, readPassesParametersToFactories) {
+		RefactoredAudioFrameProcessorImpl::Initialization initialization;
+		initialization.leftDslPrescriptionFilePath = "a";
+		initialization.rightDslPrescriptionFilePath = "b";
+		initialization.brirFilePath = "c";
+		initialization.max_dB_Spl = 1;
+		initialization.attack_ms = 2;
+		initialization.release_ms = 3;
+		initialization.windowSize = 4;
+		initialization.chunkSize = 5;
+		impl.initialize(initialization);
+		impl.read("d");
+		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
+		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
+		assertEqual("c", processorFactory.parameters().brirFilePath);
+		assertEqual("d", readerFactory.filePath());
+		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
+		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
+		EXPECT_EQ(3, processorFactory.parameters().release_ms);
+		EXPECT_EQ(4, processorFactory.parameters().windowSize);
+		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+	}
+
 	class ReadsAOne : public AudioFrameReader {
 		void read(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)

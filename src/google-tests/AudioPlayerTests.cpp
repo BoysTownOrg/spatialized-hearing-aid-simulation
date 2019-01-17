@@ -94,7 +94,6 @@ namespace {
 		EXPECT_EQ(3, processor.parameters().release_ms);
 		EXPECT_EQ(4, processor.parameters().windowSize);
 		EXPECT_EQ(5, processor.parameters().chunkSize);
-		EXPECT_EQ(2U, processor.parameters().channelScalars.size());
 	}
 
 	TEST_F(AudioPlayerTests, playPassesParametersToFactories) {
