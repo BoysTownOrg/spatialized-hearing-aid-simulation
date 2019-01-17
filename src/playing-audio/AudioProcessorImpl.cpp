@@ -25,7 +25,6 @@ void AudioProcessorImpl::initialize(Initialization initialization) {
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };
 	}
-	processing.channelScalars.clear();
 }
 
 class RmsComputer {
@@ -52,6 +51,7 @@ public:
 };
 
 void AudioProcessorImpl::prepare(Preparation p) {
+	processing.channelScalars.clear();
 	reader = makeReader(p.audioFilePath);
 	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
 	RmsComputer rms{ *reader };
