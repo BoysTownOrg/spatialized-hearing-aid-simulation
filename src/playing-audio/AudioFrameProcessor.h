@@ -26,6 +26,7 @@ public:
 		double max_dB_Spl;
 		double attack_ms;
 		double release_ms;
+		double level_dB_Spl;
 		int chunkSize;
 		int windowSize;
 		int sampleRate;
