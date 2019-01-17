@@ -132,26 +132,6 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
-	TEST_F(AudioPlayerTests, playPassesCalibrationScaleToProcessorFactory) {
-		AudioPlayer::Initialization initialization;
-		initialization.max_dB_Spl = 8;
-		player.initialize(initialization);
-		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
-		fake.setChannels(2);
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
-		AudioPlayer::PlayRequest request{};
-		request.level_dB_Spl = 7;
-		play(request);
-		assertEqual(
-			{
-				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
-				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3.0)
-			},
-			processor.parameters().channelScalars,
-			1e-6
-		);
-	}
-
 	TEST_F(AudioPlayerTests, playResetsReaderAfterComputingRms) {
 		play();
 		EXPECT_TRUE(frameReader->readingLog().endsWith("reset "));

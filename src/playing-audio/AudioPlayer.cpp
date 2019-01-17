@@ -33,29 +33,6 @@ void AudioPlayer::initialize(Initialization request) {
 	processing.channelScalars.clear();
 }
 
-class RmsComputer {
-	std::vector<std::vector<float>> entireAudioFile;
-public:
-	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile{ reader.channels() }
-	{
-		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile) {
-			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
-			pointers.push_back({ channel });
-		}
-		reader.read(pointers);
-	}
-
-	double compute(int channel) {
-		double squaredSum{};
-		const auto channel_ = entireAudioFile.at(channel);
-		for (const auto sample : channel_)
-			squaredSum += sample * sample;
-		return std::sqrt(squaredSum / channel_.size());
-	}
-};
-
 void AudioPlayer::play(PlayRequest request) {
 	if (device->streaming())
 		return;
@@ -66,10 +43,6 @@ void AudioPlayer::play(PlayRequest request) {
 	processing.channels = frameReader->channels();
 	processing.sampleRate = frameReader->sampleRate();
 	processing.level_dB_Spl = request.level_dB_Spl;
-	const auto desiredRms = std::pow(10.0, (request.level_dB_Spl - processing.max_dB_Spl) / 20.0);
-	RmsComputer rms{ *frameReader };
-	for (int i = 0; i < frameReader->channels(); ++i)
-		processing.channelScalars.push_back(desiredRms / rms.compute(i));
 	frameProcessor = makeProcessor(processing);
 
 	frameReader->reset();
