@@ -2,7 +2,7 @@
 
 #include <playing-audio/AudioPlayer.h>
 
-class NoLongerFactoryStub : public AudioProcessor {
+class AudioProcessorStub : public AudioProcessor {
 	Initialization _parameters{};
 	Preparation preparation_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
@@ -59,10 +59,10 @@ public:
 	}
 };
 
-class ErrorNoLongerFactory : public AudioProcessor {
+class InitializationFailingAudioProcessor : public AudioProcessor {
 	std::string errorMessage{};
 public:
-	explicit ErrorNoLongerFactory(
+	explicit InitializationFailingAudioProcessor(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}
@@ -71,20 +71,17 @@ public:
 		throw InitializationFailure{ errorMessage };
 	}
 
-	bool complete() override {
-		return {};
-	}
-
+	bool complete() override { return {}; }
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	void prepare(Preparation) override {}
 };
 
-class PreparationFailureNoLongerFactory : public AudioProcessor {
+class PreparationFailureAudioProcessor : public AudioProcessor {
 	std::string errorMessage{};
 public:
-	explicit PreparationFailureNoLongerFactory(
+	explicit PreparationFailureAudioProcessor(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}
@@ -92,12 +89,8 @@ public:
 	void prepare(Preparation) override {
 		throw PreparationFailure{ errorMessage };
 	}
-
-
-	bool complete() override {
-		return {};
-	}
 	
+	bool complete() override { return {}; }
 	void initialize(Initialization) override {}
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }

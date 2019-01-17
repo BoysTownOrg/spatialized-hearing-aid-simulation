@@ -8,7 +8,7 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		NoLongerFactoryStub noLongerFactory{};
+		AudioProcessorStub noLongerFactory{};
 		AudioPlayer player{ &device, &noLongerFactory };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
@@ -176,7 +176,7 @@ namespace {
 	class RequestErrorTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		NoLongerFactoryStub defaultNoLongerFactory{};
+		AudioProcessorStub defaultNoLongerFactory{};
 		AudioDevice *device{&defaultDevice};
 		AudioProcessor *noLongerFactory{&defaultNoLongerFactory};
 
@@ -217,7 +217,7 @@ namespace {
 		RequestErrorTests,
 		playThrowsRequestFailureWhenNoLongerFactoryThrowsPreparationFailure
 	) {
-		PreparationFailureNoLongerFactory failingFactory{ "error." };
+		PreparationFailureAudioProcessor failingFactory{ "error." };
 		noLongerFactory = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}
@@ -226,7 +226,7 @@ namespace {
 		RequestErrorTests,
 		initializeThrowsInitializationFailureWhenNoLongerFactoryThrowsInitializationFailure
 	) {
-		ErrorNoLongerFactory failingFactory{ "error." };
+		InitializationFailingAudioProcessor failingFactory{ "error." };
 		noLongerFactory = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
