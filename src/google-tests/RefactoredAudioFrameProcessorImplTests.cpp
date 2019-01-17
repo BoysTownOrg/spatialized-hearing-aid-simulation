@@ -1,6 +1,29 @@
 #include <playing-audio/AudioFrameProcessor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 
+class RmsComputer {
+	std::vector<std::vector<float>> entireAudioFile;
+public:
+	explicit RmsComputer(AudioFrameReader &reader) :
+		entireAudioFile{ reader.channels() }
+	{
+		std::vector<gsl::span<float>> pointers;
+		for (auto &channel : entireAudioFile) {
+			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
+			pointers.push_back({ channel });
+		}
+		reader.read(pointers);
+	}
+
+	double compute(int channel) {
+		double squaredSum{};
+		const auto channel_ = entireAudioFile.at(channel);
+		for (const auto sample : channel_)
+			squaredSum += sample * sample;
+		return std::sqrt(squaredSum / channel_.size());
+	}
+};
+
 class RefactoredAudioFrameProcessorImpl {
 	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor{};
@@ -42,6 +65,7 @@ public:
 		processing.max_dB_Spl = initialization.max_dB_Spl;
 		processing.channelScalars.resize(2);
 		processorFactory->make(processing);
+		processing.channelScalars.clear();
 	}
 
 	struct Preparation {
@@ -50,7 +74,11 @@ public:
 	};
 
 	void read(Preparation p) {
-		readerFactory->make(p.audioFilePath);
+		reader = readerFactory->make(p.audioFilePath);
+		const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
+		RmsComputer rms{ *reader };
+		for (int i = 0; i < reader->channels(); ++i)
+			processing.channelScalars.push_back(desiredRms / rms.compute(i));
 		processorFactory->make(processing);
 	}
 
