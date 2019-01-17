@@ -115,6 +115,11 @@ namespace {
 		assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 	}
 
+	TEST_F(AudioPlayerTests, playPreparesProcessorPriorToQueryingIt) {
+		play();
+		EXPECT_TRUE(processor.callbackLog().beginsWith("prepare "));
+	}
+
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
 		EXPECT_FALSE(player.isPlaying());
 		device.setStreaming();
