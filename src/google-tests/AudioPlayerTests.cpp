@@ -117,7 +117,7 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playPreparesProcessorPriorToQueryingIt) {
 		play();
-		EXPECT_TRUE(processor.callbackLog().beginsWith("prepare "));
+		EXPECT_TRUE(processor.log().beginsWith("prepare "));
 	}
 
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {

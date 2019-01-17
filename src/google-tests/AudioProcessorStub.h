@@ -7,7 +7,7 @@ class AudioProcessorStub : public AudioProcessor {
 	Initialization _parameters{};
 	Preparation preparation_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
-	LogString callbackLog_{};
+	LogString log_{};
 	int _sampleRate{};
 	int channels_{};
 	bool complete_{};
@@ -49,7 +49,7 @@ public:
 	}
 
 	int channels() override {
-		callbackLog_ += std::string{ "channels " };
+		log_ += std::string{ "channels " };
 		return channels_;
 	}
 
@@ -59,11 +59,11 @@ public:
 
 	void prepare(Preparation p) override {
 		preparation_ = std::move(p);
-		callbackLog_ += std::string{ "prepare " };
+		log_ += std::string{ "prepare " };
 	}
 
-	const LogString &callbackLog() const {
-		return callbackLog_;
+	const LogString &log() const {
+		return log_;
 	}
 };
 
