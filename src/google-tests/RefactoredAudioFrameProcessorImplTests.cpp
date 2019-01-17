@@ -71,6 +71,8 @@ class RefactoredAudioFrameProcessorImplFactory{};
 #include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
+#include "FakeAudioFileReader.h"
+#include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -160,6 +162,26 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+	}
+
+	TEST_F(RefactoredAudioFrameProcessorImplTests, playPassesCalibrationScaleToProcessorFactory) {
+		RefactoredAudioFrameProcessorImpl::Initialization initialization;
+		initialization.max_dB_Spl = 8;
+		impl.initialize(initialization);
+		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
+		fake.setChannels(2);
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
+		RefactoredAudioFrameProcessorImpl::Preparation p{};
+		p.level_dB_Spl = 7;
+		impl.read(p);
+		assertEqual(
+			{
+				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
+				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3.0)
+			},
+			processorFactory.parameters().channelScalars,
+			1e-6
+		);
 	}
 
 	class ReadsAOne : public AudioFrameReader {
