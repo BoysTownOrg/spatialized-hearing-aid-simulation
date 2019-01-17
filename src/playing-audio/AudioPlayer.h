@@ -2,7 +2,6 @@
 #include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
 #include <gsl/gsl>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -34,7 +33,6 @@ public:
 
 #include "AudioDevice.h"
 #include <recognition-test/StimulusPlayer.h>
-#include <gsl/gsl>
 
 #ifdef PLAYING_AUDIO_EXPORTS
 	#define PLAYING_AUDIO_API __declspec(dllexport)

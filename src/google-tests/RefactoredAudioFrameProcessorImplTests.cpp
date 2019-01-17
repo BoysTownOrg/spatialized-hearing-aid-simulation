@@ -1,4 +1,4 @@
-#include <playing-audio/NoLongerFactory.h>
+#include <playing-audio/RefactoredAudioFrameProcessor.h>
 #include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
 #include <gsl/gsl>

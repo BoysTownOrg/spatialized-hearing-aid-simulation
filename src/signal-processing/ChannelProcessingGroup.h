@@ -2,7 +2,7 @@
 
 #include "SignalProcessor.h"
 #include "signal-processing-exports.h"
-#include <playing-audio/NoLongerFactory.h>
+#include <playing-audio/RefactoredAudioFrameProcessor.h>
 #include <vector>
 #include <memory>
 
