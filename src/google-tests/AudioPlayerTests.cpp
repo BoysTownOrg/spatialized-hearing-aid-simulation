@@ -10,8 +10,7 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		std::shared_ptr<AudioFrameProcessorStub> obsolete_processor = std::make_shared<AudioFrameProcessorStub>();
-		NoLongerFactoryStub noLongerFactory{ obsolete_processor };
+		NoLongerFactoryStub noLongerFactory{};
 		AudioPlayer player{ &device, &noLongerFactory };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
