@@ -179,12 +179,12 @@ namespace {
 	class RequestErrorTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		NoLongerFactoryStub defaultProcessorFactory{};
+		NoLongerFactoryStub defaultNoLongerFactory{};
 		AudioDevice *device{&defaultDevice};
-		NoLongerFactory *processorFactory{&defaultProcessorFactory};
+		NoLongerFactory *noLongerFactory{&defaultNoLongerFactory};
 
 		void assertPlayThrowsRequestFailure(std::string what) {
-			AudioPlayer player{ device, processorFactory };
+			AudioPlayer player{ device, noLongerFactory };
 			try {
 				player.play({});
 				FAIL() << "Expected AudioPlayer::RequestFailure";
@@ -195,7 +195,7 @@ namespace {
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioPlayer player{ device, processorFactory };
+			AudioPlayer player{ device, noLongerFactory };
 			try {
 				player.initialize({});
 				FAIL() << "Expected AudioPlayer::InitializationFailure";
@@ -218,19 +218,19 @@ namespace {
 
 	TEST_F(
 		RequestErrorTests,
-		playThrowsRequestFailureWhenProcessorFactoryThrowsCreateError
+		playThrowsRequestFailureWhenNoLongerFactoryThrowsCreateError
 	) {
 		ErrorNoLongerFactory failingFactory{ "error." };
-		processorFactory = &failingFactory;
+		noLongerFactory = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}
 
 	TEST_F(
 		RequestErrorTests,
-		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
+		initializeThrowsInitializationFailureWhenNoLongerFactoryThrowsCreateError
 	) {
 		ErrorNoLongerFactory failingFactory{ "error." };
-		processorFactory = &failingFactory;
+		noLongerFactory = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
 }
