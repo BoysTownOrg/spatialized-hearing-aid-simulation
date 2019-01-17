@@ -105,8 +105,8 @@ namespace {
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		request.level_dB_Spl = 8;
-		frameReader->setChannels(6);
-		frameReader->setSampleRate(7);
+		processor.setChannels(6);
+		processor.setSampleRate(7);
 		play(request);
 		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(8, processor.parameters().level_dB_Spl);
