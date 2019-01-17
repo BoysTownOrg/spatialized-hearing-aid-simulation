@@ -5,7 +5,6 @@
 class NoLongerFactoryStub : public NoLongerFactory {
 	Initialization _parameters{};
 	Preparation preparation_{};
-	std::string audioFilePath_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int _sampleRate{};
 	int channels_{};
@@ -53,10 +52,6 @@ public:
 
 	int sampleRate() override {
 		return _sampleRate;
-	}
-
-	std::string audioFilePath() {
-		return _parameters.audioFilePath;
 	}
 
 	void prepare(Preparation p) override {

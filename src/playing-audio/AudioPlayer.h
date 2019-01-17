@@ -13,7 +13,6 @@ public:
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
-		std::string audioFilePath;
 		double max_dB_Spl;
 		double attack_ms;
 		double release_ms;
@@ -64,9 +63,5 @@ public:
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
 	bool isPlaying() override;
 	PLAYING_AUDIO_API void initialize(Initialization) override;
-private:
-	void makeProcessor(
-		NoLongerFactory::Initialization p
-	);
 };
 

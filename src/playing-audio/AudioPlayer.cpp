@@ -34,10 +34,16 @@ void AudioPlayer::play(PlayRequest request) {
 		return;
 	
 	audio.resize(noLongerAFactory->channels());
-
-	processing.level_dB_Spl = request.level_dB_Spl;
-	processing.audioFilePath = request.audioFilePath;
-	makeProcessor(processing);
+	
+	try {
+		NoLongerFactory::Preparation p;
+		p.audioFilePath = request.audioFilePath;
+		p.level_dB_Spl = request.level_dB_Spl;
+		noLongerAFactory->prepare(p);
+	}
+	catch (const NoLongerFactory::PreparationFailure &e) {
+		throw RequestFailure{ e.what() };
+	}
 
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = noLongerAFactory->sampleRate();
@@ -53,20 +59,6 @@ void AudioPlayer::play(PlayRequest request) {
 		throw RequestFailure{ device->errorMessage() };
 	device->setCallbackResultToContinue();
 	device->startStream();
-}
-
-void AudioPlayer::makeProcessor(
-	NoLongerFactory::Initialization obsolete
-) {
-	try {
-		NoLongerFactory::Preparation p;
-		p.audioFilePath = obsolete.audioFilePath;
-		p.level_dB_Spl = obsolete.level_dB_Spl;
-		return noLongerAFactory->prepare(p);
-	}
-	catch (const NoLongerFactory::PreparationFailure &e) {
-		throw RequestFailure{ e.what() };
-	}
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
