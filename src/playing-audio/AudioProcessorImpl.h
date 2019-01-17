@@ -28,7 +28,7 @@ public:
 	}
 };
 
-class RefactoredAudioFrameProcessorImpl : public AudioProcessor {
+class AudioProcessorImpl : public AudioProcessor {
 	RefactoredAudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<RefactoredAudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
@@ -36,7 +36,7 @@ class RefactoredAudioFrameProcessorImpl : public AudioProcessor {
 	RefactoredAudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
-	RefactoredAudioFrameProcessorImpl(
+	AudioProcessorImpl(
 		AudioFrameReaderFactory *readerFactory, 
 		RefactoredAudioFrameProcessorFactory *processorFactory
 	) :

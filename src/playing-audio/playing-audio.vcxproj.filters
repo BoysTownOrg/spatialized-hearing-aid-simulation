@@ -30,7 +30,7 @@
     <ClInclude Include="AudioProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RefactoredAudioFrameProcessorImpl.h">
+    <ClInclude Include="AudioProcessorImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -159,7 +159,7 @@
     <ClCompile Include="ChannelCopierTester.cpp" />
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />
     <ClCompile Include="PrescriptionAdapterTests.cpp" />
-    <ClCompile Include="RefactoredAudioFrameProcessorImplTests.cpp" />
+    <ClCompile Include="AudioProcessorImplTests.cpp" />
     <ClCompile Include="ScalingProcessorTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />

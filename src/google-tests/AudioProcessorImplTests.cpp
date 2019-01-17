@@ -1,4 +1,4 @@
-#include <playing-audio/RefactoredAudioFrameProcessorImpl.h>
+#include <playing-audio/AudioProcessorImpl.h>
 
 class RefactoredAudioFrameProcessorStub : public RefactoredAudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
@@ -82,7 +82,7 @@ namespace {
 		std::shared_ptr<RefactoredAudioFrameProcessorStub> processor =
 			std::make_shared<RefactoredAudioFrameProcessorStub>();
 		RefactoredAudioFrameProcessorStubFactory processorFactory{processor};
-		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
+		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
 	};
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
@@ -121,7 +121,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, initializePassesParametersToFactory) {
-		RefactoredAudioFrameProcessorImpl::Initialization initialization;
+		AudioProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
 		initialization.brirFilePath = "c";
@@ -143,7 +143,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
-		RefactoredAudioFrameProcessorImpl::Initialization initialization;
+		AudioProcessorImpl::Initialization initialization;
 		initialization.leftDslPrescriptionFilePath = "a";
 		initialization.rightDslPrescriptionFilePath = "b";
 		initialization.brirFilePath = "c";
@@ -153,7 +153,7 @@ namespace {
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		impl.initialize(initialization);
-		RefactoredAudioFrameProcessorImpl::Preparation p{};
+		AudioProcessorImpl::Preparation p{};
 		p.audioFilePath = "d";
 		impl.prepare(p);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
@@ -168,13 +168,13 @@ namespace {
 	}
 
 	TEST_F(RefactoredAudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
-		RefactoredAudioFrameProcessorImpl::Initialization initialization;
+		AudioProcessorImpl::Initialization initialization;
 		initialization.max_dB_Spl = 8;
 		impl.initialize(initialization);
 		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
 		fake.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
-		RefactoredAudioFrameProcessorImpl::Preparation p{};
+		AudioProcessorImpl::Preparation p{};
 		p.level_dB_Spl = 7;
 		impl.prepare(p);
 		assertEqual(
@@ -208,23 +208,23 @@ namespace {
 		RefactoredAudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPrepareThrowsPreparationFailure(std::string what) {
-			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
+			AudioProcessorImpl impl{ readerFactory, processorFactory };
 			try {
 				impl.prepare({});
-				FAIL() << "Expected RefactoredAudioFrameProcessorImpl::PreparationFailure";
+				FAIL() << "Expected AudioProcessorImpl::PreparationFailure";
 			}
-			catch (const RefactoredAudioFrameProcessorImpl::PreparationFailure &e) {
+			catch (const AudioProcessorImpl::PreparationFailure &e) {
 				assertEqual(what, e.what());
 			}
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			RefactoredAudioFrameProcessorImpl impl{ readerFactory, processorFactory };
+			AudioProcessorImpl impl{ readerFactory, processorFactory };
 			try {
 				impl.initialize({});
-				FAIL() << "Expected RefactoredAudioFrameProcessorImpl::InitializationFailure";
+				FAIL() << "Expected AudioProcessorImpl::InitializationFailure";
 			}
-			catch (const RefactoredAudioFrameProcessorImpl::InitializationFailure &e) {
+			catch (const AudioProcessorImpl::InitializationFailure &e) {
 				assertEqual(what, e.what());
 			}
 		}
@@ -292,7 +292,7 @@ namespace {
 	TEST(RefactoredAudioFrameProcessorOtherTests, processReadsThenProcesses) {
 		AudioFrameReaderStubFactory readerFactory{ std::make_shared<ReadsAOne>() };
 		RefactoredAudioFrameProcessorStubFactory processorFactory{ std::make_shared<TimesTwo>() };
-		RefactoredAudioFrameProcessorImpl impl{ &readerFactory, &processorFactory };
+		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
 		impl.prepare({});
 		float y{};
 		gsl::span<float> x{ &y, 1 };
