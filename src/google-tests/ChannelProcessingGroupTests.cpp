@@ -20,7 +20,7 @@ TEST_F(ChannelProcessingGroupTests, processesChannelsInOrder) {
 	float a{};
 	float b{};
 	float c{};
-	std::vector<gsl::span<float>> channels{ {&a, 1}, {&b, 1}, {&c, 1} };
+	std::vector<gsl::span<float>> channels{ {&a, 0}, {&b, 0}, {&c, 0} };
 	group.process(channels);
 	EXPECT_EQ(&a, processors.at(0)->signal().data());
 	EXPECT_EQ(&b, processors.at(1)->signal().data());
