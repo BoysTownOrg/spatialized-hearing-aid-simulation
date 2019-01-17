@@ -64,7 +64,7 @@ public:
 		errorMessage{ std::move(errorMessage) } {}
 
 	void initialize(Initialization) override {
-		throw CreateError{ errorMessage };
+		throw InitializationFailure{ errorMessage };
 	}
 
 	bool complete() override {

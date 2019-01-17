@@ -25,6 +25,7 @@ public:
 		int channels;
 	};
 	virtual void initialize(Initialization) = 0;
+	RUNTIME_ERROR(InitializationFailure);
 	virtual bool complete() = 0;
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;

@@ -24,7 +24,7 @@ void AudioPlayer::initialize(Initialization request) {
 	try {
 		noLongerAFactory->initialize(processing);
 	}
-	catch (const NoLongerFactory::CreateError &e) {
+	catch (const NoLongerFactory::InitializationFailure &e) {
 		throw InitializationFailure{ e.what() };
 	}
 }
@@ -61,7 +61,7 @@ void AudioPlayer::makeProcessor(
 	try {
 		return noLongerAFactory->initialize(std::move(p));
 	}
-	catch (const NoLongerFactory::CreateError &e) {
+	catch (const NoLongerFactory::InitializationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
