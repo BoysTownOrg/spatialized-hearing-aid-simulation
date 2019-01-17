@@ -12,7 +12,10 @@ public:
 		AudioFrameProcessorFactory *processorFactory
 	) :
 		reader{ reader },
-		processorFactory{ processorFactory } {}
+		processorFactory{ processorFactory } 
+	{
+		processor = processorFactory->make({});
+	}
 
 	struct Initialization {
 		std::string leftDslPrescriptionFilePath;
