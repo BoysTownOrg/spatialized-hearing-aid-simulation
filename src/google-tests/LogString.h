@@ -5,13 +5,13 @@
 class LogString {
 	std::string s;
 public:
-	explicit LogString(std::string s = {}) : s{ std::move(s) } {}
+	LogString(std::string s = {}) : s{ std::move(s) } {}
 
 	bool isEmpty() const {
 		return s.empty();
 	}
 
-	bool beginsWith(std::string const &beginning) {
+	bool beginsWith(std::string const &beginning) const {
 		if (s.length() >= beginning.length())
 			return 0 == s.compare(0, beginning.length(), beginning);
 		else
