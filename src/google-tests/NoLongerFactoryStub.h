@@ -75,3 +75,22 @@ public:
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 };
+
+class PreparationFailureNoLongerFactory : public NoLongerFactory {
+	std::string errorMessage{};
+public:
+	explicit PreparationFailureNoLongerFactory(
+		std::string errorMessage
+	) :
+		errorMessage{ std::move(errorMessage) } {}
+
+
+	bool complete() override {
+		return {};
+	}
+	
+	void initialize(Initialization) override {}
+	void process(gsl::span<gsl::span<float>>) override {}
+	int channels() override { return {}; }
+	int sampleRate() override { return {}; }
+};
