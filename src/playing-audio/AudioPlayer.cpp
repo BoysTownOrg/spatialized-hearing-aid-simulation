@@ -39,6 +39,7 @@ void AudioPlayer::play(PlayRequest request) {
 	audio.resize(noLongerAFactory->channels());
 
 	processing.level_dB_Spl = request.level_dB_Spl;
+	processing.audioFilePath = request.audioFilePath;
 	frameProcessor = makeProcessor(processing);
 
 	AudioDevice::StreamParameters streaming;

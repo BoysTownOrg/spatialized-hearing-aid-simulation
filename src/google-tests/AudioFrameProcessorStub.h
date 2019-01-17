@@ -93,7 +93,7 @@ public:
 	}
 
 	std::string audioFilePath() {
-		return audioFilePath_;
+		return _parameters.audioFilePath;
 	}
 };
 

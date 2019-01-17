@@ -24,6 +24,7 @@ public:
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
+		std::string audioFilePath;
 		double max_dB_Spl;
 		double attack_ms;
 		double release_ms;
