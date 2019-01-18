@@ -43,23 +43,8 @@ void AudioPlayer::play(PlayRequest request) {
 
 void AudioPlayer::play_(PlayRequest request) {
 	prepareProcessor(request);
-
 	audio.resize(processor->channels());
-
-	AudioDevice::StreamParameters streaming;
-	streaming.sampleRate = processor->sampleRate();
-	streaming.channels = processor->channels();
-	streaming.framesPerBuffer = framesPerBuffer_;
-	for (int i = 0; i < device->count(); ++i)
-		if (device->description(i) == request.audioDevice)
-			streaming.deviceIndex = i;
-
-	device->closeStream();
-	device->openStream(streaming);
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
-	device->setCallbackResultToContinue();
-	device->startStream();
+	startStream(request);
 }
 
 void AudioPlayer::prepareProcessor(PlayRequest request) {
@@ -72,6 +57,22 @@ void AudioPlayer::prepareProcessor(PlayRequest request) {
 	catch (const AudioProcessor::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
+}
+
+void AudioPlayer::startStream(PlayRequest request) {
+	device->closeStream();
+	AudioDevice::StreamParameters streaming;
+	streaming.sampleRate = processor->sampleRate();
+	streaming.channels = processor->channels();
+	streaming.framesPerBuffer = framesPerBuffer_;
+	for (int i = 0; i < device->count(); ++i)
+		if (device->description(i) == request.audioDevice)
+			streaming.deviceIndex = i;
+	device->openStream(streaming);
+	if (device->failed())
+		throw RequestFailure{ device->errorMessage() };
+	device->setCallbackResultToContinue();
+	device->startStream();
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
