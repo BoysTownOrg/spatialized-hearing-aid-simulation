@@ -88,28 +88,36 @@ protected:
 	StimulusListStub list{};
 	StimulusPlayerStub player{};
 	RecognitionTestModel model{ &list, &player };
+
+	void initializeTest(Model::TestParameters p = {}) {
+		model.initializeTest(std::move(p));
+	}
+
+	void playTrial(Model::TrialParameters p = {}) {
+		model.playTrial(std::move(p));
+	}
 };
 
 TEST_F(
     RecognitionTestModelTests,
-    initializeTestPassesStimulusListDirectoryToStimulusList
+    initializeTestInitializesStimulusList
 ) {
-    Model::TestParameters parameters;
-    parameters.audioDirectory = "a";
-    model.initializeTest(parameters);
+    Model::TestParameters p;
+    p.audioDirectory = "a";
+    initializeTest(p);
     assertEqual("a", list.directory());
 }
 
-TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
-	RecognitionTestModel::TestParameters test;
-	test.leftDslPrescriptionFilePath = "a";
-	test.rightDslPrescriptionFilePath = "b";
-	test.brirFilePath = "c";
-	test.attack_ms = 1;
-	test.release_ms = 2;
-	test.windowSize = 3;
-	test.chunkSize = 4;
-	model.initializeTest(test);
+TEST_F(RecognitionTestModelTests, initializeTestInitializesPlayer) {
+	RecognitionTestModel::TestParameters p;
+	p.leftDslPrescriptionFilePath = "a";
+	p.rightDslPrescriptionFilePath = "b";
+	p.brirFilePath = "c";
+	p.attack_ms = 1;
+	p.release_ms = 2;
+	p.windowSize = 3;
+	p.chunkSize = 4;
+	initializeTest(p);
 	assertEqual("a", player.initialization().leftDslPrescriptionFilePath);
 	assertEqual("b", player.initialization().rightDslPrescriptionFilePath);
 	assertEqual("c", player.initialization().brirFilePath);
@@ -128,27 +136,27 @@ TEST_F(
     playTrialPassesNextStimulusToStimulusPlayer
 ) {
     list.setNext("a");
-	model.playTrial({});
+	playTrial();
     assertEqual("a", player.request().audioFilePath);
 }
 
-TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
-	RecognitionTestModel::TrialParameters trial;
-	trial.audioDevice = "a";
-	trial.level_dB_Spl = 1;
-	model.playTrial(trial);
+TEST_F(RecognitionTestModelTests, playTrialPassesRequestToPlayer) {
+	RecognitionTestModel::TrialParameters p;
+	p.audioDevice = "a";
+	p.level_dB_Spl = 1;
+	playTrial(p);
 	EXPECT_EQ(1, player.request().level_dB_Spl);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
 	player.setPlaying();
-	model.playTrial({});
+	playTrial();
 	EXPECT_FALSE(list.nextCalled());
 }
 
-TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerPlaying) {
+TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
 	player.setPlaying();
-	model.playTrial({});
+	playTrial();
 	EXPECT_FALSE(player.playCalled());
 }
 
