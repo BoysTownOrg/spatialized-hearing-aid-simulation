@@ -159,7 +159,7 @@ namespace {
 		std::string description(int) override { return {}; }
 	};
 
-	class RequestErrorTests : public ::testing::Test {
+	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
 		AudioProcessorStub defaultProcessor{};
@@ -168,7 +168,7 @@ namespace {
 
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {
-				AudioPlayer player{ device, processor };
+				makePlayer();
 				FAIL() << "Expected AudioPlayer::DeviceFailure";
 			}
 			catch (const AudioPlayer::DeviceFailure &e) {
@@ -176,8 +176,12 @@ namespace {
 			}
 		}
 
+		AudioPlayer makePlayer() {
+			return { device, processor };
+		}
+
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioPlayer player{ device, processor };
+			auto player = makePlayer();
 			try {
 				player.initialize({});
 				FAIL() << "Expected AudioPlayer::InitializationFailure";
@@ -188,7 +192,7 @@ namespace {
 		}
 
 		void assertPlayThrowsRequestFailure(std::string what) {
-			AudioPlayer player{ device, processor };
+			auto player = makePlayer();
 			try {
 				player.play({});
 				FAIL() << "Expected AudioPlayer::RequestFailure";
@@ -200,7 +204,7 @@ namespace {
 	};
 
 	TEST_F(
-		RequestErrorTests,
+		AudioPlayerFailureTests,
 		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
 	) {
 		AudioDeviceStub failingDevice{};
@@ -211,7 +215,7 @@ namespace {
 	}
 
 	TEST_F(
-		RequestErrorTests,
+		AudioPlayerFailureTests,
 		initializeThrowsInitializationFailureWhenAudioProcessorThrowsInitializationFailure
 	) {
 		InitializationFailingAudioProcessor failingFactory{ "error." };
@@ -220,7 +224,7 @@ namespace {
 	}
 
 	TEST_F(
-		RequestErrorTests,
+		AudioPlayerFailureTests,
 		playThrowsDeviceFailureWhenDeviceFailsToOpenStream
 	) {
 		FailsToOpenStream failingDevice{};
@@ -230,7 +234,7 @@ namespace {
 	}
 
 	TEST_F(
-		RequestErrorTests,
+		AudioPlayerFailureTests,
 		playThrowsRequestFailureWhenAudioProcessorThrowsPreparationFailure
 	) {
 		PreparationFailureAudioProcessor failingFactory{ "error." };
