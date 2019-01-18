@@ -161,10 +161,6 @@ namespace {
 		assertEqual({ 1, 2, 3 }, impl.preferredProcessingSizes());
 	}
 
-	TEST_F(AudioProcessorImplTests, todoTest) {
-		assertEqual({ 64, 128, 256, 512, 1024, 2048, 4096, 8192 }, impl.preferredProcessingSizes());
-	}
-
 	class ReadsAOne : public AudioFrameReader {
 		void read(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)

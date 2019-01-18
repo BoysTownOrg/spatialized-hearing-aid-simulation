@@ -69,6 +69,10 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	}
 }
 
+std::vector<int> SpatializedHearingAidSimulationFactory::preferredProcessingSizes() {
+	return { 64, 128, 256, 512, 1024, 2048, 4096, 8192 };
+}
+
 PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription(std::string filePath) {
 	try {
 		return prescriptionReader->read(std::move(filePath));
