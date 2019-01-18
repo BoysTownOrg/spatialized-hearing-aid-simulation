@@ -36,7 +36,7 @@ void AudioPlayer::initializeProcessor(Initialization request) {
 	init.chunkSize = request.chunkSize;
 	init.windowSize = request.windowSize;
 	init.max_dB_Spl = request.max_dB_Spl;
-	processor->initialize(init);
+	processor->initialize(std::move(init));
 }
 
 void AudioPlayer::play(PlayRequest request) {

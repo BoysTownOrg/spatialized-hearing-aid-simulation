@@ -7,7 +7,6 @@
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
-	int framesPerBuffer_{};
 	AudioDevice *device;
 	AudioProcessor *processor;
 public:
