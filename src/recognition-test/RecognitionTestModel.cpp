@@ -20,7 +20,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	}
 }
 
-void RecognitionTestModel::initializeTest_(Model::TestParameters p) {
+void RecognitionTestModel::initializeTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory); 
 	initializeStimulusPlayer(std::move(p));
 }
@@ -29,7 +29,7 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 	list->initialize(std::move(directory));
 }
 
-void RecognitionTestModel::initializeStimulusPlayer(Model::TestParameters p) {
+void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
 	StimulusPlayer::Initialization init;
 	init.attack_ms = p.attack_ms;
 	init.brirFilePath = p.brirFilePath;
@@ -51,7 +51,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 	playTrial_(std::move(p));
 }
 
-void RecognitionTestModel::playTrial_(Model::TrialParameters p) {
+void RecognitionTestModel::playTrial_(TrialParameters p) {
 	try {
 		playNextStimulus(p);
 	}
@@ -60,7 +60,7 @@ void RecognitionTestModel::playTrial_(Model::TrialParameters p) {
 	}
 }
 
-void RecognitionTestModel::playNextStimulus(Model::TrialParameters p) {
+void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	StimulusPlayer::PlayRequest request;
 	request.audioFilePath = list->next();
 	request.audioDevice = p.audioDevice;

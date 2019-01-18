@@ -24,9 +24,9 @@ public:
 	std::vector<int> preferredProcessingSizes() override;
 	bool testComplete() override;
 private:
-	void initializeTest_(Model::TestParameters);
-	void initializeStimulusPlayer(Model::TestParameters);
+	void initializeTest_(TestParameters);
+	void initializeStimulusPlayer(TestParameters);
 	void initializeStimulusList(std::string directory);
-	void playTrial_(Model::TrialParameters);
-	void playNextStimulus(Model::TrialParameters);
+	void playTrial_(TrialParameters);
+	void playNextStimulus(TrialParameters);
 };
