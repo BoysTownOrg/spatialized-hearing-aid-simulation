@@ -37,16 +37,19 @@ class RmsComputer {
 	std::vector<std::vector<float>> entireAudioFile;
 public:
 	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile{ reader.channels() }
+		entireAudioFile(
+			reader.channels(), 
+			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
+		)
 	{
 		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile) {
-			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
+		for (auto &channel : entireAudioFile)
 			pointers.push_back({ channel });
-		}
 		reader.read(pointers);
 	}
+private:
 
+public:
 	double compute(int channel) {
 		double squaredSum{};
 		const auto channel_ = entireAudioFile.at(channel);
