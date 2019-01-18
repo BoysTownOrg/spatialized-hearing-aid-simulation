@@ -82,7 +82,6 @@ bool AudioPlayer::isPlaying() {
 	return device->streaming();
 }
 
-std::vector<int> AudioPlayer::preferredProcessingSizes()
-{
-return std::vector<int>();
+std::vector<int> AudioPlayer::preferredProcessingSizes() {
+	return processor->preferredProcessingSizes();
 }

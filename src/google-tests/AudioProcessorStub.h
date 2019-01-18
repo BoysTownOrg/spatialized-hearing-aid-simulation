@@ -17,6 +17,10 @@ public:
 		preferredProcessingSizes_ = std::move(v);
 	}
 
+	std::vector<int> preferredProcessingSizes() override {
+		return preferredProcessingSizes_;
+	}
+
 	const Initialization &initialization() const {
 		return parameters_;
 	}
@@ -90,6 +94,9 @@ public:
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	void prepare(Preparation) override {}
+	std::vector<int> preferredProcessingSizes() override {
+		return {};
+	}
 };
 
 class PreparationFailureAudioProcessor : public AudioProcessor {
@@ -109,4 +116,7 @@ public:
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
+	std::vector<int> preferredProcessingSizes() override {
+		return {};
+	}
 };

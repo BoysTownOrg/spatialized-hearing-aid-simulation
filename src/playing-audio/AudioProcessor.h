@@ -34,4 +34,5 @@ public:
 	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;
 	virtual int channels() = 0;
+	virtual std::vector<int> preferredProcessingSizes() = 0;
 };
