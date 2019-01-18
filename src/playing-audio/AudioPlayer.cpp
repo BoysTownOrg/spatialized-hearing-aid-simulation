@@ -38,7 +38,10 @@ void AudioPlayer::initializeProcessor(StimulusPlayer::Initialization request) {
 void AudioPlayer::play(PlayRequest request) {
 	if (device->streaming())
 		return;
-	
+	play_(std::move(request));
+}
+
+void AudioPlayer::play_(StimulusPlayer::PlayRequest request) {
 	try {
 		AudioProcessor::Preparation p;
 		p.audioFilePath = request.audioFilePath;
@@ -48,7 +51,7 @@ void AudioPlayer::play(PlayRequest request) {
 	catch (const AudioProcessor::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
-	
+
 	audio.resize(processor->channels());
 
 	AudioDevice::StreamParameters streaming;
