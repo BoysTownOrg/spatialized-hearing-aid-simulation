@@ -12,7 +12,24 @@ bool RecognitionTestModel::testComplete() {
 }
 
 void RecognitionTestModel::initializeTest(TestParameters p) {
-	list->initialize(p.audioDirectory);
+	try {
+		initializeTest_(std::move(p));
+	}
+	catch (const StimulusPlayer::InitializationFailure &e) {
+		throw TestInitializationFailure{ e.what() };
+	}
+}
+
+void RecognitionTestModel::initializeTest_(Model::TestParameters p) {
+	initializeStimulusList(p.audioDirectory); 
+	initializeStimulusPlayer(std::move(p));
+}
+
+void RecognitionTestModel::initializeStimulusList(std::string directory) {
+	list->initialize(std::move(directory));
+}
+
+void RecognitionTestModel::initializeStimulusPlayer(Model::TestParameters p) {
 	StimulusPlayer::Initialization init;
 	init.attack_ms = p.attack_ms;
 	init.brirFilePath = p.brirFilePath;
@@ -24,12 +41,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
 	init.max_dB_Spl = 119;
-	try {
-		player->initialize(std::move(init));
-	}
-	catch (const StimulusPlayer::InitializationFailure &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
+	player->initialize(std::move(init));
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {
