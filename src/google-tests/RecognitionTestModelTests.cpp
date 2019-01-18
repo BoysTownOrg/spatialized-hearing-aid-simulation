@@ -100,31 +100,6 @@ TEST_F(
     assertEqual("a", list.directory());
 }
 
-TEST_F(
-    RecognitionTestModelTests,
-    playTrialPassesNextStimulusToStimulusPlayer
-) {
-    list.setNext("a");
-	model.playTrial({});
-    assertEqual("a", stimulusPlayer.request().audioFilePath);
-}
-
-TEST_F(
-    RecognitionTestModelTests,
-    testCompleteWhenListEmpty
-) {
-    list.setEmpty();
-    EXPECT_TRUE(model.testComplete());
-}
-
-TEST_F(
-    RecognitionTestModelTests,
-    audioDeviceDescriptionsReturnsThatOfTheAudioPlayer
-) {
-	stimulusPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
-	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
-}
-
 TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
 	RecognitionTestModel::TestParameters test;
 	test.leftDslPrescriptionFilePath = "a";
@@ -148,6 +123,15 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
 	EXPECT_EQ(119, stimulusPlayer.initialization().max_dB_Spl);
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    playTrialPassesNextStimulusToStimulusPlayer
+) {
+    list.setNext("a");
+	model.playTrial({});
+    assertEqual("a", stimulusPlayer.request().audioFilePath);
+}
+
 TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
 	RecognitionTestModel::TrialParameters trial;
 	trial.audioDevice = "a";
@@ -168,6 +152,22 @@ TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerPlaying) {
 	EXPECT_FALSE(stimulusPlayer.playCalled());
 }
 
+TEST_F(
+    RecognitionTestModelTests,
+    testCompleteWhenListEmpty
+) {
+    list.setEmpty();
+    EXPECT_TRUE(model.testComplete());
+}
+
+TEST_F(
+    RecognitionTestModelTests,
+    audioDeviceDescriptionsReturnsThatOfTheAudioPlayer
+) {
+	stimulusPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
+	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
+}
+
 class RequestFailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
@@ -184,14 +184,18 @@ public:
 	void initialize(Initialization) override {}
 };
 
-TEST(
-	RecognitionTestModelOtherTests,
-	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
-) {
+class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
+protected:
 	StimulusListStub list{};
 	RequestFailingStimulusPlayer stimulusPlayer{};
-	stimulusPlayer.setErrorMessage("error.");
 	RecognitionTestModel model{ &list, &stimulusPlayer };
+};
+
+TEST_F(
+	RecognitionTestModelWithRequestFailingStimulusPlayer,
+	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+) {
+	stimulusPlayer.setErrorMessage("error.");
 	try {
 		model.playTrial({});
 		FAIL() << "Expected RecognitionTestModel::TrialFailure";
