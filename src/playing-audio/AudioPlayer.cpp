@@ -47,16 +47,16 @@ void AudioPlayer::play(PlayRequest request) {
 }
 
 void AudioPlayer::play_(PlayRequest request) {
-	prepareProcessor(request);
+	AudioProcessor::Preparation p;
+	p.audioFilePath = request.audioFilePath;
+	p.level_dB_Spl = request.level_dB_Spl;
+	prepareProcessor(std::move(p));
 	audio.resize(processor->channels());
-	restartStream(request);
+	restartStream(std::move(request));
 }
 
-void AudioPlayer::prepareProcessor(PlayRequest request) {
+void AudioPlayer::prepareProcessor(AudioProcessor::Preparation p) {
 	try {
-		AudioProcessor::Preparation p;
-		p.audioFilePath = request.audioFilePath;
-		p.level_dB_Spl = request.level_dB_Spl;
 		processor->prepare(std::move(p));
 	}
 	catch (const AudioProcessor::PreparationFailure &e) {

@@ -28,7 +28,7 @@ private:
 	template<typename exception>
 		void throwIfDeviceFailed();
 	void openStream(PlayRequest);
-	void prepareProcessor(PlayRequest);
+	void prepareProcessor(AudioProcessor::Preparation);
 	void prepareAudio(void * channels, int frames);
 	void completeIfDoneProcessing();
 };
