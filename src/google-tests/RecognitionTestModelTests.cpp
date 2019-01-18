@@ -189,6 +189,16 @@ protected:
 	StimulusListStub list{};
 	RequestFailingStimulusPlayer stimulusPlayer{};
 	RecognitionTestModel model{ &list, &stimulusPlayer };
+
+	void assertPlayTrialThrowsTrialFailure(std::string what) {
+		try {
+			model.playTrial({});
+			FAIL() << "Expected RecognitionTestModel::TrialFailure";
+		}
+		catch (const RecognitionTestModel::TrialFailure &e) {
+			assertEqual(std::move(what), e.what());
+		}
+	}
 };
 
 TEST_F(
@@ -196,13 +206,7 @@ TEST_F(
 	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
 	stimulusPlayer.setErrorMessage("error.");
-	try {
-		model.playTrial({});
-		FAIL() << "Expected RecognitionTestModel::TrialFailure";
-	}
-	catch (const RecognitionTestModel::TrialFailure &e) {
-		assertEqual("error.", e.what());
-	}
+	assertPlayTrialThrowsTrialFailure("error.");
 }
 
 class InitializationFailingStimulusPlayer : public StimulusPlayer {
