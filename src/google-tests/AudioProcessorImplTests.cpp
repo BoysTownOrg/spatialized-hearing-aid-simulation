@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioFrameProcessorImplTests : public ::testing::Test {
+	class AudioProcessorImplTests : public ::testing::Test {
 	protected:
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
@@ -25,45 +25,7 @@ namespace {
 		}
 	};
 
-	TEST_F(AudioFrameProcessorImplTests, processPassesAudioToReaderAndProcessor) {
-		prepare();
-		gsl::span<float> x{};
-		process({ &x, 1 });
-		EXPECT_EQ(&x, reader->audioBuffer().data());
-		EXPECT_EQ(1, reader->audioBuffer().size());
-		EXPECT_EQ(&x, processor->audioBuffer().data());
-		EXPECT_EQ(1, processor->audioBuffer().size());
-	}
-
-	TEST_F(AudioFrameProcessorImplTests, processPadsZeroToEndOfInput) {
-		prepare();
-		reader->setComplete();
-		std::vector<float> audio(3, -1);
-		gsl::span<float> x{ audio };
-		process({ &x, 1 });
-		EXPECT_EQ(0, processor->audioBuffer()[0][0]);
-		EXPECT_EQ(0, processor->audioBuffer()[0][1]);
-		EXPECT_EQ(0, processor->audioBuffer()[0][2]);
-	}
-
-	TEST_F(AudioFrameProcessorImplTests, completeAfterProcessingPaddedZeroes) {
-		prepare();
-		reader->setComplete();
-		processor->setGroupDelay(3);
-		std::vector<float> y(1);
-		std::vector<gsl::span<float>> x{ y, y };
-		process(x);
-		EXPECT_FALSE(impl.complete());
-		process(x);
-		EXPECT_FALSE(impl.complete());
-		process(x);
-		EXPECT_TRUE(impl.complete());
-		prepare();
-		process(x);
-		EXPECT_FALSE(impl.complete());
-	}
-
-	TEST_F(AudioFrameProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
+	TEST_F(AudioProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
 		AudioProcessorImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
 		init.rightDslPrescriptionFilePath = "b";
@@ -85,7 +47,7 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, preparePassesAllParametersToFactories) {
+	TEST_F(AudioProcessorImplTests, preparePassesAllParametersToFactories) {
 		AudioProcessorImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
 		init.rightDslPrescriptionFilePath = "b";
@@ -114,13 +76,13 @@ namespace {
 		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
-		AudioProcessorImpl::Initialization initialization;
-		initialization.max_dB_Spl = 8;
-		impl.initialize(initialization);
-		FakeAudioFileReader fake{ { 1, 2, 3, 4, 5, 6 } };
-		fake.setChannels(2);
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fake));
+	TEST_F(AudioProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
+		AudioProcessorImpl::Initialization init;
+		init.max_dB_Spl = 8;
+		impl.initialize(init);
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+		fakeReader.setChannels(2);
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		AudioProcessorImpl::Preparation p{};
 		p.level_dB_Spl = 7;
 		prepare(p);
@@ -134,12 +96,50 @@ namespace {
 		);
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, prepareResetsReaderAfterComputingRms) {
+	TEST_F(AudioProcessorImplTests, prepareResetsReaderAfterComputingRms) {
 		prepare();
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
+	TEST_F(AudioProcessorImplTests, processReadsAndProcessesAudio) {
+		prepare();
+		gsl::span<float> x{};
+		process({ &x, 1 });
+		EXPECT_EQ(&x, reader->audioBuffer().data());
+		EXPECT_EQ(1, reader->audioBuffer().size());
+		EXPECT_EQ(&x, processor->audioBuffer().data());
+		EXPECT_EQ(1, processor->audioBuffer().size());
+	}
+
+	TEST_F(AudioProcessorImplTests, processPadsZeroToEndOfReadInput) {
+		prepare();
+		reader->setComplete();
+		std::vector<float> audio(3, -1);
+		gsl::span<float> x{ audio };
+		process({ &x, 1 });
+		EXPECT_EQ(0, processor->audioBuffer().at(0).at(0));
+		EXPECT_EQ(0, processor->audioBuffer().at(0).at(1));
+		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
+	}
+
+	TEST_F(AudioProcessorImplTests, completeAfterProcessingPaddedZeroes) {
+		prepare();
+		reader->setComplete();
+		processor->setGroupDelay(3);
+		std::vector<float> y(1);
+		std::vector<gsl::span<float>> x{ y, y };
+		process(x);
+		EXPECT_FALSE(impl.complete());
+		process(x);
+		EXPECT_FALSE(impl.complete());
+		process(x);
+		EXPECT_TRUE(impl.complete());
+		prepare();
+		process(x);
+		EXPECT_FALSE(impl.complete());
+	}
+
+	TEST_F(AudioProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		prepare();
@@ -147,7 +147,7 @@ namespace {
 		EXPECT_EQ(2, impl.sampleRate());
 	}
 
-	TEST_F(AudioFrameProcessorImplTests, queriesDoNotThrowIfNotPrepared) {
+	TEST_F(AudioProcessorImplTests, queriesDoNotThrowIfNotPrepared) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		reader->setIncomplete();
@@ -180,7 +180,7 @@ namespace {
 		int groupDelay() override { return {}; }
 	};
 
-	TEST_F(AudioFrameProcessorImplTests, processReadsThenProcesses) {
+	TEST_F(AudioProcessorImplTests, processReadsThenProcesses) {
 		readerFactory.setReader(std::make_shared<ReadsAOne>());
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
