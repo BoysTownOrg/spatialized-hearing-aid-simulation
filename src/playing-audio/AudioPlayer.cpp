@@ -7,9 +7,14 @@ AudioPlayer::AudioPlayer(
 	device{ device },
 	processor{ processorFactory }
 {
-	if (device->failed())
-		throw DeviceFailure{ device->errorMessage() };
+	throwIfDeviceFailed<DeviceFailure>();
 	device->setController(this);
+}
+
+template<typename exception>
+void AudioPlayer::throwIfDeviceFailed() {
+	if (device->failed())
+		throw exception{ device->errorMessage() };
 }
 
 void AudioPlayer::initialize(Initialization init) {
@@ -44,7 +49,7 @@ void AudioPlayer::play(PlayRequest request) {
 void AudioPlayer::play_(PlayRequest request) {
 	prepareProcessor(request);
 	audio.resize(processor->channels());
-	startStream(request);
+	restartStream(request);
 }
 
 void AudioPlayer::prepareProcessor(PlayRequest request) {
@@ -59,11 +64,10 @@ void AudioPlayer::prepareProcessor(PlayRequest request) {
 	}
 }
 
-void AudioPlayer::startStream(PlayRequest request) {
+void AudioPlayer::restartStream(PlayRequest request) {
 	device->closeStream();
 	openStream(std::move(request));
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
+	throwIfDeviceFailed<RequestFailure>();
 	device->setCallbackResultToContinue();
 	device->startStream();
 }
@@ -80,9 +84,17 @@ void AudioPlayer::openStream(PlayRequest request) {
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
+	prepareAudio(channels, frames);
+	processor->process(audio);
+	completeIfDoneProcessing();
+}
+
+void AudioPlayer::prepareAudio(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
-	processor->process(audio);
+}
+
+void AudioPlayer::completeIfDoneProcessing() {
 	if (processor->complete())
 		device->setCallbackResultToComplete();
 }

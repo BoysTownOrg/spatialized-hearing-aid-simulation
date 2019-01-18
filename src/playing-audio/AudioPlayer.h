@@ -24,8 +24,12 @@ public:
 private:
 	void initializeProcessor(Initialization);
 	void play_(PlayRequest);
-	void startStream(PlayRequest);
+	void restartStream(PlayRequest);
+	template<typename exception>
+		void throwIfDeviceFailed();
 	void openStream(PlayRequest);
 	void prepareProcessor(PlayRequest);
+	void prepareAudio(void * channels, int frames);
+	void completeIfDoneProcessing();
 };
 
