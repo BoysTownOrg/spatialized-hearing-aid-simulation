@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioDeviceStub.h" />
+    <ClInclude Include="AudioFrameProcessorStub.h" />
     <ClInclude Include="FakeAudioFileReader.h" />
     <ClInclude Include="AudioProcessorStub.h" />
     <ClInclude Include="AudioFrameReaderStub.h" />
