@@ -5,20 +5,26 @@ AudioProcessingLoader::AudioProcessingLoader(
 	AudioFrameProcessorFactory *processorFactory
 ) :
 	readerFactory{ readerFactory },
-	processorFactory{ processorFactory } 
-{
+	processorFactory{ processorFactory } {}
+
+void AudioProcessingLoader::initialize(Initialization init) {
+	storeProcessingParameters(std::move(init));
+	assertProcessorCanBeMade();
 }
 
-void AudioProcessingLoader::initialize(Initialization initialization) {
-	processing.attack_ms = initialization.attack_ms;
-	processing.release_ms = initialization.release_ms;
-	processing.brirFilePath = initialization.brirFilePath;
-	processing.leftDslPrescriptionFilePath = initialization.leftDslPrescriptionFilePath;
-	processing.rightDslPrescriptionFilePath = initialization.rightDslPrescriptionFilePath;
-	processing.chunkSize = initialization.chunkSize;
-	processing.windowSize = initialization.windowSize;
-	processing.max_dB_Spl = initialization.max_dB_Spl;
+void AudioProcessingLoader::storeProcessingParameters(AudioLoader::Initialization init) {
+	processing.attack_ms = init.attack_ms;
+	processing.release_ms = init.release_ms;
+	processing.brirFilePath = init.brirFilePath;
+	processing.leftDslPrescriptionFilePath = init.leftDslPrescriptionFilePath;
+	processing.rightDslPrescriptionFilePath = init.rightDslPrescriptionFilePath;
+	processing.chunkSize = init.chunkSize;
+	processing.windowSize = init.windowSize;
+	processing.max_dB_Spl = init.max_dB_Spl;
 	processing.channelScalars.resize(2);
+}
+
+void AudioProcessingLoader::assertProcessorCanBeMade() {
 	try {
 		processorFactory->make(processing);
 	}

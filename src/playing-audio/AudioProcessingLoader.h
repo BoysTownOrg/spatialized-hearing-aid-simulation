@@ -14,8 +14,8 @@ class AudioProcessingLoader : public AudioLoader {
 	int paddedZeroes{};
 public:
 	PLAYING_AUDIO_API AudioProcessingLoader(
-		AudioFrameReaderFactory *readerFactory,
-		AudioFrameProcessorFactory *processorFactory
+		AudioFrameReaderFactory *,
+		AudioFrameProcessorFactory *
 	);
 
 	PLAYING_AUDIO_API void initialize(Initialization) override;
@@ -28,6 +28,8 @@ public:
 	int chunkSize() override;
 
 private:
+	void storeProcessingParameters(Initialization);
+	void assertProcessorCanBeMade();
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
 		AudioFrameProcessorFactory::Parameters
