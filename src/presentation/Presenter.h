@@ -36,5 +36,7 @@ private:
 	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);
+	int convertToInteger(std::string x, std::string identifier);
 	void playTrial_();
+	void switchViewIfTestComplete();
 };

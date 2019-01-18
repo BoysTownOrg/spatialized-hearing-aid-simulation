@@ -107,6 +107,10 @@ static bool containsOnlyDigits(std::string s) {
 int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
 	if (!containsOnlyDigits(x))
 		throw BadInput{ badInputMessage(x, identifier) };
+	return convertToInteger(x, identifier);
+}
+
+int Presenter::convertToInteger(std::string x, std::string identifier) {
 	try {
 		return std::stoi(x);
 	}
@@ -122,10 +126,6 @@ void Presenter::playTrial() {
 	catch (const std::runtime_error &failure) {
 		view->showErrorDialog(failure.what());
 	}
-	if (model->testComplete()) {
-		view->hideTesterView();
-		view->showTestSetup();
-	}
 }
 
 void Presenter::playTrial_() {
@@ -133,4 +133,12 @@ void Presenter::playTrial_() {
 	p.audioDevice = view->audioDevice();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	model->playTrial(std::move(p));
+	switchViewIfTestComplete();
+}
+
+void Presenter::switchViewIfTestComplete() {
+	if (model->testComplete()) {
+		view->hideTesterView();
+		view->showTestSetup();
+	}
 }
