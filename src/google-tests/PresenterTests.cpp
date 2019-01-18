@@ -390,13 +390,13 @@ TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
 }
 
 TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
-	model.setPreferredProcessingSizes({ -1, 2, 3.3 });
+	model.setPreferredProcessingSizes({ 1, 2, 3 });
 	assertEqual(
-		{ "-1", "2", "3.3" }, 
+		{ "1", "2", "3" }, 
 		view.chunkSizeItems()
 	);
 	assertEqual(
-		{ "-1", "2", "3.3" }, 
+		{ "1", "2", "3" }, 
 		view.windowSizeItems()
 	);
 }
