@@ -86,8 +86,8 @@ public:
 class RecognitionTestModelTests : public ::testing::Test {
 protected:
 	StimulusListStub list{};
-	StimulusPlayerStub stimulusPlayer{};
-	RecognitionTestModel model{ &list, &stimulusPlayer };
+	StimulusPlayerStub player{};
+	RecognitionTestModel model{ &list, &player };
 };
 
 TEST_F(
@@ -110,17 +110,17 @@ TEST_F(RecognitionTestModelTests, initializeTestPassesParametersToPlayer) {
 	test.windowSize = 3;
 	test.chunkSize = 4;
 	model.initializeTest(test);
-	assertEqual("a", stimulusPlayer.initialization().leftDslPrescriptionFilePath);
-	assertEqual("b", stimulusPlayer.initialization().rightDslPrescriptionFilePath);
-	assertEqual("c", stimulusPlayer.initialization().brirFilePath);
-	EXPECT_EQ(1, stimulusPlayer.initialization().attack_ms);
-	EXPECT_EQ(2, stimulusPlayer.initialization().release_ms);
-	EXPECT_EQ(3, stimulusPlayer.initialization().windowSize);
-	EXPECT_EQ(4, stimulusPlayer.initialization().chunkSize);
+	assertEqual("a", player.initialization().leftDslPrescriptionFilePath);
+	assertEqual("b", player.initialization().rightDslPrescriptionFilePath);
+	assertEqual("c", player.initialization().brirFilePath);
+	EXPECT_EQ(1, player.initialization().attack_ms);
+	EXPECT_EQ(2, player.initialization().release_ms);
+	EXPECT_EQ(3, player.initialization().windowSize);
+	EXPECT_EQ(4, player.initialization().chunkSize);
 
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
 	// I don't think it's crucial for chapro, but I'll leave it as it was.
-	EXPECT_EQ(119, stimulusPlayer.initialization().max_dB_Spl);
+	EXPECT_EQ(119, player.initialization().max_dB_Spl);
 }
 
 TEST_F(
@@ -129,7 +129,7 @@ TEST_F(
 ) {
     list.setNext("a");
 	model.playTrial({});
-    assertEqual("a", stimulusPlayer.request().audioFilePath);
+    assertEqual("a", player.request().audioFilePath);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
@@ -137,19 +137,19 @@ TEST_F(RecognitionTestModelTests, playTrialPassesParametersToPlayer) {
 	trial.audioDevice = "a";
 	trial.level_dB_Spl = 1;
 	model.playTrial(trial);
-	EXPECT_EQ(1, stimulusPlayer.request().level_dB_Spl);
+	EXPECT_EQ(1, player.request().level_dB_Spl);
 }
 
 TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
-	stimulusPlayer.setPlaying();
+	player.setPlaying();
 	model.playTrial({});
 	EXPECT_FALSE(list.nextCalled());
 }
 
 TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerPlaying) {
-	stimulusPlayer.setPlaying();
+	player.setPlaying();
 	model.playTrial({});
-	EXPECT_FALSE(stimulusPlayer.playCalled());
+	EXPECT_FALSE(player.playCalled());
 }
 
 TEST_F(
@@ -164,7 +164,7 @@ TEST_F(
     RecognitionTestModelTests,
     audioDeviceDescriptionsReturnsThatOfTheAudioPlayer
 ) {
-	stimulusPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
+	player.setAudioDeviceDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
@@ -187,8 +187,8 @@ public:
 class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
 protected:
 	StimulusListStub list{};
-	RequestFailingStimulusPlayer stimulusPlayer{};
-	RecognitionTestModel model{ &list, &stimulusPlayer };
+	RequestFailingStimulusPlayer player{};
+	RecognitionTestModel model{ &list, &player };
 
 	void assertPlayTrialThrowsTrialFailure(std::string what) {
 		try {
@@ -205,7 +205,7 @@ TEST_F(
 	RecognitionTestModelWithRequestFailingStimulusPlayer,
 	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
-	stimulusPlayer.setErrorMessage("error.");
+	player.setErrorMessage("error.");
 	assertPlayTrialThrowsTrialFailure("error.");
 }
 
@@ -224,19 +224,27 @@ public:
 	void play(PlayRequest) override {}
 };
 
-TEST(
-	RecognitionTestModelOtherTests,
+class RecognitionTestModelWithInitializationFailingStimulusPlayer : public ::testing::Test {
+protected:
+	StimulusListStub list{};
+	InitializationFailingStimulusPlayer player{};
+	RecognitionTestModel model{ &list, &player };
+
+	void assertInitializeTestThrowsInitializationFailure(std::string what) {
+		try {
+			model.initializeTest({});
+			FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+		}
+		catch (const RecognitionTestModel::TestInitializationFailure &e) {
+			assertEqual(std::move(what), e.what());
+		}
+	}
+};
+
+TEST_F(
+	RecognitionTestModelWithInitializationFailingStimulusPlayer,
 	initializeTestThrowsTestInitializationFailureWhenPlayerThrowsInitializationFailure
 ) {
-	StimulusListStub list{};
-	InitializationFailingStimulusPlayer stimulusPlayer{};
-	stimulusPlayer.setErrorMessage("error.");
-	RecognitionTestModel model{ &list, &stimulusPlayer };
-	try {
-		model.initializeTest({});
-		FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-	}
-	catch (const RecognitionTestModel::TestInitializationFailure &e) {
-		assertEqual("error.", e.what());
-	}
+	player.setErrorMessage("error.");
+	assertInitializeTestThrowsInitializationFailure("error.");
 }
