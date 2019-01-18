@@ -57,6 +57,13 @@ namespace {
 		EXPECT_TRUE(impl.complete());
 	}
 
+	TEST_F(AudioProcessorImplTests, chunkSizeReturnsWhatWasInitialized) {
+		AudioProcessorImpl::Initialization init;
+		init.chunkSize = 5;
+		impl.initialize(init);
+		EXPECT_EQ(5, impl.chunkSize());
+	}
+
 	TEST_F(AudioProcessorImplTests, preparePassesAllParametersToFactories) {
 		AudioProcessorImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
