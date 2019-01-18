@@ -40,11 +40,16 @@ public:
 
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
+	std::vector<int> preferredProcessingSizes_{};
 	Initialization initialization_{};
 	PlayRequest request_{};
 	bool playing_{};
 	bool playCalled_{};
 public:
+	void setPreferredProcessingSizes(std::vector<int> v) {
+		preferredProcessingSizes_ = std::move(v);
+	}
+
 	const Initialization &initialization() const {
 		return initialization_;
 	}
