@@ -37,7 +37,6 @@ void AudioPlayer::initializeProcessor(Initialization request) {
 	init.windowSize = request.windowSize;
 	init.max_dB_Spl = request.max_dB_Spl;
 	processor->initialize(init);
-	framesPerBuffer_ = request.chunkSize;
 }
 
 void AudioPlayer::play(PlayRequest request) {
@@ -76,7 +75,7 @@ void AudioPlayer::openStream(std::string deviceName) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = processor->sampleRate();
 	streaming.channels = processor->channels();
-	streaming.framesPerBuffer = framesPerBuffer_;
+	streaming.framesPerBuffer = processor->chunkSize();
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == deviceName)
 			streaming.deviceIndex = i;
