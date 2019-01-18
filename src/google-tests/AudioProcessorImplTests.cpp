@@ -47,6 +47,15 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
+	TEST_F(AudioProcessorImplTests, queriesDoNotThrowIfNotPrepared) {
+		reader->setChannels(1);
+		reader->setSampleRate(2);
+		reader->setIncomplete();
+		EXPECT_EQ(0, impl.channels());
+		EXPECT_EQ(0, impl.sampleRate());
+		EXPECT_TRUE(impl.complete());
+	}
+
 	TEST_F(AudioProcessorImplTests, preparePassesAllParametersToFactories) {
 		AudioProcessorImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
@@ -101,6 +110,14 @@ namespace {
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
+	TEST_F(AudioProcessorImplTests, returnsSampleRateAndChannelsFromReader) {
+		reader->setChannels(1);
+		reader->setSampleRate(2);
+		prepare();
+		EXPECT_EQ(1, impl.channels());
+		EXPECT_EQ(2, impl.sampleRate());
+	}
+
 	TEST_F(AudioProcessorImplTests, processReadsAndProcessesAudio) {
 		prepare();
 		gsl::span<float> x{};
@@ -137,23 +154,6 @@ namespace {
 		prepare();
 		process(x);
 		EXPECT_FALSE(impl.complete());
-	}
-
-	TEST_F(AudioProcessorImplTests, sampleRateAndChannelsReturnedFromReader) {
-		reader->setChannels(1);
-		reader->setSampleRate(2);
-		prepare();
-		EXPECT_EQ(1, impl.channels());
-		EXPECT_EQ(2, impl.sampleRate());
-	}
-
-	TEST_F(AudioProcessorImplTests, queriesDoNotThrowIfNotPrepared) {
-		reader->setChannels(1);
-		reader->setSampleRate(2);
-		reader->setIncomplete();
-		EXPECT_EQ(0, impl.channels());
-		EXPECT_EQ(0, impl.sampleRate());
-		EXPECT_TRUE(impl.complete());
 	}
 
 	class ReadsAOne : public AudioFrameReader {
