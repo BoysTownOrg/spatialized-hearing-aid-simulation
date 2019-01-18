@@ -26,6 +26,7 @@ public:
 	void playTrial() override;
 
 private:
+	std::vector<std::string> preferredProcessingSizes();
 	void applyIfBrowseNotCancelled(
 		std::string,
 		std::function<void(std::string)>
