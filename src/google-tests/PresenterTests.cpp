@@ -378,111 +378,33 @@ TEST_F(PresenterTests, constructorShowsTestSetupView) {
     EXPECT_TRUE(view.testSetupShown());
 }
 
+TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
+	assertEqual(
+		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
+		view.chunkSizeItems()
+	);
+	assertEqual(
+		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
+		view.windowSizeItems()
+	);
+}
+
+TEST(PresenterOtherTests, constructorPopulatesAudioDeviceMenu) {
+	ViewStub view;
+	ModelStub model;
+	model.setAudioDeviceDescriptions({ "a", "b", "c" });
+	Presenter presenter{ &model, &view };
+	assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
+}
+
 TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
     view.confirmTestSetup();
     EXPECT_TRUE(view.testSetupHidden());
 }
 
-TEST_F(
-	PresenterTests, 
-	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
-) {
-	view.setLeftDslPrescriptionFilePath("a");
-	view.setRightDslPrescriptionFilePath("b");
-	view.setBrowseCancelled();
-	view.browseForLeftDslPrescription();
-	assertEqual("a", view.leftDslPrescriptionFilePath());
-	view.browseForRightDslPrescription();
-	assertEqual("b", view.rightDslPrescriptionFilePath());
-}
-
-TEST_F(
-	PresenterTests,
-	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
-) {
-	view.setAudioDirectory("a");
-	view.setBrowseCancelled();
-	view.browseForAudio();
-	assertEqual("a", view.audioDirectory());
-}
-
-TEST_F(
-	PresenterTests,
-	cancellingBrowseForBrirDoesNotChangeBrirFilePath
-) {
-	view.setBrirFilePath("a");
-	view.setBrowseCancelled();
-	view.browseForBrir();
-	assertEqual("a", view.brirFilePath());
-}
-
-TEST_F(
-	PresenterTests,
-	browseForDslPrescriptionUpdatesDslPrescriptionFilePath
-) {
-	view.setBrowseFilePath("a");
-	view.browseForLeftDslPrescription();
-	assertEqual("a", view.leftDslPrescriptionFilePath());
-	view.setBrowseFilePath("b");
-	view.browseForRightDslPrescription();
-	assertEqual("b", view.rightDslPrescriptionFilePath());
-}
-
-TEST_F(
-	PresenterTests,
-	browseForAudioDirectoryUpdatesAudioDirectory
-) {
-	view.setBrowseDirectory("a");
-	view.browseForAudio();
-	assertEqual("a", view.audioDirectory());
-}
-
-TEST_F(
-	PresenterTests,
-	browseForBrirUpdatesBrirFilePath
-) {
-	view.setBrowseFilePath("a");
-	view.browseForBrir();
-	assertEqual("a", view.brirFilePath());
-}
-
-TEST_F(
-	PresenterTests,
-	browseForBrirFiltersWavFiles
-) {
-	view.browseForBrir();
-	assertEqual({ "*.wav" }, view.browseFilters());
-}
-
-TEST_F(
-	PresenterTests,
-	confirmTestSetupPassesParametersToModel
-) {
-	view.setLeftDslPrescriptionFilePath("a");
-	view.setRightDslPrescriptionFilePath("b");
-	view.setAudioDirectory("c");
-	view.setBrirFilePath("d");
-	view.setAttack_ms("2.2");
-	view.setRelease_ms("3.3");
-	view.setWindowSize("4");
-	view.setChunkSize("5");
+TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
 	view.confirmTestSetup();
-	assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
-	assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
-	assertEqual("c", model.testParameters().audioDirectory);
-	assertEqual("d", model.testParameters().brirFilePath);
-	EXPECT_EQ(2.2, model.testParameters().attack_ms);
-	EXPECT_EQ(3.3, model.testParameters().release_ms);
-	EXPECT_EQ(4, model.testParameters().windowSize);
-	EXPECT_EQ(5, model.testParameters().chunkSize);
-}
-
-TEST_F(PresenterTests, playTrialPassesParametersToModel) {
-	view.setAudioDevice("e");
-	view.setLevel_dB_Spl("1.1");
-	view.playTrial();
-	assertEqual("e", model.trialParameters().audioDevice);
-	EXPECT_EQ(1.1, model.trialParameters().level_dB_Spl);
+    EXPECT_TRUE(view.testerViewShown());
 }
 
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
@@ -525,29 +447,6 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotShowTesterVie
 	confirmTestSetupDoesNotShowTesterView();
 }
 
-TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
-	view.confirmTestSetup();
-    EXPECT_TRUE(view.testerViewShown());
-}
-
-TEST_F(PresenterTests, playingTrialDoesNotHideViewWhileTestInProgress) {
-    model.setTestIncomplete();
-    view.playTrial();
-    EXPECT_FALSE(view.testerViewHidden());
-}
-
-TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
-    model.setTestComplete();
-    view.playTrial();
-    EXPECT_TRUE(view.testerViewHidden());
-    EXPECT_TRUE(view.testSetupShown());
-}
-
-TEST_F(PresenterTests, playingTrialPlaysTrial) {
-    view.playTrial();
-    EXPECT_TRUE(model.trialPlayed());
-}
-
 TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
 	for (auto s : { "a", "0.1", "-1" })
 		confirmTestSetupWithChunkSizeShowsErrorMessage(s);
@@ -566,27 +465,129 @@ TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) 
 	confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
 }
 
+TEST_F(
+	PresenterTests,
+	confirmTestSetupPassesParametersToModel
+) {
+	view.setLeftDslPrescriptionFilePath("a");
+	view.setRightDslPrescriptionFilePath("b");
+	view.setAudioDirectory("c");
+	view.setBrirFilePath("d");
+	view.setAttack_ms("2.2");
+	view.setRelease_ms("3.3");
+	view.setWindowSize("4");
+	view.setChunkSize("5");
+	view.confirmTestSetup();
+	assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
+	assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
+	assertEqual("c", model.testParameters().audioDirectory);
+	assertEqual("d", model.testParameters().brirFilePath);
+	EXPECT_EQ(2.2, model.testParameters().attack_ms);
+	EXPECT_EQ(3.3, model.testParameters().release_ms);
+	EXPECT_EQ(4, model.testParameters().windowSize);
+	EXPECT_EQ(5, model.testParameters().chunkSize);
+}
+
+TEST_F(
+	PresenterTests, 
+	cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
+) {
+	view.setLeftDslPrescriptionFilePath("a");
+	view.setRightDslPrescriptionFilePath("b");
+	view.setBrowseCancelled();
+	view.browseForLeftDslPrescription();
+	assertEqual("a", view.leftDslPrescriptionFilePath());
+	view.browseForRightDslPrescription();
+	assertEqual("b", view.rightDslPrescriptionFilePath());
+}
+
+TEST_F(
+	PresenterTests,
+	browseForDslPrescriptionUpdatesDslPrescriptionFilePath
+) {
+	view.setBrowseFilePath("a");
+	view.browseForLeftDslPrescription();
+	assertEqual("a", view.leftDslPrescriptionFilePath());
+	view.setBrowseFilePath("b");
+	view.browseForRightDslPrescription();
+	assertEqual("b", view.rightDslPrescriptionFilePath());
+}
+
+TEST_F(
+	PresenterTests,
+	cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
+) {
+	view.setAudioDirectory("a");
+	view.setBrowseCancelled();
+	view.browseForAudio();
+	assertEqual("a", view.audioDirectory());
+}
+
+TEST_F(
+	PresenterTests,
+	browseForAudioDirectoryUpdatesAudioDirectory
+) {
+	view.setBrowseDirectory("a");
+	view.browseForAudio();
+	assertEqual("a", view.audioDirectory());
+}
+
+
+TEST_F(
+	PresenterTests,
+	cancellingBrowseForBrirDoesNotChangeBrirFilePath
+) {
+	view.setBrirFilePath("a");
+	view.setBrowseCancelled();
+	view.browseForBrir();
+	assertEqual("a", view.brirFilePath());
+}
+
+TEST_F(
+	PresenterTests,
+	browseForBrirFiltersWavFiles
+) {
+	view.browseForBrir();
+	assertEqual({ "*.wav" }, view.browseFilters());
+}
+
+TEST_F(
+	PresenterTests,
+	browseForBrirUpdatesBrirFilePath
+) {
+	view.setBrowseFilePath("a");
+	view.browseForBrir();
+	assertEqual("a", view.brirFilePath());
+}
+
 TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 	playTrialWithLevelShowsErrorMessage("b");
 }
 
-TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
-	assertEqual(
-		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
-		view.chunkSizeItems()
-	);
-	assertEqual(
-		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
-		view.windowSizeItems()
-	);
+TEST_F(PresenterTests, playingTrialPlaysTrial) {
+    view.playTrial();
+    EXPECT_TRUE(model.trialPlayed());
 }
 
-TEST(PresenterAudioDeviceTest, constructorPopulatesAudioDeviceMenu) {
-	ViewStub view;
-	ModelStub model;
-	model.setAudioDeviceDescriptions({ "a", "b", "c" });
-	Presenter presenter{ &model, &view };
-	assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
+TEST_F(PresenterTests, playingTrialDoesNotHideTesterViewWhileTestInProgress) {
+    model.setTestIncomplete();
+    view.playTrial();
+    EXPECT_FALSE(view.testerViewHidden());
+}
+
+TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
+    model.setTestComplete();
+    view.playTrial();
+    EXPECT_TRUE(view.testerViewHidden());
+    EXPECT_TRUE(view.testSetupShown());
+}
+
+TEST_F(PresenterTests, playTrialPassesParametersToModel) {
+	view.setAudioDevice("e");
+	view.setLevel_dB_Spl("1.1");
+	view.playTrial();
+	assertEqual("e", model.trialParameters().audioDevice);
+	EXPECT_EQ(1.1, model.trialParameters().level_dB_Spl);
 }
 
 class InitializationFailingModel : public Model {
