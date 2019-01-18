@@ -21,7 +21,7 @@ void AudioPlayer::initialize(Initialization init) {
 	}
 }
 
-void AudioPlayer::initializeProcessor(StimulusPlayer::Initialization request) {
+void AudioPlayer::initializeProcessor(Initialization request) {
 	AudioProcessor::Initialization init;
 	init.attack_ms = request.attack_ms;
 	init.release_ms = request.release_ms;
@@ -41,16 +41,8 @@ void AudioPlayer::play(PlayRequest request) {
 	play_(std::move(request));
 }
 
-void AudioPlayer::play_(StimulusPlayer::PlayRequest request) {
-	try {
-		AudioProcessor::Preparation p;
-		p.audioFilePath = request.audioFilePath;
-		p.level_dB_Spl = request.level_dB_Spl;
-		processor->prepare(p);
-	}
-	catch (const AudioProcessor::PreparationFailure &e) {
-		throw RequestFailure{ e.what() };
-	}
+void AudioPlayer::play_(PlayRequest request) {
+	prepareProcessor(request);
 
 	audio.resize(processor->channels());
 
@@ -68,6 +60,18 @@ void AudioPlayer::play_(StimulusPlayer::PlayRequest request) {
 		throw RequestFailure{ device->errorMessage() };
 	device->setCallbackResultToContinue();
 	device->startStream();
+}
+
+void AudioPlayer::prepareProcessor(PlayRequest request) {
+	try {
+		AudioProcessor::Preparation p;
+		p.audioFilePath = request.audioFilePath;
+		p.level_dB_Spl = request.level_dB_Spl;
+		processor->prepare(p);
+	}
+	catch (const AudioProcessor::PreparationFailure &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
