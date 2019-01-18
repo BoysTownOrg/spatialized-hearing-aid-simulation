@@ -5,9 +5,7 @@ RecognitionTestModel::RecognitionTestModel(
 	StimulusPlayer *player
 ) :
 	list{ list },
-	player{ player }
-{
-}
+	player{ player } {}
 
 bool RecognitionTestModel::testComplete() {
 	return list->empty();
@@ -15,19 +13,19 @@ bool RecognitionTestModel::testComplete() {
 
 void RecognitionTestModel::initializeTest(TestParameters p) {
 	list->initialize(p.audioDirectory);
-	StimulusPlayer::Initialization initialization;
-	initialization.attack_ms = p.attack_ms;
-	initialization.brirFilePath = p.brirFilePath;
-	initialization.chunkSize = p.chunkSize;
-	initialization.leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
-	initialization.release_ms = p.release_ms;
-	initialization.rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
-	initialization.windowSize = p.windowSize;
+	StimulusPlayer::Initialization init;
+	init.attack_ms = p.attack_ms;
+	init.brirFilePath = p.brirFilePath;
+	init.chunkSize = p.chunkSize;
+	init.leftDslPrescriptionFilePath = p.leftDslPrescriptionFilePath;
+	init.release_ms = p.release_ms;
+	init.rightDslPrescriptionFilePath = p.rightDslPrescriptionFilePath;
+	init.windowSize = p.windowSize;
 
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
-	initialization.max_dB_Spl = 119;
+	init.max_dB_Spl = 119;
 	try {
-		player->initialize(initialization);
+		player->initialize(std::move(init));
 	}
 	catch (const StimulusPlayer::InitializationFailure &e) {
 		throw TestInitializationFailure{ e.what() };
@@ -36,17 +34,25 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 
 void RecognitionTestModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
-		return;
-	StimulusPlayer::PlayRequest request;
-	request.audioFilePath = list->next();
-	request.audioDevice = p.audioDevice;
-	request.level_dB_Spl = p.level_dB_Spl;
+		return; 
+	playTrial_(std::move(p));
+}
+
+void RecognitionTestModel::playTrial_(Model::TrialParameters p) {
 	try {
-		player->play(request);
+		playNextStimulus(p);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
 		throw TrialFailure{ e.what() };
 	}
+}
+
+void RecognitionTestModel::playNextStimulus(Model::TrialParameters p) {
+	StimulusPlayer::PlayRequest request;
+	request.audioFilePath = list->next();
+	request.audioDevice = p.audioDevice;
+	request.level_dB_Spl = p.level_dB_Spl;
+	player->play(std::move(request));
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {

@@ -23,4 +23,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override;
 	std::vector<int> preferredProcessingSizes() override;
 	bool testComplete() override;
+private:
+	void playTrial_(Model::TrialParameters);
+	void playNextStimulus(Model::TrialParameters);
 };
