@@ -190,10 +190,6 @@ TEST_F(RecognitionTestModelTests, preferredProcessingSizesReturnsThatOfTheAudioP
 	assertEqual({ 1, 2, 3 }, model.preferredProcessingSizes());
 }
 
-TEST_F(RecognitionTestModelTests, todoTest) {
-	assertEqual({ 64, 128, 256, 512, 1024, 2048, 4096, 8192 }, model.preferredProcessingSizes());
-}
-
 class RequestFailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:

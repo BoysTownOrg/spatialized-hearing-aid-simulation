@@ -128,6 +128,15 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
+	TEST_F(AudioPlayerTests, preferredProcessingSizesReturnsThatOfProcessor) {
+		processor.setPreferredProcessingSizes({ 1, 2, 3 });
+		assertEqual({ 1, 2, 3 }, player.preferredProcessingSizes());
+	}
+
+	TEST_F(AudioPlayerTests, todoTest) {
+		assertEqual({ 64, 128, 256, 512, 1024, 2048, 4096, 8192 }, player.preferredProcessingSizes());
+	}
+
 	class FailsToOpenStream : public AudioDevice {
 		std::string errorMessage_{};
 		bool failed_{};
