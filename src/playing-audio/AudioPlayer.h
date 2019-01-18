@@ -24,10 +24,10 @@ public:
 private:
 	void initializeProcessor(Initialization);
 	void play_(PlayRequest);
-	void restartStream(PlayRequest);
+	void restartStream(std::string deviceName);
 	template<typename exception>
 		void throwIfDeviceFailed();
-	void openStream(PlayRequest);
+	void openStream(std::string deviceName);
 	void prepareProcessor(AudioProcessor::Preparation);
 	void prepareAudio(void * channels, int frames);
 	void completeIfDoneProcessing();

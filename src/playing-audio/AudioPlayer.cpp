@@ -52,7 +52,7 @@ void AudioPlayer::play_(PlayRequest request) {
 	p.level_dB_Spl = request.level_dB_Spl;
 	prepareProcessor(std::move(p));
 	audio.resize(processor->channels());
-	restartStream(std::move(request));
+	restartStream(request.audioDevice);
 }
 
 void AudioPlayer::prepareProcessor(AudioProcessor::Preparation p) {
@@ -64,21 +64,21 @@ void AudioPlayer::prepareProcessor(AudioProcessor::Preparation p) {
 	}
 }
 
-void AudioPlayer::restartStream(PlayRequest request) {
+void AudioPlayer::restartStream(std::string deviceName) {
 	device->closeStream();
-	openStream(std::move(request));
+	openStream(std::move(deviceName));
 	throwIfDeviceFailed<RequestFailure>();
 	device->setCallbackResultToContinue();
 	device->startStream();
 }
 
-void AudioPlayer::openStream(PlayRequest request) {
+void AudioPlayer::openStream(std::string deviceName) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = processor->sampleRate();
 	streaming.channels = processor->channels();
 	streaming.framesPerBuffer = framesPerBuffer_;
 	for (int i = 0; i < device->count(); ++i)
-		if (device->description(i) == request.audioDevice)
+		if (device->description(i) == deviceName)
 			streaming.deviceIndex = i;
 	device->openStream(std::move(streaming));
 }
