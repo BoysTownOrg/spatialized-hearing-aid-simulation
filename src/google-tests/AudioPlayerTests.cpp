@@ -34,38 +34,6 @@ namespace {
 		EXPECT_EQ(&player, device.controller());
 	}
 
-	TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
-		play();
-		assertEqual("close open start ", device.streamLog());
-	}
-
-	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
-		device.setStreaming();
-		play();
-		EXPECT_TRUE(device.streamLog().empty());
-	}
-
-	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenComplete) {
-		fillStreamBuffer();
-		EXPECT_FALSE(device.complete());
-		processor.setComplete();
-		fillStreamBuffer();
-		EXPECT_TRUE(device.complete());
-	}
-
-	TEST_F(AudioPlayerTests, fillStreamBufferPassesAudio) {
-		processor.setChannels(2);
-		play();
-		float left{};
-		float right{};
-		float *x[]{ &left, &right };
-		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, processor.audioBuffer()[0].data());
-		EXPECT_EQ(&right, processor.audioBuffer()[1].data());
-		EXPECT_EQ(1, processor.audioBuffer()[0].size());
-		EXPECT_EQ(1, processor.audioBuffer()[1].size());
-	}
-
 	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
 		StimulusPlayer::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
@@ -87,7 +55,18 @@ namespace {
 		EXPECT_EQ(5, processor.initialization().chunkSize);
 	}
 
-	TEST_F(AudioPlayerTests, playPassesParametersToThings) {
+	TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
+		play();
+		assertEqual("close open start ", device.streamLog());
+	}
+
+	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
+		device.setStreaming();
+		play();
+		EXPECT_TRUE(device.streamLog().empty());
+	}
+
+	TEST_F(AudioPlayerTests, playPreparesProcessorAndOpensStream) {
 		StimulusPlayer::Initialization init;
 		init.chunkSize = 5;
 		player.initialize(init);
@@ -115,6 +94,27 @@ namespace {
 	TEST_F(AudioPlayerTests, playPreparesProcessorPriorToQueryingIt) {
 		play();
 		EXPECT_TRUE(processor.log().beginsWith("prepare "));
+	}
+
+	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenProcessingCompletes) {
+		fillStreamBuffer();
+		EXPECT_FALSE(device.complete());
+		processor.setComplete();
+		fillStreamBuffer();
+		EXPECT_TRUE(device.complete());
+	}
+
+	TEST_F(AudioPlayerTests, fillStreamBufferProcessesEachAudioChannel) {
+		processor.setChannels(2);
+		play();
+		float left{};
+		float right{};
+		float *x[]{ &left, &right };
+		fillStreamBuffer(x, 1);
+		EXPECT_EQ(&left, processor.audioBuffer().at(0).data());
+		EXPECT_EQ(&right, processor.audioBuffer().at(1).data());
+		EXPECT_EQ(1, processor.audioBuffer().at(0).size());
+		EXPECT_EQ(1, processor.audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
@@ -159,28 +159,22 @@ namespace {
 		std::string description(int) override { return {}; }
 	};
 
-	TEST(
-		DeviceFailureTests,
-		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
-	) {
-		AudioDeviceStub device{};
-		device.fail();
-		device.setErrorMessage("error.");
-		try {
-			AudioPlayer player{ &device, {} };
-			FAIL() << "Expected AudioPlayer::DeviceFailure";
-		}
-		catch (const AudioPlayer::DeviceFailure &e) {
-			assertEqual("error.", e.what());
-		}
-	}
-
 	class RequestErrorTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
 		AudioProcessorStub defaultProcessor{};
 		AudioDevice *device{&defaultDevice};
 		AudioProcessor *processor{&defaultProcessor};
+
+		void assertConstructorThrowsDeviceFailure(std::string what) {
+			try {
+				AudioPlayer player{ device, processor };
+				FAIL() << "Expected AudioPlayer::DeviceFailure";
+			}
+			catch (const AudioPlayer::DeviceFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
 			AudioPlayer player{ device, processor };
@@ -204,6 +198,17 @@ namespace {
 			}
 		}
 	};
+
+	TEST_F(
+		RequestErrorTests,
+		constructorThrowsDeviceFailureWhenDeviceFailsToInitialize
+	) {
+		AudioDeviceStub failingDevice{};
+		failingDevice.fail();
+		failingDevice.setErrorMessage("error.");
+		device = &failingDevice;
+		assertConstructorThrowsDeviceFailure("error.");
+	}
 
 	TEST_F(
 		RequestErrorTests,
