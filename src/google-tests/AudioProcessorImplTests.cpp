@@ -53,6 +53,7 @@ namespace {
 		reader->setIncomplete();
 		EXPECT_EQ(0, impl.channels());
 		EXPECT_EQ(0, impl.sampleRate());
+		EXPECT_EQ(0, impl.chunkSize());
 		EXPECT_TRUE(impl.complete());
 	}
 
