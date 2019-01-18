@@ -15,8 +15,8 @@ class RecognitionTestModel : public Model {
 	StimulusPlayer *player;
 public:
 	RECOGNITION_TEST_API RecognitionTestModel(
-		StimulusList *list,
-		StimulusPlayer *player
+		StimulusList *,
+		StimulusPlayer *
 	);
 	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;

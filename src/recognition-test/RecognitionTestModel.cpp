@@ -41,6 +41,7 @@ void RecognitionTestModel::initializeStimulusPlayer(Model::TestParameters p) {
 
 	// The hearing aid simulation in MATLAB used 119 dB SPL as a maximum.
 	init.max_dB_Spl = 119;
+
 	player->initialize(std::move(init));
 }
 
