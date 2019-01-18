@@ -14,6 +14,10 @@ public:
 		preferredProcessingSizes_ = std::move(v);
 	}
 
+	std::vector<int> preferredProcessingSizes() override {
+		return preferredProcessingSizes_;
+	}
+
 	const TestParameters &testParameters() const {
 		return _testParameters;
 	}
@@ -394,8 +398,11 @@ TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
 	);
 }
 
-TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
+TEST(PresenterOtherTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
+	ModelStub model;
+	ViewStub view;
 	model.setPreferredProcessingSizes({ 1, 2, 3 });
+	Presenter presenter{ &model, &view };
 	assertEqual(
 		{ "1", "2", "3" }, 
 		view.chunkSizeItems()
@@ -621,6 +628,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void playTrial(TrialParameters) override {}
 	bool testComplete() override { return {}; }
+	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class PresenterWithInitializationFailingModel : public ::testing::Test {
@@ -660,6 +668,7 @@ public:
 	void initializeTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
+	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class PresenterWithTrialFailingModel : public ::testing::Test {

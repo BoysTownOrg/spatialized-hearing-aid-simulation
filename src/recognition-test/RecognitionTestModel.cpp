@@ -52,3 +52,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
 	return player->audioDeviceDescriptions();
 }
+
+std::vector<int> RecognitionTestModel::preferredProcessingSizes() {
+	return std::vector<int>();
+}

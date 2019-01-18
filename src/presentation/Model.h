@@ -30,5 +30,6 @@ public:
 	RUNTIME_ERROR(TrialFailure);
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
+	virtual std::vector<int> preferredProcessingSizes() = 0;
 	virtual bool testComplete() = 0;
 };
