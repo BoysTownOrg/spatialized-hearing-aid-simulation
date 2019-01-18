@@ -170,7 +170,7 @@
     <ClInclude Include="AudioDeviceStub.h" />
     <ClInclude Include="AudioFrameProcessorStub.h" />
     <ClInclude Include="FakeAudioFileReader.h" />
-    <ClInclude Include="AudioProcessorStub.h" />
+    <ClInclude Include="AudioLoaderStub.h" />
     <ClInclude Include="AudioFrameReaderStub.h" />
     <ClInclude Include="FakeConfigurationFileParser.h" />
     <ClInclude Include="FilterbankCompressorSpy.h" />

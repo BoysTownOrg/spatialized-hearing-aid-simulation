@@ -83,10 +83,10 @@
     <ClInclude Include="LogString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioProcessorStub.h">
+    <ClInclude Include="AudioFrameProcessorStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioFrameProcessorStub.h">
+    <ClInclude Include="AudioLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

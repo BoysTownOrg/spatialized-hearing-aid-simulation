@@ -1,5 +1,5 @@
 #include "AudioDeviceStub.h"
-#include "AudioProcessorStub.h"
+#include "AudioLoaderStub.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
 #include <gtest/gtest.h>
@@ -8,7 +8,7 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		AudioProcessorStub processor{};
+		AudioLoaderStub processor{};
 		AudioPlayer player{ &device, &processor };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
@@ -165,7 +165,7 @@ namespace {
 	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		AudioProcessorStub defaultProcessor{};
+		AudioLoaderStub defaultProcessor{};
 		AudioDevice *device{&defaultDevice};
 		AudioLoader *processor{&defaultProcessor};
 
@@ -219,9 +219,9 @@ namespace {
 
 	TEST_F(
 		AudioPlayerFailureTests,
-		initializeThrowsInitializationFailureWhenAudioProcessorThrowsInitializationFailure
+		initializeThrowsInitializationFailureWhenAudioLoaderThrowsInitializationFailure
 	) {
-		InitializationFailingAudioProcessor failingFactory{ "error." };
+		InitializationFailingAudioLoader failingFactory{ "error." };
 		processor = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
@@ -238,9 +238,9 @@ namespace {
 
 	TEST_F(
 		AudioPlayerFailureTests,
-		playThrowsRequestFailureWhenAudioProcessorThrowsPreparationFailure
+		playThrowsRequestFailureWhenAudioLoaderThrowsPreparationFailure
 	) {
-		PreparationFailureAudioProcessor failingFactory{ "error." };
+		PreparationFailureAudioLoader failingFactory{ "error." };
 		processor = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}

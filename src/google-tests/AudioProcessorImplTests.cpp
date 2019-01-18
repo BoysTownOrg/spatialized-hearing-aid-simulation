@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioProcessorImplTests : public ::testing::Test {
+	class AudioLoaderImplTests : public ::testing::Test {
 	protected:
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
@@ -14,9 +14,9 @@ namespace {
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
-		AudioProcessorImpl impl{ &readerFactory, &processorFactory };
+		AudioLoaderImpl impl{ &readerFactory, &processorFactory };
 
-		void prepare(AudioProcessorImpl::Preparation p = {}) {
+		void prepare(AudioLoaderImpl::Preparation p = {}) {
 			impl.prepare(std::move(p));
 		}
 
@@ -25,8 +25,8 @@ namespace {
 		}
 	};
 
-	TEST_F(AudioProcessorImplTests, initializePassesParametersToFactoryForExceptionCheck) {
-		AudioProcessorImpl::Initialization init;
+	TEST_F(AudioLoaderImplTests, initializePassesParametersToFactoryForExceptionCheck) {
+		AudioLoaderImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
 		init.rightDslPrescriptionFilePath = "b";
 		init.brirFilePath = "c";
@@ -47,7 +47,7 @@ namespace {
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
-	TEST_F(AudioProcessorImplTests, queriesDoNotThrowIfNotPrepared) {
+	TEST_F(AudioLoaderImplTests, queriesDoNotThrowIfNotPrepared) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		reader->setIncomplete();
@@ -57,15 +57,15 @@ namespace {
 		EXPECT_TRUE(impl.complete());
 	}
 
-	TEST_F(AudioProcessorImplTests, chunkSizeReturnsWhatWasInitialized) {
-		AudioProcessorImpl::Initialization init;
+	TEST_F(AudioLoaderImplTests, chunkSizeReturnsWhatWasInitialized) {
+		AudioLoaderImpl::Initialization init;
 		init.chunkSize = 5;
 		impl.initialize(init);
 		EXPECT_EQ(5, impl.chunkSize());
 	}
 
-	TEST_F(AudioProcessorImplTests, preparePassesAllParametersToFactories) {
-		AudioProcessorImpl::Initialization init;
+	TEST_F(AudioLoaderImplTests, preparePassesAllParametersToFactories) {
+		AudioLoaderImpl::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
 		init.rightDslPrescriptionFilePath = "b";
 		init.brirFilePath = "c";
@@ -75,7 +75,7 @@ namespace {
 		init.windowSize = 4;
 		init.chunkSize = 5;
 		impl.initialize(init);
-		AudioProcessorImpl::Preparation p{};
+		AudioLoaderImpl::Preparation p{};
 		p.audioFilePath = "d";
 		reader->setChannels(6);
 		reader->setSampleRate(7);
@@ -93,14 +93,14 @@ namespace {
 		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
 	}
 
-	TEST_F(AudioProcessorImplTests, preparePassesCalibrationScaleToProcessorFactory) {
-		AudioProcessorImpl::Initialization init;
+	TEST_F(AudioLoaderImplTests, preparePassesCalibrationScaleToProcessorFactory) {
+		AudioLoaderImpl::Initialization init;
 		init.max_dB_Spl = 8;
 		impl.initialize(init);
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
-		AudioProcessorImpl::Preparation p{};
+		AudioLoaderImpl::Preparation p{};
 		p.level_dB_Spl = 7;
 		prepare(p);
 		assertEqual(
@@ -113,12 +113,12 @@ namespace {
 		);
 	}
 
-	TEST_F(AudioProcessorImplTests, prepareResetsReaderAfterComputingRms) {
+	TEST_F(AudioLoaderImplTests, prepareResetsReaderAfterComputingRms) {
 		prepare();
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 	}
 
-	TEST_F(AudioProcessorImplTests, returnsSampleRateAndChannelsFromReader) {
+	TEST_F(AudioLoaderImplTests, returnsSampleRateAndChannelsFromReader) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		prepare();
@@ -126,7 +126,7 @@ namespace {
 		EXPECT_EQ(2, impl.sampleRate());
 	}
 
-	TEST_F(AudioProcessorImplTests, processReadsAndProcessesAudio) {
+	TEST_F(AudioLoaderImplTests, processReadsAndProcessesAudio) {
 		prepare();
 		gsl::span<float> x{};
 		load({ &x, 1 });
@@ -136,7 +136,7 @@ namespace {
 		EXPECT_EQ(1, processor->audioBuffer().size());
 	}
 
-	TEST_F(AudioProcessorImplTests, processPadsZeroToEndOfReadInput) {
+	TEST_F(AudioLoaderImplTests, processPadsZeroToEndOfReadInput) {
 		prepare();
 		reader->setComplete();
 		std::vector<float> audio(3, -1);
@@ -147,7 +147,7 @@ namespace {
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
 	}
 
-	TEST_F(AudioProcessorImplTests, completeAfterProcessingPaddedZeroes) {
+	TEST_F(AudioLoaderImplTests, completeAfterProcessingPaddedZeroes) {
 		prepare();
 		reader->setComplete();
 		processor->setGroupDelay(3);
@@ -164,7 +164,7 @@ namespace {
 		EXPECT_FALSE(impl.complete());
 	}
 
-	TEST_F(AudioProcessorImplTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
+	TEST_F(AudioLoaderImplTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
 		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, impl.preferredProcessingSizes());
 	}
@@ -193,7 +193,7 @@ namespace {
 		int groupDelay() override { return {}; }
 	};
 
-	TEST_F(AudioProcessorImplTests, processReadsThenProcesses) {
+	TEST_F(AudioLoaderImplTests, processReadsThenProcesses) {
 		readerFactory.setReader(std::make_shared<ReadsAOne>());
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
@@ -203,7 +203,7 @@ namespace {
 		EXPECT_EQ(2, y);
 	}
 
-	class AudioProcessorImplErrorTests : public ::testing::Test {
+	class AudioLoaderImplErrorTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory defaultReaderFactory{};
 		AudioFrameProcessorStubFactory defaultProcessorFactory{};
@@ -211,30 +211,30 @@ namespace {
 		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPrepareThrowsPreparationFailure(std::string what) {
-			AudioProcessorImpl impl{ readerFactory, processorFactory };
+			AudioLoaderImpl impl{ readerFactory, processorFactory };
 			try {
 				impl.prepare({});
-				FAIL() << "Expected AudioProcessorImpl::PreparationFailure";
+				FAIL() << "Expected AudioLoaderImpl::PreparationFailure";
 			}
-			catch (const AudioProcessorImpl::PreparationFailure &e) {
+			catch (const AudioLoaderImpl::PreparationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioProcessorImpl impl{ readerFactory, processorFactory };
+			AudioLoaderImpl impl{ readerFactory, processorFactory };
 			try {
 				impl.initialize({});
-				FAIL() << "Expected AudioProcessorImpl::InitializationFailure";
+				FAIL() << "Expected AudioLoaderImpl::InitializationFailure";
 			}
-			catch (const AudioProcessorImpl::InitializationFailure &e) {
+			catch (const AudioLoaderImpl::InitializationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
 	};
 
 	TEST_F(
-		AudioProcessorImplErrorTests,
+		AudioLoaderImplErrorTests,
 		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		CreatingErrorAudioFrameProcessorFactory failingFactory{ "error." };
@@ -243,7 +243,7 @@ namespace {
 	}
 
 	TEST_F(
-		AudioProcessorImplErrorTests,
+		AudioLoaderImplErrorTests,
 		prepareThrowsPreparationFailureWhenProcessorFactoryThrowsCreateError
 	) {
 		CreatingErrorAudioFrameProcessorFactory failingFactory{ "error." };
@@ -252,7 +252,7 @@ namespace {
 	}
 
 	TEST_F(
-		AudioProcessorImplErrorTests,
+		AudioLoaderImplErrorTests,
 		prepareThrowsPreparationFailureWhenReaderFactoryThrowsCreateError
 	) {
 		ErrorAudioFrameReaderFactory failingFactory{ "error." };

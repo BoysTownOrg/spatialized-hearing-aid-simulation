@@ -24,16 +24,16 @@
     <ClInclude Include="AudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioProcessorImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="playing-audio-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioFrameProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLoaderImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClCompile Include="AudioPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioProcessorImpl.cpp">
+    <ClCompile Include="AudioLoaderImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

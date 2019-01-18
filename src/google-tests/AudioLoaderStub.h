@@ -1,9 +1,9 @@
 #pragma once
 
 #include "LogString.h"
-#include <playing-audio/AudioProcessor.h>
+#include <playing-audio/AudioLoader.h>
 
-class AudioProcessorStub : public AudioLoader {
+class AudioLoaderStub : public AudioLoader {
 	Initialization parameters_{};
 	Preparation preparation_{};
 	std::vector<int> preferredProcessingSizes_{};
@@ -86,10 +86,10 @@ public:
 	}
 };
 
-class InitializationFailingAudioProcessor : public AudioLoader {
+class InitializationFailingAudioLoader : public AudioLoader {
 	std::string errorMessage{};
 public:
-	explicit InitializationFailingAudioProcessor(
+	explicit InitializationFailingAudioLoader(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}
@@ -109,10 +109,10 @@ public:
 	}
 };
 
-class PreparationFailureAudioProcessor : public AudioLoader {
+class PreparationFailureAudioLoader : public AudioLoader {
 	std::string errorMessage{};
 public:
-	explicit PreparationFailureAudioProcessor(
+	explicit PreparationFailureAudioLoader(
 		std::string errorMessage
 	) :
 		errorMessage{ std::move(errorMessage) } {}

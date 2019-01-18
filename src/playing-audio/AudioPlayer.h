@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AudioDevice.h"
-#include "AudioProcessor.h"
+#include "AudioLoader.h"
 #include "playing-audio-exports.h"
 #include <recognition-test/StimulusPlayer.h>
 

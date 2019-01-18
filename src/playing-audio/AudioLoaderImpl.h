@@ -1,11 +1,11 @@
 #pragma once
 
 #include "AudioFrameProcessor.h"
-#include "AudioProcessor.h"
+#include "AudioLoader.h"
 #include "playing-audio-exports.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 
-class AudioProcessorImpl : public AudioLoader {
+class AudioLoaderImpl : public AudioLoader {
 	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
@@ -13,7 +13,7 @@ class AudioProcessorImpl : public AudioLoader {
 	AudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
-	PLAYING_AUDIO_API AudioProcessorImpl(
+	PLAYING_AUDIO_API AudioLoaderImpl(
 		AudioFrameReaderFactory *readerFactory,
 		AudioFrameProcessorFactory *processorFactory
 	);
