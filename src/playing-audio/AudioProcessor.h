@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 
-class AudioProcessor {
+class AudioLoader {
 public:
-	INTERFACE_OPERATIONS(AudioProcessor);
+	INTERFACE_OPERATIONS(AudioLoader);
 	struct Initialization {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
@@ -31,7 +31,7 @@ public:
 	RUNTIME_ERROR(PreparationFailure);
 
 	virtual bool complete() = 0;
-	virtual void process(gsl::span<gsl::span<float>> audio) = 0;
+	virtual void load(gsl::span<gsl::span<float>> audio) = 0;
 	virtual int sampleRate() = 0;
 	virtual int channels() = 0;
 	virtual int chunkSize() = 0;

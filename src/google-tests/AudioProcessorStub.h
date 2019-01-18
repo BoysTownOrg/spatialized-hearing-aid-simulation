@@ -3,7 +3,7 @@
 #include "LogString.h"
 #include <playing-audio/AudioProcessor.h>
 
-class AudioProcessorStub : public AudioProcessor {
+class AudioProcessorStub : public AudioLoader {
 	Initialization parameters_{};
 	Preparation preparation_{};
 	std::vector<int> preferredProcessingSizes_{};
@@ -46,7 +46,7 @@ public:
 		return _audioBuffer;
 	}
 
-	void process(gsl::span<gsl::span<float>> audio) override {
+	void load(gsl::span<gsl::span<float>> audio) override {
 		_audioBuffer = std::move(audio);
 	}
 
@@ -86,7 +86,7 @@ public:
 	}
 };
 
-class InitializationFailingAudioProcessor : public AudioProcessor {
+class InitializationFailingAudioProcessor : public AudioLoader {
 	std::string errorMessage{};
 public:
 	explicit InitializationFailingAudioProcessor(
@@ -99,7 +99,7 @@ public:
 	}
 
 	bool complete() override { return {}; }
-	void process(gsl::span<gsl::span<float>>) override {}
+	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	int chunkSize() override { return {}; }
@@ -109,7 +109,7 @@ public:
 	}
 };
 
-class PreparationFailureAudioProcessor : public AudioProcessor {
+class PreparationFailureAudioProcessor : public AudioLoader {
 	std::string errorMessage{};
 public:
 	explicit PreparationFailureAudioProcessor(
@@ -123,7 +123,7 @@ public:
 	
 	bool complete() override { return {}; }
 	void initialize(Initialization) override {}
-	void process(gsl::span<gsl::span<float>>) override {}
+	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	int chunkSize() override { return {}; }

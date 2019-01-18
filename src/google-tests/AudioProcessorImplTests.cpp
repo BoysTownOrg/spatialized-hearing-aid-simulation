@@ -20,8 +20,8 @@ namespace {
 			impl.prepare(std::move(p));
 		}
 
-		void process(gsl::span<gsl::span<float>> s = {}) {
-			impl.process(std::move(s));
+		void load(gsl::span<gsl::span<float>> s = {}) {
+			impl.load(std::move(s));
 		}
 	};
 
@@ -129,7 +129,7 @@ namespace {
 	TEST_F(AudioProcessorImplTests, processReadsAndProcessesAudio) {
 		prepare();
 		gsl::span<float> x{};
-		process({ &x, 1 });
+		load({ &x, 1 });
 		EXPECT_EQ(&x, reader->audioBuffer().data());
 		EXPECT_EQ(1, reader->audioBuffer().size());
 		EXPECT_EQ(&x, processor->audioBuffer().data());
@@ -141,7 +141,7 @@ namespace {
 		reader->setComplete();
 		std::vector<float> audio(3, -1);
 		gsl::span<float> x{ audio };
-		process({ &x, 1 });
+		load({ &x, 1 });
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(0));
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(1));
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
@@ -153,14 +153,14 @@ namespace {
 		processor->setGroupDelay(3);
 		std::vector<float> y(1);
 		std::vector<gsl::span<float>> x{ y, y };
-		process(x);
+		load(x);
 		EXPECT_FALSE(impl.complete());
-		process(x);
+		load(x);
 		EXPECT_FALSE(impl.complete());
-		process(x);
+		load(x);
 		EXPECT_TRUE(impl.complete());
 		prepare();
-		process(x);
+		load(x);
 		EXPECT_FALSE(impl.complete());
 	}
 
@@ -199,7 +199,7 @@ namespace {
 		prepare();
 		float y{};
 		gsl::span<float> x{ &y, 1 };
-		impl.process({ &x, 1 });
+		impl.load({ &x, 1 });
 		EXPECT_EQ(2, y);
 	}
 

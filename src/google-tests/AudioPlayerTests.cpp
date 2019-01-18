@@ -167,7 +167,7 @@ namespace {
 		AudioDeviceStub defaultDevice{};
 		AudioProcessorStub defaultProcessor{};
 		AudioDevice *device{&defaultDevice};
-		AudioProcessor *processor{&defaultProcessor};
+		AudioLoader *processor{&defaultProcessor};
 
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {

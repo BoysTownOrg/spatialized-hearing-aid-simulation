@@ -8,11 +8,11 @@
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
-	AudioProcessor *processor;
+	AudioLoader *loader;
 public:
 	PLAYING_AUDIO_API AudioPlayer(
 		AudioDevice *, 
-		AudioProcessor *
+		AudioLoader *
 	);
 	void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API void play(PlayRequest) override;
@@ -21,13 +21,13 @@ public:
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 	std::vector<int> preferredProcessingSizes() override;
 private:
-	void initializeProcessor(Initialization);
+	void initializeLoader(Initialization);
 	void play_(PlayRequest);
 	void restartStream(std::string deviceName);
 	template<typename exception>
 		void throwIfDeviceFailed();
 	void openStream(std::string deviceName);
-	void prepareProcessor(AudioProcessor::Preparation);
+	void prepareLoader(AudioLoader::Preparation);
 	void prepareAudio(void * channels, int frames);
 	void completeIfDoneProcessing();
 	int findDeviceIndex(std::string deviceName);

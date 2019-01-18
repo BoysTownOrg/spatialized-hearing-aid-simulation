@@ -92,7 +92,7 @@ std::vector<int> AudioProcessorImpl::preferredProcessingSizes() {
 	return processorFactory->preferredProcessingSizes();
 }
 
-void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
+void AudioProcessorImpl::load(gsl::span<gsl::span<float>> audio) {
 	if (reader->complete()) {
 		for (auto channel : audio)
 			for (auto &x : channel)

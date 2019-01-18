@@ -5,7 +5,7 @@
 #include "playing-audio-exports.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 
-class AudioProcessorImpl : public AudioProcessor {
+class AudioProcessorImpl : public AudioLoader {
 	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
@@ -20,7 +20,7 @@ public:
 
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation) override;
-	PLAYING_AUDIO_API void process(gsl::span<gsl::span<float>> audio) override;
+	PLAYING_AUDIO_API void load(gsl::span<gsl::span<float>> audio) override;
 	PLAYING_AUDIO_API bool complete() override;
 	PLAYING_AUDIO_API int channels() override;
 	PLAYING_AUDIO_API int sampleRate() override;
