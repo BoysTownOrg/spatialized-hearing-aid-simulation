@@ -1,6 +1,6 @@
-#include "AudioLoaderImpl.h"
+#include "AudioProcessingLoader.h"
 
-AudioLoaderImpl::AudioLoaderImpl(
+AudioProcessingLoader::AudioProcessingLoader(
 	AudioFrameReaderFactory *readerFactory, 
 	AudioFrameProcessorFactory *processorFactory
 ) :
@@ -9,7 +9,7 @@ AudioLoaderImpl::AudioLoaderImpl(
 {
 }
 
-void AudioLoaderImpl::initialize(Initialization initialization) {
+void AudioProcessingLoader::initialize(Initialization initialization) {
 	processing.attack_ms = initialization.attack_ms;
 	processing.release_ms = initialization.release_ms;
 	processing.brirFilePath = initialization.brirFilePath;
@@ -50,7 +50,7 @@ public:
 	}
 };
 
-void AudioLoaderImpl::prepare(Preparation p) {
+void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
 	RmsComputer rms{ *reader };
 	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
@@ -64,7 +64,7 @@ void AudioLoaderImpl::prepare(Preparation p) {
 	paddedZeroes = 0;
 }
 
-std::shared_ptr<AudioFrameReader> AudioLoaderImpl::makeReader(std::string filePath) {
+std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string filePath) {
 	try {
 		return readerFactory->make(std::move(filePath));
 	}
@@ -73,7 +73,7 @@ std::shared_ptr<AudioFrameReader> AudioLoaderImpl::makeReader(std::string filePa
 	}
 }
 
-std::shared_ptr<AudioFrameProcessor> AudioLoaderImpl::makeProcessor(
+std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
 	AudioFrameProcessorFactory::Parameters p
 ) {
 	try {
@@ -84,15 +84,15 @@ std::shared_ptr<AudioFrameProcessor> AudioLoaderImpl::makeProcessor(
 	}
 }
 
-int AudioLoaderImpl::chunkSize() {
+int AudioProcessingLoader::chunkSize() {
 	return processing.chunkSize;
 }
 
-std::vector<int> AudioLoaderImpl::preferredProcessingSizes() {
+std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {
 	return processorFactory->preferredProcessingSizes();
 }
 
-void AudioLoaderImpl::load(gsl::span<gsl::span<float>> audio) {
+void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 	if (reader->complete()) {
 		for (auto channel : audio)
 			for (auto &x : channel)
@@ -104,14 +104,14 @@ void AudioLoaderImpl::load(gsl::span<gsl::span<float>> audio) {
 	processor->process(audio);
 }
 
-bool AudioLoaderImpl::complete() {
+bool AudioProcessingLoader::complete() {
 	return processor ? paddedZeroes >= processor->groupDelay() : true;
 }
 
-int AudioLoaderImpl::channels() {
+int AudioProcessingLoader::channels() {
 	return reader ? reader->channels() : 0;
 }
 
-int AudioLoaderImpl::sampleRate() {
+int AudioProcessingLoader::sampleRate() {
 	return reader ? reader->sampleRate() : 0;
 }

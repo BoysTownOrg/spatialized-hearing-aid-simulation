@@ -5,7 +5,7 @@
 #include "playing-audio-exports.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 
-class AudioLoaderImpl : public AudioLoader {
+class AudioProcessingLoader : public AudioLoader {
 	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor{};
 	std::shared_ptr<AudioFrameReader> reader{};
@@ -13,7 +13,7 @@ class AudioLoaderImpl : public AudioLoader {
 	AudioFrameProcessorFactory *processorFactory;
 	int paddedZeroes{};
 public:
-	PLAYING_AUDIO_API AudioLoaderImpl(
+	PLAYING_AUDIO_API AudioProcessingLoader(
 		AudioFrameReaderFactory *readerFactory,
 		AudioFrameProcessorFactory *processorFactory
 	);

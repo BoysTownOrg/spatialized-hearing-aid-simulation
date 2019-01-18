@@ -10,7 +10,7 @@
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
-#include <playing-audio/AudioLoaderImpl.h>
+#include <playing-audio/AudioProcessingLoader.h>
 #include <recognition-test/RecognitionTestModel.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
@@ -86,7 +86,7 @@ int main() {
 		)
 	};
 	
-	AudioLoaderImpl impl{&frameReaderFactory, &processorFactory};
+	AudioProcessingLoader impl{&frameReaderFactory, &processorFactory};
 	AudioPlayer player{&device, &impl};
 	RecognitionTestModel model{ &list, &player };
 	FltkView view{};

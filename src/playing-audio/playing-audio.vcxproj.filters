@@ -33,7 +33,7 @@
     <ClInclude Include="AudioLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioLoaderImpl.h">
+    <ClInclude Include="AudioProcessingLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClCompile Include="AudioPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AudioLoaderImpl.cpp">
+    <ClCompile Include="AudioProcessingLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

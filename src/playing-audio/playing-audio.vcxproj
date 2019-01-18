@@ -160,11 +160,11 @@
     <ClInclude Include="playing-audio-exports.h" />
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
-    <ClInclude Include="AudioLoaderImpl.h" />
+    <ClInclude Include="AudioProcessingLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioPlayer.cpp" />
-    <ClCompile Include="AudioLoaderImpl.cpp" />
+    <ClCompile Include="AudioProcessingLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

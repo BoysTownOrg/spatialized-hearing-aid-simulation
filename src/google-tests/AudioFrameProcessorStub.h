@@ -1,5 +1,5 @@
 #pragma once
-#include <playing-audio/AudioLoaderImpl.h>
+#include <playing-audio/AudioProcessingLoader.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
 	gsl::span<gsl::span<float>> _audioBuffer{};
