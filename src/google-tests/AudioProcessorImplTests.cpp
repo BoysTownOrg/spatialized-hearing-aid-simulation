@@ -156,8 +156,8 @@ namespace {
 		EXPECT_FALSE(impl.complete());
 	}
 
-	TEST_F(AudioProcessorImplTests, preferredProcessingSizesReturnsThatOfProcessor) {
-		processor->setPreferredProcessingSizes({ 1, 2, 3 });
+	TEST_F(AudioProcessorImplTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
+		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, impl.preferredProcessingSizes());
 	}
 

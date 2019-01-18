@@ -2,15 +2,10 @@
 #include <playing-audio/AudioProcessorImpl.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
-	std::vector<int> preferredProcessingSizes_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	int groupDelay_{};
 	bool complete_{};
 public:
-	void setPreferredProcessingSizes(std::vector<int> v) {
-		preferredProcessingSizes_ = std::move(v);
-	}
-
 	const gsl::span<gsl::span<float>> audioBuffer() const {
 		return _audioBuffer;
 	}
@@ -33,6 +28,7 @@ public:
 };
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
+	std::vector<int> preferredProcessingSizes_{};
 	Parameters parameters_{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 public:
@@ -53,6 +49,10 @@ public:
 	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
 		parameters_ = std::move(p);
 		return processor;
+	}
+
+	void setPreferredProcessingSizes(std::vector<int> v) {
+		preferredProcessingSizes_ = std::move(v);
 	}
 };
 

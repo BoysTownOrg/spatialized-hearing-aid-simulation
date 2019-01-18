@@ -84,9 +84,8 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessorImpl::makeProcessor(
 	}
 }
 
-std::vector<int> AudioProcessorImpl::preferredProcessingSizes()
-{
-	return std::vector<int>();
+std::vector<int> AudioProcessorImpl::preferredProcessingSizes() {
+	return {};
 }
 
 void AudioProcessorImpl::process(gsl::span<gsl::span<float>> audio) {
