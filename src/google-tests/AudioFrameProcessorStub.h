@@ -54,6 +54,10 @@ public:
 	void setPreferredProcessingSizes(std::vector<int> v) {
 		preferredProcessingSizes_ = std::move(v);
 	}
+
+	std::vector<int> preferredProcessingSizes() override {
+		return preferredProcessingSizes_;
+	}
 };
 
 class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -66,5 +70,9 @@ public:
 
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
 		throw CreateError{ errorMessage };
+	}
+
+	std::vector<int> preferredProcessingSizes() override {
+		return {};
 	}
 };

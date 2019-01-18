@@ -32,4 +32,5 @@ public:
 		int channels;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
+	virtual std::vector<int> preferredProcessingSizes() = 0;
 };
