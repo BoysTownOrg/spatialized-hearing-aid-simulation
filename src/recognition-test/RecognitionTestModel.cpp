@@ -54,5 +54,5 @@ std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
 }
 
 std::vector<int> RecognitionTestModel::preferredProcessingSizes() {
-	return std::vector<int>();
+	return player->preferredProcessingSizes();
 }
