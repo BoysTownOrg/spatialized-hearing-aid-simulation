@@ -76,10 +76,16 @@ void AudioPlayer::openStream(std::string deviceName) {
 	streaming.sampleRate = processor->sampleRate();
 	streaming.channels = processor->channels();
 	streaming.framesPerBuffer = processor->chunkSize();
+	streaming.deviceIndex = findDeviceIndex(std::move(deviceName));
+	device->openStream(std::move(streaming));
+}
+
+int AudioPlayer::findDeviceIndex(std::string deviceName) {
+	int deviceIndex{};
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == deviceName)
-			streaming.deviceIndex = i;
-	device->openStream(std::move(streaming));
+			deviceIndex = i;
+	return deviceIndex;
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {

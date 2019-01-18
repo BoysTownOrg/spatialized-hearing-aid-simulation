@@ -30,5 +30,6 @@ private:
 	void prepareProcessor(AudioProcessor::Preparation);
 	void prepareAudio(void * channels, int frames);
 	void completeIfDoneProcessing();
+	int findDeviceIndex(std::string deviceName);
 };
 
