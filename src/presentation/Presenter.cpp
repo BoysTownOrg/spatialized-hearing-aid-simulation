@@ -81,7 +81,7 @@ void Presenter::initializeModel() {
 	p.release_ms = convertToDouble(view->release_ms(), "release time");
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-	model->initializeTest(p);
+	model->initializeTest(std::move(p));
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {
@@ -117,10 +117,7 @@ int Presenter::convertToPositiveInteger(std::string x, std::string identifier) {
 
 void Presenter::playTrial() {
 	try {
-		Model::TrialParameters p;
-		p.audioDevice = view->audioDevice();
-		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		model->playTrial(p);
+		playTrial_();
 	}
 	catch (const std::runtime_error &failure) {
 		view->showErrorDialog(failure.what());
@@ -129,4 +126,11 @@ void Presenter::playTrial() {
 		view->hideTesterView();
 		view->showTestSetup();
 	}
+}
+
+void Presenter::playTrial_() {
+	Model::TrialParameters p;
+	p.audioDevice = view->audioDevice();
+	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	model->playTrial(std::move(p));
 }
