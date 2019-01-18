@@ -8,8 +8,8 @@ namespace {
 	class AudioPlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		AudioLoaderStub processor{};
-		AudioPlayer player{ &device, &processor };
+		AudioLoaderStub loader{};
+		AudioPlayer player{ &device, &loader };
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
@@ -34,7 +34,7 @@ namespace {
 		EXPECT_EQ(&player, device.controller());
 	}
 
-	TEST_F(AudioPlayerTests, initializeInitializesProcessor) {
+	TEST_F(AudioPlayerTests, initializeInitializesLoader) {
 		StimulusPlayer::Initialization init;
 		init.leftDslPrescriptionFilePath = "a";
 		init.rightDslPrescriptionFilePath = "b";
@@ -45,17 +45,17 @@ namespace {
 		init.windowSize = 4;
 		init.chunkSize = 5;
 		player.initialize(init);
-		assertEqual("a", processor.initialization().leftDslPrescriptionFilePath);
-		assertEqual("b", processor.initialization().rightDslPrescriptionFilePath);
-		assertEqual("c", processor.initialization().brirFilePath);
-		EXPECT_EQ(1, processor.initialization().max_dB_Spl);
-		EXPECT_EQ(2, processor.initialization().attack_ms);
-		EXPECT_EQ(3, processor.initialization().release_ms);
-		EXPECT_EQ(4, processor.initialization().windowSize);
-		EXPECT_EQ(5, processor.initialization().chunkSize);
+		assertEqual("a", loader.initialization().leftDslPrescriptionFilePath);
+		assertEqual("b", loader.initialization().rightDslPrescriptionFilePath);
+		assertEqual("c", loader.initialization().brirFilePath);
+		EXPECT_EQ(1, loader.initialization().max_dB_Spl);
+		EXPECT_EQ(2, loader.initialization().attack_ms);
+		EXPECT_EQ(3, loader.initialization().release_ms);
+		EXPECT_EQ(4, loader.initialization().windowSize);
+		EXPECT_EQ(5, loader.initialization().chunkSize);
 	}
 
-	TEST_F(AudioPlayerTests, playFirstClosesStreamThenOpensThenStarts) {
+	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {
 		play();
 		assertEqual("close open start ", device.streamLog());
 	}
@@ -66,18 +66,18 @@ namespace {
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, playPreparesProcessorAndOpensStream) {
+	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
 		StimulusPlayer::PlayRequest request;
 		request.audioFilePath = "d";
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		request.level_dB_Spl = 8;
-		processor.setChunkSize(5);
-		processor.setChannels(6);
-		processor.setSampleRate(7);
+		loader.setChunkSize(5);
+		loader.setChannels(6);
+		loader.setSampleRate(7);
 		play(request);
-		assertEqual("d", processor.preparation().audioFilePath);
-		EXPECT_EQ(8, processor.preparation().level_dB_Spl);
+		assertEqual("d", loader.preparation().audioFilePath);
+		EXPECT_EQ(8, loader.preparation().level_dB_Spl);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(6, device.streamParameters().channels);
@@ -89,30 +89,30 @@ namespace {
 		assertEqual("setCallbackResultToContinue start ", device.callbackLog());
 	}
 
-	TEST_F(AudioPlayerTests, playPreparesProcessorPriorToQueryingIt) {
+	TEST_F(AudioPlayerTests, playPreparesLoaderPriorToQueryingIt) {
 		play();
-		EXPECT_TRUE(processor.log().beginsWith("prepare "));
+		EXPECT_TRUE(loader.log().beginsWith("prepare "));
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenProcessingCompletes) {
+	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
 		fillStreamBuffer();
 		EXPECT_FALSE(device.complete());
-		processor.setComplete();
+		loader.setComplete();
 		fillStreamBuffer();
 		EXPECT_TRUE(device.complete());
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferProcessesEachAudioChannel) {
-		processor.setChannels(2);
+	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
+		loader.setChannels(2);
 		play();
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, processor.audioBuffer().at(0).data());
-		EXPECT_EQ(&right, processor.audioBuffer().at(1).data());
-		EXPECT_EQ(1, processor.audioBuffer().at(0).size());
-		EXPECT_EQ(1, processor.audioBuffer().at(1).size());
+		EXPECT_EQ(&left, loader.audioBuffer().at(0).data());
+		EXPECT_EQ(&right, loader.audioBuffer().at(1).data());
+		EXPECT_EQ(1, loader.audioBuffer().at(0).size());
+		EXPECT_EQ(1, loader.audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
@@ -126,8 +126,8 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
-	TEST_F(AudioPlayerTests, preferredProcessingSizesReturnsThatOfProcessor) {
-		processor.setPreferredProcessingSizes({ 1, 2, 3 });
+	TEST_F(AudioPlayerTests, preferredProcessingSizesReturnsThatOfLoader) {
+		loader.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, player.preferredProcessingSizes());
 	}
 
@@ -165,9 +165,9 @@ namespace {
 	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		AudioLoaderStub defaultProcessor{};
+		AudioLoaderStub defaultLoader{};
 		AudioDevice *device{&defaultDevice};
-		AudioLoader *processor{&defaultProcessor};
+		AudioLoader *loader{&defaultLoader};
 
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {
@@ -180,7 +180,7 @@ namespace {
 		}
 
 		AudioPlayer makePlayer() {
-			return { device, processor };
+			return { device, loader };
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
@@ -222,7 +222,7 @@ namespace {
 		initializeThrowsInitializationFailureWhenAudioLoaderThrowsInitializationFailure
 	) {
 		InitializationFailingAudioLoader failingFactory{ "error." };
-		processor = &failingFactory;
+		loader = &failingFactory;
 		assertInitializeThrowsInitializationFailure("error.");
 	}
 
@@ -241,7 +241,7 @@ namespace {
 		playThrowsRequestFailureWhenAudioLoaderThrowsPreparationFailure
 	) {
 		PreparationFailureAudioLoader failingFactory{ "error." };
-		processor = &failingFactory;
+		loader = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}
 }
