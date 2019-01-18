@@ -89,17 +89,17 @@ int AudioPlayer::findDeviceIndex(std::string deviceName) {
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
-	prepareAudio(channels, frames);
+	prepareAudioForLoading(channels, frames);
 	loader->load(audio);
-	completeIfDoneProcessing();
+	signalDeviceIfDoneLoading();
 }
 
-void AudioPlayer::prepareAudio(void * channels, int frames) {
+void AudioPlayer::prepareAudioForLoading(void * channels, int frames) {
 	for (decltype(audio)::size_type i = 0; i < audio.size(); ++i)
 		audio.at(i) = { static_cast<float **>(channels)[i], frames };
 }
 
-void AudioPlayer::completeIfDoneProcessing() {
+void AudioPlayer::signalDeviceIfDoneLoading() {
 	if (loader->complete())
 		device->setCallbackResultToComplete();
 }

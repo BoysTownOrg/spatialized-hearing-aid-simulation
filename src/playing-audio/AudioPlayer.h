@@ -28,8 +28,8 @@ private:
 		void throwIfDeviceFailed();
 	void openStream(std::string deviceName);
 	void prepareLoader(AudioLoader::Preparation);
-	void prepareAudio(void * channels, int frames);
-	void completeIfDoneProcessing();
+	void prepareAudioForLoading(void * channels, int frames);
+	void signalDeviceIfDoneLoading();
 	int findDeviceIndex(std::string deviceName);
 };
 
