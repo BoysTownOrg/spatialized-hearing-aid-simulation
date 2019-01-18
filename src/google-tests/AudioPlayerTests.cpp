@@ -67,14 +67,12 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playPreparesProcessorAndOpensStream) {
-		StimulusPlayer::Initialization init;
-		init.chunkSize = 5;
-		player.initialize(init);
 		StimulusPlayer::PlayRequest request;
 		request.audioFilePath = "d";
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		request.level_dB_Spl = 8;
+		processor.setChunkSize(5);
 		processor.setChannels(6);
 		processor.setSampleRate(7);
 		play(request);

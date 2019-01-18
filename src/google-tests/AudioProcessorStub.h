@@ -11,6 +11,7 @@ class AudioProcessorStub : public AudioProcessor {
 	LogString log_{};
 	int _sampleRate{};
 	int channels_{};
+	int chunkSize_{};
 	bool complete_{};
 public:
 	void setPreferredProcessingSizes(std::vector<int> v) {
@@ -75,6 +76,14 @@ public:
 	const LogString &log() const {
 		return log_;
 	}
+
+	void setChunkSize(int s) {
+		chunkSize_ = s;
+	}
+
+	int chunkSize() override {
+		return chunkSize_;
+	}
 };
 
 class InitializationFailingAudioProcessor : public AudioProcessor {
@@ -93,6 +102,7 @@ public:
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
+	int chunkSize() override { return {}; }
 	void prepare(Preparation) override {}
 	std::vector<int> preferredProcessingSizes() override {
 		return {};
@@ -116,6 +126,7 @@ public:
 	void process(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
+	int chunkSize() override { return {}; }
 	std::vector<int> preferredProcessingSizes() override {
 		return {};
 	}

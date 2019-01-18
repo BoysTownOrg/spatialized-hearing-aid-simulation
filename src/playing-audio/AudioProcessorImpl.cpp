@@ -84,6 +84,11 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessorImpl::makeProcessor(
 	}
 }
 
+int AudioProcessorImpl::chunkSize()
+{
+	return 0;
+}
+
 std::vector<int> AudioProcessorImpl::preferredProcessingSizes() {
 	return processorFactory->preferredProcessingSizes();
 }
