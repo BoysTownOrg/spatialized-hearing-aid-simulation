@@ -25,6 +25,7 @@ private:
 	void initializeProcessor(Initialization);
 	void play_(PlayRequest);
 	void startStream(PlayRequest);
+	void openStream(PlayRequest);
 	void prepareProcessor(PlayRequest);
 };
 

@@ -52,7 +52,7 @@ void AudioPlayer::prepareProcessor(PlayRequest request) {
 		AudioProcessor::Preparation p;
 		p.audioFilePath = request.audioFilePath;
 		p.level_dB_Spl = request.level_dB_Spl;
-		processor->prepare(p);
+		processor->prepare(std::move(p));
 	}
 	catch (const AudioProcessor::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
@@ -61,6 +61,14 @@ void AudioPlayer::prepareProcessor(PlayRequest request) {
 
 void AudioPlayer::startStream(PlayRequest request) {
 	device->closeStream();
+	openStream(std::move(request));
+	if (device->failed())
+		throw RequestFailure{ device->errorMessage() };
+	device->setCallbackResultToContinue();
+	device->startStream();
+}
+
+void AudioPlayer::openStream(PlayRequest request) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = processor->sampleRate();
 	streaming.channels = processor->channels();
@@ -68,11 +76,7 @@ void AudioPlayer::startStream(PlayRequest request) {
 	for (int i = 0; i < device->count(); ++i)
 		if (device->description(i) == request.audioDevice)
 			streaming.deviceIndex = i;
-	device->openStream(streaming);
-	if (device->failed())
-		throw RequestFailure{ device->errorMessage() };
-	device->setCallbackResultToContinue();
-	device->startStream();
+	device->openStream(std::move(streaming));
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
