@@ -21,5 +21,7 @@ public:
 	bool isPlaying() override;
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 	std::vector<int> preferredProcessingSizes() override;
+private:
+	void initializeProcessor(StimulusPlayer::Initialization request);
 };
 
