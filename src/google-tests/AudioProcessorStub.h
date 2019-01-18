@@ -6,12 +6,17 @@
 class AudioProcessorStub : public AudioProcessor {
 	Initialization parameters_{};
 	Preparation preparation_{};
+	std::vector<int> preferredProcessingSizes_{};
 	gsl::span<gsl::span<float>> _audioBuffer{};
 	LogString log_{};
 	int _sampleRate{};
 	int channels_{};
 	bool complete_{};
 public:
+	void setPreferredProcessingSizes(std::vector<int> v) {
+		preferredProcessingSizes_ = std::move(v);
+	}
+
 	const Initialization &initialization() const {
 		return parameters_;
 	}
