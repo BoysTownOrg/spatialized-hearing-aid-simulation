@@ -389,6 +389,18 @@ TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
 	);
 }
 
+TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
+	model.setPreferredProcessingSizes({ -1, 2, 3.3 });
+	assertEqual(
+		{ "-1", "2", "3.3" }, 
+		view.chunkSizeItems()
+	);
+	assertEqual(
+		{ "-1", "2", "3.3" }, 
+		view.windowSizeItems()
+	);
+}
+
 TEST(PresenterOtherTests, constructorPopulatesAudioDeviceMenu) {
 	ViewStub view;
 	ModelStub model;
