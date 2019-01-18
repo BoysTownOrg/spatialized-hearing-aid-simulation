@@ -387,17 +387,6 @@ TEST_F(PresenterTests, constructorShowsTestSetupView) {
     EXPECT_TRUE(view.testSetupShown());
 }
 
-TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPowersOfTwo) {
-	assertEqual(
-		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
-		view.chunkSizeItems()
-	);
-	assertEqual(
-		{ "64", "128", "256", "512", "1024", "2048", "4096", "8192" }, 
-		view.windowSizeItems()
-	);
-}
-
 TEST(PresenterOtherTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
 	ModelStub model;
 	ViewStub view;

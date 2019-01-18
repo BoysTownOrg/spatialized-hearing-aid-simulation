@@ -176,6 +176,15 @@ TEST_F(
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
+TEST_F(RecognitionTestModelTests, preferredProcessingSizesReturnsThatOfTheAudioPlayer) {
+	player.setPreferredProcessingSizes({ 1, 2, 3 });
+	assertEqual({ 1, 2, 3 }, model.preferredProcessingSizes());
+}
+
+TEST_F(RecognitionTestModelTests, todoTest) {
+	assertEqual({ 64, 128, 256, 512, 1024, 2048, 4096, 8192 }, model.preferredProcessingSizes());
+}
+
 class RequestFailingStimulusPlayer : public StimulusPlayer {
 	std::string errorMessage{};
 public:
