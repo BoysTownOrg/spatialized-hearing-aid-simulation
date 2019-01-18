@@ -4,11 +4,16 @@
 
 class ModelStub : public Model {
 	std::vector<std::string> _audioDeviceDescriptions{};
+	std::vector<int> preferredProcessingSizes_{};
 	TestParameters _testParameters{};
 	TrialParameters trialParameters_{};
 	bool _testComplete{};
 	bool _trialPlayed{};
 public:
+	void setPreferredProcessingSizes(std::vector<int> v) {
+		preferredProcessingSizes_ = std::move(v);
+	}
+
 	const TestParameters &testParameters() const {
 		return _testParameters;
 	}
