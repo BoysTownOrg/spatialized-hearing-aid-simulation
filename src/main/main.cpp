@@ -86,8 +86,8 @@ int main() {
 		)
 	};
 	
-	AudioProcessingLoader impl{&frameReaderFactory, &processorFactory};
-	AudioPlayer player{&device, &impl};
+	AudioProcessingLoader loader{&frameReaderFactory, &processorFactory};
+	AudioPlayer player{&device, &loader};
 	RecognitionTestModel model{ &list, &player };
 	FltkView view{};
 	Presenter presenter{ &model, &view };

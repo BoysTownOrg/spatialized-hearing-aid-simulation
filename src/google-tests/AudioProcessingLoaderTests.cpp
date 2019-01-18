@@ -14,14 +14,14 @@ namespace {
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
-		AudioProcessingLoader impl{ &readerFactory, &processorFactory };
+		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
 
 		void prepare(AudioProcessingLoader::Preparation p = {}) {
-			impl.prepare(std::move(p));
+			loader.prepare(std::move(p));
 		}
 
 		void load(gsl::span<gsl::span<float>> s = {}) {
-			impl.load(std::move(s));
+			loader.load(std::move(s));
 		}
 	};
 
@@ -35,7 +35,7 @@ namespace {
 		init.release_ms = 3;
 		init.windowSize = 4;
 		init.chunkSize = 5;
-		impl.initialize(init);
+		loader.initialize(init);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -51,17 +51,17 @@ namespace {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		reader->setIncomplete();
-		EXPECT_EQ(0, impl.channels());
-		EXPECT_EQ(0, impl.sampleRate());
-		EXPECT_EQ(0, impl.chunkSize());
-		EXPECT_TRUE(impl.complete());
+		EXPECT_EQ(0, loader.channels());
+		EXPECT_EQ(0, loader.sampleRate());
+		EXPECT_EQ(0, loader.chunkSize());
+		EXPECT_TRUE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, chunkSizeReturnsWhatWasInitialized) {
 		AudioProcessingLoader::Initialization init;
 		init.chunkSize = 5;
-		impl.initialize(init);
-		EXPECT_EQ(5, impl.chunkSize());
+		loader.initialize(init);
+		EXPECT_EQ(5, loader.chunkSize());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
@@ -74,7 +74,7 @@ namespace {
 		init.release_ms = 3;
 		init.windowSize = 4;
 		init.chunkSize = 5;
-		impl.initialize(init);
+		loader.initialize(init);
 		AudioProcessingLoader::Preparation p{};
 		p.audioFilePath = "d";
 		reader->setChannels(6);
@@ -96,7 +96,7 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
 		AudioProcessingLoader::Initialization init;
 		init.max_dB_Spl = 8;
-		impl.initialize(init);
+		loader.initialize(init);
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
@@ -122,8 +122,8 @@ namespace {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
 		prepare();
-		EXPECT_EQ(1, impl.channels());
-		EXPECT_EQ(2, impl.sampleRate());
+		EXPECT_EQ(1, loader.channels());
+		EXPECT_EQ(2, loader.sampleRate());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, processReadsAndProcessesAudio) {
@@ -154,19 +154,19 @@ namespace {
 		std::vector<float> y(1);
 		std::vector<gsl::span<float>> x{ y, y };
 		load(x);
-		EXPECT_FALSE(impl.complete());
+		EXPECT_FALSE(loader.complete());
 		load(x);
-		EXPECT_FALSE(impl.complete());
+		EXPECT_FALSE(loader.complete());
 		load(x);
-		EXPECT_TRUE(impl.complete());
+		EXPECT_TRUE(loader.complete());
 		prepare();
 		load(x);
-		EXPECT_FALSE(impl.complete());
+		EXPECT_FALSE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
 		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
-		assertEqual({ 1, 2, 3 }, impl.preferredProcessingSizes());
+		assertEqual({ 1, 2, 3 }, loader.preferredProcessingSizes());
 	}
 
 	class ReadsAOne : public AudioFrameReader {
@@ -199,7 +199,7 @@ namespace {
 		prepare();
 		float y{};
 		gsl::span<float> x{ &y, 1 };
-		impl.load({ &x, 1 });
+		loader.load({ &x, 1 });
 		EXPECT_EQ(2, y);
 	}
 
@@ -211,9 +211,9 @@ namespace {
 		AudioFrameProcessorFactory *processorFactory{&defaultProcessorFactory};
 
 		void assertPrepareThrowsPreparationFailure(std::string what) {
-			AudioProcessingLoader impl{ readerFactory, processorFactory };
+			AudioProcessingLoader loader{ readerFactory, processorFactory };
 			try {
-				impl.prepare({});
+				loader.prepare({});
 				FAIL() << "Expected AudioProcessingLoader::PreparationFailure";
 			}
 			catch (const AudioProcessingLoader::PreparationFailure &e) {
@@ -222,9 +222,9 @@ namespace {
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioProcessingLoader impl{ readerFactory, processorFactory };
+			AudioProcessingLoader loader{ readerFactory, processorFactory };
 			try {
-				impl.initialize({});
+				loader.initialize({});
 				FAIL() << "Expected AudioProcessingLoader::InitializationFailure";
 			}
 			catch (const AudioProcessingLoader::InitializationFailure &e) {
