@@ -9,8 +9,13 @@ class AudioFrameReaderStub : public AudioFrameReader {
 	long long _frames{};
 	int _sampleRate{};
 	int channels_{};
+    int remainingSamples_{};
 	bool _complete{};
 public:
+    void setRemainingSamples(int n) {
+        remainingSamples_ = n;
+    }
+
 	const gsl::span<gsl::span<float>> audioBuffer() const {
 		return _audioBuffer;
 	}
