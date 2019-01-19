@@ -43,9 +43,8 @@ void AudioFileInMemory::reset() {
 	head = 0;
 }
 
-long long AudioFileInMemory::framesRemaining()
-{
-    return 0;
+long long AudioFileInMemory::framesRemaining() {
+    return buffer.size() - head;
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
