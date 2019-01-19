@@ -22,9 +22,11 @@ TEST_F(ChannelCopierTests, returnsParameters) {
 	reader->setSampleRate(1);
 	reader->setChannels(2);
 	reader->setFrames(3);
+    reader->setRemainingFrames(4);
 	EXPECT_EQ(1, copier.sampleRate());
 	EXPECT_EQ(2, copier.channels());
 	EXPECT_EQ(3, copier.frames());
+    EXPECT_EQ(4, copier.framesRemaining());
 }
 
 TEST_F(ChannelCopierTests, returnsTwoIfOneChannel) {
