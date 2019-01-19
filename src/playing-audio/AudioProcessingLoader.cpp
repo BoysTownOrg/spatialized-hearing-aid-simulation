@@ -52,11 +52,7 @@ public:
 
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
-	RmsComputer rms{ *reader };
-	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
-	processing.channelScalars.clear();
-	for (int i = 0; i < reader->channels(); ++i)
-		processing.channelScalars.push_back(desiredRms / rms.compute(i));
+    processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
 	processing.channels = reader->channels();
 	processing.sampleRate = reader->sampleRate();
 	processor = makeProcessor(processing);
@@ -71,6 +67,15 @@ std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string 
 	catch (const AudioFrameReaderFactory::CreateError &e) {
 		throw PreparationFailure{ e.what() };
 	}
+}
+
+std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {
+    RmsComputer rms{ *reader };
+    const auto desiredRms = std::pow(10.0, (level_dB_Spl - processing.max_dB_Spl) / 20.0);
+    std::vector<double> scalars{};
+    for (int i = 0; i < reader->channels(); ++i)
+        scalars.push_back(desiredRms / rms.compute(i));
+    return scalars;
 }
 
 std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
