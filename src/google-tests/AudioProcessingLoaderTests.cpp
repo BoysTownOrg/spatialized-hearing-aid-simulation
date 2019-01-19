@@ -181,7 +181,7 @@ namespace {
 		int sampleRate() const override { return {}; }
 		long long frames() const override { return {}; }
 		void reset() override {}
-        long long framesRemaining() override { return {}; }
+        long long framesRemaining() override { return 1; }
 	};
 
 	class TimesTwo : public AudioFrameProcessor {
