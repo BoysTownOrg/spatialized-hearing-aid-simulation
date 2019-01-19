@@ -138,12 +138,12 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, processPadsZeroToEndOfReadInput) {
 		prepare();
-		reader->setComplete();
+		reader->setRemainingSamples(2);
 		std::vector<float> audio(3, -1);
 		gsl::span<float> x{ audio };
 		load({ &x, 1 });
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(0));
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(1));
+		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(0));
+		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(1));
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
 	}
 
