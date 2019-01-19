@@ -9,15 +9,15 @@ class AudioFrameReaderStub : public AudioFrameReader {
 	long long _frames{};
 	int _sampleRate{};
 	int channels_{};
-    int remainingSamples_{};
+    int remainingFrames_{};
 	bool _complete{};
 public:
     long long framesRemaining() override {
-        return remainingSamples_;
+        return remainingFrames_;
     }
 
-    void setRemainingSamples(int n) {
-        remainingSamples_ = n;
+    void setRemainingFrames(int n) {
+        remainingFrames_ = n;
     }
 
 	const gsl::span<gsl::span<float>> audioBuffer() const {
