@@ -12,6 +12,10 @@ class AudioFrameReaderStub : public AudioFrameReader {
     int remainingSamples_{};
 	bool _complete{};
 public:
+    long long framesRemaining() override {
+        return remainingSamples_;
+    }
+
     void setRemainingSamples(int n) {
         remainingSamples_ = n;
     }

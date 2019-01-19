@@ -34,6 +34,11 @@ void ChannelCopier::reset() {
 	reader->reset();
 }
 
+long long ChannelCopier::framesRemaining()
+{
+    return 0;
+}
+
 ChannelCopierFactory::ChannelCopierFactory(
 	std::shared_ptr<AudioFrameReaderFactory> factory
 ) :

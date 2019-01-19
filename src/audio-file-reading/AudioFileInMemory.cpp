@@ -43,6 +43,11 @@ void AudioFileInMemory::reset() {
 	head = 0;
 }
 
+long long AudioFileInMemory::framesRemaining()
+{
+    return 0;
+}
+
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 	std::shared_ptr<AudioFileReaderFactory> factory
 ) :
