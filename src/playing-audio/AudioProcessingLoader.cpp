@@ -27,29 +27,6 @@ void AudioProcessingLoader::initialize(Initialization initialization) {
 	}
 }
 
-class RmsComputer {
-	std::vector<std::vector<float>> entireAudioFile;
-public:
-	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile{ reader.channels() }
-	{
-		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile) {
-			channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
-			pointers.push_back({ channel });
-		}
-		reader.read(pointers);
-	}
-
-	double compute(int channel) {
-		double squaredSum{};
-		const auto channel_ = entireAudioFile.at(channel);
-		for (const auto sample : channel_)
-			squaredSum += sample * sample;
-		return std::sqrt(squaredSum / channel_.size());
-	}
-};
-
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
     processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
@@ -68,6 +45,29 @@ std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string 
 		throw PreparationFailure{ e.what() };
 	}
 }
+
+class RmsComputer {
+    std::vector<std::vector<float>> entireAudioFile;
+public:
+    explicit RmsComputer(AudioFrameReader &reader) :
+        entireAudioFile{ reader.channels() }
+    {
+        std::vector<gsl::span<float>> pointers;
+        for (auto &channel : entireAudioFile) {
+            channel.resize(gsl::narrow<std::vector<float>::size_type>(reader.frames()));
+            pointers.push_back({ channel });
+        }
+        reader.read(pointers);
+    }
+
+    double compute(int channel) {
+        double squaredSum{};
+        const auto channel_ = entireAudioFile.at(channel);
+        for (const double sample : channel_)
+            squaredSum += sample * sample;
+        return std::sqrt(squaredSum / channel_.size());
+    }
+};
 
 std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {
     RmsComputer rms{ *reader };
