@@ -44,7 +44,7 @@ void AudioFileInMemory::reset() {
 }
 
 long long AudioFileInMemory::framesRemaining() {
-    return buffer.size() - head;
+    return (buffer.size() - head) / channels_;
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(

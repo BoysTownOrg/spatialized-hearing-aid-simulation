@@ -64,14 +64,14 @@ TEST(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
     FakeAudioFileReader reader{ { 1, 2, 3, 4, 5, 6 } };
 	reader.setChannels(2);
     AudioFileInMemory adapter{ reader };
-    float x{};
-    gsl::span<float> channels{ &x, 1 };
+	std::vector<float> channel(1);
+    std::vector<gsl::span<float>> channels{ channel, channel };
     EXPECT_EQ(3, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+    adapter.read(channels);
     EXPECT_EQ(2, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+    adapter.read(channels);
     EXPECT_EQ(1, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+    adapter.read(channels);
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
