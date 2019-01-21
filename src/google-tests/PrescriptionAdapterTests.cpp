@@ -2,7 +2,6 @@
 #include "FakeConfigurationFileParser.h"
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <gtest/gtest.h>
-#include <map>
 
 namespace {
 	class PrescriptionAdapterTests : public ::testing::Test {
