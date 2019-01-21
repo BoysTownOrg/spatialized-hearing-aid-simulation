@@ -22,11 +22,11 @@ class AudioFileInMemory : public AudioFrameReader {
 public:
 	RUNTIME_ERROR(FileError);
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(AudioFileReader &);
-	AUDIO_FILE_READING_API void read(gsl::span<gsl::span<float>> audio) override;
-	AUDIO_FILE_READING_API bool complete() const override;
-	AUDIO_FILE_READING_API int sampleRate() const override;
-	AUDIO_FILE_READING_API int channels() const override;
-	AUDIO_FILE_READING_API long long frames() const override;
+	AUDIO_FILE_READING_API void read(gsl::span<channel_type> audio) override;
+	AUDIO_FILE_READING_API bool complete() override;
+	AUDIO_FILE_READING_API int sampleRate() override;
+	AUDIO_FILE_READING_API int channels() override;
+	AUDIO_FILE_READING_API long long frames() override;
 	AUDIO_FILE_READING_API void reset() override;
     AUDIO_FILE_READING_API long long framesRemaining() override;
 };

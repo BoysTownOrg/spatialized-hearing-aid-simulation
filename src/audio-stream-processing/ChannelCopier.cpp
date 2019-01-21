@@ -3,7 +3,7 @@
 ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) :
 	reader{ std::move(reader) } {}
 
-void ChannelCopier::read(gsl::span<gsl::span<float>> audio) {
+void ChannelCopier::read(gsl::span<channel_type> audio) {
 	if (reader->channels() == 1) {
 		reader->read(audio.first(1));
 		for (const auto channel : audio.last(audio.size() - 1))
@@ -14,19 +14,19 @@ void ChannelCopier::read(gsl::span<gsl::span<float>> audio) {
 		reader->read(audio);
 }
 
-bool ChannelCopier::complete() const {
+bool ChannelCopier::complete() {
 	return reader->complete();
 }
 
-int ChannelCopier::sampleRate() const {
+int ChannelCopier::sampleRate() {
 	return reader->sampleRate();
 }
 
-int ChannelCopier::channels() const {
+int ChannelCopier::channels() {
 	return reader->channels() == 1 ? 2 : reader->channels();
 }
 
-long long ChannelCopier::frames() const {
+long long ChannelCopier::frames() {
 	return reader->frames();
 }
 

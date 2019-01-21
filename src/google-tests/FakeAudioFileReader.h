@@ -45,11 +45,11 @@ public:
 		errorMessage_ = std::move(s);
 	}
 
-	bool failed() const override {
+	bool failed() override {
 		return failed_;
 	}
 
-	std::string errorMessage() const override {
+	std::string errorMessage() override {
 		return errorMessage_;
 	}
 

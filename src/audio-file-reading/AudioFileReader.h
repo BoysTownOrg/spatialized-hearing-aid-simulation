@@ -11,8 +11,8 @@ public:
 	virtual int channels() = 0;
 	virtual int sampleRate() = 0;
 	virtual void readFrames(float *, long long) = 0;
-	virtual bool failed() const = 0;
-	virtual std::string errorMessage() const = 0;
+	virtual bool failed() = 0;
+	virtual std::string errorMessage() = 0;
 };
 
 class AudioFileReaderFactory {

@@ -7,10 +7,10 @@ class NullProcessor : public AudioFrameProcessor {
 
 class NullReader : public AudioFrameReader {
 	void read(gsl::span<gsl::span<float>>) override {}
-	bool complete() const override { return true; }
-	int sampleRate() const override { return 0; }
-	int channels() const override { return 0; }
-	long long frames() const override { return 0; }
+	bool complete() override { return true; }
+	int sampleRate() override { return 0; }
+	int channels() override { return 0; }
+	long long frames() override { return 0; }
 	void reset() override {}
 	long long framesRemaining() override { return 0; }
 };

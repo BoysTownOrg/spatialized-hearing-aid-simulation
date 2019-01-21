@@ -24,7 +24,7 @@ public:
 		return _audioBuffer;
 	}
 
-	int channels() const override {
+	int channels() override {
 		return channels_;
 	}
 
@@ -37,11 +37,11 @@ public:
 		_complete = true;
 	}
 
-	bool complete() const override {
+	bool complete() override {
 		return _complete;
 	}
 
-	int sampleRate() const override {
+	int sampleRate() override {
 		return _sampleRate;
 	}
 
@@ -53,7 +53,7 @@ public:
 		channels_ = c;
 	}
 
-	long long frames() const override {
+	long long frames() override {
 		return _frames;
 	}
 

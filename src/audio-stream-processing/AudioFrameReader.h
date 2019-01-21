@@ -10,10 +10,10 @@ public:
 	INTERFACE_OPERATIONS(AudioFrameReader);
 	using channel_type = gsl::span<float>;
 	virtual void read(gsl::span<channel_type> audio) = 0;
-	virtual bool complete() const = 0;
-	virtual int sampleRate() const = 0;
-	virtual int channels() const = 0;
-	virtual long long frames() const = 0;
+	virtual bool complete() = 0;
+	virtual int sampleRate() = 0;
+	virtual int channels() = 0;
+	virtual long long frames() = 0;
 	virtual void reset() = 0;
     virtual long long framesRemaining() = 0;
 };
