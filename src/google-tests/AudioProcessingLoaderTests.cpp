@@ -8,6 +8,10 @@
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
+		AudioProcessingLoader::Initialization initialization;
+		std::vector<float> mono{};
+		std::vector<float> left{};
+		std::vector<float> right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{reader};
@@ -15,12 +19,9 @@ namespace {
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
-		std::vector<float> mono{};
-		std::vector<float> left{};
-		std::vector<float> right{};
 
-		void initialize(AudioProcessingLoader::Initialization i = {}) {
-			loader.initialize(std::move(i));
+		void initialize() {
+			loader.initialize(initialization);
 		}
 
 		void prepare(AudioProcessingLoader::Preparation p = {}) {
@@ -51,16 +52,15 @@ namespace {
 	};
 
 	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheck) {
-		AudioProcessingLoader::Initialization init;
-		init.leftDslPrescriptionFilePath = "a";
-		init.rightDslPrescriptionFilePath = "b";
-		init.brirFilePath = "c";
-		init.max_dB_Spl = 1;
-		init.attack_ms = 2;
-		init.release_ms = 3;
-		init.windowSize = 4;
-		init.chunkSize = 5;
-		initialize(init);
+		initialization.leftDslPrescriptionFilePath = "a";
+		initialization.rightDslPrescriptionFilePath = "b";
+		initialization.brirFilePath = "c";
+		initialization.max_dB_Spl = 1;
+		initialization.attack_ms = 2;
+		initialization.release_ms = 3;
+		initialization.windowSize = 4;
+		initialization.chunkSize = 5;
+		initialize();
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -82,23 +82,21 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, chunkSizeReturnsWhatWasInitialized) {
-		AudioProcessingLoader::Initialization init;
-		init.chunkSize = 5;
-		initialize(init);
+		initialization.chunkSize = 5;
+		initialize();
 		EXPECT_EQ(5, loader.chunkSize());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
-		AudioProcessingLoader::Initialization init;
-		init.leftDslPrescriptionFilePath = "a";
-		init.rightDslPrescriptionFilePath = "b";
-		init.brirFilePath = "c";
-		init.max_dB_Spl = 1;
-		init.attack_ms = 2;
-		init.release_ms = 3;
-		init.windowSize = 4;
-		init.chunkSize = 5;
-		initialize(init);
+		initialization.leftDslPrescriptionFilePath = "a";
+		initialization.rightDslPrescriptionFilePath = "b";
+		initialization.brirFilePath = "c";
+		initialization.max_dB_Spl = 1;
+		initialization.attack_ms = 2;
+		initialization.release_ms = 3;
+		initialization.windowSize = 4;
+		initialization.chunkSize = 5;
+		initialize();
 		AudioProcessingLoader::Preparation p{};
 		p.audioFilePath = "d";
 		reader->setChannels(6);
@@ -118,9 +116,8 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
-		AudioProcessingLoader::Initialization init;
-		init.max_dB_Spl = 8;
-		initialize(init);
+		initialization.max_dB_Spl = 8;
+		initialize();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
