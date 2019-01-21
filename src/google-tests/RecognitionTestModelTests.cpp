@@ -150,11 +150,12 @@ namespace {
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialPassesRequestToPlayer) {
-		RecognitionTestModel::TrialParameters p;
-		p.audioDevice = "a";
-		p.level_dB_Spl = 1;
-		playTrial(p);
+		RecognitionTestModel::TrialParameters trial;
+		trial.audioDevice = "a";
+		trial.level_dB_Spl = 1;
+		playTrial(trial);
 		EXPECT_EQ(1, player.request().level_dB_Spl);
+		assertEqual("a", player.request().audioDevice);
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
