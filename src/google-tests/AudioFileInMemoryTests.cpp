@@ -10,12 +10,6 @@ protected:
 	std::vector<float> left{};
 	std::vector<float> right{};
 
-	void readMono() {
-		std::vector<gsl::span<float>> channels{ mono };
-		AudioFileInMemory adapter{ reader };
-		adapter.read(channels);
-	}
-
 	void readStereo() {
 		std::vector<gsl::span<float>> channels{ left, right };
 		AudioFileInMemory adapter{ reader };
@@ -54,25 +48,25 @@ TEST_F(AudioFileInMemoryTests, readNothingWhenExhausted) {
 TEST_F(AudioFileInMemoryTests, completeWhenExhausted) {
 	reader.setContents({ 3, 4 });
 	AudioFileInMemory adapter{ reader };
-	float x{};
-	gsl::span<float> channels{ &x, 1 };
-	adapter.read({ &channels, 1 });
+	mono.resize(1);
+	std::vector<gsl::span<float>> channels{ mono };
+	adapter.read(channels);
 	EXPECT_FALSE(adapter.complete());
-	adapter.read({ &channels, 1 });
+	adapter.read(channels);
 	EXPECT_TRUE(adapter.complete());
 }
 
 TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
 	reader.setContents({ 1, 2, 3 });
     AudioFileInMemory adapter{ reader };
-    float x{};
-    gsl::span<float> channels{ &x, 1 };
+	mono.resize(1);
+	std::vector<gsl::span<float>> channels{ mono };
     EXPECT_EQ(3, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+	adapter.read(channels);
     EXPECT_EQ(2, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+	adapter.read(channels);
     EXPECT_EQ(1, adapter.framesRemaining());
-    adapter.read({ &channels, 1 });
+	adapter.read(channels);
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
@@ -80,8 +74,9 @@ TEST_F(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
 	reader.setContents({ 1, 2, 3, 4, 5, 6 });
 	reader.setChannels(2);
     AudioFileInMemory adapter{ reader };
-	std::vector<float> channel(1);
-    std::vector<gsl::span<float>> channels{ channel, channel };
+	left.resize(1);
+	right.resize(1);
+    std::vector<gsl::span<float>> channels{ left, right };
     EXPECT_EQ(3, adapter.framesRemaining());
     adapter.read(channels);
     EXPECT_EQ(2, adapter.framesRemaining());
@@ -104,17 +99,17 @@ TEST_F(AudioFileInMemoryTests, returnsFileParameters) {
 TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset) {
 	reader.setContents({ 3, 4 });
 	AudioFileInMemory adapter{ reader };
-	float x{};
-	gsl::span<float> channels{ &x, 1 };
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(3, x);
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(4, x);
+	mono.resize(1);
+	std::vector<gsl::span<float>> channels{ mono };
+    adapter.read(channels);
+	EXPECT_EQ(3, mono.front());
+    adapter.read(channels);
+	EXPECT_EQ(4, mono.front());
 	adapter.reset();
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(3, x);
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(4, x);
+    adapter.read(channels);
+	EXPECT_EQ(3, mono.front());
+    adapter.read(channels);
+	EXPECT_EQ(4, mono.front());
 }
 
 class AudioFileInMemoryFactoryTests : public ::testing::Test {
