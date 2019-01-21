@@ -6,7 +6,7 @@
 
 class AudioDeviceStub : public AudioDevice {
 	std::vector<std::string> _descriptions{};
-	std::string _errorMessage{};
+	std::string errorMessage_{};
 	std::string _streamLog{};
 	std::string _callbackLog{};
 	StreamParameters _streamParameters{};
@@ -49,7 +49,7 @@ public:
 	}
 
 	void setErrorMessage(std::string s) {
-		_errorMessage = std::move(s);
+		errorMessage_ = std::move(s);
 	}
 
 	bool failed() override {
@@ -57,7 +57,7 @@ public:
 	}
 
 	std::string errorMessage() override {
-		return _errorMessage;
+		return errorMessage_;
 	}
 
 	bool setCallbackResultToCompleteCalled() const {

@@ -182,6 +182,7 @@
     <ClInclude Include="SignalProcessorStub.h" />
     <ClInclude Include="StimulusListStub.h" />
     <ClInclude Include="StimulusPlayerStub.h" />
+    <ClInclude Include="ViewStub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

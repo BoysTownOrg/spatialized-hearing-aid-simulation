@@ -39,14 +39,14 @@ FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
 	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
-	_audioDirectory(250, 150, 200, 45, "audio directory"),
-	_brirFilePath(250, 200, 200, 45, "BRIR file path"),
+	audioDirectory_(250, 150, 200, 45, "audio directory"),
+	brirFilePath_(250, 200, 200, 45, "BRIR file path"),
 	browseLeftPrescription(460, 50, 60, 45, "browse"),
 	browseRightPrescription(460, 100, 60, 45, "browse"),
 	browseAudio(460, 150, 60, 45, "browse"),
 	browseBrir(460, 200, 60, 45, "browse"),
-	_attack_ms(250, 300, 200, 45, "attack (ms)"),
-	_release_ms(250, 350, 200, 45, "release (ms)"),
+	attack_ms_(250, 300, 200, 45, "attack (ms)"),
+	release_ms_(250, 350, 200, 45, "release (ms)"),
 	windowSize_(250, 400, 200, 45, "window size (samples)"),
 	chunkSize_(250, 450, 200, 45, "chunk size (samples)"),
 	confirm(250, 550, 60, 45, "confirm")
@@ -56,8 +56,8 @@ FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 
 FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
-	_level_dB_Spl(250, 250, 200, 45, "level (dB SPL)"),
-	_audioDevice(250, 500, 200, 45, "audio device"),
+	level_dB_Spl_(250, 250, 200, 45, "level (dB SPL)"),
+	audioDevice_(250, 500, 200, 45, "audio device"),
 	play(250, 550, 60, 45, "play trial")
 {
 	end();
@@ -102,7 +102,7 @@ void FltkView::hideTesterView() {
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
-	window.testerView._audioDevice.populate(std::move(items));
+	window.testerView.audioDevice_.populate(std::move(items));
 }
 
 void FltkView::populateChunkSizeMenu(std::vector<std::string> items) {
@@ -114,7 +114,7 @@ void FltkView::populateWindowSizeMenu(std::vector<std::string> items) {
 }
 
 std::string FltkView::audioDevice() {
-	return window.testerView._audioDevice.text();
+	return window.testerView.audioDevice_.text();
 }
 
 void FltkView::runEventLoop() {
@@ -156,7 +156,7 @@ std::string FltkView::browseForDirectory() {
 }
 
 void FltkView::setAudioDirectory(std::string d) {
-	window.setupView._audioDirectory.value(d.c_str());
+	window.setupView.audioDirectory_.value(d.c_str());
 }
 
 void FltkView::setLeftDslPrescriptionFilePath(std::string p) {
@@ -168,11 +168,11 @@ void FltkView::setRightDslPrescriptionFilePath(std::string p) {
 }
 
 void FltkView::setBrirFilePath(std::string p) {
-	window.setupView._brirFilePath.value(p.c_str());
+	window.setupView.brirFilePath_.value(p.c_str());
 }
 
 std::string FltkView::audioDirectory() {
-	return window.setupView._audioDirectory.value();
+	return window.setupView.audioDirectory_.value();
 }
 
 std::string FltkView::leftDslPrescriptionFilePath() {
@@ -184,19 +184,19 @@ std::string FltkView::rightDslPrescriptionFilePath() {
 }
 
 std::string FltkView::brirFilePath() {
-	return window.setupView._brirFilePath.value();
+	return window.setupView.brirFilePath_.value();
 }
 
 std::string FltkView::level_dB_Spl() {
-	return window.testerView._level_dB_Spl.value();
+	return window.testerView.level_dB_Spl_.value();
 }
 
 std::string FltkView::attack_ms() {
-	return window.setupView._attack_ms.value();
+	return window.setupView.attack_ms_.value();
 }
 
 std::string FltkView::release_ms() {
-	return window.setupView._release_ms.value();
+	return window.setupView.release_ms_.value();
 }
 
 std::string FltkView::windowSize() {

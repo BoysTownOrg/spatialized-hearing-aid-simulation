@@ -21,10 +21,10 @@ struct FltkSetupView : public Fl_Group {
 	FltkSetupView(int, int, int, int, const char * = {});
 	Fl_Input _leftPrescriptionFilePath;
 	Fl_Input _rightPrescriptionFilePath;
-	Fl_Input _audioDirectory;
-	Fl_Input _brirFilePath;
-	Fl_Float_Input _attack_ms;
-	Fl_Float_Input _release_ms;
+	Fl_Input audioDirectory_;
+	Fl_Input brirFilePath_;
+	Fl_Float_Input attack_ms_;
+	Fl_Float_Input release_ms_;
 	Fl_ChoiceFacade windowSize_;
 	Fl_ChoiceFacade chunkSize_;
 	Fl_Button browseLeftPrescription;
@@ -36,8 +36,8 @@ struct FltkSetupView : public Fl_Group {
 
 struct FltkTesterView : public Fl_Group {
 	FltkTesterView(int, int, int, int, const char * = {});
-	Fl_Float_Input _level_dB_Spl;
-	Fl_ChoiceFacade _audioDevice;
+	Fl_Float_Input level_dB_Spl_;
+	Fl_ChoiceFacade audioDevice_;
 	Fl_Button play;
 };
 
