@@ -16,14 +16,18 @@ namespace {
 		void assertReadThrowsReadFailureOnChannelCountMismatch(
 			std::string property
 		) {
+			parser->setValidSingleChannelDslProperties();
+			parser->setVectorProperty(std::move(property), {});
+			assertReadThrowsReadFailure("channel count mismatch in prescription.");
+		}
+
+		void assertReadThrowsReadFailure(std::string what) {
 			try {
-				parser->setValidSingleChannelDslProperties();
-				parser->setVectorProperty(std::move(property), {});
 				adapter.read({});
 				FAIL() << "Expected PrescriptionAdapter::ReadFailure.";
 			}
 			catch (const PrescriptionAdapter::ReadFailure &e) {
-				assertEqual("channel count mismatch in prescription.", e.what());
+				assertEqual(std::move(what), e.what());
 			}
 		}
 	};
@@ -68,12 +72,6 @@ namespace {
 		throwsWhenParserThrows
 	) {
 		factory->setParser(std::make_shared<ErrorParser>("error."));
-		try {
-			adapter.read({});
-			FAIL() << "Expected PrescriptionAdapter::ReadFailure.";
-		}
-		catch (const PrescriptionAdapter::ReadFailure &e) {
-			assertEqual("error.", e.what());
-		}
+		assertReadThrowsReadFailure("error.");
 	}
 }
