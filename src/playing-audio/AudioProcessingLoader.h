@@ -11,7 +11,7 @@ class AudioProcessingLoader : public AudioLoader {
 	std::shared_ptr<AudioFrameReader> reader{};
 	AudioFrameReaderFactory *readerFactory;
 	AudioFrameProcessorFactory *processorFactory;
-	long long paddedZeroes{};
+	long long paddedZeros{};
 public:
 	PLAYING_AUDIO_API AudioProcessingLoader(
 		AudioFrameReaderFactory *,

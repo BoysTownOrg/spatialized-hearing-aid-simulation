@@ -40,7 +40,7 @@ void AudioProcessingLoader::prepare(Preparation p) {
 	processing.sampleRate = reader->sampleRate();
 	processor = makeProcessor(processing);
 	reader->reset();
-	paddedZeroes = 0;
+	paddedZeros = 0;
 }
 
 std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string filePath) {
@@ -105,11 +105,12 @@ std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {
 }
 
 void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
-	if (reader->framesRemaining() < audio.begin()->size()) {
+	const auto zerosToPad = audio.begin()->size() - reader->framesRemaining();
+	if (zerosToPad > 0) {
         for (auto channel : audio)
-            for (int i = 0; i < audio.begin()->size() - reader->framesRemaining(); ++i)
+            for (int i = 0; i < zerosToPad; ++i)
                 *(channel.end() - i - 1) = 0;
-		paddedZeroes += (audio.begin()->size() - reader->framesRemaining());
+		paddedZeros += zerosToPad;
 	}
 	else
 		reader->read(audio);
@@ -117,7 +118,7 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 }
 
 bool AudioProcessingLoader::complete() {
-	return processor ? paddedZeroes >= processor->groupDelay() : true;
+	return processor ? paddedZeros >= processor->groupDelay() : true;
 }
 
 int AudioProcessingLoader::channels() {
