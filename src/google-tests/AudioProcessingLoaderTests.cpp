@@ -15,7 +15,7 @@ namespace {
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
-		std::vector<float> singleChannel{};
+		std::vector<float> mono{};
 
 		void initialize(AudioProcessingLoader::Initialization i = {}) {
 			loader.initialize(std::move(i));
@@ -25,8 +25,8 @@ namespace {
 			loader.prepare(std::move(p));
 		}
 
-		void loadSingleChannel() {
-			std::vector<gsl::span<float>> audio{ singleChannel };
+		void loadMono() {
+			std::vector<gsl::span<float>> audio{ mono };
 			loader.load(audio);
 		}
 
@@ -148,28 +148,28 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		singleChannel = { -1, -1, -1, -1 };
-		loadSingleChannel();
-		assertEqual({ 1, 2, 3, 0 }, singleChannel);
+		mono = { -1, -1, -1, -1 };
+		loadMono();
+		assertEqual({ 1, 2, 3, 0 }, mono);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
 		processor->setGroupDelay(3);
-		singleChannel.resize(1);
-		loadSingleChannel();
+		mono.resize(1);
+		loadMono();
 		EXPECT_FALSE(loader.complete());
-		loadSingleChannel();
+		loadMono();
 		EXPECT_FALSE(loader.complete());
-		loadSingleChannel();
+		loadMono();
 		EXPECT_TRUE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparationResetsZeroPadCount) {
 		prepare();
 		processor->setGroupDelay(1);
-		singleChannel.resize(1);
-		loadSingleChannel();
+		mono.resize(1);
+		loadMono();
 		EXPECT_TRUE(loader.complete());
 		prepare();
 		EXPECT_FALSE(loader.complete());
@@ -195,9 +195,9 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
-		singleChannel = { -1, -1, -1 };
-		loadSingleChannel();
-		assertEqual({ 2, 4, 6 }, singleChannel);
+		mono = { -1, -1, -1 };
+		loadMono();
+		assertEqual({ 2, 4, 6 }, mono);
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
