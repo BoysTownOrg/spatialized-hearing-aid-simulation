@@ -164,6 +164,16 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
+	TEST_F(AudioProcessingLoaderTests, incompleteAfterSecondPreparation) {
+		prepare();
+		processor->setGroupDelay(1);
+		std::vector<float> y{ -1 };
+		load(y);
+		EXPECT_TRUE(loader.complete());
+		prepare();
+		EXPECT_FALSE(loader.complete());
+	}
+
 	TEST_F(AudioProcessingLoaderTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
 		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, loader.preferredProcessingSizes());
