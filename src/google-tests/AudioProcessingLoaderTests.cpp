@@ -15,6 +15,7 @@ namespace {
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
+		std::vector<float> singleChannel{};
 
 		void initialize(AudioProcessingLoader::Initialization i = {}) {
 			loader.initialize(std::move(i));
@@ -24,8 +25,8 @@ namespace {
 			loader.prepare(std::move(p));
 		}
 
-		void load(gsl::span<float> x) {
-			std::vector<gsl::span<float>> audio{ x };
+		void loadSingleChannel() {
+			std::vector<gsl::span<float>> audio{ singleChannel };
 			loader.load(audio);
 		}
 
@@ -119,11 +120,11 @@ namespace {
 		AudioProcessingLoader::Preparation p{};
 		p.level_dB_Spl = 7;
 		prepare(p);
-		const auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
+		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
 		assertEqual(
 			{
-				desiredRms / rms(std::vector<float>{ 1, 3, 5 }),
-				desiredRms / rms(std::vector<float>{ 2, 4, 6 })
+				desiredRms / rms<float>({ 1, 3, 5 }),
+				desiredRms / rms<float>({ 2, 4, 6 })
 			},
 			processorFactory.parameters().channelScalars,
 			1e-6
@@ -147,28 +148,28 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		std::vector<float> audio{ -1, -1, -1, -1 };
-		load(audio);
-		assertEqual({ 1, 2, 3, 0 }, audio);
+		singleChannel = { -1, -1, -1, -1 };
+		loadSingleChannel();
+		assertEqual({ 1, 2, 3, 0 }, singleChannel);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
 		processor->setGroupDelay(3);
-		std::vector<float> y{ -1 };
-		load(y);
+		singleChannel.resize(1);
+		loadSingleChannel();
 		EXPECT_FALSE(loader.complete());
-		load(y);
+		loadSingleChannel();
 		EXPECT_FALSE(loader.complete());
-		load(y);
+		loadSingleChannel();
 		EXPECT_TRUE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, incompleteAfterSecondPreparation) {
+	TEST_F(AudioProcessingLoaderTests, preparationResetsZeroPadCount) {
 		prepare();
 		processor->setGroupDelay(1);
-		std::vector<float> y{ -1 };
-		load(y);
+		singleChannel.resize(1);
+		loadSingleChannel();
 		EXPECT_TRUE(loader.complete());
 		prepare();
 		EXPECT_FALSE(loader.complete());
@@ -194,9 +195,9 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
-		std::vector<float> audio{ -1, -1, -1 };
-		load(audio);
-		assertEqual({ 2, 4, 6 }, audio);
+		singleChannel = { -1, -1, -1 };
+		loadSingleChannel();
+		assertEqual({ 2, 4, 6 }, singleChannel);
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
