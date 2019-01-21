@@ -1,9 +1,26 @@
 #include "AudioProcessingLoader.h"
 
+class NullProcessor : public AudioFrameProcessor {
+	void process(gsl::span<gsl::span<float>>) override {}
+	int groupDelay() override { return 0; }
+};
+
+class NullReader : public AudioFrameReader {
+	void read(gsl::span<gsl::span<float>>) override {}
+	bool complete() const override { return true; }
+	int sampleRate() const override { return 0; }
+	int channels() const override { return 0; }
+	long long frames() const override { return 0; }
+	void reset() override {}
+	long long framesRemaining() override { return 0; }
+};
+
 AudioProcessingLoader::AudioProcessingLoader(
 	AudioFrameReaderFactory *readerFactory, 
 	AudioFrameProcessorFactory *processorFactory
 ) :
+	reader{std::make_shared<NullReader>()},
+	processor{std::make_shared<NullProcessor>()},
 	readerFactory{ readerFactory },
 	processorFactory{ processorFactory } {}
 
@@ -117,13 +134,13 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 }
 
 bool AudioProcessingLoader::complete() {
-	return processor ? paddedZeros >= processor->groupDelay() : true;
+	return paddedZeros >= processor->groupDelay();
 }
 
 int AudioProcessingLoader::channels() {
-	return reader ? reader->channels() : 0;
+	return reader->channels();
 }
 
 int AudioProcessingLoader::sampleRate() {
-	return reader ? reader->sampleRate() : 0;
+	return reader->sampleRate();
 }
