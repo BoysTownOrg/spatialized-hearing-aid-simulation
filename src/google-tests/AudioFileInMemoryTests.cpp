@@ -60,6 +60,21 @@ TEST(AudioFileInMemoryTests, returnsFramesRemaining) {
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
+TEST(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
+    FakeAudioFileReader reader{ { 1, 2, 3, 4, 5, 6 } };
+	reader.setChannels(2);
+    AudioFileInMemory adapter{ reader };
+    float x{};
+    gsl::span<float> channels{ &x, 1 };
+    EXPECT_EQ(3, adapter.framesRemaining());
+    adapter.read({ &channels, 1 });
+    EXPECT_EQ(2, adapter.framesRemaining());
+    adapter.read({ &channels, 1 });
+    EXPECT_EQ(1, adapter.framesRemaining());
+    adapter.read({ &channels, 1 });
+    EXPECT_EQ(0, adapter.framesRemaining());
+}
+
 TEST(AudioFileInMemoryTests, returnsFileParameters) {
 	FakeAudioFileReader reader{ { 4, 5, 6 } };
 	reader.setChannels(3);
