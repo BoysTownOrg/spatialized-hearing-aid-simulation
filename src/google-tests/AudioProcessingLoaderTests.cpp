@@ -40,11 +40,6 @@ namespace {
 				) / x.size()
 			);
 		}
-
-		template<typename T>
-		std::vector<T> toVector(gsl::span<T> x) {
-			return std::vector<T>(x.begin(), x.begin() + x.size());
-		}
 	};
 
 	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheck) {
@@ -160,7 +155,7 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
 		processor->setGroupDelay(3);
-		std::vector<float> y(1);
+		std::vector<float> y{ -1 };
 		load(y);
 		EXPECT_FALSE(loader.complete());
 		load(y);
@@ -185,13 +180,13 @@ namespace {
 	};
 
 	TEST_F(AudioProcessingLoaderTests, processReadsThenProcesses) {
-		FakeAudioFileReader fakeReader{ { 1 } };
+		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
-		std::vector<float> y(100);
-		load(y);
-		EXPECT_EQ(2, y.front());
+		std::vector<float> audio{ -1, -1, -1 };
+		load(audio);
+		assertEqual({ 2, 4, 6 }, audio);
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
