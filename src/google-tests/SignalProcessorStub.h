@@ -19,7 +19,7 @@ public:
 		groupDelay_ = n;
 	}
 
-	int groupDelay() override {
+	index_type groupDelay() override {
 		return groupDelay_;
 	}
 };

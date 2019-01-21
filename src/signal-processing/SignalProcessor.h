@@ -6,6 +6,8 @@
 class SignalProcessor {
 public:
 	INTERFACE_OPERATIONS(SignalProcessor);
-	virtual void process(gsl::span<float> signal) = 0;
-	virtual int groupDelay() = 0;
+	using signal_type = gsl::span<float>;
+	using index_type = signal_type::index_type;
+	virtual void process(signal_type signal) = 0;
+	virtual index_type groupDelay() = 0;
 };

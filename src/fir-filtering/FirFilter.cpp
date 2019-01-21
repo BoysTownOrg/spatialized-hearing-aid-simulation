@@ -1,13 +1,6 @@
 #include "FirFilter.h"
 #include <algorithm>
 
-static long nextPowerOfTwo(unsigned int x) {
-	int power{};
-	while (x /= 2)
-		++power;
-	return 1 << (power + 1);
-}
-
 FirFilter::FirFilter(coefficient_type b) :
 	order{ b.size() - 1 }
 {
@@ -37,13 +30,20 @@ FirFilter::FirFilter(coefficient_type b) :
 	H = dftComplex;
 }
 
+long FirFilter::nextPowerOfTwo(coefficient_type::size_type x) {
+	int power{};
+	while (x /= 2)
+		++power;
+	return 1 << (power + 1);
+}
+
 FirFilter::~FirFilter() {
 	fftwf_destroy_plan(fftPlan);
 	fftwf_destroy_plan(ifftPlan);
 }
 
 void FirFilter::process(gsl::span<float> signal) {
-	for (int i = 0; i < signal.size() / L; ++i)
+	for (coefficient_type::size_type i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 	filter(signal.last(signal.size() % L));
 }
@@ -67,13 +67,13 @@ void FirFilter::overlapAdd() {
 		overlap[i] += dftReal[i];
 }
 
-void FirFilter::shiftOverlap(int n) {
+void FirFilter::shiftOverlap(index_type n) {
 	for (int i = 0; i < N - n; ++i)
 		overlap[i] = overlap[i + n];
-	for (int i = N - n; i < N; ++i)
+	for (index_type i = N - n; i < N; ++i)
 		overlap[i] = 0;
 }
 
-int FirFilter::groupDelay() {
+auto FirFilter::groupDelay() -> index_type {
 	return order / 2;
 }

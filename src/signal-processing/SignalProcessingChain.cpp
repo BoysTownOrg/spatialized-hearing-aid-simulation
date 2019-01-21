@@ -10,12 +10,12 @@ void SignalProcessingChain::add(std::shared_ptr<SignalProcessor> processor) {
 	processors.push_back(std::move(processor));
 }
 
-int SignalProcessingChain::groupDelay() {
+auto SignalProcessingChain::groupDelay() -> index_type {
 	return std::accumulate(
 		processors.begin(),
 		processors.end(),
-		0,
-		[](int x, std::shared_ptr<SignalProcessor> processor) { 
+		index_type{ 0 },
+		[](index_type x, std::shared_ptr<SignalProcessor> processor) { 
 			return x + processor->groupDelay(); 
 		}
 	);

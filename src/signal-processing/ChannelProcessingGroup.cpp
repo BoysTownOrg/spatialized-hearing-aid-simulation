@@ -12,7 +12,7 @@ void ChannelProcessingGroup::process(gsl::span<gsl::span<float>> audio) {
 		processors[i]->process(audio[i]);
 }
 
-int ChannelProcessingGroup::groupDelay() {
+auto ChannelProcessingGroup::groupDelay() -> channel_type::index_type {
 	return (*std::max_element(
 		processors.begin(),
 		processors.end(),

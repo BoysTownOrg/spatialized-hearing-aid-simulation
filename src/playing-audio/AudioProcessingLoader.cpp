@@ -2,7 +2,7 @@
 
 class NullProcessor : public AudioFrameProcessor {
 	void process(gsl::span<gsl::span<float>>) override {}
-	int groupDelay() override { return 0; }
+	channel_type::index_type groupDelay() override { return 0; }
 };
 
 class NullReader : public AudioFrameReader {

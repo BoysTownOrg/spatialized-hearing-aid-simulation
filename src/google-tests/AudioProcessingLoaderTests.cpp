@@ -215,7 +215,7 @@ namespace {
 					x *= 2;
 		}
 
-		int groupDelay() override { return {}; }
+		channel_type::index_type groupDelay() override { return {}; }
 	};
 
 	TEST_F(AudioProcessingLoaderTests, loadReadsThenProcesses) {
@@ -235,7 +235,7 @@ namespace {
 					x += 1;
 		}
 
-		int groupDelay() override { return {}; }
+		channel_type::index_type groupDelay() override { return {}; }
 	};
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZerosBeforeProcessing) {

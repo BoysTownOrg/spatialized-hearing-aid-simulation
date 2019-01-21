@@ -7,6 +7,6 @@ void ScalingProcessor::process(gsl::span<float> signal) {
 		x *= scale;
 }
 
-int ScalingProcessor::groupDelay() {
+auto ScalingProcessor::groupDelay() -> index_type {
 	return 0;
 }

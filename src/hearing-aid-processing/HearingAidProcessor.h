@@ -22,7 +22,7 @@ public:
 	);
 	RUNTIME_ERROR(CompressorError);
 	HEARING_AID_PROCESSING_API void process(gsl::span<float>) override;
-	int groupDelay() override;
+	index_type groupDelay() override;
 private:
 	void throwIfNotPowerOfTwo(int n, std::string name);
 };

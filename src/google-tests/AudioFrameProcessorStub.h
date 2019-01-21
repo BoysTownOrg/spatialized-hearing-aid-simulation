@@ -18,7 +18,7 @@ public:
 		groupDelay_ = n;
 	}
 
-	int groupDelay() override {
+	channel_type::index_type groupDelay() override {
 		return groupDelay_;
 	}
 

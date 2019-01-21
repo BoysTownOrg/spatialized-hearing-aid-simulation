@@ -10,7 +10,7 @@ namespace {
 				x += 1;
 		}
 
-		int groupDelay() override { return {}; }
+		index_type groupDelay() override { return {}; }
 	};
 
 	class TimesTwo : public SignalProcessor {
@@ -20,7 +20,7 @@ namespace {
 				x *= 2;
 		}
 
-		int groupDelay() override { return {}; }
+		index_type groupDelay() override { return {}; }
 	};
 
 	class SignalProcessingChainTests : public ::testing::Test {
