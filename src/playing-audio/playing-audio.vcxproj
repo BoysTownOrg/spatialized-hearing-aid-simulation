@@ -97,6 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>PLAYING_AUDIO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -111,6 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>PLAYING_AUDIO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -127,6 +129,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>PLAYING_AUDIO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -145,6 +148,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>PLAYING_AUDIO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
