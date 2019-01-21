@@ -16,6 +16,8 @@ namespace {
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
 		std::vector<float> mono{};
+		std::vector<float> left{};
+		std::vector<float> right{};
 
 		void initialize(AudioProcessingLoader::Initialization i = {}) {
 			loader.initialize(std::move(i));
@@ -27,6 +29,11 @@ namespace {
 
 		void loadMono() {
 			std::vector<gsl::span<float>> audio{ mono };
+			loader.load(audio);
+		}
+
+		void loadStereo() {
+			std::vector<gsl::span<float>> audio{ left, right };
 			loader.load(audio);
 		}
 
@@ -151,6 +158,18 @@ namespace {
 		mono = { -1, -1, -1, -1 };
 		loadMono();
 		assertEqual({ 1, 2, 3, 0 }, mono);
+	}
+
+	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfStereoInput) {
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+		fakeReader.setChannels(2);
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		prepare();
+		left = { -1, -1, -1, -1 };
+		right = { -1, -1, -1, -1 };
+		loadStereo();
+		assertEqual({ 1, 3, 5, 0 }, left);
+		assertEqual({ 2, 4, 6, 0 }, right);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
