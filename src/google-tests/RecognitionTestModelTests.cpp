@@ -1,98 +1,10 @@
 #include "assert-utility.h"
+#include "StimulusPlayerStub.h"
+#include "StimulusListStub.h"
 #include <recognition-test/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 
 namespace {
-	class StimulusListStub : public StimulusList {
-		std::string directory_{};
-		std::string next_{};
-		bool empty_{};
-		bool nextCalled_{};
-	public:
-		void setNext(std::string s) {
-			next_ = std::move(s);
-		}
-
-		std::string directory() const {
-			return directory_;
-		}
-
-		void initialize(std::string d) override {
-			directory_ = std::move(d);
-		}
-
-		std::string next() override {
-			nextCalled_ = true;
-			return next_;
-		}
-
-		void setEmpty() {
-			empty_ = true;
-		}
-
-		bool empty() override {
-			return empty_;
-		}
-
-		bool nextCalled() const {
-			return nextCalled_;
-		}
-	};
-
-	class StimulusPlayerStub : public StimulusPlayer {
-		std::vector<std::string> audioDeviceDescriptions_{};
-		std::vector<int> preferredProcessingSizes_{};
-		Initialization initialization_{};
-		PlayRequest request_{};
-		bool playing_{};
-		bool playCalled_{};
-	public:
-		void setPreferredProcessingSizes(std::vector<int> v) {
-			preferredProcessingSizes_ = std::move(v);
-		}
-
-		std::vector<int> preferredProcessingSizes() override {
-			return preferredProcessingSizes_;
-		}
-
-		const Initialization &initialization() const {
-			return initialization_;
-		}
-
-		const PlayRequest &request() const {
-			return request_;
-		}
-
-		void play(PlayRequest request) override {
-			request_ = std::move(request);
-			playCalled_ = true;
-		}
-
-		void setAudioDeviceDescriptions(std::vector<std::string> v) {
-			audioDeviceDescriptions_ = std::move(v);
-		}
-
-		std::vector<std::string> audioDeviceDescriptions() override {
-			return audioDeviceDescriptions_;
-		}
-
-		void setPlaying() {
-			playing_ = true;
-		}
-
-		bool isPlaying() override {
-			return playing_;
-		}
-
-		bool playCalled() {
-			return playCalled_;
-		}
-
-		void initialize(Initialization i) override {
-			initialization_ = std::move(i);
-		}
-	};
-
 	class RecognitionTestModelTests : public ::testing::Test {
 	protected:
 		RecognitionTestModel::TestParameters testParameters;
@@ -191,25 +103,6 @@ namespace {
 		assertEqual({ 1, 2, 3 }, model.preferredProcessingSizes());
 	}
 
-	class RequestFailingStimulusPlayer : public StimulusPlayer {
-		std::string errorMessage{};
-	public:
-		void setErrorMessage(std::string s) {
-			errorMessage = std::move(s);
-		}
-
-		void play(PlayRequest) override {
-			throw RequestFailure{ errorMessage };
-		}
-
-		std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-		bool isPlaying() override { return {}; }
-		void initialize(Initialization) override {}
-		std::vector<int> preferredProcessingSizes() override {
-			return {};
-		}
-	};
-
 	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
 	protected:
 		StimulusListStub list{};
@@ -234,24 +127,6 @@ namespace {
 		player.setErrorMessage("error.");
 		assertPlayTrialThrowsTrialFailure("error.");
 	}
-
-	class InitializationFailingStimulusPlayer : public StimulusPlayer {
-		std::string errorMessage{};
-	public:
-		void setErrorMessage(std::string s) {
-			errorMessage = std::move(s);
-		}
-		void initialize(Initialization) override {
-			throw InitializationFailure{ errorMessage };
-		}
-
-		std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-		bool isPlaying() override { return {}; }
-		void play(PlayRequest) override {}
-		std::vector<int> preferredProcessingSizes() override {
-			return {};
-		}
-	};
 
 	class RecognitionTestModelWithInitializationFailingStimulusPlayer : public ::testing::Test {
 	protected:

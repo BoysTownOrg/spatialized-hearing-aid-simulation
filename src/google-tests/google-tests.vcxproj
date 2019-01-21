@@ -180,6 +180,8 @@
     <ClInclude Include="FilterbankCompressorSpy.h" />
     <ClInclude Include="LogString.h" />
     <ClInclude Include="SignalProcessorStub.h" />
+    <ClInclude Include="StimulusListStub.h" />
+    <ClInclude Include="StimulusPlayerStub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
