@@ -6,18 +6,22 @@
 class AudioFileInMemoryFacade {
 	AudioFileInMemory inMemory;
 public:
-	std::vector<float> left{};
-	std::vector<float> right{};
+	using vector_type = std::vector<float>;
+	vector_type left{};
+	vector_type right{};
 
 	AudioFileInMemoryFacade(AudioFileReader &reader) :
 		inMemory{ reader } {}
 
-	void readMono() {
+	void readMono(vector_type::size_type n) {
+		left.resize(n);
 		std::vector<gsl::span<float>> mono{ left };
 		inMemory.read(mono);
 	}
 
-	void readStereo() {
+	void readStereo(vector_type::size_type n) {
+		left.resize(n);
+		right.resize(n);
 		std::vector<gsl::span<float>> stereo{ left, right };
 		inMemory.read(stereo);
 	}
@@ -44,9 +48,7 @@ TEST_F(AudioFileInMemoryTests, readFillsEachChannelStereo) {
 	reader.setContents({ 1, 2, 3, 4, 5, 6 });
 	reader.setChannels(2);
 	AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(3);
-	adapter.right.resize(3);
-	adapter.readStereo();
+	adapter.readStereo(3);
 	assertEqual({ 1, 3, 5 }, adapter.left);
 	assertEqual({ 2, 4, 6 }, adapter.right);
 }
@@ -59,35 +61,32 @@ TEST_F(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
 TEST_F(AudioFileInMemoryTests, readNothingWhenExhausted) {
 	reader.setContents({ 3, 4 });
 	AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(1);
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(3, adapter.left.front());
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(4, adapter.left.front());
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(4, adapter.left.front());
 }
 
 TEST_F(AudioFileInMemoryTests, completeWhenExhausted) {
 	reader.setContents({ 3, 4 });
 	AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(1);
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_FALSE(adapter.complete());
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_TRUE(adapter.complete());
 }
 
 TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
 	reader.setContents({ 1, 2, 3 });
     AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(1);
     EXPECT_EQ(3, adapter.framesRemaining());
-	adapter.readMono();
+	adapter.readMono(1);
     EXPECT_EQ(2, adapter.framesRemaining());
-	adapter.readMono();
+	adapter.readMono(1);
     EXPECT_EQ(1, adapter.framesRemaining());
-	adapter.readMono();
+	adapter.readMono(1);
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
@@ -95,14 +94,12 @@ TEST_F(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
 	reader.setContents({ 1, 2, 3, 4, 5, 6 });
 	reader.setChannels(2);
     AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(1);
-	adapter.right.resize(1);
     EXPECT_EQ(3, adapter.framesRemaining());
-	adapter.readStereo();
+	adapter.readStereo(1);
     EXPECT_EQ(2, adapter.framesRemaining());
-	adapter.readStereo();
+	adapter.readStereo(1);
     EXPECT_EQ(1, adapter.framesRemaining());
-	adapter.readStereo();
+	adapter.readStereo(1);
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
@@ -119,15 +116,14 @@ TEST_F(AudioFileInMemoryTests, returnsFileParameters) {
 TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset) {
 	reader.setContents({ 3, 4 });
 	AudioFileInMemoryFacade adapter{ reader };
-	adapter.left.resize(1);
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(3, adapter.left.front());
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(4, adapter.left.front());
 	adapter.reset();
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(3, adapter.left.front());
-	adapter.readMono();
+	adapter.readMono(1);
 	EXPECT_EQ(4, adapter.left.front());
 }
 
