@@ -7,9 +7,9 @@ class AudioLoaderStub : public AudioLoader {
 	Initialization parameters_{};
 	Preparation preparation_{};
 	std::vector<int> preferredProcessingSizes_{};
-	gsl::span<gsl::span<float>> _audioBuffer{};
+	gsl::span<gsl::span<float>> audioBuffer_{};
 	LogString log_{};
-	int _sampleRate{};
+	int sampleRate_{};
 	int channels_{};
 	int chunkSize_{};
 	bool complete_{};
@@ -43,15 +43,15 @@ public:
 	}
 
 	const gsl::span<gsl::span<float>> audioBuffer() const {
-		return _audioBuffer;
+		return audioBuffer_;
 	}
 
 	void load(gsl::span<gsl::span<float>> audio) override {
-		_audioBuffer = std::move(audio);
+		audioBuffer_ = std::move(audio);
 	}
 
 	void setSampleRate(int r) {
-		_sampleRate = r;
+		sampleRate_ = r;
 	}
 
 	void setChannels(int c) {
@@ -65,7 +65,7 @@ public:
 
 	int sampleRate() override {
 		log_ += std::string{ "sampleRate " };
-		return _sampleRate;
+		return sampleRate_;
 	}
 
 	void prepare(Preparation p) override {
@@ -104,9 +104,7 @@ public:
 	int sampleRate() override { return {}; }
 	int chunkSize() override { return {}; }
 	void prepare(Preparation) override {}
-	std::vector<int> preferredProcessingSizes() override {
-		return {};
-	}
+	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class PreparationFailureAudioLoader : public AudioLoader {
@@ -127,7 +125,5 @@ public:
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	int chunkSize() override { return {}; }
-	std::vector<int> preferredProcessingSizes() override {
-		return {};
-	}
+	std::vector<int> preferredProcessingSizes() override { return {}; }
 };

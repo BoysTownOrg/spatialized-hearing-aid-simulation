@@ -49,7 +49,7 @@ public:
 	}
 
 	void setErrorMessage(std::string s) {
-		_errorMessage = s;
+		_errorMessage = std::move(s);
 	}
 
 	bool failed() override {
@@ -92,7 +92,7 @@ public:
 	}
 
 	void setDescriptions(std::vector<std::string> d) {
-		_descriptions = d;
+		_descriptions = std::move(d);
 	}
 
 	std::string description(int i) override {

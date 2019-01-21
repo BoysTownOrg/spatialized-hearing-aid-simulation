@@ -2,16 +2,16 @@
 #include <playing-audio/AudioProcessingLoader.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
-	gsl::span<channel_type> _audioBuffer{};
+	gsl::span<channel_type> audioBuffer_{};
 	int groupDelay_{};
 	bool complete_{};
 public:
 	const gsl::span<channel_type> audioBuffer() const {
-		return _audioBuffer;
+		return audioBuffer_;
 	}
 
 	void process(gsl::span<channel_type> audio) override {
-		_audioBuffer = audio;
+		audioBuffer_ = audio;
 	}
 
 	void setGroupDelay(int n) {
@@ -39,7 +39,7 @@ public:
 		processor{ std::move(processor) } {}
 
 	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-		this->processor = std::move(p);
+		processor = std::move(p);
 	}
 
 	const Parameters &parameters() const {
@@ -72,7 +72,5 @@ public:
 		throw CreateError{ errorMessage };
 	}
 
-	std::vector<int> preferredProcessingSizes() override {
-		return {};
-	}
+	std::vector<int> preferredProcessingSizes() override { return {}; }
 };

@@ -4,13 +4,13 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioFrameReaderStub : public AudioFrameReader {
-	LogString _readingLog{};
-	gsl::span<channel_type> _audioBuffer{};
-	long long _frames{};
-	int _sampleRate{};
+	LogString readingLog_{};
+	gsl::span<channel_type> audioBuffer_{};
+	long long frames_{};
+	int sampleRate_{};
 	int channels_{};
     int remainingFrames_{};
-	bool _complete{};
+	bool complete_{};
 public:
     long long framesRemaining() override {
         return remainingFrames_;
@@ -21,7 +21,7 @@ public:
     }
 
 	const gsl::span<channel_type> audioBuffer() const {
-		return _audioBuffer;
+		return audioBuffer_;
 	}
 
 	int channels() override {
@@ -29,24 +29,24 @@ public:
 	}
 
 	void read(gsl::span<channel_type> audio) override {
-		_audioBuffer = audio;
-		_readingLog += LogString{ "prepare " };
+		audioBuffer_ = audio;
+		readingLog_ += LogString{ "prepare " };
 	}
 
 	void setComplete() {
-		_complete = true;
+		complete_ = true;
 	}
 
 	bool complete() override {
-		return _complete;
+		return complete_;
 	}
 
 	int sampleRate() override {
-		return _sampleRate;
+		return sampleRate_;
 	}
 
 	void setSampleRate(int r) {
-		_sampleRate = r;
+		sampleRate_ = r;
 	}
 
 	void setChannels(int c) {
@@ -54,28 +54,28 @@ public:
 	}
 
 	long long frames() override {
-		return _frames;
+		return frames_;
 	}
 
 	void setFrames(long long f) {
-		_frames = f;
+		frames_ = f;
 	}
 
 	LogString readingLog() const {
-		return _readingLog;
+		return readingLog_;
 	}
 
 	void reset() override {
-		_readingLog += LogString{ "reset " };
+		readingLog_ += LogString{ "reset " };
 	}
 
 	void setIncomplete() {
-		_complete = false;
+		complete_ = false;
 	}
 };
 
 class AudioFrameReaderStubFactory : public AudioFrameReaderFactory {
-	std::string _filePath{};
+	std::string filePath_{};
 	std::shared_ptr<AudioFrameReader> reader;
 public:
 	explicit AudioFrameReaderStubFactory(
@@ -89,12 +89,12 @@ public:
 	}
 
 	std::shared_ptr<AudioFrameReader> make(std::string filePath) override {
-		_filePath = filePath;
+		filePath_ = std::move(filePath);
 		return reader;
 	}
 
 	std::string filePath() const {
-		return _filePath;
+		return filePath_;
 	}
 };
 
