@@ -3,40 +3,56 @@
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
-TEST(AudioFileInMemoryTests, readFillsEachChannel) {
-	FakeAudioFileReader reader{ { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
-	reader.setChannels(3);
+class AudioFileInMemoryTests : public ::testing::Test {
+protected:
+	FakeAudioFileReader reader{};
+	std::vector<float> mono{};
+	std::vector<float> left{};
+	std::vector<float> right{};
+
+	void readMono() {
+		std::vector<gsl::span<float>> channels{ mono };
+		AudioFileInMemory adapter{ reader };
+		adapter.read(channels);
+	}
+
+	void readStereo() {
+		std::vector<gsl::span<float>> channels{ left, right };
+		AudioFileInMemory adapter{ reader };
+		adapter.read(channels);
+	}
+};
+
+TEST_F(AudioFileInMemoryTests, readFillsEachChannelStereo) {
+	reader.setContents({ 1, 2, 3, 4, 5, 6 });
+	reader.setChannels(2);
+	left.resize(3);
+	right.resize(3);
+	readStereo();
+	assertEqual({ 1, 3, 5 }, left);
+	assertEqual({ 2, 4, 6 }, right);
+}
+
+TEST_F(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
+	reader.setContents({});
 	AudioFileInMemory adapter{ reader };
-	std::vector<float> a(4);
-	std::vector<float> b(4);
-	std::vector<float> c(4);
-	std::vector<gsl::span<float>> channels{ a, b, c };
+}
+
+TEST_F(AudioFileInMemoryTests, readNothingWhenExhausted) {
+	reader.setContents({ 3, 4 });
+	AudioFileInMemory adapter{ reader };
+	mono.resize(1);
+	std::vector<gsl::span<float>> channels{ mono };
 	adapter.read(channels);
-	assertEqual({ 1, 4, 7, 10 }, a);
-	assertEqual({ 2, 5, 8, 11 }, b);
-	assertEqual({ 3, 6, 9, 12 }, c);
+	EXPECT_EQ(3, mono.front());
+	adapter.read(channels);
+	EXPECT_EQ(4, mono.front());
+	adapter.read(channels);
+	EXPECT_EQ(4, mono.front());
 }
 
-TEST(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
-	FakeAudioFileReader reader{ {} };
-	AudioFileInMemory adapter{ reader };
-}
-
-TEST(AudioFileInMemoryTests, readNothingWhenExhausted) {
-	FakeAudioFileReader reader{ { 3, 4 } };
-	AudioFileInMemory adapter{ reader };
-	float x{};
-	gsl::span<float> channels{ &x, 1 };
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(3, x);
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(4, x);
-	adapter.read({ &channels, 1 });
-	EXPECT_EQ(4, x);
-}
-
-TEST(AudioFileInMemoryTests, completeWhenExhausted) {
-	FakeAudioFileReader reader{ { 3, 4 } };
+TEST_F(AudioFileInMemoryTests, completeWhenExhausted) {
+	reader.setContents({ 3, 4 });
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	gsl::span<float> channels{ &x, 1 };
@@ -46,8 +62,8 @@ TEST(AudioFileInMemoryTests, completeWhenExhausted) {
 	EXPECT_TRUE(adapter.complete());
 }
 
-TEST(AudioFileInMemoryTests, returnsFramesRemaining) {
-    FakeAudioFileReader reader{ { 1, 2, 3 } };
+TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
+	reader.setContents({ 1, 2, 3 });
     AudioFileInMemory adapter{ reader };
     float x{};
     gsl::span<float> channels{ &x, 1 };
@@ -60,8 +76,8 @@ TEST(AudioFileInMemoryTests, returnsFramesRemaining) {
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
-TEST(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
-    FakeAudioFileReader reader{ { 1, 2, 3, 4, 5, 6 } };
+TEST_F(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
+	reader.setContents({ 1, 2, 3, 4, 5, 6 });
 	reader.setChannels(2);
     AudioFileInMemory adapter{ reader };
 	std::vector<float> channel(1);
@@ -75,8 +91,8 @@ TEST(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
     EXPECT_EQ(0, adapter.framesRemaining());
 }
 
-TEST(AudioFileInMemoryTests, returnsFileParameters) {
-	FakeAudioFileReader reader{ { 4, 5, 6 } };
+TEST_F(AudioFileInMemoryTests, returnsFileParameters) {
+	reader.setContents({ 4, 5, 6 });
 	reader.setChannels(3);
 	reader.setSampleRate(2);
 	AudioFileInMemory adapter{ reader };
@@ -85,8 +101,8 @@ TEST(AudioFileInMemoryTests, returnsFileParameters) {
 	EXPECT_EQ(1, adapter.frames());
 }
 
-TEST(AudioFileInMemoryTests, seeksBeginningOnReset) {
-	FakeAudioFileReader reader{ { 3, 4 } };
+TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset) {
+	reader.setContents({ 3, 4 });
 	AudioFileInMemory adapter{ reader };
 	float x{};
 	gsl::span<float> channels{ &x, 1 };
