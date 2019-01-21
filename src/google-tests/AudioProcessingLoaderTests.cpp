@@ -149,9 +149,9 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterProcessingPaddedZeroes) {
 		prepare();
-		reader->setRemainingFrames(1);
-		processor->setGroupDelay(2);
-		std::vector<float> y(1);
+		reader->setRemainingFrames(2);
+		processor->setGroupDelay(11);
+		std::vector<float> y(6);
 		std::vector<gsl::span<float>> x{ y, y };
 		load(x);
 		EXPECT_FALSE(loader.complete());
@@ -161,6 +161,7 @@ namespace {
 		load(x);
 		EXPECT_TRUE(loader.complete());
 		prepare();
+		reader->setRemainingFrames(2);
 		load(x);
 		EXPECT_FALSE(loader.complete());
 	}
