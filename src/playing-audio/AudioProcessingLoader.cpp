@@ -111,7 +111,7 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 		for (auto channel : audio)
 			for (int i = 0; i < zerosToPad; ++i)
 				*(channel.end() - i - 1) = 0;
-		paddedZeros += zerosToPad;
+		paddedZeros += audio.begin()->size();
 	}
 	processor->process(audio);
 }
