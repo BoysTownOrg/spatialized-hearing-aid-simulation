@@ -12,7 +12,7 @@ class AudioDeviceStub : public AudioDevice {
 	StreamParameters _streamParameters{};
 	AudioDeviceController *_controller{};
 	bool _streaming{};
-	bool _failed{};
+	bool failed_{};
 	bool _setCallbackResultToCompleteCalled{};
 	bool complete_{};
 public:
@@ -45,7 +45,7 @@ public:
 	}
 
 	void fail() {
-		_failed = true;
+		failed_ = true;
 	}
 
 	void setErrorMessage(std::string s) {
@@ -53,7 +53,7 @@ public:
 	}
 
 	bool failed() override {
-		return _failed;
+		return failed_;
 	}
 
 	std::string errorMessage() override {

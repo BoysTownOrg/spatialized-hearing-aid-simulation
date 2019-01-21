@@ -18,27 +18,27 @@ public:
 	}
 
 	void setVectorProperty(std::string property, std::vector<double> v) {
-		vectors[property] = v;
+		vectors[std::move(property)] = std::move(v);
 	}
 
 	void setDoubleProperty(std::string property, double x) {
-		doubles[property] = x;
+		doubles[std::move(property)] = x;
 	}
 
 	void setIntProperty(std::string property, int x) {
-		ints[property] = x;
+		ints[std::move(property)] = x;
 	}
 
-	std::vector<double> asVector(std::string property) const override {
-		return vectors.at(property);
+	std::vector<double> asVector(std::string property) override {
+		return vectors.at(std::move(property));
 	}
 
-	double asDouble(std::string property) const override {
-		return doubles.at(property);
+	double asDouble(std::string property) override {
+		return doubles.at(std::move(property));
 	}
 
-	int asInt(std::string property) const override {
-		return ints.at(property);
+	int asInt(std::string property) override {
+		return ints.at(std::move(property));
 	}
 };
 
@@ -63,15 +63,15 @@ public:
 	explicit ErrorParser(std::string message) :
 		message{ std::move(message) } {}
 
-	double asDouble(std::string) const override {
+	double asDouble(std::string) override {
 		throw ParseError{ message };
 	}
 
-	int asInt(std::string) const override {
+	int asInt(std::string) override {
 		throw ParseError{ message };
 	}
 
-	std::vector<double> asVector(std::string) const override {
+	std::vector<double> asVector(std::string) override {
 		throw ParseError{ message };
 	}
 };

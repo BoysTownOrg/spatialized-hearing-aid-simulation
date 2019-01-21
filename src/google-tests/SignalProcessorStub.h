@@ -3,16 +3,16 @@
 #include <signal-processing/SignalProcessor.h>
 
 class SignalProcessorStub : public SignalProcessor {
-	signal_type _signal{};
-	int _samples{};
+	signal_type signal_{};
+	int samples_{};
 	int groupDelay_{};
 public:
 	const signal_type signal() const {
-		return _signal;
+		return signal_;
 	}
 
 	void process(signal_type signal) override {
-		_signal = std::move(signal);
+		signal_ = std::move(signal);
 	}
 
 	void setGroupDelay(int n) {

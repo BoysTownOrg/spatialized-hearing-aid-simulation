@@ -3,43 +3,43 @@
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
 class FilterbankCompressorSpy : public FilterbankCompressor {
-	std::string _processingLog{};
+	std::string processingLog_{};
 	int chunkSize_ = 1;
-	int _compressInputChunkSize{};
-	int _filterbankAnalyzeChunkSize{};
-	int _compressChannelsChunkSize{};
-	int _filterbankSynthesizeChunkSize{};
-	int _compressOutputChunkSize{};
-	bool _failed{};
+	int compressInputChunkSize_{};
+	int filterbankAnalyzeChunkSize_{};
+	int compressChannelsChunkSize_{};
+	int filterbankSynthesizeChunkSize_{};
+	int compressOutputChunkSize_{};
+	bool failed_{};
 	int windowSize_{};
 public:
 	std::string processingLog() const {
-		return _processingLog;
+		return processingLog_;
 	}
 
 	void compressInput(real_type *, real_type *, int chunkSize) override {
-		_compressInputChunkSize = chunkSize;
-		_processingLog += "compressInput";
+		compressInputChunkSize_ = chunkSize;
+		processingLog_ += "compressInput";
 	}
 
 	void analyzeFilterbank(real_type *, complex_type *, int chunkSize) override {
-		_filterbankAnalyzeChunkSize = chunkSize;
-		_processingLog += "analyzeFilterbank";
+		filterbankAnalyzeChunkSize_ = chunkSize;
+		processingLog_ += "analyzeFilterbank";
 	}
 
 	void compressChannels(complex_type *, complex_type *, int chunkSize) override {
-		_compressChannelsChunkSize = chunkSize;
-		_processingLog += "compressChannels";
+		compressChannelsChunkSize_ = chunkSize;
+		processingLog_ += "compressChannels";
 	}
 
 	void synthesizeFilterbank(complex_type *, real_type *, int chunkSize) override {
-		_filterbankSynthesizeChunkSize = chunkSize;
-		_processingLog += "synthesizeFilterbank";
+		filterbankSynthesizeChunkSize_ = chunkSize;
+		processingLog_ += "synthesizeFilterbank";
 	}
 
 	void compressOutput(real_type *, real_type *, int chunkSize) override {
-		_compressOutputChunkSize = chunkSize;
-		_processingLog += "compressOutput";
+		compressOutputChunkSize_ = chunkSize;
+		processingLog_ += "compressOutput";
 	}
 
 	void setChunkSize(int s) {
@@ -47,46 +47,46 @@ public:
 	}
 
 	int compressInputChunkSize() const {
-		return _compressInputChunkSize;
+		return compressInputChunkSize_;
 	}
 
 	int filterbankAnalyzeChunkSize() const {
-		return _filterbankAnalyzeChunkSize;
+		return filterbankAnalyzeChunkSize_;
 	}
 
 	int compressChannelsChunkSize() const {
-		return _compressChannelsChunkSize;
+		return compressChannelsChunkSize_;
 	}
 
 	int filterbankSynthesizeChunkSize() const {
-		return _filterbankSynthesizeChunkSize;
+		return filterbankSynthesizeChunkSize_;
 	}
 
 	int compressOutputChunkSize() const {
-		return _compressOutputChunkSize;
+		return compressOutputChunkSize_;
 	}
 
-	int chunkSize() const override {
+	int chunkSize() override {
 		return chunkSize_;
 	}
 
-	int channels() const override {
+	int channels() override {
 		return 1;
 	}
 
 	void fail() {
-		_failed = true;
+		failed_ = true;
 	}
 
-	bool failed() const override {
-		return _failed;
+	bool failed() override {
+		return failed_;
 	}
 
 	void setWindowSize(int n) {
 		windowSize_ = n;
 	}
 
-	int windowSize() const override {
+	int windowSize() override {
 		return windowSize_;
 	}
 };
@@ -108,7 +108,7 @@ public:
 	std::shared_ptr<FilterbankCompressor> make(
 		FilterbankCompressor::Parameters p
 	) override {
-		parameters_ = p;
+		parameters_ = std::move(p);
 		return compressor;
 	}
 };

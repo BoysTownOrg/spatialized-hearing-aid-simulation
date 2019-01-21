@@ -135,10 +135,10 @@ public:
 		*output *= 13;
 	}
 
-	bool failed() const override { return false; }
-	int chunkSize() const override { return 1; }
-	int channels() const override { return 1; }
-	int windowSize() const override { return 1; }
+	bool failed() override { return false; }
+	int chunkSize() override { return 1; }
+	int channels() override { return 1; }
+	int windowSize() override { return 1; }
 	void compressChannels(complex_type *, complex_type *, int) override {}
 };
 
@@ -173,11 +173,11 @@ public:
 		postSynthesizeFilterbankComplexResult_ = *(input + pointerOffset_);
 	}
 
-	int chunkSize() const override {
+	int chunkSize() override {
 		return chunkSize_;
 	}
 
-	int channels() const override {
+	int channels() override {
 		return channels_;
 	}
 
@@ -197,8 +197,8 @@ public:
 		return postSynthesizeFilterbankComplexResult_;
 	}
 
-	bool failed() const override { return false; }
-	int windowSize() const override { return 1; }
+	bool failed() override { return false; }
+	int windowSize() override { return 1; }
 	void compressInput(real_type *, real_type *, int) override {}
 	void compressOutput(real_type *, real_type *, int) override {}
 };
