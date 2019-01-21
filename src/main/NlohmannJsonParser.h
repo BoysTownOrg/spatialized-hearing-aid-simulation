@@ -7,9 +7,9 @@ class NlohmannJsonParser : public ConfigurationFileParser {
 	nlohmann::json json{};
 public:
 	explicit NlohmannJsonParser(std::string filePath);
-	std::vector<double> asVector(std::string property) const override;
-	double asDouble(std::string property) const override;
-	int asInt(std::string property) const override;
+	std::vector<double> asVector(std::string property) override;
+	double asDouble(std::string property) override;
+	int asInt(std::string property) override;
 private:
 	template<typename T>
 	T at(std::string property) const {

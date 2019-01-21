@@ -54,7 +54,7 @@ void PortAudioDevice::stopStream() {
 	lastError = Pa_StopStream(stream);
 }
 
-bool PortAudioDevice::streaming() const {
+bool PortAudioDevice::streaming() {
 	return Pa_IsStreamActive(stream) == 1;
 }
 

@@ -11,15 +11,15 @@ NlohmannJsonParser::NlohmannJsonParser(std::string filePath) {
 	}
 }
 
-std::vector<double> NlohmannJsonParser::asVector(std::string property) const {
+std::vector<double> NlohmannJsonParser::asVector(std::string property) {
 	return at<std::vector<double>>(std::move(property));
 }
 
-double NlohmannJsonParser::asDouble(std::string property) const {
+double NlohmannJsonParser::asDouble(std::string property) {
 	return at<double>(std::move(property));
 }
 
-int NlohmannJsonParser::asInt(std::string property) const {
+int NlohmannJsonParser::asInt(std::string property) {
 	return at<int>(std::move(property));
 }
 

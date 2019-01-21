@@ -16,8 +16,8 @@ public:
 	void readFrames(float *, long long) override;
 	long long frames() override;
 	int channels() override;
-	bool failed() const override;
-	std::string errorMessage() const override;
+	bool failed() override;
+	std::string errorMessage() override;
 	int sampleRate() override;
 };
 

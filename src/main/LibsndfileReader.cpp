@@ -20,11 +20,11 @@ int LibsndfileReader::channels() {
 	return info.channels;
 }
 
-bool LibsndfileReader::failed() const {
+bool LibsndfileReader::failed() {
 	return file == nullptr;
 }
 
-std::string LibsndfileReader::errorMessage() const {
+std::string LibsndfileReader::errorMessage() {
 	return sf_strerror(file);
 }
 

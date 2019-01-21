@@ -20,7 +20,7 @@ public:
 	void stopStream() override;
 	bool failed() override;
 	std::string errorMessage() override;
-	bool streaming() const override;
+	bool streaming() override;
 	void setCallbackResultToComplete() override;
 	void setCallbackResultToContinue() override;
 	void openStream(StreamParameters parameters) override;
