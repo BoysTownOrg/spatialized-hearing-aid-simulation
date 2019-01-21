@@ -179,6 +179,7 @@
     <ClInclude Include="FakeConfigurationFileParser.h" />
     <ClInclude Include="FilterbankCompressorSpy.h" />
     <ClInclude Include="LogString.h" />
+    <ClInclude Include="ModelStub.h" />
     <ClInclude Include="SignalProcessorStub.h" />
     <ClInclude Include="StimulusListStub.h" />
     <ClInclude Include="StimulusPlayerStub.h" />
