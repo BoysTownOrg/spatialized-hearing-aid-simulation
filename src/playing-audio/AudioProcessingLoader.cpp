@@ -1,12 +1,12 @@
 #include "AudioProcessingLoader.h"
 
 class NullProcessor : public AudioFrameProcessor {
-	void process(gsl::span<gsl::span<float>>) override {}
+	void process(gsl::span<channel_type>) override {}
 	channel_type::index_type groupDelay() override { return 0; }
 };
 
 class NullReader : public AudioFrameReader {
-	void read(gsl::span<gsl::span<float>>) override {}
+	void read(gsl::span<channel_type>) override {}
 	bool complete() override { return true; }
 	int sampleRate() override { return 0; }
 	int channels() override { return 0; }

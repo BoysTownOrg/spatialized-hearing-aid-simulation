@@ -48,10 +48,10 @@ public:
 		real_type *output,
 		int chunkSize
 	) = 0;
-	virtual int chunkSize() const = 0;
-	virtual int channels() const = 0;
-	virtual bool failed() const = 0;
-	virtual int windowSize() const = 0;
+	virtual int chunkSize() = 0;
+	virtual int channels() = 0;
+	virtual bool failed() = 0;
+	virtual int windowSize() = 0;
 };
 
 class FilterbankCompressorFactory {

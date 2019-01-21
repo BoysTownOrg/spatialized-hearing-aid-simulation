@@ -154,7 +154,7 @@ namespace {
 		void setController(AudioDeviceController *) override {}
 		void startStream() override {}
 		void stopStream() override {}
-		bool streaming() const override { return {}; }
+		bool streaming() override { return {}; }
 		void setCallbackResultToComplete() override {}
 		void setCallbackResultToContinue() override {}
 		void closeStream() override {}

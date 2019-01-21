@@ -21,7 +21,7 @@ void HearingAidProcessor::throwIfNotPowerOfTwo(int n, std::string name) {
 		throw CompressorError{ "The " + name + " must be a power of two." };
 }
 
-void HearingAidProcessor::process(gsl::span<float> signal) {
+void HearingAidProcessor::process(signal_type signal) {
 	const auto chunkSize = compressor->chunkSize();
 	if (signal.size() == chunkSize) {
 		const auto buffer_ = &buffer.front();

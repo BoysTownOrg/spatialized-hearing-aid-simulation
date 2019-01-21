@@ -24,7 +24,7 @@ public:
 		_controller = c;
 	}
 
-	bool streaming() const override {
+	bool streaming() override {
 		return _streaming;
 	}
 

@@ -50,25 +50,25 @@ void FirFilter::process(signal_type signal) {
 
 void FirFilter::filter(signal_type signal) {
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
-	for (int i = 0; i < signal.size(); ++i)
+	for (index_type i = 0; i < signal.size(); ++i)
 		dftReal[i] = signal[i];
 	overlapAdd();
-	for (int i = 0; i < signal.size(); ++i)
+	for (index_type i = 0; i < signal.size(); ++i)
 		signal[i] = overlap[i] / N;
 	shiftOverlap(signal.size());
 }
 
 void FirFilter::overlapAdd() {
 	fftwf_execute(fftPlan);
-	for (int i = 0; i < N / 2 + 1; ++i)
+	for (index_type i = 0; i < N / 2 + 1; ++i)
 		dftComplex[i] *= H[i];
 	fftwf_execute(ifftPlan);
-	for (int i = 0; i < N; ++i)
+	for (index_type i = 0; i < N; ++i)
 		overlap[i] += dftReal[i];
 }
 
 void FirFilter::shiftOverlap(index_type n) {
-	for (int i = 0; i < N - n; ++i)
+	for (index_type i = 0; i < N - n; ++i)
 		overlap[i] = overlap[i + n];
 	for (index_type i = N - n; i < N; ++i)
 		overlap[i] = 0;
