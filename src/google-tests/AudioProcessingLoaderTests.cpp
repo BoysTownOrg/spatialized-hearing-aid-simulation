@@ -149,7 +149,7 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterProcessingPaddedZeroes) {
 		prepare();
-		reader->setComplete();
+		reader->setRemainingFrames(0);
 		processor->setGroupDelay(3);
 		std::vector<float> y(1);
 		std::vector<gsl::span<float>> x{ y, y };
