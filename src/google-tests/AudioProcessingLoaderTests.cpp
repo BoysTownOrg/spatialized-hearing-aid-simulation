@@ -147,26 +147,24 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
         std::vector<float> x(4, -1);
-		gsl::span<float> audio{ x };
-		load({ &audio, 1 });
+		std::vector<gsl::span<float>> audio{ x };
+		load(audio);
 		EXPECT_EQ(1, processor->audioBuffer().at(0).at(0));
 		EXPECT_EQ(2, processor->audioBuffer().at(0).at(1));
 		EXPECT_EQ(3, processor->audioBuffer().at(0).at(2));
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(3));
 	}
 
-	TEST_F(AudioProcessingLoaderTests, completeAfterProcessingPaddedZeroes) {
-		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
-		processor->setGroupDelay(12);
-		std::vector<float> y(5);
-		std::vector<gsl::span<float>> x{ y, y, y };
-		load(x); // 2 zeros
+		processor->setGroupDelay(3);
+		std::vector<float> y(1);
+		std::vector<gsl::span<float>> x{ y };
+		load(x);
 		EXPECT_FALSE(loader.complete());
-		load(x); // 2 + 5 zeros
+		load(x);
 		EXPECT_FALSE(loader.complete());
-		load(x); // 2 + 5 + 5 zeros
+		load(x);
 		EXPECT_TRUE(loader.complete());
 	}
 
