@@ -70,12 +70,13 @@ namespace {
 		EXPECT_EQ(3, processorFactory.parameters().release_ms);
 		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+		
+		// The SpatializedHearingAidSimulationFactory expects a size of two.
+		// Ideally this would not cater to a single implementation...
 		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
-		reader->setChannels(1);
-		reader->setSampleRate(2);
 		EXPECT_EQ(0, loader.channels());
 		EXPECT_EQ(0, loader.sampleRate());
 		EXPECT_EQ(0, loader.chunkSize());
@@ -190,19 +191,15 @@ namespace {
 		EXPECT_FALSE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosStereo) {
-		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4 } };
-		fakeReader.setChannels(2);
+	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosWithPartiallyPaddedLoad) {
+		FakeAudioFileReader fakeReader{ { 0 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		processor->setGroupDelay(10);
-		left.resize(5);
-		right.resize(5);
-		loadStereo();
+		processor->setGroupDelay(2);
+		mono.resize(2);
+		loadMono();
 		EXPECT_FALSE(loader.complete());
-		loadStereo();
-		EXPECT_FALSE(loader.complete());
-		loadStereo();
+		loadMono();
 		EXPECT_TRUE(loader.complete());
 	}
 
