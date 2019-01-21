@@ -24,8 +24,9 @@ namespace {
 			loader.prepare(std::move(p));
 		}
 
-		void load(gsl::span<gsl::span<float>> s = {}) {
-			loader.load(std::move(s));
+		void load(gsl::span<float> x) {
+			std::vector<gsl::span<float>> audio{ x };
+			loader.load(audio);
 		}
 
 		template<typename T>
@@ -38,6 +39,11 @@ namespace {
 					[](T a, T b) { return a += b * b; }
 				) / x.size()
 			);
+		}
+
+		template<typename T>
+		std::vector<T> toVector(gsl::span<T> x) {
+			return std::vector<T>(x.begin(), x.begin() + x.size());
 		}
 	};
 
@@ -146,24 +152,20 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-        std::vector<float> x(4, -1);
-		std::vector<gsl::span<float>> audio{ x };
+		std::vector<float> audio{ -1, -1, -1, -1 };
 		load(audio);
-		auto first = processor->audioBuffer().at(0).begin();
-		auto size = processor->audioBuffer().at(0).size();
-		assertEqual({ 1, 2, 3, 0 }, std::vector<float>(first, first + size));
+		assertEqual({ 1, 2, 3, 0 }, audio);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
 		processor->setGroupDelay(3);
 		std::vector<float> y(1);
-		std::vector<gsl::span<float>> x{ y };
-		load(x);
+		load(y);
 		EXPECT_FALSE(loader.complete());
-		load(x);
+		load(y);
 		EXPECT_FALSE(loader.complete());
-		load(x);
+		load(y);
 		EXPECT_TRUE(loader.complete());
 	}
 
@@ -188,8 +190,7 @@ namespace {
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
 		std::vector<float> y(100);
-		gsl::span<float> x{ y };
-		loader.load({ &x, 1 });
+		load(y);
 		EXPECT_EQ(2, y.front());
 	}
 
