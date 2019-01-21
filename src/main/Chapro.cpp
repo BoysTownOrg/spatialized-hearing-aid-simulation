@@ -73,18 +73,18 @@ void Chapro::compressOutput(float *input, float *output, int chunkSize) {
 	cha_agc_output(cha_pointer, input, output, chunkSize);
 }
 
-int Chapro::chunkSize() const {
+int Chapro::chunkSize() {
 	return chunkSize_;
 }
 
-int Chapro::channels() const {
+int Chapro::channels() {
 	return channels_;
 }
 
-bool Chapro::failed() const {
+bool Chapro::failed() {
 	return error != 0;
 }
 
-int Chapro::windowSize() const {
+int Chapro::windowSize() {
 	return windowSize_;
 }

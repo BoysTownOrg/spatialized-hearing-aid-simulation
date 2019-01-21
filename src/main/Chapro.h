@@ -34,10 +34,10 @@ public:
 	void compressChannels(complex_type * input, complex_type * output, int chunkSize) override;
 	void synthesizeFilterbank(complex_type * input, real_type * output, int chunkSize) override;
 	void compressOutput(real_type * input, real_type * output, int chunkSize) override;
-	int chunkSize() const override;
-	int channels() const override;
-	bool failed() const override;
-	int windowSize() const override;
+	int chunkSize() override;
+	int channels() override;
+	bool failed() override;
+	int windowSize() override;
 };
 
 class ChaproFactory : public FilterbankCompressorFactory {
