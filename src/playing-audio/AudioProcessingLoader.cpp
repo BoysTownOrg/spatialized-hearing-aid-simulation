@@ -66,7 +66,6 @@ public:
 			pointers.push_back({ channel });
 		reader.read(pointers);
 	}
-private:
 
     double compute(int channel) {
         double squaredSum{};
