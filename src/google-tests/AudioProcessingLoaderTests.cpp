@@ -138,12 +138,12 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, processPadsZeroToEndOfReadInput) {
 		prepare();
-		reader->setComplete();
-		std::vector<float> audio(3, -1);
-		gsl::span<float> x{ audio };
-		load({ &x, 1 });
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(0));
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(1));
+		reader->setRemainingFrames(2);
+        std::vector<float> mono{ -1, -1, -1 };
+		gsl::span<float> audio{ mono };
+		load({ &audio, 1 });
+		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(0));
+		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(1));
 		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
 	}
 
@@ -181,6 +181,7 @@ namespace {
 		int sampleRate() const override { return {}; }
 		long long frames() const override { return {}; }
 		void reset() override {}
+        long long framesRemaining() override { return 1; }
 	};
 
 	class TimesTwo : public AudioFrameProcessor {

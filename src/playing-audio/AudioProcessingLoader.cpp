@@ -33,39 +33,9 @@ void AudioProcessingLoader::assertProcessorCanBeMade() {
 	}
 }
 
-class RmsComputer {
-	std::vector<std::vector<float>> entireAudioFile;
-public:
-	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile(
-			reader.channels(), 
-			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
-		)
-	{
-		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile)
-			pointers.push_back({ channel });
-		reader.read(pointers);
-	}
-private:
-
-public:
-	double compute(int channel) {
-		double squaredSum{};
-		const auto channel_ = entireAudioFile.at(channel);
-		for (const auto sample : channel_)
-			squaredSum += sample * sample;
-		return std::sqrt(squaredSum / channel_.size());
-	}
-};
-
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
-	RmsComputer rms{ *reader };
-	const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - processing.max_dB_Spl) / 20.0);
-	processing.channelScalars.clear();
-	for (int i = 0; i < reader->channels(); ++i)
-		processing.channelScalars.push_back(desiredRms / rms.compute(i));
+    processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
 	processing.channels = reader->channels();
 	processing.sampleRate = reader->sampleRate();
 	processor = makeProcessor(processing);
@@ -80,6 +50,40 @@ std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string 
 	catch (const AudioFrameReaderFactory::CreateError &e) {
 		throw PreparationFailure{ e.what() };
 	}
+}
+
+class RmsComputer {
+    std::vector<std::vector<float>> entireAudioFile;
+public:
+	explicit RmsComputer(AudioFrameReader &reader) :
+		entireAudioFile(
+			reader.channels(), 
+			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
+		)
+	{
+		std::vector<gsl::span<float>> pointers;
+		for (auto &channel : entireAudioFile)
+			pointers.push_back({ channel });
+		reader.read(pointers);
+	}
+private:
+
+    double compute(int channel) {
+        double squaredSum{};
+        const auto channel_ = entireAudioFile.at(channel);
+        for (const double sample : channel_)
+            squaredSum += sample * sample;
+        return std::sqrt(squaredSum / channel_.size());
+    }
+};
+
+std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {
+    RmsComputer rms{ *reader };
+    const auto desiredRms = std::pow(10.0, (level_dB_Spl - processing.max_dB_Spl) / 20.0);
+    std::vector<double> scalars{};
+    for (int i = 0; i < reader->channels(); ++i)
+        scalars.push_back(desiredRms / rms.compute(i));
+    return scalars;
 }
 
 std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
@@ -102,10 +106,10 @@ std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {
 }
 
 void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
-	if (reader->complete()) {
-		for (auto channel : audio)
-			for (auto &x : channel)
-				x = 0;
+	if (reader->framesRemaining() < audio.begin()->size()) {
+        for (auto channel : audio)
+            for (int i = 0; i < audio.begin()->size() - reader->framesRemaining(); ++i)
+                *(channel.end() - i - 1) = 0;
 		paddedZeroes += audio.begin()->size();
 	}
 	else

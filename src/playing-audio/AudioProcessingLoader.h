@@ -31,6 +31,7 @@ private:
 	void storeProcessingParameters(Initialization);
 	void assertProcessorCanBeMade();
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
+    std::vector<double> computeChannelScalars(double level_dB_Spl);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(
 		AudioFrameProcessorFactory::Parameters
 	);
