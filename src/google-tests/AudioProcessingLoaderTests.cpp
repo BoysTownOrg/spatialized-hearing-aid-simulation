@@ -168,10 +168,6 @@ namespace {
 		EXPECT_FALSE(loader.complete());
 		load(x); // 2 + 5 + 5 zeros
 		EXPECT_TRUE(loader.complete());
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
-		prepare();
-		load(x);
-		EXPECT_FALSE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
