@@ -171,21 +171,6 @@ namespace {
 		assertEqual({ 1, 2, 3 }, loader.preferredProcessingSizes());
 	}
 
-	class ReadsAOne : public AudioFrameReader {
-		void read(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
-				for (auto &x : channel)
-					x = 1;
-		}
-
-		int channels() const override { return 1; }
-		bool complete() const override { return {}; }
-		int sampleRate() const override { return {}; }
-		long long frames() const override { return {}; }
-		void reset() override {}
-        long long framesRemaining() override { return 1; }
-	};
-
 	class TimesTwo : public AudioFrameProcessor {
 		void process(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)
@@ -197,7 +182,8 @@ namespace {
 	};
 
 	TEST_F(AudioProcessingLoaderTests, processReadsThenProcesses) {
-		readerFactory.setReader(std::make_shared<ReadsAOne>());
+		FakeAudioFileReader fakeReader{ { 1 } };
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
 		std::vector<float> y(100);
