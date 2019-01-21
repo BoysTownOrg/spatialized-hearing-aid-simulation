@@ -149,10 +149,9 @@ namespace {
         std::vector<float> x(4, -1);
 		std::vector<gsl::span<float>> audio{ x };
 		load(audio);
-		EXPECT_EQ(1, processor->audioBuffer().at(0).at(0));
-		EXPECT_EQ(2, processor->audioBuffer().at(0).at(1));
-		EXPECT_EQ(3, processor->audioBuffer().at(0).at(2));
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(3));
+		auto first = processor->audioBuffer().at(0).begin();
+		auto size = processor->audioBuffer().at(0).size();
+		assertEqual({ 1, 2, 3, 0 }, std::vector<float>(first, first + size));
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
