@@ -23,6 +23,15 @@ namespace {
 		void load(gsl::span<gsl::span<float>> s = {}) {
 			loader.load(std::move(s));
 		}
+
+		template<typename T>
+		T rms(std::vector<T> x) {
+			return std::sqrt(std::accumulate(
+				x.begin(),
+				x.end(),
+				T{ 0 },
+				[](T a, T b) { return a += b * b; }) / x.size());
+		}
 	};
 
 	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheck) {
@@ -105,8 +114,8 @@ namespace {
 		prepare(p);
 		assertEqual(
 			{
-				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3.0),
-				std::pow(10.0, (7 - 8) / 20.0) / std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3.0)
+				std::pow(10.0, (7 - 8) / 20.0) / rms(std::vector<float>{ 1, 3, 5 }),
+				std::pow(10.0, (7 - 8) / 20.0) / rms(std::vector<float>{ 2, 4, 6 })
 			},
 			processorFactory.parameters().channelScalars,
 			1e-6
