@@ -40,6 +40,7 @@ public:
 };
 
 class WindowsDirectoryReader : public DirectoryReader {
+	// https://docs.microsoft.com/en-us/windows/desktop/fileio/listing-the-files-in-a-directory
 	std::vector<std::string> filesIn(std::string directory) override {
 		directory += "\\*";
 		WIN32_FIND_DATA ffd;

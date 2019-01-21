@@ -8,7 +8,7 @@ Fl_ChoiceFacade::Fl_ChoiceFacade(int x, int y, int w, int h, const char *c) :
 void Fl_ChoiceFacade::populate(std::vector<std::string> items) {
 	for (auto s : items)
 		add(s.c_str());
-	value(0); // If the value is never set then FLTK crashes.
+	value(0); // If the value is never set then FLTK crashes on read.
 }
 
 void FltkView::onBrowseLeftPrescription(Fl_Widget *, void *self) {
