@@ -155,6 +155,7 @@ namespace {
 		std::vector<gsl::span<float>> x{ y, y };
 		load(x);
 		EXPECT_FALSE(loader.complete());
+		reader->setRemainingFrames(0);
 		load(x);
 		EXPECT_FALSE(loader.complete());
 		load(x);
