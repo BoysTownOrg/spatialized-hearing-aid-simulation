@@ -156,20 +156,20 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterProcessingPaddedZeroes) {
+		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		reader->setRemainingFrames(2);
-		processor->setGroupDelay(11);
-		std::vector<float> y(6);
-		std::vector<gsl::span<float>> x{ y, y };
-		load(x);
+		processor->setGroupDelay(12);
+		std::vector<float> y(5);
+		std::vector<gsl::span<float>> x{ y, y, y };
+		load(x); // 2 zeros
 		EXPECT_FALSE(loader.complete());
-		reader->setRemainingFrames(0);
-		load(x);
+		load(x); // 2 + 5 zeros
 		EXPECT_FALSE(loader.complete());
-		load(x);
+		load(x); // 2 + 5 + 5 zeros
 		EXPECT_TRUE(loader.complete());
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		reader->setRemainingFrames(2);
 		load(x);
 		EXPECT_FALSE(loader.complete());
 	}
