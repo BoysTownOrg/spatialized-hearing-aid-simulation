@@ -190,7 +190,7 @@ namespace {
 		int groupDelay() override { return {}; }
 	};
 
-	TEST_F(AudioProcessingLoaderTests, processReadsThenProcesses) {
+	TEST_F(AudioProcessingLoaderTests, loadReadsThenProcesses) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
@@ -198,6 +198,26 @@ namespace {
 		mono = { -1, -1, -1 };
 		loadMono();
 		assertEqual({ 2, 4, 6 }, mono);
+	}
+
+	class AddsOne : public AudioFrameProcessor {
+		void process(gsl::span<gsl::span<float>> audio) override {
+			for (const auto channel : audio)
+				for (auto &x : channel)
+					x += 1;
+		}
+
+		int groupDelay() override { return {}; }
+	};
+
+	TEST_F(AudioProcessingLoaderTests, loadPadsZerosBeforeProcessing) {
+		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		processorFactory.setProcessor(std::make_shared<AddsOne>());
+		prepare();
+		mono = { -1, -1, -1, -1 };
+		loadMono();
+		assertEqual({ 2, 3, 4, 1 }, mono);
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
