@@ -16,6 +16,10 @@ namespace {
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
 
+		void initialize(AudioProcessingLoader::Initialization i = {}) {
+			loader.initialize(std::move(i));
+		}
+
 		void prepare(AudioProcessingLoader::Preparation p = {}) {
 			loader.prepare(std::move(p));
 		}
@@ -26,11 +30,14 @@ namespace {
 
 		template<typename T>
 		T rms(std::vector<T> x) {
-			return std::sqrt(std::accumulate(
-				x.begin(),
-				x.end(),
-				T{ 0 },
-				[](T a, T b) { return a += b * b; }) / x.size());
+			return std::sqrt(
+				std::accumulate(
+					x.begin(),
+					x.end(),
+					T{ 0 },
+					[](T a, T b) { return a += b * b; }
+				) / x.size()
+			);
 		}
 	};
 
@@ -44,7 +51,7 @@ namespace {
 		init.release_ms = 3;
 		init.windowSize = 4;
 		init.chunkSize = 5;
-		loader.initialize(init);
+		initialize(init);
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -59,7 +66,6 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
 		reader->setChannels(1);
 		reader->setSampleRate(2);
-		reader->setIncomplete();
 		EXPECT_EQ(0, loader.channels());
 		EXPECT_EQ(0, loader.sampleRate());
 		EXPECT_EQ(0, loader.chunkSize());
@@ -69,7 +75,7 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, chunkSizeReturnsWhatWasInitialized) {
 		AudioProcessingLoader::Initialization init;
 		init.chunkSize = 5;
-		loader.initialize(init);
+		initialize(init);
 		EXPECT_EQ(5, loader.chunkSize());
 	}
 
@@ -83,7 +89,7 @@ namespace {
 		init.release_ms = 3;
 		init.windowSize = 4;
 		init.chunkSize = 5;
-		loader.initialize(init);
+		initialize(init);
 		AudioProcessingLoader::Preparation p{};
 		p.audioFilePath = "d";
 		reader->setChannels(6);
@@ -105,17 +111,18 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
 		AudioProcessingLoader::Initialization init;
 		init.max_dB_Spl = 8;
-		loader.initialize(init);
+		initialize(init);
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		AudioProcessingLoader::Preparation p{};
 		p.level_dB_Spl = 7;
 		prepare(p);
+		const auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
 		assertEqual(
 			{
-				std::pow(10.0, (7 - 8) / 20.0) / rms(std::vector<float>{ 1, 3, 5 }),
-				std::pow(10.0, (7 - 8) / 20.0) / rms(std::vector<float>{ 2, 4, 6 })
+				desiredRms / rms(std::vector<float>{ 1, 3, 5 }),
+				desiredRms / rms(std::vector<float>{ 2, 4, 6 })
 			},
 			processorFactory.parameters().channelScalars,
 			1e-6
@@ -135,25 +142,17 @@ namespace {
 		EXPECT_EQ(2, loader.sampleRate());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, processReadsAndProcessesAudio) {
+	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfReadInput) {
+		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		gsl::span<float> x{};
-		load({ &x, 1 });
-		EXPECT_EQ(&x, reader->audioBuffer().data());
-		EXPECT_EQ(1, reader->audioBuffer().size());
-		EXPECT_EQ(&x, processor->audioBuffer().data());
-		EXPECT_EQ(1, processor->audioBuffer().size());
-	}
-
-	TEST_F(AudioProcessingLoaderTests, processPadsZeroToEndOfReadInput) {
-		prepare();
-		reader->setRemainingFrames(2);
-        std::vector<float> mono{ -1, -1, -1 };
-		gsl::span<float> audio{ mono };
+        std::vector<float> x(4, -1);
+		gsl::span<float> audio{ x };
 		load({ &audio, 1 });
-		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(0));
-		EXPECT_EQ(-1, processor->audioBuffer().at(0).at(1));
-		EXPECT_EQ(0, processor->audioBuffer().at(0).at(2));
+		EXPECT_EQ(1, processor->audioBuffer().at(0).at(0));
+		EXPECT_EQ(2, processor->audioBuffer().at(0).at(1));
+		EXPECT_EQ(3, processor->audioBuffer().at(0).at(2));
+		EXPECT_EQ(0, processor->audioBuffer().at(0).at(3));
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterProcessingPaddedZeroes) {
