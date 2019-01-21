@@ -105,6 +105,7 @@ std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {
 }
 
 void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
+	reader->read(audio);
 	const auto zerosToPad = audio.begin()->size() - reader->framesRemaining();
 	if (zerosToPad > 0) {
         for (auto channel : audio)
@@ -112,8 +113,6 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
                 *(channel.end() - i - 1) = 0;
 		paddedZeros += zerosToPad;
 	}
-	else
-		reader->read(audio);
 	processor->process(audio);
 }
 
