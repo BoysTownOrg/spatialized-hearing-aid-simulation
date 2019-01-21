@@ -200,10 +200,10 @@ namespace {
 		readerFactory.setReader(std::make_shared<ReadsAOne>());
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
-		float y{};
-		gsl::span<float> x{ &y, 1 };
+		std::vector<float> y(100);
+		gsl::span<float> x{ y };
 		loader.load({ &x, 1 });
-		EXPECT_EQ(2, y);
+		EXPECT_EQ(2, y.front());
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
