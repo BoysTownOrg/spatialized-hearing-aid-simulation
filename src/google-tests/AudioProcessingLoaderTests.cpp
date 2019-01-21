@@ -8,7 +8,8 @@
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
-		AudioProcessingLoader::Initialization initialization;
+		AudioProcessingLoader::Initialization initialization{};
+		AudioProcessingLoader::Preparation preparation{};
 		std::vector<float> mono{};
 		std::vector<float> left{};
 		std::vector<float> right{};
@@ -24,8 +25,8 @@ namespace {
 			loader.initialize(initialization);
 		}
 
-		void prepare(AudioProcessingLoader::Preparation p = {}) {
-			loader.prepare(std::move(p));
+		void prepare() {
+			loader.prepare(preparation);
 		}
 
 		void loadMono() {
@@ -97,11 +98,10 @@ namespace {
 		initialization.windowSize = 4;
 		initialization.chunkSize = 5;
 		initialize();
-		AudioProcessingLoader::Preparation p{};
-		p.audioFilePath = "d";
+		preparation.audioFilePath = "d";
 		reader->setChannels(6);
 		reader->setSampleRate(7);
-		prepare(p);
+		prepare();
 		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
 		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
 		assertEqual("c", processorFactory.parameters().brirFilePath);
@@ -121,9 +121,8 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
-		AudioProcessingLoader::Preparation p{};
-		p.level_dB_Spl = 7;
-		prepare(p);
+		preparation.level_dB_Spl = 7;
+		prepare();
 		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
 		assertEqual(
 			{
