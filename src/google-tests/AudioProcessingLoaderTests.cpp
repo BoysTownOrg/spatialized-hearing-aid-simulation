@@ -10,9 +10,9 @@ namespace {
 	protected:
 		AudioProcessingLoader::Initialization initialization{};
 		AudioProcessingLoader::Preparation preparation{};
-		std::vector<float> mono{};
-		std::vector<float> left{};
-		std::vector<float> right{};
+		using vector_type = std::vector<float>;
+		vector_type left{};
+		vector_type right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{reader};
@@ -29,14 +29,17 @@ namespace {
 			loader.prepare(preparation);
 		}
 
-		void loadMono() {
-			std::vector<gsl::span<float>> audio{ mono };
-			loader.load(audio);
+		void loadMonoFrames(vector_type::size_type n) {
+			left.resize(n);
+			std::vector<gsl::span<float>> mono{ left };
+			loader.load(mono);
 		}
 
-		void loadStereo() {
-			std::vector<gsl::span<float>> audio{ left, right };
-			loader.load(audio);
+		void loadStereoFrames(vector_type::size_type n) {
+			left.resize(n);
+			right.resize(n);
+			std::vector<gsl::span<float>> stereo{ left, right };
+			loader.load(stereo);
 		}
 
 		template<typename T>
@@ -152,9 +155,8 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		mono = { -1, -1, -1, -1 };
-		loadMono();
-		assertEqual({ 1, 2, 3, 0 }, mono);
+		loadMonoFrames(4);
+		assertEqual({ 1, 2, 3, 0 }, left);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfStereoInput) {
@@ -162,9 +164,7 @@ namespace {
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
-		left = { -1, -1, -1, -1 };
-		right = { -1, -1, -1, -1 };
-		loadStereo();
+		loadStereoFrames(4);
 		assertEqual({ 1, 3, 5, 0 }, left);
 		assertEqual({ 2, 4, 6, 0 }, right);
 	}
@@ -172,20 +172,18 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		prepare();
 		processor->setGroupDelay(3);
-		mono.resize(1);
-		loadMono();
+		loadMonoFrames(1);
 		EXPECT_FALSE(loader.complete());
-		loadMono();
+		loadMonoFrames(1);
 		EXPECT_FALSE(loader.complete());
-		loadMono();
+		loadMonoFrames(1);
 		EXPECT_TRUE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparationResetsZeroPadCount) {
 		prepare();
 		processor->setGroupDelay(1);
-		mono.resize(1);
-		loadMono();
+		loadMonoFrames(1);
 		EXPECT_TRUE(loader.complete());
 		prepare();
 		EXPECT_FALSE(loader.complete());
@@ -196,10 +194,9 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		prepare();
 		processor->setGroupDelay(2);
-		mono.resize(2);
-		loadMono();
+		loadMonoFrames(2);
 		EXPECT_FALSE(loader.complete());
-		loadMono();
+		loadMonoFrames(2);
 		EXPECT_TRUE(loader.complete());
 	}
 
@@ -223,9 +220,8 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
-		mono = { -1, -1, -1 };
-		loadMono();
-		assertEqual({ 2, 4, 6 }, mono);
+		loadMonoFrames(3);
+		assertEqual({ 2, 4, 6 }, left);
 	}
 
 	class AddsOne : public AudioFrameProcessor {
@@ -243,9 +239,8 @@ namespace {
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
 		processorFactory.setProcessor(std::make_shared<AddsOne>());
 		prepare();
-		mono = { -1, -1, -1, -1 };
-		loadMono();
-		assertEqual({ 2, 3, 4, 1 }, mono);
+		loadMonoFrames(4);
+		assertEqual({ 2, 3, 4, 1 }, left);
 	}
 
 	class AudioProcessingLoaderErrorTests : public ::testing::Test {
