@@ -12,7 +12,7 @@ public:
 	SIGNAL_PROCESSING_API explicit ChannelProcessingGroup(
 		std::vector<std::shared_ptr<SignalProcessor>> processors
 	);
-	SIGNAL_PROCESSING_API void process(gsl::span<gsl::span<float>> audio) override;
+	SIGNAL_PROCESSING_API void process(gsl::span<channel_type> audio) override;
 	SIGNAL_PROCESSING_API channel_type::index_type groupDelay() override;
 };
 

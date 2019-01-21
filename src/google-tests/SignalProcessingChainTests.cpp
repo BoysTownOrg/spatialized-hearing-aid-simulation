@@ -5,7 +5,7 @@
 namespace {
 	class AddOne : public SignalProcessor {
 	public:
-		void process(gsl::span<float> signal) override {
+		void process(signal_type signal) override {
 			for (auto &x : signal)
 				x += 1;
 		}
@@ -15,7 +15,7 @@ namespace {
 
 	class TimesTwo : public SignalProcessor {
 	public:
-		void process(gsl::span<float> signal) override {
+		void process(signal_type signal) override {
 			for (auto &x : signal)
 				x *= 2;
 		}

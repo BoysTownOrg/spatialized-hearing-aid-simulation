@@ -1,7 +1,7 @@
 #include "SignalProcessingChain.h"
 #include <algorithm>
 
-void SignalProcessingChain::process(gsl::span<float> signal) {
+void SignalProcessingChain::process(signal_type signal) {
 	for (auto processor : processors)
 		processor->process(signal);
 }

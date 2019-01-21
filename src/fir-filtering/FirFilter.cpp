@@ -42,13 +42,13 @@ FirFilter::~FirFilter() {
 	fftwf_destroy_plan(ifftPlan);
 }
 
-void FirFilter::process(gsl::span<float> signal) {
+void FirFilter::process(signal_type signal) {
 	for (coefficient_type::size_type i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 	filter(signal.last(signal.size() % L));
 }
 
-void FirFilter::filter(gsl::span<float> signal) {
+void FirFilter::filter(signal_type signal) {
 	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
 	for (int i = 0; i < signal.size(); ++i)
 		dftReal[i] = signal[i];

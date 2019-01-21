@@ -21,7 +21,7 @@ public:
 		std::shared_ptr<FilterbankCompressor>
 	);
 	RUNTIME_ERROR(CompressorError);
-	HEARING_AID_PROCESSING_API void process(gsl::span<float>) override;
+	HEARING_AID_PROCESSING_API void process(signal_type) override;
 	index_type groupDelay() override;
 private:
 	void throwIfNotPowerOfTwo(int n, std::string name);

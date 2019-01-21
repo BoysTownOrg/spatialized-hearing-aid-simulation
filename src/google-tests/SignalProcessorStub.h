@@ -3,15 +3,15 @@
 #include <signal-processing/SignalProcessor.h>
 
 class SignalProcessorStub : public SignalProcessor {
-	gsl::span<float> _signal{};
+	signal_type _signal{};
 	int _samples{};
 	int groupDelay_{};
 public:
-	const gsl::span<float> signal() const {
+	const signal_type signal() const {
 		return _signal;
 	}
 
-	void process(gsl::span<float> signal) override {
+	void process(signal_type signal) override {
 		_signal = std::move(signal);
 	}
 

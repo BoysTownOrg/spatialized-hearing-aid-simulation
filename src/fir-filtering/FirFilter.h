@@ -17,7 +17,7 @@ public:
 	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(coefficient_type b);
 	FIR_FILTERING_API ~FirFilter();
-	FIR_FILTERING_API void process(gsl::span<float>) override;
+	FIR_FILTERING_API void process(signal_type) override;
 	FIR_FILTERING_API index_type groupDelay() override;
 private:
 	std::vector<std::complex<float>> H{};
@@ -31,7 +31,7 @@ private:
 	coefficient_type::size_type order;
 	
 	long nextPowerOfTwo(coefficient_type::size_type x);
-	void filter(gsl::span<float>);
+	void filter(signal_type);
 	void overlapAdd();
 	void shiftOverlap(index_type x);
 };
