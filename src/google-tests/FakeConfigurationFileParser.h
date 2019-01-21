@@ -51,9 +51,12 @@ public:
 	) :
 		parser{ std::move(parser) } {}
 
-	std::shared_ptr<ConfigurationFileParser> make(std::string filePath) override
-	{
+	std::shared_ptr<ConfigurationFileParser> make(std::string) override {
 		return parser;
+	}
+
+	void setParser(std::shared_ptr<ConfigurationFileParser> p) {
+		parser = std::move(p);
 	}
 };
 
