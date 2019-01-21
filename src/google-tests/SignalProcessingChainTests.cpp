@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include "SignalProcessorStub.h"
 #include <signal-processing/SignalProcessingChain.h>
 #include <gtest/gtest.h>
@@ -37,16 +38,9 @@ namespace {
 	TEST_F(SignalProcessingChainTests, chainCallsProcessorsInOrder) {
 		chain.add(std::make_shared<AddOne>());
 		chain.add(std::make_shared<TimesTwo>());
-		float x = 1;
-		chain.process({ &x, 1 });
-		EXPECT_EQ(4, x);
-	}
-
-	TEST_F(SignalProcessingChainTests, chainPassesParametersToProcessor) {
-		float x{};
-		const gsl::span<float> channel{ &x, 1 };
-		chain.process(channel);
-		EXPECT_EQ(channel, processor->signal());
+		std::vector<float> x = { 1, 2, 3 };
+		chain.process(x);
+		assertEqual({ 4, 6, 8 }, x);
 	}
 
 	TEST_F(SignalProcessingChainTests, groupDelayReturnsSumOfComponents) {
