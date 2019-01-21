@@ -2,15 +2,15 @@
 #include <playing-audio/AudioProcessingLoader.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
-	gsl::span<gsl::span<channel_type>> _audioBuffer{};
+	gsl::span<channel_type> _audioBuffer{};
 	int groupDelay_{};
 	bool complete_{};
 public:
-	const gsl::span<gsl::span<channel_type>> audioBuffer() const {
+	const gsl::span<channel_type> audioBuffer() const {
 		return _audioBuffer;
 	}
 
-	void process(gsl::span<gsl::span<channel_type>> audio) override {
+	void process(gsl::span<channel_type> audio) override {
 		_audioBuffer = audio;
 	}
 
