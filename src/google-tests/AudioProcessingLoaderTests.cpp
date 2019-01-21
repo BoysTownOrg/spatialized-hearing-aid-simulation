@@ -194,6 +194,22 @@ namespace {
 		EXPECT_FALSE(loader.complete());
 	}
 
+	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosStereo) {
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4 } };
+		fakeReader.setChannels(2);
+		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		prepare();
+		processor->setGroupDelay(10);
+		left.resize(5);
+		right.resize(5);
+		loadStereo();
+		EXPECT_FALSE(loader.complete());
+		loadStereo();
+		EXPECT_FALSE(loader.complete());
+		loadStereo();
+		EXPECT_TRUE(loader.complete());
+	}
+
 	TEST_F(AudioProcessingLoaderTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
 		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, loader.preferredProcessingSizes());
