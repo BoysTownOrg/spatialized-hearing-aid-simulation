@@ -39,34 +39,56 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
 }
 
+class FormattedStream {
+	std::stringstream stream{};
+public:
+	void putFixed() {
+		stream << std::fixed;
+	}
+
+	void putPrecision(std::streamsize n) {
+		stream << std::setprecision(n);
+	}
+
+	template<typename T>
+	void putLabeledParameter(std::string label, T p) {
+		stream << label << ": " << p;
+	}
+
+	template<typename T>
+	void putIndentedLabeledParameter(std::string label, T p) {
+		stream << "    " << label << ": " << p;
+	}
+
+	void putLine(std::string s) {
+		stream << s << '\n';
+	}
+
+	std::string str() {
+		return stream.str();
+	}
+};
+
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
-	std::stringstream stream;
-	stream << "DSL prescription";
-	stream << '\n';
-	stream << "    left: ";
-	stream << p.leftDslPrescriptionFilePath;
-	stream << '\n';
-	stream << "    right: ";
-	stream << p.rightDslPrescriptionFilePath;
-	stream << '\n';
-	stream << "BRIR: ";
-	stream << p.brirFilePath;
-	stream << '\n';
-	stream << "attack (ms): ";
-	stream << std::fixed;
-	stream << std::setprecision(1);
-	stream << p.attack_ms;
-	stream << '\n';
-	stream << "release (ms): ";
-	stream << p.release_ms;
-	stream << '\n';
-	stream << "window size (samples): ";
-	stream << p.windowSize;
-	stream << '\n';
-	stream << "chunk size (samples): ";
-	stream << p.chunkSize;
+	FormattedStream stream;
+	stream.putLine("DSL prescription");
+	stream.putIndentedLabeledParameter("left", p.leftDslPrescriptionFilePath);
+	stream.putLine("");
+	stream.putIndentedLabeledParameter("right", p.rightDslPrescriptionFilePath);
+	stream.putLine("");
+	stream.putLabeledParameter("BRIR", p.brirFilePath);
+	stream.putLine("");
+	stream.putFixed();
+	stream.putPrecision(1);
+	stream.putLabeledParameter("attack (ms)", p.attack_ms);
+	stream.putLine("");
+	stream.putLabeledParameter("release (ms)", p.release_ms);
+	stream.putLine("");
+	stream.putLabeledParameter("window size (samples)", p.windowSize);
+	stream.putLine("");
+	stream.putLabeledParameter("chunk size (samples)", p.chunkSize);
+	stream.putLine("");
 	documenter->writeLine(stream.str());
-	documenter->writeLine("");
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
