@@ -21,7 +21,7 @@ public:
 	INTERFACE_OPERATIONS(View);
 	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;
-	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
+	virtual std::string browseForOpeningFile(std::vector<std::string> filters) = 0;
 	virtual std::string browseForSavingFile(std::vector<std::string> filters) = 0;
 	virtual std::string browseForDirectory() = 0;
 	virtual bool browseCancelled() = 0;

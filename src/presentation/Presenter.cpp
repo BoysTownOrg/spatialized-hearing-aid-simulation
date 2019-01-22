@@ -32,7 +32,7 @@ void Presenter::browseForTestFile() {
 
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(
-		view->browseForFile({ "*.json" }), 
+		view->browseForOpeningFile({ "*.json" }), 
 		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(std::move(p)); }
 	);
 }
@@ -44,7 +44,7 @@ void Presenter::applyIfBrowseNotCancelled(std::string s, std::function<void(std:
 
 void Presenter::browseForRightDslPrescription() {
 	applyIfBrowseNotCancelled(
-		view->browseForFile({ "*.json" }), 
+		view->browseForOpeningFile({ "*.json" }), 
 		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(std::move(p)); }
 	);
 }
@@ -58,7 +58,7 @@ void Presenter::browseForAudio() {
 
 void Presenter::browseForBrir() {
 	applyIfBrowseNotCancelled(
-		view->browseForFile({ "*.wav" }), 
+		view->browseForOpeningFile({ "*.wav" }), 
 		[=](std::string p) { this->view->setBrirFilePath(std::move(p)); }
 	);
 }

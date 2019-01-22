@@ -55,7 +55,7 @@ public:
 	FltkView();
 	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
-	std::string browseForFile(std::vector<std::string> filters) override;
+	std::string browseForOpeningFile(std::vector<std::string> filters) override;
 	std::string browseForDirectory() override;
 	bool browseCancelled() override;
 	void setAudioDirectory(std::string) override;

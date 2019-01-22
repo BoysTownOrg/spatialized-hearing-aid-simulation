@@ -45,7 +45,7 @@ public:
 		return runningEventLoop_;
 	}
 
-	std::string browseForFile(
+	std::string browseForOpeningFile(
 		std::vector<std::string> filters
 	) override {
 		browseFilters_ = std::move(filters);

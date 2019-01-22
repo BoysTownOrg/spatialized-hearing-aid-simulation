@@ -132,7 +132,7 @@ static std::string formatFilters(std::vector<std::string> filters) {
 	return stream.str();
 }
 
-std::string FltkView::browseForFile(std::vector<std::string> filters) {
+std::string FltkView::browseForOpeningFile(std::vector<std::string> filters) {
 	Fl_Native_File_Chooser chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_FILE);
 	chooser.filter(formatFilters(std::move(filters)).c_str());
