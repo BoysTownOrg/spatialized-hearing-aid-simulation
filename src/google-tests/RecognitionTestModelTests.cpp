@@ -54,6 +54,15 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
+		initializeTestInitializesDocumenter
+	) {
+		testParameters.testFilePath = "a";
+		initializeTest();
+		assertEqual("a", documenter.filePath());
+	}
+
+	TEST_F(
+		RecognitionTestModelTests,
 		playTrialPassesNextStimulusToStimulusPlayer
 	) {
 		list.setNext("a");
