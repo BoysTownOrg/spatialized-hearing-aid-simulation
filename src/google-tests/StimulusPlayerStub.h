@@ -7,9 +7,15 @@ class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<int> preferredProcessingSizes_{};
 	Initialization initialization_{};
 	PlayRequest request_{};
+	std::string errorMessage{};
+	bool failOnPlay_{};
 	bool playing_{};
 	bool playCalled_{};
 public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
 	void setPreferredProcessingSizes(std::vector<int> v) {
 		preferredProcessingSizes_ = std::move(v);
 	}
@@ -23,6 +29,8 @@ public:
 	}
 
 	const PlayRequest &request() const {
+		if (failOnPlay_)
+			throw RequestFailure{ errorMessage };
 		return request_;
 	}
 

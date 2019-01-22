@@ -130,8 +130,18 @@ namespace {
 		assertEqual("a", player.request().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestModelTests, DISABLED_playTrialDoesNotAdvanceListWhenPlayerFails) {
-		FAIL();
+	TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerFails) {
+		list.setContents({ "a", "b", "c" });
+		player.failOnPlay();
+		try {
+			playTrial();
+		}
+		catch (const RecognitionTestModel::TrialFailure &) {
+
+		}
+		player.dontFailOnPlay();
+		playTrial();
+		assertEqual("a", player.request().audioFilePath);
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
