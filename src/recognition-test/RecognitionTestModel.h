@@ -31,6 +31,7 @@ private:
 	void initializeStimulusPlayer(TestParameters);
 	void initializeStimulusList(std::string directory);
 	void initializeDocumenter(std::string testFilePath);
+	void documentTestParameters(TestParameters);
 	void playTrial_(TrialParameters);
 	void playNextStimulus(TrialParameters);
 };

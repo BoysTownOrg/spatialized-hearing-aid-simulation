@@ -23,7 +23,8 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 }
 
 void RecognitionTestModel::initializeTest_(TestParameters p) {
-	initializeStimulusList(p.audioDirectory); 
+	initializeStimulusList(p.audioDirectory);
+	documentTestParameters(p);
 	initializeDocumenter(p.testFilePath);
 	initializeStimulusPlayer(std::move(p));
 }
@@ -34,6 +35,18 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
+}
+
+void RecognitionTestModel::documentTestParameters(TestParameters) {
+	documenter->writeLine("DSL prescription");
+	documenter->writeLine("    left: a");
+	documenter->writeLine("    right: b");
+	documenter->writeLine("BRIR: c");
+	documenter->writeLine("attack (ms): 1");
+	documenter->writeLine("release (ms): 2");
+	documenter->writeLine("window size (samples): 3");
+	documenter->writeLine("chunk size (samples): 4");
+	documenter->writeLine("");
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {

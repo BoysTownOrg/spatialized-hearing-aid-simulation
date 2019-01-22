@@ -17,4 +17,8 @@ public:
 	std::string content() const {
 		return content_;
 	}
+
+	void writeLine(std::string s) override {
+		content_ += s + '\n';
+	}
 };
