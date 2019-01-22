@@ -90,6 +90,14 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
+		initializeTestDocumentsTestParametersAfterInitializing
+	) {
+		initializeTest();
+		EXPECT_TRUE(documenter.log().beginsWith("initialize"));
+	}
+
+	TEST_F(
+		RecognitionTestModelTests,
 		playTrialPassesNextStimulusToStimulusPlayer
 	) {
 		list.setNext("a");
