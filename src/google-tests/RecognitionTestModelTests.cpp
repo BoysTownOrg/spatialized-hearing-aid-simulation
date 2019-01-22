@@ -124,6 +124,10 @@ namespace {
 		EXPECT_FALSE(list.nextCalled());
 	}
 
+	TEST_F(RecognitionTestModelTests, DISABLED_playTrialDoesNotAdvanceListWhenPlayerFails) {
+		FAIL();
+	}
+
 	TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
 		player.setPlaying();
 		playTrial();
