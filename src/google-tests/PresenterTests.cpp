@@ -199,6 +199,9 @@ namespace {
 		view.setRightDslPrescriptionFilePath("b");
 		view.setAudioDirectory("c");
 		view.setBrirFilePath("d");
+		view.setTestFilePath("e");
+		view.setSubjectId("f");
+		view.setTesterId("g");
 		view.setAttack_ms("2.2");
 		view.setRelease_ms("3.3");
 		view.setWindowSize("4");
@@ -208,6 +211,9 @@ namespace {
 		assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().audioDirectory);
 		assertEqual("d", model.testParameters().brirFilePath);
+		assertEqual("e", model.testParameters().testFilePath);
+		assertEqual("f", model.testParameters().subjectId);
+		assertEqual("g", model.testParameters().testerId);
 		EXPECT_EQ(2.2, model.testParameters().attack_ms);
 		EXPECT_EQ(3.3, model.testParameters().release_ms);
 		EXPECT_EQ(4, model.testParameters().windowSize);
