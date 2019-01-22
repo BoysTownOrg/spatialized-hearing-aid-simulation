@@ -23,7 +23,12 @@ void Presenter::run() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForTestFile() {}
+void Presenter::browseForTestFile() {
+	applyIfBrowseNotCancelled(
+		view->browseForSavingFile({ "" }), 
+		[=](std::string p) { this->view->setTestFilePath(std::move(p)); }
+	);
+}
 
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(

@@ -52,10 +52,6 @@ public:
 		return browseFilePath_;
 	}
 
-	void setTestFilePath(std::string p) {
-		testFilePath_ = std::move(p);
-	}
-
 	void setBrowseFilePath(std::string p) {
 		browseFilePath_ = std::move(p);
 	}
@@ -74,6 +70,16 @@ public:
 
 	void browseForLeftDslPrescription() {
 		listener_->browseForLeftDslPrescription();
+	}
+
+	std::string browseForSavingFile(
+		std::vector<std::string>
+	) override {
+		return browseFilePath_;
+	}
+
+	void setTestFilePath(std::string p) override {
+		testFilePath_ = std::move(p);
 	}
 
 	std::string testFilePath() {

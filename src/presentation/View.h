@@ -22,8 +22,10 @@ public:
 	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForFile(std::vector<std::string> filters) = 0;
+	virtual std::string browseForSavingFile(std::vector<std::string> filters) = 0;
 	virtual std::string browseForDirectory() = 0;
 	virtual bool browseCancelled() = 0;
+	virtual void setTestFilePath(std::string) = 0;
 	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	virtual void setAudioDirectory(std::string) = 0;
