@@ -206,6 +206,16 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		cancellingSaveAsTestFileDoesNotChangeTestFilePath
+	) {
+		view.setTestFilePath("a");
+		view.setBrowseCancelled();
+		view.browseForTestFile();
+		assertEqual("a", view.testFilePath());
+	}
+
+	TEST_F(
+		PresenterTests,
 		cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
 	) {
 		view.setLeftDslPrescriptionFilePath("a");
