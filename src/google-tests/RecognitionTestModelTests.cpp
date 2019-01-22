@@ -65,6 +65,31 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
+		initializeTestDocumentsTestParameters
+	) {
+		testParameters.leftDslPrescriptionFilePath = "a";
+		testParameters.rightDslPrescriptionFilePath = "b";
+		testParameters.brirFilePath = "c";
+		testParameters.attack_ms = 1;
+		testParameters.release_ms = 2;
+		testParameters.windowSize = 3;
+		testParameters.chunkSize = 4;
+		initializeTest();
+		assertEqual(
+			"DSL prescription\n"
+			"    left: a\n"
+			"    right: b\n"
+			"BRIR: c\n"
+			"attack (ms): 1\n"
+			"release (ms): 2\n"
+			"window size (samples): 3\n"
+			"chunk size (samples): 4\n\n", 
+			documenter.content()
+		);
+	}
+
+	TEST_F(
+		RecognitionTestModelTests,
 		playTrialPassesNextStimulusToStimulusPlayer
 	) {
 		list.setNext("a");
