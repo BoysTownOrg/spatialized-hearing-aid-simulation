@@ -168,6 +168,7 @@ std::string FltkView::browseForSavingFile(std::vector<std::string> filters) {
 	Fl_Native_File_Chooser chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 	chooser.filter(formatFilters(std::move(filters)).c_str());
+	chooser.options(Fl_Native_File_Chooser::SAVEAS_CONFIRM | Fl_Native_File_Chooser::USE_FILTER_EXT);
 	browseResult = chooser.show();
 	return chooser.filename();
 }
