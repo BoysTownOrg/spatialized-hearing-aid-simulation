@@ -65,6 +65,21 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
+		initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
+	) {
+		documenter.fail();
+		documenter.setErrorMessage("error.");
+		try {
+			initializeTest();
+			FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+		}
+		catch (const RecognitionTestModel::TestInitializationFailure &e) {
+			assertEqual("error.", e.what());
+		}
+	}
+
+	TEST_F(
+		RecognitionTestModelTests,
 		initializeTestDocumentsTestParameters
 	) {
 		testParameters.subjectId = "a";
