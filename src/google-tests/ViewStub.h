@@ -73,8 +73,9 @@ public:
 	}
 
 	std::string browseForSavingFile(
-		std::vector<std::string>
+		std::vector<std::string> filters
 	) override {
+		browseFilters_ = std::move(filters);
 		return browseFilePath_;
 	}
 

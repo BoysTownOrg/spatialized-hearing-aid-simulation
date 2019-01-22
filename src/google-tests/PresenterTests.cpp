@@ -216,6 +216,14 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		saveAsTestFileFiltersTextFiles
+	) {
+		view.browseForTestFile();
+		assertEqual({ "*.txt" }, view.browseFilters());
+	}
+
+	TEST_F(
+		PresenterTests,
 		saveAsTestFileUpdatesTestFilePath
 	) {
 		view.setBrowseFilePath("a");
