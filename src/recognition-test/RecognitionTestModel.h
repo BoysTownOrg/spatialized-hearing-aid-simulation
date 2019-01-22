@@ -2,6 +2,7 @@
 
 #include "StimulusList.h"
 #include "StimulusPlayer.h"
+#include "Documenter.h"
 #include <presentation/Model.h>
 
 #ifdef RECOGNITION_TEST_EXPORTS
@@ -16,7 +17,8 @@ class RecognitionTestModel : public Model {
 public:
 	RECOGNITION_TEST_API RecognitionTestModel(
 		StimulusList *,
-		StimulusPlayer *
+		StimulusPlayer *,
+		Documenter *
 	);
 	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;

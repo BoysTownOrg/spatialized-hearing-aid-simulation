@@ -14,6 +14,7 @@ public:
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
 		std::string audioDirectory;
+		std::string testFilePath;
 		double attack_ms;
 		double release_ms;
 		int windowSize;

@@ -1,6 +1,7 @@
 #include "assert-utility.h"
 #include "StimulusPlayerStub.h"
 #include "StimulusListStub.h"
+#include "DocumenterStub.h"
 #include <recognition-test/RecognitionTestModel.h>
 #include <gtest/gtest.h>
 
@@ -10,7 +11,8 @@ namespace {
 		RecognitionTestModel::TestParameters testParameters;
 		StimulusListStub list{};
 		StimulusPlayerStub player{};
-		RecognitionTestModel model{ &list, &player };
+		DocumenterStub documenter{};
+		RecognitionTestModel model{ &list, &player, &documenter };
 
 		void initializeTest() {
 			model.initializeTest(testParameters);
@@ -116,7 +118,8 @@ namespace {
 	protected:
 		StimulusListStub list{};
 		RequestFailingStimulusPlayer player{};
-		RecognitionTestModel model{ &list, &player };
+		DocumenterStub documenter{};
+		RecognitionTestModel model{ &list, &player, &documenter };
 
 		void assertPlayTrialThrowsTrialFailure(std::string what) {
 			try {
@@ -141,7 +144,8 @@ namespace {
 	protected:
 		StimulusListStub list{};
 		InitializationFailingStimulusPlayer player{};
-		RecognitionTestModel model{ &list, &player };
+		DocumenterStub documenter{};
+		RecognitionTestModel model{ &list, &player, &documenter };
 
 		void assertInitializeTestThrowsInitializationFailure(std::string what) {
 			try {

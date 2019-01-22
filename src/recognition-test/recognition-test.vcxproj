@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Documenter.h" />
     <ClInclude Include="RecognitionTestModel.h" />
     <ClInclude Include="StimulusList.h" />
     <ClInclude Include="StimulusPlayer.h" />

@@ -2,7 +2,8 @@
 
 RecognitionTestModel::RecognitionTestModel(
 	StimulusList *list,
-	StimulusPlayer *player
+	StimulusPlayer *player,
+	Documenter *
 ) :
 	list{ list },
 	player{ player } {}

@@ -101,5 +101,8 @@
     <ClInclude Include="ModelStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DocumenterStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
