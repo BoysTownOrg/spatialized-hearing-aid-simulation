@@ -36,6 +36,8 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 }
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
+	if (documenter->failed())
+		throw TestInitializationFailure{ documenter->errorMessage() };
 	documenter->initialize(std::move(testFilePath));
 }
 
