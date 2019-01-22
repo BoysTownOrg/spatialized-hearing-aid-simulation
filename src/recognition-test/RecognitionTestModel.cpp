@@ -40,11 +40,18 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 }
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
-	documenter->writeLine("DSL prescription");
-	documenter->writeLine("    left: " + p.leftDslPrescriptionFilePath);
-	documenter->writeLine("    right: " + p.rightDslPrescriptionFilePath);
-	documenter->writeLine("BRIR: " + p.brirFilePath);
 	std::stringstream stream;
+	stream << "DSL prescription";
+	stream << '\n';
+	stream << "    left: ";
+	stream << p.leftDslPrescriptionFilePath;
+	stream << '\n';
+	stream << "    right: ";
+	stream << p.rightDslPrescriptionFilePath;
+	stream << '\n';
+	stream << "BRIR: ";
+	stream << p.brirFilePath;
+	stream << '\n';
 	stream << "attack (ms): ";
 	stream << std::fixed;
 	stream << std::setprecision(1);
@@ -52,9 +59,13 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	stream << '\n';
 	stream << "release (ms): ";
 	stream << p.release_ms;
+	stream << '\n';
+	stream << "window size (samples): ";
+	stream << p.windowSize;
+	stream << '\n';
+	stream << "chunk size (samples): ";
+	stream << p.chunkSize;
 	documenter->writeLine(stream.str());
-	documenter->writeLine("window size (samples): " + std::to_string(p.windowSize));
-	documenter->writeLine("chunk size (samples): " + std::to_string(p.chunkSize));
 	documenter->writeLine("");
 }
 
