@@ -22,9 +22,9 @@ public:
 		return content_.str();
 	}
 
-	void writeLine(std::string s) override {
-		content_ << std::move(s) << '\n';
-		log_ += LogString{ "writeLine " };
+	void write(std::string s) override {
+		content_ << std::move(s);
+		log_ += LogString{ "write " };
 	}
 
 	LogString log() const {
@@ -55,5 +55,5 @@ public:
 		return errorMessage_;
 	}
 
-	void writeLine(std::string) override {}
+	void write(std::string) override {}
 };

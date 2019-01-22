@@ -63,7 +63,7 @@ public:
 		insertLabeledParameterLine(std::move(label), std::move(p));
 	}
 
-	void insertLine(std::string s) {
+	void insertLine(std::string s = {}) {
 		stream << std::move(s) << '\n';
 	}
 
@@ -86,7 +86,8 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	stream.insertLabeledParameterLine("release (ms)", p.release_ms);
 	stream.insertLabeledParameterLine("window size (samples)", p.windowSize);
 	stream.insertLabeledParameterLine("chunk size (samples)", p.chunkSize);
-	documenter->writeLine(stream.str());
+	stream.insertLine();
+	documenter->write(stream.str());
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {

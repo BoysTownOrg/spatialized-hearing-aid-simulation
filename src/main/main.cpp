@@ -75,7 +75,7 @@ public:
 		file.open(filePath);
 	}
 
-	void writeLine(std::string s) override {
+	void write(std::string s) override {
 		file << s;
 		file << '\n';
 	}
