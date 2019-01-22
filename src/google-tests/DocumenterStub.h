@@ -8,4 +8,8 @@ public:
 	std::string filePath() const {
 		return filePath_;
 	}
+
+	void initialize(std::string filePath) override {
+		filePath_ = std::move(filePath);
+	}
 };

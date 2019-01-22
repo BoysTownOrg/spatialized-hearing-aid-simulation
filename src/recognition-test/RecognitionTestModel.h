@@ -14,6 +14,7 @@
 class RecognitionTestModel : public Model {
 	StimulusList *list;
 	StimulusPlayer *player;
+	Documenter *documenter;
 public:
 	RECOGNITION_TEST_API RecognitionTestModel(
 		StimulusList *,
@@ -29,6 +30,7 @@ private:
 	void initializeTest_(TestParameters);
 	void initializeStimulusPlayer(TestParameters);
 	void initializeStimulusList(std::string directory);
+	void initializeDocumenter(std::string testFilePath);
 	void playTrial_(TrialParameters);
 	void playNextStimulus(TrialParameters);
 };

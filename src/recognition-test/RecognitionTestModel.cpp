@@ -3,10 +3,11 @@
 RecognitionTestModel::RecognitionTestModel(
 	StimulusList *list,
 	StimulusPlayer *player,
-	Documenter *
+	Documenter *documenter
 ) :
 	list{ list },
-	player{ player } {}
+	player{ player },
+	documenter{ documenter } {}
 
 bool RecognitionTestModel::testComplete() {
 	return list->empty();
@@ -23,11 +24,16 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 
 void RecognitionTestModel::initializeTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory); 
+	initializeDocumenter(p.testFilePath);
 	initializeStimulusPlayer(std::move(p));
 }
 
 void RecognitionTestModel::initializeStimulusList(std::string directory) {
 	list->initialize(std::move(directory));
+}
+
+void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
+	documenter->initialize(testFilePath);
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
