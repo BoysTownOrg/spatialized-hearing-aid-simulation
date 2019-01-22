@@ -40,6 +40,14 @@ public:
 		testerId_ = std::move(s);
 	}
 
+	std::string subjectId() override {
+		return subjectId_;
+	}
+
+	std::string testerId() override {
+		return testerId_;
+	}
+
 	void subscribe(EventListener * listener) override {
 		listener_ = listener;
 	}
@@ -94,7 +102,7 @@ public:
 		testFilePath_ = std::move(p);
 	}
 
-	std::string testFilePath() {
+	std::string testFilePath() override {
 		return testFilePath_;
 	}
 
