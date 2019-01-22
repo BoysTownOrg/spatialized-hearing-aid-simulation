@@ -9,6 +9,7 @@ namespace {
 	class RecognitionTestModelTests : public ::testing::Test {
 	protected:
 		RecognitionTestModel::TestParameters testParameters;
+		RecognitionTestModel::TrialParameters trial;
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
@@ -18,8 +19,8 @@ namespace {
 			model.initializeTest(testParameters);
 		}
 
-		void playTrial(Model::TrialParameters p = {}) {
-			model.playTrial(std::move(p));
+		void playTrial() {
+			model.playTrial(trial);
 		}
 	};
 
@@ -114,10 +115,9 @@ namespace {
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialPassesRequestToPlayer) {
-		RecognitionTestModel::TrialParameters trial;
 		trial.audioDevice = "a";
 		trial.level_dB_Spl = 1;
-		playTrial(trial);
+		playTrial();
 		EXPECT_EQ(1, player.request().level_dB_Spl);
 		assertEqual("a", player.request().audioDevice);
 	}
@@ -155,9 +155,8 @@ namespace {
 		playTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
-		RecognitionTestModel::TrialParameters trial;
 		trial.level_dB_Spl = 1;
-		playTrial(trial);
+		playTrial();
 		assertEqual(
 			"stimulus: a\n"
 			"level (dB SPL): 1\n\n", 
