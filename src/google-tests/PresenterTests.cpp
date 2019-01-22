@@ -267,6 +267,14 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		browseForBrirFiltersWavFiles
+	) {
+		view.browseForBrir();
+		assertEqual({ "*.wav" }, view.browseFilters());
+	}
+
+	TEST_F(
+		PresenterTests,
 		browseForTestFileUpdatesTestFilePath
 	) {
 		view.setBrowseFilePath("a");
@@ -293,14 +301,6 @@ namespace {
 		view.setBrowseDirectory("a");
 		view.browseForAudio();
 		assertEqual("a", view.audioDirectory());
-	}
-
-	TEST_F(
-		PresenterTests,
-		browseForBrirFiltersWavFiles
-	) {
-		view.browseForBrir();
-		assertEqual({ "*.wav" }, view.browseFilters());
 	}
 
 	TEST_F(
