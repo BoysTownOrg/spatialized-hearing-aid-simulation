@@ -10,6 +10,8 @@ public:
 	INTERFACE_OPERATIONS(Model);
 
 	struct TestParameters {
+		std::string subjectId;
+		std::string testerId;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
