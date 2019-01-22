@@ -132,7 +132,7 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
-		playTrialDocumentsTrial
+		DISABLED_playTrialDocumentsTrial
 	) {
 		list.setNext("a");
 		RecognitionTestModel::TrialParameters trial;
