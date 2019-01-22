@@ -132,6 +132,21 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
+		playTrialDocumentsTrial
+	) {
+		list.setNext("a");
+		RecognitionTestModel::TrialParameters trial;
+		trial.level_dB_Spl = 1;
+		playTrial();
+		assertEqual(
+			"stimulus: a\n"
+			"level (dB SPL): 1\n\n", 
+			documenter.content()
+		);
+	}
+
+	TEST_F(
+		RecognitionTestModelTests,
 		testCompleteWhenListEmpty
 	) {
 		list.setEmpty();
