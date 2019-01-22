@@ -80,8 +80,8 @@ namespace {
 			"    left: a\n"
 			"    right: b\n"
 			"BRIR: c\n"
-			"attack (ms): 1\n"
-			"release (ms): 2\n"
+			"attack (ms): 1.0\n"
+			"release (ms): 2.0\n"
 			"window size (samples): 3\n"
 			"chunk size (samples): 4\n\n", 
 			documenter.content()

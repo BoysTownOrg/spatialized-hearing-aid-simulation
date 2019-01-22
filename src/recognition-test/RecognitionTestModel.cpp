@@ -1,4 +1,6 @@
 #include "RecognitionTestModel.h"
+#include <sstream>
+#include <iomanip>
 
 RecognitionTestModel::RecognitionTestModel(
 	StimulusList *list,
@@ -37,15 +39,22 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
 }
 
-void RecognitionTestModel::documentTestParameters(TestParameters) {
+void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	documenter->writeLine("DSL prescription");
-	documenter->writeLine("    left: a");
-	documenter->writeLine("    right: b");
-	documenter->writeLine("BRIR: c");
-	documenter->writeLine("attack (ms): 1");
-	documenter->writeLine("release (ms): 2");
-	documenter->writeLine("window size (samples): 3");
-	documenter->writeLine("chunk size (samples): 4");
+	documenter->writeLine("    left: " + p.leftDslPrescriptionFilePath);
+	documenter->writeLine("    right: " + p.rightDslPrescriptionFilePath);
+	documenter->writeLine("BRIR: " + p.brirFilePath);
+	std::stringstream stream;
+	stream << "attack (ms): ";
+	stream << std::fixed;
+	stream << std::setprecision(1);
+	stream << p.attack_ms;
+	stream << '\n';
+	stream << "release (ms): ";
+	stream << p.release_ms;
+	documenter->writeLine(stream.str());
+	documenter->writeLine("window size (samples): " + std::to_string(p.windowSize));
+	documenter->writeLine("chunk size (samples): " + std::to_string(p.chunkSize));
 	documenter->writeLine("");
 }
 
