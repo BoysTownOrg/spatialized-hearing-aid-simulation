@@ -23,6 +23,8 @@ void Presenter::run() {
 	view->runEventLoop();
 }
 
+void Presenter::browseForTestFile() {}
+
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForFile({ "*.json" }), 

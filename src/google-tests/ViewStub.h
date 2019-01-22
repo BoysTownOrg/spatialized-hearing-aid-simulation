@@ -7,6 +7,7 @@ class ViewStub : public View {
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
+	std::string testFilePath_{};
 	std::string audioDirectory_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
@@ -51,6 +52,10 @@ public:
 		return browseFilePath_;
 	}
 
+	void setTestFilePath(std::string p) {
+		testFilePath_ = std::move(p);
+	}
+
 	void setBrowseFilePath(std::string p) {
 		browseFilePath_ = std::move(p);
 	}
@@ -63,8 +68,16 @@ public:
 		browseCancelled_ = true;
 	}
 
+	void browseForTestFile() {
+		listener_->browseForTestFile();
+	}
+
 	void browseForLeftDslPrescription() {
 		listener_->browseForLeftDslPrescription();
+	}
+
+	std::string testFilePath() {
+		return testFilePath_;
 	}
 
 	void setLeftDslPrescriptionFilePath(std::string p) override {
