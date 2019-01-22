@@ -7,11 +7,6 @@ class ViewStub : public View {
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
-	std::string testFilePath_{};
-	std::string audioDirectory_{};
-	std::string leftDslPrescriptionFilePath_{};
-	std::string rightDslPrescriptionFilePath_{};
-	std::string brirFilePath_{};
 	std::string audioDevice_{};
 	std::string level_dB_Spl_{ "0" };
 	std::string attack_ms_{ "0" };
@@ -29,6 +24,12 @@ class ViewStub : public View {
 	bool testerViewShown_{};
 	bool testerViewHidden_{};
 public:
+	std::string testFilePath_{};
+	std::string audioDirectory_{};
+	std::string leftDslPrescriptionFilePath_{};
+	std::string rightDslPrescriptionFilePath_{};
+	std::string brirFilePath_{};
+
 	void subscribe(EventListener * listener) override {
 		listener_ = listener;
 	}

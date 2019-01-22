@@ -11,6 +11,16 @@ namespace {
 		ViewStub view;
 		Presenter presenter{ &model, &view };
 
+		void assertCancellingBrowseDoesNotChangePath(
+			std::string expected, 
+			std::string &path, 
+			void(ViewStub::*browse)()
+		) {
+			view.setBrowseCancelled();
+			(view.*browse)();
+			assertEqual(expected, path);
+		}
+
 		void setInvalidChunkSize() {
 			view.setChunkSize("?");
 		}
@@ -208,10 +218,47 @@ namespace {
 		PresenterTests,
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
-		view.setTestFilePath("a");
+		view.testFilePath_ = "a";
+		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForTestFile);
+	}
+
+	TEST_F(
+		PresenterTests,
+		cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
+	) {
+		view.leftDslPrescriptionFilePath_ = "a";
+		view.rightDslPrescriptionFilePath_ = "b";
+		assertCancellingBrowseDoesNotChangePath(
+			"a", 
+			view.leftDslPrescriptionFilePath_, 
+			&ViewStub::browseForLeftDslPrescription
+		);
+		assertCancellingBrowseDoesNotChangePath(
+			"b", 
+			view.rightDslPrescriptionFilePath_, 
+			&ViewStub::browseForRightDslPrescription
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
+	) {
+		view.setAudioDirectory("a");
 		view.setBrowseCancelled();
-		view.browseForTestFile();
-		assertEqual("a", view.testFilePath());
+		view.browseForAudio();
+		assertEqual("a", view.audioDirectory());
+	}
+
+
+	TEST_F(
+		PresenterTests,
+		cancellingBrowseForBrirDoesNotChangeBrirFilePath
+	) {
+		view.setBrirFilePath("a");
+		view.setBrowseCancelled();
+		view.browseForBrir();
+		assertEqual("a", view.brirFilePath());
 	}
 
 	TEST_F(
@@ -233,19 +280,6 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
-	) {
-		view.setLeftDslPrescriptionFilePath("a");
-		view.setRightDslPrescriptionFilePath("b");
-		view.setBrowseCancelled();
-		view.browseForLeftDslPrescription();
-		assertEqual("a", view.leftDslPrescriptionFilePath());
-		view.browseForRightDslPrescription();
-		assertEqual("b", view.rightDslPrescriptionFilePath());
-	}
-
-	TEST_F(
-		PresenterTests,
 		browseForDslPrescriptionUpdatesDslPrescriptionFilePath
 	) {
 		view.setBrowseFilePath("a");
@@ -258,32 +292,11 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
-	) {
-		view.setAudioDirectory("a");
-		view.setBrowseCancelled();
-		view.browseForAudio();
-		assertEqual("a", view.audioDirectory());
-	}
-
-	TEST_F(
-		PresenterTests,
 		browseForAudioDirectoryUpdatesAudioDirectory
 	) {
 		view.setBrowseDirectory("a");
 		view.browseForAudio();
 		assertEqual("a", view.audioDirectory());
-	}
-
-
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForBrirDoesNotChangeBrirFilePath
-	) {
-		view.setBrirFilePath("a");
-		view.setBrowseCancelled();
-		view.browseForBrir();
-		assertEqual("a", view.brirFilePath());
 	}
 
 	TEST_F(
