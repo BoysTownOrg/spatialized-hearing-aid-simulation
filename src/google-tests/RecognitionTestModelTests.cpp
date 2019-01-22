@@ -67,19 +67,23 @@ namespace {
 		RecognitionTestModelTests,
 		initializeTestDocumentsTestParameters
 	) {
-		testParameters.leftDslPrescriptionFilePath = "a";
-		testParameters.rightDslPrescriptionFilePath = "b";
-		testParameters.brirFilePath = "c";
+		testParameters.subjectId = "a";
+		testParameters.testerId = "b";
+		testParameters.leftDslPrescriptionFilePath = "c";
+		testParameters.rightDslPrescriptionFilePath = "d";
+		testParameters.brirFilePath = "e";
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.windowSize = 3;
 		testParameters.chunkSize = 4;
 		initializeTest();
 		assertEqual(
+			"subject: a\n"
+			"tester: b\n"
 			"DSL prescription\n"
-			"    left: a\n"
-			"    right: b\n"
-			"BRIR: c\n"
+			"    left: c\n"
+			"    right: d\n"
+			"BRIR: e\n"
 			"attack (ms): 1.0\n"
 			"release (ms): 2.0\n"
 			"window size (samples): 3\n"
