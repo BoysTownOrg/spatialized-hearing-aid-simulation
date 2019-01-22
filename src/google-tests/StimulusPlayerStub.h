@@ -29,8 +29,6 @@ public:
 	}
 
 	const PlayRequest &request() const {
-		if (failOnPlay_)
-			throw RequestFailure{ errorMessage };
 		return request_;
 	}
 
@@ -45,6 +43,8 @@ public:
 	void play(PlayRequest request) override {
 		request_ = std::move(request);
 		playCalled_ = true;
+		if (failOnPlay_)
+			throw RequestFailure{ errorMessage };
 	}
 
 	void setAudioDeviceDescriptions(std::vector<std::string> v) {

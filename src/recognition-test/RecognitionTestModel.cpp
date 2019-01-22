@@ -110,6 +110,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return; 
 	playTrial_(std::move(p));
+	failedOnLastPlayRequest = false;
 }
 
 void RecognitionTestModel::playTrial_(TrialParameters p) {
@@ -117,13 +118,17 @@ void RecognitionTestModel::playTrial_(TrialParameters p) {
 		playNextStimulus(p);
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
+		failedOnLastPlayRequest = true;
 		throw TrialFailure{ e.what() };
 	}
 }
 
 void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	StimulusPlayer::PlayRequest request;
-	request.audioFilePath = list->next();
+	if (failedOnLastPlayRequest)
+		request.audioFilePath = currentStimulus_;
+	else
+		request.audioFilePath = currentStimulus_ = list->next();
 	request.audioDevice = p.audioDevice;
 	request.level_dB_Spl = p.level_dB_Spl;
 	player->play(std::move(request));

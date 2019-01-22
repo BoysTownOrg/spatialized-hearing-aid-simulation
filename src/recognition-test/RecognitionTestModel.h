@@ -12,9 +12,11 @@
 #endif
 
 class RecognitionTestModel : public Model {
+	std::string currentStimulus_{};
 	StimulusList *list;
 	StimulusPlayer *player;
 	Documenter *documenter;
+	bool failedOnLastPlayRequest{};
 public:
 	RECOGNITION_TEST_API RecognitionTestModel(
 		StimulusList *,
