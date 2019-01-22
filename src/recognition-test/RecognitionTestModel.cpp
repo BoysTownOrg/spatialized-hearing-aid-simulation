@@ -42,26 +42,27 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 class FormattedStream {
 	std::stringstream stream{};
 public:
-	void putFixed() {
+	void insertFixed() {
 		stream << std::fixed;
 	}
 
-	void putPrecision(std::streamsize n) {
+	void insertPrecision(std::streamsize n) {
 		stream << std::setprecision(n);
 	}
 
 	template<typename T>
-	void putLabeledParameter(std::string label, T p) {
-		stream << label << ": " << p;
+	void insertLabeledParameterLine(std::string label, T p) {
+		stream << std::move(label) << ": " << std::move(p) << '\n';
 	}
 
 	template<typename T>
-	void putIndentedLabeledParameter(std::string label, T p) {
-		stream << "    " << label << ": " << p;
+	void insertIndentedLabeledParameterLine(std::string label, T p) {
+		stream << "    ";
+		insertLabeledParameterLine(std::move(label), std::move(p));
 	}
 
-	void putLine(std::string s) {
-		stream << s << '\n';
+	void insertLine(std::string s) {
+		stream << std::move(s) << '\n';
 	}
 
 	std::string str() {
@@ -71,23 +72,16 @@ public:
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	FormattedStream stream;
-	stream.putLine("DSL prescription");
-	stream.putIndentedLabeledParameter("left", p.leftDslPrescriptionFilePath);
-	stream.putLine("");
-	stream.putIndentedLabeledParameter("right", p.rightDslPrescriptionFilePath);
-	stream.putLine("");
-	stream.putLabeledParameter("BRIR", p.brirFilePath);
-	stream.putLine("");
-	stream.putFixed();
-	stream.putPrecision(1);
-	stream.putLabeledParameter("attack (ms)", p.attack_ms);
-	stream.putLine("");
-	stream.putLabeledParameter("release (ms)", p.release_ms);
-	stream.putLine("");
-	stream.putLabeledParameter("window size (samples)", p.windowSize);
-	stream.putLine("");
-	stream.putLabeledParameter("chunk size (samples)", p.chunkSize);
-	stream.putLine("");
+	stream.insertLine("DSL prescription");
+	stream.insertIndentedLabeledParameterLine("left", p.leftDslPrescriptionFilePath);
+	stream.insertIndentedLabeledParameterLine("right", p.rightDslPrescriptionFilePath);
+	stream.insertLabeledParameterLine("BRIR", p.brirFilePath);
+	stream.insertFixed();
+	stream.insertPrecision(1);
+	stream.insertLabeledParameterLine("attack (ms)", p.attack_ms);
+	stream.insertLabeledParameterLine("release (ms)", p.release_ms);
+	stream.insertLabeledParameterLine("window size (samples)", p.windowSize);
+	stream.insertLabeledParameterLine("chunk size (samples)", p.chunkSize);
 	documenter->writeLine(stream.str());
 }
 
