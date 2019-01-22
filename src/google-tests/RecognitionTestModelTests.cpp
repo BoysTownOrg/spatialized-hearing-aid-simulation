@@ -177,32 +177,6 @@ namespace {
 		assertInitializeTestThrowsInitializationFailure("error.");
 	}
 
-	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
-	protected:
-		StimulusListStub list{};
-		RequestFailingStimulusPlayer player{};
-		DocumenterStub documenter{};
-		RecognitionTestModel model{ &list, &player, &documenter };
-
-		void assertPlayTrialThrowsTrialFailure(std::string what) {
-			try {
-				model.playTrial({});
-				FAIL() << "Expected RecognitionTestModel::TrialFailure";
-			}
-			catch (const RecognitionTestModel::TrialFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-	};
-
-	TEST_F(
-		RecognitionTestModelWithRequestFailingStimulusPlayer,
-		playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
-	) {
-		player.setErrorMessage("error.");
-		assertPlayTrialThrowsTrialFailure("error.");
-	}
-
 	class RecognitionTestModelWithInitializationFailingStimulusPlayer : public ::testing::Test {
 	protected:
 		StimulusListStub list{};
@@ -227,5 +201,31 @@ namespace {
 	) {
 		player.setErrorMessage("error.");
 		assertInitializeTestThrowsInitializationFailure("error.");
+	}
+
+	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
+	protected:
+		StimulusListStub list{};
+		RequestFailingStimulusPlayer player{};
+		DocumenterStub documenter{};
+		RecognitionTestModel model{ &list, &player, &documenter };
+
+		void assertPlayTrialThrowsTrialFailure(std::string what) {
+			try {
+				model.playTrial({});
+				FAIL() << "Expected RecognitionTestModel::TrialFailure";
+			}
+			catch (const RecognitionTestModel::TrialFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
+	};
+
+	TEST_F(
+		RecognitionTestModelWithRequestFailingStimulusPlayer,
+		playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+	) {
+		player.setErrorMessage("error.");
+		assertPlayTrialThrowsTrialFailure("error.");
 	}
 }
