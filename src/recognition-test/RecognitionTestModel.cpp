@@ -33,7 +33,7 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 }
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
-	documenter->initialize(testFilePath);
+	documenter->initialize(std::move(testFilePath));
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
