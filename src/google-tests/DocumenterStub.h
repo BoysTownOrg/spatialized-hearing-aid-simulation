@@ -1,10 +1,11 @@
 #pragma once
 
 #include <recognition-test/Documenter.h>
+#include <sstream>
 
 class DocumenterStub : public Documenter {
 	std::string filePath_{};
-	std::string content_{};
+	std::stringstream content_{};
 public:
 	std::string filePath() const {
 		return filePath_;
@@ -15,10 +16,10 @@ public:
 	}
 
 	std::string content() const {
-		return content_;
+		return content_.str();
 	}
 
 	void writeLine(std::string s) override {
-		content_ += s + '\n';
+		content_ << std::move(s) << '\n';
 	}
 };
