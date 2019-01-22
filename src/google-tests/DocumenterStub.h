@@ -4,6 +4,7 @@
 
 class DocumenterStub : public Documenter {
 	std::string filePath_{};
+	std::string content_{};
 public:
 	std::string filePath() const {
 		return filePath_;
@@ -11,5 +12,9 @@ public:
 
 	void initialize(std::string filePath) override {
 		filePath_ = std::move(filePath);
+	}
+
+	std::string content() const {
+		return content_;
 	}
 };
