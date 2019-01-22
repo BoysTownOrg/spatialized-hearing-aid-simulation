@@ -109,7 +109,8 @@ void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
 void RecognitionTestModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return; 
-	playTrial_(std::move(p));
+	playTrial_(p);
+	documentTrialParameters(std::move(p));
 	failedOnLastPlayRequest = false;
 }
 
@@ -132,6 +133,14 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	request.audioDevice = p.audioDevice;
 	request.level_dB_Spl = p.level_dB_Spl;
 	player->play(std::move(request));
+}
+
+void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
+	FormattedStream stream;
+	stream.insertLabeledParameterLine("stimulus", currentStimulus_);
+	stream.insertLabeledParameterLine("level (dB SPL)", 0);
+	stream.insertLine();
+	documenter->write(stream.str());
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
