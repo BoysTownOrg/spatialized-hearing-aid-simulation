@@ -72,6 +72,8 @@ public:
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	FormattedStream stream;
+	stream.insertLabeledParameterLine("subject", p.subjectId);
+	stream.insertLabeledParameterLine("tester", p.testerId);
 	stream.insertLine("DSL prescription");
 	stream.insertIndentedLabeledParameterLine("left", p.leftDslPrescriptionFilePath);
 	stream.insertIndentedLabeledParameterLine("right", p.rightDslPrescriptionFilePath);
