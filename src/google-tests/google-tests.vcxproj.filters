@@ -92,9 +92,6 @@
     <ClInclude Include="StimulusPlayerStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StimulusListStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ViewStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DocumenterStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeStimulusList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

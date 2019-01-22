@@ -182,7 +182,7 @@
     <ClInclude Include="LogString.h" />
     <ClInclude Include="ModelStub.h" />
     <ClInclude Include="SignalProcessorStub.h" />
-    <ClInclude Include="StimulusListStub.h" />
+    <ClInclude Include="FakeStimulusList.h" />
     <ClInclude Include="StimulusPlayerStub.h" />
     <ClInclude Include="ViewStub.h" />
   </ItemGroup>

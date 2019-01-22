@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "StimulusPlayerStub.h"
-#include "StimulusListStub.h"
+#include "FakeStimulusList.h"
 #include "DocumenterStub.h"
 #include <recognition-test/RecognitionTestModel.h>
 #include <gtest/gtest.h>
@@ -9,7 +9,7 @@ namespace {
 	class RecognitionTestModelTests : public ::testing::Test {
 	protected:
 		RecognitionTestModel::TestParameters testParameters;
-		StimulusListStub list{};
+		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
 		RecognitionTestModel model{ &list, &player, &documenter };
@@ -104,9 +104,13 @@ namespace {
 		RecognitionTestModelTests,
 		playTrialPassesNextStimulusToStimulusPlayer
 	) {
-		list.setNext("a");
+		list.setContents({ "a", "b", "c" });
 		playTrial();
 		assertEqual("a", player.request().audioFilePath);
+		playTrial();
+		assertEqual("b", player.request().audioFilePath);
+		playTrial();
+		assertEqual("c", player.request().audioFilePath);
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialPassesRequestToPlayer) {
@@ -119,9 +123,11 @@ namespace {
 	}
 
 	TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
+		list.setContents({ "a", "b", "c" });
+		playTrial();
 		player.setPlaying();
 		playTrial();
-		EXPECT_FALSE(list.nextCalled());
+		assertEqual("a", player.request().audioFilePath);
 	}
 
 	TEST_F(RecognitionTestModelTests, DISABLED_playTrialDoesNotAdvanceListWhenPlayerFails) {
@@ -138,7 +144,7 @@ namespace {
 		RecognitionTestModelTests,
 		DISABLED_playTrialDocumentsTrial
 	) {
-		list.setNext("a");
+		list.setContents({ "a", "b", "c" });
 		RecognitionTestModel::TrialParameters trial;
 		trial.level_dB_Spl = 1;
 		playTrial();
@@ -153,7 +159,7 @@ namespace {
 		RecognitionTestModelTests,
 		testCompleteWhenListEmpty
 	) {
-		list.setEmpty();
+		list.setContents({});
 		EXPECT_TRUE(model.testComplete());
 	}
 
@@ -172,7 +178,7 @@ namespace {
 
 	class RecognitionTestModelWithInitializationFailingDocumenter : public ::testing::Test {
 	protected:
-		StimulusListStub list{};
+		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		InitializationFailingDocumenter documenter{};
 		RecognitionTestModel model{ &list, &player, &documenter };
@@ -198,7 +204,7 @@ namespace {
 
 	class RecognitionTestModelWithInitializationFailingStimulusPlayer : public ::testing::Test {
 	protected:
-		StimulusListStub list{};
+		FakeStimulusList list{};
 		InitializationFailingStimulusPlayer player{};
 		DocumenterStub documenter{};
 		RecognitionTestModel model{ &list, &player, &documenter };
@@ -224,7 +230,7 @@ namespace {
 
 	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
 	protected:
-		StimulusListStub list{};
+		FakeStimulusList list{};
 		RequestFailingStimulusPlayer player{};
 		DocumenterStub documenter{};
 		RecognitionTestModel model{ &list, &player, &documenter };
