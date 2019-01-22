@@ -34,6 +34,14 @@ public:
 		return request_;
 	}
 
+	void failOnPlay() {
+		failOnPlay_ = true;
+	}
+
+	void dontFailOnPlay() {
+		failOnPlay_ = false;
+	}
+
 	void play(PlayRequest request) override {
 		request_ = std::move(request);
 		playCalled_ = true;
