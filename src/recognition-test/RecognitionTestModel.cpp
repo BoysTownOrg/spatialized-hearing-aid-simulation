@@ -36,9 +36,9 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 }
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
+	documenter->initialize(std::move(testFilePath));
 	if (documenter->failed())
 		throw TestInitializationFailure{ documenter->errorMessage() };
-	documenter->initialize(std::move(testFilePath));
 }
 
 class FormattedStream {

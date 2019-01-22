@@ -6,10 +6,8 @@
 
 class DocumenterStub : public Documenter {
 	std::string filePath_{};
-	std::string errorMessage_{};
 	std::stringstream content_{};
 	LogString log_{};
-	bool failed_{};
 public:
 	std::string filePath() const {
 		return filePath_;
@@ -33,21 +31,8 @@ public:
 		return log_;
 	}
 
-	void setErrorMessage(std::string s) {
-		errorMessage_ = std::move(s);
-	}
-
-	void fail() {
-		failed_ = true;
-	}
-
-	bool failed() override {
-		return failed_;
-	}
-
-	std::string errorMessage() override {
-		return errorMessage_;
-	}
+	bool failed() override { return {}; }
+	std::string errorMessage() override { return {}; }
 };
 
 class InitializationFailingDocumenter : public Documenter {
