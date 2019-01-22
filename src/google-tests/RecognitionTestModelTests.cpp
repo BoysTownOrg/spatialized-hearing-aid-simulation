@@ -152,7 +152,7 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
-		DISABLED_playTrialDocumentsTrial
+		playTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
 		RecognitionTestModel::TrialParameters trial;
