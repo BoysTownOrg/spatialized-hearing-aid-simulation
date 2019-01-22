@@ -206,7 +206,7 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		cancellingSaveAsTestFileDoesNotChangeTestFilePath
+		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.setTestFilePath("a");
 		view.setBrowseCancelled();
@@ -216,7 +216,7 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		saveAsTestFileFiltersTextFiles
+		browseForTestFileFiltersTextFiles
 	) {
 		view.browseForTestFile();
 		assertEqual({ "*.txt" }, view.browseFilters());
@@ -224,7 +224,7 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		saveAsTestFileUpdatesTestFilePath
+		browseForTestFileUpdatesTestFilePath
 	) {
 		view.setBrowseFilePath("a");
 		view.browseForTestFile();
