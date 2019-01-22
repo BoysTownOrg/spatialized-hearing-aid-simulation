@@ -244,10 +244,8 @@ namespace {
 		PresenterTests,
 		cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
 	) {
-		view.setAudioDirectory("a");
-		view.setBrowseCancelled();
-		view.browseForAudio();
-		assertEqual("a", view.audioDirectory());
+		view.audioDirectory_ = "a";
+		assertCancellingBrowseDoesNotChangePath("a", view.audioDirectory_, &ViewStub::browseForAudio);
 	}
 
 
@@ -255,10 +253,8 @@ namespace {
 		PresenterTests,
 		cancellingBrowseForBrirDoesNotChangeBrirFilePath
 	) {
-		view.setBrirFilePath("a");
-		view.setBrowseCancelled();
-		view.browseForBrir();
-		assertEqual("a", view.brirFilePath());
+		view.brirFilePath_ = "a";
+		assertCancellingBrowseDoesNotChangePath("a", view.brirFilePath_, &ViewStub::browseForBrir);
 	}
 
 	TEST_F(
