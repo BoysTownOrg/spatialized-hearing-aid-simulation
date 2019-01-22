@@ -49,3 +49,26 @@ public:
 		return errorMessage_;
 	}
 };
+
+class InitializationFailingDocumenter : public Documenter {
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	void initialize(std::string) override {
+		failed_ = true;
+	}
+
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+
+	void writeLine(std::string) override {}
+};

@@ -65,21 +65,6 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
-		initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
-	) {
-		documenter.fail();
-		documenter.setErrorMessage("error.");
-		try {
-			initializeTest();
-			FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-		}
-		catch (const RecognitionTestModel::TestInitializationFailure &e) {
-			assertEqual("error.", e.what());
-		}
-	}
-
-	TEST_F(
-		RecognitionTestModelTests,
 		initializeTestDocumentsTestParameters
 	) {
 		testParameters.subjectId = "a";
@@ -164,6 +149,32 @@ namespace {
 	TEST_F(RecognitionTestModelTests, preferredProcessingSizesReturnsThatOfTheAudioPlayer) {
 		player.setPreferredProcessingSizes({ 1, 2, 3 });
 		assertEqual({ 1, 2, 3 }, model.preferredProcessingSizes());
+	}
+
+	class RecognitionTestModelWithInitializationFailingDocumenter : public ::testing::Test {
+	protected:
+		StimulusListStub list{};
+		StimulusPlayerStub player{};
+		InitializationFailingDocumenter documenter{};
+		RecognitionTestModel model{ &list, &player, &documenter };
+
+		void assertInitializeTestThrowsInitializationFailure(std::string what) {
+			try {
+				model.initializeTest({});
+				FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+			}
+			catch (const RecognitionTestModel::TestInitializationFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
+	};
+
+	TEST_F(
+		RecognitionTestModelWithInitializationFailingDocumenter,
+		initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
+	) {
+		documenter.setErrorMessage("error.");
+		assertInitializeTestThrowsInitializationFailure("error.");
 	}
 
 	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
