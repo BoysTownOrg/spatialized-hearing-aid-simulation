@@ -66,6 +66,21 @@ public:
     }
 };
 
+#include <fstream>
+
+class FileSystemDocumenter : public Documenter {
+	std::ofstream file;
+public:
+	void initialize(std::string filePath) override {
+		file.open(filePath);
+	}
+
+	void writeLine(std::string s) override {
+		file << s;
+		file << '\n';
+	}
+};
+
 int main() {
 	WindowsDirectoryReader reader{};
 	FileFilterDecorator decorator{&reader, ".wav"};
@@ -89,7 +104,8 @@ int main() {
 	
 	AudioProcessingLoader loader{&frameReaderFactory, &processorFactory};
 	AudioPlayer player{&device, &loader};
-	RecognitionTestModel model{ &list, &player };
+	FileSystemDocumenter documenter;
+	RecognitionTestModel model{ &list, &player, &documenter };
 	FltkView view{};
 	Presenter presenter{ &model, &view };
 	presenter.run();

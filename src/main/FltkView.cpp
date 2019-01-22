@@ -11,6 +11,10 @@ void Fl_ChoiceFacade::populate(std::vector<std::string> items) {
 	value(0); // If the value is never set then FLTK crashes on read.
 }
 
+void FltkView::onBrowseTestFile(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->browseForTestFile();
+}
+
 void FltkView::onBrowseLeftPrescription(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->browseForLeftDslPrescription();
 }
@@ -37,19 +41,23 @@ void FltkView::onPlay(Fl_Widget *, void *self) {
 
 FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
-	_leftPrescriptionFilePath(250, 50, 200, 45, "left DSL prescription file path"),
-	_rightPrescriptionFilePath(250, 100, 200, 45, "right DSL prescription file path"),
-	audioDirectory_(250, 150, 200, 45, "audio directory"),
-	brirFilePath_(250, 200, 200, 45, "BRIR file path"),
-	browseLeftPrescription(460, 50, 60, 45, "browse"),
-	browseRightPrescription(460, 100, 60, 45, "browse"),
-	browseAudio(460, 150, 60, 45, "browse"),
-	browseBrir(460, 200, 60, 45, "browse"),
-	attack_ms_(250, 300, 200, 45, "attack (ms)"),
-	release_ms_(250, 350, 200, 45, "release (ms)"),
-	windowSize_(250, 400, 200, 45, "window size (samples)"),
-	chunkSize_(250, 450, 200, 45, "chunk size (samples)"),
-	confirm(250, 550, 60, 45, "confirm")
+	testFilePath_(250, 50, 200, 45, "test file path"),
+	browseTestFilePath(460, 50, 60, 45, "browse"),
+	subjectId_(250, 100, 200, 45, "subject ID"),
+	testerId_(250, 150, 200, 45, "tester ID"),
+	leftPrescriptionFilePath_(250, 200, 200, 45, "left DSL prescription file path"),
+	browseLeftPrescription(460, 200, 60, 45, "browse"),
+	rightPrescriptionFilePath_(250, 250, 200, 45, "right DSL prescription file path"),
+	browseRightPrescription(460, 250, 60, 45, "browse"),
+	audioDirectory_(250, 300, 200, 45, "audio directory"),
+	browseAudio(460, 300, 60, 45, "browse"),
+	brirFilePath_(250, 350, 200, 45, "BRIR file path"),
+	browseBrir(460, 350, 60, 45, "browse"),
+	attack_ms_(250, 400, 200, 45, "attack (ms)"),
+	release_ms_(250, 450, 200, 45, "release (ms)"),
+	windowSize_(250, 500, 200, 45, "window size (samples)"),
+	chunkSize_(250, 550, 200, 45, "chunk size (samples)"),
+	confirm(250, 600, 60, 45, "confirm")
 {
 	end();
 }
@@ -65,18 +73,19 @@ FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
 
 FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
-	testerView{ 0, 0, 600, 600 },
-	setupView{ 0, 0, 600, 600 }
+	testerView{ 0, 0, 600, 700 },
+	setupView{ 0, 0, 600, 700 }
 {
 	end();
 }
 
 FltkView::FltkView() :
-	window{ 800, 200, 600, 600 }
+	window{ 800, 200, 600, 700 }
 {
 	window.show();
 	window.setupView.hide();
 	window.testerView.hide();
+	window.setupView.browseTestFilePath.callback(onBrowseTestFile, this);
 	window.setupView.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.setupView.browseRightPrescription.callback(onBrowseRightPrescription, this);
 	window.setupView.browseAudio.callback(onBrowseAudio, this);
@@ -155,20 +164,44 @@ std::string FltkView::browseForDirectory() {
 	return chooser.filename();
 }
 
+std::string FltkView::browseForSavingFile(std::vector<std::string> filters) {
+	Fl_Native_File_Chooser chooser{};
+	chooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+	chooser.filter(formatFilters(std::move(filters)).c_str());
+	browseResult = chooser.show();
+	return chooser.filename();
+}
+
+void FltkView::setTestFilePath(std::string p) {
+	window.setupView.testFilePath_.value(p.c_str());
+}
+
 void FltkView::setAudioDirectory(std::string d) {
 	window.setupView.audioDirectory_.value(d.c_str());
 }
 
 void FltkView::setLeftDslPrescriptionFilePath(std::string p) {
-	window.setupView._leftPrescriptionFilePath.value(p.c_str());
+	window.setupView.leftPrescriptionFilePath_.value(p.c_str());
 }
 
 void FltkView::setRightDslPrescriptionFilePath(std::string p) {
-	window.setupView._rightPrescriptionFilePath.value(p.c_str());
+	window.setupView.rightPrescriptionFilePath_.value(p.c_str());
 }
 
 void FltkView::setBrirFilePath(std::string p) {
 	window.setupView.brirFilePath_.value(p.c_str());
+}
+
+std::string FltkView::subjectId() {
+	return window.setupView.subjectId_.value();
+}
+
+std::string FltkView::testerId() {
+	return window.setupView.testerId_.value();
+}
+
+std::string FltkView::testFilePath() {
+	return window.setupView.testFilePath_.value();
 }
 
 std::string FltkView::audioDirectory() {
@@ -176,11 +209,11 @@ std::string FltkView::audioDirectory() {
 }
 
 std::string FltkView::leftDslPrescriptionFilePath() {
-	return window.setupView._leftPrescriptionFilePath.value();
+	return window.setupView.leftPrescriptionFilePath_.value();
 }
 
 std::string FltkView::rightDslPrescriptionFilePath() {
-	return window.setupView._rightPrescriptionFilePath.value();
+	return window.setupView.rightPrescriptionFilePath_.value();
 }
 
 std::string FltkView::brirFilePath() {

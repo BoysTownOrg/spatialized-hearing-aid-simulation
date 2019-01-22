@@ -19,14 +19,18 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 
 struct FltkSetupView : public Fl_Group {
 	FltkSetupView(int, int, int, int, const char * = {});
-	Fl_Input _leftPrescriptionFilePath;
-	Fl_Input _rightPrescriptionFilePath;
+	Fl_Input subjectId_;
+	Fl_Input testerId_;
+	Fl_Input testFilePath_;
+	Fl_Input leftPrescriptionFilePath_;
+	Fl_Input rightPrescriptionFilePath_;
 	Fl_Input audioDirectory_;
 	Fl_Input brirFilePath_;
 	Fl_Float_Input attack_ms_;
 	Fl_Float_Input release_ms_;
 	Fl_ChoiceFacade windowSize_;
 	Fl_ChoiceFacade chunkSize_;
+	Fl_Button browseTestFilePath;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
@@ -56,12 +60,17 @@ public:
 	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
 	std::string browseForOpeningFile(std::vector<std::string> filters) override;
+	std::string browseForSavingFile(std::vector<std::string> filters) override;
 	std::string browseForDirectory() override;
 	bool browseCancelled() override;
 	void setAudioDirectory(std::string) override;
 	void setLeftDslPrescriptionFilePath(std::string) override;
 	void setRightDslPrescriptionFilePath(std::string) override;
 	void setBrirFilePath(std::string) override;
+	void setTestFilePath(std::string) override;
+	std::string subjectId() override;
+	std::string testerId() override;
+	std::string testFilePath() override;
 	std::string audioDirectory() override;
 	std::string leftDslPrescriptionFilePath() override;
 	std::string rightDslPrescriptionFilePath() override;
@@ -82,6 +91,7 @@ public:
 	void hideTesterView() override;
 
 private:
+	static void onBrowseTestFile(Fl_Widget *, void *);
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);
 	static void onBrowseRightPrescription(Fl_Widget *, void *);
 	static void onBrowseAudio(Fl_Widget *, void *);
