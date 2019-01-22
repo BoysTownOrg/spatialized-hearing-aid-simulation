@@ -25,7 +25,7 @@ void Presenter::run() {
 
 void Presenter::browseForTestFile() {
 	applyIfBrowseNotCancelled(
-		view->browseForSavingFile({ "" }), 
+		view->browseForSavingFile({ "*.txt" }), 
 		[=](std::string p) { this->view->setTestFilePath(std::move(p)); }
 	);
 }
