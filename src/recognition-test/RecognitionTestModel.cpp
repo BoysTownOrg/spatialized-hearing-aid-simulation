@@ -138,7 +138,7 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("stimulus", currentStimulus_);
-	stream.insertLabeledParameterLine("level (dB SPL)", 0);
+	stream.insertLabeledParameterLine("level (dB SPL)", p.level_dB_Spl);
 	stream.insertLine();
 	documenter->write(stream.str());
 }
