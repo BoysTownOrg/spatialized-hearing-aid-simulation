@@ -26,8 +26,8 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 
 void RecognitionTestModel::initializeTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
-	documentTestParameters(p);
 	initializeDocumenter(p.testFilePath);
+	documentTestParameters(p);
 	initializeStimulusPlayer(std::move(p));
 }
 
