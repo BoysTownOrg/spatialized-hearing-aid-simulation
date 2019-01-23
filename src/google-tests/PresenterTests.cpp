@@ -323,6 +323,8 @@ namespace {
 		view.toggleSpatialization();
 		EXPECT_TRUE(view.brirFilePathDeactivated());
 		EXPECT_TRUE(view.browseForBrirButtonDeactivated());
+		EXPECT_FALSE(view.brirFilePathActivated());
+		EXPECT_FALSE(view.browseForBrirButtonActivated());
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
@@ -330,6 +332,8 @@ namespace {
 		view.toggleSpatialization();
 		EXPECT_TRUE(view.brirFilePathActivated());
 		EXPECT_TRUE(view.browseForBrirButtonActivated());
+		EXPECT_FALSE(view.brirFilePathDeactivated());
+		EXPECT_FALSE(view.browseForBrirButtonDeactivated());
 	}
 
 	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
