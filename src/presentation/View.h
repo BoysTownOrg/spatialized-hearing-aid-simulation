@@ -44,6 +44,7 @@ public:
 	virtual std::string release_ms() = 0;
 	virtual std::string windowSize() = 0;
 	virtual std::string chunkSize() = 0;
+	virtual bool usingSpatialization() = 0;
 	virtual void showErrorDialog(std::string message) = 0;
 	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
 	virtual void populateChunkSizeMenu(std::vector<std::string> items) = 0;

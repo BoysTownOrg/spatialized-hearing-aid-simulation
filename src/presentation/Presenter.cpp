@@ -154,8 +154,12 @@ void Presenter::switchViewIfTestComplete() {
 }
 
 void Presenter::toggleUsingSpatialization() {
-	view->deactivateBrowseForBrirButton();
-	view->deactivateBrirFilePath();
-	view->activateBrowseForBrirButton();
-	view->activateBrirFilePath();
+	if (view->usingSpatialization()) {
+		view->activateBrowseForBrirButton();
+		view->activateBrirFilePath();
+	}
+	else {
+		view->deactivateBrowseForBrirButton();
+		view->deactivateBrirFilePath();
+	}
 }
