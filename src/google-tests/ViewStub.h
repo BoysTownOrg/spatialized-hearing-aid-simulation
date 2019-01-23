@@ -35,6 +35,14 @@ public:
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
 
+	void deactivateBrowseForBrirButton() {
+		browseForBrirButtonDeactivated_ = true;
+	}
+
+	void deactivateBrirFilePath() {
+		brirFilePathDeactivated_ = true;
+	}
+
 	bool browseForBrirButtonDeactivated() const {
 		return browseForBrirButtonDeactivated_;
 	}
