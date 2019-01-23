@@ -325,6 +325,13 @@ namespace {
 		EXPECT_TRUE(view.browseForBrirButtonDeactivated());
 	}
 
+	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
+		view.setSpatializationOn();
+		view.toggleSpatialization();
+		EXPECT_TRUE(view.brirFilePathActivated());
+		EXPECT_TRUE(view.browseForBrirButtonActivated());
+	}
+
 	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 		playTrialWithLevelShowsErrorMessage("b");
 	}
