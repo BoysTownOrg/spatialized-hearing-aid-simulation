@@ -126,10 +126,9 @@ void RecognitionTestModel::playTrial_(TrialParameters p) {
 
 void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	StimulusPlayer::PlayRequest request;
-	if (failedOnLastPlayRequest)
-		request.audioFilePath = currentStimulus_;
-	else
-		request.audioFilePath = currentStimulus_ = list->next();
+	if (!failedOnLastPlayRequest)
+		currentStimulus_ = list->next();
+	request.audioFilePath = currentStimulus_;
 	request.audioDevice = p.audioDevice;
 	request.level_dB_Spl = p.level_dB_Spl;
 	player->play(std::move(request));
