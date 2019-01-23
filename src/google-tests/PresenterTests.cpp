@@ -247,17 +247,17 @@ namespace {
 		view.setWindowSize("4");
 		view.setChunkSize("5");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().global->leftDslPrescriptionFilePath);
-		assertEqual("b", model.testParameters().global->rightDslPrescriptionFilePath);
+		assertEqual("a", model.global.leftDslPrescriptionFilePath);
+		assertEqual("b", model.global.rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().audioDirectory);
-		assertEqual("d", model.testParameters().global->brirFilePath);
+		assertEqual("d", model.global.brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
-		assertEqual("f", model.testParameters().global->subjectId);
-		assertEqual("g", model.testParameters().global->testerId);
-		EXPECT_EQ(2.2, model.testParameters().global->attack_ms);
-		EXPECT_EQ(3.3, model.testParameters().global->release_ms);
-		EXPECT_EQ(4, model.testParameters().global->windowSize);
-		EXPECT_EQ(5, model.testParameters().global->chunkSize);
+		assertEqual("f", model.global.subjectId);
+		assertEqual("g", model.global.testerId);
+		EXPECT_EQ(2.2, model.global.attack_ms);
+		EXPECT_EQ(3.3, model.global.release_ms);
+		EXPECT_EQ(4, model.global.windowSize);
+		EXPECT_EQ(5, model.global.chunkSize);
 	}
 
 	TEST_F(

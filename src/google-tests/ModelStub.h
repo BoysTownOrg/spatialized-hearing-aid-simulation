@@ -1,6 +1,7 @@
 #pragma once
 
 #include <presentation/Model.h>
+#include <presentation/Presenter.h>
 
 class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
@@ -10,6 +11,8 @@ class ModelStub : public Model {
 	bool testComplete_{};
 	bool trialPlayed_{};
 public:
+	GlobalTestParameters global{};
+
 	void setPreferredProcessingSizes(std::vector<int> v) {
 		preferredProcessingSizes_ = std::move(v);
 	}
@@ -32,6 +35,7 @@ public:
 
 	void initializeTest(TestParameters p) override {
 		testParameters_ = std::move(p);
+		global = *p.global;
 	}
 
 	void setTestIncomplete() {

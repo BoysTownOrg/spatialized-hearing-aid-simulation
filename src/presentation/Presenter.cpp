@@ -111,6 +111,8 @@ void Presenter::initializeModel() {
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	p.usingSpatialization = view->usingSpatialization();
+	test.testFilePath = view->testFilePath();
+	test.audioDirectory = view->audioDirectory();
 	test.global = &p;
 	model->initializeTest(std::move(test));
 }
