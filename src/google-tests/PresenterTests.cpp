@@ -85,6 +85,13 @@ namespace {
 			view.playTrial();
 			assertEqual(std::move(s), view.errorMessage());
 		}
+
+		void assertSpatializationUIHasOnlyBeenDeactivated() {
+			EXPECT_TRUE(view.brirFilePathDeactivated());
+			EXPECT_TRUE(view.browseForBrirButtonDeactivated());
+			EXPECT_FALSE(view.brirFilePathActivated());
+			EXPECT_FALSE(view.browseForBrirButtonActivated());
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -134,15 +141,11 @@ namespace {
 		EXPECT_FALSE(view.browseForBrirButtonDeactivated());
 	}
 
-	TEST(PresenterOtherTests, constructordeactivatesSpatializationUIWhenInitiallyOff) {
-		ViewStub view;
-		ModelStub model;
+	TEST_F(PresenterTests, constructordeactivatesSpatializationUIWhenInitiallyOff) {
+		view.clearActivationState();
 		view.setSpatializationOff();
-		Presenter presenter{ &model, &view };
-		EXPECT_TRUE(view.brirFilePathDeactivated());
-		EXPECT_TRUE(view.browseForBrirButtonDeactivated());
-		EXPECT_FALSE(view.brirFilePathActivated());
-		EXPECT_FALSE(view.browseForBrirButtonActivated());
+		Presenter{ &model, &view };
+		assertSpatializationUIHasOnlyBeenDeactivated();
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
