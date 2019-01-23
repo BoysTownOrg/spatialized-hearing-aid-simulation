@@ -262,6 +262,24 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		confirmTestSetupUsingSpatialization
+	) {
+		view.setSpatializationOn();
+		view.confirmTestSetup();
+		EXPECT_TRUE(model.testParameters().usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingSpatialization
+	) {
+		view.setSpatializationOff();
+		view.confirmTestSetup();
+		EXPECT_FALSE(model.testParameters().usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.testFilePath_ = "a";
