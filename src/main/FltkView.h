@@ -9,6 +9,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Check_Button.H>
 #include <FL/Fl.H>
 #pragma warning (pop)
 
@@ -36,6 +37,7 @@ struct FltkSetupView : public Fl_Group {
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
 	Fl_Button confirm;
+	Fl_Check_Button usingSpatialization_;
 };
 
 struct FltkTesterView : public Fl_Group {
@@ -81,6 +83,7 @@ public:
 	std::string release_ms() override;
 	std::string windowSize() override;
 	std::string chunkSize() override;
+	bool usingSpatialization() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
 	void populateChunkSizeMenu(std::vector<std::string> items) override;
@@ -89,6 +92,10 @@ public:
 	void hideTestSetup() override;
 	void showTesterView() override;
 	void hideTesterView() override;
+	void deactivateBrowseForBrirButton() override;
+	void deactivateBrirFilePath() override;
+	void activateBrowseForBrirButton() override;
+	void activateBrirFilePath() override;
 
 private:
 	static void onBrowseTestFile(Fl_Widget *, void *);
@@ -98,4 +105,5 @@ private:
 	static void onBrowseBrir(Fl_Widget *, void *);
 	static void onConfirmTestSetup(Fl_Widget *, void *);
 	static void onPlay(Fl_Widget *, void *);
+	static void onToggleSpatialization(Fl_Widget *, void *);
 };

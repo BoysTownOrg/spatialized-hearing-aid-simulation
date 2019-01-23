@@ -39,6 +39,10 @@ void FltkView::onPlay(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->playTrial();
 }
 
+void FltkView::onToggleSpatialization(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->toggleUsingSpatialization();
+}
+
 FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	testFilePath_(250, 50, 200, 45, "test file path"),
@@ -53,6 +57,7 @@ FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	browseAudio(460, 300, 60, 45, "browse"),
 	brirFilePath_(250, 350, 200, 45, "BRIR file path"),
 	browseBrir(460, 350, 60, 45, "browse"),
+	usingSpatialization_(100, 350, 60, 45),
 	attack_ms_(250, 400, 200, 45, "attack (ms)"),
 	release_ms_(250, 450, 200, 45, "release (ms)"),
 	windowSize_(250, 500, 200, 45, "window size (samples)"),
@@ -91,6 +96,7 @@ FltkView::FltkView() :
 	window.setupView.browseAudio.callback(onBrowseAudio, this);
 	window.setupView.browseBrir.callback(onBrowseBrir, this);
 	window.setupView.confirm.callback(onConfirmTestSetup, this);
+	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.testerView.play.callback(onPlay, this);
 }
 
@@ -108,6 +114,22 @@ void FltkView::showTesterView() {
 
 void FltkView::hideTesterView() {
 	window.testerView.hide();
+}
+
+void FltkView::deactivateBrowseForBrirButton() {
+	window.setupView.browseBrir.deactivate();
+}
+
+void FltkView::deactivateBrirFilePath() {
+	window.setupView.brirFilePath_.deactivate();
+}
+
+void FltkView::activateBrowseForBrirButton() {
+	window.setupView.browseBrir.activate();
+}
+
+void FltkView::activateBrirFilePath() {
+	window.setupView.brirFilePath_.activate();
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
@@ -239,6 +261,10 @@ std::string FltkView::windowSize() {
 
 std::string FltkView::chunkSize() {
 	return window.setupView.chunkSize_.text();
+}
+
+bool FltkView::usingSpatialization() {
+	return window.setupView.usingSpatialization_.value();
 }
 
 void FltkView::showErrorDialog(std::string message) {
