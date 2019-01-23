@@ -10,6 +10,17 @@ Presenter::Presenter(Model *model, View *view) :
 	view->populateChunkSizeMenu(sizeItems);
 	view->populateWindowSizeMenu(sizeItems);
 	view->showTestSetup();
+	toggleSpatializationActivation();
+}
+
+std::vector<std::string> Presenter::preferredProcessingSizes() {
+	std::vector<std::string> sizeItems{};
+	for (auto size : model->preferredProcessingSizes())
+		sizeItems.push_back(std::to_string(size));
+	return sizeItems;
+}
+
+void Presenter::toggleSpatializationActivation() {
 	if (view->usingSpatialization()) {
 		view->activateBrowseForBrirButton();
 		view->activateBrirFilePath();
@@ -18,13 +29,6 @@ Presenter::Presenter(Model *model, View *view) :
 		view->deactivateBrowseForBrirButton();
 		view->deactivateBrirFilePath();
 	}
-}
-
-std::vector<std::string> Presenter::preferredProcessingSizes() {
-	std::vector<std::string> sizeItems{};
-	for (auto size : model->preferredProcessingSizes())
-		sizeItems.push_back(std::to_string(size));
-	return sizeItems;
 }
 
 void Presenter::run() {
@@ -162,12 +166,5 @@ void Presenter::switchViewIfTestComplete() {
 }
 
 void Presenter::toggleUsingSpatialization() {
-	if (view->usingSpatialization()) {
-		view->activateBrowseForBrirButton();
-		view->activateBrirFilePath();
-	}
-	else {
-		view->deactivateBrowseForBrirButton();
-		view->deactivateBrirFilePath();
-	}
+	toggleSpatializationActivation();
 }
