@@ -21,6 +21,7 @@ public:
 		double release_ms;
 		int windowSize;
 		int chunkSize;
+		bool usingSpatialization;
 	};
 	virtual void initializeTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);
