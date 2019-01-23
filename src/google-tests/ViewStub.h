@@ -37,6 +37,13 @@ public:
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
 
+	void clearActivationState() {
+		browseForBrirButtonActivated_ = false;
+		brirFilePathActivated_ = false;
+		browseForBrirButtonDeactivated_ = false;
+		brirFilePathDeactivated_ = false;
+	}
+
 	bool usingSpatialization() override {
 		return usingSpatialization_;
 	}

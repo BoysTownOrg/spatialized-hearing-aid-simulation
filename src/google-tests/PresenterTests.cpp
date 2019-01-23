@@ -341,6 +341,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
+		view.clearActivationState();
 		view.setSpatializationOff();
 		view.toggleSpatialization();
 		EXPECT_TRUE(view.brirFilePathDeactivated());
@@ -350,6 +351,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
+		view.clearActivationState();
 		view.setSpatializationOn();
 		view.toggleSpatialization();
 		EXPECT_TRUE(view.brirFilePathActivated());
