@@ -29,6 +29,8 @@ public:
 
 private:
 	void toggleSpatializationActivation();
+	void deactivateSpatialization();
+	void activateSpatialization();
 	std::vector<std::string> preferredProcessingSizes();
 	void applyIfBrowseNotCancelled(
 		std::string,

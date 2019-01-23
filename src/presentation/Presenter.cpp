@@ -21,14 +21,20 @@ std::vector<std::string> Presenter::preferredProcessingSizes() {
 }
 
 void Presenter::toggleSpatializationActivation() {
-	if (view->usingSpatialization()) {
-		view->activateBrowseForBrirButton();
-		view->activateBrirFilePath();
-	}
-	else {
-		view->deactivateBrowseForBrirButton();
-		view->deactivateBrirFilePath();
-	}
+	if (view->usingSpatialization())
+		activateSpatialization();
+	else
+		deactivateSpatialization();
+}
+
+void Presenter::activateSpatialization() {
+	view->activateBrowseForBrirButton();
+	view->activateBrirFilePath();
+}
+
+void Presenter::deactivateSpatialization() {
+	view->deactivateBrowseForBrirButton();
+	view->deactivateBrirFilePath();
 }
 
 void Presenter::run() {
