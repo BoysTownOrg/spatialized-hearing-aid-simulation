@@ -109,6 +109,7 @@ void Presenter::initializeModel() {
 	p.release_ms = convertToDouble(view->release_ms(), "release time");
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	p.usingSpatialization = view->usingSpatialization();
 	model->initializeTest(std::move(p));
 }
 
