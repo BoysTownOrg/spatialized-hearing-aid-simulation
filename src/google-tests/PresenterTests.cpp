@@ -114,11 +114,9 @@ namespace {
 		EXPECT_TRUE(view.testSetupShown());
 	}
 
-	TEST(PresenterOtherTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
-		ModelStub model;
-		ViewStub view;
+	TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
 		model.setPreferredProcessingSizes({ 1, 2, 3 });
-		Presenter presenter{ &model, &view };
+		Presenter{ &model, &view };
 		assertEqual(
 			{ "1", "2", "3" },
 			view.chunkSizeItems()
@@ -129,11 +127,9 @@ namespace {
 		);
 	}
 
-	TEST(PresenterOtherTests, constructorPopulatesAudioDeviceMenu) {
-		ViewStub view;
-		ModelStub model;
+	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {
 		model.setAudioDeviceDescriptions({ "a", "b", "c" });
-		Presenter presenter{ &model, &view };
+		Presenter{ &model, &view };
 		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
 	}
 
