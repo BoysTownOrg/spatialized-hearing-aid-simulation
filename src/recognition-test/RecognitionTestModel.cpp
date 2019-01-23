@@ -116,7 +116,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 
 void RecognitionTestModel::playTrial_(TrialParameters p) {
 	try {
-		playNextStimulus(p);
+		playNextStimulus(std::move(p));
 	}
 	catch (const StimulusPlayer::RequestFailure &e) {
 		failedOnLastPlayRequest = true;
