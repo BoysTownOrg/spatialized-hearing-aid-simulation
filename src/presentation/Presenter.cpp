@@ -14,6 +14,10 @@ Presenter::Presenter(Model *model, View *view) :
 		view->activateBrowseForBrirButton();
 		view->activateBrirFilePath();
 	}
+	else {
+		view->deactivateBrowseForBrirButton();
+		view->deactivateBrirFilePath();
+	}
 }
 
 std::vector<std::string> Presenter::preferredProcessingSizes() {
