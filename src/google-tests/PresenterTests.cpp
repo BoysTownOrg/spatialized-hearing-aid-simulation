@@ -318,6 +318,13 @@ namespace {
 		assertEqual("a", view.brirFilePath());
 	}
 
+	TEST_F(PresenterTests, togglingSpatializationTogglesActivationOfUI) {
+		view.setSpatializationOn();
+		view.toggleSpatialization();
+		EXPECT_TRUE(view.brirFilePathDeactivated());
+		EXPECT_TRUE(view.browseForBrirButtonDeactivated());
+	}
+
 	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 		playTrialWithLevelShowsErrorMessage("b");
 	}
