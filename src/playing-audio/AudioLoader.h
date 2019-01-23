@@ -6,18 +6,13 @@
 #include <string>
 #include <vector>
 
+struct GlobalTestParameters;
+
 class AudioLoader {
 public:
 	INTERFACE_OPERATIONS(AudioLoader);
 	struct Initialization {
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
-		double max_dB_Spl;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
+		GlobalTestParameters *global;
 	};
 	virtual void initialize(Initialization) = 0;
 	RUNTIME_ERROR(InitializationFailure);

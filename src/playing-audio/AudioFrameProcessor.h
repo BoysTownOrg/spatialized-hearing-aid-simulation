@@ -15,22 +15,19 @@ public:
 	virtual channel_type::index_type groupDelay() = 0;
 };
 
+struct GlobalTestParameters;
+
 class AudioFrameProcessorFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> channelScalars;
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
 		double max_dB_Spl;
-		double attack_ms;
-		double release_ms;
-		int chunkSize;
-		int windowSize;
 		int sampleRate;
 		int channels;
+		int chunkSize;
+		GlobalTestParameters *global;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
 	virtual std::vector<int> preferredProcessingSizes() = 0;

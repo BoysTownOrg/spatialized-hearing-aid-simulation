@@ -97,7 +97,8 @@ void Presenter::prepareTest() {
 }
 
 void Presenter::initializeModel() {
-	Model::TestParameters p;
+	Model::TestParameters test;
+	GlobalTestParameters p;
 	p.subjectId = view->subjectId();
 	p.testerId = view->testerId();
 	p.testFilePath = view->testFilePath();
@@ -110,7 +111,8 @@ void Presenter::initializeModel() {
 	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	p.usingSpatialization = view->usingSpatialization();
-	model->initializeTest(std::move(p));
+	test.global = &p;
+	model->initializeTest(std::move(test));
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {

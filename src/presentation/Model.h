@@ -5,23 +5,16 @@
 #include <string>
 #include <vector>
 
+struct GlobalTestParameters;
+
 class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
 
 	struct TestParameters {
-		std::string subjectId;
-		std::string testerId;
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
 		std::string audioDirectory;
 		std::string testFilePath;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
-		bool usingSpatialization;
+		GlobalTestParameters *global;
 	};
 	virtual void initializeTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);

@@ -5,20 +5,15 @@
 #include <vector>
 #include <string>
 
+struct GlobalTestParameters;
+
 class StimulusPlayer {
 public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
 
 	struct Initialization {
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
-		double max_dB_Spl;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
+		GlobalTestParameters *global;
 	};
 	virtual void initialize(Initialization) = 0;
 	RUNTIME_ERROR(InitializationFailure);

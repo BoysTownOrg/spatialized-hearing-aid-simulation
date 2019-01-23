@@ -28,14 +28,7 @@ void AudioPlayer::initialize(Initialization init) {
 
 void AudioPlayer::initializeLoader(Initialization request) {
 	AudioLoader::Initialization init;
-	init.attack_ms = request.attack_ms;
-	init.release_ms = request.release_ms;
-	init.brirFilePath = request.brirFilePath;
-	init.leftDslPrescriptionFilePath = request.leftDslPrescriptionFilePath;
-	init.rightDslPrescriptionFilePath = request.rightDslPrescriptionFilePath;
-	init.chunkSize = request.chunkSize;
-	init.windowSize = request.windowSize;
-	init.max_dB_Spl = request.max_dB_Spl;
+	init.global = request.global;
 	loader->initialize(std::move(init));
 }
 

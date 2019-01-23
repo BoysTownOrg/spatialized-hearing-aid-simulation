@@ -247,17 +247,17 @@ namespace {
 		view.setWindowSize("4");
 		view.setChunkSize("5");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
-		assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
+		assertEqual("a", model.testParameters().global->leftDslPrescriptionFilePath);
+		assertEqual("b", model.testParameters().global->rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().audioDirectory);
-		assertEqual("d", model.testParameters().brirFilePath);
+		assertEqual("d", model.testParameters().global->brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
-		assertEqual("f", model.testParameters().subjectId);
-		assertEqual("g", model.testParameters().testerId);
-		EXPECT_EQ(2.2, model.testParameters().attack_ms);
-		EXPECT_EQ(3.3, model.testParameters().release_ms);
-		EXPECT_EQ(4, model.testParameters().windowSize);
-		EXPECT_EQ(5, model.testParameters().chunkSize);
+		assertEqual("f", model.testParameters().global->subjectId);
+		assertEqual("g", model.testParameters().global->testerId);
+		EXPECT_EQ(2.2, model.testParameters().global->attack_ms);
+		EXPECT_EQ(3.3, model.testParameters().global->release_ms);
+		EXPECT_EQ(4, model.testParameters().global->windowSize);
+		EXPECT_EQ(5, model.testParameters().global->chunkSize);
 	}
 
 	TEST_F(
@@ -266,7 +266,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.testParameters().usingSpatialization);
+		EXPECT_TRUE(model.testParameters().global->usingSpatialization);
 	}
 
 	TEST_F(
@@ -275,7 +275,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.testParameters().usingSpatialization);
+		EXPECT_FALSE(model.testParameters().global->usingSpatialization);
 	}
 
 	TEST_F(

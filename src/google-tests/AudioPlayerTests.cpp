@@ -2,6 +2,7 @@
 #include "AudioLoaderStub.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
+#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -36,23 +37,10 @@ namespace {
 
 	TEST_F(AudioPlayerTests, initializeInitializesLoader) {
 		StimulusPlayer::Initialization init;
-		init.leftDslPrescriptionFilePath = "a";
-		init.rightDslPrescriptionFilePath = "b";
-		init.brirFilePath = "c";
-		init.max_dB_Spl = 1;
-		init.attack_ms = 2;
-		init.release_ms = 3;
-		init.windowSize = 4;
-		init.chunkSize = 5;
+		GlobalTestParameters x;
+		init.global = &x;
 		player.initialize(init);
-		assertEqual("a", loader.initialization().leftDslPrescriptionFilePath);
-		assertEqual("b", loader.initialization().rightDslPrescriptionFilePath);
-		assertEqual("c", loader.initialization().brirFilePath);
-		EXPECT_EQ(1, loader.initialization().max_dB_Spl);
-		EXPECT_EQ(2, loader.initialization().attack_ms);
-		EXPECT_EQ(3, loader.initialization().release_ms);
-		EXPECT_EQ(4, loader.initialization().windowSize);
-		EXPECT_EQ(5, loader.initialization().chunkSize);
+		EXPECT_EQ(&x, loader.initialization().global);
 	}
 
 	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {

@@ -30,14 +30,7 @@ void AudioProcessingLoader::initialize(Initialization init) {
 }
 
 void AudioProcessingLoader::storeProcessingParameters(AudioLoader::Initialization init) {
-	processing.attack_ms = init.attack_ms;
-	processing.release_ms = init.release_ms;
-	processing.brirFilePath = init.brirFilePath;
-	processing.leftDslPrescriptionFilePath = init.leftDslPrescriptionFilePath;
-	processing.rightDslPrescriptionFilePath = init.rightDslPrescriptionFilePath;
-	processing.chunkSize = init.chunkSize;
-	processing.windowSize = init.windowSize;
-	processing.max_dB_Spl = init.max_dB_Spl;
+	processing.global = init.global;
 	processing.channelScalars.resize(2);
 }
 

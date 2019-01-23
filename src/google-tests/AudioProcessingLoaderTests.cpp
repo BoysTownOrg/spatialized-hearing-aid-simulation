@@ -3,6 +3,7 @@
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
+#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -56,23 +57,11 @@ namespace {
 	};
 
 	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheck) {
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
-		initialization.chunkSize = 5;
+		GlobalTestParameters x;
+		initialization.global = &x;
 		initialize();
-		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processorFactory.parameters().brirFilePath);
-		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-		EXPECT_EQ(3, processorFactory.parameters().release_ms);
-		EXPECT_EQ(4, processorFactory.parameters().windowSize);
-		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
+
+		EXPECT_EQ(&x, processorFactory.parameters().global);
 		
 		// The SpatializedHearingAidSimulationFactory expects a size of two.
 		// Ideally this would not cater to a single implementation...
@@ -87,40 +76,27 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, chunkSizeReturnsWhatWasInitialized) {
-		initialization.chunkSize = 5;
 		initialize();
 		EXPECT_EQ(5, loader.chunkSize());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
-		initialization.leftDslPrescriptionFilePath = "a";
-		initialization.rightDslPrescriptionFilePath = "b";
-		initialization.brirFilePath = "c";
-		initialization.max_dB_Spl = 1;
-		initialization.attack_ms = 2;
-		initialization.release_ms = 3;
-		initialization.windowSize = 4;
-		initialization.chunkSize = 5;
+		GlobalTestParameters x;
+		initialization.global = &x;
 		initialize();
 		preparation.audioFilePath = "d";
 		reader->setChannels(6);
 		reader->setSampleRate(7);
 		prepare();
-		assertEqual("a", processorFactory.parameters().leftDslPrescriptionFilePath);
-		assertEqual("b", processorFactory.parameters().rightDslPrescriptionFilePath);
-		assertEqual("c", processorFactory.parameters().brirFilePath);
 		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-		EXPECT_EQ(2, processorFactory.parameters().attack_ms);
-		EXPECT_EQ(3, processorFactory.parameters().release_ms);
-		EXPECT_EQ(4, processorFactory.parameters().windowSize);
 		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 		EXPECT_EQ(6, processorFactory.parameters().channels);
 		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
+		EXPECT_EQ(&x, processorFactory.parameters().global);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
-		initialization.max_dB_Spl = 8;
 		initialize();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
