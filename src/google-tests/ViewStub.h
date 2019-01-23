@@ -28,12 +28,26 @@ class ViewStub : public View {
 	bool usingSpatialization_{};
 	bool brirFilePathDeactivated_{};
 	bool browseForBrirButtonDeactivated_{};
+	bool brirFilePathActivated_{};
+	bool browseForBrirButtonActivated_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
+
+	bool browseForBrirButtonActivated() const {
+		return browseForBrirButtonActivated_;
+	}
+
+	bool brirFilePathActivated() const {
+		return brirFilePathActivated_;
+	}
+
+	void setSpatializationOn() {
+		usingSpatialization_ = true;
+	}
 
 	void deactivateBrowseForBrirButton() {
 		browseForBrirButtonDeactivated_ = true;
