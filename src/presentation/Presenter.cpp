@@ -156,4 +156,6 @@ void Presenter::switchViewIfTestComplete() {
 void Presenter::toggleUsingSpatialization() {
 	view->deactivateBrowseForBrirButton();
 	view->deactivateBrirFilePath();
+	view->activateBrowseForBrirButton();
+	view->activateBrirFilePath();
 }

@@ -54,4 +54,6 @@ public:
 	virtual void hideTesterView() = 0;
 	virtual void deactivateBrowseForBrirButton() = 0;
 	virtual void deactivateBrirFilePath() = 0;
+	virtual void activateBrowseForBrirButton() = 0;
+	virtual void activateBrirFilePath() = 0;
 };

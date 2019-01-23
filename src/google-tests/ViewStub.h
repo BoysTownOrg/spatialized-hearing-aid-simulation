@@ -37,6 +37,14 @@ public:
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
 
+	void activateBrowseForBrirButton() override {
+		browseForBrirButtonActivated_ = true;
+	}
+
+	void activateBrirFilePath() override {
+		brirFilePathActivated_ = true;
+	}
+
 	bool browseForBrirButtonActivated() const {
 		return browseForBrirButtonActivated_;
 	}
@@ -49,11 +57,11 @@ public:
 		usingSpatialization_ = true;
 	}
 
-	void deactivateBrowseForBrirButton() {
+	void deactivateBrowseForBrirButton() override {
 		browseForBrirButtonDeactivated_ = true;
 	}
 
-	void deactivateBrirFilePath() {
+	void deactivateBrirFilePath() override {
 		brirFilePathDeactivated_ = true;
 	}
 
