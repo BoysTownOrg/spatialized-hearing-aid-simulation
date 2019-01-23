@@ -92,6 +92,13 @@ namespace {
 			EXPECT_FALSE(view.brirFilePathActivated());
 			EXPECT_FALSE(view.browseForBrirButtonActivated());
 		}
+
+		void assertSpatializationUIHasOnlyBeenActivated() {
+			EXPECT_TRUE(view.brirFilePathActivated());
+			EXPECT_TRUE(view.browseForBrirButtonActivated());
+			EXPECT_FALSE(view.brirFilePathDeactivated());
+			EXPECT_FALSE(view.browseForBrirButtonDeactivated());
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -130,15 +137,11 @@ namespace {
 		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
 	}
 
-	TEST(PresenterOtherTests, constructorActivatesSpatializationUIWhenInitiallyOn) {
-		ViewStub view;
-		ModelStub model;
+	TEST_F(PresenterTests, constructorActivatesSpatializationUIWhenInitiallyOn) {
+		view.clearActivationState();
 		view.setSpatializationOn();
-		Presenter presenter{ &model, &view };
-		EXPECT_TRUE(view.brirFilePathActivated());
-		EXPECT_TRUE(view.browseForBrirButtonActivated());
-		EXPECT_FALSE(view.brirFilePathDeactivated());
-		EXPECT_FALSE(view.browseForBrirButtonDeactivated());
+		Presenter{ &model, &view };
+		assertSpatializationUIHasOnlyBeenActivated();
 	}
 
 	TEST_F(PresenterTests, constructordeactivatesSpatializationUIWhenInitiallyOff) {
@@ -347,20 +350,14 @@ namespace {
 		view.clearActivationState();
 		view.setSpatializationOff();
 		view.toggleSpatialization();
-		EXPECT_TRUE(view.brirFilePathDeactivated());
-		EXPECT_TRUE(view.browseForBrirButtonDeactivated());
-		EXPECT_FALSE(view.brirFilePathActivated());
-		EXPECT_FALSE(view.browseForBrirButtonActivated());
+		assertSpatializationUIHasOnlyBeenDeactivated();
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
 		view.clearActivationState();
 		view.setSpatializationOn();
 		view.toggleSpatialization();
-		EXPECT_TRUE(view.brirFilePathActivated());
-		EXPECT_TRUE(view.browseForBrirButtonActivated());
-		EXPECT_FALSE(view.brirFilePathDeactivated());
-		EXPECT_FALSE(view.browseForBrirButtonDeactivated());
+		assertSpatializationUIHasOnlyBeenActivated();
 	}
 
 	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
