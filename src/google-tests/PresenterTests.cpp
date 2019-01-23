@@ -318,8 +318,8 @@ namespace {
 		assertEqual("a", view.brirFilePath());
 	}
 
-	TEST_F(PresenterTests, togglingSpatializationTogglesActivationOfUI) {
-		view.setSpatializationOn();
+	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
+		view.setSpatializationOff();
 		view.toggleSpatialization();
 		EXPECT_TRUE(view.brirFilePathDeactivated());
 		EXPECT_TRUE(view.browseForBrirButtonDeactivated());

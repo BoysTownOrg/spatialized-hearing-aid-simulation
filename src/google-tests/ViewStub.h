@@ -55,8 +55,8 @@ public:
 		listener_->toggleUsingSpatialization();
 	}
 
-	void setSpatializationOn() {
-		usingSpatialization_ = true;
+	void setSpatializationOff() {
+		usingSpatialization_ = false;
 	}
 
 	void setSubjectId(std::string s) {
