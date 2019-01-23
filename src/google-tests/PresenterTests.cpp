@@ -123,6 +123,17 @@ namespace {
 		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
 	}
 
+	TEST(PresenterOtherTests, constructorActivatesSpatializationUIWhenInitiallySet) {
+		ViewStub view;
+		ModelStub model;
+		view.setSpatializationOn();
+		Presenter presenter{ &model, &view };
+		EXPECT_TRUE(view.brirFilePathActivated());
+		EXPECT_TRUE(view.browseForBrirButtonActivated());
+		EXPECT_FALSE(view.brirFilePathDeactivated());
+		EXPECT_FALSE(view.browseForBrirButtonDeactivated());
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
 		view.confirmTestSetup();
 		EXPECT_TRUE(view.testSetupHidden());
