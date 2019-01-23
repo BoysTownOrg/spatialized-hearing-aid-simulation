@@ -87,15 +87,31 @@ namespace {
 		}
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
+			assertSpatializationUIHasBeenDeactivated();
+			assertSpatializationUIHasNotBeenActivated();
+		}
+
+		void assertSpatializationUIHasBeenDeactivated() {
 			EXPECT_TRUE(view.brirFilePathDeactivated());
 			EXPECT_TRUE(view.browseForBrirButtonDeactivated());
+		}
+
+		void assertSpatializationUIHasNotBeenActivated() {
 			EXPECT_FALSE(view.brirFilePathActivated());
 			EXPECT_FALSE(view.browseForBrirButtonActivated());
 		}
 
 		void assertSpatializationUIHasOnlyBeenActivated() {
+			assertSpatializationUIHasBeenActivated();
+			assertSpatializationUIHasNotBeenDeactivated();
+		}
+
+		void assertSpatializationUIHasBeenActivated() {
 			EXPECT_TRUE(view.brirFilePathActivated());
 			EXPECT_TRUE(view.browseForBrirButtonActivated());
+		}
+
+		void assertSpatializationUIHasNotBeenDeactivated() {
 			EXPECT_FALSE(view.brirFilePathDeactivated());
 			EXPECT_FALSE(view.browseForBrirButtonDeactivated());
 		}
