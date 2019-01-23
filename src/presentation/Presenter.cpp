@@ -10,6 +10,10 @@ Presenter::Presenter(Model *model, View *view) :
 	view->populateChunkSizeMenu(sizeItems);
 	view->populateWindowSizeMenu(sizeItems);
 	view->showTestSetup();
+	if (view->usingSpatialization()) {
+		view->activateBrowseForBrirButton();
+		view->activateBrirFilePath();
+	}
 }
 
 std::vector<std::string> Presenter::preferredProcessingSizes() {
