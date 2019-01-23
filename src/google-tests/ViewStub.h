@@ -25,12 +25,31 @@ class ViewStub : public View {
 	bool testSetupHidden_{};
 	bool testerViewShown_{};
 	bool testerViewHidden_{};
+	bool usingSpatialization_{};
+	bool brirFilePathDeactivated_{};
+	bool browseForBrirButtonDeactivated_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
+
+	bool browseForBrirButtonDeactivated() const {
+		return browseForBrirButtonDeactivated_;
+	}
+
+	bool brirFilePathDeactivated() const {
+		return brirFilePathDeactivated_;
+	}
+
+	void toggleSpatialization() {
+		listener_->toggleUsingSpatialization();
+	}
+
+	void setSpatializationOn() {
+		usingSpatialization_ = true;
+	}
 
 	void setSubjectId(std::string s) {
 		subjectId_ = std::move(s);

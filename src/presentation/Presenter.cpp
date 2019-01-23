@@ -152,3 +152,7 @@ void Presenter::switchViewIfTestComplete() {
 		view->showTestSetup();
 	}
 }
+
+void Presenter::toggleUsingSpatialization()
+{
+}

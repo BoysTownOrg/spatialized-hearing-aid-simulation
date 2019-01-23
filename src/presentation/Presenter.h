@@ -25,6 +25,7 @@ public:
 	void browseForBrir() override;
 	void confirmTestSetup() override;
 	void playTrial() override;
+	void toggleUsingSpatialization() override;
 
 private:
 	std::vector<std::string> preferredProcessingSizes();
