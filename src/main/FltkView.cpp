@@ -98,6 +98,7 @@ FltkView::FltkView() :
 	window.setupView.confirm.callback(onConfirmTestSetup, this);
 	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.testerView.play.callback(onPlay, this);
+	window.setupView.usingSpatialization_.value(1);
 }
 
 void FltkView::showTestSetup() {
