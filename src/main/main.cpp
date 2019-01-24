@@ -88,6 +88,10 @@ public:
 		strerror_s(buffer, sizeof buffer, errno);
 		return buffer;
 	}
+
+	void documentTestParameters(TestParameters) override
+	{
+	}
 };
 
 int main() {

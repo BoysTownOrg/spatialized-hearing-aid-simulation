@@ -19,6 +19,8 @@ public:
 	);
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override;
 	std::vector<int> preferredProcessingSizes() override;
+	int preferredBufferSize() override;
+	double fullScale_dB_Spl() override;
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(
