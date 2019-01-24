@@ -31,6 +31,7 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	std::vector<int> preferredProcessingSizes_{};
 	Parameters parameters_{};
 	std::shared_ptr<AudioFrameProcessor> processor;
+	double fullScale_dB_Spl_{};
 	int preferredBufferSize_{};
 public:
 	explicit AudioFrameProcessorStubFactory(
@@ -66,6 +67,10 @@ public:
 
 	int preferredBufferSize() override {
 		return preferredBufferSize_;
+	}
+
+	void setFullScale_dB_Spl(double x) {
+		fullScale_dB_Spl_ = x;
 	}
 };
 
