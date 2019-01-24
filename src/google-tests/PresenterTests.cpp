@@ -46,6 +46,11 @@ namespace {
 			EXPECT_FALSE(view.testSetupHidden());
 		}
 
+		void confirmTestSetupHidesSetupView() {
+			view.confirmTestSetup();
+			EXPECT_TRUE(view.testSetupHidden());
+		}
+
 		void confirmTestSetupDoesNotShowTesterView() {
 			view.confirmTestSetup();
 			EXPECT_FALSE(view.testerViewShown());
@@ -292,7 +297,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		setInvalidChunkSize();
-		confirmTestSetupDoesHidesSetupView();
+		confirmTestSetupHidesSetupView();
 	}
 
 	TEST_F(
