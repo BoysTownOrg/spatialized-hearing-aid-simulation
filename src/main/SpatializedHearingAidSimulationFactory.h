@@ -33,7 +33,11 @@ private:
 		double
 	);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
-	FilterbankCompressor::Parameters toCompressorParameters(Parameters, PrescriptionReader::Dsl);
+	FilterbankCompressor::Parameters toCompressorParameters(
+		GlobalTestParameters *,
+		Parameters, 
+		PrescriptionReader::Dsl
+	);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);
 	std::shared_ptr<SignalProcessor> makeHearingAid(
 		FilterbankCompressor::Parameters

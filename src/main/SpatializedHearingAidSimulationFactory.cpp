@@ -19,15 +19,15 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
-	const auto brir = readBrir(p.global->brirFilePath);
+	const auto brir = readBrir(global.brirFilePath);
 	processors.push_back(makeChannel(
 		brir.left,
-		toCompressorParameters(p, readPrescription(p.global->leftDslPrescriptionFilePath)),
+		toCompressorParameters(&global, p, readPrescription(global.leftDslPrescriptionFilePath)),
 		p.channelScalars.at(0))
 	);
 	processors.push_back(makeChannel(
 		brir.right,
-		toCompressorParameters(p, readPrescription(p.global->rightDslPrescriptionFilePath)),
+		toCompressorParameters(&global, p, readPrescription(global.rightDslPrescriptionFilePath)),
 		p.channelScalars.at(1))
 	);
 	return std::make_shared<ChannelProcessingGroup>(processors);
@@ -72,15 +72,14 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *x) {
 	const auto brir = readBrir(x->brirFilePath);
 	Parameters dummy;
-	dummy.global = x;
 	makeChannel(
 		brir.left,
-		toCompressorParameters(dummy, readPrescription(x->leftDslPrescriptionFilePath)),
+		toCompressorParameters(x, dummy, readPrescription(x->leftDslPrescriptionFilePath)),
 		0
 	);
 	makeChannel(
 		brir.right,
-		toCompressorParameters(dummy, readPrescription(x->rightDslPrescriptionFilePath)),
+		toCompressorParameters(x, dummy, readPrescription(x->rightDslPrescriptionFilePath)),
 		0
 	);
 }
@@ -111,16 +110,17 @@ PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription
 }
 
 FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompressorParameters(
+	GlobalTestParameters *g,
 	Parameters p, 
 	PrescriptionReader::Dsl prescription
 ) {
 	FilterbankCompressor::Parameters compression;
-	compression.attack_ms = p.global->attack_ms;
-	compression.release_ms = p.global->release_ms;
-	compression.chunkSize = p.global->chunkSize;
-	compression.windowSize = p.global->windowSize;
+	compression.attack_ms = g->attack_ms;
+	compression.release_ms = g->release_ms;
+	compression.chunkSize = g->chunkSize;
+	compression.windowSize = g->windowSize;
 	compression.sampleRate = p.sampleRate;
-	compression.max_dB_Spl = p.global->max_dB_Spl;
+	compression.max_dB_Spl = g->max_dB_Spl;
 	compression.compressionRatios = prescription.compressionRatios;
 	compression.crossFrequenciesHz = prescription.crossFrequenciesHz;
 	compression.kneepointGains_dB = prescription.kneepointGains_dB;
