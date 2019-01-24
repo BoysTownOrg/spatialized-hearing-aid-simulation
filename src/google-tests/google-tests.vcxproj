@@ -182,6 +182,7 @@
     <ClInclude Include="FilterbankCompressorSpy.h" />
     <ClInclude Include="LogString.h" />
     <ClInclude Include="ModelStub.h" />
+    <ClInclude Include="PersistentMemoryWriterStub.h" />
     <ClInclude Include="SignalProcessorStub.h" />
     <ClInclude Include="FakeStimulusList.h" />
     <ClInclude Include="StimulusPlayerStub.h" />

@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include "DocumenterStub.h"
+#include "PersistentMemoryWriterStub.h"
 #include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
 #include <gtest/gtest.h>
 #include <sstream>
