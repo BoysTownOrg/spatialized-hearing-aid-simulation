@@ -13,6 +13,7 @@ public:
 	struct TestParameters{
 		GlobalTestParameters *global;
 	};
+	virtual void documentTestParameters(TestParameters) = 0;
 
 	virtual void write(std::string) = 0;
 	virtual bool failed() = 0;

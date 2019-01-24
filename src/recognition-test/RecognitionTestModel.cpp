@@ -89,6 +89,9 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	stream.insertLine();
 	*/
 	documenter->write(stream.str());
+	Documenter::TestParameters adapted;
+	adapted.global = p.global;
+	documenter->documentTestParameters(adapted);
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {

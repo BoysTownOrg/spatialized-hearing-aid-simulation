@@ -10,6 +10,10 @@ class DocumenterStub : public Documenter {
 	std::stringstream content_{};
 	LogString log_{};
 public:
+	void documentTestParameters(TestParameters p) override {
+		testParameters_ = std::move(p);
+	}
+
 	const TestParameters &documentedTestParameters() {
 		return testParameters_;
 	}
@@ -61,4 +65,5 @@ public:
 	}
 
 	void write(std::string) override {}
+	void documentTestParameters(TestParameters) override {}
 };
