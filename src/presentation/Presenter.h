@@ -23,6 +23,7 @@ struct GlobalTestParameters {
 	int windowSize;
 	int chunkSize;
 	bool usingSpatialization;
+	bool usingHearingAidSimulation;
 };
 
 class Presenter : public EventListener {
