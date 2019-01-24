@@ -125,10 +125,10 @@ void Presenter::initializeModel() {
 	global.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 	global.brirFilePath = view->brirFilePath();
 	global.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-	global.release_ms = convertToDouble(view->release_ms(), "release time");
 	if (view->usingHearingAidSimulation()) {
 		global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 		global.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		global.release_ms = convertToDouble(view->release_ms(), "release time");
 	}
 	global.usingSpatialization = view->usingSpatialization();
 	global.usingHearingAidSimulation = view->usingHearingAidSimulation();
