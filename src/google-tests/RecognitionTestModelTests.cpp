@@ -52,9 +52,12 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelTests,
-		DISABLED_initializeTestDocumentsTestParameters
+		initializeTestDocumentsTestParameters
 	) {
-		FAIL();
+		GlobalTestParameters x;
+		testParameters.global = &x;
+		initializeTest();
+		EXPECT_EQ(&x, documenter.documentedTestParameters());
 	}
 
 	TEST_F(
