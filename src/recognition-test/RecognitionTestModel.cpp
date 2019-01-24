@@ -41,15 +41,15 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 }
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
-	Documenter::TestParameters adapted;
-	adapted.global = p.global;
-	documenter->documentTestParameters(adapted);
+	Documenter::TestParameters documenting;
+	documenting.global = p.global;
+	documenter->documentTestParameters(std::move(documenting));
 }
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
-	StimulusPlayer::Initialization init;
-	init.global = p.global;
-	player->initialize(std::move(init));
+	StimulusPlayer::Initialization playing;
+	playing.global = p.global;
+	player->initialize(std::move(playing));
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {
@@ -81,12 +81,12 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 }
 
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
-	Documenter::TrialParameters adapted;
+	Documenter::TrialParameters documenting;
 	GlobalTrialParameters global;
 	global.level_dB_Spl = p.level_dB_Spl;
 	global.stimulus = currentStimulus_;
-	adapted.global = &global;
-	documenter->documentTrialParameters(adapted);
+	documenting.global = &global;
+	documenter->documentTrialParameters(std::move(documenting));
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
