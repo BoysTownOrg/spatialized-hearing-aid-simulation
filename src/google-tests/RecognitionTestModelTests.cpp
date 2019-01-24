@@ -57,7 +57,7 @@ namespace {
 		GlobalTestParameters x;
 		testParameters.global = &x;
 		initializeTest();
-		EXPECT_EQ(&x, documenter.documentedTestParameters());
+		EXPECT_EQ(&x, documenter.documentedTestParameters().global);
 	}
 
 	TEST_F(
