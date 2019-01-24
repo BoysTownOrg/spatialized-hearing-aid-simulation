@@ -127,7 +127,8 @@ void Presenter::initializeModel() {
 	global.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 	global.release_ms = convertToDouble(view->release_ms(), "release time");
 	global.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-	global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	if (view->usingHearingAidSimulation())
+		global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	global.usingSpatialization = view->usingSpatialization();
 	global.usingHearingAidSimulation = view->usingHearingAidSimulation();
 	test.testFilePath = view->testFilePath();
