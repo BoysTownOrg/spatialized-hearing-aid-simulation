@@ -277,6 +277,15 @@ namespace {
 		confirmTestSetupDoesNotHideSetupView();
 	}
 
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidAttackTimeButNoHearingAidSimulationStillHidesSetupView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidAttackTime();
+		confirmTestSetupHidesSetupView();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotHideSetupView) {
 		setInvalidAttackTime();
 		confirmTestSetupDoesNotHideSetupView();
