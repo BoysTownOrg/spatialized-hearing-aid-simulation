@@ -65,7 +65,7 @@ public:
 	}
 
 	void initialize(std::string) override {
-		failed_ = true;
+		throw InitializationFailure{ errorMessage_ };
 	}
 
 	bool failed() override {
