@@ -103,6 +103,10 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
+	void assertCanBeMade(GlobalTestParameters *) override {
+		throw CreateError{ errorMessage };
+	};
+
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
 		throw CreateError{ errorMessage };
 	}
@@ -110,6 +114,5 @@ public:
 	std::vector<int> preferredProcessingSizes() override { return {}; }
 	int preferredBufferSize() override { return {}; }
 	double fullScale_dB_Spl() override { return {}; }
-	void assertCanBeMade(GlobalTestParameters *) override {};
 	void storeParameters(GlobalTestParameters *) override {};
 };
