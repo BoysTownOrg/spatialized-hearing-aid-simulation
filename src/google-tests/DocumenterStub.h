@@ -51,14 +51,10 @@ public:
 	LogString log() const {
 		return log_;
 	}
-
-	bool failed() override { return {}; }
-	std::string errorMessage() override { return {}; }
 };
 
 class InitializationFailingDocumenter : public Documenter {
 	std::string errorMessage_{};
-	bool failed_{};
 public:
 	void setErrorMessage(std::string s) {
 		errorMessage_ = std::move(s);
@@ -66,14 +62,6 @@ public:
 
 	void initialize(std::string) override {
 		throw InitializationFailure{ errorMessage_ };
-	}
-
-	bool failed() override {
-		return failed_;
-	}
-
-	std::string errorMessage() override {
-		return errorMessage_;
 	}
 
 	void write(std::string) override {}
