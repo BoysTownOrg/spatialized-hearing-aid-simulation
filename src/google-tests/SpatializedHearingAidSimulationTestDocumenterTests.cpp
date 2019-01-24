@@ -54,6 +54,16 @@ TEST(
 }
 
 TEST(
+	SpatializedHearingAidSimulationTestDocumenterTests,
+	initializePassesFilePath
+) {
+	PersistentMemoryWriterStub writer;
+	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	documenter.initialize("a");
+	assertEqual("a", writer.filePath());
+}
+
+TEST(
 	SpatializedHearingAidSimulationTestDocumenterWithInitializationFailingWriter,
 	initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
 ) {
