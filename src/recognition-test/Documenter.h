@@ -4,6 +4,7 @@
 #include <string>
 
 struct GlobalTestParameters;
+struct GlobalTrialParameters;
 
 class Documenter {
 public:
@@ -14,6 +15,10 @@ public:
 		GlobalTestParameters *global;
 	};
 	virtual void documentTestParameters(TestParameters) = 0;
+	
+	struct TrialParameters{
+		GlobalTrialParameters *global;
+	};
 
 	virtual void write(std::string) = 0;
 	virtual bool failed() = 0;

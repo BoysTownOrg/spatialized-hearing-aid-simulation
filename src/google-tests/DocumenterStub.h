@@ -6,10 +6,15 @@
 
 class DocumenterStub : public Documenter {
 	TestParameters testParameters_{};
+	TrialParameters trialParameters_{};
 	std::string filePath_{};
 	std::stringstream content_{};
 	LogString log_{};
 public:
+	TrialParameters documentedTrialParameters() {
+		return trialParameters_;
+	}
+
 	void documentTestParameters(TestParameters p) override {
 		testParameters_ = std::move(p);
 	}
