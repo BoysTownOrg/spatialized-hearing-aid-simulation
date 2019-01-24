@@ -46,6 +46,10 @@ public:
 	bool browseForLeftDslPrescriptionButtonDeactivated_{};
 	bool browseForRightDslPrescriptionButtonDeactivated_{};
 
+	void toggleHearingAidSimulation() {
+		listener_->toggleUsingHearingAidSimulation();
+	}
+
 	void activateLeftDslPrescriptionFilePath() override {
 		leftDslPrescriptionFilePathActivated_ = true;
 	};

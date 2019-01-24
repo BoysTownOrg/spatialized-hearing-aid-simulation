@@ -13,6 +13,7 @@ public:
 	virtual void browseForAudio() = 0;
 	virtual void browseForBrir() = 0;
 	virtual void toggleUsingSpatialization() = 0;
+	virtual void toggleUsingHearingAidSimulation() = 0;
 	virtual void confirmTestSetup() = 0;
 	virtual void playTrial() = 0;
 };

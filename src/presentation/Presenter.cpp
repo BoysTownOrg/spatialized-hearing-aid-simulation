@@ -189,3 +189,7 @@ void Presenter::switchViewIfTestComplete() {
 void Presenter::toggleUsingSpatialization() {
 	toggleSpatializationActivation();
 }
+
+void Presenter::toggleUsingHearingAidSimulation() {
+	toggleHearingAidSimulationActivation();
+}
