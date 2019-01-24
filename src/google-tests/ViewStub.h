@@ -45,6 +45,42 @@ public:
 	bool rightDslPrescriptionFilePathDeactivated_{};
 	bool browseForLeftDslPrescriptionButtonDeactivated_{};
 	bool browseForRightDslPrescriptionButtonDeactivated_{};
+
+	void activateLeftDslPrescriptionFilePath() override {
+		leftDslPrescriptionFilePathActivated_ = true;
+	};
+	
+	void activateRightDslPrescriptionFilePath() override {
+		rightDslPrescriptionFilePathActivated_ = true;
+	};
+	
+	void activateBrowseForLeftDslPrescriptionButton() override {
+		browseForLeftDslPrescriptionButtonActivated_ = true;
+	};
+	
+	void activateBrowseForRightDslPrescriptionButton() override {
+		browseForRightDslPrescriptionButtonActivated_ = true;
+	};
+	
+	void deactivateLeftDslPrescriptionFilePath() override {
+		leftDslPrescriptionFilePathDeactivated_ = true;
+	};
+	
+	void deactivateRightDslPrescriptionFilePath() override {
+		rightDslPrescriptionFilePathDeactivated_ = true;
+	};
+	
+	void deactivateBrowseForLeftDslPrescriptionButton() override {
+		browseForLeftDslPrescriptionButtonDeactivated_ = true;
+	};
+	
+	void deactivateBrowseForRightDslPrescriptionButton() override {
+		browseForRightDslPrescriptionButtonDeactivated_ = true;
+	};
+
+	bool usingHearingAidSimulation() override {
+		return usingHearingAidSimulation_;
+	}
 	
 	void setHearingAidSimulationOn() {
 		usingHearingAidSimulation_ = true;

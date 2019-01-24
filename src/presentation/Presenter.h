@@ -42,8 +42,11 @@ public:
 
 private:
 	void toggleSpatializationActivation();
+	void toggleHearingAidSimulationActivation();
 	void deactivateSpatialization();
 	void activateSpatialization();
+	void activateHearingAidSimulation();
+	void deactivateHearingAidSimulation();
 	void applyIfBrowseNotCancelled(
 		std::string,
 		std::function<void(std::string)>

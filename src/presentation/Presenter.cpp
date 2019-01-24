@@ -8,6 +8,7 @@ Presenter::Presenter(Model *model, View *view) :
 	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
 	view->showTestSetup();
 	toggleSpatializationActivation();
+	toggleHearingAidSimulationActivation();
 }
 
 void Presenter::toggleSpatializationActivation() {
@@ -25,6 +26,27 @@ void Presenter::activateSpatialization() {
 void Presenter::deactivateSpatialization() {
 	view->deactivateBrowseForBrirButton();
 	view->deactivateBrirFilePath();
+}
+
+void Presenter::toggleHearingAidSimulationActivation() {
+	if (view->usingHearingAidSimulation())
+		activateHearingAidSimulation();
+	else
+		deactivateHearingAidSimulation();
+}
+
+void Presenter::activateHearingAidSimulation() {
+	view->activateLeftDslPrescriptionFilePath();
+	view->activateRightDslPrescriptionFilePath();
+	view->activateBrowseForLeftDslPrescriptionButton();
+	view->activateBrowseForRightDslPrescriptionButton();
+}
+
+void Presenter::deactivateHearingAidSimulation() {
+	view->deactivateLeftDslPrescriptionFilePath();
+	view->deactivateRightDslPrescriptionFilePath();
+	view->deactivateBrowseForLeftDslPrescriptionButton();
+	view->deactivateBrowseForRightDslPrescriptionButton();
 }
 
 void Presenter::run() {

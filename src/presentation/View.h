@@ -45,6 +45,7 @@ public:
 	virtual std::string windowSize() = 0;
 	virtual std::string chunkSize() = 0;
 	virtual bool usingSpatialization() = 0;
+	virtual bool usingHearingAidSimulation() = 0;
 	virtual void showErrorDialog(std::string message) = 0;
 	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
 	virtual void populateChunkSizeMenu(std::vector<std::string> items) = 0;
@@ -57,4 +58,12 @@ public:
 	virtual void deactivateBrirFilePath() = 0;
 	virtual void activateBrowseForBrirButton() = 0;
 	virtual void activateBrirFilePath() = 0;
+	virtual void activateLeftDslPrescriptionFilePath() = 0;
+	virtual void activateRightDslPrescriptionFilePath() = 0;
+	virtual void activateBrowseForLeftDslPrescriptionButton() = 0;
+	virtual void activateBrowseForRightDslPrescriptionButton() = 0;
+	virtual void deactivateLeftDslPrescriptionFilePath() = 0;
+	virtual void deactivateRightDslPrescriptionFilePath() = 0;
+	virtual void deactivateBrowseForLeftDslPrescriptionButton() = 0;
+	virtual void deactivateBrowseForRightDslPrescriptionButton() = 0;
 };
