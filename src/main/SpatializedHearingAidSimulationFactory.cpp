@@ -84,6 +84,8 @@ void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameter
 	);
 }
 
+static double max_dB_Spl_Matlab = 119;
+
 void SpatializedHearingAidSimulationFactory::storeParameters(GlobalTestParameters *x) {
 	global = *x;
 }
@@ -93,7 +95,7 @@ int SpatializedHearingAidSimulationFactory::preferredBufferSize() {
 }
 
 double SpatializedHearingAidSimulationFactory::fullScale_dB_Spl() {
-	return global.max_dB_Spl;
+	return max_dB_Spl_Matlab;
 }
 
 std::vector<int> SpatializedHearingAidSimulationFactory::preferredProcessingSizes() {
@@ -120,7 +122,7 @@ FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompr
 	compression.chunkSize = g->chunkSize;
 	compression.windowSize = g->windowSize;
 	compression.sampleRate = p.sampleRate;
-	compression.max_dB_Spl = g->max_dB_Spl;
+	compression.max_dB_Spl = max_dB_Spl_Matlab;
 	compression.compressionRatios = prescription.compressionRatios;
 	compression.crossFrequenciesHz = prescription.crossFrequenciesHz;
 	compression.kneepointGains_dB = prescription.kneepointGains_dB;
