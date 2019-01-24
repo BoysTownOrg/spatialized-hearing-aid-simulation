@@ -22,6 +22,7 @@ struct GlobalTestParameters {
 	std::string testFilePath;
 	double attack_ms;
 	double release_ms;
+	double max_dB_Spl;
 	int windowSize;
 	int chunkSize;
 	bool usingSpatialization;

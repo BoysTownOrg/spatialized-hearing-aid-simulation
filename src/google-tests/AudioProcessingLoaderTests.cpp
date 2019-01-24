@@ -89,8 +89,6 @@ namespace {
 		reader->setSampleRate(7);
 		prepare();
 		assertEqual("d", readerFactory.filePath());
-		EXPECT_EQ(1, processorFactory.parameters().max_dB_Spl);
-		EXPECT_EQ(5, processorFactory.parameters().chunkSize);
 		EXPECT_EQ(6, processorFactory.parameters().channels);
 		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
 		EXPECT_EQ(&x, processorFactory.parameters().global);
