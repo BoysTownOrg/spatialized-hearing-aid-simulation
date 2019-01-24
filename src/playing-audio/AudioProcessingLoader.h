@@ -6,7 +6,6 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioProcessingLoader : public AudioLoader {
-	AudioFrameProcessorFactory::Parameters processing{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 	std::shared_ptr<AudioFrameReader> reader;
 	AudioFrameReaderFactory *readerFactory;

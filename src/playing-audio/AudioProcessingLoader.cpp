@@ -40,10 +40,11 @@ void AudioProcessingLoader::assertProcessorCanBeMade(GlobalTestParameters *globa
 
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
+	AudioFrameProcessorFactory::Parameters processing;
     processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
 	processing.channels = reader->channels();
 	processing.sampleRate = reader->sampleRate();
-	processor = makeProcessor(processing);
+	processor = makeProcessor(std::move(processing));
 	reader->reset();
 	paddedZeros = 0;
 }
