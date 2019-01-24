@@ -312,16 +312,43 @@ namespace {
 		confirmTestSetupDoesNotShowTesterView();
 	}
 
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidWindowSizeButNoHearingAidSimulationShowsTesterView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidWindowSize();
+		confirmTestSetupShowsTesterView();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotShowTesterView) {
 		view.setHearingAidSimulationOn();
 		setInvalidWindowSize();
 		confirmTestSetupDoesNotShowTesterView();
 	}
 
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidReleaseTimeButNoHearingAidSimulationShowsTesterView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidReleaseTime();
+		confirmTestSetupShowsTesterView();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotShowTesterView) {
 		view.setHearingAidSimulationOn();
 		setInvalidReleaseTime();
 		confirmTestSetupDoesNotShowTesterView();
+	}
+
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidAttackTimeButNoHearingAidSimulationShowsTesterView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidAttackTime();
+		confirmTestSetupShowsTesterView();
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotShowTesterView) {
