@@ -266,7 +266,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.testParameters().global->usingSpatialization);
+		EXPECT_TRUE(model.global.usingSpatialization);
 	}
 
 	TEST_F(
@@ -275,7 +275,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.testParameters().global->usingSpatialization);
+		EXPECT_FALSE(model.global.usingSpatialization);
 	}
 
 	TEST_F(
