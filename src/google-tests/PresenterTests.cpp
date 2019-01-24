@@ -234,6 +234,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
+		view.setHearingAidSimulationOn();
 		setInvalidChunkSize();
 		confirmTestSetupDoesNotHideSetupView();
 	}
@@ -254,6 +255,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotShowTesterView) {
+		view.setHearingAidSimulationOn();
 		setInvalidChunkSize();
 		confirmTestSetupDoesNotShowTesterView();
 	}
@@ -274,6 +276,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
 		for (auto s : { "a", "0.1", "-1" })
 			confirmTestSetupWithChunkSizeShowsErrorMessage(s);
 	}
