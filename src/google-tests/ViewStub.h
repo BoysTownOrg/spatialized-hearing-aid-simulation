@@ -30,18 +30,39 @@ class ViewStub : public View {
 	bool browseForBrirButtonDeactivated_{};
 	bool brirFilePathActivated_{};
 	bool browseForBrirButtonActivated_{};
+	bool usingHearingAidSimulation_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
+	bool browseForLeftDslPrescriptionButtonActivated_{};
+	bool browseForRightDslPrescriptionButtonActivated_{};
+	bool leftDslPrescriptionFilePathActivated_{};
+	bool rightDslPrescriptionFilePathActivated_{};
+	bool leftDslPrescriptionFilePathDeactivated_{};
+	bool rightDslPrescriptionFilePathDeactivated_{};
+	bool browseForLeftDslPrescriptionButtonDeactivated_{};
+	bool browseForRightDslPrescriptionButtonDeactivated_{};
+	
+	void setHearingAidSimulationOn() {
+		usingHearingAidSimulation_ = true;
+	}
 
 	void clearActivationState() {
 		browseForBrirButtonActivated_ = false;
 		brirFilePathActivated_ = false;
 		browseForBrirButtonDeactivated_ = false;
 		brirFilePathDeactivated_ = false;
+		browseForLeftDslPrescriptionButtonActivated_ = false;
+		browseForRightDslPrescriptionButtonActivated_ = false;
+		leftDslPrescriptionFilePathActivated_ = false;
+		rightDslPrescriptionFilePathActivated_ = false;
+		leftDslPrescriptionFilePathDeactivated_ = false;
+		rightDslPrescriptionFilePathDeactivated_ = false;
+		browseForLeftDslPrescriptionButtonDeactivated_ = false;
+		browseForRightDslPrescriptionButtonDeactivated_ = false;
 	}
 
 	bool usingSpatialization() override {
