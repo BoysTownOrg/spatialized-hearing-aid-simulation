@@ -33,6 +33,8 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	std::shared_ptr<AudioFrameProcessor> processor;
 	double fullScale_dB_Spl_{};
 	int preferredBufferSize_{};
+	GlobalTestParameters *assertCanBeMadeParameters_{};
+	GlobalTestParameters *storedParameters_{};
 public:
 	explicit AudioFrameProcessorStubFactory(
 		std::shared_ptr<AudioFrameProcessor> processor =
@@ -75,6 +77,14 @@ public:
 
 	double fullScale_dB_Spl() override { 
 		return fullScale_dB_Spl_; 
+	}
+
+	const GlobalTestParameters *assertCanBeMadeParameters() const {
+		return assertCanBeMadeParameters_;
+	}
+
+	const GlobalTestParameters *storedParameters() const {
+		return storedParameters_;
 	}
 };
 
