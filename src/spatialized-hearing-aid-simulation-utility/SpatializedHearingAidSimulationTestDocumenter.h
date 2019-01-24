@@ -10,6 +10,7 @@ public:
 };
 
 #include <presentation/Presenter.h>
+#include <recognition-test/RecognitionTestModel.h>
 
 #ifdef SPATIALIZED_HA_SIMULATION_UTILITY_EXPORTS
 	#define SPATIALIZED_HA_SIMULATION_UTILITY_API __declspec(dllexport)
@@ -23,5 +24,6 @@ public:
 	SPATIALIZED_HA_SIMULATION_UTILITY_API explicit 
 		SpatializedHearingAidSimulationTestDocumenter(PersistentMemoryWriter *);
 	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTestParameters(GlobalTestParameters *);
+	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTrialParameters(GlobalTrialParameters *);
 };
 

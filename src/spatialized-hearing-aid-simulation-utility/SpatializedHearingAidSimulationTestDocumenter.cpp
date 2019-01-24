@@ -55,3 +55,8 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(Globa
 	stream.insertLine();
 	writer->write(stream.str());
 }
+
+void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(GlobalTrialParameters *)
+{
+	return void();
+}
