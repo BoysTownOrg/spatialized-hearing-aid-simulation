@@ -272,6 +272,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotHideSetupView) {
+		view.setHearingAidSimulationOn();
 		setInvalidReleaseTime();
 		confirmTestSetupDoesNotHideSetupView();
 	}
@@ -294,6 +295,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotShowTesterView) {
+		view.setHearingAidSimulationOn();
 		setInvalidReleaseTime();
 		confirmTestSetupDoesNotShowTesterView();
 	}
@@ -320,6 +322,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
 		confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
 	}
 
