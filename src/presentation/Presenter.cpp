@@ -98,20 +98,20 @@ void Presenter::prepareTest() {
 
 void Presenter::initializeModel() {
 	Model::TestParameters test;
-	GlobalTestParameters p;
-	p.subjectId = view->subjectId();
-	p.testerId = view->testerId();
-	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	p.brirFilePath = view->brirFilePath();
-	p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-	p.release_ms = convertToDouble(view->release_ms(), "release time");
-	p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-	p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-	p.usingSpatialization = view->usingSpatialization();
+	GlobalTestParameters global;
+	global.subjectId = view->subjectId();
+	global.testerId = view->testerId();
+	global.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	global.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	global.brirFilePath = view->brirFilePath();
+	global.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+	global.release_ms = convertToDouble(view->release_ms(), "release time");
+	global.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+	global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	global.usingSpatialization = view->usingSpatialization();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
-	test.global = &p;
+	test.global = &global;
 	model->initializeTest(std::move(test));
 }
 
