@@ -15,18 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Presenter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="View.h">
+    <ClInclude Include="SpatializedHearingAidSimulationTestDocumenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Presenter.cpp">
+    <ClCompile Include="SpatializedHearingAidSimulationTestDocumenter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
