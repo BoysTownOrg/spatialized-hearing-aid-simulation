@@ -126,6 +126,10 @@ namespace {
 			EXPECT_TRUE(view.rightDslPrescriptionFilePathActivated_);
 			EXPECT_TRUE(view.browseForLeftDslPrescriptionButtonActivated_);
 			EXPECT_TRUE(view.browseForRightDslPrescriptionButtonActivated_);
+			EXPECT_TRUE(view.chunkSizeActivated_);
+			EXPECT_TRUE(view.windowSizeActivated_);
+			EXPECT_TRUE(view.attack_msActivated_);
+			EXPECT_TRUE(view.release_msActivated_);
 		}
 
 		void assertHearingAidUIHasNotBeenDeactivated() {
@@ -133,6 +137,10 @@ namespace {
 			EXPECT_FALSE(view.rightDslPrescriptionFilePathDeactivated_);
 			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonDeactivated_);
 			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonDeactivated_);
+			EXPECT_FALSE(view.chunkSizeDeactivated_);
+			EXPECT_FALSE(view.windowSizeDeactivated_);
+			EXPECT_FALSE(view.attack_msDeactivated_);
+			EXPECT_FALSE(view.release_msDeactivated_);
 		}
 
 		void assertHearingAidUIHasOnlyBeenDeactivated() {
@@ -145,6 +153,10 @@ namespace {
 			EXPECT_FALSE(view.rightDslPrescriptionFilePathActivated_);
 			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonActivated_);
 			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonActivated_);
+			EXPECT_FALSE(view.chunkSizeActivated_);
+			EXPECT_FALSE(view.windowSizeActivated_);
+			EXPECT_FALSE(view.attack_msActivated_);
+			EXPECT_FALSE(view.release_msActivated_);
 		}
 
 		void assertHearingAidUIHasBeenDeactivated() {
@@ -152,6 +164,10 @@ namespace {
 			EXPECT_TRUE(view.rightDslPrescriptionFilePathDeactivated_);
 			EXPECT_TRUE(view.browseForLeftDslPrescriptionButtonDeactivated_);
 			EXPECT_TRUE(view.browseForRightDslPrescriptionButtonDeactivated_);
+			EXPECT_TRUE(view.chunkSizeDeactivated_);
+			EXPECT_TRUE(view.windowSizeDeactivated_);
+			EXPECT_TRUE(view.attack_msDeactivated_);
+			EXPECT_TRUE(view.release_msDeactivated_);
 		}
 	};
 

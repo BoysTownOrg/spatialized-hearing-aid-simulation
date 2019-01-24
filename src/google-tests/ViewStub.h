@@ -45,6 +45,14 @@ public:
 	bool rightDslPrescriptionFilePathDeactivated_{};
 	bool browseForLeftDslPrescriptionButtonDeactivated_{};
 	bool browseForRightDslPrescriptionButtonDeactivated_{};
+	bool chunkSizeActivated_{};
+	bool windowSizeActivated_{};
+	bool attack_msActivated_{};
+	bool release_msActivated_{};
+	bool chunkSizeDeactivated_{};
+	bool windowSizeDeactivated_{};
+	bool attack_msDeactivated_{};
+	bool release_msDeactivated_{};
 
 	void toggleHearingAidSimulation() {
 		listener_->toggleUsingHearingAidSimulation();
