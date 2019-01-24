@@ -5,10 +5,15 @@
 #include <sstream>
 
 class DocumenterStub : public Documenter {
+	TestParameters testParameters_{};
 	std::string filePath_{};
 	std::stringstream content_{};
 	LogString log_{};
 public:
+	const TestParameters &documentedTestParameters() {
+		return testParameters_;
+	}
+
 	std::string filePath() const {
 		return filePath_;
 	}
