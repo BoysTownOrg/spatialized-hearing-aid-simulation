@@ -43,6 +43,10 @@ void FltkView::onToggleSpatialization(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->toggleUsingSpatialization();
 }
 
+void FltkView::onToggleHearingAidSimulation(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->toggleUsingHearingAidSimulation();
+}
+
 FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	testFilePath_(250, 50, 200, 45, "test file path"),
@@ -51,6 +55,7 @@ FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	testerId_(250, 150, 200, 45, "tester ID"),
 	leftPrescriptionFilePath_(250, 200, 200, 45, "left DSL prescription file path"),
 	browseLeftPrescription(460, 200, 60, 45, "browse"),
+	usingHearingAidSimulation_(20, 200, 60, 45),
 	rightPrescriptionFilePath_(250, 250, 200, 45, "right DSL prescription file path"),
 	browseRightPrescription(460, 250, 60, 45, "browse"),
 	audioDirectory_(250, 300, 200, 45, "audio directory"),
@@ -97,8 +102,10 @@ FltkView::FltkView() :
 	window.setupView.browseBrir.callback(onBrowseBrir, this);
 	window.setupView.confirm.callback(onConfirmTestSetup, this);
 	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
+	window.setupView.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
 	window.testerView.play.callback(onPlay, this);
 	window.setupView.usingSpatialization_.value(1);
+	window.setupView.usingHearingAidSimulation_.value(1);
 	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
 	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
 }
@@ -133,6 +140,38 @@ void FltkView::activateBrowseForBrirButton() {
 
 void FltkView::activateBrirFilePath() {
 	window.setupView.brirFilePath_.activate();
+}
+
+void FltkView::activateLeftDslPrescriptionFilePath() {
+	window.setupView.leftPrescriptionFilePath_.activate();
+}
+
+void FltkView::activateRightDslPrescriptionFilePath() {
+	window.setupView.rightPrescriptionFilePath_.activate();
+}
+
+void FltkView::activateBrowseForLeftDslPrescriptionButton() {
+	window.setupView.browseLeftPrescription.activate();
+}
+
+void FltkView::activateBrowseForRightDslPrescriptionButton() {
+	window.setupView.browseRightPrescription.activate();
+}
+
+void FltkView::deactivateLeftDslPrescriptionFilePath() {
+	window.setupView.leftPrescriptionFilePath_.deactivate();
+}
+
+void FltkView::deactivateRightDslPrescriptionFilePath() {
+	window.setupView.rightPrescriptionFilePath_.deactivate();
+}
+
+void FltkView::deactivateBrowseForLeftDslPrescriptionButton() {
+	window.setupView.browseLeftPrescription.deactivate();
+}
+
+void FltkView::deactivateBrowseForRightDslPrescriptionButton() {
+	window.setupView.browseRightPrescription.deactivate();
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
@@ -268,6 +307,10 @@ std::string FltkView::chunkSize() {
 
 bool FltkView::usingSpatialization() {
 	return window.setupView.usingSpatialization_.value();
+}
+
+bool FltkView::usingHearingAidSimulation() {
+	return window.setupView.usingHearingAidSimulation_.value();
 }
 
 void FltkView::showErrorDialog(std::string message) {

@@ -38,6 +38,7 @@ struct FltkSetupView : public Fl_Group {
 	Fl_Button browseBrir;
 	Fl_Button confirm;
 	Fl_Check_Button usingSpatialization_;
+	Fl_Check_Button usingHearingAidSimulation_;
 };
 
 struct FltkTesterView : public Fl_Group {
@@ -96,6 +97,15 @@ public:
 	void deactivateBrirFilePath() override;
 	void activateBrowseForBrirButton() override;
 	void activateBrirFilePath() override;
+	bool usingHearingAidSimulation() override;
+	void activateLeftDslPrescriptionFilePath() override;
+	void activateRightDslPrescriptionFilePath() override;
+	void activateBrowseForLeftDslPrescriptionButton() override;
+	void activateBrowseForRightDslPrescriptionButton() override;
+	void deactivateLeftDslPrescriptionFilePath() override;
+	void deactivateRightDslPrescriptionFilePath() override;
+	void deactivateBrowseForLeftDslPrescriptionButton() override;
+	void deactivateBrowseForRightDslPrescriptionButton() override;
 
 private:
 	static void onBrowseTestFile(Fl_Widget *, void *);
@@ -106,4 +116,5 @@ private:
 	static void onConfirmTestSetup(Fl_Widget *, void *);
 	static void onPlay(Fl_Widget *, void *);
 	static void onToggleSpatialization(Fl_Widget *, void *);
+	static void onToggleHearingAidSimulation(Fl_Widget *, void *);
 };

@@ -27,6 +27,7 @@ public:
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(
+		GlobalTestParameters *,
 		std::vector<float> b,
 		FilterbankCompressor::Parameters,
 		double
