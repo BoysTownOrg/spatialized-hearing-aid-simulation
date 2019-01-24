@@ -150,6 +150,13 @@ namespace {
 		assertSpatializationUIHasOnlyBeenDeactivated();
 	}
 
+	TEST_F(PresenterTests, constructorActivatesHearingAidSimulationUIWhenInitiallyOn) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOn();
+		Presenter{ &model, &view };
+		assertHearingAidUIHasOnlyBeenActivated();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
 		view.confirmTestSetup();
 		EXPECT_TRUE(view.testSetupHidden());
