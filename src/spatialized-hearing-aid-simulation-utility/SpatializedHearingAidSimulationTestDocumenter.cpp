@@ -63,3 +63,7 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(Glob
 	stream.insertLine();
 	writer->write(stream.str());
 }
+
+void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string filePath)
+{
+}

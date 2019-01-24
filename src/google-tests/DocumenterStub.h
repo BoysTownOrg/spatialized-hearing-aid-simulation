@@ -86,11 +86,22 @@ public:
 class PersistentMemoryWriterStub : public PersistentMemoryWriter {
 	std::stringstream content_{};
 public:
-	void write(std::string s) {
+	void write(std::string s) override {
 		content_ << std::move(s);
 	}
 
 	std::string content() const {
 		return content_.str();
 	}
+};
+
+class InitializationFailingWriter : public PersistentMemoryWriter {
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	void write(std::string) override {}
 };

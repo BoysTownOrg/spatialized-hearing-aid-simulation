@@ -11,6 +11,7 @@ public:
 
 #include <presentation/Presenter.h>
 #include <recognition-test/RecognitionTestModel.h>
+#include <common-includes/RuntimeError.h>
 
 #ifdef SPATIALIZED_HA_SIMULATION_UTILITY_EXPORTS
 	#define SPATIALIZED_HA_SIMULATION_UTILITY_API __declspec(dllexport)
@@ -25,5 +26,7 @@ public:
 		SpatializedHearingAidSimulationTestDocumenter(PersistentMemoryWriter *);
 	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTestParameters(GlobalTestParameters *);
 	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTrialParameters(GlobalTrialParameters *);
+	SPATIALIZED_HA_SIMULATION_UTILITY_API void initialize(std::string filePath);
+	RUNTIME_ERROR(InitializationFailure);
 };
 
