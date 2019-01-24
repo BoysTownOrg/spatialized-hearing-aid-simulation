@@ -35,3 +35,20 @@ TEST(
 		writer.content()
 	);
 }
+
+TEST(
+	SpatializedHearingAidSimulationTestDocumenterTests,
+	playTrialDocumentsTrial
+) {
+	GlobalTrialParameters x;
+	x.level_dB_Spl = 1;
+	x.stimulus = "a";
+	PersistentMemoryWriterStub writer;
+	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	documenter.documentTrialParameters(&x);
+	assertEqual(
+		"stimulus: a\n"
+		"level (dB SPL): 1\n\n", 
+		writer.content()
+	);
+}
