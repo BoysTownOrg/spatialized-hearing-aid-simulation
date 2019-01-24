@@ -72,6 +72,10 @@ public:
 	void setFullScale_dB_Spl(double x) {
 		fullScale_dB_Spl_ = x;
 	}
+
+	double fullScale_dB_Spl() override { 
+		return fullScale_dB_Spl_; 
+	}
 };
 
 class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -88,4 +92,5 @@ public:
 
 	std::vector<int> preferredProcessingSizes() override { return {}; }
 	int preferredBufferSize() override { return {}; }
+	double fullScale_dB_Spl() override { return {}; }
 };

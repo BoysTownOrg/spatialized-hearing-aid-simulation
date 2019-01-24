@@ -88,7 +88,7 @@ public:
 
 std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {
     RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (level_dB_Spl - processing.max_dB_Spl) / 20.0);
+    const auto desiredRms = std::pow(10.0, (level_dB_Spl - processorFactory->fullScale_dB_Spl()) / 20.0);
     std::vector<double> scalars{};
     for (int i = 0; i < reader->channels(); ++i)
         scalars.push_back(desiredRms / rms.compute(i));
