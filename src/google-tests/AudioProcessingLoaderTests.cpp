@@ -56,16 +56,13 @@ namespace {
 		}
 	};
 
-	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheck) {
+	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheckAndStoresThem) {
 		GlobalTestParameters x;
 		initialization.global = &x;
 		initialize();
 
-		EXPECT_EQ(&x, processorFactory.parameters().global);
-		
-		// The SpatializedHearingAidSimulationFactory expects a size of two.
-		// Ideally this would not cater to a single implementation...
-		EXPECT_EQ(2U, processorFactory.parameters().channelScalars.size());
+		EXPECT_EQ(&x, processorFactory.assertCanBeMadeParameters());
+		EXPECT_EQ(&x, processorFactory.storedParameters());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
