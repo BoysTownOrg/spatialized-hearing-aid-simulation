@@ -107,7 +107,7 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
 }
 
 int AudioProcessingLoader::bufferSize() {
-	return processing.chunkSize;
+	return processorFactory->preferredBufferSize();
 }
 
 std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {

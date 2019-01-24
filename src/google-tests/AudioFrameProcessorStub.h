@@ -63,6 +63,10 @@ public:
 	void setPreferredBufferSize(int n) {
 		preferredBufferSize_ = n;
 	}
+
+	int preferredBufferSize() override {
+		return preferredBufferSize_;
+	}
 };
 
 class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -78,4 +82,5 @@ public:
 	}
 
 	std::vector<int> preferredProcessingSizes() override { return {}; }
+	int preferredBufferSize() override { return {}; }
 };

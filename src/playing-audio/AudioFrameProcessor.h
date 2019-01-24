@@ -31,4 +31,5 @@ public:
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
 	virtual std::vector<int> preferredProcessingSizes() = 0;
+	virtual int preferredBufferSize() = 0;
 };
