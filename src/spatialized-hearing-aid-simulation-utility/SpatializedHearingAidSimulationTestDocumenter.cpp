@@ -38,6 +38,12 @@ SpatializedHearingAidSimulationTestDocumenter::SpatializedHearingAidSimulationTe
 ) :
 	writer{ writer } {}
 
+void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string) {
+	writer->initialize({});
+	if (writer->failed())
+		throw InitializationFailure{ writer->errorMessage() };
+}
+
 void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(GlobalTestParameters * global) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("subject", global->subjectId);
@@ -62,8 +68,4 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(Glob
 	stream.insertLabeledParameterLine("level (dB SPL)", global->level_dB_Spl);
 	stream.insertLine();
 	writer->write(stream.str());
-}
-
-void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string filePath)
-{
 }
