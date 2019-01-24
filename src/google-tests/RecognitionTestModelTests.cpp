@@ -35,10 +35,10 @@ namespace {
 	}
 
 	TEST_F(RecognitionTestModelTests, initializeTestInitializesPlayer) {
-		GlobalTestParameters x;
-		testParameters.global = &x;
+		GlobalTestParameters global;
+		testParameters.global = &global;
 		initializeTest();
-		EXPECT_EQ(&x, player.initialization().global);
+		EXPECT_EQ(&global, player.initialization().global);
 	}
 
 	TEST_F(
@@ -54,10 +54,10 @@ namespace {
 		RecognitionTestModelTests,
 		initializeTestDocumentsTestParameters
 	) {
-		GlobalTestParameters x;
-		testParameters.global = &x;
+		GlobalTestParameters global;
+		testParameters.global = &global;
 		initializeTest();
-		EXPECT_EQ(&x, documenter.documentedTestParameters().global);
+		EXPECT_EQ(&global, documenter.documentedTestParameters().global);
 	}
 
 	TEST_F(
@@ -124,8 +124,8 @@ namespace {
 		list.setContents({ "a", "b", "c" });
 		trial.level_dB_Spl = 1;
 		playTrial();
-		EXPECT_EQ(1, documenter.global.level_dB_Spl);
-		assertEqual("a", documenter.global.stimulus);
+		EXPECT_EQ(1, documenter.globalTrialParameters.level_dB_Spl);
+		assertEqual("a", documenter.globalTrialParameters.stimulus);
 	}
 
 	TEST_F(

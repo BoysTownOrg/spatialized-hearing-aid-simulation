@@ -11,10 +11,10 @@ class DocumenterStub : public Documenter {
 	std::stringstream content_{};
 	LogString log_{};
 public:
-	GlobalTrialParameters global{};
+	GlobalTrialParameters globalTrialParameters{};
 
 	void documentTrialParameters(TrialParameters p) override {
-		global = *p.global;
+		globalTrialParameters = *p.global;
 		log_ += LogString{ "documentTrialParameters " };
 	}
 
