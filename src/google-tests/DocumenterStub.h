@@ -67,3 +67,17 @@ public:
 	void write(std::string) override {}
 	void documentTestParameters(TestParameters) override {}
 };
+
+#include <presentation/SpatializedHearingAidSimulationTestDocumenter.h>
+
+class PersistentMemoryWriterStub : public PersistentMemoryWriter {
+	std::stringstream content_{};
+public:
+	void write(std::string s) {
+		content_ << std::move(s);
+	}
+
+	std::string content() const {
+		return content_.str();
+	}
+};

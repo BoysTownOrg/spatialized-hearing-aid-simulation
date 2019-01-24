@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Model.h" />
     <ClInclude Include="Presenter.h" />
+    <ClInclude Include="SpatializedHearingAidSimulationTestDocumenter.h" />
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
