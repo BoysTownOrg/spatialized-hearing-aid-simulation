@@ -56,7 +56,10 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(Globa
 	writer->write(stream.str());
 }
 
-void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(GlobalTrialParameters *)
-{
-	return void();
+void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(GlobalTrialParameters *global) {
+	FormattedStream stream;
+	stream.insertLabeledParameterLine("stimulus", global->stimulus);
+	stream.insertLabeledParameterLine("level (dB SPL)", global->level_dB_Spl);
+	stream.insertLine();
+	writer->write(stream.str());
 }
