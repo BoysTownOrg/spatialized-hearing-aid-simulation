@@ -81,7 +81,7 @@ public:
 		chunkSize_ = s;
 	}
 
-	int chunkSize() override {
+	int bufferSize() override {
 		return chunkSize_;
 	}
 };
@@ -102,7 +102,7 @@ public:
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
-	int chunkSize() override { return {}; }
+	int bufferSize() override { return {}; }
 	void prepare(Preparation) override {}
 	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
@@ -124,6 +124,6 @@ public:
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
-	int chunkSize() override { return {}; }
+	int bufferSize() override { return {}; }
 	std::vector<int> preferredProcessingSizes() override { return {}; }
 };

@@ -85,7 +85,7 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	stream.insertLabeledParameterLine("attack (ms)", p.attack_ms);
 	stream.insertLabeledParameterLine("release (ms)", p.release_ms);
 	stream.insertLabeledParameterLine("window size (samples)", p.windowSize);
-	stream.insertLabeledParameterLine("chunk size (samples)", p.chunkSize);
+	stream.insertLabeledParameterLine("chunk size (samples)", p.bufferSize);
 	stream.insertLine();
 	*/
 	documenter->write(stream.str());

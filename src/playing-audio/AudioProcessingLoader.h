@@ -25,7 +25,7 @@ public:
 	PLAYING_AUDIO_API int channels() override;
 	PLAYING_AUDIO_API int sampleRate() override;
 	std::vector<int> preferredProcessingSizes() override;
-	int chunkSize() override;
+	int bufferSize() override;
 
 private:
 	void storeProcessingParameters(Initialization);

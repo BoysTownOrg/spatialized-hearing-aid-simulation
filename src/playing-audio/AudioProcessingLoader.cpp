@@ -106,7 +106,7 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
 	}
 }
 
-int AudioProcessingLoader::chunkSize() {
+int AudioProcessingLoader::bufferSize() {
 	return processing.chunkSize;
 }
 

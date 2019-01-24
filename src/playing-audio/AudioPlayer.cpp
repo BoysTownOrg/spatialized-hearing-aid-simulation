@@ -68,7 +68,7 @@ void AudioPlayer::openStream(std::string deviceName) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = loader->sampleRate();
 	streaming.channels = loader->channels();
-	streaming.framesPerBuffer = loader->chunkSize();
+	streaming.framesPerBuffer = loader->bufferSize();
 	streaming.deviceIndex = findDeviceIndex(std::move(deviceName));
 	device->openStream(std::move(streaming));
 }

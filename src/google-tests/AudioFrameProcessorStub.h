@@ -31,6 +31,7 @@ class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
 	std::vector<int> preferredProcessingSizes_{};
 	Parameters parameters_{};
 	std::shared_ptr<AudioFrameProcessor> processor;
+	int preferredBufferSize_{};
 public:
 	explicit AudioFrameProcessorStubFactory(
 		std::shared_ptr<AudioFrameProcessor> processor =
@@ -57,6 +58,10 @@ public:
 
 	std::vector<int> preferredProcessingSizes() override {
 		return preferredProcessingSizes_;
+	}
+
+	void setPreferredBufferSize(int n) {
+		preferredBufferSize_ = n;
 	}
 };
 
