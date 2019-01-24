@@ -1,6 +1,4 @@
 #include "RecognitionTestModel.h"
-#include <sstream>
-#include <iomanip>
 
 RecognitionTestModel::RecognitionTestModel(
 	StimulusList *list,
@@ -22,6 +20,9 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	catch (const StimulusPlayer::InitializationFailure &e) {
 		throw TestInitializationFailure{ e.what() };
 	}
+	catch (const Documenter::InitializationFailure &e) {
+		throw TestInitializationFailure{ e.what() };
+	}
 }
 
 void RecognitionTestModel::initializeTest_(TestParameters p) {
@@ -36,12 +37,7 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 }
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
-	try {
-		documenter->initialize(std::move(testFilePath));
-	}
-	catch (const Documenter::InitializationFailure &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
+	documenter->initialize(std::move(testFilePath));
 }
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
