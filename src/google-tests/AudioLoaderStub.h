@@ -77,7 +77,7 @@ public:
 		return log_;
 	}
 
-	void setChunkSize(int s) {
+	void setBufferSize(int s) {
 		chunkSize_ = s;
 	}
 

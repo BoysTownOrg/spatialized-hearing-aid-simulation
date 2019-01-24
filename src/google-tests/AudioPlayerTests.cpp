@@ -60,7 +60,7 @@ namespace {
 		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
 		request.audioDevice = "gamma";
 		request.level_dB_Spl = 8;
-		loader.setChunkSize(5);
+		loader.setBufferSize(5);
 		loader.setChannels(6);
 		loader.setSampleRate(7);
 		play(request);
