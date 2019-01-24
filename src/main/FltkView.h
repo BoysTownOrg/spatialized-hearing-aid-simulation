@@ -106,6 +106,14 @@ public:
 	void deactivateRightDslPrescriptionFilePath() override;
 	void deactivateBrowseForLeftDslPrescriptionButton() override;
 	void deactivateBrowseForRightDslPrescriptionButton() override;
+	void activateReleaseTime_ms() override;
+	void activateAttackTime_ms() override;
+	void activateWindowSize() override;
+	void activateChunkSize() override;
+	void deactivateReleaseTime_ms() override;
+	void deactivateAttackTime_ms() override;
+	void deactivateWindowSize() override;
+	void deactivateChunkSize() override;
 
 private:
 	static void onBrowseTestFile(Fl_Widget *, void *);

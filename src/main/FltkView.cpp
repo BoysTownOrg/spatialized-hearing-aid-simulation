@@ -53,16 +53,16 @@ FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	browseTestFilePath(460, 50, 60, 45, "browse"),
 	subjectId_(250, 100, 200, 45, "subject ID"),
 	testerId_(250, 150, 200, 45, "tester ID"),
-	leftPrescriptionFilePath_(250, 200, 200, 45, "left DSL prescription file path"),
-	browseLeftPrescription(460, 200, 60, 45, "browse"),
-	usingHearingAidSimulation_(20, 200, 60, 45),
-	rightPrescriptionFilePath_(250, 250, 200, 45, "right DSL prescription file path"),
-	browseRightPrescription(460, 250, 60, 45, "browse"),
-	audioDirectory_(250, 300, 200, 45, "audio directory"),
-	browseAudio(460, 300, 60, 45, "browse"),
-	brirFilePath_(250, 350, 200, 45, "BRIR file path"),
-	browseBrir(460, 350, 60, 45, "browse"),
-	usingSpatialization_(100, 350, 60, 45),
+	audioDirectory_(250, 200, 200, 45, "audio directory"),
+	browseAudio(460, 200, 60, 45, "browse"),
+	brirFilePath_(250, 250, 200, 45, "BRIR file path"),
+	browseBrir(460, 250, 60, 45, "browse"),
+	usingSpatialization_(100, 250, 60, 45),
+	leftPrescriptionFilePath_(250, 300, 200, 45, "left DSL prescription file path"),
+	browseLeftPrescription(460, 300, 60, 45, "browse"),
+	usingHearingAidSimulation_(20, 300, 60, 45),
+	rightPrescriptionFilePath_(250, 350, 200, 45, "right DSL prescription file path"),
+	browseRightPrescription(460, 350, 60, 45, "browse"),
 	attack_ms_(250, 400, 200, 45, "attack (ms)"),
 	release_ms_(250, 450, 200, 45, "release (ms)"),
 	windowSize_(250, 500, 200, 45, "window size (samples)"),
@@ -172,6 +172,38 @@ void FltkView::deactivateBrowseForLeftDslPrescriptionButton() {
 
 void FltkView::deactivateBrowseForRightDslPrescriptionButton() {
 	window.setupView.browseRightPrescription.deactivate();
+}
+
+void FltkView::activateReleaseTime_ms() {
+	window.setupView.release_ms_.activate();
+}
+
+void FltkView::activateAttackTime_ms() {
+	window.setupView.attack_ms_.activate();
+}
+
+void FltkView::activateWindowSize() {
+	window.setupView.windowSize_.activate();
+}
+
+void FltkView::activateChunkSize() {
+	window.setupView.chunkSize_.activate();
+}
+
+void FltkView::deactivateReleaseTime_ms() {
+	window.setupView.release_ms_.deactivate();
+}
+
+void FltkView::deactivateAttackTime_ms() {
+	window.setupView.attack_ms_.deactivate();
+}
+
+void FltkView::deactivateWindowSize() {
+	window.setupView.windowSize_.deactivate();
+}
+
+void FltkView::deactivateChunkSize() {
+	window.setupView.chunkSize_.deactivate();
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
