@@ -121,6 +121,7 @@ void Presenter::initializeModel() {
 	global.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	global.usingSpatialization = view->usingSpatialization();
+	global.usingHearingAidSimulation = view->usingHearingAidSimulation();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
 	test.global = &global;
