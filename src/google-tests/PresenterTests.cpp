@@ -257,6 +257,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotHideSetupView) {
+		view.setHearingAidSimulationOn();
 		setInvalidWindowSize();
 		confirmTestSetupDoesNotHideSetupView();
 	}
@@ -278,6 +279,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotShowTesterView) {
+		view.setHearingAidSimulationOn();
 		setInvalidWindowSize();
 		confirmTestSetupDoesNotShowTesterView();
 	}
@@ -299,6 +301,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
 		for (auto s : { "a", "0.1", "-1" })
 			confirmTestSetupWithWindowSizeShowsErrorMessage(s);
 	}
