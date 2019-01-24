@@ -52,3 +52,19 @@ TEST(
 		writer.content()
 	);
 }
+
+TEST(
+	SpatializedHearingAidSimulationTestDocumenterWithInitializationFailingWriter,
+	initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
+) {
+	InitializationFailingWriter writer{};
+	writer.setErrorMessage("error.");
+	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	try {
+		documenter.initialize({});
+		FAIL() << "Expected SpatializedHearingAidSimulationTestDocumenter::InitializationFailure";
+	}
+	catch (const SpatializedHearingAidSimulationTestDocumenter::InitializationFailure &e) {
+		assertEqual("error.", e.what());
+	}
+}
