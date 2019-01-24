@@ -37,10 +37,10 @@ namespace {
 
 	TEST_F(AudioPlayerTests, initializeInitializesLoader) {
 		StimulusPlayer::Initialization init;
-		GlobalTestParameters x;
-		init.global = &x;
+		GlobalTestParameters global;
+		init.global = &global;
 		player.initialize(init);
-		EXPECT_EQ(&x, loader.initialization().global);
+		EXPECT_EQ(&global, loader.initialization().global);
 	}
 
 	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {
@@ -56,20 +56,25 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
 		StimulusPlayer::PlayRequest request;
-		request.audioFilePath = "d";
-		device.setDescriptions({ "alpha", "beta", "gamma", "lambda" });
-		request.audioDevice = "gamma";
-		request.level_dB_Spl = 8;
-		loader.setBufferSize(5);
-		loader.setChannels(6);
-		loader.setSampleRate(7);
+		request.audioFilePath = "a";
+		request.level_dB_Spl = 1;
+		loader.setBufferSize(2);
+		loader.setChannels(3);
+		loader.setSampleRate(4);
 		play(request);
-		assertEqual("d", loader.preparation().audioFilePath);
-		EXPECT_EQ(8, loader.preparation().level_dB_Spl);
+		assertEqual("a", loader.preparation().audioFilePath);
+		EXPECT_EQ(1, loader.preparation().level_dB_Spl);
+		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
+		EXPECT_EQ(3, device.streamParameters().channels);
+		EXPECT_EQ(4, device.streamParameters().sampleRate);
+	}
+
+	TEST_F(AudioPlayerTests, playFindsDeviceIndex) {
+		StimulusPlayer::PlayRequest request;
+		device.setDescriptions({ "zeroth", "first", "second", "third" });
+		request.audioDevice = "second";
+		play(request);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
-		EXPECT_EQ(5U, device.streamParameters().framesPerBuffer);
-		EXPECT_EQ(6, device.streamParameters().channels);
-		EXPECT_EQ(7, device.streamParameters().sampleRate);
 	}
 
 	TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
