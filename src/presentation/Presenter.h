@@ -20,7 +20,6 @@ struct GlobalTestParameters {
 	std::string brirFilePath;
 	double attack_ms;
 	double release_ms;
-	double max_dB_Spl;
 	int windowSize;
 	int chunkSize;
 	bool usingSpatialization;
