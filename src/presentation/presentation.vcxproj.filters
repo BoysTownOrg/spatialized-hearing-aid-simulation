@@ -32,5 +32,8 @@
     <ClCompile Include="Presenter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpatializedHearingAidSimulationTestDocumenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

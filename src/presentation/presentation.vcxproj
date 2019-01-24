@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Presenter.cpp" />
+    <ClCompile Include="SpatializedHearingAidSimulationTestDocumenter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
