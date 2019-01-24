@@ -81,9 +81,6 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
-		GlobalTestParameters x;
-		initialization.global = &x;
-		initialize();
 		preparation.audioFilePath = "d";
 		reader->setChannels(6);
 		reader->setSampleRate(7);
@@ -91,14 +88,13 @@ namespace {
 		assertEqual("d", readerFactory.filePath());
 		EXPECT_EQ(6, processorFactory.parameters().channels);
 		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
-		EXPECT_EQ(&x, processorFactory.parameters().global);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
-		processorFactory.setFullScale_dB_Spl(8);
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		processorFactory.setFullScale_dB_Spl(8);
 		preparation.level_dB_Spl = 7;
 		prepare();
 		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
