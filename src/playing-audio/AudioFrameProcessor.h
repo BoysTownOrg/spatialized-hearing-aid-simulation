@@ -23,7 +23,6 @@ public:
 	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> channelScalars;
-		double max_dB_Spl;
 		int sampleRate;
 		int channels;
 		GlobalTestParameters *global;
