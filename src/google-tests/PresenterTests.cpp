@@ -176,6 +176,13 @@ namespace {
 		assertHearingAidUIHasOnlyBeenActivated();
 	}
 
+	TEST_F(PresenterTests, constructorDeactivatesHearingAidSimulationUIWhenInitiallyOff) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOff();
+		Presenter{ &model, &view };
+		assertHearingAidUIHasOnlyBeenDeactivated();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
 		view.confirmTestSetup();
 		EXPECT_TRUE(view.testSetupHidden());
