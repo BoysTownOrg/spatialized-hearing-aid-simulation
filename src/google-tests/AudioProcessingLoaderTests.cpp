@@ -80,6 +80,14 @@ namespace {
 		EXPECT_EQ(1, loader.bufferSize());
 	}
 
+	TEST_F(AudioProcessingLoaderTests, DISABLED_bufferSizePassesTestParametersToFactory) {
+		GlobalTestParameters x;
+		initialization.global = &x;
+		initialize();
+		loader.bufferSize();
+		FAIL();// EXPECT_EQ(&x, processorFactory.preferredBufferSizeArgument());
+	}
+
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
 		GlobalTestParameters x;
 		initialization.global = &x;
