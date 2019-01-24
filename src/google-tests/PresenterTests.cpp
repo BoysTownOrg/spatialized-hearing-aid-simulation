@@ -247,6 +247,15 @@ namespace {
 		confirmTestSetupDoesNotHideSetupView();
 	}
 
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidWindowSizeButNoHearingAidSimulationStillHidesSetupView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidWindowSize();
+		confirmTestSetupHidesSetupView();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotHideSetupView) {
 		setInvalidWindowSize();
 		confirmTestSetupDoesNotHideSetupView();
