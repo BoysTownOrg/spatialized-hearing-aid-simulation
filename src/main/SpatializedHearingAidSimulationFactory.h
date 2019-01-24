@@ -6,11 +6,13 @@
 #include <dsl-prescription/PrescriptionReader.h>
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <signal-processing/SignalProcessor.h>
+#include <presentation/Presenter.h>
 
 class SpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<PrescriptionReader> prescriptionReader;
 	std::shared_ptr<BrirReader> brirReader;
+	GlobalTestParameters global{};
 public:
 	SpatializedHearingAidSimulationFactory(
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
@@ -21,6 +23,8 @@ public:
 	std::vector<int> preferredProcessingSizes() override;
 	int preferredBufferSize() override;
 	double fullScale_dB_Spl() override;
+	void assertCanBeMade(GlobalTestParameters *) override;
+	void storeParameters(GlobalTestParameters *) override;
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
 	std::shared_ptr<SignalProcessor> makeChannel(

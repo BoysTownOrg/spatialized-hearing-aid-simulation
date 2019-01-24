@@ -4,7 +4,6 @@
 #include <signal-processing/ScalingProcessor.h>
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <fir-filtering/FirFilter.h>
-#include <presentation/Presenter.h>
 #include <gsl/gsl>
 
 SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
@@ -70,12 +69,32 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	}
 }
 
+void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *x) {
+	const auto brir = readBrir(x->brirFilePath);
+	Parameters dummy;
+	dummy.global = x;
+	makeChannel(
+		brir.left,
+		toCompressorParameters(dummy, readPrescription(x->leftDslPrescriptionFilePath)),
+		0
+	);
+	makeChannel(
+		brir.right,
+		toCompressorParameters(dummy, readPrescription(x->rightDslPrescriptionFilePath)),
+		0
+	);
+}
+
+void SpatializedHearingAidSimulationFactory::storeParameters(GlobalTestParameters *x) {
+	global = *x;
+}
+
 int SpatializedHearingAidSimulationFactory::preferredBufferSize() {
-	return 0;
+	return global.chunkSize;
 }
 
 double SpatializedHearingAidSimulationFactory::fullScale_dB_Spl() {
-	return 0.0;
+	return global.max_dB_Spl;
 }
 
 std::vector<int> SpatializedHearingAidSimulationFactory::preferredProcessingSizes() {
