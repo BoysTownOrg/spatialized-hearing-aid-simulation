@@ -307,6 +307,7 @@ namespace {
 		PresenterTests,
 		confirmTestSetupPassesParametersToModel
 	) {
+		view.setHearingAidSimulationOn();
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
 		view.setAudioDirectory("c");
