@@ -41,54 +41,7 @@ void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
 		throw TestInitializationFailure{ documenter->errorMessage() };
 }
 
-class FormattedStream {
-	std::stringstream stream{};
-public:
-	void insertFixed() {
-		stream << std::fixed;
-	}
-
-	void insertPrecision(std::streamsize n) {
-		stream << std::setprecision(n);
-	}
-
-	template<typename T>
-	void insertLabeledParameterLine(std::string label, T p) {
-		stream << std::move(label) << ": " << std::move(p) << '\n';
-	}
-
-	template<typename T>
-	void insertIndentedLabeledParameterLine(std::string label, T p) {
-		stream << "    ";
-		insertLabeledParameterLine(std::move(label), std::move(p));
-	}
-
-	void insertLine(std::string s = {}) {
-		stream << std::move(s) << '\n';
-	}
-
-	std::string str() {
-		return stream.str();
-	}
-};
-
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
-	FormattedStream stream; /*
-	stream.insertLabeledParameterLine("subject", p.subjectId);
-	stream.insertLabeledParameterLine("tester", p.testerId);
-	stream.insertLine("DSL prescription");
-	stream.insertIndentedLabeledParameterLine("left", p.leftDslPrescriptionFilePath);
-	stream.insertIndentedLabeledParameterLine("right", p.rightDslPrescriptionFilePath);
-	stream.insertLabeledParameterLine("BRIR", p.brirFilePath);
-	stream.insertFixed();
-	stream.insertPrecision(1);
-	stream.insertLabeledParameterLine("attack (ms)", p.attack_ms);
-	stream.insertLabeledParameterLine("release (ms)", p.release_ms);
-	stream.insertLabeledParameterLine("window size (samples)", p.windowSize);
-	stream.insertLabeledParameterLine("chunk size (samples)", p.bufferSize);
-	stream.insertLine();
-	*/
-	documenter->write(stream.str());
 	Documenter::TestParameters adapted;
 	adapted.global = p.global;
 	documenter->documentTestParameters(adapted);
@@ -96,9 +49,7 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 
 void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
 	StimulusPlayer::Initialization init;
-
 	init.global = p.global;
-
 	player->initialize(std::move(init));
 }
 
@@ -130,12 +81,7 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	player->play(std::move(request));
 }
 
-void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
-	FormattedStream stream;
-	stream.insertLabeledParameterLine("stimulus", currentStimulus_);
-	stream.insertLabeledParameterLine("level (dB SPL)", p.level_dB_Spl);
-	stream.insertLine();
-	documenter->write(stream.str());
+void RecognitionTestModel::documentTrialParameters(TrialParameters) {
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {

@@ -124,11 +124,8 @@ namespace {
 		list.setContents({ "a", "b", "c" });
 		trial.level_dB_Spl = 1;
 		playTrial();
-		assertEqual(
-			"stimulus: a\n"
-			"level (dB SPL): 1\n\n", 
-			documenter.content()
-		);
+		EXPECT_EQ(1, documenter.documentedTrialParameters().global->level_dB_Spl);
+		assertEqual("a", documenter.documentedTrialParameters().global->stimulus);
 	}
 
 	TEST_F(
