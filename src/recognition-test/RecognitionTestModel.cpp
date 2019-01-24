@@ -36,9 +36,12 @@ void RecognitionTestModel::initializeStimulusList(std::string directory) {
 }
 
 void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
-	documenter->initialize(std::move(testFilePath));
-	if (documenter->failed())
-		throw TestInitializationFailure{ documenter->errorMessage() };
+	try {
+		documenter->initialize(std::move(testFilePath));
+	}
+	catch (const Documenter::InitializationFailure &e) {
+		throw TestInitializationFailure{ e.what() };
+	}
 }
 
 void RecognitionTestModel::documentTestParameters(TestParameters p) {
