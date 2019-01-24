@@ -20,7 +20,6 @@ public:
 		std::shared_ptr<BrirReader> brirReader
 	);
 	std::shared_ptr<AudioFrameProcessor> make(Parameters) override;
-	std::vector<int> preferredProcessingSizes() override;
 	int preferredBufferSize() override;
 	double fullScale_dB_Spl() override;
 	void assertCanBeMade(GlobalTestParameters *) override;
