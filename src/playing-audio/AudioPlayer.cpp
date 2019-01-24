@@ -26,10 +26,10 @@ void AudioPlayer::initialize(Initialization init) {
 	}
 }
 
-void AudioPlayer::initializeLoader(Initialization request) {
-	AudioLoader::Initialization init;
-	init.global = request.global;
-	loader->initialize(std::move(init));
+void AudioPlayer::initializeLoader(Initialization init) {
+	AudioLoader::Initialization loading;
+	loading.global = init.global;
+	loader->initialize(std::move(loading));
 }
 
 void AudioPlayer::play(PlayRequest request) {
