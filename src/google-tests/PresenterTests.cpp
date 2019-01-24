@@ -287,6 +287,15 @@ namespace {
 	}
 
 	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidChunkSizeButNoHearingAidSimulationStillHidesSetupView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidChunkSize();
+		confirmTestSetupDoesHidesSetupView();
+	}
+
+	TEST_F(
 		PresenterTests,
 		confirmTestSetupPassesParametersToModel
 	) {
