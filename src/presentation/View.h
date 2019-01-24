@@ -67,4 +67,12 @@ public:
 	virtual void deactivateRightDslPrescriptionFilePath() = 0;
 	virtual void deactivateBrowseForLeftDslPrescriptionButton() = 0;
 	virtual void deactivateBrowseForRightDslPrescriptionButton() = 0;
+	virtual void activateReleaseTime_ms() = 0;
+	virtual void activateAttackTime_ms() = 0;
+	virtual void activateWindowSize() = 0;
+	virtual void activateChunkSize() = 0;
+	virtual void deactivateReleaseTime_ms() = 0;
+	virtual void deactivateAttackTime_ms() = 0;
+	virtual void deactivateWindowSize() = 0;
+	virtual void deactivateChunkSize() = 0;
 };

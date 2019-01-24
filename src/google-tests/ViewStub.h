@@ -53,6 +53,38 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
+	
+	void activateReleaseTime_ms() override {
+		release_msActivated_ = true;
+	};
+
+	void activateAttackTime_ms() override {
+		attack_msActivated_ = true;
+	};
+	
+	void activateWindowSize() override {
+		windowSizeActivated_ = true;
+	};
+	
+	void activateChunkSize() override {
+		chunkSizeActivated_ = true;
+	};
+	
+	void deactivateReleaseTime_ms() override {
+		release_msDeactivated_ = true;
+	};
+	
+	void deactivateAttackTime_ms() override {
+		attack_msDeactivated_ = true;
+	};
+	
+	void deactivateWindowSize() override {
+		windowSizeDeactivated_ = true;
+	};
+	
+	void deactivateChunkSize() override {
+		chunkSizeDeactivated_ = true;
+	};
 
 	void toggleHearingAidSimulation() {
 		listener_->toggleUsingHearingAidSimulation();
@@ -115,6 +147,14 @@ public:
 		rightDslPrescriptionFilePathDeactivated_ = false;
 		browseForLeftDslPrescriptionButtonDeactivated_ = false;
 		browseForRightDslPrescriptionButtonDeactivated_ = false;
+		release_msDeactivated_ = false;
+		attack_msDeactivated_ = false;
+		windowSizeDeactivated_ = false;
+		chunkSizeDeactivated_ = false;
+		chunkSizeActivated_ = false;
+		windowSizeActivated_ = false;
+		attack_msActivated_ = false;
+		release_msActivated_ = false;
 	}
 
 	bool usingSpatialization() override {

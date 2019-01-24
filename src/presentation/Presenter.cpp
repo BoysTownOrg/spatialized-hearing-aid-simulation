@@ -40,6 +40,10 @@ void Presenter::activateHearingAidSimulation() {
 	view->activateRightDslPrescriptionFilePath();
 	view->activateBrowseForLeftDslPrescriptionButton();
 	view->activateBrowseForRightDslPrescriptionButton();
+	view->activateChunkSize();
+	view->activateWindowSize();
+	view->activateAttackTime_ms();
+	view->activateReleaseTime_ms();
 }
 
 void Presenter::deactivateHearingAidSimulation() {
@@ -47,6 +51,10 @@ void Presenter::deactivateHearingAidSimulation() {
 	view->deactivateRightDslPrescriptionFilePath();
 	view->deactivateBrowseForLeftDslPrescriptionButton();
 	view->deactivateBrowseForRightDslPrescriptionButton();
+	view->deactivateChunkSize();
+	view->deactivateWindowSize();
+	view->deactivateAttackTime_ms();
+	view->deactivateReleaseTime_ms();
 }
 
 void Presenter::run() {
