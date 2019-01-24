@@ -6,7 +6,6 @@
 class AudioLoaderStub : public AudioLoader {
 	Initialization parameters_{};
 	Preparation preparation_{};
-	std::vector<int> preferredProcessingSizes_{};
 	gsl::span<gsl::span<float>> audioBuffer_{};
 	LogString log_{};
 	int sampleRate_{};
@@ -14,14 +13,6 @@ class AudioLoaderStub : public AudioLoader {
 	int bufferSize_{};
 	bool complete_{};
 public:
-	void setPreferredProcessingSizes(std::vector<int> v) {
-		preferredProcessingSizes_ = std::move(v);
-	}
-
-	std::vector<int> preferredProcessingSizes() override {
-		return preferredProcessingSizes_;
-	}
-
 	const Initialization &initialization() const {
 		return parameters_;
 	}
@@ -104,7 +95,6 @@ public:
 	int sampleRate() override { return {}; }
 	int bufferSize() override { return {}; }
 	void prepare(Preparation) override {}
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class PreparationFailureAudioLoader : public AudioLoader {
@@ -125,5 +115,4 @@ public:
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
 	int bufferSize() override { return {}; }
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 };

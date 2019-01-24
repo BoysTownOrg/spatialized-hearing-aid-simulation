@@ -31,7 +31,6 @@ public:
 	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
-	std::vector<int> preferredProcessingSizes() override;
 	bool testComplete() override;
 private:
 	void initializeTest_(TestParameters);

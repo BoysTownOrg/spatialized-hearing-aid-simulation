@@ -130,19 +130,6 @@ namespace {
 		EXPECT_TRUE(view.testSetupShown());
 	}
 
-	TEST_F(PresenterTests, constructorPopulatesChunkAndWindowSizesWithPreferredProcessingSizes) {
-		model.setPreferredProcessingSizes({ 1, 2, 3 });
-		Presenter{ &model, &view };
-		assertEqual(
-			{ "1", "2", "3" },
-			view.chunkSizeItems()
-		);
-		assertEqual(
-			{ "1", "2", "3" },
-			view.windowSizeItems()
-		);
-	}
-
 	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {
 		model.setAudioDeviceDescriptions({ "a", "b", "c" });
 		Presenter{ &model, &view };

@@ -27,7 +27,6 @@ public:
 		int channels;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
-	virtual std::vector<int> preferredProcessingSizes() = 0;
 	virtual int preferredBufferSize() = 0;
 	virtual double fullScale_dB_Spl() = 0;
 	virtual void assertCanBeMade(GlobalTestParameters *) = 0;

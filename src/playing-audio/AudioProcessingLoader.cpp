@@ -106,10 +106,6 @@ int AudioProcessingLoader::bufferSize() {
 	return processorFactory->preferredBufferSize();
 }
 
-std::vector<int> AudioProcessingLoader::preferredProcessingSizes() {
-	return processorFactory->preferredProcessingSizes();
-}
-
 void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 	const auto zerosToPad = audio.begin()->size() - reader->framesRemaining();
 	reader->read(audio);

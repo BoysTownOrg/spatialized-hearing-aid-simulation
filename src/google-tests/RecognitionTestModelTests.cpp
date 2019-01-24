@@ -144,11 +144,6 @@ namespace {
 		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 	}
 
-	TEST_F(RecognitionTestModelTests, preferredProcessingSizesReturnsThatOfTheAudioPlayer) {
-		player.setPreferredProcessingSizes({ 1, 2, 3 });
-		assertEqual({ 1, 2, 3 }, model.preferredProcessingSizes());
-	}
-
 	class RecognitionTestModelWithInitializationFailingDocumenter : public ::testing::Test {
 	protected:
 		FakeStimulusList list{};

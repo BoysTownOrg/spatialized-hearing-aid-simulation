@@ -23,7 +23,6 @@ public:
 	PLAYING_AUDIO_API bool complete() override;
 	PLAYING_AUDIO_API int channels() override;
 	PLAYING_AUDIO_API int sampleRate() override;
-	std::vector<int> preferredProcessingSizes() override;
 	int bufferSize() override;
 
 private:

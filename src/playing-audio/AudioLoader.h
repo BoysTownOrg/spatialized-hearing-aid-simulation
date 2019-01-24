@@ -30,5 +30,4 @@ public:
 	virtual int sampleRate() = 0;
 	virtual int channels() = 0;
 	virtual int bufferSize() = 0;
-	virtual std::vector<int> preferredProcessingSizes() = 0;
 };

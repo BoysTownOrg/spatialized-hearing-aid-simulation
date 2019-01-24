@@ -27,6 +27,5 @@ public:
 	RUNTIME_ERROR(RequestFailure);
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
-	virtual std::vector<int> preferredProcessingSizes() = 0;
 	virtual bool isPlaying() = 0;
 };

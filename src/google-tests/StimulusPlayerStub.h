@@ -20,10 +20,6 @@ public:
 		preferredProcessingSizes_ = std::move(v);
 	}
 
-	std::vector<int> preferredProcessingSizes() override {
-		return preferredProcessingSizes_;
-	}
-
 	const Initialization &initialization() const {
 		return initialization_;
 	}
@@ -86,7 +82,6 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
 	void initialize(Initialization) override {}
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class InitializationFailingStimulusPlayer : public StimulusPlayer {
@@ -103,7 +98,4 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
 	void play(PlayRequest) override {}
-	std::vector<int> preferredProcessingSizes() override {
-		return {};
-	}
 };

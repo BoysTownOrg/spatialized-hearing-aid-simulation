@@ -28,7 +28,6 @@ public:
 };
 
 class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
-	std::vector<int> preferredProcessingSizes_{};
 	Parameters parameters_{};
 	std::shared_ptr<AudioFrameProcessor> processor;
 	double fullScale_dB_Spl_{};
@@ -53,14 +52,6 @@ public:
 	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
 		parameters_ = std::move(p);
 		return processor;
-	}
-
-	void setPreferredProcessingSizes(std::vector<int> v) {
-		preferredProcessingSizes_ = std::move(v);
-	}
-
-	std::vector<int> preferredProcessingSizes() override {
-		return preferredProcessingSizes_;
 	}
 
 	void setPreferredBufferSize(int n) {
@@ -111,7 +102,6 @@ public:
 		throw CreateError{ errorMessage };
 	}
 
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 	int preferredBufferSize() override { return {}; }
 	double fullScale_dB_Spl() override { return {}; }
 	void storeParameters(GlobalTestParameters *) override {};

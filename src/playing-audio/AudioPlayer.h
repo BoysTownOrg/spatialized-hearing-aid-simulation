@@ -19,7 +19,6 @@ public:
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
 	bool isPlaying() override;
 	PLAYING_AUDIO_API void initialize(Initialization) override;
-	std::vector<int> preferredProcessingSizes() override;
 private:
 	void initializeLoader(Initialization);
 	void play_(PlayRequest);

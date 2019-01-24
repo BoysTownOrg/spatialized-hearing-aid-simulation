@@ -171,11 +171,6 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, preferredProcessingSizesReturnsThatOfProcessorFactory) {
-		processorFactory.setPreferredProcessingSizes({ 1, 2, 3 });
-		assertEqual({ 1, 2, 3 }, loader.preferredProcessingSizes());
-	}
-
 	class TimesTwo : public AudioFrameProcessor {
 		void process(gsl::span<gsl::span<float>> audio) override {
 			for (const auto channel : audio)

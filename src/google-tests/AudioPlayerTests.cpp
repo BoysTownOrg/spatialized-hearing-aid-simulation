@@ -119,11 +119,6 @@ namespace {
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
 
-	TEST_F(AudioPlayerTests, preferredProcessingSizesReturnsThatOfLoader) {
-		loader.setPreferredProcessingSizes({ 1, 2, 3 });
-		assertEqual({ 1, 2, 3 }, player.preferredProcessingSizes());
-	}
-
 	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};

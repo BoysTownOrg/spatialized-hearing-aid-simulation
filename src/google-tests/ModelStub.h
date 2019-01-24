@@ -5,21 +5,12 @@
 
 class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
-	std::vector<int> preferredProcessingSizes_{};
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
 public:
 	GlobalTestParameters globalTestParameters{};
-
-	void setPreferredProcessingSizes(std::vector<int> v) {
-		preferredProcessingSizes_ = std::move(v);
-	}
-
-	std::vector<int> preferredProcessingSizes() override {
-		return preferredProcessingSizes_;
-	}
 
 	const TestParameters &testParameters() const {
 		return testParameters_;
@@ -78,7 +69,6 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void playTrial(TrialParameters) override {}
 	bool testComplete() override { return {}; }
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 };
 
 class TrialFailingModel : public Model {
@@ -95,5 +85,4 @@ public:
 	void initializeTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
-	std::vector<int> preferredProcessingSizes() override { return {}; }
 };

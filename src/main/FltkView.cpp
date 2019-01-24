@@ -99,6 +99,8 @@ FltkView::FltkView() :
 	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.testerView.play.callback(onPlay, this);
 	window.setupView.usingSpatialization_.value(1);
+	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
 }
 
 void FltkView::showTestSetup() {

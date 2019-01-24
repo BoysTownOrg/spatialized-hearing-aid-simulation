@@ -6,18 +6,8 @@ Presenter::Presenter(Model *model, View *view) :
 {
 	view->subscribe(this);
 	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
-	const auto sizeItems = preferredProcessingSizes();
-	view->populateChunkSizeMenu(sizeItems);
-	view->populateWindowSizeMenu(sizeItems);
 	view->showTestSetup();
 	toggleSpatializationActivation();
-}
-
-std::vector<std::string> Presenter::preferredProcessingSizes() {
-	std::vector<std::string> sizeItems{};
-	for (auto size : model->preferredProcessingSizes())
-		sizeItems.push_back(std::to_string(size));
-	return sizeItems;
 }
 
 void Presenter::toggleSpatializationActivation() {
