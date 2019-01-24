@@ -134,6 +134,25 @@ namespace {
 			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonDeactivated_);
 			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonDeactivated_);
 		}
+
+		void assertHearingAidUIHasOnlyBeenDeactivated() {
+			assertHearingAidUIHasNotBeenActivated();
+			assertHearingAidUIHasBeenDeactivated();
+		}
+
+		void assertHearingAidUIHasNotBeenActivated() {
+			EXPECT_FALSE(view.leftDslPrescriptionFilePathActivated_);
+			EXPECT_FALSE(view.rightDslPrescriptionFilePathActivated_);
+			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonActivated_);
+			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonActivated_);
+		}
+
+		void assertHearingAidUIHasBeenDeactivated() {
+			EXPECT_TRUE(view.leftDslPrescriptionFilePathDeactivated_);
+			EXPECT_TRUE(view.rightDslPrescriptionFilePathDeactivated_);
+			EXPECT_TRUE(view.browseForLeftDslPrescriptionButtonDeactivated_);
+			EXPECT_TRUE(view.browseForRightDslPrescriptionButtonDeactivated_);
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {

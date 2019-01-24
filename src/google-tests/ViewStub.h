@@ -86,6 +86,10 @@ public:
 		usingHearingAidSimulation_ = true;
 	}
 
+	void setHearingAidSimulationOff() {
+		usingHearingAidSimulation_ = false;
+	}
+
 	void clearActivationState() {
 		browseForBrirButtonActivated_ = false;
 		brirFilePathActivated_ = false;
