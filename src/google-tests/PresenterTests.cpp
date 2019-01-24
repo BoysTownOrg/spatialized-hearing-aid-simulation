@@ -429,6 +429,20 @@ namespace {
 		assertSpatializationUIHasOnlyBeenActivated();
 	}
 
+	TEST_F(PresenterTests, togglingHearingAidSimulationOffDeactivatesUI) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOn();
+		view.toggleHearingAidSimulation();
+		assertHearingAidUIHasOnlyBeenActivated();
+	}
+
+	TEST_F(PresenterTests, togglingHearingAidSimulationOnActivatesUI) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOff();
+		view.toggleHearingAidSimulation();
+		assertHearingAidUIHasOnlyBeenDeactivated();
+	}
+
 	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
 		playTrialWithLevelShowsErrorMessage("b");
 	}
