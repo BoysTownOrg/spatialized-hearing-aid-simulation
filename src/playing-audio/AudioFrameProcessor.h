@@ -26,7 +26,6 @@ public:
 		double max_dB_Spl;
 		int sampleRate;
 		int channels;
-		int chunkSize;
 		GlobalTestParameters *global;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
