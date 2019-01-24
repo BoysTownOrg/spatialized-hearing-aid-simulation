@@ -56,6 +56,11 @@ namespace {
 			EXPECT_FALSE(view.testerViewShown());
 		}
 
+		void confirmTestSetupShowsTesterView() {
+			view.confirmTestSetup();
+			EXPECT_TRUE(view.testerViewShown());
+		}
+
 		void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
 			view.setChunkSize(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid chunk size.");
