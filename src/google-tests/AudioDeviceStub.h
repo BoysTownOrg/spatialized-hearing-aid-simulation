@@ -111,3 +111,34 @@ public:
 		return complete_;
 	}
 };
+
+class FailsToOpenStream : public AudioDevice {
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	void openStream(StreamParameters) override {
+		failed_ = true;
+	}
+
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+
+	void setController(AudioDeviceController *) override {}
+	void startStream() override {}
+	void stopStream() override {}
+	bool streaming() override { return {}; }
+	void setCallbackResultToComplete() override {}
+	void setCallbackResultToContinue() override {}
+	void closeStream() override {}
+	int count() override { return {}; }
+	std::string description(int) override { return {}; }
+};
