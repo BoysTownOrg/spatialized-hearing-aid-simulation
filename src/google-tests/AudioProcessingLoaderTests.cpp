@@ -75,9 +75,9 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, chunkSizeReturnsWhatWasInitialized) {
-		initialize();
-		EXPECT_EQ(5, loader.chunkSize());
+	TEST_F(AudioProcessingLoaderTests, preferredBufferSizeReturnsThatOfFactory) {
+		processorFactory.setPreferredBufferSize(1);
+		EXPECT_EQ(1, loader.preferredBufferSize());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
