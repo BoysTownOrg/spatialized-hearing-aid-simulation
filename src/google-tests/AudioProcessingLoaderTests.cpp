@@ -95,8 +95,7 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
-		//initialization.max_dB_Spl = 8;
-		initialize();
+		processorFactory.setFullScale_dB_Spl(8);
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
