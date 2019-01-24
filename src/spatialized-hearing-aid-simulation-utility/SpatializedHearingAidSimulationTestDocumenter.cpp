@@ -38,8 +38,8 @@ SpatializedHearingAidSimulationTestDocumenter::SpatializedHearingAidSimulationTe
 ) :
 	writer{ writer } {}
 
-void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string) {
-	writer->initialize({});
+void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string filePath) {
+	writer->initialize(std::move(filePath));
 	if (writer->failed())
 		throw InitializationFailure{ writer->errorMessage() };
 }
