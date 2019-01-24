@@ -28,8 +28,7 @@ public:
 	int bufferSize() override;
 
 private:
-	void storeProcessingParameters(Initialization);
-	void assertProcessorCanBeMade();
+	void assertProcessorCanBeMade(GlobalTestParameters *);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
     std::vector<double> computeChannelScalars(double level_dB_Spl);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(

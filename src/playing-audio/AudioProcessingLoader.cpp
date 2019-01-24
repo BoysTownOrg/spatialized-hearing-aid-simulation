@@ -25,23 +25,13 @@ AudioProcessingLoader::AudioProcessingLoader(
 	processorFactory{ processorFactory } {}
 
 void AudioProcessingLoader::initialize(Initialization init) {
-	try {
-		processorFactory->assertCanBeMade(init.global);
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw InitializationFailure{ e.what() };
-	}
+	assertProcessorCanBeMade(init.global);
 	processorFactory->storeParameters(init.global);
 }
 
-void AudioProcessingLoader::storeProcessingParameters(AudioLoader::Initialization init) {
-	processing.global = init.global;
-	processing.channelScalars.resize(2);
-}
-
-void AudioProcessingLoader::assertProcessorCanBeMade() {
+void AudioProcessingLoader::assertProcessorCanBeMade(GlobalTestParameters *global) {
 	try {
-		processorFactory->make(processing);
+		processorFactory->assertCanBeMade(global);
 	}
 	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw InitializationFailure{ e.what() };

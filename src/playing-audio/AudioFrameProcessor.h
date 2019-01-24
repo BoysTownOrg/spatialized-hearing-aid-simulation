@@ -25,7 +25,6 @@ public:
 		std::vector<double> channelScalars;
 		int sampleRate;
 		int channels;
-		GlobalTestParameters *global;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
 	virtual std::vector<int> preferredProcessingSizes() = 0;
