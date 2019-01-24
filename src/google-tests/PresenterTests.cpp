@@ -223,14 +223,22 @@ namespace {
 		assertHearingAidUIHasOnlyBeenDeactivated();
 	}
 
-	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
-		view.confirmTestSetup();
-		EXPECT_TRUE(view.testSetupHidden());
-	}
-
 	TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
 		view.confirmTestSetup();
 		EXPECT_TRUE(view.testerViewShown());
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
+		confirmTestSetupHidesSetupView();
+	}
+
+	TEST_F(
+		PresenterTests, 
+		confirmTestSetupWithInvalidChunkSizeButNoHearingAidSimulationStillHidesSetupView
+	) {
+		view.setHearingAidSimulationOff();
+		setInvalidChunkSize();
+		confirmTestSetupHidesSetupView();
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotHideSetupView) {
@@ -292,15 +300,6 @@ namespace {
 
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
 		confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
-	}
-
-	TEST_F(
-		PresenterTests, 
-		confirmTestSetupWithInvalidChunkSizeButNoHearingAidSimulationStillHidesSetupView
-	) {
-		view.setHearingAidSimulationOff();
-		setInvalidChunkSize();
-		confirmTestSetupHidesSetupView();
 	}
 
 	TEST_F(
