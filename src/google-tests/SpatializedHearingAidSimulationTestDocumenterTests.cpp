@@ -2,26 +2,29 @@
 #include "PersistentMemoryWriterStub.h"
 #include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
 #include <gtest/gtest.h>
-#include <sstream>
 
-TEST(
+class SpatializedHearingAidSimulationTestDocumenterTests : public ::testing::Test {
+protected:
+	PersistentMemoryWriterStub writer;
+	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+};
+
+TEST_F(
 	SpatializedHearingAidSimulationTestDocumenterTests,
 	formatsTestParameters
 ) {
-	GlobalTestParameters x;
-	x.subjectId = "a";
-	x.testerId = "b";
-	x.leftDslPrescriptionFilePath = "c";
-	x.rightDslPrescriptionFilePath = "d";
-	x.brirFilePath = "e";
-	x.attack_ms = 1;
-	x.release_ms = 2;
-	x.windowSize = 3;
-	x.chunkSize = 4;
-	PersistentMemoryWriterStub writer;
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	GlobalTestParameters test;
+	test.subjectId = "a";
+	test.testerId = "b";
+	test.leftDslPrescriptionFilePath = "c";
+	test.rightDslPrescriptionFilePath = "d";
+	test.brirFilePath = "e";
+	test.attack_ms = 1;
+	test.release_ms = 2;
+	test.windowSize = 3;
+	test.chunkSize = 4;
 	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
-	p.global = &x;
+	p.global = &test;
 	documenter.documentTestParameters(p);
 	assertEqual(
 		"subject: a\n"
@@ -38,17 +41,15 @@ TEST(
 	);
 }
 
-TEST(
+TEST_F(
 	SpatializedHearingAidSimulationTestDocumenterTests,
 	playTrialDocumentsTrial
 ) {
-	GlobalTrialParameters x;
-	x.level_dB_Spl = 1;
-	x.stimulus = "a";
-	PersistentMemoryWriterStub writer;
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	GlobalTrialParameters trial;
+	trial.level_dB_Spl = 1;
+	trial.stimulus = "a";
 	SpatializedHearingAidSimulationTestDocumenter::TrialParameters p;
-	p.global = &x;
+	p.global = &trial;
 	documenter.documentTrialParameters(p);
 	assertEqual(
 		"stimulus: a\n"
@@ -57,12 +58,10 @@ TEST(
 	);
 }
 
-TEST(
+TEST_F(
 	SpatializedHearingAidSimulationTestDocumenterTests,
 	initializePassesFilePath
 ) {
-	PersistentMemoryWriterStub writer;
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
 	documenter.initialize("a");
 	assertEqual("a", writer.filePath());
 }
