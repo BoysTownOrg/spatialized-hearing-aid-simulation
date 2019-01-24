@@ -160,7 +160,8 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosWithPartiallyPaddedLoad) {
-		FakeAudioFileReader fakeReader{ { 0 } };
+		std::vector<float> singleSample { 0 };
+		FakeAudioFileReader fakeReader{ singleSample };
 		setInMemoryReader(fakeReader);
 		prepare();
 		processor->setGroupDelay(2);
