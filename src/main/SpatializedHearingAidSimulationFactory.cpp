@@ -17,6 +17,21 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 {
 }
 
+void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *x) {
+	const auto brir = readBrir(x->brirFilePath);
+	Parameters dummy;
+	makeChannel(
+		brir.left,
+		toCompressorParameters(x, dummy, readPrescription(x->leftDslPrescriptionFilePath)),
+		0
+	);
+	makeChannel(
+		brir.right,
+		toCompressorParameters(x, dummy, readPrescription(x->rightDslPrescriptionFilePath)),
+		0
+	);
+}
+
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
 	std::vector<std::shared_ptr<SignalProcessor>> processors{};
 	const auto brir = readBrir(global.brirFilePath);
@@ -69,26 +84,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	}
 }
 
-void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *x) {
-	const auto brir = readBrir(x->brirFilePath);
-	Parameters dummy;
-	makeChannel(
-		brir.left,
-		toCompressorParameters(x, dummy, readPrescription(x->leftDslPrescriptionFilePath)),
-		0
-	);
-	makeChannel(
-		brir.right,
-		toCompressorParameters(x, dummy, readPrescription(x->rightDslPrescriptionFilePath)),
-		0
-	);
-}
-
 static double max_dB_Spl_Matlab = 119;
-
-void SpatializedHearingAidSimulationFactory::storeParameters(GlobalTestParameters *x) {
-	global = *x;
-}
 
 int SpatializedHearingAidSimulationFactory::preferredBufferSize() {
 	return global.chunkSize;
@@ -140,4 +136,8 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFil
 	catch (const FirFilter::InvalidCoefficients &) {
 		throw CreateError{ "Invalid filter coefficients." };
 	}
+}
+
+void SpatializedHearingAidSimulationFactory::storeParameters(GlobalTestParameters *x) {
+	global = *x;
 }
