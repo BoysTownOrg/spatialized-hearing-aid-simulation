@@ -11,7 +11,7 @@ class AudioLoaderStub : public AudioLoader {
 	LogString log_{};
 	int sampleRate_{};
 	int channels_{};
-	int chunkSize_{};
+	int bufferSize_{};
 	bool complete_{};
 public:
 	void setPreferredProcessingSizes(std::vector<int> v) {
@@ -78,11 +78,11 @@ public:
 	}
 
 	void setBufferSize(int s) {
-		chunkSize_ = s;
+		bufferSize_ = s;
 	}
 
 	int bufferSize() override {
-		return chunkSize_;
+		return bufferSize_;
 	}
 };
 
