@@ -11,7 +11,7 @@ class ModelStub : public Model {
 	bool testComplete_{};
 	bool trialPlayed_{};
 public:
-	GlobalTestParameters global{};
+	GlobalTestParameters globalTestParameters{};
 
 	void setPreferredProcessingSizes(std::vector<int> v) {
 		preferredProcessingSizes_ = std::move(v);
@@ -35,7 +35,7 @@ public:
 
 	void initializeTest(TestParameters p) override {
 		testParameters_ = std::move(p);
-		global = *p.global;
+		globalTestParameters = *p.global;
 	}
 
 	void setTestIncomplete() {
