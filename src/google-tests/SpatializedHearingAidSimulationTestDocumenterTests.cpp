@@ -20,7 +20,9 @@ TEST(
 	x.chunkSize = 4;
 	PersistentMemoryWriterStub writer;
 	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
-	documenter.documentTestParameters(&x);
+	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
+	p.global = &x;
+	documenter.documentTestParameters(p);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -45,7 +47,9 @@ TEST(
 	x.stimulus = "a";
 	PersistentMemoryWriterStub writer;
 	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
-	documenter.documentTrialParameters(&x);
+	SpatializedHearingAidSimulationTestDocumenter::TrialParameters p;
+	p.global = &x;
+	documenter.documentTrialParameters(p);
 	assertEqual(
 		"stimulus: a\n"
 		"level (dB SPL): 1\n\n", 

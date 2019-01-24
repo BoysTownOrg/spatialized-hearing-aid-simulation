@@ -16,6 +16,7 @@ public:
 
 	void documentTrialParameters(TrialParameters p) override {
 		global = *p.global;
+		log_ += LogString{ "documentTrialParameters " };
 	}
 
 	TrialParameters documentedTrialParameters() {
@@ -24,6 +25,7 @@ public:
 
 	void documentTestParameters(TestParameters p) override {
 		testParameters_ = std::move(p);
+		log_ += LogString{ "documentTestParameters " };
 	}
 
 	const TestParameters &documentedTestParameters() {
@@ -43,11 +45,6 @@ public:
 		return content_.str();
 	}
 
-	void write(std::string s) override {
-		content_ << std::move(s);
-		log_ += LogString{ "write " };
-	}
-
 	LogString log() const {
 		return log_;
 	}
@@ -64,7 +61,6 @@ public:
 		throw InitializationFailure{ errorMessage_ };
 	}
 
-	void write(std::string) override {}
 	void documentTestParameters(TestParameters) override {}
 	void documentTrialParameters(TrialParameters) override {}
 };
