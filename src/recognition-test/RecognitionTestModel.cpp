@@ -81,7 +81,13 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	player->play(std::move(request));
 }
 
-void RecognitionTestModel::documentTrialParameters(TrialParameters) {
+void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
+	Documenter::TrialParameters adapted;
+	GlobalTrialParameters global;
+	global.level_dB_Spl = p.level_dB_Spl;
+	global.stimulus = currentStimulus_;
+	adapted.global = &global;
+	documenter->documentTrialParameters(adapted);
 }
 
 std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {

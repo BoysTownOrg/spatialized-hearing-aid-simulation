@@ -19,6 +19,7 @@ public:
 	struct TrialParameters{
 		GlobalTrialParameters *global;
 	};
+	virtual void documentTrialParameters(TrialParameters) = 0;
 
 	virtual void write(std::string) = 0;
 	virtual bool failed() = 0;

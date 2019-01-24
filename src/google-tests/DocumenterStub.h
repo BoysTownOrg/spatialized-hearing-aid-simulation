@@ -11,6 +11,10 @@ class DocumenterStub : public Documenter {
 	std::stringstream content_{};
 	LogString log_{};
 public:
+	void documentTrialParameters(TrialParameters p) override {
+		trialParameters_ = std::move(p);
+	}
+
 	TrialParameters documentedTrialParameters() {
 		return trialParameters_;
 	}
@@ -71,6 +75,7 @@ public:
 
 	void write(std::string) override {}
 	void documentTestParameters(TestParameters) override {}
+	void documentTrialParameters(TrialParameters) override {}
 };
 
 #include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
