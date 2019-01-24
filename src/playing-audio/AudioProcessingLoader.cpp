@@ -25,8 +25,13 @@ AudioProcessingLoader::AudioProcessingLoader(
 	processorFactory{ processorFactory } {}
 
 void AudioProcessingLoader::initialize(Initialization init) {
-	storeProcessingParameters(std::move(init));
-	assertProcessorCanBeMade();
+	try {
+		processorFactory->assertCanBeMade(init.global);
+	}
+	catch (const AudioFrameProcessorFactory::CreateError &e) {
+		throw InitializationFailure{ e.what() };
+	}
+	processorFactory->storeParameters(init.global);
 }
 
 void AudioProcessingLoader::storeProcessingParameters(AudioLoader::Initialization init) {

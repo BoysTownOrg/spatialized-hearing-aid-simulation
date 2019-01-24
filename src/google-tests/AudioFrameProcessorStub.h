@@ -86,6 +86,13 @@ public:
 	const GlobalTestParameters *storedParameters() const {
 		return storedParameters_;
 	}
+	void assertCanBeMade(GlobalTestParameters *x) override {
+		assertCanBeMadeParameters_ = x;
+	};
+
+	void storeParameters(GlobalTestParameters *x) override {
+		storedParameters_ = x;
+	};
 };
 
 class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
@@ -103,4 +110,6 @@ public:
 	std::vector<int> preferredProcessingSizes() override { return {}; }
 	int preferredBufferSize() override { return {}; }
 	double fullScale_dB_Spl() override { return {}; }
+	void assertCanBeMade(GlobalTestParameters *) override {};
+	void storeParameters(GlobalTestParameters *) override {};
 };
