@@ -14,6 +14,7 @@
 #include <recognition-test/RecognitionTestModel.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
+#include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
 
 #include <Windows.h>
 
@@ -68,7 +69,7 @@ public:
 
 #include <fstream>
 
-class FileSystemDocumenter : public Documenter {
+class FileSystemWriter : public PersistentMemoryWriter {
 	std::ofstream file;
 public:
 	void initialize(std::string filePath) override {
@@ -87,10 +88,6 @@ public:
 		char buffer[256];
 		strerror_s(buffer, sizeof buffer, errno);
 		return buffer;
-	}
-
-	void documentTestParameters(TestParameters) override
-	{
 	}
 };
 
@@ -117,7 +114,8 @@ int main() {
 	
 	AudioProcessingLoader loader{&frameReaderFactory, &processorFactory};
 	AudioPlayer player{&device, &loader};
-	FileSystemDocumenter documenter;
+	FileSystemWriter writer;
+	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
 	RecognitionTestModel model{ &list, &player, &documenter };
 	FltkView view{};
 	Presenter presenter{ &model, &view };
