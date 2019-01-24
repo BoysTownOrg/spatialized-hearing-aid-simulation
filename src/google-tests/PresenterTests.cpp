@@ -319,6 +319,24 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		confirmTestSetupUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOn();
+		view.confirmTestSetup();
+		EXPECT_TRUE(model.globalTestParameters.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOff();
+		view.confirmTestSetup();
+		EXPECT_FALSE(model.globalTestParameters.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.testFilePath_ = "a";
