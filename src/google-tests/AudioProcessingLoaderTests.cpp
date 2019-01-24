@@ -150,6 +150,12 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
+	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
+		prepare();
+		reader->setRemainingFrames(1);
+		EXPECT_FALSE(loader.complete());
+	}
+
 	TEST_F(AudioProcessingLoaderTests, preparationResetsZeroPadCount) {
 		prepare();
 		processor->setGroupDelay(1);

@@ -50,7 +50,7 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 	if (p.channelScalars.size() > 0) {
 		auto rightPrescription = global.usingHearingAidSimulation
 			? readPrescription(global.rightDslPrescriptionFilePath)
-		: PrescriptionReader::Dsl{};
+			: PrescriptionReader::Dsl{};
 		processors.push_back(makeChannel(
 			&global,
 			brir.left,
