@@ -119,7 +119,7 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 }
 
 bool AudioProcessingLoader::complete() {
-	return paddedZeros >= processor->groupDelay();
+	return reader->framesRemaining() == 0 && paddedZeros >= processor->groupDelay();
 }
 
 int AudioProcessingLoader::channels() {
