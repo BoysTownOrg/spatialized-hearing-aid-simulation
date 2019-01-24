@@ -54,15 +54,18 @@ namespace {
 				) / x.size()
 			);
 		}
+
+		void setInMemoryReader(AudioFileReader &reader_) {
+			readerFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
+		}
 	};
 
 	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheckAndStoresThem) {
-		GlobalTestParameters x;
-		initialization.global = &x;
+		GlobalTestParameters global;
+		initialization.global = &global;
 		initialize();
-
-		EXPECT_EQ(&x, processorFactory.assertCanBeMadeParameters());
-		EXPECT_EQ(&x, processorFactory.storedParameters());
+		EXPECT_EQ(&global, processorFactory.assertCanBeMadeParameters());
+		EXPECT_EQ(&global, processorFactory.storedParameters());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
@@ -77,22 +80,22 @@ namespace {
 		EXPECT_EQ(1, loader.bufferSize());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, preparePassesAllParametersToFactories) {
-		preparation.audioFilePath = "d";
-		reader->setChannels(6);
-		reader->setSampleRate(7);
+	TEST_F(AudioProcessingLoaderTests, preparePassesParametersToFactory) {
+		preparation.audioFilePath = "a";
+		reader->setChannels(1);
+		reader->setSampleRate(2);
 		prepare();
-		assertEqual("d", readerFactory.filePath());
-		EXPECT_EQ(6, processorFactory.parameters().channels);
-		EXPECT_EQ(7, processorFactory.parameters().sampleRate);
+		assertEqual("a", readerFactory.filePath());
+		EXPECT_EQ(1, processorFactory.parameters().channels);
+		EXPECT_EQ(2, processorFactory.parameters().sampleRate);
 	}
 
-	TEST_F(AudioProcessingLoaderTests, preparePassesCalibrationScaleToProcessorFactory) {
+	TEST_F(AudioProcessingLoaderTests, preparePassesCalibratedScalarsToProcessorFactory) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
-		processorFactory.setFullScale_dB_Spl(8);
+		setInMemoryReader(fakeReader);
 		preparation.level_dB_Spl = 7;
+		processorFactory.setFullScale_dB_Spl(8);
 		prepare();
 		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
 		assertEqual(
@@ -120,7 +123,7 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfReadInput) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		setInMemoryReader(fakeReader);
 		prepare();
 		loadMonoFrames(4);
 		assertEqual({ 1, 2, 3, 0 }, left);
@@ -129,7 +132,7 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfStereoInput) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		setInMemoryReader(fakeReader);
 		prepare();
 		loadStereoFrames(4);
 		assertEqual({ 1, 3, 5, 0 }, left);
@@ -158,7 +161,7 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosWithPartiallyPaddedLoad) {
 		FakeAudioFileReader fakeReader{ { 0 } };
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		setInMemoryReader(fakeReader);
 		prepare();
 		processor->setGroupDelay(2);
 		loadMonoFrames(2);
@@ -184,7 +187,7 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, loadReadsThenProcesses) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		setInMemoryReader(fakeReader);
 		processorFactory.setProcessor(std::make_shared<TimesTwo>());
 		prepare();
 		loadMonoFrames(3);
@@ -203,7 +206,7 @@ namespace {
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZerosBeforeProcessing) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		readerFactory.setReader(std::make_shared<AudioFileInMemory>(fakeReader));
+		setInMemoryReader(fakeReader);
 		processorFactory.setProcessor(std::make_shared<AddsOne>());
 		prepare();
 		loadMonoFrames(4);
