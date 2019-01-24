@@ -85,6 +85,7 @@ public:
 
 class PersistentMemoryWriterStub : public PersistentMemoryWriter {
 	std::stringstream content_{};
+	std::string filePath_{};
 public:
 	void write(std::string s) override {
 		content_ << std::move(s);
@@ -94,7 +95,14 @@ public:
 		return content_.str();
 	}
 
-	void initialize(std::string) override {}
+	std::string filePath() const {
+		return filePath_;
+	}
+
+	void initialize(std::string s) override {
+		filePath_ = std::move(s);
+	}
+
 	bool failed() override { return {}; }
 	std::string errorMessage() override { return {}; }
 };
