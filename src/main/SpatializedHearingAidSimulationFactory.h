@@ -26,16 +26,10 @@ public:
 	void storeParameters(GlobalTestParameters *) override;
 private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string);
-	std::shared_ptr<SignalProcessor> makeChannel(
-		GlobalTestParameters *,
-		std::vector<float> b,
-		FilterbankCompressor::Parameters,
-		double
-	);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	FilterbankCompressor::Parameters toCompressorParameters(
 		GlobalTestParameters *,
-		Parameters, 
+		int sampleRate, 
 		PrescriptionReader::Dsl
 	);
 	std::shared_ptr<SignalProcessor> makeFilter(std::vector<float> b);

@@ -17,29 +17,16 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 {
 }
 
-void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *global_) {
-	const auto brir = global_->usingSpatialization 
-		? readBrir(global_->brirFilePath) 
-		: BrirReader::BinauralRoomImpulseResponse{};
-	Parameters dummy;
-	auto leftPrescription = global_->usingHearingAidSimulation
-		? readPrescription(global_->leftDslPrescriptionFilePath)
-		: PrescriptionReader::Dsl{};
-	makeChannel(
-		global_,
-		brir.left,
-		toCompressorParameters(global_, dummy, leftPrescription),
-		0
-	);
-	auto rightPrescription = global_->usingHearingAidSimulation
-		? readPrescription(global_->rightDslPrescriptionFilePath)
-		: PrescriptionReader::Dsl{};
-	makeChannel(
-		global_,
-		brir.right,
-		toCompressorParameters(global_, dummy, rightPrescription),
-		0
-	);
+void SpatializedHearingAidSimulationFactory::assertCanBeMade(GlobalTestParameters *p) {
+	if (p->usingSpatialization) {
+		auto brir = readBrir(p->brirFilePath);
+		makeFilter(brir.left);
+		makeFilter(brir.right);
+	}
+	if (p->usingHearingAidSimulation) {
+		makeHearingAid(toCompressorParameters(p, {}, readPrescription(p->leftDslPrescriptionFilePath)));
+		makeHearingAid(toCompressorParameters(p, {}, readPrescription(p->rightDslPrescriptionFilePath)));
+	}
 }
 
 std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::make(Parameters p) {
@@ -48,26 +35,22 @@ std::shared_ptr<AudioFrameProcessor> SpatializedHearingAidSimulationFactory::mak
 		? readBrir(global.brirFilePath) 
 		: BrirReader::BinauralRoomImpulseResponse{};
 	if (p.channelScalars.size() > 0) {
-		auto rightPrescription = global.usingHearingAidSimulation
-			? readPrescription(global.rightDslPrescriptionFilePath)
-			: PrescriptionReader::Dsl{};
-		processors.push_back(makeChannel(
-			&global,
-			brir.left,
-			toCompressorParameters(&global, p, rightPrescription),
-			p.channelScalars.at(0))
-		);
+		const auto channel = std::make_shared<SignalProcessingChain>();
+		channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(p.channelScalars.at(0))));
+		if (global.usingSpatialization)
+			channel->add(makeFilter(brir.left));
+		if (global.usingHearingAidSimulation)
+			channel->add(makeHearingAid(toCompressorParameters(&global, p.sampleRate, readPrescription(global.leftDslPrescriptionFilePath))));
+		processors.push_back(channel);
 	}
 	if (p.channelScalars.size() > 1) {
-		auto leftPrescription = global.usingHearingAidSimulation
-			? readPrescription(global.leftDslPrescriptionFilePath)
-			: PrescriptionReader::Dsl{};
-		processors.push_back(makeChannel(
-			&global,
-			brir.right,
-			toCompressorParameters(&global, p, leftPrescription),
-			p.channelScalars.at(1))
-		);
+		const auto channel = std::make_shared<SignalProcessingChain>();
+		channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(p.channelScalars.at(1))));
+		if (global.usingSpatialization)
+			channel->add(makeFilter(brir.right));
+		if (global.usingHearingAidSimulation)
+			channel->add(makeHearingAid(toCompressorParameters(&global, p.sampleRate, readPrescription(global.rightDslPrescriptionFilePath))));
+		processors.push_back(channel);
 	}
 	return std::make_shared<ChannelProcessingGroup>(processors);
 }
@@ -81,21 +64,6 @@ BrirReader::BinauralRoomImpulseResponse SpatializedHearingAidSimulationFactory::
 	catch (const BrirReader::ReadFailure &e) {
 		throw CreateError{ e.what() };
 	}
-}
-
-std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeChannel(
-	GlobalTestParameters *global_,
-	std::vector<float> b,
-	FilterbankCompressor::Parameters compression,
-	double scale
-) {
-	const auto channel = std::make_shared<SignalProcessingChain>();
-	channel->add(std::make_shared<ScalingProcessor>(gsl::narrow_cast<float>(scale)));
-	if (global_->usingSpatialization)
-		channel->add(makeFilter(std::move(b)));
-	if (global_->usingHearingAidSimulation)
-		channel->add(makeHearingAid(std::move(compression)));
-	return channel;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAid(
@@ -132,7 +100,7 @@ PrescriptionReader::Dsl SpatializedHearingAidSimulationFactory::readPrescription
 
 FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompressorParameters(
 	GlobalTestParameters *g,
-	Parameters p, 
+	int sampleRate, 
 	PrescriptionReader::Dsl prescription
 ) {
 	FilterbankCompressor::Parameters compression;
@@ -140,7 +108,7 @@ FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::toCompr
 	compression.release_ms = g->release_ms;
 	compression.chunkSize = g->chunkSize;
 	compression.windowSize = g->windowSize;
-	compression.sampleRate = p.sampleRate;
+	compression.sampleRate = sampleRate;
 	compression.max_dB_Spl = max_dB_Spl_Matlab;
 	compression.compressionRatios = prescription.compressionRatios;
 	compression.crossFrequenciesHz = prescription.crossFrequenciesHz;
