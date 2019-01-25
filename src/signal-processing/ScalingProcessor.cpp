@@ -8,5 +8,5 @@ void ScalingProcessor::process(signal_type signal) {
 }
 
 auto ScalingProcessor::groupDelay() -> index_type {
-	return 0;
+	return index_type{ 0 };
 }
