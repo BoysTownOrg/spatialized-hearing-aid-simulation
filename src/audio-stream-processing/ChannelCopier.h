@@ -21,9 +21,9 @@ public:
 	AUDIO_STREAM_PROCESSING_API int channels() override;
 	AUDIO_STREAM_PROCESSING_API long long frames() override;
 	AUDIO_STREAM_PROCESSING_API void reset() override;
-
-    // Inherited via AudioFrameReader
-    virtual long long remainingFrames() override;
+    long long remainingFrames() override;
+private:
+	bool mono();
 };
 
 class ChannelCopierFactory : public AudioFrameReaderFactory {
@@ -32,5 +32,6 @@ public:
 	AUDIO_STREAM_PROCESSING_API explicit ChannelCopierFactory(
 		std::shared_ptr<AudioFrameReaderFactory>
 	);
-	AUDIO_STREAM_PROCESSING_API std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+	AUDIO_STREAM_PROCESSING_API 
+		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
 };

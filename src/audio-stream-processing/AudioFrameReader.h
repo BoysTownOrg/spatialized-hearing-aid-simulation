@@ -21,7 +21,7 @@ public:
 class AudioFrameReaderFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameReaderFactory);
-	RUNTIME_ERROR(CreateError);
 	virtual std::shared_ptr<AudioFrameReader> make(std::string filePath) = 0;
+	RUNTIME_ERROR(CreateError);
 };
 
