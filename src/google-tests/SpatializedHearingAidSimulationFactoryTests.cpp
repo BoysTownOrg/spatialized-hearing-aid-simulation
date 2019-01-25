@@ -8,6 +8,7 @@
 
 class SpatializedHearingAidSimulationTests : public ::testing::Test {
 protected:
+	GlobalTestParameters global;
 	std::shared_ptr<FilterbankCompressorSpy> compressor =
 		std::make_shared<FilterbankCompressorSpy>();
 	std::shared_ptr<FilterbankCompressorSpyFactory> compressorFactory =
@@ -18,19 +19,31 @@ protected:
 		std::make_shared<FakeConfigurationFileParserFactory>(parser);
 	std::shared_ptr<PrescriptionReader> prescriptionReader =
 		std::make_shared<PrescriptionAdapter>(parserFactory);
+	std::shared_ptr<FakeAudioFileReader> audioFileReader =
+		std::make_shared<FakeAudioFileReader>();
+	std::shared_ptr<FakeAudioFileReaderFactory> audioFileReaderFactory =
+		std::make_shared<FakeAudioFileReaderFactory>(audioFileReader);
 	std::shared_ptr<BrirReader> brirReader =
-		std::make_shared<BrirAdapter>(
-			std::make_shared<FakeAudioFileReaderFactory>()
-		);
-	SpatializedHearingAidSimulationFactory factory{compressorFactory, prescriptionReader, brirReader};
+		std::make_shared<BrirAdapter>(audioFileReaderFactory);
+	SpatializedHearingAidSimulationFactory factory{
+		compressorFactory, 
+		prescriptionReader, 
+		brirReader
+	};
+
+	SpatializedHearingAidSimulationTests() {
+		global.usingHearingAidSimulation = false;
+		global.usingSpatialization = false;
+		parser->setValidSingleChannelDslProperties();
+		compressor->setChunkSize(1);
+		compressor->setWindowSize(1);
+	}
 };
 
-TEST_F(SpatializedHearingAidSimulationTests, tbd) {
-	parser->setValidSingleChannelDslProperties();
-	compressor->setChunkSize(1);
-	compressor->setWindowSize(1);
-	GlobalTestParameters global;
-	global.usingSpatialization = false;
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadePassesPrescriptionFilePathsToParserFactory
+) {
 	global.leftDslPrescriptionFilePath = "a";
 	global.rightDslPrescriptionFilePath = "b";
 	global.usingHearingAidSimulation = true;
@@ -39,12 +52,10 @@ TEST_F(SpatializedHearingAidSimulationTests, tbd) {
 	EXPECT_TRUE(parserFactory->filePaths().contains("b"));
 }
 
-TEST_F(SpatializedHearingAidSimulationTests, tbd2) {
-	parser->setValidSingleChannelDslProperties();
-	compressor->setChunkSize(1);
-	compressor->setWindowSize(1);
-	GlobalTestParameters global;
-	global.usingSpatialization = false;
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeDoesTryToMakePrescriptionsWhenNotUsingHearingAidSimulation
+) {
 	global.leftDslPrescriptionFilePath = "a";
 	global.rightDslPrescriptionFilePath = "b";
 	global.usingHearingAidSimulation = false;
