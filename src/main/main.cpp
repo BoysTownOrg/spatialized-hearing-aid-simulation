@@ -6,7 +6,6 @@
 #include "WindowsDirectoryReader.h"
 #include "FileSystemWriter.h"
 #include "MersenneTwisterRandomizer.h"
-#include "SpatializedHearingAidSimulationFactory.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
@@ -17,7 +16,8 @@
 #include <recognition-test/RecognitionTestModel.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
-#include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
+#include <test-documenting/TestDocumenter.h>
+#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 
 int main() {
 	WindowsDirectoryReader reader{};
