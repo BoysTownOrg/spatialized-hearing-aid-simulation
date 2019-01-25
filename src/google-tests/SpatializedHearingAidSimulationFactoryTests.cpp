@@ -119,9 +119,27 @@ TEST_F(
 
 TEST_F(
 	SpatializedHearingAidSimulationTests, 
-	assertCanBeMadeThrowsSomething
+	assertCanBeMadeThrowsCreateErrorWhenFilterCoefficientsEmpty
 ) {
 	audioFileReader->setContents({});
 	global.usingSpatialization = true;
 	canNotBeMade("Invalid filter coefficients.");
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeThrowsCreateErrorWhenWindowSizeNotPowerOfTwo
+) {
+	compressor->setWindowSize(3);
+	global.usingHearingAidSimulation = true;
+	canNotBeMade("The window size must be a power of two.");
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeThrowsCreateErrorWhenChunkSizeNotPowerOfTwo
+) {
+	compressor->setChunkSize(3);
+	global.usingHearingAidSimulation = true;
+	canNotBeMade("The chunk size must be a power of two.");
 }
