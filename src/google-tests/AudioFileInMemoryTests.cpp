@@ -79,6 +79,15 @@ namespace {
 		EXPECT_TRUE(adapter.complete());
 	}
 
+	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingMoreThanOneSampleAtATime) {
+		reader.setContents({ 3, 4, 5, 6 });
+		AudioFileInMemoryFacade adapter{ reader };
+		adapter.readMonoFrames(2);
+		EXPECT_FALSE(adapter.complete());
+		adapter.readMonoFrames(2);
+		EXPECT_TRUE(adapter.complete());
+	}
+
 	TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
 		reader.setContents({ 1, 2, 3 });
 		AudioFileInMemoryFacade adapter{ reader };
