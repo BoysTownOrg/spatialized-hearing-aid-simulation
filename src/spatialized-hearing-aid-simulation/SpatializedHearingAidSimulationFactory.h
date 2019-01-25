@@ -8,13 +8,19 @@
 #include <signal-processing/SignalProcessor.h>
 #include <presentation/Presenter.h>
 
+#ifdef SPATIALIZED_HA_SIMULATION_EXPORTS
+	#define SPATIALIZED_HA_SIMULATION_API __declspec(dllexport)
+#else
+	#define SPATIALIZED_HA_SIMULATION_API __declspec(dllimport)
+#endif
+
 class SpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<PrescriptionReader> prescriptionReader;
 	std::shared_ptr<BrirReader> brirReader;
 	GlobalTestParameters global{};
 public:
-	SpatializedHearingAidSimulationFactory(
+	SPATIALIZED_HA_SIMULATION_API SpatializedHearingAidSimulationFactory(
 		std::shared_ptr<FilterbankCompressorFactory> compressorFactory,
 		std::shared_ptr<PrescriptionReader> prescriptionReader,
 		std::shared_ptr<BrirReader> brirReader
