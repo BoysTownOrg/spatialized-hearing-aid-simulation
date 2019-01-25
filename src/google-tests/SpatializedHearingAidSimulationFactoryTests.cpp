@@ -143,3 +143,13 @@ TEST_F(
 	global.usingHearingAidSimulation = true;
 	canNotBeMade("The chunk size must be a power of two.");
 }
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	preferredBufferSizeReturnsChunkSize
+) {
+	global.chunkSize = 1;
+	global.usingHearingAidSimulation = true;
+	factory.storeParameters(&global);
+	EXPECT_EQ(1, factory.preferredBufferSize());
+}
