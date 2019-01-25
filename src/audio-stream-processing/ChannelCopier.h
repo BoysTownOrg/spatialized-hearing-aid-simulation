@@ -23,6 +23,7 @@ public:
 	AUDIO_STREAM_PROCESSING_API void reset() override;
     long long remainingFrames() override;
 private:
+	void readAndCopyFirstChannel(gsl::span<channel_type> audio);
 	bool mono();
 };
 
