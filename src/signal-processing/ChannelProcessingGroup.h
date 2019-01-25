@@ -7,12 +7,14 @@
 #include <memory>
 
 class ChannelProcessingGroup : public AudioFrameProcessor {
-	std::vector<std::shared_ptr<SignalProcessor>> processors;
 public:
+	using channel_processing_type = std::shared_ptr<SignalProcessor>;
 	SIGNAL_PROCESSING_API explicit ChannelProcessingGroup(
-		std::vector<std::shared_ptr<SignalProcessor>> processors
+		std::vector<channel_processing_type> processors
 	);
 	SIGNAL_PROCESSING_API void process(gsl::span<channel_type> audio) override;
 	SIGNAL_PROCESSING_API channel_type::index_type groupDelay() override;
+private:
+	std::vector<channel_processing_type> processors;
 };
 
