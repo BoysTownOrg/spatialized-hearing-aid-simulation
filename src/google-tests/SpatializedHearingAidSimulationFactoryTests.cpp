@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include "FakeAudioFileReader.h"
 #include "FakeConfigurationFileParser.h"
 #include "FilterbankCompressorSpy.h"
@@ -32,11 +33,18 @@ protected:
 	};
 
 	SpatializedHearingAidSimulationTests() {
+		setValidDefaults();
+	}
+
+private:
+	void setValidDefaults() {
 		global.usingHearingAidSimulation = false;
 		global.usingSpatialization = false;
 		parser->setValidSingleChannelDslProperties();
 		compressor->setChunkSize(1);
 		compressor->setWindowSize(1);
+		audioFileReader->setContents({ 0, 0 });
+		audioFileReader->setChannels(2);
 	}
 };
 
@@ -77,4 +85,14 @@ TEST_F(
 	EXPECT_EQ(2, compressorFactory->parameters().release_ms);
 	EXPECT_EQ(4, compressorFactory->parameters().chunkSize);
 	EXPECT_EQ(8, compressorFactory->parameters().windowSize);
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadePassesBrirFilePathToAudioFileReaderFactory
+) {
+	global.brirFilePath = "a";
+	global.usingSpatialization = true;
+	factory.assertCanBeMade(&global);
+	assertEqual("a", audioFileReaderFactory->filePath());
 }
