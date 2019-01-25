@@ -3,14 +3,14 @@
 #include <test-documenting/TestDocumenter.h>
 #include <gtest/gtest.h>
 
-class SpatializedHearingAidSimulationTestDocumenterTests : public ::testing::Test {
+class TestDocumenterTests : public ::testing::Test {
 protected:
 	PersistentMemoryWriterStub writer;
 	TestDocumenter documenter{ &writer };
 };
 
 TEST_F(
-	SpatializedHearingAidSimulationTestDocumenterTests,
+	TestDocumenterTests,
 	formatsTestParameters
 ) {
 	GlobalTestParameters test;
@@ -44,7 +44,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTestDocumenterTests,
+	TestDocumenterTests,
 	ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	GlobalTestParameters test;
@@ -75,7 +75,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTestDocumenterTests,
+	TestDocumenterTests,
 	ignoresBrirIfNotUsingSpatialization
 ) {
 	GlobalTestParameters test;
@@ -108,7 +108,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTestDocumenterTests,
+	TestDocumenterTests,
 	playTrialDocumentsTrial
 ) {
 	GlobalTrialParameters trial;
@@ -125,7 +125,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTestDocumenterTests,
+	TestDocumenterTests,
 	initializePassesFilePath
 ) {
 	documenter.initialize("a");
@@ -133,7 +133,7 @@ TEST_F(
 }
 
 TEST(
-	SpatializedHearingAidSimulationTestDocumenterWithInitializationFailingWriter,
+	TestDocumenterWithInitializationFailingWriter,
 	initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
 ) {
 	InitializationFailingWriter writer{};
