@@ -29,5 +29,7 @@ public:
 		std::shared_ptr<ConfigurationFileParserFactory> 
 	);
 	DSL_PRESCRIPTION_API Dsl read(std::string filePath) override;
+private:
+	Dsl read_(std::string filePath);
 };
 
