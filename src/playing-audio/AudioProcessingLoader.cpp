@@ -120,8 +120,11 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 	reader->read(audio);
 	if (zerosToPad > 0) {
 		for (auto channel : audio)
-			for (int i = 0; i < zerosToPad; ++i)
-				*(channel.end() - i - 1) = 0;
+			std::fill(
+				channel.end() - gsl::narrow<decltype(channel)::index_type>(zerosToPad), 
+				channel.end(), 
+				decltype(channel)::element_type{ 0 }
+			);
 		paddedZeros += zerosToPad;
 	}
 	processor->process(audio);
