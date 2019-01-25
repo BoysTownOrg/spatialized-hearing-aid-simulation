@@ -158,7 +158,6 @@
     <ClCompile Include="MersenneTwisterRandomizer.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
     <ClCompile Include="WindowsDirectoryReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,7 +168,6 @@
     <ClInclude Include="MersenneTwisterRandomizer.h" />
     <ClInclude Include="NlohmannJsonParser.h" />
     <ClInclude Include="PortAudioDevice.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="WindowsDirectoryReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

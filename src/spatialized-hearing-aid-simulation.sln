@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-tests\google-tests.vcxproj", "{03E08837-A004-40B9-8FD2-4CDA51994ED1}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,6 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "google-tests", "google-test
 		{6E368A0E-612A-4A30-A18D-145E6341FE31} = {6E368A0E-612A-4A30-A18D-145E6341FE31}
 		{27FD3D17-8E94-4152-B8AF-E40A34C3414F} = {27FD3D17-8E94-4152-B8AF-E40A34C3414F}
 		{CD085F18-3FA5-42B6-90E1-23E83DC3CF27} = {CD085F18-3FA5-42B6-90E1-23E83DC3CF27}
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C} = {DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}
 		{94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD} = {94FF903C-62FE-4B9C-BDE2-FA87D47D0CCD}
 		{B63D5042-124C-4D0D-8141-17D8F84F6625} = {B63D5042-124C-4D0D-8141-17D8F84F6625}
 		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
@@ -62,7 +63,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recognition-test", "recogni
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stimulus-list", "stimulus-list\stimulus-list.vcxproj", "{CD085F18-3FA5-42B6-90E1-23E83DC3CF27}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spatialized-hearing-aid-simulation-utility", "spatialized-hearing-aid-simulation-utility\spatialized-hearing-aid-simulation-utility.vcxproj", "{928FDB00-B6B8-4621-8BB5-C2BB4FC74736}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test-documenting", "test-documenting\test-documenting.vcxproj", "{928FDB00-B6B8-4621-8BB5-C2BB4FC74736}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spatialized-hearing-aid-simulation", "spatialized-hearing-aid-simulation\spatialized-hearing-aid-simulation.vcxproj", "{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91FCB34A-3AB2-40BF-AA27-E4B248820462} = {91FCB34A-3AB2-40BF-AA27-E4B248820462}
+		{668D0564-F956-49E7-AC77-A34F0B33D6B3} = {668D0564-F956-49E7-AC77-A34F0B33D6B3}
+		{8E991A8E-5FA0-492A-8273-A0626CB15164} = {8E991A8E-5FA0-492A-8273-A0626CB15164}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -192,6 +200,14 @@ Global
 		{928FDB00-B6B8-4621-8BB5-C2BB4FC74736}.Release|x64.Build.0 = Release|x64
 		{928FDB00-B6B8-4621-8BB5-C2BB4FC74736}.Release|x86.ActiveCfg = Release|Win32
 		{928FDB00-B6B8-4621-8BB5-C2BB4FC74736}.Release|x86.Build.0 = Release|Win32
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Debug|x64.ActiveCfg = Debug|x64
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Debug|x64.Build.0 = Debug|x64
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Debug|x86.ActiveCfg = Debug|Win32
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Debug|x86.Build.0 = Debug|Win32
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x64.ActiveCfg = Release|x64
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x64.Build.0 = Release|x64
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x86.ActiveCfg = Release|Win32
+		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

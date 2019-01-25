@@ -33,9 +33,6 @@
     <ClCompile Include="FltkView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FileSystemWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FltkView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WindowsDirectoryReader.h">
