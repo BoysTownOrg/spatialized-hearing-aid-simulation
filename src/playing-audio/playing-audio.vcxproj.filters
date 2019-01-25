@@ -18,9 +18,6 @@
     <ClInclude Include="AudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioDeviceController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

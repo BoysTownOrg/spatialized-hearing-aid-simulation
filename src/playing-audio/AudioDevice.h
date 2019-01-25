@@ -1,9 +1,14 @@
 #pragma once
 
-#include "AudioDeviceController.h"
 #include <common-includes/Interface.h>
 #include <vector>
 #include <string>
+
+class AudioDeviceController {
+public:
+	INTERFACE_OPERATIONS(AudioDeviceController);
+	virtual void fillStreamBuffer(void *channels, int frames) = 0;
+};
 
 class AudioDevice {
 public:
