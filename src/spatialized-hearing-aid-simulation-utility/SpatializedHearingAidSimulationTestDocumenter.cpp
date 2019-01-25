@@ -54,7 +54,8 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(TestP
 		stream.insertIndentedLabeledParameterLine("left", global->leftDslPrescriptionFilePath);
 		stream.insertIndentedLabeledParameterLine("right", global->rightDslPrescriptionFilePath);
 	}
-	stream.insertLabeledParameterLine("BRIR", global->brirFilePath);
+	if (global->usingSpatialization)
+		stream.insertLabeledParameterLine("BRIR", global->brirFilePath);
 	stream.insertFixed();
 	stream.insertPrecision(1);
 	stream.insertLabeledParameterLine("attack (ms)", global->attack_ms);
