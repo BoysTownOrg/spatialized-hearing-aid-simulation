@@ -43,6 +43,14 @@ public:
 	}
 };
 
+template<typename T>
+static bool allEqualTo(T expected, std::vector<T> toCheck) {
+	for (auto item : toCheck)
+		if (item != expected)
+			return false;
+	return true;
+}
+
 auto PrescriptionAdapter::read_(std::string filePath) -> Dsl {
 	VectorParser parser{factory->make(std::move(filePath))};
 	Dsl dsl{};
@@ -54,12 +62,15 @@ auto PrescriptionAdapter::read_(std::string filePath) -> Dsl {
 	dsl.broadbandOutputLimitingThresholds_dBSpl =
 		parser.parse(Property::broadbandOutputLimitingThresholds_dBSpl);
 	auto channels = dsl.crossFrequenciesHz.size() + 1;
-	if (
-		dsl.compressionRatios.size() != channels ||
-		dsl.kneepointGains_dB.size() != channels ||
-		dsl.kneepoints_dBSpl.size() != channels ||
-		dsl.broadbandOutputLimitingThresholds_dBSpl.size() != channels
-	)
+	if (!allEqualTo(
+		channels, 
+		{
+			dsl.compressionRatios.size(), 
+			dsl.kneepointGains_dB.size(), 
+			dsl.kneepoints_dBSpl.size(), 
+			dsl.broadbandOutputLimitingThresholds_dBSpl.size()
+		}
+	))
 		throw ReadFailure{ "channel count mismatch in prescription." };
 	dsl.channels = gsl::narrow<int>(channels);
 	return dsl;
