@@ -151,12 +151,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chapro.cpp" />
+    <ClCompile Include="FileSystemWriter.cpp" />
     <ClCompile Include="FltkView.cpp" />
     <ClCompile Include="LibsndfileReader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MersenneTwisterRandomizer.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
+    <ClCompile Include="WindowsDirectoryReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapro.h" />
