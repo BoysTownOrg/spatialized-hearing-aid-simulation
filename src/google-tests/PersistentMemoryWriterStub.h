@@ -1,6 +1,6 @@
 #pragma once
 
-#include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
+#include <test-documenting/TestDocumenter.h>
 #include <sstream>
 
 class PersistentMemoryWriterStub : public PersistentMemoryWriter {

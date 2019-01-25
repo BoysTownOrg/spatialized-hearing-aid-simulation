@@ -16,22 +16,22 @@ public:
 #include <recognition-test/RecognitionTestModel.h>
 #include <common-includes/RuntimeError.h>
 
-#ifdef SPATIALIZED_HA_SIMULATION_UTILITY_EXPORTS
-	#define SPATIALIZED_HA_SIMULATION_UTILITY_API __declspec(dllexport)
+#ifdef TEST_DOCUMENTING_EXPORTS
+	#define TEST_DOCUMENTING_API __declspec(dllexport)
 #else
-	#define SPATIALIZED_HA_SIMULATION_UTILITY_API __declspec(dllimport)
+	#define TEST_DOCUMENTING_API __declspec(dllimport)
 #endif
 
-class SpatializedHearingAidSimulationTestDocumenter : public Documenter {
+class TestDocumenter : public Documenter {
 	PersistentMemoryWriter *writer;
 public:
-	SPATIALIZED_HA_SIMULATION_UTILITY_API explicit 
-		SpatializedHearingAidSimulationTestDocumenter(PersistentMemoryWriter *);
-	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+	TEST_DOCUMENTING_API explicit 
+		TestDocumenter(PersistentMemoryWriter *);
+	TEST_DOCUMENTING_API 
 		void documentTestParameters(TestParameters) override;
-	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+	TEST_DOCUMENTING_API 
 		void documentTrialParameters(TrialParameters) override;
-	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+	TEST_DOCUMENTING_API 
 		void initialize(std::string filePath) override;
 };
 

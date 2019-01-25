@@ -1,12 +1,12 @@
 #include "assert-utility.h"
 #include "PersistentMemoryWriterStub.h"
-#include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
+#include <test-documenting/TestDocumenter.h>
 #include <gtest/gtest.h>
 
 class SpatializedHearingAidSimulationTestDocumenterTests : public ::testing::Test {
 protected:
 	PersistentMemoryWriterStub writer;
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	TestDocumenter documenter{ &writer };
 };
 
 TEST_F(
@@ -25,7 +25,7 @@ TEST_F(
 	test.release_ms = 2;
 	test.windowSize = 3;
 	test.chunkSize = 4;
-	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
+	TestDocumenter::TestParameters p;
 	p.global = &test;
 	documenter.documentTestParameters(p);
 	assertEqual(
@@ -59,7 +59,7 @@ TEST_F(
 	test.release_ms = 2;
 	test.windowSize = 3;
 	test.chunkSize = 4;
-	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
+	TestDocumenter::TestParameters p;
 	p.global = &test;
 	documenter.documentTestParameters(p);
 	assertEqual(
@@ -90,7 +90,7 @@ TEST_F(
 	test.release_ms = 2;
 	test.windowSize = 3;
 	test.chunkSize = 4;
-	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
+	TestDocumenter::TestParameters p;
 	p.global = &test;
 	documenter.documentTestParameters(p);
 	assertEqual(
@@ -114,7 +114,7 @@ TEST_F(
 	GlobalTrialParameters trial;
 	trial.level_dB_Spl = 1;
 	trial.stimulus = "a";
-	SpatializedHearingAidSimulationTestDocumenter::TrialParameters p;
+	TestDocumenter::TrialParameters p;
 	p.global = &trial;
 	documenter.documentTrialParameters(p);
 	assertEqual(
@@ -138,12 +138,12 @@ TEST(
 ) {
 	InitializationFailingWriter writer{};
 	writer.setErrorMessage("error.");
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	TestDocumenter documenter{ &writer };
 	try {
 		documenter.initialize({});
-		FAIL() << "Expected SpatializedHearingAidSimulationTestDocumenter::InitializationFailure";
+		FAIL() << "Expected TestDocumenter::InitializationFailure";
 	}
-	catch (const SpatializedHearingAidSimulationTestDocumenter::InitializationFailure &e) {
+	catch (const TestDocumenter::InitializationFailure &e) {
 		assertEqual("error.", e.what());
 	}
 }

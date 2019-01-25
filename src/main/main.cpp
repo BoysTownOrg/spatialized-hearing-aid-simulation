@@ -42,7 +42,7 @@ int main() {
 	AudioProcessingLoader loader{&frameReaderFactory, &processorFactory};
 	AudioPlayer player{&device, &loader};
 	FileSystemWriter writer;
-	SpatializedHearingAidSimulationTestDocumenter documenter{ &writer };
+	TestDocumenter documenter{ &writer };
 	RecognitionTestModel model{ &list, &player, &documenter };
 	FltkView view{};
 	Presenter presenter{ &model, &view };

@@ -1,4 +1,4 @@
-#include "SpatializedHearingAidSimulationTestDocumenter.h"
+#include "TestDocumenter.h"
 #include <sstream>
 #include <iomanip>
 
@@ -33,18 +33,18 @@ public:
 	}
 };
 
-SpatializedHearingAidSimulationTestDocumenter::SpatializedHearingAidSimulationTestDocumenter(
+TestDocumenter::TestDocumenter(
 	PersistentMemoryWriter *writer
 ) :
 	writer{ writer } {}
 
-void SpatializedHearingAidSimulationTestDocumenter::initialize(std::string filePath) {
+void TestDocumenter::initialize(std::string filePath) {
 	writer->initialize(std::move(filePath));
 	if (writer->failed())
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(TestParameters p) {
+void TestDocumenter::documentTestParameters(TestParameters p) {
 	FormattedStream stream;
 	auto global = p.global;
 	stream.insertLabeledParameterLine("subject", global->subjectId);
@@ -66,7 +66,7 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(TestP
 	writer->write(stream.str());
 }
 
-void SpatializedHearingAidSimulationTestDocumenter::documentTrialParameters(TrialParameters p) {
+void TestDocumenter::documentTrialParameters(TrialParameters p) {
 	FormattedStream stream;
 	auto global = p.global;
 	stream.insertLabeledParameterLine("stimulus", global->stimulus);
