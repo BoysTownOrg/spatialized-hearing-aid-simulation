@@ -27,8 +27,11 @@ class SpatializedHearingAidSimulationTestDocumenter : public Documenter {
 public:
 	SPATIALIZED_HA_SIMULATION_UTILITY_API explicit 
 		SpatializedHearingAidSimulationTestDocumenter(PersistentMemoryWriter *);
-	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTestParameters(TestParameters) override;
-	SPATIALIZED_HA_SIMULATION_UTILITY_API void documentTrialParameters(TrialParameters) override;
-	SPATIALIZED_HA_SIMULATION_UTILITY_API void initialize(std::string filePath) override;
+	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+		void documentTestParameters(TestParameters) override;
+	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+		void documentTrialParameters(TrialParameters) override;
+	SPATIALIZED_HA_SIMULATION_UTILITY_API 
+		void initialize(std::string filePath) override;
 };
 

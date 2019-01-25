@@ -18,9 +18,9 @@ bool RandomizedStimulusList::empty() {
 }
 
 std::string RandomizedStimulusList::next() {
-    auto next_ = files.size() ? files.front() : current_;
-	current_ = next_;
-	if (files.size())
+	if (files.size()) {
+		current_ = files.front();
 		files.erase(files.begin());
-    return directory_ + "/" + next_;
+	}
+    return directory_ + "/" + current_;
 }
