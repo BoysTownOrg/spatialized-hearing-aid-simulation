@@ -17,13 +17,17 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 void AudioFileInMemory::read(gsl::span<channel_type> audio) {
 	for (int i = 0; i < audio.begin()->size(); ++i)
 		for (const auto channel : audio) {
-			if (head == buffer.size())
+			if (complete_())
 				return;
 			channel[i] = buffer[head++];
 		}
 }
 
 bool AudioFileInMemory::complete() {
+	return complete_();
+}
+
+bool AudioFileInMemory::complete_() {
 	return head == buffer.size();
 }
 
@@ -54,9 +58,13 @@ AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 {
 }
 
-std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(std::string filePath) {
+std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(
+	std::string filePath
+) {
 	try {
-		return std::make_shared<AudioFileInMemory>(*factory->make(filePath));
+		return std::make_shared<AudioFileInMemory>(
+			*factory->make(std::move(filePath))
+		);
 	}
 	catch (const AudioFileInMemory::FileError &e) {
 		throw CreateError{ e.what() };

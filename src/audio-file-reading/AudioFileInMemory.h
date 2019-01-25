@@ -20,8 +20,8 @@ class AudioFileInMemory : public AudioFrameReader {
 	int channels_;
 	int sampleRate_;
 public:
-	RUNTIME_ERROR(FileError);
 	AUDIO_FILE_READING_API explicit AudioFileInMemory(AudioFileReader &);
+	RUNTIME_ERROR(FileError);
 	AUDIO_FILE_READING_API void read(gsl::span<channel_type> audio) override;
 	AUDIO_FILE_READING_API bool complete() override;
 	AUDIO_FILE_READING_API int sampleRate() override;
@@ -29,6 +29,8 @@ public:
 	AUDIO_FILE_READING_API long long frames() override;
 	AUDIO_FILE_READING_API void reset() override;
     AUDIO_FILE_READING_API long long framesRemaining() override;
+private:
+	bool complete_();
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
@@ -37,5 +39,6 @@ public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemoryFactory(
 		std::shared_ptr<AudioFileReaderFactory>
 	);
-	AUDIO_FILE_READING_API std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
+	AUDIO_FILE_READING_API 
+		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
 };
