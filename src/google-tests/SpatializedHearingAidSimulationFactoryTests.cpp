@@ -62,3 +62,19 @@ TEST_F(
 	factory.assertCanBeMade(&global);
 	EXPECT_TRUE(parserFactory->filePaths().empty());
 }
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadePassesCompressionParametersToFactory
+) {
+	global.usingHearingAidSimulation = true;
+	global.attack_ms = 1;
+	global.release_ms = 2;
+	global.chunkSize = 4;
+	global.windowSize = 8;
+	factory.assertCanBeMade(&global);
+	EXPECT_EQ(1, compressorFactory->parameters().attack_ms);
+	EXPECT_EQ(2, compressorFactory->parameters().release_ms);
+	EXPECT_EQ(4, compressorFactory->parameters().chunkSize);
+	EXPECT_EQ(8, compressorFactory->parameters().windowSize);
+}
