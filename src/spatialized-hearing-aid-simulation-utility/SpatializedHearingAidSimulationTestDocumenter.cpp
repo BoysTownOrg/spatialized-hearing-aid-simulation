@@ -49,9 +49,11 @@ void SpatializedHearingAidSimulationTestDocumenter::documentTestParameters(TestP
 	auto global = p.global;
 	stream.insertLabeledParameterLine("subject", global->subjectId);
 	stream.insertLabeledParameterLine("tester", global->testerId);
-	stream.insertLine("DSL prescription");
-	stream.insertIndentedLabeledParameterLine("left", global->leftDslPrescriptionFilePath);
-	stream.insertIndentedLabeledParameterLine("right", global->rightDslPrescriptionFilePath);
+	if (global->usingHearingAidSimulation) {
+		stream.insertLine("DSL prescription");
+		stream.insertIndentedLabeledParameterLine("left", global->leftDslPrescriptionFilePath);
+		stream.insertIndentedLabeledParameterLine("right", global->rightDslPrescriptionFilePath);
+	}
 	stream.insertLabeledParameterLine("BRIR", global->brirFilePath);
 	stream.insertFixed();
 	stream.insertPrecision(1);
