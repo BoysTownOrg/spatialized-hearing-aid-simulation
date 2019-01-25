@@ -146,6 +146,16 @@ TEST_F(
 
 TEST_F(
 	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeThrowsCreateErrorWhenChannelCountMismatchInPrescription
+) {
+	parser->setVectorProperty(propertyName(dsl_prescription::Property::compressionRatios), { 0 });
+	parser->setVectorProperty(propertyName(dsl_prescription::Property::kneepointGains_dB), { 0, 0 });
+	global.usingHearingAidSimulation = true;
+	canNotBeMade("channel count mismatch in prescription.");
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
 	preferredBufferSizeReturnsChunkSize
 ) {
 	global.chunkSize = 1;
