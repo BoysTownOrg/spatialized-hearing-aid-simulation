@@ -74,12 +74,21 @@ public:
 	}
 
     double compute(int channel) {
-        double squaredSum{};
-        const auto channel_ = entireAudioFile.at(channel);
-        for (const double sample : channel_)
-            squaredSum += sample * sample;
-        return std::sqrt(squaredSum / channel_.size());
+		return rms(entireAudioFile.at(channel));
     }
+
+private:
+	template<typename T>
+	T rms(std::vector<T> x) {
+		return std::sqrt(
+			std::accumulate(
+				x.begin(),
+				x.end(),
+				T{ 0 },
+				[](T a, T b) { return a += b * b; }
+			) / x.size()
+		);
+	}
 };
 
 std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {

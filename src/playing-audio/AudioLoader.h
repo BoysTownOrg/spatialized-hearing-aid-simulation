@@ -17,7 +17,6 @@ public:
 	virtual void initialize(Initialization) = 0;
 	RUNTIME_ERROR(InitializationFailure);
 	
-
 	struct Preparation {
 		std::string audioFilePath;
 		double level_dB_Spl;

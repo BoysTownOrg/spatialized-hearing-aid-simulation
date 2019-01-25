@@ -16,7 +16,6 @@ public:
 		AudioFrameReaderFactory *,
 		AudioFrameProcessorFactory *
 	);
-
 	PLAYING_AUDIO_API void initialize(Initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation) override;
 	PLAYING_AUDIO_API void load(gsl::span<gsl::span<float>> audio) override;

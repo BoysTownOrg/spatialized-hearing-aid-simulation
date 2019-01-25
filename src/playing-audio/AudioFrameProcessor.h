@@ -20,13 +20,13 @@ struct GlobalTestParameters;
 class AudioFrameProcessorFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
-	RUNTIME_ERROR(CreateError);
 	struct Parameters {
 		std::vector<double> channelScalars;
 		int sampleRate;
 		int channels;
 	};
 	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
+	RUNTIME_ERROR(CreateError);
 	virtual int preferredBufferSize() = 0;
 	virtual double fullScale_dB_Spl() = 0;
 	virtual void assertCanBeMade(GlobalTestParameters *) = 0;
