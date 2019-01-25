@@ -42,7 +42,21 @@ public:
 	}
 };
 
+template<typename T>
+class ArgumentCollection {
+	std::vector<T> collection;
+public:
+	bool contains(T item) {
+		return std::find(collection.begin(), collection.end(), item) != collection.end();
+	}
+
+	auto push_back(T item) {
+		return collection.push_back(std::move(item));
+	}
+};
+
 class FakeConfigurationFileParserFactory : public ConfigurationFileParserFactory {
+	ArgumentCollection<std::string> filePaths_{};
 	std::shared_ptr<ConfigurationFileParser> parser;
 public:
 	explicit FakeConfigurationFileParserFactory(
@@ -51,12 +65,17 @@ public:
 	) :
 		parser{ std::move(parser) } {}
 
-	std::shared_ptr<ConfigurationFileParser> make(std::string) override {
+	std::shared_ptr<ConfigurationFileParser> make(std::string s) override {
+		filePaths_.push_back(std::move(s));
 		return parser;
 	}
 
 	void setParser(std::shared_ptr<ConfigurationFileParser> p) {
 		parser = std::move(p);
+	}
+
+	ArgumentCollection<std::string> filePaths() const {
+		return filePaths_;
 	}
 };
 

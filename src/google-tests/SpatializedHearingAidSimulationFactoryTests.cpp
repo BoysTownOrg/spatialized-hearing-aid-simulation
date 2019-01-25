@@ -27,6 +27,6 @@ TEST_F(SpatializedHearingAidSimulationTests, tbd) {
 	global.rightDslPrescriptionFilePath = "b";
 	global.usingHearingAidSimulation = true;
 	factory.assertCanBeMade(&global);
-	EXPECT_TRUE(parserFactory->filePaths.contains("a"));
-	EXPECT_TRUE(parserFactory->filePaths.contains("b"));
+	EXPECT_TRUE(parserFactory->filePaths().contains("a"));
+	EXPECT_TRUE(parserFactory->filePaths().contains("b"));
 }
