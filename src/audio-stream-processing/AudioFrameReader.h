@@ -15,7 +15,7 @@ public:
 	virtual int channels() = 0;
 	virtual long long frames() = 0;
 	virtual void reset() = 0;
-    virtual long long framesRemaining() = 0;
+    virtual long long remainingFrames() = 0;
 };
 
 class AudioFrameReaderFactory {

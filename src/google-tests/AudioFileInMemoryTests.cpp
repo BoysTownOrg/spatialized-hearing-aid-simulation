@@ -31,8 +31,8 @@ namespace {
 			return inMemory.complete();
 		}
 
-		long long framesRemaining() {
-			return inMemory.framesRemaining();
+		long long remainingFrames() {
+			return inMemory.remainingFrames();
 		}
 
 		void reset() {
@@ -82,26 +82,26 @@ namespace {
 	TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
 		reader.setContents({ 1, 2, 3 });
 		AudioFileInMemoryFacade adapter{ reader };
-		EXPECT_EQ(3, adapter.framesRemaining());
+		EXPECT_EQ(3, adapter.remainingFrames());
 		adapter.readMonoFrames(1);
-		EXPECT_EQ(2, adapter.framesRemaining());
+		EXPECT_EQ(2, adapter.remainingFrames());
 		adapter.readMonoFrames(1);
-		EXPECT_EQ(1, adapter.framesRemaining());
+		EXPECT_EQ(1, adapter.remainingFrames());
 		adapter.readMonoFrames(1);
-		EXPECT_EQ(0, adapter.framesRemaining());
+		EXPECT_EQ(0, adapter.remainingFrames());
 	}
 
 	TEST_F(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
 		reader.setContents({ 1, 2, 3, 4, 5, 6 });
 		reader.setChannels(2);
 		AudioFileInMemoryFacade adapter{ reader };
-		EXPECT_EQ(3, adapter.framesRemaining());
+		EXPECT_EQ(3, adapter.remainingFrames());
 		adapter.readStereoFrames(1);
-		EXPECT_EQ(2, adapter.framesRemaining());
+		EXPECT_EQ(2, adapter.remainingFrames());
 		adapter.readStereoFrames(1);
-		EXPECT_EQ(1, adapter.framesRemaining());
+		EXPECT_EQ(1, adapter.remainingFrames());
 		adapter.readStereoFrames(1);
-		EXPECT_EQ(0, adapter.framesRemaining());
+		EXPECT_EQ(0, adapter.remainingFrames());
 	}
 
 	TEST_F(AudioFileInMemoryTests, returnsFileParameters) {

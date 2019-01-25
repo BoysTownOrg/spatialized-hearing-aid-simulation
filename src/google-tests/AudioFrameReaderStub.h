@@ -12,7 +12,7 @@ class AudioFrameReaderStub : public AudioFrameReader {
     int remainingFrames_{};
 	bool complete_{};
 public:
-    long long framesRemaining() override {
+    long long remainingFrames() override {
         return remainingFrames_;
     }
 

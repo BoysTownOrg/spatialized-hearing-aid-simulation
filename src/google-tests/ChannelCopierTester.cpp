@@ -27,7 +27,7 @@ namespace {
 		EXPECT_EQ(1, copier.sampleRate());
 		EXPECT_EQ(2, copier.frames());
 		EXPECT_EQ(3, copier.channels());
-		EXPECT_EQ(4, copier.framesRemaining());
+		EXPECT_EQ(4, copier.remainingFrames());
 	}
 
 	TEST_F(ChannelCopierTests, returnsTwoIfOneChannel) {

@@ -12,7 +12,7 @@ class NullReader : public AudioFrameReader {
 	int channels() override { return 0; }
 	long long frames() override { return 0; }
 	void reset() override {}
-	long long framesRemaining() override { return 0; }
+	long long remainingFrames() override { return 0; }
 };
 
 AudioProcessingLoader::AudioProcessingLoader(
@@ -107,7 +107,7 @@ int AudioProcessingLoader::bufferSize() {
 }
 
 void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
-	const auto zerosToPad = audio.begin()->size() - reader->framesRemaining();
+	const auto zerosToPad = audio.begin()->size() - reader->remainingFrames();
 	reader->read(audio);
 	if (zerosToPad > 0) {
 		for (auto channel : audio)
@@ -119,7 +119,7 @@ void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
 }
 
 bool AudioProcessingLoader::complete() {
-	return reader->framesRemaining() == 0 && paddedZeros >= processor->groupDelay();
+	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
 }
 
 int AudioProcessingLoader::channels() {

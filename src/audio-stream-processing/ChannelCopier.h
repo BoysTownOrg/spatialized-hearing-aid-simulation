@@ -23,7 +23,7 @@ public:
 	AUDIO_STREAM_PROCESSING_API void reset() override;
 
     // Inherited via AudioFrameReader
-    virtual long long framesRemaining() override;
+    virtual long long remainingFrames() override;
 };
 
 class ChannelCopierFactory : public AudioFrameReaderFactory {

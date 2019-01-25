@@ -34,8 +34,8 @@ void ChannelCopier::reset() {
 	reader->reset();
 }
 
-long long ChannelCopier::framesRemaining() {
-    return reader->framesRemaining();
+long long ChannelCopier::remainingFrames() {
+    return reader->remainingFrames();
 }
 
 ChannelCopierFactory::ChannelCopierFactory(

@@ -28,9 +28,10 @@ public:
 	AUDIO_FILE_READING_API int channels() override;
 	AUDIO_FILE_READING_API long long frames() override;
 	AUDIO_FILE_READING_API void reset() override;
-    AUDIO_FILE_READING_API long long framesRemaining() override;
+    AUDIO_FILE_READING_API long long remainingFrames() override;
 private:
 	bool complete_();
+	unsigned int remainingFrames_();
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
