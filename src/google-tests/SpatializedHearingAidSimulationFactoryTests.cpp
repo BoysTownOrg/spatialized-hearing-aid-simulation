@@ -7,7 +7,7 @@
 #include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <gtest/gtest.h>
 
-class SpatializedHearingAidSimulationTests : public ::testing::Test {
+class SpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 protected:
 	GlobalTestParameters global;
 	std::shared_ptr<FilterbankCompressorSpy> compressor =
@@ -32,7 +32,7 @@ protected:
 		brirReader
 	};
 
-	SpatializedHearingAidSimulationTests() {
+	SpatializedHearingAidSimulationFactoryTests() {
 		setValidDefaults();
 	}
 
@@ -59,7 +59,7 @@ public:
 };
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadePassesPrescriptionFilePathsToParserFactory
 ) {
 	global.leftDslPrescriptionFilePath = "a";
@@ -71,7 +71,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeDoesNotTryToMakePrescriptionsWhenNotUsingHearingAidSimulation
 ) {
 	global.leftDslPrescriptionFilePath = "a";
@@ -82,7 +82,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadePassesCompressionParametersToFactory
 ) {
 	global.usingHearingAidSimulation = true;
@@ -98,7 +98,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadePassesBrirFilePathToAudioFileReaderFactory
 ) {
 	global.brirFilePath = "a";
@@ -108,7 +108,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeDoesNotTryToMakeBrirWhenNotUsingSpatialization
 ) {
 	global.brirFilePath = "a";
@@ -118,7 +118,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeThrowsCreateErrorWhenFilterCoefficientsEmpty
 ) {
 	audioFileReader->setContents({});
@@ -127,7 +127,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeThrowsCreateErrorWhenWindowSizeNotPowerOfTwo
 ) {
 	compressor->setWindowSize(3);
@@ -136,7 +136,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeThrowsCreateErrorWhenChunkSizeNotPowerOfTwo
 ) {
 	compressor->setChunkSize(3);
@@ -145,7 +145,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadeThrowsCreateErrorWhenChannelCountMismatchInPrescription
 ) {
 	parser->setVectorProperty(propertyName(dsl_prescription::Property::compressionRatios), { 0 });
@@ -155,7 +155,7 @@ TEST_F(
 }
 
 TEST_F(
-	SpatializedHearingAidSimulationTests, 
+	SpatializedHearingAidSimulationFactoryTests, 
 	preferredBufferSizeReturnsChunkSize
 ) {
 	global.chunkSize = 1;
