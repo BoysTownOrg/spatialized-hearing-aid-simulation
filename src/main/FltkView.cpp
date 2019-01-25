@@ -93,8 +93,16 @@ FltkView::FltkView() :
 	window{ 800, 200, 600, 700 }
 {
 	window.show();
-	window.setupView.hide();
-	window.testerView.hide();
+	hideTestSetup();
+	hideTesterView();
+	registerCallbacks();
+	turnOnSpatialization();
+	turnOnHearingAidSimulation();
+	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+}
+
+void FltkView::registerCallbacks() {
 	window.setupView.browseTestFilePath.callback(onBrowseTestFile, this);
 	window.setupView.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.setupView.browseRightPrescription.callback(onBrowseRightPrescription, this);
@@ -104,10 +112,14 @@ FltkView::FltkView() :
 	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.setupView.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
 	window.testerView.play.callback(onPlay, this);
-	window.setupView.usingSpatialization_.value(1);
+}
+
+void FltkView::turnOnHearingAidSimulation() {
 	window.setupView.usingHearingAidSimulation_.value(1);
-	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
-	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+}
+
+void FltkView::turnOnSpatialization() {
+	window.setupView.usingSpatialization_.value(1);
 }
 
 void FltkView::showTestSetup() {
@@ -230,17 +242,42 @@ void FltkView::subscribe(EventListener * e) {
 	this->listener = e;
 }
 
-static std::string formatFilters(std::vector<std::string> filters) {
-	std::stringstream stream;
-	for (auto filter : filters)
-		stream << filter << "\n";
-	return stream.str();
-}
+class Fl_Chooser_Facade {
+	Fl_Native_File_Chooser chooser{};
+public:
+	auto type(Fl_Native_File_Chooser::Type t) {
+		return chooser.type(t);
+	}
+
+	auto filter(std::vector<std::string> filters) {
+		chooser.filter(formatFilters(std::move(filters)).c_str());
+	}
+
+	auto show() {
+		return chooser.show();
+	}
+
+	auto filename() {
+		return chooser.filename();
+	}
+
+	auto options(int opt) {
+		return chooser.options(opt);
+	}
+
+private:
+	std::string formatFilters(std::vector<std::string> filters) {
+		std::stringstream stream;
+		for (auto filter : filters)
+			stream << filter << "\n";
+		return stream.str();
+	}
+};
 
 std::string FltkView::browseForOpeningFile(std::vector<std::string> filters) {
-	Fl_Native_File_Chooser chooser{};
+	Fl_Chooser_Facade chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_FILE);
-	chooser.filter(formatFilters(std::move(filters)).c_str());
+	chooser.filter(std::move(filters));
 	browseResult = chooser.show();
 	return chooser.filename();
 }
@@ -254,16 +291,16 @@ bool FltkView::browseCancelled() {
 }
 
 std::string FltkView::browseForDirectory() {
-	Fl_Native_File_Chooser chooser{};
+	Fl_Chooser_Facade chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
 	browseResult = chooser.show();
 	return chooser.filename();
 }
 
 std::string FltkView::browseForSavingFile(std::vector<std::string> filters) {
-	Fl_Native_File_Chooser chooser{};
+	Fl_Chooser_Facade chooser{};
 	chooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
-	chooser.filter(formatFilters(std::move(filters)).c_str());
+	chooser.filter(std::move(filters));
 	chooser.options(Fl_Native_File_Chooser::SAVEAS_CONFIRM | Fl_Native_File_Chooser::USE_FILTER_EXT);
 	browseResult = chooser.show();
 	return chooser.filename();

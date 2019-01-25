@@ -116,6 +116,9 @@ public:
 	void deactivateChunkSize() override;
 
 private:
+	void registerCallbacks();
+	void turnOnHearingAidSimulation();
+	void turnOnSpatialization();
 	static void onBrowseTestFile(Fl_Widget *, void *);
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);
 	static void onBrowseRightPrescription(Fl_Widget *, void *);
