@@ -68,8 +68,7 @@ void FirFilter::overlapAdd() {
 	for (index_type i = 0; i < N / 2 + 1; ++i)
 		dftComplex[i] *= H[i];
 	fftwf_execute(ifftPlan);
-	for (index_type i = 0; i < N; ++i)
-		overlap[i] += dftReal[i];
+	std::transform(overlap.begin(), overlap.end(), dftReal.begin(), overlap.begin(), std::plus<float>{});
 }
 
 void FirFilter::shiftOverlap(index_type n) {
