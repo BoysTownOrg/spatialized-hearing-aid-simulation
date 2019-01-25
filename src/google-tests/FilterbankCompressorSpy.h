@@ -91,13 +91,13 @@ public:
 	}
 };
 
-class MockCompressorFactory : public FilterbankCompressorFactory {
+class FilterbankCompressorSpyFactory : public FilterbankCompressorFactory {
 	FilterbankCompressor::Parameters parameters_{};
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
-	explicit MockCompressorFactory(
+	explicit FilterbankCompressorSpyFactory(
 		std::shared_ptr<FilterbankCompressor> compressor =
-		std::make_shared<FilterbankCompressorSpy>()
+			std::make_shared<FilterbankCompressorSpy>()
 	) :
 		compressor{ std::move(compressor) } {}
 
