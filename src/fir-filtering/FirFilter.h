@@ -14,9 +14,9 @@
 class FirFilter : public SignalProcessor {
 public:
 	using coefficient_type = std::vector<float>;
-	class InvalidCoefficients {};
 	FIR_FILTERING_API explicit FirFilter(coefficient_type b);
-	FIR_FILTERING_API ~FirFilter();
+	class InvalidCoefficients {};
+	FIR_FILTERING_API ~FirFilter() override;
 	FIR_FILTERING_API void process(signal_type) override;
 	FIR_FILTERING_API index_type groupDelay() override;
 private:
@@ -31,6 +31,8 @@ private:
 	coefficient_type::size_type order;
 	
 	long nextPowerOfTwo(coefficient_type::size_type x);
+	void filterCompleteSegments(signal_type);
+	void filterRemaining(signal_type);
 	void filter(signal_type);
 	void overlapAdd();
 	void shiftOverlap(index_type x);

@@ -6,24 +6,23 @@ FirFilter::FirFilter(coefficient_type b) :
 {
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
-	const auto M = b.size();
-	N = nextPowerOfTwo(M - 1);
-	L = N - M + 1;
+	N = nextPowerOfTwo(order);
+	L = N - order;
 	overlap.resize(N);
 	dftReal = std::move(b);
 	dftReal.resize(N);
-	dftComplex.resize(N / 2 + 1);
-	const auto to_fftw = reinterpret_cast<fftwf_complex *>(&dftComplex[0]);
+	dftComplex.resize(N/2 + 1);
+	const auto to_fftw = reinterpret_cast<fftwf_complex *>(&dftComplex.front());
 	fftPlan = fftwf_plan_dft_r2c_1d(
 		N, 
-		&dftReal[0],
+		&dftReal.front(),
 		to_fftw,
 		FFTW_ESTIMATE
 	);
 	ifftPlan = fftwf_plan_dft_c2r_1d(
 		N, 
 		to_fftw,
-		&dftReal[0],
+		&dftReal.front(),
 		FFTW_ESTIMATE
 	);
 	fftwf_execute(fftPlan);
@@ -43,15 +42,21 @@ FirFilter::~FirFilter() {
 }
 
 void FirFilter::process(signal_type signal) {
+	filterCompleteSegments(signal);
+	filterRemaining(signal);
+}
+
+void FirFilter::filterCompleteSegments(signal_type signal) {
 	for (coefficient_type::size_type i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
+}
+
+void FirFilter::filterRemaining(signal_type signal) {
 	filter(signal.last(signal.size() % L));
 }
 
 void FirFilter::filter(signal_type signal) {
-	std::fill(dftReal.begin(), dftReal.end(), 0.0f);
-	for (index_type i = 0; i < signal.size(); ++i)
-		dftReal[i] = signal[i];
+	std::fill(std::copy(signal.begin(), signal.end(), dftReal.begin()), dftReal.end(), 0.0f);
 	overlapAdd();
 	for (index_type i = 0; i < signal.size(); ++i)
 		signal[i] = overlap[i] / N;
