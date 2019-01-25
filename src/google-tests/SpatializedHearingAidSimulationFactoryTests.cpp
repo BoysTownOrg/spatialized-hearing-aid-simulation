@@ -8,10 +8,14 @@
 
 class SpatializedHearingAidSimulationTests : public ::testing::Test {
 protected:
-	std::shared_ptr<FilterbankCompressorFactory> compressorFactory =
-		std::make_shared<FilterbankCompressorSpyFactory>();
+	std::shared_ptr<FilterbankCompressorSpy> compressor =
+		std::make_shared<FilterbankCompressorSpy>();
+	std::shared_ptr<FilterbankCompressorSpyFactory> compressorFactory =
+		std::make_shared<FilterbankCompressorSpyFactory>(compressor);
+	std::shared_ptr<FakeConfigurationFileParser> parser =
+		std::make_shared<FakeConfigurationFileParser>();
 	std::shared_ptr<FakeConfigurationFileParserFactory> parserFactory =
-		std::make_shared<FakeConfigurationFileParserFactory>();
+		std::make_shared<FakeConfigurationFileParserFactory>(parser);
 	std::shared_ptr<PrescriptionReader> prescriptionReader =
 		std::make_shared<PrescriptionAdapter>(parserFactory);
 	std::shared_ptr<BrirReader> brirReader =
@@ -22,7 +26,11 @@ protected:
 };
 
 TEST_F(SpatializedHearingAidSimulationTests, tbd) {
+	parser->setValidSingleChannelDslProperties();
+	compressor->setChunkSize(1);
+	compressor->setWindowSize(1);
 	GlobalTestParameters global;
+	global.usingSpatialization = false;
 	global.leftDslPrescriptionFilePath = "a";
 	global.rightDslPrescriptionFilePath = "b";
 	global.usingHearingAidSimulation = true;

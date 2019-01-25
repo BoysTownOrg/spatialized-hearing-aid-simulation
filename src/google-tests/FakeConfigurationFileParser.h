@@ -44,7 +44,7 @@ public:
 
 template<typename T>
 class ArgumentCollection {
-	std::vector<T> collection;
+	std::vector<T> collection{};
 public:
 	bool contains(T item) {
 		return std::find(collection.begin(), collection.end(), item) != collection.end();
