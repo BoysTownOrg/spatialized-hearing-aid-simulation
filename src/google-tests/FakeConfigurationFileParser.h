@@ -53,6 +53,10 @@ public:
 	auto push_back(T item) {
 		return collection.push_back(std::move(item));
 	}
+
+	auto empty() {
+		return collection.empty();
+	}
 };
 
 class FakeConfigurationFileParserFactory : public ConfigurationFileParserFactory {

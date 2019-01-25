@@ -38,3 +38,16 @@ TEST_F(SpatializedHearingAidSimulationTests, tbd) {
 	EXPECT_TRUE(parserFactory->filePaths().contains("a"));
 	EXPECT_TRUE(parserFactory->filePaths().contains("b"));
 }
+
+TEST_F(SpatializedHearingAidSimulationTests, tbd2) {
+	parser->setValidSingleChannelDslProperties();
+	compressor->setChunkSize(1);
+	compressor->setWindowSize(1);
+	GlobalTestParameters global;
+	global.usingSpatialization = false;
+	global.leftDslPrescriptionFilePath = "a";
+	global.rightDslPrescriptionFilePath = "b";
+	global.usingHearingAidSimulation = false;
+	factory.assertCanBeMade(&global);
+	EXPECT_TRUE(parserFactory->filePaths().empty());
+}
