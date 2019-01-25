@@ -73,6 +73,38 @@ TEST_F(
 
 TEST_F(
 	SpatializedHearingAidSimulationTestDocumenterTests,
+	ignoresBrirIfNotUsingSpatialization
+) {
+	GlobalTestParameters test;
+	test.subjectId = "a";
+	test.testerId = "b";
+	test.leftDslPrescriptionFilePath = "c";
+	test.rightDslPrescriptionFilePath = "d";
+	test.brirFilePath = "e";
+	test.attack_ms = 1;
+	test.release_ms = 2;
+	test.windowSize = 3;
+	test.chunkSize = 4;
+	test.usingSpatialization = false;
+	SpatializedHearingAidSimulationTestDocumenter::TestParameters p;
+	p.global = &test;
+	documenter.documentTestParameters(p);
+	assertEqual(
+		"subject: a\n"
+		"tester: b\n"
+		"DSL prescription\n"
+		"    left: c\n"
+		"    right: d\n"
+		"attack (ms): 1.0\n"
+		"release (ms): 2.0\n"
+		"window size (samples): 3\n"
+		"chunk size (samples): 4\n\n", 
+		writer.content()
+	);
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTestDocumenterTests,
 	playTrialDocumentsTrial
 ) {
 	GlobalTrialParameters trial;
