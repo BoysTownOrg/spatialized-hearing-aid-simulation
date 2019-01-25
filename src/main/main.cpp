@@ -3,6 +3,9 @@
 #include "LibsndfileReader.h"
 #include "PortAudioDevice.h"
 #include "NlohmannJsonParser.h"
+#include "WindowsDirectoryReader.h"
+#include "FileSystemWriter.h"
+#include "MersenneTwisterRandomizer.h"
 #include "SpatializedHearingAidSimulationFactory.h"
 #include <audio-stream-processing/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
@@ -15,81 +18,6 @@
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <spatialized-hearing-aid-simulation-utility/SpatializedHearingAidSimulationTestDocumenter.h>
-
-#include <Windows.h>
-
-class WindowsFileSearch {
-	HANDLE hFind;
-public:
-	WindowsFileSearch(LPCSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData) :
-		hFind{FindFirstFileA(lpFileName, lpFindFileData)}
-	{
-	}
-
-	bool FindNextFileA(LPWIN32_FIND_DATAA lpFindFileData) {
-		return ::FindNextFileA(hFind, lpFindFileData);
-	}
-
-	~WindowsFileSearch() noexcept {
-		FindClose(hFind);
-	}
-
-	WindowsFileSearch(WindowsFileSearch &&) = delete;
-	WindowsFileSearch &operator=(WindowsFileSearch &&) = delete;
-	WindowsFileSearch(const WindowsFileSearch &) = delete;
-	WindowsFileSearch &operator=(const WindowsFileSearch &) = delete;
-};
-
-class WindowsDirectoryReader : public DirectoryReader {
-	// https://docs.microsoft.com/en-us/windows/desktop/fileio/listing-the-files-in-a-directory
-	std::vector<std::string> filesIn(std::string directory) override {
-		directory += "\\*";
-		WIN32_FIND_DATA ffd;
-		WindowsFileSearch search{ directory.c_str(), &ffd };
-		std::vector<std::string> files{};
-		do {
-			if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-				continue;
-			else
-				files.push_back(ffd.cFileName);
-		} while (search.FindNextFileA(&ffd) != 0);
-		return files;
-	}
-};
-
-#include <random>
-
-class MersenneTwisterRandomizer : public Randomizer {
-    std::mt19937 engine{std::random_device{}()};
-public:
-    void shuffle(shuffle_iterator begin, shuffle_iterator end) override {
-        std::shuffle(begin, end, engine);
-    }
-};
-
-#include <fstream>
-
-class FileSystemWriter : public PersistentMemoryWriter {
-	std::ofstream file;
-public:
-	void initialize(std::string filePath) override {
-		file.open(std::move(filePath));
-	}
-
-	void write(std::string s) override {
-		file << std::move(s);
-	}
-
-	bool failed() override {
-		return file.fail();
-	}
-
-	std::string errorMessage() override {
-		char buffer[256];
-		strerror_s(buffer, sizeof buffer, errno);
-		return buffer;
-	}
-};
 
 int main() {
 	WindowsDirectoryReader reader{};
@@ -111,7 +39,6 @@ int main() {
 			std::make_shared<LibsndfileReaderFactory>()
 		)
 	};
-	
 	AudioProcessingLoader loader{&frameReaderFactory, &processorFactory};
 	AudioPlayer player{&device, &loader};
 	FileSystemWriter writer;

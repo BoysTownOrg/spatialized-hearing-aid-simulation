@@ -56,5 +56,14 @@
     <ClInclude Include="SpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WindowsDirectoryReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystemWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MersenneTwisterRandomizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

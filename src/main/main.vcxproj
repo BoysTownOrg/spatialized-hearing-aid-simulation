@@ -160,11 +160,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapro.h" />
+    <ClInclude Include="FileSystemWriter.h" />
     <ClInclude Include="FltkView.h" />
     <ClInclude Include="LibsndfileReader.h" />
+    <ClInclude Include="MersenneTwisterRandomizer.h" />
     <ClInclude Include="NlohmannJsonParser.h" />
     <ClInclude Include="PortAudioDevice.h" />
     <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="WindowsDirectoryReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
