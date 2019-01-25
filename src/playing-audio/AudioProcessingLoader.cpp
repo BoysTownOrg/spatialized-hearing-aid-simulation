@@ -115,15 +115,17 @@ int AudioProcessingLoader::bufferSize() {
 	return processorFactory->preferredBufferSize();
 }
 
-void AudioProcessingLoader::load(gsl::span<gsl::span<float>> audio) {
-	const auto zerosToPad = audio.begin()->size() - reader->remainingFrames();
+void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
+	const auto zerosToPad = audio.size() 
+		? audio.begin()->size() - reader->remainingFrames() 
+		: 0;
 	reader->read(audio);
 	if (zerosToPad > 0) {
 		for (auto channel : audio)
 			std::fill(
-				channel.end() - gsl::narrow<decltype(channel)::index_type>(zerosToPad), 
+				channel.end() - gsl::narrow<channel_type::index_type>(zerosToPad), 
 				channel.end(), 
-				decltype(channel)::element_type{ 0 }
+				channel_type::element_type{ 0 }
 			);
 		paddedZeros += zerosToPad;
 	}

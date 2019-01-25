@@ -25,7 +25,8 @@ public:
 	RUNTIME_ERROR(PreparationFailure);
 
 	virtual bool complete() = 0;
-	virtual void load(gsl::span<gsl::span<float>> audio) = 0;
+	using channel_type = gsl::span<float>;
+	virtual void load(gsl::span<channel_type> audio) = 0;
 	virtual int sampleRate() = 0;
 	virtual int channels() = 0;
 	virtual int bufferSize() = 0;
