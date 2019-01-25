@@ -62,7 +62,7 @@ TEST_F(
 
 TEST_F(
 	SpatializedHearingAidSimulationTests, 
-	assertCanBeMadeDoesTryToMakePrescriptionsWhenNotUsingHearingAidSimulation
+	assertCanBeMadeDoesNotTryToMakePrescriptionsWhenNotUsingHearingAidSimulation
 ) {
 	global.leftDslPrescriptionFilePath = "a";
 	global.rightDslPrescriptionFilePath = "b";
@@ -95,4 +95,14 @@ TEST_F(
 	global.usingSpatialization = true;
 	factory.assertCanBeMade(&global);
 	assertEqual("a", audioFileReaderFactory->filePath());
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeDoesNotTryToMakeBrirWhenNotUsingSpatialization
+) {
+	global.brirFilePath = "a";
+	global.usingSpatialization = false;
+	factory.assertCanBeMade(&global);
+	EXPECT_TRUE(audioFileReaderFactory->filePath().empty());
 }
