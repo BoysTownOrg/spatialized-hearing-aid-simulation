@@ -46,6 +46,16 @@ private:
 		audioFileReader->setContents({ 0, 0 });
 		audioFileReader->setChannels(2);
 	}
+
+public:
+	void canNotBeMade(std::string what) {
+		try {
+			factory.assertCanBeMade(&global);
+		}
+		catch (const SpatializedHearingAidSimulationFactory::CreateError &e) {
+			assertEqual(std::move(what), e.what());
+		}
+	}
 };
 
 TEST_F(
@@ -105,4 +115,13 @@ TEST_F(
 	global.usingSpatialization = false;
 	factory.assertCanBeMade(&global);
 	EXPECT_TRUE(audioFileReaderFactory->filePath().empty());
+}
+
+TEST_F(
+	SpatializedHearingAidSimulationTests, 
+	assertCanBeMadeThrowsSomething
+) {
+	audioFileReader->setContents({});
+	global.usingSpatialization = true;
+	canNotBeMade("Invalid filter coefficients.");
 }
