@@ -15,15 +15,12 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 }
 
 void AudioFileInMemory::read(gsl::span<channel_type> audio) {
-	auto channels = audio.size();
-	for (channel_type::index_type i = 0; i < channels; ++i) {
-		auto channel = audio[i];
-		auto samples = std::min(gsl::narrow<size_type>(channel.size()), remainingFrames_());
-		for (size_type j = 0; j < samples; ++j)
-			channel[j] = buffer[head + i + j * channels_];
-	}
-	if (!complete_())
-		head += channels;
+	for (int i = 0; i < audio.begin()->size(); ++i)
+		for (const auto channel : audio) {
+			if (head == buffer.size())
+				return;
+			channel[i] = buffer[head++];
+		}
 }
 
 bool AudioFileInMemory::complete() {
