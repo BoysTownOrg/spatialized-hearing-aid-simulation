@@ -56,7 +56,7 @@ void FirFilter::filterRemaining(signal_type signal) {
 }
 
 void FirFilter::filter(signal_type signal) {
-	std::fill(std::copy(signal.begin(), signal.end(), dftReal.begin()), dftReal.end(), 0.0f);
+	std::fill(std::copy(signal.begin(), signal.end(), dftReal.begin()), dftReal.end(), sample_type{ 0 });
 	overlapAdd();
 	for (index_type i = 0; i < signal.size(); ++i)
 		signal[i] = overlap[i] / N;
@@ -65,17 +65,27 @@ void FirFilter::filter(signal_type signal) {
 
 void FirFilter::overlapAdd() {
 	fftwf_execute(fftPlan);
-	for (index_type i = 0; i < N / 2 + 1; ++i)
-		dftComplex[i] *= H[i];
+	std::transform(
+		dftComplex.begin(), 
+		dftComplex.end(), 
+		H.begin(), 
+		dftComplex.begin(), 
+		std::multiplies{}
+	);
 	fftwf_execute(ifftPlan);
-	std::transform(overlap.begin(), overlap.end(), dftReal.begin(), overlap.begin(), std::plus<float>{});
+	std::transform(
+		overlap.begin(), 
+		overlap.end(), 
+		dftReal.begin(), 
+		overlap.begin(), 
+		std::plus{}
+	);
 }
 
 void FirFilter::shiftOverlap(index_type n) {
 	for (index_type i = 0; i < N - n; ++i)
 		overlap[i] = overlap[i + n];
-	for (index_type i = N - n; i < N; ++i)
-		overlap[i] = 0;
+	std::fill(overlap.end() - n, overlap.end(), sample_type{ 0 });
 }
 
 auto FirFilter::groupDelay() -> index_type {

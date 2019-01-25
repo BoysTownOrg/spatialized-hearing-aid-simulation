@@ -13,17 +13,20 @@
 
 class FirFilter : public SignalProcessor {
 public:
-	using coefficient_type = std::vector<float>;
+	using sample_type = signal_type::element_type;
+	using coefficient_type = std::vector<sample_type>;
 	FIR_FILTERING_API explicit FirFilter(coefficient_type b);
 	class InvalidCoefficients {};
 	FIR_FILTERING_API ~FirFilter() override;
 	FIR_FILTERING_API void process(signal_type) override;
 	FIR_FILTERING_API index_type groupDelay() override;
 private:
-	std::vector<std::complex<float>> H{};
-	std::vector<std::complex<float>> dftComplex{};
-	std::vector<float> dftReal{};
-	std::vector<float> overlap{};
+	using complex_signal_type = std::vector<std::complex<sample_type>>;
+	complex_signal_type H{};
+	complex_signal_type dftComplex{};
+	using real_signal_type = std::vector<sample_type>;
+	real_signal_type dftReal{};
+	real_signal_type overlap{};
 	fftwf_plan fftPlan{};
 	fftwf_plan ifftPlan{};
 	long N{};
