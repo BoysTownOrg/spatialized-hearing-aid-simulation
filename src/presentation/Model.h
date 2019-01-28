@@ -15,6 +15,7 @@ public:
 		std::string audioDirectory;
 		std::string testFilePath;
 		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
 		bool usingHearingAidSimulation;
 		GlobalTestParameters *global;
 	};
