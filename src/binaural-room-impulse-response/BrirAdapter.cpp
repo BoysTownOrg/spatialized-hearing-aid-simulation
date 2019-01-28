@@ -2,19 +2,19 @@
 #include <gsl/gsl>
 
 class BrirAdapter::ChannelReader {
-	vector_type contents;
+	impulse_response_type contents;
 	int channels;
 public:
 	explicit ChannelReader(AudioFileReader &reader) :
-		contents(gsl::narrow<vector_type::size_type>(reader.frames() * reader.channels())),
+		contents(gsl::narrow<impulse_response_type::size_type>(reader.frames() * reader.channels())),
 		channels{ reader.channels() } 
 	{
 		if (contents.size())
 			reader.readFrames(&contents.front(), reader.frames());
 	}
 
-	vector_type read(vector_type::size_type channel) {
-		vector_type result{};
+	impulse_response_type read(impulse_response_type::size_type channel) {
+		impulse_response_type result{};
 		auto i{ channel };
 		while (i < contents.size()) {
 			result.push_back(contents[i]);

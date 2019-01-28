@@ -7,9 +7,10 @@
 class BrirReader {
 public:
 	INTERFACE_OPERATIONS(BrirReader);
+	using impulse_response_type = std::vector<float>;
 	struct BinauralRoomImpulseResponse {
-		std::vector<float> left;
-		std::vector<float> right;
+		impulse_response_type left;
+		impulse_response_type right;
 		int sampleRate;
 	};
 	virtual BinauralRoomImpulseResponse read(std::string filePath) = 0;

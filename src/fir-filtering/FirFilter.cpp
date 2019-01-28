@@ -1,7 +1,7 @@
 #include "FirFilter.h"
 #include <algorithm>
 
-FirFilter::FirFilter(coefficient_type b) :
+FirFilter::FirFilter(coefficients_type b) :
 	order{ b.size() - 1 }
 {
 	if (b.size() == 0)
@@ -29,7 +29,7 @@ FirFilter::FirFilter(coefficient_type b) :
 	H = dftComplex;
 }
 
-long FirFilter::nextPowerOfTwo(coefficient_type::size_type x) {
+long FirFilter::nextPowerOfTwo(coefficients_type::size_type x) {
 	int power{};
 	while (x /= 2)
 		++power;
@@ -47,7 +47,7 @@ void FirFilter::process(signal_type signal) {
 }
 
 void FirFilter::filterCompleteSegments(signal_type signal) {
-	for (coefficient_type::size_type i = 0; i < signal.size() / L; ++i)
+	for (coefficients_type::size_type i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 }
 

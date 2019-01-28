@@ -18,7 +18,6 @@ public:
 		BinauralRoomImpulseResponse read(std::string filePath) override;
 private:
 	class ChannelReader;
-	using vector_type = decltype(BinauralRoomImpulseResponse::left);
 	std::shared_ptr<AudioFileReader> makeReader(std::string filePath);
 	BinauralRoomImpulseResponse makeBrir(AudioFileReader &);
 };

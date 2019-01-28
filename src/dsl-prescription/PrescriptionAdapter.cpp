@@ -39,7 +39,7 @@ public:
 		parser{ std::move(parser) } {}
 
 	std::vector<double> parse(dsl_prescription::Property p) {
-		return parser->asVector(dsl_prescription::propertyName(p));
+		return parser->asVector(propertyName(p));
 	}
 };
 

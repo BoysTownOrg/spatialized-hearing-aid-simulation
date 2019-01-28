@@ -11,9 +11,9 @@ namespace {
 	protected:
 		AudioProcessingLoader::Initialization initialization{};
 		AudioProcessingLoader::Preparation preparation{};
-		using vector_type = std::vector<float>;
-		vector_type left{};
-		vector_type right{};
+		using impulse_response_type = std::vector<float>;
+		impulse_response_type left{};
+		impulse_response_type right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory readerFactory{reader};
@@ -30,13 +30,13 @@ namespace {
 			loader.prepare(preparation);
 		}
 
-		void loadMonoFrames(vector_type::size_type n) {
+		void loadMonoFrames(impulse_response_type::size_type n) {
 			left.resize(n);
 			std::vector<gsl::span<float>> mono{ left };
 			loader.load(mono);
 		}
 
-		void loadStereoFrames(vector_type::size_type n) {
+		void loadStereoFrames(impulse_response_type::size_type n) {
 			left.resize(n);
 			right.resize(n);
 			std::vector<gsl::span<float>> stereo{ left, right };

@@ -7,20 +7,20 @@ namespace {
 	class AudioFileInMemoryFacade {
 		AudioFileInMemory inMemory;
 	public:
-		using vector_type = std::vector<float>;
-		vector_type left{};
-		vector_type right{};
+		using impulse_response_type = std::vector<float>;
+		impulse_response_type left{};
+		impulse_response_type right{};
 
 		explicit AudioFileInMemoryFacade(AudioFileReader &reader) :
 			inMemory{ reader } {}
 
-		void readMonoFrames(vector_type::size_type n) {
+		void readMonoFrames(impulse_response_type::size_type n) {
 			left.resize(n);
 			std::vector<gsl::span<float>> mono{ left };
 			inMemory.read(mono);
 		}
 
-		void readStereoFrames(vector_type::size_type n) {
+		void readStereoFrames(impulse_response_type::size_type n) {
 			left.resize(n);
 			right.resize(n);
 			std::vector<gsl::span<float>> stereo{ left, right };

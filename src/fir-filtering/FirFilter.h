@@ -14,8 +14,8 @@
 class FirFilter : public SignalProcessor {
 public:
 	using sample_type = signal_type::element_type;
-	using coefficient_type = std::vector<sample_type>;
-	FIR_FILTERING_API explicit FirFilter(coefficient_type b);
+	using coefficients_type = std::vector<sample_type>;
+	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
 	class InvalidCoefficients {};
 	FIR_FILTERING_API ~FirFilter() override;
 	FIR_FILTERING_API void process(signal_type) override;
@@ -30,10 +30,10 @@ private:
 	fftwf_plan fftPlan{};
 	fftwf_plan ifftPlan{};
 	long N{};
-	coefficient_type::size_type L{};
-	coefficient_type::size_type order;
+	coefficients_type::size_type L{};
+	coefficients_type::size_type order;
 	
-	long nextPowerOfTwo(coefficient_type::size_type x);
+	long nextPowerOfTwo(coefficients_type::size_type x);
 	void filterCompleteSegments(signal_type);
 	void filterRemaining(signal_type);
 	void filter(signal_type);
