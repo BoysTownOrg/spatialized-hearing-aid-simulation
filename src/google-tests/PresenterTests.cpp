@@ -608,8 +608,12 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
 		view.setAudioDevice("a");
+		view.setAudioFilePath("b");
+		view.setLevel_dB_Spl("1.1");
 		view.playCalibration();
 		assertEqual("a", model.calibrationParameters().audioDevice);
+		assertEqual("b", model.calibrationParameters().audioFilePath);
+		EXPECT_EQ(1.1, model.calibrationParameters().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
