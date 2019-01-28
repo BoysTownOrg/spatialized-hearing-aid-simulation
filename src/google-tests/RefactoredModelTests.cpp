@@ -2,10 +2,13 @@
 #include <presentation/Model.h>
 
 class RefactoredModel : public Model {
+	PrescriptionReader* prescriptionReader;
 public:
-	explicit RefactoredModel(PrescriptionReader*) {}
+	explicit RefactoredModel(PrescriptionReader* prescriptionReader) :
+		prescriptionReader{ prescriptionReader } {}
 
-	void initializeTest(TestParameters) override {
+	void initializeTest(TestParameters p) override {
+		prescriptionReader->read(p.leftDslPrescriptionFilePath);
 	}
 
 	void playTrial(TrialParameters) override {
