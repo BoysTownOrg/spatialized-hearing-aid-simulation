@@ -33,6 +33,7 @@ public:
 		std::string audioDevice;
 	};
 	virtual void playCalibration(CalibrationParameters) = 0;
+	RUNTIME_ERROR(CalibrationFailure);
 	virtual void stopCalibration() = 0;
 	virtual void calibrate(double level_dB_Spl) = 0;
 };

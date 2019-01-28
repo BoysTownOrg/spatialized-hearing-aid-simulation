@@ -125,3 +125,22 @@ public:
 	void stopCalibration() override {}
 	void calibrate(double) override {}
 };
+
+class CalibrationFailingModel : public Model {
+	std::string message{};
+public:
+	void setErrorMessage(std::string s) {
+		message = std::move(s);
+	}
+
+	void playCalibration(CalibrationParameters) override {
+		throw CalibrationFailure{ message };
+	}
+	
+	void playTrial(TrialParameters) override {}
+	void initializeTest(TestParameters) override {}
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	bool testComplete() override { return {}; }
+	void stopCalibration() override {}
+	void calibrate(double) override {}
+};
