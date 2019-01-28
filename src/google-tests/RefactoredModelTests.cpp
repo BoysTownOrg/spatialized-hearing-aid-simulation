@@ -9,6 +9,7 @@ public:
 
 	void initializeTest(TestParameters p) override {
 		prescriptionReader->read(p.leftDslPrescriptionFilePath);
+		prescriptionReader->read(p.rightDslPrescriptionFilePath);
 	}
 
 	void playTrial(TrialParameters) override {
