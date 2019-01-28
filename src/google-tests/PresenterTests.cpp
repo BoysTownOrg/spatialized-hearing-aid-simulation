@@ -617,7 +617,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmCalibrationPassesCalibratedLevel) {
-		view.setCalibrationLevel_dB_Spl(1);
+		view.setCalibrationLevel_dB_Spl("1");
 		view.confirmCalibration();
 		EXPECT_EQ(1, model.calibrationLevel_dB_Spl());
 	}

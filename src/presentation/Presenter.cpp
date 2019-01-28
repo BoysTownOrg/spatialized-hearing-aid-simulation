@@ -209,6 +209,10 @@ void Presenter::stopCalibration() {
 	model->stopCalibration();
 }
 
+void Presenter::confirmCalibration()
+{
+}
+
 void Presenter::toggleUsingSpatialization() {
 	toggleSpatializationActivation();
 }

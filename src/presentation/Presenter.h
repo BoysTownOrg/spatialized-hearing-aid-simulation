@@ -44,6 +44,7 @@ public:
 	void calibrate() override;
 	void playCalibration() override;
 	void stopCalibration() override;
+	void confirmCalibration() override;
 
 private:
 	void toggleSpatializationActivation();
