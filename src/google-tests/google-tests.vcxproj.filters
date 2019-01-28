@@ -116,5 +116,8 @@
     <ClInclude Include="PersistentMemoryWriterStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArgumentCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

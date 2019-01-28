@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ArgumentCollection.h"
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <map>
 
@@ -39,23 +40,6 @@ public:
 
 	int asInt(std::string property) override {
 		return ints.at(std::move(property));
-	}
-};
-
-template<typename T>
-class ArgumentCollection {
-	std::vector<T> collection{};
-public:
-	bool contains(T item) {
-		return std::find(collection.begin(), collection.end(), item) != collection.end();
-	}
-
-	auto push_back(T item) {
-		return collection.push_back(std::move(item));
-	}
-
-	auto empty() {
-		return collection.empty();
 	}
 };
 

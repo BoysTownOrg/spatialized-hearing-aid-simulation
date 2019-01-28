@@ -29,16 +29,18 @@ public:
 	}
 };
 
+#include "ArgumentCollection.h"
+
 class PrescriptionReaderStub : public PrescriptionReader {
-	std::string filePath_{};
+	ArgumentCollection<std::string> filePaths_{};
 public:
 	Dsl read(std::string filePath) override {
-		filePath_ = std::move(filePath);
+		filePaths_.push_back(std::move(filePath));
 		return {};
 	}
 
-	std::string filePath() const {
-		return filePath_;
+	ArgumentCollection<std::string> filePaths() const {
+		return filePaths_;
 	}
 };
 
@@ -59,6 +61,8 @@ protected:
 TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "a";
+	test.rightDslPrescriptionFilePath = "b";
 	initializeTest();
-	assertEqual("a", prescriptionReader.filePath());
+	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
+	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
