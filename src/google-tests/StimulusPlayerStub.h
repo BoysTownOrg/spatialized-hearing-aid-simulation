@@ -71,6 +71,10 @@ public:
 	bool stopped() const {
 		return stopped_;
 	}
+
+	void stop() override {
+		stopped_ = true;
+	}
 };
 
 class RequestFailingStimulusPlayer : public StimulusPlayer {
@@ -87,6 +91,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
 	void initialize(Initialization) override {}
+	void stop() override {}
 };
 
 class InitializationFailingStimulusPlayer : public StimulusPlayer {
@@ -103,4 +108,5 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
 	void play(PlayRequest) override {}
+	void stop() override {}
 };

@@ -87,6 +87,7 @@ void RecognitionTestModel::playCalibration(CalibrationParameters p) {
 }
 
 void RecognitionTestModel::stopCalibration() {
+	player->stop();
 }
 
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
