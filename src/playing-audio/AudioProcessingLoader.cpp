@@ -24,20 +24,6 @@ AudioProcessingLoader::AudioProcessingLoader(
 	readerFactory{ readerFactory },
 	processorFactory{ processorFactory } {}
 
-void AudioProcessingLoader::initialize(Initialization init) {
-	assertProcessorCanBeMade(init.global);
-	processorFactory->storeParameters(init.global);
-}
-
-void AudioProcessingLoader::assertProcessorCanBeMade(GlobalTestParameters *global) {
-	try {
-		processorFactory->assertCanBeMade(global);
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
-		throw InitializationFailure{ e.what() };
-	}
-}
-
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
 	AudioFrameProcessorFactory::Parameters processing;

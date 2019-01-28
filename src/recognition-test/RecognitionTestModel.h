@@ -36,7 +36,6 @@ public:
 	void stopCalibration() override;
 private:
 	void initializeTest_(TestParameters);
-	void initializeStimulusPlayer(TestParameters);
 	void initializeStimulusList(std::string directory);
 	void initializeDocumenter(std::string testFilePath);
 	void documentTestParameters(TestParameters);

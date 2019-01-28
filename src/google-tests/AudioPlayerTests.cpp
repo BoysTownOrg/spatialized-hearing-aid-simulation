@@ -39,14 +39,6 @@ namespace {
 		EXPECT_EQ(&player, device.controller());
 	}
 
-	TEST_F(AudioPlayerTests, initializeInitializesLoader) {
-		StimulusPlayer::Initialization init;
-		GlobalTestParameters global;
-		init.global = &global;
-		player.initialize(init);
-		EXPECT_EQ(&global, loader.initialization().global);
-	}
-
 	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {
 		play();
 		assertEqual("close open start ", device.streamLog());
@@ -149,17 +141,6 @@ namespace {
 			return { device, loader };
 		}
 
-		void assertInitializeThrowsInitializationFailure(std::string what) {
-			auto player = makePlayer();
-			try {
-				player.initialize({});
-				FAIL() << "Expected AudioPlayer::InitializationFailure";
-			}
-			catch (const AudioPlayer::InitializationFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-
 		void assertPlayThrowsRequestFailure(std::string what) {
 			auto player = makePlayer();
 			try {
@@ -181,15 +162,6 @@ namespace {
 		failingDevice.setErrorMessage("error.");
 		device = &failingDevice;
 		assertConstructorThrowsDeviceFailure("error.");
-	}
-
-	TEST_F(
-		AudioPlayerFailureTests,
-		initializeThrowsInitializationFailureWhenAudioLoaderThrowsInitializationFailure
-	) {
-		InitializationFailingAudioLoader failingFactory{ "error." };
-		loader = &failingFactory;
-		assertInitializeThrowsInitializationFailure("error.");
 	}
 
 	TEST_F(

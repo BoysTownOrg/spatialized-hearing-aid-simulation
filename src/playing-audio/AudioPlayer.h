@@ -16,12 +16,10 @@ public:
 	);
 	PLAYING_AUDIO_API void play(PlayRequest) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
-	PLAYING_AUDIO_API void initialize(Initialization) override;
 	void fillStreamBuffer(void * channels, int frames) override;
 	bool isPlaying() override;
 	void stop() override;
 private:
-	void initializeLoader(Initialization);
 	void play_(PlayRequest);
 	void restartStream(std::string deviceName);
 	template<typename exception>

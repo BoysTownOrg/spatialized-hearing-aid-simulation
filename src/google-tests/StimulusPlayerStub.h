@@ -5,7 +5,6 @@
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	std::vector<int> preferredProcessingSizes_{};
-	Initialization initialization_{};
 	PlayRequest request_{};
 	std::string errorMessage{};
 	bool failOnPlay_{};
@@ -19,10 +18,6 @@ public:
 
 	void setPreferredProcessingSizes(std::vector<int> v) {
 		preferredProcessingSizes_ = std::move(v);
-	}
-
-	const Initialization &initialization() const {
-		return initialization_;
 	}
 
 	const PlayRequest &request() const {
@@ -64,10 +59,6 @@ public:
 		return playCalled_;
 	}
 
-	void initialize(Initialization i) override {
-		initialization_ = std::move(i);
-	}
-
 	bool stopped() const {
 		return stopped_;
 	}
@@ -90,23 +81,5 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool isPlaying() override { return {}; }
-	void initialize(Initialization) override {}
-	void stop() override {}
-};
-
-class InitializationFailingStimulusPlayer : public StimulusPlayer {
-	std::string errorMessage{};
-public:
-	void setErrorMessage(std::string s) {
-		errorMessage = std::move(s);
-	}
-
-	void initialize(Initialization) override {
-		throw InitializationFailure{ errorMessage };
-	}
-
-	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	bool isPlaying() override { return {}; }
-	void play(PlayRequest) override {}
 	void stop() override {}
 };

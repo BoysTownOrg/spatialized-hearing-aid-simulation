@@ -16,7 +16,6 @@ public:
 		AudioFrameReaderFactory *,
 		AudioFrameProcessorFactory *
 	);
-	PLAYING_AUDIO_API void initialize(Initialization) override;
 	PLAYING_AUDIO_API void prepare(Preparation) override;
 	PLAYING_AUDIO_API void load(gsl::span<gsl::span<float>> audio) override;
 	PLAYING_AUDIO_API bool complete() override;
@@ -25,7 +24,6 @@ public:
 	int bufferSize() override;
 
 private:
-	void assertProcessorCanBeMade(GlobalTestParameters *);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
     std::vector<double> computeChannelScalars(double level_dB_Spl);
 	std::shared_ptr<AudioFrameProcessor> makeProcessor(

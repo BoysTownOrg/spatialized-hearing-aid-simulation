@@ -9,7 +9,6 @@
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
-		AudioProcessingLoader::Initialization initialization{};
 		AudioProcessingLoader::Preparation preparation{};
 		using impulse_response_type = std::vector<float>;
 		impulse_response_type left{};
@@ -21,10 +20,6 @@ namespace {
 			std::make_shared<AudioFrameProcessorStub>();
 		AudioFrameProcessorStubFactory processorFactory{processor};
 		AudioProcessingLoader loader{ &readerFactory, &processorFactory };
-
-		void initialize() {
-			loader.initialize(initialization);
-		}
 
 		void prepare() {
 			loader.prepare(preparation);
@@ -59,14 +54,6 @@ namespace {
 			readerFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
 	};
-
-	TEST_F(AudioProcessingLoaderTests, initializePassesParametersToFactoryForExceptionCheckAndStoresThem) {
-		GlobalTestParameters global;
-		initialization.global = &global;
-		initialize();
-		EXPECT_EQ(&global, processorFactory.assertCanBeMadeParameters());
-		EXPECT_EQ(&global, processorFactory.storedParameters());
-	}
 
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
 		EXPECT_EQ(0, loader.channels());
@@ -232,27 +219,7 @@ namespace {
 				assertEqual(std::move(what), e.what());
 			}
 		}
-
-		void assertInitializeThrowsInitializationFailure(std::string what) {
-			AudioProcessingLoader loader{ readerFactory, processorFactory };
-			try {
-				loader.initialize({});
-				FAIL() << "Expected AudioProcessingLoader::InitializationFailure";
-			}
-			catch (const AudioProcessingLoader::InitializationFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
 	};
-
-	TEST_F(
-		AudioProcessingLoaderErrorTests,
-		initializeThrowsInitializationFailureWhenProcessorFactoryThrowsCreateError
-	) {
-		CreatingErrorAudioFrameProcessorFactory failingFactory{ "error." };
-		processorFactory = &failingFactory;
-		assertInitializeThrowsInitializationFailure("error.");
-	}
 
 	TEST_F(
 		AudioProcessingLoaderErrorTests,

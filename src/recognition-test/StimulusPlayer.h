@@ -12,12 +12,6 @@ public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
 
-	struct Initialization {
-		GlobalTestParameters *global;
-	};
-	virtual void initialize(Initialization) = 0;
-	RUNTIME_ERROR(InitializationFailure);
-
 	struct PlayRequest {
 		std::string audioFilePath;
 		std::string audioDevice;

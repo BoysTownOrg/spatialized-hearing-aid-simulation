@@ -39,13 +39,6 @@ namespace {
 		assertEqual("a", list.directory());
 	}
 
-	TEST_F(RecognitionTestModelTests, initializeTestInitializesPlayer) {
-		GlobalTestParameters global;
-		testParameters.global = &global;
-		initializeTest();
-		EXPECT_EQ(&global, player.initialization().global);
-	}
-
 	TEST_F(
 		RecognitionTestModelTests,
 		initializeTestInitializesDocumenter
@@ -187,32 +180,6 @@ namespace {
 		initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
 	) {
 		documenter.setErrorMessage("error.");
-		assertInitializeTestThrowsInitializationFailure("error.");
-	}
-
-	class RecognitionTestModelWithInitializationFailingStimulusPlayer : public ::testing::Test {
-	protected:
-		FakeStimulusList list{};
-		InitializationFailingStimulusPlayer player{};
-		DocumenterStub documenter{};
-		RecognitionTestModel model{ &list, &player, &documenter };
-
-		void assertInitializeTestThrowsInitializationFailure(std::string what) {
-			try {
-				model.initializeTest({});
-				FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
-			}
-			catch (const RecognitionTestModel::TestInitializationFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-	};
-
-	TEST_F(
-		RecognitionTestModelWithInitializationFailingStimulusPlayer,
-		initializeTestThrowsTestInitializationFailureWhenPlayerThrowsInitializationFailure
-	) {
-		player.setErrorMessage("error.");
 		assertInitializeTestThrowsInitializationFailure("error.");
 	}
 

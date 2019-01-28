@@ -26,7 +26,6 @@ void RecognitionTestModel::initializeTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
-	initializeStimulusPlayer(std::move(p));
 }
 
 void RecognitionTestModel::initializeStimulusList(std::string directory) {
@@ -41,12 +40,6 @@ void RecognitionTestModel::documentTestParameters(TestParameters p) {
 	Documenter::TestParameters documenting;
 	documenting.global = p.global;
 	documenter->documentTestParameters(std::move(documenting));
-}
-
-void RecognitionTestModel::initializeStimulusPlayer(TestParameters p) {
-	StimulusPlayer::Initialization playing;
-	playing.global = p.global;
-	player->initialize(std::move(playing));
 }
 
 void RecognitionTestModel::playTrial(TrialParameters p) {

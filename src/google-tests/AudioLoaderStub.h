@@ -4,7 +4,6 @@
 #include <playing-audio/AudioLoader.h>
 
 class AudioLoaderStub : public AudioLoader {
-	Initialization parameters_{};
 	Preparation preparation_{};
 	gsl::span<gsl::span<float>> audioBuffer_{};
 	LogString log_{};
@@ -13,16 +12,8 @@ class AudioLoaderStub : public AudioLoader {
 	int bufferSize_{};
 	bool complete_{};
 public:
-	const Initialization &initialization() const {
-		return parameters_;
-	}
-
 	const Preparation &preparation() const {
 		return preparation_;
-	}
-
-	void initialize(Initialization p) override {
-		parameters_ = std::move(p);
 	}
 
 	void setComplete() {
@@ -85,10 +76,6 @@ public:
 	) :
 		errorMessage{ std::move(errorMessage) } {}
 
-	void initialize(Initialization) override {
-		throw InitializationFailure{ errorMessage };
-	}
-
 	bool complete() override { return {}; }
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
@@ -110,7 +97,6 @@ public:
 	}
 	
 	bool complete() override { return {}; }
-	void initialize(Initialization) override {}
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }

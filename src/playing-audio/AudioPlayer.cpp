@@ -17,21 +17,6 @@ void AudioPlayer::throwIfDeviceFailed() {
 		throw exception{ device->errorMessage() };
 }
 
-void AudioPlayer::initialize(Initialization init) {
-	try {
-		initializeLoader(std::move(init));
-	}
-	catch (const AudioLoader::InitializationFailure &e) {
-		throw InitializationFailure{ e.what() };
-	}
-}
-
-void AudioPlayer::initializeLoader(Initialization init) {
-	AudioLoader::Initialization loading;
-	loading.global = init.global;
-	loader->initialize(std::move(loading));
-}
-
 void AudioPlayer::play(PlayRequest request) {
 	if (device->streaming())
 		return;
