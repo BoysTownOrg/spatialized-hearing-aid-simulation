@@ -24,6 +24,7 @@ public:
     long long remainingFrames() override;
 private:
 	void readAndCopyFirstChannel(gsl::span<channel_type> audio);
+	void readAllChannels(gsl::span<channel_type> audio);
 	bool mono();
 };
 

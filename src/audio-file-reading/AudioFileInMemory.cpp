@@ -9,9 +9,8 @@ AudioFileInMemory::AudioFileInMemory(AudioFileReader &reader) :
 {
 	if (reader.failed())
 		throw FileError{ reader.errorMessage() };
-	if (buffer.size() == 0)
-		return;
-	reader.readFrames(&buffer.front(), reader.frames());
+	if (buffer.size())
+		reader.readFrames(&buffer.front(), reader.frames());
 }
 
 void AudioFileInMemory::read(gsl::span<channel_type> audio) {

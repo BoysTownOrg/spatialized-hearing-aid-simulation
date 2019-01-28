@@ -7,7 +7,7 @@ void ChannelCopier::read(gsl::span<channel_type> audio) {
 	if (mono())
 		readAndCopyFirstChannel(audio);
 	else
-		reader->read(audio);
+		readAllChannels(audio);
 }
 
 void ChannelCopier::readAndCopyFirstChannel(gsl::span<channel_type> audio) {
@@ -15,6 +15,10 @@ void ChannelCopier::readAndCopyFirstChannel(gsl::span<channel_type> audio) {
 	for (const auto channel : audio.last(audio.size() - 1))
 		for (int i = 0; i < channel.size(); ++i)
 			channel[i] = (*audio.begin())[i];
+}
+
+void ChannelCopier::readAllChannels(gsl::span<channel_type> audio) {
+	reader->read(audio);
 }
 
 bool ChannelCopier::complete() {
