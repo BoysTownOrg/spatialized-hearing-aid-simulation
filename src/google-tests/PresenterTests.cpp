@@ -611,6 +611,11 @@ namespace {
 		EXPECT_TRUE(model.calibrationPlayed());
 	}
 
+	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
+		view.stopCalibration();
+		EXPECT_TRUE(model.calibrationStopped());
+	}
+
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;

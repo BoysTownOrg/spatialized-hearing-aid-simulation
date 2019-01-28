@@ -32,6 +32,7 @@ public:
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
+	void playCalibration() override;
 private:
 	void initializeTest_(TestParameters);
 	void initializeStimulusPlayer(TestParameters);
