@@ -202,7 +202,7 @@ void Presenter::calibrate() {
 }
 
 void Presenter::playCalibration() {
-	model->playCalibration();
+	model->playCalibration({});
 }
 
 void Presenter::stopCalibration() {

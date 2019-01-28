@@ -36,7 +36,8 @@ public:
 		return calibrationStopped_;
 	}
 
-	void playCalibration() override {
+	void playCalibration(CalibrationParameters p) override {
+		calibrationParameters_ = std::move(p);
 		calibrationPlayed_ = true;
 	}
 
@@ -101,7 +102,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void playTrial(TrialParameters) override {}
 	bool testComplete() override { return {}; }
-	void playCalibration() override {}
+	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
 	void calibrate(double) override {}
 };
@@ -120,7 +121,7 @@ public:
 	void initializeTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
-	void playCalibration() override {}
+	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
 	void calibrate(double) override {}
 };

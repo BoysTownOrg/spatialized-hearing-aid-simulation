@@ -80,16 +80,13 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	player->play(std::move(request));
 }
 
-void RecognitionTestModel::calibrate(double)
-{
+void RecognitionTestModel::calibrate(double) {
 }
 
-void RecognitionTestModel::stopCalibration()
-{
+void RecognitionTestModel::stopCalibration() {
 }
 
-void RecognitionTestModel::playCalibration()
-{
+void RecognitionTestModel::playCalibration(CalibrationParameters) {
 }
 
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {

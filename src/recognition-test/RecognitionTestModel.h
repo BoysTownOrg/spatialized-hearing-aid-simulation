@@ -32,7 +32,7 @@ public:
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
-	void playCalibration() override;
+	void playCalibration(CalibrationParameters) override;
 	void stopCalibration() override;
 	void calibrate(double level_dB_Spl) override;
 private:

@@ -32,7 +32,7 @@ public:
 	struct CalibrationParameters {
 		std::string audioDevice;
 	};
-	virtual void playCalibration() = 0;
+	virtual void playCalibration(CalibrationParameters) = 0;
 	virtual void stopCalibration() = 0;
 	virtual void calibrate(double level_dB_Spl) = 0;
 };
