@@ -106,6 +106,14 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
+TEST_F(RefactoredModelTests, initializeTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
+	test.usingHearingAidSimulation = false;
+	test.leftDslPrescriptionFilePath = "a";
+	test.rightDslPrescriptionFilePath = "b";
+	initializeTest();
+	EXPECT_TRUE(prescriptionReader.filePaths().empty());
+}
+
 TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
 	test.usingSpatialization = true;
 	test.brirFilePath = "a";
