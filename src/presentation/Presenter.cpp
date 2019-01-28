@@ -209,7 +209,7 @@ void Presenter::playCalibration() {
 		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 		model->playCalibration(std::move(p));
 	}
-	catch (const Model::CalibrationFailure & e) {
+	catch (const std::runtime_error &e) {
 		view->showErrorDialog(e.what());
 	}
 }
