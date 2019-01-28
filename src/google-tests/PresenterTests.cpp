@@ -627,6 +627,12 @@ namespace {
 		EXPECT_TRUE(view.calibrationHidden());
 	}
 
+	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelDoesNotHideCalibrationView) {
+		view.setCalibrationLevel_dB_Spl("a");
+		view.confirmCalibration();
+		EXPECT_FALSE(view.calibrationHidden());
+	}
+
 	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelShowsErrorMessage) {
 		view.setCalibrationLevel_dB_Spl("a");
 		view.confirmCalibration();
