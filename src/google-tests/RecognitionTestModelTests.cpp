@@ -139,6 +139,11 @@ namespace {
 		assertEqual("a", player.request().audioDevice);
 	}
 
+	TEST_F(RecognitionTestModelTests, stopCalibrationStopsPlayer) {
+		model.stopCalibration();
+		EXPECT_TRUE(player.stopped());
+	}
+
 	TEST_F(
 		RecognitionTestModelTests,
 		testCompleteWhenListEmpty
