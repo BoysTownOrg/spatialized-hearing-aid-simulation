@@ -127,6 +127,13 @@ TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
 	assertEqual("a", brirReader.filePath());
 }
 
+TEST_F(RefactoredModelTests, initializeTestDoesNotReadBrirWhenNotUsingSpatialization) {
+	test.usingSpatialization = false;
+	test.brirFilePath = "a";
+	initializeTest();
+	EXPECT_TRUE(brirReader.filePath().empty());
+}
+
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters test{};
