@@ -205,8 +205,8 @@ void Presenter::playCalibration() {
 	model->playCalibration();
 }
 
-void Presenter::stopCalibration()
-{
+void Presenter::stopCalibration() {
+	model->stopCalibration();
 }
 
 void Presenter::toggleUsingSpatialization() {
