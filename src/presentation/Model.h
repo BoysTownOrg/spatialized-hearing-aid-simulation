@@ -31,6 +31,8 @@ public:
 
 	struct CalibrationParameters {
 		std::string audioDevice;
+		std::string audioFilePath;
+		double level_dB_Spl;
 	};
 	virtual void playCalibration(CalibrationParameters) = 0;
 	RUNTIME_ERROR(CalibrationFailure);

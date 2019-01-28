@@ -10,6 +10,7 @@ class ViewStub : public View {
 	std::string subjectId_{};
 	std::string testerId_{};
 	std::string audioDevice_{};
+	std::string audioFilePath_{};
 	std::string level_dB_Spl_{ "0" };
 	std::string attack_ms_{ "0" };
 	std::string release_ms_{ "0" };
@@ -56,6 +57,10 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
+
+	void setAudioFilePath(std::string s) {
+		audioFilePath_ = std::move(s);
+	}
 
 	void hideCalibration() override {
 		calibrationHidden_ = true;
