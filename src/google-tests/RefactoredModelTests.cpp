@@ -15,13 +15,8 @@ public:
 
 	void initializeTest(TestParameters p) override {
 		brirReader->read(p.brirFilePath);
-		try {
-			prescriptionReader->read(p.leftDslPrescriptionFilePath);
-			prescriptionReader->read(p.rightDslPrescriptionFilePath);
-		}
-		catch (const PrescriptionReader::ReadFailure &) {
-			throw TestInitializationFailure{ "Unable to read '" + p.leftDslPrescriptionFilePath + "'." };
-		}
+		if (p.usingHearingAidSimulation)
+			readPrescriptions(p);
 	}
 
 	void playTrial(TrialParameters) override {
@@ -39,6 +34,17 @@ public:
 	}
 
 	void stopCalibration() override {
+	}
+
+private:
+	void readPrescriptions(Model::TestParameters p) {
+		try {
+			prescriptionReader->read(p.leftDslPrescriptionFilePath);
+			prescriptionReader->read(p.rightDslPrescriptionFilePath);
+		}
+		catch (const PrescriptionReader::ReadFailure &) {
+			throw TestInitializationFailure{ "Unable to read '" + p.leftDslPrescriptionFilePath + "'." };
+		}
 	}
 };
 
