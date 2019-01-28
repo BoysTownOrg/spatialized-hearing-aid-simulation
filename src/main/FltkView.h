@@ -20,10 +20,10 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 
 struct FltkCalibrationView : public Fl_Group {
 	FltkCalibrationView(int, int, int, int, const char * = {});
+	Fl_Input audioFilePath_;
 	Fl_Float_Input calibrationLevel_dB_Spl_;
 	Fl_Button play;
 	Fl_Button stop;
-	Fl_Button confirm;
 };
 
 struct FltkSetupView : public Fl_Group {
@@ -84,6 +84,7 @@ public:
 	std::string testerId() override;
 	std::string testFilePath() override;
 	std::string audioDirectory() override;
+	std::string audioFilePath() override;
 	std::string leftDslPrescriptionFilePath() override;
 	std::string rightDslPrescriptionFilePath() override;
 	std::string brirFilePath() override;
@@ -142,5 +143,4 @@ private:
 	static void onToggleHearingAidSimulation(Fl_Widget *, void *);
 	static void onPlayCalibration(Fl_Widget *, void *);
 	static void onStopCalibration(Fl_Widget *, void *);
-	static void onConfirmCalibration(Fl_Widget *, void *);
 };

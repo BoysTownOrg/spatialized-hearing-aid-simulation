@@ -55,16 +55,12 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->stopCalibration();
 }
 
-void FltkView::onConfirmCalibration(Fl_Widget *, void *self) {
-	static_cast<FltkView *>(self)->listener->confirmCalibration();
-}
-
 FltkCalibrationView::FltkCalibrationView(int x, int y, int w, int h, const char *):
 	Fl_Group{ x, y, w, h },
+	audioFilePath_{250, 300, 200, 45, "audio file path"},
 	calibrationLevel_dB_Spl_{ 250, 400, 200, 45, "calibrated level (dB SPL)" },
 	play{ 50, 600, 60, 45, "play" },
-	stop{ 150, 600, 60, 45, "stop" },
-	confirm{ 250, 600, 60, 45, "confirm" }
+	stop{ 150, 600, 60, 45, "stop" }
 {
 }
 
@@ -137,7 +133,6 @@ void FltkView::registerCallbacks() {
 	window.testerView.play.callback(onPlayTrial, this);
 	window.calibrationView.play.callback(onPlayCalibration, this);
 	window.calibrationView.stop.callback(onStopCalibration, this);
-	window.calibrationView.confirm.callback(onConfirmCalibration, this);
 }
 
 void FltkView::turnOnHearingAidSimulation() {
@@ -370,6 +365,10 @@ std::string FltkView::testerId() {
 
 std::string FltkView::testFilePath() {
 	return window.setupView.testFilePath_.value();
+}
+
+std::string FltkView::audioFilePath() {
+	return window.calibrationView.audioFilePath_.value();
 }
 
 std::string FltkView::audioDirectory() {
