@@ -202,9 +202,14 @@ void Presenter::calibrate() {
 }
 
 void Presenter::playCalibration() {
-	Model::CalibrationParameters p;
-	p.audioDevice = view->audioDevice();
-	model->playCalibration(std::move(p));
+	try {
+		Model::CalibrationParameters p;
+		p.audioDevice = view->audioDevice();
+		model->playCalibration(std::move(p));
+	}
+	catch (const Model::CalibrationFailure & e) {
+		view->showErrorDialog(e.what());
+	}
 }
 
 void Presenter::stopCalibration() {
