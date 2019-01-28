@@ -81,8 +81,8 @@ int AudioPlayer::findDeviceIndex(std::string deviceName) {
 	return deviceIndex;
 }
 
-void AudioPlayer::stop()
-{
+void AudioPlayer::stop() {
+	device->stopStream();
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {

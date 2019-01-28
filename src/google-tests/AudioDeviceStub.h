@@ -38,6 +38,7 @@ public:
 	}
 
 	void stopStream() override {
+		_streamLog += "stop ";
 	}
 
 	void fillStreamBuffer(void *x, int n) {
