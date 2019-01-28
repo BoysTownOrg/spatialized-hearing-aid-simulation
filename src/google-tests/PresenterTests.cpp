@@ -601,6 +601,11 @@ namespace {
 		EXPECT_EQ(1.1, model.trialParameters().level_dB_Spl);
 	}
 
+	TEST_F(PresenterTests, calibrateShowsCalibrationView) {
+		view.calibrate();
+		EXPECT_TRUE(view.calibrationShown());
+	}
+
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;
