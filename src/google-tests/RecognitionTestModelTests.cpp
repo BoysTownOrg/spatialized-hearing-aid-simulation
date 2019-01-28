@@ -11,6 +11,7 @@ namespace {
 	protected:
 		RecognitionTestModel::TestParameters testParameters;
 		RecognitionTestModel::TrialParameters trial;
+		RecognitionTestModel::CalibrationParameters calibration;
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
@@ -22,6 +23,10 @@ namespace {
 
 		void playTrial() {
 			model.playTrial(trial);
+		}
+
+		void playCalibration() {
+			model.playCalibration(calibration);
 		}
 	};
 
@@ -126,6 +131,12 @@ namespace {
 		playTrial();
 		EXPECT_EQ(1, documenter.globalTrialParameters.level_dB_Spl);
 		assertEqual("a", documenter.globalTrialParameters.stimulus);
+	}
+
+	TEST_F(RecognitionTestModelTests, playCalibrationPassesRequestToPlayer) {
+		calibration.audioDevice = "a";
+		playCalibration();
+		assertEqual("a", player.request().audioDevice);
 	}
 
 	TEST_F(
