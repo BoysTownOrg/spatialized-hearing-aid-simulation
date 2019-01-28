@@ -85,6 +85,13 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
+TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
+	test.usingSpatialization = true;
+	test.brirFilePath = "a";
+	initializeTest();
+	assertEqual("a", brirReader.filePath());
+}
+
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters test{};
