@@ -216,6 +216,7 @@ void Presenter::confirmCalibration() {
 	catch (const std::invalid_argument &) {
 		view->showErrorDialog(badInputMessage(view->calibrationLevel_dB_Spl(), "level"));
 	}
+	view->hideCalibration();
 }
 
 void Presenter::toggleUsingSpatialization() {

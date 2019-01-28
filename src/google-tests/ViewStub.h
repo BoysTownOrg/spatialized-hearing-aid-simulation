@@ -57,6 +57,10 @@ public:
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
 
+	void hideCalibration() override {
+		calibrationHidden_ = true;
+	}
+
 	bool calibrationHidden() const {
 		return calibrationHidden_;
 	}
