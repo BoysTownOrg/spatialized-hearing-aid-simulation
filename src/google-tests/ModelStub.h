@@ -7,6 +7,7 @@ class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
+	CalibrationParameters calibrationParameters_{};
 	double calibrationLevel_dB_Spl_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
@@ -14,6 +15,10 @@ class ModelStub : public Model {
 	bool calibrationStopped_{};
 public:
 	GlobalTestParameters globalTestParameters{};
+
+	const CalibrationParameters &calibrationParameters() {
+		return calibrationParameters_;
+	}
 
 	void calibrate(double level_dB_Spl) override {
 		calibrationLevel_dB_Spl_ = level_dB_Spl;
