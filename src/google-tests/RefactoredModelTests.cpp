@@ -4,14 +4,17 @@
 
 class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
+	BrirReader *brirReader;
 public:
 	RefactoredModel(
 		PrescriptionReader* prescriptionReader,
-		BrirReader *
+		BrirReader *brirReader
 	) :
-		prescriptionReader{ prescriptionReader } {}
+		prescriptionReader{ prescriptionReader },
+		brirReader{ brirReader } {}
 
 	void initializeTest(TestParameters p) override {
+		brirReader->read(p.brirFilePath);
 		try {
 			prescriptionReader->read(p.leftDslPrescriptionFilePath);
 			prescriptionReader->read(p.rightDslPrescriptionFilePath);
