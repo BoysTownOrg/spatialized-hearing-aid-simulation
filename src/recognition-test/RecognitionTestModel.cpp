@@ -17,10 +17,7 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	try {
 		initializeTest_(std::move(p));
 	}
-	catch (const StimulusPlayer::InitializationFailure &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
-	catch (const Documenter::InitializationFailure &e) {
+	catch (const std::runtime_error &e) {
 		throw TestInitializationFailure{ e.what() };
 	}
 }
@@ -102,7 +99,7 @@ void RecognitionTestModel::stopCalibration() {
 }
 
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
-	Documenter::TrialParameters documenting;
+	Documenter::TrialParameters documenting{};
 	GlobalTrialParameters global;
 	global.level_dB_Spl = p.level_dB_Spl;
 	global.stimulus = currentStimulus_;
