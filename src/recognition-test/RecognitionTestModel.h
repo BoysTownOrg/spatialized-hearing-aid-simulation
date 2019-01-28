@@ -42,5 +42,6 @@ private:
 	void documentTestParameters(TestParameters);
 	void documentTrialParameters(TrialParameters);
 	void playTrial_(TrialParameters);
+	void playCalibration_(CalibrationParameters);
 	void playNextStimulus(TrialParameters);
 };
