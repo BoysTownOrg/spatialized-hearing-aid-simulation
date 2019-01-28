@@ -622,6 +622,11 @@ namespace {
 		EXPECT_EQ(1, model.calibrationLevel_dB_Spl());
 	}
 
+	TEST_F(PresenterTests, confirmCalibrationHidesCalibrationView) {
+		view.confirmCalibration();
+		EXPECT_TRUE(view.calibrationHidden());
+	}
+
 	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelShowsErrorMessage) {
 		view.setCalibrationLevel_dB_Spl("a");
 		view.confirmCalibration();
