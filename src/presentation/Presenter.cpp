@@ -205,6 +205,8 @@ void Presenter::playCalibration() {
 	try {
 		Model::CalibrationParameters p;
 		p.audioDevice = view->audioDevice();
+		p.audioFilePath = view->audioFilePath();
+		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 		model->playCalibration(std::move(p));
 	}
 	catch (const Model::CalibrationFailure & e) {

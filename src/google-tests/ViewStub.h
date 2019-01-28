@@ -58,6 +58,10 @@ public:
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
 
+	std::string audioFilePath() override {
+		return audioFilePath_;
+	}
+
 	void setAudioFilePath(std::string s) {
 		audioFilePath_ = std::move(s);
 	}

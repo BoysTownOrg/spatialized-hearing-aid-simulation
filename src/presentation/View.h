@@ -41,6 +41,7 @@ public:
 	virtual std::string leftDslPrescriptionFilePath() = 0;
 	virtual std::string rightDslPrescriptionFilePath() = 0;
 	virtual std::string audioDirectory() = 0;
+	virtual std::string audioFilePath() = 0;
 	virtual std::string brirFilePath() = 0;
 	virtual std::string audioDevice() = 0;
 	virtual std::string level_dB_Spl() = 0;
