@@ -201,6 +201,10 @@ void Presenter::calibrate() {
 	view->showCalibration();
 }
 
+void Presenter::playCalibration()
+{
+}
+
 void Presenter::toggleUsingSpatialization() {
 	toggleSpatializationActivation();
 }

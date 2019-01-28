@@ -55,6 +55,10 @@ public:
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
 
+	void playCalibration() {
+		listener_->playCalibration();
+	}
+
 	void showCalibration() override {
 		calibrationShown_ = true;
 	}

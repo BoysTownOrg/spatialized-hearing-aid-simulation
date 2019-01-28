@@ -9,8 +9,13 @@ class ModelStub : public Model {
 	TrialParameters trialParameters_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
+	bool calibrationPlayed_{};
 public:
 	GlobalTestParameters globalTestParameters{};
+
+	bool calibrationPlayed() const {
+		return calibrationPlayed_;
+	}
 
 	const TestParameters &testParameters() const {
 		return testParameters_;

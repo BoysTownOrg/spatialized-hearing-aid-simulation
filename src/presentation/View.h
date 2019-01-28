@@ -17,6 +17,7 @@ public:
 	virtual void confirmTestSetup() = 0;
 	virtual void playTrial() = 0;
 	virtual void calibrate() = 0;
+	virtual void playCalibration() = 0;
 };
 
 class View {
