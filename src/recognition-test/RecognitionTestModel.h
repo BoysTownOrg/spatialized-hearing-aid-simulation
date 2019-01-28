@@ -34,6 +34,7 @@ public:
 	bool testComplete() override;
 	void playCalibration() override;
 	void stopCalibration() override;
+	void calibrate(double level_dB_Spl) override;
 private:
 	void initializeTest_(TestParameters);
 	void initializeStimulusPlayer(TestParameters);

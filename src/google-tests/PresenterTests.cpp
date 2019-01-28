@@ -622,6 +622,12 @@ namespace {
 		EXPECT_EQ(1, model.calibrationLevel_dB_Spl());
 	}
 
+	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelShowsErrorMessage) {
+		view.setCalibrationLevel_dB_Spl("a");
+		view.confirmCalibration();
+		assertEqual("'a' is not a valid level.", view.errorMessage());
+	}
+
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;
