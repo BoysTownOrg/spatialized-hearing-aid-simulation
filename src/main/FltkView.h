@@ -18,6 +18,14 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 	void populate(std::vector<std::string> items);
 };
 
+struct FltkCalibrationView : public Fl_Group {
+	FltkCalibrationView(int, int, int, int, const char * = {});
+	Fl_Float_Input calibrationLevel_dB_Spl_;
+	Fl_Button play;
+	Fl_Button stop;
+	Fl_Button confirm;
+};
+
 struct FltkSetupView : public Fl_Group {
 	FltkSetupView(int, int, int, int, const char * = {});
 	Fl_Input subjectId_;
@@ -52,6 +60,7 @@ struct FltkWindow : public Fl_Double_Window {
 	FltkWindow(int, int, int, int, const char * = {});
 	FltkSetupView setupView;
 	FltkTesterView testerView;
+	FltkCalibrationView calibrationView;
 };
 
 class FltkView : public View {
@@ -84,6 +93,7 @@ public:
 	std::string release_ms() override;
 	std::string windowSize() override;
 	std::string chunkSize() override;
+	std::string calibrationLevel_dB_Spl() override;
 	bool usingSpatialization() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
@@ -93,6 +103,8 @@ public:
 	void hideTestSetup() override;
 	void showTesterView() override;
 	void hideTesterView() override;
+	void showCalibration() override;
+	void hideCalibration() override;
 	void deactivateBrowseForBrirButton() override;
 	void deactivateBrirFilePath() override;
 	void activateBrowseForBrirButton() override;
@@ -125,7 +137,10 @@ private:
 	static void onBrowseAudio(Fl_Widget *, void *);
 	static void onBrowseBrir(Fl_Widget *, void *);
 	static void onConfirmTestSetup(Fl_Widget *, void *);
-	static void onPlay(Fl_Widget *, void *);
+	static void onPlayTrial(Fl_Widget *, void *);
 	static void onToggleSpatialization(Fl_Widget *, void *);
 	static void onToggleHearingAidSimulation(Fl_Widget *, void *);
+	static void onPlayCalibration(Fl_Widget *, void *);
+	static void onStopCalibration(Fl_Widget *, void *);
+	static void onConfirmCalibration(Fl_Widget *, void *);
 };

@@ -35,7 +35,7 @@ void FltkView::onConfirmTestSetup(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->confirmTestSetup();
 }
 
-void FltkView::onPlay(Fl_Widget *, void *self) {
+void FltkView::onPlayTrial(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->playTrial();
 }
 
@@ -45,6 +45,27 @@ void FltkView::onToggleSpatialization(Fl_Widget *, void *self) {
 
 void FltkView::onToggleHearingAidSimulation(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->toggleUsingHearingAidSimulation();
+}
+
+void FltkView::onPlayCalibration(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->playCalibration();
+}
+
+void FltkView::onStopCalibration(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->stopCalibration();
+}
+
+void FltkView::onConfirmCalibration(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->confirmCalibration();
+}
+
+FltkCalibrationView::FltkCalibrationView(int x, int y, int w, int h, const char *):
+	Fl_Group{ x, y, w, h },
+	calibrationLevel_dB_Spl_{ 250, 400, 200, 45, "calibrated level (dB SPL)" },
+	play{ 50, 600, 60, 45, "play" },
+	stop{ 150, 600, 60, 45, "stop" },
+	confirm{ 250, 600, 60, 45, "confirm" }
+{
 }
 
 FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
@@ -84,7 +105,8 @@ FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
 FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
 	testerView{ 0, 0, 600, 700 },
-	setupView{ 0, 0, 600, 700 }
+	setupView{ 0, 0, 600, 700 },
+	calibrationView{ 0, 0, 600, 700 }
 {
 	end();
 }
@@ -95,6 +117,7 @@ FltkView::FltkView() :
 	window.show();
 	hideTestSetup();
 	hideTesterView();
+	hideCalibration();
 	registerCallbacks();
 	turnOnSpatialization();
 	turnOnHearingAidSimulation();
@@ -111,7 +134,10 @@ void FltkView::registerCallbacks() {
 	window.setupView.confirm.callback(onConfirmTestSetup, this);
 	window.setupView.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.setupView.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
-	window.testerView.play.callback(onPlay, this);
+	window.testerView.play.callback(onPlayTrial, this);
+	window.calibrationView.play.callback(onPlayCalibration, this);
+	window.calibrationView.stop.callback(onStopCalibration, this);
+	window.calibrationView.confirm.callback(onConfirmCalibration, this);
 }
 
 void FltkView::turnOnHearingAidSimulation() {
@@ -136,6 +162,14 @@ void FltkView::showTesterView() {
 
 void FltkView::hideTesterView() {
 	window.testerView.hide();
+}
+
+void FltkView::showCalibration() {
+	window.calibrationView.show();
+}
+
+void FltkView::hideCalibration() {
+	window.calibrationView.hide();
 }
 
 void FltkView::deactivateBrowseForBrirButton() {
@@ -372,6 +406,10 @@ std::string FltkView::windowSize() {
 
 std::string FltkView::chunkSize() {
 	return window.setupView.chunkSize_.text();
+}
+
+std::string FltkView::calibrationLevel_dB_Spl() {
+	return window.calibrationView.calibrationLevel_dB_Spl_.value();
 }
 
 bool FltkView::usingSpatialization() {
