@@ -135,8 +135,12 @@ namespace {
 
 	TEST_F(RecognitionTestModelTests, playCalibrationPassesRequestToPlayer) {
 		calibration.audioDevice = "a";
+		calibration.audioFilePath = "b";
+		calibration.level_dB_Spl = 1;
 		playCalibration();
 		assertEqual("a", player.request().audioDevice);
+		assertEqual("b", player.request().audioFilePath);
+		EXPECT_EQ(1, player.request().level_dB_Spl);
 	}
 
 	TEST_F(RecognitionTestModelTests, stopCalibrationStopsPlayer) {
