@@ -22,12 +22,22 @@ class RefactoredModel : public Model {
 	}
 };
 
+#include "assert-utility.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
+protected:
+	RefactoredModel::TestParameters test{};
+	RefactoredModel model{};
 
+	void initializeTest() {
+		model.initializeTest(test);
+	}
 };
 
-TEST_F(RefactoredModelTests, tbd) {
-	FAIL();
+TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
+	test.usingHearingAidSimulation = true;
+	test.leftDslPrescriptionFilePath = "a";
+	initializeTest();
+	assertEqual("a", prescriptionReader->filePath());
 }
