@@ -652,4 +652,17 @@ namespace {
 		view.playTrial();
 		assertEqual("error.", view.errorMessage());
 	}
+
+	class PresenterWithCalibrationFailingModel : public ::testing::Test {
+	protected:
+		CalibrationFailingModel model;
+		ViewStub view;
+		Presenter presenter{ &model, &view };
+	};
+
+	TEST_F(PresenterWithCalibrationFailingModel, playCalibrationShowsErrorMessage) {
+		model.setErrorMessage("error.");
+		view.playCalibration();
+		assertEqual("error.", view.errorMessage());
+	}
 }
