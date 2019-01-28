@@ -31,6 +31,7 @@ class ViewStub : public View {
 	bool brirFilePathActivated_{};
 	bool browseForBrirButtonActivated_{};
 	bool usingHearingAidSimulation_{};
+	bool calibrationShown_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
@@ -53,6 +54,14 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
+
+	bool calibrationShown() const {
+		return calibrationShown_;
+	}
+
+	void calibrate() {
+		listener_->calibrate();
+	}
 	
 	void activateReleaseTime_ms() override {
 		release_msActivated_ = true;

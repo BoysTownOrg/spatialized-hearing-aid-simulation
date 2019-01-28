@@ -41,6 +41,7 @@ public:
 	void playTrial() override;
 	void toggleUsingSpatialization() override;
 	void toggleUsingHearingAidSimulation() override;
+	void calibrate() override;
 
 private:
 	void toggleSpatializationActivation();

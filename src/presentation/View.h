@@ -16,6 +16,7 @@ public:
 	virtual void toggleUsingHearingAidSimulation() = 0;
 	virtual void confirmTestSetup() = 0;
 	virtual void playTrial() = 0;
+	virtual void calibrate() = 0;
 };
 
 class View {
