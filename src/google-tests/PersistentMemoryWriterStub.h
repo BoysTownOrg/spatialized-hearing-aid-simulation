@@ -1,6 +1,6 @@
 #pragma once
 
-#include <test-documenting/TestDocumenter.h>
+#include <test-documenting/PersistentMemoryWriter.h>
 #include <sstream>
 
 class PersistentMemoryWriterStub : public PersistentMemoryWriter {

@@ -18,6 +18,9 @@
     <ClInclude Include="TestDocumenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PersistentMemoryWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestDocumenter.cpp">
