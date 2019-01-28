@@ -1,10 +1,14 @@
 #include <dsl-prescription/PrescriptionReader.h>
+#include <binaural-room-impulse-response/BrirReader.h>
 #include <presentation/Model.h>
 
 class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 public:
-	explicit RefactoredModel(PrescriptionReader* prescriptionReader) :
+	RefactoredModel(
+		PrescriptionReader* prescriptionReader,
+		BrirReader *
+	) :
 		prescriptionReader{ prescriptionReader } {}
 
 	void initializeTest(TestParameters p) override {
@@ -62,6 +66,19 @@ public:
 	}
 };
 
+class BrirReaderStub : public BrirReader {
+	std::string filePath_{};
+public:
+	BinauralRoomImpulseResponse read(std::string filePath) override {
+		filePath_ = std::move(filePath);
+		return {};
+	}
+
+	std::string filePath() const {
+		return filePath_;
+	}
+};
+
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
@@ -69,7 +86,8 @@ class RefactoredModelTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters test{};
 	PrescriptionReaderStub prescriptionReader{};
-	RefactoredModel model{&prescriptionReader};
+	BrirReaderStub brirReader{};
+	RefactoredModel model{ &prescriptionReader, &brirReader };
 
 	void initializeTest() {
 		model.initializeTest(test);
@@ -96,7 +114,8 @@ class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test
 protected:
 	RefactoredModel::TestParameters test{};
 	FailingPrescriptionReader prescriptionReader{};
-	RefactoredModel model{&prescriptionReader};
+	BrirReaderStub brirReader{};
+	RefactoredModel model{ &prescriptionReader, &brirReader };
 
 	void initializeTest() {
 		model.initializeTest(test);

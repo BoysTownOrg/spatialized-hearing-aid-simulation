@@ -16,7 +16,9 @@ public:
 		std::string testFilePath;
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
 		bool usingHearingAidSimulation;
+		bool usingSpatialization;
 		GlobalTestParameters *global;
 	};
 	virtual void initializeTest(TestParameters) = 0;
