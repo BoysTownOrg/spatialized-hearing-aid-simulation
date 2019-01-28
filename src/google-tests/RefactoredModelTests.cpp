@@ -8,8 +8,13 @@ public:
 		prescriptionReader{ prescriptionReader } {}
 
 	void initializeTest(TestParameters p) override {
-		prescriptionReader->read(p.leftDslPrescriptionFilePath);
-		prescriptionReader->read(p.rightDslPrescriptionFilePath);
+		try {
+			prescriptionReader->read(p.leftDslPrescriptionFilePath);
+			prescriptionReader->read(p.rightDslPrescriptionFilePath);
+		}
+		catch (const PrescriptionReader::ReadFailure &) {
+			throw TestInitializationFailure{ "Unable to read '" + p.leftDslPrescriptionFilePath + "'." };
+		}
 	}
 
 	void playTrial(TrialParameters) override {
