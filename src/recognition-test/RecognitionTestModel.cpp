@@ -83,6 +83,8 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 void RecognitionTestModel::playCalibration(CalibrationParameters p) {
 	StimulusPlayer::PlayRequest request;
 	request.audioDevice = p.audioDevice;
+	request.audioFilePath = p.audioFilePath;
+	request.level_dB_Spl = p.level_dB_Spl;
 	player->play(std::move(request));
 }
 
