@@ -26,6 +26,10 @@ namespace {
 			player.play(std::move(r));
 		}
 
+		void stop() {
+			player.stop();
+		}
+
 		void fillStreamBuffer(void *x = {}, int n = {}) {
 			device.fillStreamBuffer(x, n);
 		}
@@ -46,6 +50,11 @@ namespace {
 	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {
 		play();
 		assertEqual("close open start ", device.streamLog());
+	}
+
+	TEST_F(AudioPlayerTests, stopStopsStream) {
+		stop();
+		assertEqual("stop ", device.streamLog());
 	}
 
 	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
