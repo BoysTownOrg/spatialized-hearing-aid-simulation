@@ -11,6 +11,7 @@ class StimulusPlayerStub : public StimulusPlayer {
 	bool failOnPlay_{};
 	bool playing_{};
 	bool playCalled_{};
+	bool stopped_{};
 public:
 	void setErrorMessage(std::string s) {
 		errorMessage = std::move(s);
@@ -65,6 +66,10 @@ public:
 
 	void initialize(Initialization i) override {
 		initialization_ = std::move(i);
+	}
+
+	bool stopped() const {
+		return stopped_;
 	}
 };
 
