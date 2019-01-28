@@ -19,10 +19,6 @@ public:
 		return calibrationParameters_;
 	}
 
-	void calibrate(double level_dB_Spl) override {
-		calibrationLevel_dB_Spl_ = level_dB_Spl;
-	}
-
 	double calibrationLevel_dB_Spl() const {
 		return calibrationLevel_dB_Spl_;
 	}
@@ -98,7 +94,6 @@ public:
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
-	void calibrate(double) override {}
 };
 
 class TrialFailingModel : public Model {
@@ -117,7 +112,6 @@ public:
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
-	void calibrate(double) override {}
 };
 
 class CalibrationFailingModel : public Model {
@@ -136,5 +130,4 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
-	void calibrate(double) override {}
 };
