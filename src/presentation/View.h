@@ -19,7 +19,6 @@ public:
 	virtual void calibrate() = 0;
 	virtual void playCalibration() = 0;
 	virtual void stopCalibration() = 0;
-	virtual void confirmCalibration() = 0;
 };
 
 class View {

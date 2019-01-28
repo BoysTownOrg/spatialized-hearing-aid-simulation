@@ -69,10 +69,6 @@ public:
 		return calibrationLevel_dB_Spl_;
 	}
 
-	void confirmCalibration() {
-		listener_->confirmCalibration();
-	}
-
 	void setCalibrationLevel_dB_Spl(std::string s) {
 		calibrationLevel_dB_Spl_ = std::move(s);
 	}

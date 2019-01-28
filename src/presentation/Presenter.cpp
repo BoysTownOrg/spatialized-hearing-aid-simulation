@@ -211,16 +211,6 @@ void Presenter::stopCalibration() {
 	model->stopCalibration();
 }
 
-void Presenter::confirmCalibration() {
-	try {
-		model->calibrate(std::stod(view->calibrationLevel_dB_Spl()));
-		view->hideCalibration();
-	}
-	catch (const std::invalid_argument &) {
-		view->showErrorDialog(badInputMessage(view->calibrationLevel_dB_Spl(), "level"));
-	}
-}
-
 void Presenter::toggleUsingSpatialization() {
 	toggleSpatializationActivation();
 }

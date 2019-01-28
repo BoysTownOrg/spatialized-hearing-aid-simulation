@@ -617,29 +617,6 @@ namespace {
 		EXPECT_TRUE(model.calibrationStopped());
 	}
 
-	TEST_F(PresenterTests, confirmCalibrationPassesCalibratedLevel) {
-		view.setCalibrationLevel_dB_Spl("1");
-		view.confirmCalibration();
-		EXPECT_EQ(1, model.calibrationLevel_dB_Spl());
-	}
-
-	TEST_F(PresenterTests, confirmCalibrationHidesCalibrationView) {
-		view.confirmCalibration();
-		EXPECT_TRUE(view.calibrationHidden());
-	}
-
-	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelDoesNotHideCalibrationView) {
-		view.setCalibrationLevel_dB_Spl("a");
-		view.confirmCalibration();
-		EXPECT_FALSE(view.calibrationHidden());
-	}
-
-	TEST_F(PresenterTests, confirmCalibrationWithInvalidLevelShowsErrorMessage) {
-		view.setCalibrationLevel_dB_Spl("a");
-		view.confirmCalibration();
-		assertEqual("'a' is not a valid level.", view.errorMessage());
-	}
-
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;
