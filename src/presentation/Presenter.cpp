@@ -197,8 +197,8 @@ void Presenter::switchViewIfTestComplete() {
 	}
 }
 
-void Presenter::calibrate()
-{
+void Presenter::calibrate() {
+	view->showCalibration();
 }
 
 void Presenter::toggleUsingSpatialization() {

@@ -56,6 +56,7 @@ public:
 	virtual void hideTestSetup() = 0;
 	virtual void showTesterView() = 0;
 	virtual void hideTesterView() = 0;
+	virtual void showCalibration() = 0;
 	virtual void deactivateBrowseForBrirButton() = 0;
 	virtual void deactivateBrirFilePath() = 0;
 	virtual void activateBrowseForBrirButton() = 0;
