@@ -43,6 +43,7 @@ public:
 	void toggleUsingHearingAidSimulation() override;
 	void calibrate() override;
 	void playCalibration() override;
+	void stopCalibration() override;
 
 private:
 	void toggleSpatializationActivation();

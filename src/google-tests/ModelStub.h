@@ -10,8 +10,13 @@ class ModelStub : public Model {
 	bool testComplete_{};
 	bool trialPlayed_{};
 	bool calibrationPlayed_{};
+	bool calibrationStopped_{};
 public:
 	GlobalTestParameters globalTestParameters{};
+
+	bool calibrationStopped() const {
+		return calibrationStopped_;
+	}
 
 	void playCalibration() override {
 		calibrationPlayed_ = true;

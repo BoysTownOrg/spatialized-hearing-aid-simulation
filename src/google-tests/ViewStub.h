@@ -55,6 +55,10 @@ public:
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
 
+	void stopCalibration() {
+		listener_->stopCalibration();
+	}
+
 	void playCalibration() {
 		listener_->playCalibration();
 	}
