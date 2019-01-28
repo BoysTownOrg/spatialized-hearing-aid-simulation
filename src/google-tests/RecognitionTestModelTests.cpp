@@ -232,6 +232,16 @@ namespace {
 				assertEqual(std::move(what), e.what());
 			}
 		}
+
+		void assertPlayCalibrationThrowsCalibrationFailure(std::string what) {
+			try {
+				model.playCalibration({});
+				FAIL() << "Expected RecognitionTestModel::CalibrationFailure";
+			}
+			catch (const RecognitionTestModel::CalibrationFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
 	};
 
 	TEST_F(
@@ -240,5 +250,13 @@ namespace {
 	) {
 		player.setErrorMessage("error.");
 		assertPlayTrialThrowsTrialFailure("error.");
+	}
+
+	TEST_F(
+		RecognitionTestModelWithRequestFailingStimulusPlayer,
+		playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
+	) {
+		player.setErrorMessage("error.");
+		assertPlayCalibrationThrowsCalibrationFailure("error.");
 	}
 }
