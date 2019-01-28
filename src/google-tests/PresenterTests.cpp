@@ -606,9 +606,10 @@ namespace {
 		EXPECT_TRUE(view.calibrationShown());
 	}
 
-	TEST_F(PresenterTests, playCalibrationPlaysCalibration) {
+	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
+		view.setAudioDevice("a");
 		view.playCalibration();
-		EXPECT_TRUE(model.calibrationPlayed());
+		assertEqual("a", model.calibrationParameters().audioDevice);
 	}
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
