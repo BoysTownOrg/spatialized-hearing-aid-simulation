@@ -80,10 +80,13 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	player->play(std::move(request));
 }
 
-void RecognitionTestModel::stopCalibration() {
+void RecognitionTestModel::playCalibration(CalibrationParameters p) {
+	StimulusPlayer::PlayRequest request;
+	request.audioDevice = p.audioDevice;
+	player->play(std::move(request));
 }
 
-void RecognitionTestModel::playCalibration(CalibrationParameters) {
+void RecognitionTestModel::stopCalibration() {
 }
 
 void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
