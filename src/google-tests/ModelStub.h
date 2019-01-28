@@ -11,7 +11,6 @@ class ModelStub : public Model {
 	double calibrationLevel_dB_Spl_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
-	bool calibrationPlayed_{};
 	bool calibrationStopped_{};
 public:
 	GlobalTestParameters globalTestParameters{};
@@ -38,11 +37,6 @@ public:
 
 	void playCalibration(CalibrationParameters p) override {
 		calibrationParameters_ = std::move(p);
-		calibrationPlayed_ = true;
-	}
-
-	bool calibrationPlayed() const {
-		return calibrationPlayed_;
 	}
 
 	const TestParameters &testParameters() const {
