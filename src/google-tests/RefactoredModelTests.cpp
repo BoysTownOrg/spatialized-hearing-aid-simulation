@@ -45,6 +45,18 @@ public:
 	}
 };
 
+class FailingPrescriptionReader : public PrescriptionReader {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	Dsl read(std::string) override {
+		throw ReadFailure{ errorMessage };
+	}
+};
+
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
@@ -66,4 +78,31 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	initializeTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
+}
+
+class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
+protected:
+	RefactoredModel::TestParameters test{};
+	FailingPrescriptionReader prescriptionReader{};
+	RefactoredModel model{&prescriptionReader};
+
+	void initializeTest() {
+		model.initializeTest(test);
+	}
+};
+
+TEST_F(
+	RefactoredModelWithFailingPrescriptionReaderTests, 
+	initializeTestThrowsTestInitializationFailureWhenUsingHearingAidSimulation
+) {
+	prescriptionReader.setErrorMessage("irrelevant");
+	try {
+		test.usingHearingAidSimulation = true;
+		test.leftDslPrescriptionFilePath = "a";
+		initializeTest();
+		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
+	}
+	catch (const RefactoredModel::TestInitializationFailure & e) {
+		assertEqual("Unable to read 'a'.", e.what());
+	}
 }
