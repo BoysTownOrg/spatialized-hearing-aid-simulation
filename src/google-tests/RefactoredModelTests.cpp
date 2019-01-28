@@ -1,6 +1,10 @@
+#include <dsl-prescription/PrescriptionReader.h>
 #include <presentation/Model.h>
 
 class RefactoredModel : public Model {
+public:
+	explicit RefactoredModel(PrescriptionReader*) {}
+
 	void initializeTest(TestParameters) override {
 	}
 
@@ -22,13 +26,27 @@ class RefactoredModel : public Model {
 	}
 };
 
+class PrescriptionReaderStub : public PrescriptionReader {
+	std::string filePath_{};
+public:
+	Dsl read(std::string filePath) override {
+		filePath_ = std::move(filePath);
+		return {};
+	}
+
+	std::string filePath() const {
+		return filePath_;
+	}
+};
+
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters test{};
-	RefactoredModel model{};
+	PrescriptionReaderStub prescriptionReader{};
+	RefactoredModel model{&prescriptionReader};
 
 	void initializeTest() {
 		model.initializeTest(test);
@@ -39,5 +57,5 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "a";
 	initializeTest();
-	assertEqual("a", prescriptionReader->filePath());
+	assertEqual("a", prescriptionReader.filePath());
 }

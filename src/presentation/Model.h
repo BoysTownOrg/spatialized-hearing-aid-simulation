@@ -14,6 +14,8 @@ public:
 	struct TestParameters {
 		std::string audioDirectory;
 		std::string testFilePath;
+		std::string leftDslPrescriptionFilePath;
+		bool usingHearingAidSimulation;
 		GlobalTestParameters *global;
 	};
 	virtual void initializeTest(TestParameters) = 0;
