@@ -33,6 +33,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 	void playCalibration() override;
+	void stopCalibration() override;
 private:
 	void initializeTest_(TestParameters);
 	void initializeStimulusPlayer(TestParameters);

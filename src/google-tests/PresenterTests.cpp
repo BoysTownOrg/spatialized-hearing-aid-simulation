@@ -616,6 +616,12 @@ namespace {
 		EXPECT_TRUE(model.calibrationStopped());
 	}
 
+	TEST_F(PresenterTests, confirmCalibrationPassesCalibratedLevel) {
+		view.setCalibrationLevel_dB_Spl(1);
+		view.confirmCalibration();
+		EXPECT_EQ(1, model.calibrationLevel_dB_Spl());
+	}
+
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;
