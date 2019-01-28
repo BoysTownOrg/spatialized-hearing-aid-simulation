@@ -14,7 +14,8 @@ public:
 		brirReader{ brirReader } {}
 
 	void initializeTest(TestParameters p) override {
-		brirReader->read(p.brirFilePath);
+		if (p.usingSpatialization)
+			brirReader->read(p.brirFilePath);
 		if (p.usingHearingAidSimulation)
 			readPrescriptions(p);
 	}
