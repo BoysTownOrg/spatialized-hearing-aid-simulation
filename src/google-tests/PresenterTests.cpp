@@ -606,6 +606,11 @@ namespace {
 		EXPECT_TRUE(view.calibrationShown());
 	}
 
+	TEST_F(PresenterTests, playCalibrationPlaysCalibration) {
+		view.playCalibration();
+		EXPECT_TRUE(model.calibrationPlayed());
+	}
+
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
 	protected:
 		InitializationFailingModel model;
