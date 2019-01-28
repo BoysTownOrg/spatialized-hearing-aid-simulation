@@ -209,8 +209,8 @@ void Presenter::stopCalibration() {
 	model->stopCalibration();
 }
 
-void Presenter::confirmCalibration()
-{
+void Presenter::confirmCalibration() {
+	model->calibrate(std::stod(view->calibrationLevel_dB_Spl()));
 }
 
 void Presenter::toggleUsingSpatialization() {

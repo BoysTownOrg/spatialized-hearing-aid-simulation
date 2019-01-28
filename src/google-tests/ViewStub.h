@@ -56,6 +56,10 @@ public:
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
 
+	std::string calibrationLevel_dB_Spl() override {
+		return calibrationLevel_dB_Spl_;
+	}
+
 	void confirmCalibration() {
 		listener_->confirmCalibration();
 	}
