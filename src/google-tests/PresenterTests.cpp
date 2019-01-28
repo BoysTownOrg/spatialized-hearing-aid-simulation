@@ -616,6 +616,12 @@ namespace {
 		EXPECT_EQ(1.1, model.calibrationParameters().level_dB_Spl);
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
+		view.setLevel_dB_Spl("a");
+		view.playCalibration();
+		assertEqual("'a' is not a valid level.", view.errorMessage());
+	}
+
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
 		EXPECT_TRUE(model.calibrationStopped());
