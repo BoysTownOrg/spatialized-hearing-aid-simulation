@@ -13,6 +13,10 @@ class ModelStub : public Model {
 public:
 	GlobalTestParameters globalTestParameters{};
 
+	void playCalibration() override {
+		calibrationPlayed_ = true;
+	}
+
 	bool calibrationPlayed() const {
 		return calibrationPlayed_;
 	}
@@ -74,6 +78,7 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void playTrial(TrialParameters) override {}
 	bool testComplete() override { return {}; }
+	void playCalibration() override {}
 };
 
 class TrialFailingModel : public Model {
@@ -90,4 +95,5 @@ public:
 	void initializeTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
+	void playCalibration() override {}
 };

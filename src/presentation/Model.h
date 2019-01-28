@@ -28,4 +28,5 @@ public:
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual bool testComplete() = 0;
+	virtual void playCalibration() = 0;
 };
