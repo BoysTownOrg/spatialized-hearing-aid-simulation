@@ -15,7 +15,7 @@ class ViewStub : public View {
 	std::string release_ms_{ "0" };
 	std::string windowSize_{ "0" };
 	std::string chunkSize_{ "0" };
-	std::string calibrationLevel_dB_Spl_{};
+	std::string calibrationLevel_dB_Spl_{ "0" };
 	std::string errorMessage_{};
 	std::string browseFilePath_{};
 	std::string browseDirectory_{};
@@ -33,6 +33,7 @@ class ViewStub : public View {
 	bool browseForBrirButtonActivated_{};
 	bool usingHearingAidSimulation_{};
 	bool calibrationShown_{};
+	bool calibrationHidden_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
@@ -55,6 +56,10 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
+
+	bool calibrationHidden() const {
+		return calibrationHidden_;
+	}
 
 	std::string calibrationLevel_dB_Spl() override {
 		return calibrationLevel_dB_Spl_;
