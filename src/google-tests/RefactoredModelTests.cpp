@@ -202,12 +202,17 @@ public:
 };
 
 class AudioPlayerStub : public IIAudioPlayer {
+	std::vector<std::string> audioDeviceDescriptions_{};
+public:
 	void prepareToPlay(Preparation) override
 	{
 	}
 	std::vector<std::string> audioDeviceDescriptions() override
 	{
-		return std::vector<std::string>();
+		return audioDeviceDescriptions_;
+	}
+	void setAudioDeviceDescriptions(std::vector<std::string> v) {
+		audioDeviceDescriptions_ = std::move(v);
 	}
 	void play() override
 	{
@@ -457,8 +462,8 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	EXPECT_EQ(11, right.windowSize);
 }
 
-TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptions) {
-	player.setDescriptions({ "a", "b", "c" });
+TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
+	player.setAudioDeviceDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
