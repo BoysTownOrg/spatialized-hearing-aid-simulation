@@ -1,6 +1,12 @@
 #include <dsl-prescription/PrescriptionReader.h>
 #include <binaural-room-impulse-response/BrirReader.h>
+#include <hearing-aid-processing/FilterbankCompressor.h>
 #include <presentation/Model.h>
+
+class AudioProcessor {
+public:
+	INTERFACE_OPERATIONS(AudioProcessor);
+};
 
 class SpeechPerceptionTest {
 public:
@@ -25,9 +31,11 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 public:
 	RefactoredModel(
+		SpeechPerceptionTest *test,
+		AudioProcessor *,
 		PrescriptionReader* prescriptionReader,
 		BrirReader *brirReader,
-		SpeechPerceptionTest *test
+		FilterbankCompressorFactory *
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
@@ -154,7 +162,16 @@ public:
 	}
 };
 
+class AudioProcessorStub : public AudioProcessor {
+	int sampleRate_{};
+public:
+	void setSampleRate(int fs) {
+		sampleRate_ = fs;
+	}
+};
+
 #include "assert-utility.h"
+#include "FilterbankCompressorSpy.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
@@ -164,7 +181,9 @@ protected:
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
-	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
+	AudioProcessorStub processor{};
+	FilterbankCompressorSpyFactory compressorFactory{};
+	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory };
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
@@ -253,7 +272,9 @@ protected:
 	FailingPrescriptionReader prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
-	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
+	AudioProcessorStub processor{};
+	FilterbankCompressorSpyFactory compressorFactory{};
+	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory };
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);

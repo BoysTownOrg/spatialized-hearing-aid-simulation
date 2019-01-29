@@ -17,6 +17,10 @@ public:
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
 		bool usingHearingAidSimulation;
 		bool usingSpatialization;
 		GlobalTestParameters *global;
