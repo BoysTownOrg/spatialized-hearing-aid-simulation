@@ -83,14 +83,14 @@ namespace {
 
 	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialDoesNotAdvanceListWhenPlayerFails) {
 		list.setContents({ "a", "b", "c" });
-		//player.failOnPrepareToPlay();
+		//defaultStimulusPlayer.failOnPrepareToPlay();
 		//try {
 		//	prepareNextTrial();
 		//}
 		//catch (const RecognitionTest::TrialFailure &) {
 
 		//}
-		//player.dontFailOnPrepareToPlay();
+		//defaultStimulusPlayer.dontFailOnPrepareToPlay();
 		//prepareNextTrial();
 		//assertEqual("a", model.nextStimulus());
 	}
@@ -143,9 +143,9 @@ namespace {
 	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
 	protected:
 		FakeStimulusList list{};
-		//RequestFailingStimulusPlayer player{};
+		//RequestFailingStimulusPlayer defaultStimulusPlayer{};
 		DocumenterStub documenter{};
-		//RecognitionTest model{ &list, &player, &documenter };
+		//RecognitionTest model{ &list, &defaultStimulusPlayer, &documenter };
 		/*
 		void assertPrepareNextTrialThrowsTrialFailure(std::string what) {
 			try {
@@ -172,7 +172,7 @@ namespace {
 		RecognitionTestModelWithRequestFailingStimulusPlayer,
 		DISABLED_prepareNextTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 	) {
-		//player.setErrorMessage("error.");
+		//defaultStimulusPlayer.setErrorMessage("error.");
 		//assertPrepareNextTrialThrowsTrialFailure("error.");
 	}
 
@@ -180,7 +180,7 @@ namespace {
 		RecognitionTestModelWithRequestFailingStimulusPlayer,
 		DISABLED_playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
 	) {
-		//player.setErrorMessage("error.");
+		//defaultStimulusPlayer.setErrorMessage("error.");
 		//assertPlayCalibrationThrowsCalibrationFailure("error.");
 	}
 }

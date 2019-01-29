@@ -13,6 +13,8 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
+	RUNTIME_ERROR(TestInitializationFailure);
+
 	virtual void playNextTrial(StimulusPlayer *) = 0;
 	virtual std::string nextStimulus() = 0;
 };
@@ -150,7 +152,6 @@ public:
 
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
-	std::string trialLog_{};
 	std::string nextStimulus_{};
 	StimulusPlayer *player_{};
 public:
@@ -164,11 +165,6 @@ public:
 
 	void playNextTrial(StimulusPlayer *p) override {
 		player_ = p;
-		trialLog_ += "playNextTrial ";
-	}
-
-	std::string trialLog() const {
-		return trialLog_;
 	}
 
 	void setNextStimulus(std::string s) {
@@ -182,6 +178,21 @@ public:
 	const StimulusPlayer *player() const {
 		return player_;
 	}
+};
+
+class InitializationFailingSpeechPerceptionTest : public SpeechPerceptionTest {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	void prepareNewTest(TestParameters) override {
+		throw TestInitializationFailure{ errorMessage };
+	}
+
+	void playNextTrial(StimulusPlayer *) override {}
+	std::string nextStimulus() override { return {}; }
 };
 
 #include "assert-utility.h"
@@ -345,41 +356,65 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	EXPECT_EQ(11, right.windowSize);
 }
 
-class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
+class RefactoredModelFailureTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters testing{};
-	FailingPrescriptionReader prescriptionReader{};
-	BrirReaderStub brirReader{};
-	SpeechPerceptionTestStub test{};
-	FilterbankCompressorSpyFactory compressorFactory{};
-	AudioFrameReaderStubFactory readerFactory{};
-	StimulusPlayerStub player{};
-	RefactoredModel model{ 
-		&test,
-		&prescriptionReader, 
-		&brirReader, 
-		&compressorFactory, 
-		&readerFactory,
-		&player
-	};
+	PrescriptionReaderStub defaultPrescriptionReader{};
+	PrescriptionReader *prescriptionReader{&defaultPrescriptionReader};
+	BrirReaderStub defaultBrirReader{};
+	BrirReader *brirReader{&defaultBrirReader};
+	SpeechPerceptionTestStub defaultTest{};
+	SpeechPerceptionTest *test{&defaultTest};
+	FilterbankCompressorSpyFactory defaultCompressorFactory{};
+	FilterbankCompressorFactory *compressorFactory{&defaultCompressorFactory};
+	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
+	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
+	StimulusPlayerStub defaultStimulusPlayer{};
+	StimulusPlayer *stimulusPlayer{ &defaultStimulusPlayer };
 
 	void prepareNewTest() {
+		RefactoredModel model{ 
+			test,
+			prescriptionReader, 
+			brirReader, 
+			compressorFactory, 
+			audioReaderFactory,
+			stimulusPlayer
+		};
 		model.prepareNewTest(testing);
 	}
 };
 
 TEST_F(
-	RefactoredModelWithFailingPrescriptionReaderTests, 
-	prepareNewTestThrowsTestInitializationFailureWhenUsingHearingAidSimulation
+	RefactoredModelFailureTests, 
+	prepareNewTestThrowsTestInitializationFailureWhenPrescriptionReaderFails
 ) {
-	prescriptionReader.setErrorMessage("irrelevant");
+	FailingPrescriptionReader failing;
+	failing.setErrorMessage("irrelevant");
 	try {
 		testing.usingHearingAidSimulation = true;
 		testing.leftDslPrescriptionFilePath = "a";
+		prescriptionReader = &failing;
 		prepareNewTest();
 		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 	}
 	catch (const RefactoredModel::TestInitializationFailure & e) {
 		assertEqual("Unable to read 'a'.", e.what());
+	}
+}
+
+TEST_F(
+	RefactoredModelFailureTests, 
+	prepareNewTestThrowsTestInitializationFailureWhenTestFailsToInitialize
+) {
+	InitializationFailingSpeechPerceptionTest failing;
+	failing.setErrorMessage("error.");
+	try {
+		test = &failing;
+		prepareNewTest();
+		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
+	}
+	catch (const RefactoredModel::TestInitializationFailure & e) {
+		assertEqual("error.", e.what());
 	}
 }
