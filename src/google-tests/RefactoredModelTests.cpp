@@ -153,6 +153,7 @@ public:
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string trialLog_{};
+	std::string nextStimulus_{};
 public:
 	const TestParameters &testParameters() const {
 		return testParameters_;
@@ -168,6 +169,10 @@ public:
 
 	std::string trialLog() const {
 		return trialLog_;
+	}
+
+	void setNextStimulus(std::string s) {
+		nextStimulus_ = std::move(s);
 	}
 };
 
