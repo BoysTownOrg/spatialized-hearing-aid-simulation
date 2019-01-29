@@ -81,11 +81,16 @@ private:
 #include "ArgumentCollection.h"
 
 class PrescriptionReaderStub : public PrescriptionReader {
+	Dsl dsl_;
 	ArgumentCollection<std::string> filePaths_{};
 public:
+	void setDsl(Dsl dsl) {
+		dsl_ = std::move(dsl);
+	}
+
 	Dsl read(std::string filePath) override {
 		filePaths_.push_back(std::move(filePath));
-		return {};
+		return dsl_;
 	}
 
 	ArgumentCollection<std::string> filePaths() const {
@@ -220,6 +225,26 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToSpeechPerceptionTest) {
 TEST_F(RefactoredModelTests, playTrialPreparesSpeechPerceptionTestBeforePlaying) {
 	playTrial();
 	assertEqual("prepareNextTrial playTrial ", test.trialLog());
+}
+
+TEST_F(RefactoredModelTests, couldBeUgly) {
+	PrescriptionReader::Dsl dsl;
+	dsl.compressionRatios = { 1 };
+	dsl.crossFrequenciesHz = { 2 };
+	dsl.kneepointGains_dB = { 3 };
+	dsl.kneepoints_dBSpl = { 4 };
+	dsl.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+	dsl.channels = 6;
+	prescriptionReader.setDsl(dsl);
+	processor.setSampleRate(7);
+	testing.usingHearingAidSimulation = true;
+	testing.attack_ms = 8;
+	testing.release_ms = 9;
+	testing.chunkSize = 10;
+	testing.windowSize = 11;
+	prepareNewTest();
+	playTrial();
+	assertEqual({ 1 }, compressorFactory.parameters().compressionRatios);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
