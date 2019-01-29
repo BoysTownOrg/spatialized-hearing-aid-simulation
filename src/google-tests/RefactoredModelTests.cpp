@@ -3,7 +3,12 @@
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <recognition-test/StimulusPlayer.h>
+#include <playing-audio/AudioPlayer.h>
 #include <presentation/Model.h>
+
+class IIAudioPlayer : public IAudioPlayer, public StimulusPlayer {
+
+};
 
 class SpeechPerceptionTest {
 public:
@@ -26,7 +31,7 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 	FilterbankCompressorFactory *compressorFactory;
 	AudioFrameReaderFactory *readerFactory;
-	StimulusPlayer *player;
+	IIAudioPlayer *player;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
@@ -34,7 +39,7 @@ public:
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
 		AudioFrameReaderFactory *readerFactory,
-		StimulusPlayer *player
+		IIAudioPlayer *player
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
@@ -190,6 +195,50 @@ public:
 	}
 };
 
+class AudioPlayerStub : public IIAudioPlayer {
+	void prepareToPlay(Preparation) override
+	{
+	}
+	std::vector<std::string> audioDeviceDescriptions() override
+	{
+		return std::vector<std::string>();
+	}
+	void play() override
+	{
+	}
+	bool isPlaying() override
+	{
+		return false;
+	}
+	void stop() override
+	{
+	}
+};
+
+class PreparationFailingAudioPlayer : public IIAudioPlayer {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	void prepareToPlay(Preparation) override {
+		throw PreparationFailure{ errorMessage };
+	}
+
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	void play() override
+	{
+	}
+	bool isPlaying() override
+	{
+		return false;
+	}
+	void stop() override
+	{
+	}
+};
+
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
@@ -251,7 +300,7 @@ protected:
 	FilterbankCompressorSpyFactory compressorFactory{};
 	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{reader};
-	StimulusPlayerStub player{};
+	AudioPlayerStub player{};
 	RefactoredModel model{ 
 		&test,
 		&prescriptionReader, 
@@ -409,8 +458,8 @@ protected:
 	FilterbankCompressorFactory *compressorFactory{&defaultCompressorFactory};
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
-	StimulusPlayerStub defaultStimulusPlayer{};
-	StimulusPlayer *stimulusPlayer{ &defaultStimulusPlayer };
+	AudioPlayerStub defaultPlayer{};
+	IIAudioPlayer *player{ &defaultPlayer };
 
 	void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 		RefactoredModel model{ 
@@ -419,13 +468,31 @@ protected:
 			brirReader, 
 			compressorFactory, 
 			audioReaderFactory,
-			stimulusPlayer
+			player
 		};
 		try {
 			model.prepareNewTest(testing);
 			FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 		}
 		catch (const RefactoredModel::TestInitializationFailure & e) {
+			assertEqual(std::move(what), e.what());
+		}
+	}
+
+	void assertPlayTrialThrowsTrialFailure(std::string what) {
+		RefactoredModel model{ 
+			test,
+			prescriptionReader, 
+			brirReader, 
+			compressorFactory, 
+			audioReaderFactory,
+			player
+		};
+		try {
+			model.playTrial({});
+			FAIL() << "Expected RefactoredModel::TrialFailure.";
+		}
+		catch (const RefactoredModel::TrialFailure &e) {
 			assertEqual(std::move(what), e.what());
 		}
 	}
@@ -469,9 +536,10 @@ TEST_F(
 	RefactoredModelFailureTests,
 	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
-	FAIL();
-	//defaultStimulusPlayer.setErrorMessage("error.");
-	//assertPrepareNextTrialThrowsTrialFailure("error.");
+	PreparationFailingAudioPlayer failing;
+	failing.setErrorMessage("error.");
+	player = &failing;
+	assertPlayTrialThrowsTrialFailure("error.");
 }
 
 TEST_F(
