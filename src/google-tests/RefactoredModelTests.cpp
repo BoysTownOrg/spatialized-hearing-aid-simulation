@@ -205,24 +205,34 @@ public:
 
 class AudioPlayerStub : public IIAudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
+	Preparation preparation_{};
 public:
-	void prepareToPlay(Preparation) override
+	void prepareToPlay(Preparation p) override
 	{
+		preparation_ = std::move(p);
 	}
-	std::vector<std::string> audioDeviceDescriptions() override
-	{
+
+	const Preparation &preparation() const {
+		return preparation_;
+	}
+	
+	std::vector<std::string> audioDeviceDescriptions() override {
 		return audioDeviceDescriptions_;
 	}
+
 	void setAudioDeviceDescriptions(std::vector<std::string> v) {
 		audioDeviceDescriptions_ = std::move(v);
 	}
+
 	void play() override
 	{
 	}
+
 	bool isPlaying() override
 	{
 		return false;
 	}
+	
 	void stop() override
 	{
 	}
@@ -240,16 +250,9 @@ public:
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void play() override
-	{
-	}
-	bool isPlaying() override
-	{
-		return false;
-	}
-	void stop() override
-	{
-	}
+	void play() override {}
+	bool isPlaying() override { return {}; }
+	void stop() override {}
 };
 
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
@@ -386,6 +389,18 @@ TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
 	test.setNextStimulus("a");
 	playTrial();
 	assertEqual("a", readerFactory.filePath());
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
+	testing.usingHearingAidSimulation = true;
+	testing.chunkSize = 3;
+	prepareNewTest();
+	reader->setChannels(1);
+	reader->setSampleRate(2);
+	playTrial();
+	EXPECT_EQ(1, player.preparation().channels);
+	EXPECT_EQ(2, player.preparation().sampleRate);
+	EXPECT_EQ(3, player.preparation().framesPerBuffer);
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {

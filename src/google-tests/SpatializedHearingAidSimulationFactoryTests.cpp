@@ -60,29 +60,6 @@ public:
 
 TEST_F(
 	SpatializedHearingAidSimulationFactoryTests, 
-	assertCanBeMadePassesPrescriptionFilePathsToParserFactory
-) {
-	global.leftDslPrescriptionFilePath = "a";
-	global.rightDslPrescriptionFilePath = "b";
-	global.usingHearingAidSimulation = true;
-	factory.assertCanBeMade(&global);
-	EXPECT_TRUE(parserFactory->filePaths().contains("a"));
-	EXPECT_TRUE(parserFactory->filePaths().contains("b"));
-}
-
-TEST_F(
-	SpatializedHearingAidSimulationFactoryTests, 
-	assertCanBeMadeDoesNotTryToMakePrescriptionsWhenNotUsingHearingAidSimulation
-) {
-	global.leftDslPrescriptionFilePath = "a";
-	global.rightDslPrescriptionFilePath = "b";
-	global.usingHearingAidSimulation = false;
-	factory.assertCanBeMade(&global);
-	EXPECT_TRUE(parserFactory->filePaths().empty());
-}
-
-TEST_F(
-	SpatializedHearingAidSimulationFactoryTests, 
 	assertCanBeMadePassesCompressionParametersToFactory
 ) {
 	global.usingHearingAidSimulation = true;
@@ -105,16 +82,6 @@ TEST_F(
 	global.usingSpatialization = true;
 	factory.assertCanBeMade(&global);
 	assertEqual("a", audioFileReaderFactory->filePath());
-}
-
-TEST_F(
-	SpatializedHearingAidSimulationFactoryTests, 
-	assertCanBeMadeDoesNotTryToMakeBrirWhenNotUsingSpatialization
-) {
-	global.brirFilePath = "a";
-	global.usingSpatialization = false;
-	factory.assertCanBeMade(&global);
-	EXPECT_TRUE(audioFileReaderFactory->filePath().empty());
 }
 
 TEST_F(
