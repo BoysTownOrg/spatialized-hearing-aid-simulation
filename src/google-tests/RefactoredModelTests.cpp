@@ -457,6 +457,11 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	EXPECT_EQ(11, right.windowSize);
 }
 
+TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptions) {
+	player.setDescriptions({ "a", "b", "c" });
+	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
+}
+
 class RefactoredModelFailureTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters testing{};
