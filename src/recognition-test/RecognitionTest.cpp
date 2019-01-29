@@ -22,6 +22,10 @@ void RecognitionTest::prepareNewTest(TestParameters p) {
 	}
 }
 
+void RecognitionTest::prepareNextTrial(TrialParameters)
+{
+}
+
 void RecognitionTest::prepareNewTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
@@ -36,26 +40,14 @@ void RecognitionTest::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
 }
 
-void RecognitionTest::documentTestParameters(TestParameters p) {
-	Documenter::TestParameters documenting;
-	documenting.global = p.global;
-	documenter->documentTestParameters(std::move(documenting));
+void RecognitionTest::documentTestParameters(TestParameters) {
+	documenter->documentTestParameters({});
 }
 
-void RecognitionTest::playTrial(TrialParameters p) {
+void RecognitionTest::playTrial() {
 	if (player->isPlaying())
 		return; 
-	documentTrialParameters(std::move(p));
-}
-
-void RecognitionTest::playCalibration(CalibrationParameters) {
-}
-
-void RecognitionTest::playCalibration_(CalibrationParameters) {
-}
-
-void RecognitionTest::stopCalibration() {
-	player->stop();
+	documentTrialParameters({});
 }
 
 void RecognitionTest::documentTrialParameters(TrialParameters p) {

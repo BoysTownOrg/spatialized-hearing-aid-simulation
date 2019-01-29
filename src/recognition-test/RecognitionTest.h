@@ -16,7 +16,25 @@ struct GlobalTrialParameters {
 	double level_dB_Spl;
 };
 
-class RecognitionTest : public Model {
+class SpeechPerceptionTest_ {
+public:
+	INTERFACE_OPERATIONS(SpeechPerceptionTest_);
+	struct TestParameters {
+		std::string audioDirectory;
+		std::string testFilePath;
+	};
+	virtual void prepareNewTest(TestParameters) = 0;
+	RUNTIME_ERROR(TestInitializationFailure);
+
+	struct TrialParameters {
+		std::string audioDevice;
+		double level_dB_Spl;
+	};
+	virtual void prepareNextTrial(TrialParameters) = 0;
+	virtual void playTrial() = 0;
+};
+
+class RecognitionTest : public SpeechPerceptionTest_ {
 	std::string currentStimulus_{};
 	StimulusList *list;
 	StimulusPlayer *player;
@@ -29,15 +47,13 @@ public:
 		Documenter *
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
-	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
-	bool testComplete() override;
-	void playCalibration(CalibrationParameters) override;
-	void stopCalibration() override;
+	void prepareNextTrial(TrialParameters) override;
+	RECOGNITION_TEST_API void playTrial() override;
+	RECOGNITION_TEST_API bool testComplete();
 private:
 	void prepareNewTest_(TestParameters);
 	void initializeStimulusList(std::string directory);
 	void initializeDocumenter(std::string testFilePath);
 	void documentTestParameters(TestParameters);
 	void documentTrialParameters(TrialParameters);
-	void playCalibration_(CalibrationParameters);
 };
