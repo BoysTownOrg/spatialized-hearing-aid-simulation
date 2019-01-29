@@ -72,6 +72,10 @@ public:
 	void setTestComplete() {
 		testComplete_ = true;
 	}
+
+	std::vector<std::string> audioDeviceDescriptions() override {
+		return audioDeviceDescriptions_;
+	}
 };
 
 class InitializationFailingModel : public Model {
@@ -89,6 +93,7 @@ public:
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };
 
 class TrialFailingModel : public Model {
@@ -106,6 +111,7 @@ public:
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };
 
 class CalibrationFailingModel : public Model {
@@ -123,4 +129,5 @@ public:
 	void prepareNewTest(TestParameters) override {}
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };

@@ -45,4 +45,5 @@ public:
 	virtual void playCalibration(CalibrationParameters) = 0;
 	RUNTIME_ERROR(CalibrationFailure);
 	virtual void stopCalibration() = 0;
+	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };

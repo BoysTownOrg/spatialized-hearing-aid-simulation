@@ -44,7 +44,16 @@ public:
 		player{ player } {}
 
 	void prepareNewTest(TestParameters p) override {
+		prepareNewTest_(p);
+		if (p.usingSpatialization)
+			readBrir(p);
+		if (p.usingHearingAidSimulation)
+			readPrescriptions(p);
 		testParameters = p;
+	}
+
+private:
+	void prepareNewTest_(Model::TestParameters p) {
 		SpeechPerceptionTest::TestParameters adapted;
 		adapted.audioDirectory = p.audioDirectory;
 		adapted.testFilePath = p.testFilePath;
@@ -54,17 +63,20 @@ public:
 		catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
 			throw TestInitializationFailure{ e.what() };
 		}
-		if (p.usingSpatialization)
-			readBrir(p);
-		if (p.usingHearingAidSimulation)
-			readPrescriptions(p);
 	}
 
+public:
 	void playTrial(TrialParameters p) override {
 		test->playNextTrial(player);
 		auto reader = readerFactory->make(test->nextStimulus());
-		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), reader->sampleRate());
-		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), reader->sampleRate());
+		makeCompressor(
+			prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), 
+			reader->sampleRate()
+		);
+		makeCompressor(
+			prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), 
+			reader->sampleRate()
+		);
 		reader->reset();
 	}
 
@@ -96,6 +108,8 @@ public:
 
 	void stopCalibration() override {
 	}
+
+	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 
 private:
 	void readPrescriptions(Model::TestParameters p) {
