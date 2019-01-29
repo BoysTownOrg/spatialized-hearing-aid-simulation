@@ -54,6 +54,7 @@ public:
 		auto reader = readerFactory->make(test->nextStimulus());
 		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), reader->sampleRate());
 		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), reader->sampleRate());
+		reader->reset();
 	}
 
 private:
