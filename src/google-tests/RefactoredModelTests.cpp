@@ -1,6 +1,7 @@
 #include <dsl-prescription/PrescriptionReader.h>
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
+#include <audio-stream-processing/AudioFrameReader.h>
 #include <presentation/Model.h>
 
 class AudioProcessor {
@@ -32,19 +33,22 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 	AudioProcessor *processor;
 	FilterbankCompressorFactory *compressorFactory;
+	AudioFrameReaderFactory *readerFactory;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
 		AudioProcessor *processor,
-		PrescriptionReader* prescriptionReader,
+		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
-		FilterbankCompressorFactory *compressorFactory
+		FilterbankCompressorFactory *compressorFactory,
+		AudioFrameReaderFactory *readerFactory
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
 		test{ test },
 		processor{ processor },
-		compressorFactory{ compressorFactory } {}
+		compressorFactory{ compressorFactory },
+		readerFactory{ readerFactory } {}
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters = p;
@@ -77,7 +81,7 @@ private:
 		compression.chunkSize = testParameters.chunkSize;
 		compression.windowSize = testParameters.windowSize;
 
-		//compression.sampleRate = processor->sampleRate();
+		compression.sampleRate = readerFactory->make({})->sampleRate();
 		compression.compressionRatios = dsl.compressionRatios;
 		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
 		compression.kneepointGains_dB = dsl.kneepointGains_dB;
@@ -192,6 +196,7 @@ class AudioProcessorStub : public AudioProcessor {
 
 #include "assert-utility.h"
 #include "FilterbankCompressorSpy.h"
+#include "AudioFrameReaderStub.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
@@ -203,7 +208,9 @@ protected:
 	SpeechPerceptionTestStub test{};
 	AudioProcessorStub processor{};
 	FilterbankCompressorSpyFactory compressorFactory{};
-	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory };
+	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
+	AudioFrameReaderStubFactory readerFactory{reader};
+	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory, &readerFactory };
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
@@ -327,7 +334,8 @@ protected:
 	SpeechPerceptionTestStub test{};
 	AudioProcessorStub processor{};
 	FilterbankCompressorSpyFactory compressorFactory{};
-	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory };
+	AudioFrameReaderStubFactory readerFactory{};
+	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory, &readerFactory };
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
