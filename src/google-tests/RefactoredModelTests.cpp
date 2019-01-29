@@ -12,7 +12,7 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
-	virtual void playTrial() = 0;
+	virtual void playNextTrial() = 0;
 	virtual std::string nextStimulus() = 0;
 };
 
@@ -50,7 +50,7 @@ public:
 	}
 
 	void playTrial(TrialParameters p) override {
-		test->playTrial();
+		test->playNextTrial();
 		auto reader = readerFactory->make(test->nextStimulus());
 		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), reader->sampleRate());
 		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), reader->sampleRate());
@@ -157,7 +157,7 @@ public:
 		testParameters_ = std::move(p);
 	}
 
-	void playTrial() override {
+	void playNextTrial() override {
 		trialLog_ += "playNextTrial ";
 	}
 
@@ -245,9 +245,9 @@ TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTes
 	assertEqual("b", test.testParameters().testFilePath);
 }
 
-TEST_F(RefactoredModelTests, DISABLED_playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
+TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
 	playTrial();
-	//EXPECT_EQ(&player, test.stimulusPlayer());
+	EXPECT_EQ(&player, test.stimulusPlayer());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
