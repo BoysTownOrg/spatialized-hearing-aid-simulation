@@ -2,6 +2,7 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
+#include <recognition-test/StimulusPlayer.h>
 #include <presentation/Model.h>
 
 class SpeechPerceptionTest {
@@ -29,7 +30,8 @@ public:
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
-		AudioFrameReaderFactory *readerFactory
+		AudioFrameReaderFactory *readerFactory,
+		StimulusPlayer *
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
@@ -148,6 +150,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string trialLog_{};
 	std::string nextStimulus_{};
+	StimulusPlayer *player_{};
 public:
 	const TestParameters &testParameters() const {
 		return testParameters_;
@@ -172,11 +175,16 @@ public:
 	std::string nextStimulus() override {
 		return nextStimulus_;
 	}
+
+	const StimulusPlayer *player() const {
+		return player_;
+	}
 };
 
 #include "assert-utility.h"
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
+#include "StimulusPlayerStub.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
@@ -189,12 +197,14 @@ protected:
 	FilterbankCompressorSpyFactory compressorFactory{};
 	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{reader};
+	StimulusPlayerStub player{};
 	RefactoredModel model{ 
 		&test,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
-		&readerFactory 
+		&readerFactory,
+		&player
 	};
 
 	void prepareNewTest() {
@@ -247,7 +257,7 @@ TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTes
 
 TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
 	playTrial();
-	EXPECT_EQ(&player, test.stimulusPlayer());
+	EXPECT_EQ(&player, test.player());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
@@ -340,12 +350,14 @@ protected:
 	SpeechPerceptionTestStub test{};
 	FilterbankCompressorSpyFactory compressorFactory{};
 	AudioFrameReaderStubFactory readerFactory{};
+	StimulusPlayerStub player{};
 	RefactoredModel model{ 
 		&test,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
-		&readerFactory 
+		&readerFactory,
+		&player
 	};
 
 	void prepareNewTest() {
