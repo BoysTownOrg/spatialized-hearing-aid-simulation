@@ -93,7 +93,7 @@ FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	level_dB_Spl_(250, 250, 200, 45, "level (dB SPL)"),
 	audioDevice_(250, 500, 200, 45, "audio device"),
-	play(250, 550, 60, 45, "prepareToPlay trial")
+	play(250, 550, 60, 45, "prepareToPlay nextTrial")
 {
 	end();
 }

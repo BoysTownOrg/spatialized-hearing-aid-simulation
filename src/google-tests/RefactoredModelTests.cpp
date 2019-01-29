@@ -184,7 +184,7 @@ public:
 	}
 
 	void playTrial() override {
-		trialLog_ += "playTrial ";
+		trialLog_ += "prepareNextTrial ";
 	}
 
 	std::string trialLog() const {
@@ -277,7 +277,7 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToSpeechPerceptionTest) {
 
 TEST_F(RefactoredModelTests, playTrialPreparesSpeechPerceptionTestBeforePlaying) {
 	playTrial();
-	assertEqual("prepareNextTrial playTrial ", test.trialLog());
+	assertEqual("prepareNextTrial prepareNextTrial ", test.trialLog());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {

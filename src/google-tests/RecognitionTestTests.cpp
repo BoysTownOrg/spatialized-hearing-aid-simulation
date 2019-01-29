@@ -9,8 +9,8 @@
 namespace {
 	class RecognitionTestTests : public ::testing::Test {
 	protected:
-		RecognitionTest::TestParameters testParameters;
-		RecognitionTest::TrialParameters trial;
+		RecognitionTest::TestParameters newTest;
+		RecognitionTest::TrialParameters nextTrial;
 		RecognitionTest::CalibrationParameters calibration;
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
@@ -18,11 +18,11 @@ namespace {
 		RecognitionTest model{ &list, &player, &documenter };
 
 		void prepareNewTest() {
-			model.prepareNewTest(testParameters);
+			model.prepareNewTest(newTest);
 		}
 
-		void playTrial() {
-			model.prepareNextTrial(trial);
+		void prepareNextTrial() {
+			model.prepareNextTrial(nextTrial);
 		}
 
 		void playCalibration() {
@@ -32,35 +32,35 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
-		initializeTestInitializesStimulusList
+		prepareNewTestInitializesStimulusList
 	) {
-		testParameters.audioDirectory = "a";
+		newTest.audioDirectory = "a";
 		prepareNewTest();
 		assertEqual("a", list.directory());
 	}
 
 	TEST_F(
 		RecognitionTestTests,
-		initializeTestInitializesDocumenter
+		prepareNewTestInitializesDocumenter
 	) {
-		testParameters.testFilePath = "a";
+		newTest.testFilePath = "a";
 		prepareNewTest();
 		assertEqual("a", documenter.filePath());
 	}
 
 	TEST_F(
 		RecognitionTestTests,
-		initializeTestDocumentsTestParameters
+		prepareNewTestDocumentsTestParameters
 	) {
 		GlobalTestParameters global;
-		testParameters.global = &global;
+		newTest.global = &global;
 		prepareNewTest();
 		EXPECT_EQ(&global, documenter.documentedTestParameters().global);
 	}
 
 	TEST_F(
 		RecognitionTestTests,
-		initializeTestDocumentsTestParametersAfterInitializing
+		prepareNewTestDocumentsTestParametersAfterInitializing
 	) {
 		prepareNewTest();
 		EXPECT_TRUE(documenter.log().beginsWith("initialize"));
@@ -68,60 +68,60 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
-		playTrialPassesNextStimulusToStimulusPlayer
+		prepareNextTrialPreparesNextStimulus
 	) {
 		list.setContents({ "a", "b", "c" });
-		playTrial();
-		assertEqual("a", player.request().audioFilePath);
-		playTrial();
-		assertEqual("b", player.request().audioFilePath);
-		playTrial();
-		assertEqual("c", player.request().audioFilePath);
+		prepareNextTrial();
+		assertEqual("a", player.preparation().audioFilePath);
+		prepareNextTrial();
+		assertEqual("b", player.preparation().audioFilePath);
+		prepareNextTrial();
+		assertEqual("c", player.preparation().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestTests, playTrialPassesRequestToPlayer) {
-		trial.audioDevice = "a";
-		trial.level_dB_Spl = 1;
-		playTrial();
-		EXPECT_EQ(1, player.request().level_dB_Spl);
-		assertEqual("a", player.request().audioDevice);
+	TEST_F(RecognitionTestTests, prepareNextTrialPassesParametersToPlayer) {
+		nextTrial.audioDevice = "a";
+		nextTrial.level_dB_Spl = 1;
+		prepareNextTrial();
+		EXPECT_EQ(1, player.preparation().level_dB_Spl);
+		assertEqual("a", player.preparation().audioDevice);
 	}
 
-	TEST_F(RecognitionTestTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
+	TEST_F(RecognitionTestTests, prepareNextTrialDoesNotAdvanceListWhenPlayerPlaying) {
 		list.setContents({ "a", "b", "c" });
-		playTrial();
+		prepareNextTrial();
 		player.setPlaying();
-		playTrial();
-		assertEqual("a", player.request().audioFilePath);
+		prepareNextTrial();
+		assertEqual("a", player.preparation().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestTests, playTrialDoesNotAdvanceListWhenPlayerFails) {
+	TEST_F(RecognitionTestTests, prepareNextTrialDoesNotAdvanceListWhenPlayerFails) {
 		list.setContents({ "a", "b", "c" });
-		player.failOnPlay();
+		player.failOnPrepareToPlay();
 		try {
-			playTrial();
+			prepareNextTrial();
 		}
 		catch (const RecognitionTest::TrialFailure &) {
 
 		}
-		player.dontFailOnPlay();
-		playTrial();
-		assertEqual("a", player.request().audioFilePath);
+		player.dontFailOnPrepareToPlay();
+		prepareNextTrial();
+		assertEqual("a", player.preparation().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
+	TEST_F(RecognitionTestTests, prepareNextTrialDoesNotPrepareAgainWhenPlayerAlreadyPlaying) {
 		player.setPlaying();
-		playTrial();
-		EXPECT_FALSE(player.playCalled());
+		prepareNextTrial();
+		EXPECT_FALSE(player.prepareToPlayCalled());
 	}
 
 	TEST_F(
 		RecognitionTestTests,
-		playTrialDocumentsTrial
+		prepareNextTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
-		trial.level_dB_Spl = 1;
-		playTrial();
+		nextTrial.level_dB_Spl = 1;
+		prepareNextTrial();
 		EXPECT_EQ(1, documenter.globalTrialParameters.level_dB_Spl);
 		assertEqual("a", documenter.globalTrialParameters.stimulus);
 	}
@@ -131,9 +131,9 @@ namespace {
 		calibration.audioFilePath = "b";
 		calibration.level_dB_Spl = 1;
 		playCalibration();
-		assertEqual("a", player.request().audioDevice);
-		assertEqual("b", player.request().audioFilePath);
-		EXPECT_EQ(1, player.request().level_dB_Spl);
+		assertEqual("a", player.preparation().audioDevice);
+		assertEqual("b", player.preparation().audioFilePath);
+		EXPECT_EQ(1, player.preparation().level_dB_Spl);
 	}
 
 	TEST_F(RecognitionTestTests, stopCalibrationStopsPlayer) {
@@ -164,7 +164,7 @@ namespace {
 		InitializationFailingDocumenter documenter{};
 		RecognitionTest model{ &list, &player, &documenter };
 
-		void assertInitializeTestThrowsInitializationFailure(std::string what) {
+		void assertPrepareNewTestThrowsInitializationFailure(std::string what) {
 			try {
 				model.prepareNewTest({});
 				FAIL() << "Expected RecognitionTest::TestInitializationFailure";
@@ -177,10 +177,10 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelWithInitializationFailingDocumenter,
-		initializeTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
+		prepareNewTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
 	) {
 		documenter.setErrorMessage("error.");
-		assertInitializeTestThrowsInitializationFailure("error.");
+		assertPrepareNewTestThrowsInitializationFailure("error.");
 	}
 
 	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
@@ -190,7 +190,7 @@ namespace {
 		DocumenterStub documenter{};
 		RecognitionTest model{ &list, &player, &documenter };
 
-		void assertPlayTrialThrowsTrialFailure(std::string what) {
+		void assertPrepareNextTrialThrowsTrialFailure(std::string what) {
 			try {
 				model.prepareNextTrial({});
 				FAIL() << "Expected RecognitionTest::TrialFailure";
@@ -213,10 +213,10 @@ namespace {
 
 	TEST_F(
 		RecognitionTestModelWithRequestFailingStimulusPlayer,
-		playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+		prepareNextTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 	) {
 		player.setErrorMessage("error.");
-		assertPlayTrialThrowsTrialFailure("error.");
+		assertPrepareNextTrialThrowsTrialFailure("error.");
 	}
 
 	TEST_F(

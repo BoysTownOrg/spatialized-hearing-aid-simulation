@@ -5,11 +5,11 @@
 class StimulusPlayerStub : public StimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	std::vector<int> preferredProcessingSizes_{};
-	Preparation request_{};
+	Preparation preparation_{};
 	std::string errorMessage{};
-	bool failOnPlay_{};
+	bool failOnPrepareToPlay_{};
 	bool playing_{};
-	bool playCalled_{};
+	bool prepareToPlayCalled_{};
 	bool stopped_{};
 public:
 	void setErrorMessage(std::string s) {
@@ -20,22 +20,22 @@ public:
 		preferredProcessingSizes_ = std::move(v);
 	}
 
-	const Preparation &request() const {
-		return request_;
+	const Preparation &preparation() const {
+		return preparation_;
 	}
 
-	void failOnPlay() {
-		failOnPlay_ = true;
+	void failOnPrepareToPlay() {
+		failOnPrepareToPlay_ = true;
 	}
 
-	void dontFailOnPlay() {
-		failOnPlay_ = false;
+	void dontFailOnPrepareToPlay() {
+		failOnPrepareToPlay_ = false;
 	}
 
-	void prepareToPlay(Preparation request) override {
-		request_ = std::move(request);
-		playCalled_ = true;
-		if (failOnPlay_)
+	void prepareToPlay(Preparation p) override {
+		preparation_ = std::move(p);
+		prepareToPlayCalled_ = true;
+		if (failOnPrepareToPlay_)
 			throw PreparationFailure{ errorMessage };
 	}
 
@@ -55,8 +55,8 @@ public:
 		return playing_;
 	}
 
-	bool playCalled() {
-		return playCalled_;
+	bool prepareToPlayCalled() {
+		return prepareToPlayCalled_;
 	}
 
 	bool stopped() const {
