@@ -249,6 +249,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
 	StimulusPlayer *player_{};
+	bool playNextTrialCalled_{};
 public:
 	const TestParameters &testParameters() const {
 		return testParameters_;
@@ -260,6 +261,11 @@ public:
 
 	void playNextTrial(StimulusPlayer *p) override {
 		player_ = p;
+		playNextTrialCalled_ = true;
+	}
+	
+	bool playNextTrialCalled() const {
+		return playNextTrialCalled_;
 	}
 
 	void setNextStimulus(std::string s) {
@@ -571,7 +577,7 @@ TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
 	try {
 		model.playTrial({});
 	}
-	catch (const RefactoredModel::TrialFailure &e) {
+	catch (const RefactoredModel::TrialFailure &) {
 	}
 	EXPECT_FALSE(defaultTest.playNextTrialCalled());
 }

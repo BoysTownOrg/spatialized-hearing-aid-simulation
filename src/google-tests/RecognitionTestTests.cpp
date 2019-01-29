@@ -81,20 +81,6 @@ namespace {
 		assertEqual("a", model.nextStimulus());
 	}
 
-	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialDoesNotAdvanceListWhenPlayerFails) {
-		list.setContents({ "a", "b", "c" });
-		//defaultStimulusPlayer.failOnPrepareToPlay();
-		//try {
-		//	prepareNextTrial();
-		//}
-		//catch (const RecognitionTest::TrialFailure &) {
-
-		//}
-		//defaultStimulusPlayer.dontFailOnPrepareToPlay();
-		//prepareNextTrial();
-		//assertEqual("a", model.nextStimulus());
-	}
-
 	TEST_F(
 		RecognitionTestTests,
 		DISABLED_playNextTrialDocumentsTrial
