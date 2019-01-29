@@ -59,13 +59,13 @@ namespace {
 		assertEqual("stop ", device.streamLog());
 	}
 
-	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
+	TEST_F(AudioPlayerTests, prepareToPlayWhileStreamingDoesNotAlterStream) {
 		device.setStreaming();
 		prepareToPlay();
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
+	TEST_F(AudioPlayerTests, prepareToPlayOpensStream) {
 		AudioPlayer::Preparation request;
 		request.framesPerBuffer = 2;
 		request.channels = 3;
@@ -76,7 +76,7 @@ namespace {
 		EXPECT_EQ(4, device.streamParameters().sampleRate);
 	}
 
-	TEST_F(AudioPlayerTests, playFindsDeviceIndex) {
+	TEST_F(AudioPlayerTests, prepareToPlayFindsDeviceIndex) {
 		AudioPlayer::Preparation request;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		request.audioDevice = "second";
@@ -84,7 +84,7 @@ namespace {
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 	}
 
-	TEST_F(AudioPlayerTests, playPreparesLoaderPriorToQueryingIt) {
+	TEST_F(AudioPlayerTests, prepareToPlayResetsLoaderPriorToQueryingIt) {
 		prepareToPlay();
 		EXPECT_TRUE(loader.log().beginsWith("reset "));
 	}
@@ -143,7 +143,7 @@ namespace {
 			return { device, loader };
 		}
 
-		void assertPlayThrowsRequestFailure(std::string what) {
+		void assertPrepareToPlayThrowsRequestFailure(std::string what) {
 			auto player = makePlayer();
 			try {
 				player.prepareToPlay({});
@@ -168,11 +168,11 @@ namespace {
 
 	TEST_F(
 		AudioPlayerFailureTests,
-		playThrowsDeviceFailureWhenDeviceFailsToOpenStream
+		prepareToPlayThrowsDeviceFailureWhenDeviceFailsToOpenStream
 	) {
 		FailsToOpenStream failingDevice{};
 		failingDevice.setErrorMessage("error.");
 		device = &failingDevice;
-		assertPlayThrowsRequestFailure("error.");
+		assertPrepareToPlayThrowsRequestFailure("error.");
 	}
 }
