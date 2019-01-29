@@ -486,14 +486,7 @@ protected:
 	IIAudioPlayer *player{ &defaultPlayer };
 
 	void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
-		RefactoredModel model{ 
-			test,
-			prescriptionReader, 
-			brirReader, 
-			compressorFactory, 
-			audioReaderFactory,
-			player
-		};
+		auto model = makeModel();
 		try {
 			model.prepareNewTest(testing);
 			FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
@@ -504,14 +497,7 @@ protected:
 	}
 
 	void assertPlayTrialThrowsTrialFailure(std::string what) {
-		RefactoredModel model{ 
-			test,
-			prescriptionReader, 
-			brirReader, 
-			compressorFactory, 
-			audioReaderFactory,
-			player
-		};
+		auto model = makeModel();
 		try {
 			model.playTrial({});
 			FAIL() << "Expected RefactoredModel::TrialFailure.";
@@ -519,6 +505,18 @@ protected:
 		catch (const RefactoredModel::TrialFailure &e) {
 			assertEqual(std::move(what), e.what());
 		}
+	}
+
+	RefactoredModel makeModel() {
+		return 
+		{ 
+			test,
+			prescriptionReader, 
+			brirReader, 
+			compressorFactory, 
+			audioReaderFactory,
+			player
+		};
 	}
 };
 
@@ -578,14 +576,7 @@ TEST_F(
 TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
 	PreparationFailingAudioPlayer failing;
 	player = &failing;
-	RefactoredModel model{ 
-		test,
-		prescriptionReader, 
-		brirReader, 
-		compressorFactory, 
-		audioReaderFactory,
-		player
-	};
+	auto model = makeModel();
 	try {
 		model.playTrial({});
 	}
