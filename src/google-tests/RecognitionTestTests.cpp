@@ -17,12 +17,12 @@ namespace {
 		DocumenterStub documenter{};
 		RecognitionTest model{ &list, &player, &documenter };
 
-		void initializeTest() {
-			model.initializeTest(testParameters);
+		void prepareNewTest() {
+			model.prepareNewTest(testParameters);
 		}
 
 		void playTrial() {
-			model.playTrial(trial);
+			model.prepareNextTrial(trial);
 		}
 
 		void playCalibration() {
@@ -35,7 +35,7 @@ namespace {
 		initializeTestInitializesStimulusList
 	) {
 		testParameters.audioDirectory = "a";
-		initializeTest();
+		prepareNewTest();
 		assertEqual("a", list.directory());
 	}
 
@@ -44,7 +44,7 @@ namespace {
 		initializeTestInitializesDocumenter
 	) {
 		testParameters.testFilePath = "a";
-		initializeTest();
+		prepareNewTest();
 		assertEqual("a", documenter.filePath());
 	}
 
@@ -54,7 +54,7 @@ namespace {
 	) {
 		GlobalTestParameters global;
 		testParameters.global = &global;
-		initializeTest();
+		prepareNewTest();
 		EXPECT_EQ(&global, documenter.documentedTestParameters().global);
 	}
 
@@ -62,7 +62,7 @@ namespace {
 		RecognitionTestTests,
 		initializeTestDocumentsTestParametersAfterInitializing
 	) {
-		initializeTest();
+		prepareNewTest();
 		EXPECT_TRUE(documenter.log().beginsWith("initialize"));
 	}
 
@@ -166,7 +166,7 @@ namespace {
 
 		void assertInitializeTestThrowsInitializationFailure(std::string what) {
 			try {
-				model.initializeTest({});
+				model.prepareNewTest({});
 				FAIL() << "Expected RecognitionTest::TestInitializationFailure";
 			}
 			catch (const RecognitionTest::TestInitializationFailure &e) {
@@ -192,7 +192,7 @@ namespace {
 
 		void assertPlayTrialThrowsTrialFailure(std::string what) {
 			try {
-				model.playTrial({});
+				model.prepareNextTrial({});
 				FAIL() << "Expected RecognitionTest::TrialFailure";
 			}
 			catch (const RecognitionTest::TrialFailure &e) {

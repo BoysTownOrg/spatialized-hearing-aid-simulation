@@ -47,7 +47,7 @@ public:
 		return audioDeviceDescriptions_;
 	}
 
-	void initializeTest(TestParameters p) override {
+	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
 		globalTestParameters = *p.global;
 	}
@@ -85,7 +85,7 @@ public:
 		message = std::move(s);
 	}
 
-	void initializeTest(TestParameters) override {
+	void prepareNewTest(TestParameters) override {
 		throw TestInitializationFailure{ message };
 	}
 
@@ -107,7 +107,7 @@ public:
 		throw TrialFailure{ message };
 	}
 
-	void initializeTest(TestParameters) override {}
+	void prepareNewTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
@@ -126,7 +126,7 @@ public:
 	}
 	
 	void playTrial(TrialParameters) override {}
-	void initializeTest(TestParameters) override {}
+	void prepareNewTest(TestParameters) override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}

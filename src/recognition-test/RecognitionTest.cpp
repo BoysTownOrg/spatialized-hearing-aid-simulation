@@ -13,16 +13,16 @@ bool RecognitionTest::testComplete() {
 	return list->empty();
 }
 
-void RecognitionTest::initializeTest(TestParameters p) {
+void RecognitionTest::prepareNewTest(TestParameters p) {
 	try {
-		initializeTest_(std::move(p));
+		prepareNewTest_(std::move(p));
 	}
 	catch (const std::runtime_error &e) {
 		throw TestInitializationFailure{ e.what() };
 	}
 }
 
-void RecognitionTest::initializeTest_(TestParameters p) {
+void RecognitionTest::prepareNewTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
@@ -42,17 +42,17 @@ void RecognitionTest::documentTestParameters(TestParameters p) {
 	documenter->documentTestParameters(std::move(documenting));
 }
 
-void RecognitionTest::playTrial(TrialParameters p) {
+void RecognitionTest::prepareNextTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return; 
-	playTrial_(p);
+	prepareNextTrial_(p);
 	documentTrialParameters(std::move(p));
 	failedOnLastPlayRequest = false;
 }
 
-void RecognitionTest::playTrial_(TrialParameters p) {
+void RecognitionTest::prepareNextTrial_(TrialParameters p) {
 	try {
-		playNextStimulus(std::move(p));
+		prepareNextStimulus(std::move(p));
 	}
 	catch (const StimulusPlayer::PreparationFailure &e) {
 		failedOnLastPlayRequest = true;
@@ -60,7 +60,7 @@ void RecognitionTest::playTrial_(TrialParameters p) {
 	}
 }
 
-void RecognitionTest::playNextStimulus(TrialParameters p) {
+void RecognitionTest::prepareNextStimulus(TrialParameters p) {
 	StimulusPlayer::Preparation request;
 	if (!failedOnLastPlayRequest)
 		currentStimulus_ = list->next();
@@ -68,6 +68,10 @@ void RecognitionTest::playNextStimulus(TrialParameters p) {
 	request.audioDevice = p.audioDevice;
 	request.level_dB_Spl = p.level_dB_Spl;
 	player->prepareToPlay(std::move(request));
+}
+
+void RecognitionTest::playTrial(TrialParameters) {
+
 }
 
 void RecognitionTest::playCalibration(CalibrationParameters p) {

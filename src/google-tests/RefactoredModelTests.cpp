@@ -9,7 +9,7 @@ public:
 		std::string audioDirectory;
 		std::string testFilePath;
 	};
-	virtual void initializeTest(TestParameters) = 0;
+	virtual void prepareNewTest(TestParameters) = 0;
 };
 
 class RefactoredModel : public Model {
@@ -26,11 +26,11 @@ public:
 		brirReader{ brirReader },
 		test{ test } {}
 
-	void initializeTest(TestParameters p) override {
+	void prepareNewTest(TestParameters p) override {
 		SpeechPerceptionTest::TestParameters adapted;
 		adapted.audioDirectory = p.audioDirectory;
 		adapted.testFilePath = p.testFilePath;
-		test->initializeTest(adapted);
+		test->prepareNewTest(adapted);
 		if (p.usingSpatialization)
 			brirReader->read(p.brirFilePath);
 		if (p.usingHearingAidSimulation)
@@ -113,7 +113,7 @@ public:
 		return testParameters_;
 	}
 
-	void initializeTest(TestParameters p) override {
+	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
 	}
 };
@@ -129,8 +129,8 @@ protected:
 	SpeechPerceptionTestStub test{};
 	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
 
-	void initializeTest() {
-		model.initializeTest(testing);
+	void prepareNewTest() {
+		model.prepareNewTest(testing);
 	}
 };
 
@@ -138,7 +138,7 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	testing.usingHearingAidSimulation = true;
 	testing.leftDslPrescriptionFilePath = "a";
 	testing.rightDslPrescriptionFilePath = "b";
-	initializeTest();
+	prepareNewTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
@@ -147,28 +147,28 @@ TEST_F(RefactoredModelTests, initializeTestDoesNotReadPrescriptionsWhenNotUsingH
 	testing.usingHearingAidSimulation = false;
 	testing.leftDslPrescriptionFilePath = "a";
 	testing.rightDslPrescriptionFilePath = "b";
-	initializeTest();
+	prepareNewTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().empty());
 }
 
 TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
 	testing.usingSpatialization = true;
 	testing.brirFilePath = "a";
-	initializeTest();
+	prepareNewTest();
 	assertEqual("a", brirReader.filePath());
 }
 
 TEST_F(RefactoredModelTests, initializeTestDoesNotReadBrirWhenNotUsingSpatialization) {
 	testing.usingSpatialization = false;
 	testing.brirFilePath = "a";
-	initializeTest();
+	prepareNewTest();
 	EXPECT_TRUE(brirReader.filePath().empty());
 }
 
 TEST_F(RefactoredModelTests, initializeTestPassesParametersToSpeechPerceptionTest) {
 	testing.audioDirectory = "a";
 	testing.testFilePath = "b";
-	initializeTest();
+	prepareNewTest();
 	assertEqual("a", test.testParameters().audioDirectory);
 	assertEqual("b", test.testParameters().testFilePath);
 }
@@ -181,8 +181,8 @@ protected:
 	SpeechPerceptionTestStub test{};
 	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
 
-	void initializeTest() {
-		model.initializeTest(testing);
+	void prepareNewTest() {
+		model.prepareNewTest(testing);
 	}
 };
 
@@ -194,7 +194,7 @@ TEST_F(
 	try {
 		testing.usingHearingAidSimulation = true;
 		testing.leftDslPrescriptionFilePath = "a";
-		initializeTest();
+		prepareNewTest();
 		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 	}
 	catch (const RefactoredModel::TestInitializationFailure & e) {

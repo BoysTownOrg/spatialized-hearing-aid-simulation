@@ -135,7 +135,7 @@ void Presenter::initializeModel() {
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
 	test.global = &global;
-	model->initializeTest(std::move(test));
+	model->prepareNewTest(std::move(test));
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {

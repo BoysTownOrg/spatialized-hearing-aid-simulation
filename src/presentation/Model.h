@@ -21,7 +21,7 @@ public:
 		bool usingSpatialization;
 		GlobalTestParameters *global;
 	};
-	virtual void initializeTest(TestParameters) = 0;
+	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);
 
 	struct TrialParameters {

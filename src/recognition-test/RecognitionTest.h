@@ -28,19 +28,20 @@ public:
 		StimulusPlayer *,
 		Documenter *
 	);
-	RECOGNITION_TEST_API void initializeTest(TestParameters) override;
+	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
+	RECOGNITION_TEST_API void prepareNextTrial(TrialParameters);
 	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 	void playCalibration(CalibrationParameters) override;
 	void stopCalibration() override;
 private:
-	void initializeTest_(TestParameters);
+	void prepareNewTest_(TestParameters);
 	void initializeStimulusList(std::string directory);
 	void initializeDocumenter(std::string testFilePath);
 	void documentTestParameters(TestParameters);
 	void documentTrialParameters(TrialParameters);
-	void playTrial_(TrialParameters);
+	void prepareNextTrial_(TrialParameters);
 	void playCalibration_(CalibrationParameters);
-	void playNextStimulus(TrialParameters);
+	void prepareNextStimulus(TrialParameters);
 };
