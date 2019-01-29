@@ -13,6 +13,10 @@ bool RecognitionTest::testComplete() {
 	return list->empty();
 }
 
+std::string RecognitionTest::nextStimulus() {
+	return nextStimulus_;
+}
+
 void RecognitionTest::prepareNewTest(TestParameters p) {
 	try {
 		prepareNewTest_(std::move(p));
@@ -30,6 +34,7 @@ void RecognitionTest::prepareNewTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
+	nextStimulus_ = list->next();
 }
 
 void RecognitionTest::initializeStimulusList(std::string directory) {
@@ -44,17 +49,17 @@ void RecognitionTest::documentTestParameters(TestParameters) {
 	documenter->documentTestParameters({});
 }
 
-void RecognitionTest::playTrial() {
+void RecognitionTest::playNextTrial() {
 	if (player->isPlaying())
 		return; 
 	documentTrialParameters({});
+	nextStimulus_ = list->next();
 }
 
 void RecognitionTest::documentTrialParameters(TrialParameters p) {
 	Documenter::TrialParameters documenting{};
 	GlobalTrialParameters global;
 	global.level_dB_Spl = p.level_dB_Spl;
-	global.stimulus = currentStimulus_;
 	documenting.global = &global;
 	documenter->documentTrialParameters(std::move(documenting));
 }

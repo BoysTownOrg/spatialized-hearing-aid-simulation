@@ -31,11 +31,12 @@ public:
 		double level_dB_Spl;
 	};
 	virtual void prepareNextTrial(TrialParameters) = 0;
-	virtual void playTrial() = 0;
+	virtual void playNextTrial() = 0;
+	virtual std::string nextStimulus() = 0;
 };
 
 class RecognitionTest : public SpeechPerceptionTest_ {
-	std::string currentStimulus_{};
+	std::string nextStimulus_{};
 	StimulusList *list;
 	StimulusPlayer *player;
 	Documenter *documenter;
@@ -48,8 +49,9 @@ public:
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
 	void prepareNextTrial(TrialParameters) override;
-	RECOGNITION_TEST_API void playTrial() override;
+	RECOGNITION_TEST_API void playNextTrial() override;
 	RECOGNITION_TEST_API bool testComplete();
+	std::string nextStimulus() override;
 private:
 	void prepareNewTest_(TestParameters);
 	void initializeStimulusList(std::string directory);

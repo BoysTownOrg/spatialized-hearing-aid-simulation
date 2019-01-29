@@ -19,6 +19,10 @@ namespace {
 		void prepareNewTest() {
 			model.prepareNewTest(newTest);
 		}
+
+		void playNextTrial() {
+			model.playNextTrial();
+		}
 	};
 
 	TEST_F(
@@ -59,15 +63,15 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
-		DISABLED_prepareNextTrialPreparesNextStimulus
+		nextStimulusReturnsThatOfList
 	) {
 		list.setContents({ "a", "b", "c" });
-		//prepareNextTrial();
-		//assertEqual("a", model.currentStimulus());
-		//prepareNextTrial();
-		//assertEqual("b", model.currentStimulus());
-		//prepareNextTrial();
-		//assertEqual("c", model.currentStimulus());
+		prepareNewTest();
+		assertEqual("a", model.nextStimulus());
+		playNextTrial();
+		assertEqual("b", model.nextStimulus());
+		playNextTrial();
+		assertEqual("c", model.nextStimulus());
 	}
 
 	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialPassesParametersToPlayer) {

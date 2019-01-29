@@ -157,7 +157,7 @@ public:
 	}
 
 	void playTrial() override {
-		trialLog_ += "playTrial ";
+		trialLog_ += "playNextTrial ";
 	}
 
 	std::string trialLog() const {
