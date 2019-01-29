@@ -13,7 +13,6 @@ public:
 	RUNTIME_ERROR(DeviceFailure);
 
 	struct Preparation {
-		std::string audioFilePath;
 		std::string audioDevice;
 		int framesPerBuffer;
 		int channels = 0;

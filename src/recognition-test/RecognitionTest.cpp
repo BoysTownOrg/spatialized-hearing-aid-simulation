@@ -61,12 +61,14 @@ void RecognitionTest::prepareNextTrial_(TrialParameters p) {
 }
 
 void RecognitionTest::prepareNextStimulus(TrialParameters p) {
-	StimulusPlayer::Preparation request;
+	StimulusPlayer::Preparation toPlay;
 	if (!failedOnLastPlayRequest)
 		currentStimulus_ = list->next();
-	request.audioFilePath = currentStimulus_;
-	request.audioDevice = p.audioDevice;
-	player->prepareToPlay(std::move(request));
+	toPlay.audioDevice = p.audioDevice;
+	toPlay.channels = 0;
+	toPlay.framesPerBuffer = 0;
+	toPlay.sampleRate = 0;
+	player->prepareToPlay(std::move(toPlay));
 }
 
 void RecognitionTest::playTrial(TrialParameters) {
@@ -85,7 +87,6 @@ void RecognitionTest::playCalibration(CalibrationParameters p) {
 void RecognitionTest::playCalibration_(CalibrationParameters p) {
 	StimulusPlayer::Preparation request;
 	request.audioDevice = p.audioDevice;
-	request.audioFilePath = p.audioFilePath;
 	player->prepareToPlay(std::move(request));
 }
 
