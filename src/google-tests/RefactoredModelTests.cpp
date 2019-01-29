@@ -48,7 +48,12 @@ public:
 		SpeechPerceptionTest::TestParameters adapted;
 		adapted.audioDirectory = p.audioDirectory;
 		adapted.testFilePath = p.testFilePath;
-		test->prepareNewTest(adapted);
+		try {
+			test->prepareNewTest(adapted);
+		}
+		catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
+			throw TestInitializationFailure{ e.what() };
+		}
 		if (p.usingSpatialization)
 			brirReader->read(p.brirFilePath);
 		if (p.usingHearingAidSimulation)
