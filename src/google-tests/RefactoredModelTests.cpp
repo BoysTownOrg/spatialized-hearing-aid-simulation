@@ -72,14 +72,18 @@ private:
 
 public:
 	void playTrial(TrialParameters p) override {
+		auto reader = readerFactory->make(test->nextStimulus());
+		IAudioPlayer::Preparation playing{};
+		playing.channels = reader->channels();
+		playing.framesPerBuffer = testParameters.chunkSize;
+		playing.sampleRate = reader->sampleRate();
 		try {
-			player->prepareToPlay({});
+			player->prepareToPlay(playing);
 		}
 		catch (const IAudioPlayer::PreparationFailure &e) {
 			throw TrialFailure{ e.what() };
 		}
 		test->playNextTrial(player);
-		auto reader = readerFactory->make(test->nextStimulus());
 		makeCompressor(
 			prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), 
 			reader->sampleRate()
