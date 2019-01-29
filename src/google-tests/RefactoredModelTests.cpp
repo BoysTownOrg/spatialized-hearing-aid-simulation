@@ -284,6 +284,16 @@ TEST_F(RefactoredModelTests, couldBeUgly) {
 	prepareNewTest();
 	playTrial();
 	assertEqual({ 1 }, compressorFactory.parameters().compressionRatios);
+	assertEqual({ 2 }, compressorFactory.parameters().crossFrequenciesHz);
+	assertEqual({ 3 }, compressorFactory.parameters().kneepointGains_dB);
+	assertEqual({ 4 }, compressorFactory.parameters().kneepoints_dBSpl);
+	assertEqual({ 5 }, compressorFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
+	EXPECT_EQ(6, compressorFactory.parameters().channels);
+	EXPECT_EQ(7, compressorFactory.parameters().sampleRate);
+	EXPECT_EQ(8, compressorFactory.parameters().attack_ms);
+	EXPECT_EQ(9, compressorFactory.parameters().release_ms);
+	EXPECT_EQ(10, compressorFactory.parameters().chunkSize);
+	EXPECT_EQ(11, compressorFactory.parameters().windowSize);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
