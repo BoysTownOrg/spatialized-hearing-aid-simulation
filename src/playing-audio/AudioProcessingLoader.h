@@ -21,7 +21,6 @@ public:
 	PLAYING_AUDIO_API bool complete() override;
 	PLAYING_AUDIO_API int channels() override;
 	PLAYING_AUDIO_API int sampleRate() override;
-	int bufferSize() override;
 
 private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);

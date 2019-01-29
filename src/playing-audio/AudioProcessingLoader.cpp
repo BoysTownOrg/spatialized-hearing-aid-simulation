@@ -55,10 +55,6 @@ std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
 	}
 }
 
-int AudioProcessingLoader::bufferSize() {
-	return processorFactory->preferredBufferSize();
-}
-
 void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
 	const auto zerosToPad = audio.size() 
 		? audio.begin()->size() - reader->remainingFrames() 

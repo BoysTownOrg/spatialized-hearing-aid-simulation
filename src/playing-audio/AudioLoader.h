@@ -19,5 +19,4 @@ public:
 	virtual void load(gsl::span<channel_type> audio) = 0;
 	virtual int sampleRate() = 0;
 	virtual int channels() = 0;
-	virtual int bufferSize() = 0;
 };

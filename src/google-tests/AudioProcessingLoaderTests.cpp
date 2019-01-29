@@ -58,13 +58,7 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
 		EXPECT_EQ(0, loader.channels());
 		EXPECT_EQ(0, loader.sampleRate());
-		EXPECT_EQ(0, loader.bufferSize());
 		EXPECT_TRUE(loader.complete());
-	}
-
-	TEST_F(AudioProcessingLoaderTests, preferredBufferSizeReturnsThatOfFactory) {
-		processorFactory.setPreferredBufferSize(1);
-		EXPECT_EQ(1, loader.bufferSize());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparePassesParametersToFactory) {

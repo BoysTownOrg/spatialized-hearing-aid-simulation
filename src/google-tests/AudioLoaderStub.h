@@ -9,7 +9,6 @@ class AudioLoaderStub : public AudioLoader {
 	LogString log_{};
 	int sampleRate_{};
 	int channels_{};
-	int bufferSize_{};
 	bool complete_{};
 public:
 	const Preparation &preparation() const {
@@ -58,14 +57,6 @@ public:
 	const LogString &log() const {
 		return log_;
 	}
-
-	void setBufferSize(int s) {
-		bufferSize_ = s;
-	}
-
-	int bufferSize() override {
-		return bufferSize_;
-	}
 };
 
 class InitializationFailingAudioLoader : public AudioLoader {
@@ -80,7 +71,6 @@ public:
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
-	int bufferSize() override { return {}; }
 	void prepare(Preparation) override {}
 };
 
@@ -100,5 +90,4 @@ public:
 	void load(gsl::span<gsl::span<float>>) override {}
 	int channels() override { return {}; }
 	int sampleRate() override { return {}; }
-	int bufferSize() override { return {}; }
 };
