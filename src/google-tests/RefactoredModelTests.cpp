@@ -556,3 +556,22 @@ TEST_F(
 	//defaultStimulusPlayer.setErrorMessage("error.");
 	//assertPlayCalibrationThrowsCalibrationFailure("error.");
 }
+
+TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
+	PreparationFailingAudioPlayer failing;
+	player = &failing;
+	RefactoredModel model{ 
+		test,
+		prescriptionReader, 
+		brirReader, 
+		compressorFactory, 
+		audioReaderFactory,
+		player
+	};
+	try {
+		model.playTrial({});
+	}
+	catch (const RefactoredModel::TrialFailure &e) {
+	}
+	EXPECT_FALSE(defaultTest.playNextTrialCalled());
+}
