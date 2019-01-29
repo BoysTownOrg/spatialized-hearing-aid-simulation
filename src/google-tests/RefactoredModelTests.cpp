@@ -119,6 +119,7 @@ public:
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
+	std::string trialLog_{};
 public:
 	const TrialParameters &trialParameters() const {
 		return trialParameters_;
@@ -134,6 +135,11 @@ public:
 
 	void prepareNextTrial(TrialParameters p) override {
 		trialParameters_ = std::move(p);
+		trialLog_ += "prepareNextTrial ";
+	}
+
+	std::string trialLog() const {
+		return trialLog_;
 	}
 };
 
