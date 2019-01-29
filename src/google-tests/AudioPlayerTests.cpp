@@ -14,7 +14,7 @@ namespace {
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
-				play();
+				prepareToPlay();
 				FAIL() << "Expected AudioPlayer::PreparationFailure";
 			}
 			catch (const AudioPlayer::PreparationFailure &e) {
@@ -22,7 +22,7 @@ namespace {
 			}
 		}
 
-		void play(AudioPlayer::Preparation r = {}) {
+		void prepareToPlay(AudioPlayer::Preparation r = {}) {
 			player.prepareToPlay(std::move(r));
 		}
 
@@ -39,9 +39,19 @@ namespace {
 		EXPECT_EQ(&player, device.controller());
 	}
 
-	TEST_F(AudioPlayerTests, playClosesOpensAndStartsStreamInOrder) {
-		play();
-		assertEqual("close open start ", device.streamLog());
+	TEST_F(AudioPlayerTests, prepareToPlayFirstClosesThenOpensStream) {
+		prepareToPlay();
+		assertEqual("close open ", device.streamLog());
+	}
+
+	TEST_F(AudioPlayerTests, prepareToPlaySetsCallbackResultToContinue) {
+		prepareToPlay();
+		assertEqual("setCallbackResultToContinue ", device.callbackLog());
+	}
+
+	TEST_F(AudioPlayerTests, playStartsStream) {
+		player.play();
+		assertEqual("start ", device.streamLog());
 	}
 
 	TEST_F(AudioPlayerTests, stopStopsStream) {
@@ -51,7 +61,7 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playWhileStreamingDoesNotAlterStream) {
 		device.setStreaming();
-		play();
+		prepareToPlay();
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
@@ -62,7 +72,7 @@ namespace {
 		loader.setBufferSize(2);
 		loader.setChannels(3);
 		loader.setSampleRate(4);
-		play(request);
+		prepareToPlay(request);
 		assertEqual("a", loader.preparation().audioFilePath);
 		EXPECT_EQ(1, loader.preparation().level_dB_Spl);
 		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
@@ -74,17 +84,12 @@ namespace {
 		StimulusPlayer::Preparation request;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		request.audioDevice = "second";
-		play(request);
+		prepareToPlay(request);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 	}
 
-	TEST_F(AudioPlayerTests, playSetsCallbackResultToContinueBeforeStartingStream) {
-		play();
-		assertEqual("setCallbackResultToContinue start ", device.callbackLog());
-	}
-
 	TEST_F(AudioPlayerTests, playPreparesLoaderPriorToQueryingIt) {
-		play();
+		prepareToPlay();
 		EXPECT_TRUE(loader.log().beginsWith("prepare "));
 	}
 
@@ -98,7 +103,7 @@ namespace {
 
 	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
 		loader.setChannels(2);
-		play();
+		prepareToPlay();
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
