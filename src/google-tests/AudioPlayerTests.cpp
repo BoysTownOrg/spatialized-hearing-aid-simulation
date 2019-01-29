@@ -84,11 +84,6 @@ namespace {
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayResetsLoaderPriorToQueryingIt) {
-		prepareToPlay();
-		EXPECT_TRUE(loader.log().beginsWith("reset "));
-	}
-
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
 		fillStreamBuffer();
 		EXPECT_FALSE(device.complete());
