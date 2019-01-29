@@ -72,6 +72,12 @@ private:
 
 public:
 	void playTrial(TrialParameters p) override {
+		try {
+			player->prepareToPlay({});
+		}
+		catch (const IAudioPlayer::PreparationFailure &e) {
+			throw TrialFailure{ e.what() };
+		}
 		test->playNextTrial(player);
 		auto reader = readerFactory->make(test->nextStimulus());
 		makeCompressor(
