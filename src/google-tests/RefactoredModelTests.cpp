@@ -120,7 +120,9 @@ public:
 	void stopCalibration() override {
 	}
 
-	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	std::vector<std::string> audioDeviceDescriptions() override { 
+		return player->audioDeviceDescriptions(); 
+	}
 
 private:
 	void readPrescriptions(Model::TestParameters p) {
