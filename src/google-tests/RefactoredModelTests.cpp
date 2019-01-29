@@ -94,45 +94,53 @@ public:
 
 class RefactoredModelTests : public ::testing::Test {
 protected:
-	RefactoredModel::TestParameters test{};
+	RefactoredModel::TestParameters testing{};
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	RefactoredModel model{ &prescriptionReader, &brirReader };
 
 	void initializeTest() {
-		model.initializeTest(test);
+		model.initializeTest(testing);
 	}
 };
 
 TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
-	test.usingHearingAidSimulation = true;
-	test.leftDslPrescriptionFilePath = "a";
-	test.rightDslPrescriptionFilePath = "b";
+	testing.usingHearingAidSimulation = true;
+	testing.leftDslPrescriptionFilePath = "a";
+	testing.rightDslPrescriptionFilePath = "b";
 	initializeTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
 TEST_F(RefactoredModelTests, initializeTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
-	test.usingHearingAidSimulation = false;
-	test.leftDslPrescriptionFilePath = "a";
-	test.rightDslPrescriptionFilePath = "b";
+	testing.usingHearingAidSimulation = false;
+	testing.leftDslPrescriptionFilePath = "a";
+	testing.rightDslPrescriptionFilePath = "b";
 	initializeTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().empty());
 }
 
 TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
-	test.usingSpatialization = true;
-	test.brirFilePath = "a";
+	testing.usingSpatialization = true;
+	testing.brirFilePath = "a";
 	initializeTest();
 	assertEqual("a", brirReader.filePath());
 }
 
 TEST_F(RefactoredModelTests, initializeTestDoesNotReadBrirWhenNotUsingSpatialization) {
-	test.usingSpatialization = false;
-	test.brirFilePath = "a";
+	testing.usingSpatialization = false;
+	testing.brirFilePath = "a";
 	initializeTest();
 	EXPECT_TRUE(brirReader.filePath().empty());
+}
+
+TEST_F(RefactoredModelTests, initializeTestPassesParametersToSpeechPerceptionTest) {
+	testing.audioDirectory = "a";
+	testing.testFilePath = "b";
+	initializeTest();
+	assertEqual("a", test.initialization().audioDirectory);
+	assertEqual("b", test.initialization().testFilePath);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {

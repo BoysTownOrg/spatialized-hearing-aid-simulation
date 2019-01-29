@@ -66,7 +66,7 @@ FltkCalibrationView::FltkCalibrationView(int x, int y, int w, int h, const char 
 
 FltkSetupView::FltkSetupView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
-	testFilePath_(250, 50, 200, 45, "test file path"),
+	testFilePath_(250, 50, 200, 45, "testing file path"),
 	browseTestFilePath(460, 50, 60, 45, "browse"),
 	subjectId_(250, 100, 200, 45, "subject ID"),
 	testerId_(250, 150, 200, 45, "tester ID"),
