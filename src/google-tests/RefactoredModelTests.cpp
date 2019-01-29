@@ -65,6 +65,13 @@ public:
 		adapted.level_dB_Spl = p.level_dB_Spl;
 		test->prepareNextTrial(adapted);
 		test->playTrial();
+
+		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath));
+		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath));
+	}
+
+private:
+	void makeCompressor(PrescriptionReader::Dsl dsl) {
 		FilterbankCompressor::Parameters compression;
 		compression.attack_ms = testParameters.attack_ms;
 		compression.release_ms = testParameters.release_ms;
@@ -72,8 +79,6 @@ public:
 		compression.windowSize = testParameters.windowSize;
 
 		compression.sampleRate = processor->sampleRate();
-
-		auto dsl = prescriptionReader->read({});
 		compression.compressionRatios = dsl.compressionRatios;
 		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
 		compression.kneepointGains_dB = dsl.kneepointGains_dB;
@@ -83,6 +88,7 @@ public:
 		compressorFactory->make(compression);
 	}
 
+public:
 	std::vector<std::string> audioDeviceDescriptions() override {
 		return {};
 	}
@@ -110,18 +116,19 @@ private:
 };
 
 #include "ArgumentCollection.h"
+#include <map>
 
 class PrescriptionReaderStub : public PrescriptionReader {
-	Dsl dsl_;
 	ArgumentCollection<std::string> filePaths_{};
+	std::map<std::string, Dsl> prescriptions_{};
 public:
-	void setDsl(Dsl dsl) {
-		dsl_ = std::move(dsl);
+	void addPrescription(std::string filePath, Dsl dsl) {
+		prescriptions_[filePath] = dsl;
 	}
 
 	Dsl read(std::string filePath) override {
-		filePaths_.push_back(std::move(filePath));
-		return dsl_;
+		filePaths_.push_back(filePath);
+		return prescriptions_[filePath];
 	}
 
 	ArgumentCollection<std::string> filePaths() const {
@@ -273,34 +280,57 @@ TEST_F(RefactoredModelTests, playTrialPreparesSpeechPerceptionTestBeforePlaying)
 	assertEqual("prepareNextTrial playTrial ", test.trialLog());
 }
 
-TEST_F(RefactoredModelTests, couldBeUgly) {
-	PrescriptionReader::Dsl dsl;
-	dsl.compressionRatios = { 1 };
-	dsl.crossFrequenciesHz = { 2 };
-	dsl.kneepointGains_dB = { 3 };
-	dsl.kneepoints_dBSpl = { 4 };
-	dsl.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-	dsl.channels = 6;
-	prescriptionReader.setDsl(dsl);
+TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
+	PrescriptionReader::Dsl leftPrescription;
+	leftPrescription.compressionRatios = { 1 };
+	leftPrescription.crossFrequenciesHz = { 2 };
+	leftPrescription.kneepointGains_dB = { 3 };
+	leftPrescription.kneepoints_dBSpl = { 4 };
+	leftPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+	leftPrescription.channels = 6;
+	prescriptionReader.addPrescription("leftFilePath", leftPrescription);
+	PrescriptionReader::Dsl rightPrescription;
+	rightPrescription.compressionRatios = { 1, 1 };
+	rightPrescription.crossFrequenciesHz = { 2, 2 };
+	rightPrescription.kneepointGains_dB = { 3, 3 };
+	rightPrescription.kneepoints_dBSpl = { 4, 4 };
+	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
+	rightPrescription.channels = 12;
+	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
 	processor.setSampleRate(7);
 	testing.usingHearingAidSimulation = true;
 	testing.attack_ms = 8;
 	testing.release_ms = 9;
 	testing.chunkSize = 10;
 	testing.windowSize = 11;
+	testing.leftDslPrescriptionFilePath = "leftFilePath";
+	testing.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
 	playTrial();
-	assertEqual({ 1 }, compressorFactory.parameters().compressionRatios);
-	assertEqual({ 2 }, compressorFactory.parameters().crossFrequenciesHz);
-	assertEqual({ 3 }, compressorFactory.parameters().kneepointGains_dB);
-	assertEqual({ 4 }, compressorFactory.parameters().kneepoints_dBSpl);
-	assertEqual({ 5 }, compressorFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
-	EXPECT_EQ(6, compressorFactory.parameters().channels);
-	EXPECT_EQ(7, compressorFactory.parameters().sampleRate);
-	EXPECT_EQ(8, compressorFactory.parameters().attack_ms);
-	EXPECT_EQ(9, compressorFactory.parameters().release_ms);
-	EXPECT_EQ(10, compressorFactory.parameters().chunkSize);
-	EXPECT_EQ(11, compressorFactory.parameters().windowSize);
+	auto left = compressorFactory.parameters().at(0);
+	assertEqual({ 1 }, left.compressionRatios);
+	assertEqual({ 2 }, left.crossFrequenciesHz);
+	assertEqual({ 3 }, left.kneepointGains_dB);
+	assertEqual({ 4 }, left.kneepoints_dBSpl);
+	assertEqual({ 5 }, left.broadbandOutputLimitingThresholds_dBSpl);
+	EXPECT_EQ(6, left.channels);
+	EXPECT_EQ(7, left.sampleRate);
+	EXPECT_EQ(8, left.attack_ms);
+	EXPECT_EQ(9, left.release_ms);
+	EXPECT_EQ(10, left.chunkSize);
+	EXPECT_EQ(11, left.windowSize);
+	auto right = compressorFactory.parameters().at(1);
+	assertEqual({ 1, 1 }, right.compressionRatios);
+	assertEqual({ 2, 2 }, right.crossFrequenciesHz);
+	assertEqual({ 3, 3 }, right.kneepointGains_dB);
+	assertEqual({ 4, 4 }, right.kneepoints_dBSpl);
+	assertEqual({ 5, 5 }, right.broadbandOutputLimitingThresholds_dBSpl);
+	EXPECT_EQ(12, right.channels);
+	EXPECT_EQ(7, right.sampleRate);
+	EXPECT_EQ(8, right.attack_ms);
+	EXPECT_EQ(9, right.release_ms);
+	EXPECT_EQ(10, right.chunkSize);
+	EXPECT_EQ(11, right.windowSize);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {

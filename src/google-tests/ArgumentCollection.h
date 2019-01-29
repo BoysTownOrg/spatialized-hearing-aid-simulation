@@ -15,4 +15,8 @@ public:
 	auto empty() {
 		return collection.empty();
 	}
+
+	auto at(typename std::vector<T>::size_type position) {
+		return collection.at(position);
+	}
 };

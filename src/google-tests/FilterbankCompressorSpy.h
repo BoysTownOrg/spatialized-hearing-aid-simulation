@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ArgumentCollection.h"
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
 class FilterbankCompressorSpy : public FilterbankCompressor {
@@ -92,7 +93,7 @@ public:
 };
 
 class FilterbankCompressorSpyFactory : public FilterbankCompressorFactory {
-	FilterbankCompressor::Parameters parameters_{};
+	ArgumentCollection<FilterbankCompressor::Parameters> parameters_{};
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	explicit FilterbankCompressorSpyFactory(
@@ -101,14 +102,14 @@ public:
 	) :
 		compressor{ std::move(compressor) } {}
 
-	const FilterbankCompressor::Parameters &parameters() const {
+	ArgumentCollection<FilterbankCompressor::Parameters> parameters() const {
 		return parameters_;
 	}
 
 	std::shared_ptr<FilterbankCompressor> make(
 		FilterbankCompressor::Parameters p
 	) override {
-		parameters_ = std::move(p);
+		parameters_.push_back(std::move(p));
 		return compressor;
 	}
 };

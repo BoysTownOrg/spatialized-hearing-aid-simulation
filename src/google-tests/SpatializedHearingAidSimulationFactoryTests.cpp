@@ -91,10 +91,10 @@ TEST_F(
 	global.chunkSize = 4;
 	global.windowSize = 8;
 	factory.assertCanBeMade(&global);
-	EXPECT_EQ(1, compressorFactory->parameters().attack_ms);
-	EXPECT_EQ(2, compressorFactory->parameters().release_ms);
-	EXPECT_EQ(4, compressorFactory->parameters().chunkSize);
-	EXPECT_EQ(8, compressorFactory->parameters().windowSize);
+	EXPECT_EQ(1, compressorFactory->parameters().at(0).attack_ms);
+	EXPECT_EQ(2, compressorFactory->parameters().at(0).release_ms);
+	EXPECT_EQ(4, compressorFactory->parameters().at(0).chunkSize);
+	EXPECT_EQ(8, compressorFactory->parameters().at(0).windowSize);
 }
 
 TEST_F(
