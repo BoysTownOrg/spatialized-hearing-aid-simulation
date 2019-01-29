@@ -417,3 +417,15 @@ TEST_F(
 	test = &failing;
 	assertPreparingNewTestThrowsTestInitializationFailure("error.");
 }
+
+TEST_F(
+	RefactoredModelFailureTests, 
+	prepareNewTestThrowsTestInitializationFailureWhenBrirReaderFails
+) {
+	FailingBrirReader failing;
+	failing.setErrorMessage("irrelevant.");
+	brirReader = &failing;
+	testing.usingSpatialization = true;
+	testing.brirFilePath = "a";
+	assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
+}
