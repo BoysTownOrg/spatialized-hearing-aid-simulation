@@ -16,22 +16,14 @@ class NullReader : public AudioFrameReader {
 };
 
 AudioProcessingLoader::AudioProcessingLoader(
-	AudioFrameReaderFactory *readerFactory, 
-	AudioFrameProcessorFactory *processorFactory
+	AudioFrameReaderFactory *readerFactory
 ) :
 	reader{std::make_shared<NullReader>()},
 	processor{std::make_shared<NullProcessor>()},
-	readerFactory{ readerFactory },
-	processorFactory{ processorFactory } {}
+	readerFactory{ readerFactory } {}
 
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
-	AudioFrameProcessorFactory::Parameters processing;
-//    processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
-	processing.channels = reader->channels();
-	processing.sampleRate = reader->sampleRate();
-	processor = makeProcessor(std::move(processing));
-	reader->reset();
 	paddedZeros = 0;
 }
 
@@ -40,17 +32,6 @@ std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string 
 		return readerFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw PreparationFailure{ e.what() };
-	}
-}
-
-std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
-	AudioFrameProcessorFactory::Parameters p
-) {
-	try {
-		return processorFactory->make(std::move(p));
-	}
-	catch (const AudioFrameProcessorFactory::CreateError &e) {
 		throw PreparationFailure{ e.what() };
 	}
 }
@@ -82,4 +63,8 @@ int AudioProcessingLoader::channels() {
 
 int AudioProcessingLoader::sampleRate() {
 	return reader->sampleRate();
+}
+
+void AudioProcessingLoader::updateProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+	processor = std::move(p);
 }
