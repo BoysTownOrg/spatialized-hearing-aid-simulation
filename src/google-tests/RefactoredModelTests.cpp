@@ -18,6 +18,7 @@ public:
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
 	virtual void playTrial() = 0;
+	virtual std::string nextStimulus() = 0;
 };
 
 class RefactoredModel : public Model {
@@ -58,20 +59,20 @@ public:
 
 	void playTrial(TrialParameters p) override {
 		test->playTrial();
-
-		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath));
-		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath));
+		auto reader = readerFactory->make(test->nextStimulus());
+		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), reader->sampleRate());
+		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), reader->sampleRate());
 	}
 
 private:
-	void makeCompressor(PrescriptionReader::Dsl dsl) {
+	void makeCompressor(PrescriptionReader::Dsl dsl, int sampleRate) {
 		FilterbankCompressor::Parameters compression;
 		compression.attack_ms = testParameters.attack_ms;
 		compression.release_ms = testParameters.release_ms;
 		compression.chunkSize = testParameters.chunkSize;
 		compression.windowSize = testParameters.windowSize;
 
-		compression.sampleRate = readerFactory->make({})->sampleRate();
+		compression.sampleRate = sampleRate;
 		compression.compressionRatios = dsl.compressionRatios;
 		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
 		compression.kneepointGains_dB = dsl.kneepointGains_dB;
@@ -173,6 +174,10 @@ public:
 
 	void setNextStimulus(std::string s) {
 		nextStimulus_ = std::move(s);
+	}
+
+	std::string nextStimulus() override {
+		return nextStimulus_;
 	}
 };
 
