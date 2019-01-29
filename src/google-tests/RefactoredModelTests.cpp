@@ -88,10 +88,6 @@ private:
 	}
 
 public:
-	std::vector<std::string> audioDeviceDescriptions() override {
-		return {};
-	}
-
 	bool testComplete() override {
 		return false;
 	}

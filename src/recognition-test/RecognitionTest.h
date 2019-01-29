@@ -30,8 +30,6 @@ public:
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
 	RECOGNITION_TEST_API void playTrial(TrialParameters) override;
-	RECOGNITION_TEST_API void prepareNextTrial(TrialParameters);
-	std::vector<std::string> audioDeviceDescriptions() override;
 	bool testComplete() override;
 	void playCalibration(CalibrationParameters) override;
 	void stopCalibration() override;
@@ -41,7 +39,5 @@ private:
 	void initializeDocumenter(std::string testFilePath);
 	void documentTestParameters(TestParameters);
 	void documentTrialParameters(TrialParameters);
-	void prepareNextTrial_(TrialParameters);
 	void playCalibration_(CalibrationParameters);
-	void prepareNextStimulus(TrialParameters);
 };

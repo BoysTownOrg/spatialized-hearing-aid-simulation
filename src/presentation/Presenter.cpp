@@ -5,7 +5,7 @@ Presenter::Presenter(Model *model, View *view) :
 	view{ view }
 {
 	view->subscribe(this);
-	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
+//	view->populateAudioDeviceMenu(model->audioDeviceDescriptions());
 	view->showTestSetup();
 	toggleSpatializationActivation();
 	toggleHearingAidSimulationActivation();

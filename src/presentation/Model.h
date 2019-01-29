@@ -35,7 +35,6 @@ public:
 	virtual void playTrial(TrialParameters) = 0;
 	RUNTIME_ERROR(TrialFailure);
 
-	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual bool testComplete() = 0;
 
 	struct CalibrationParameters {

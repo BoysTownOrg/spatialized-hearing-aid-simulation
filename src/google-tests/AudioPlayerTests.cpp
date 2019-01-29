@@ -66,7 +66,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
-		StimulusPlayer::Preparation request;
+		AudioPlayer::Preparation request;
 		request.framesPerBuffer = 2;
 		request.channels = 3;
 		request.sampleRate = 4;
@@ -77,7 +77,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playFindsDeviceIndex) {
-		StimulusPlayer::Preparation request;
+		AudioPlayer::Preparation request;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		request.audioDevice = "second";
 		prepareToPlay(request);
@@ -98,7 +98,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
-		StimulusPlayer::Preparation request;
+		AudioPlayer::Preparation request;
 		request.channels = 2;
 		prepareToPlay(request);
 		float left{};

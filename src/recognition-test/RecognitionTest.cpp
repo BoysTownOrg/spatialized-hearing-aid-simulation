@@ -42,52 +42,16 @@ void RecognitionTest::documentTestParameters(TestParameters p) {
 	documenter->documentTestParameters(std::move(documenting));
 }
 
-void RecognitionTest::prepareNextTrial(TrialParameters p) {
+void RecognitionTest::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return; 
-	prepareNextTrial_(p);
 	documentTrialParameters(std::move(p));
-	failedOnLastPlayRequest = false;
 }
 
-void RecognitionTest::prepareNextTrial_(TrialParameters p) {
-	try {
-		prepareNextStimulus(std::move(p));
-	}
-	catch (const StimulusPlayer::PreparationFailure &e) {
-		failedOnLastPlayRequest = true;
-		throw TrialFailure{ e.what() };
-	}
+void RecognitionTest::playCalibration(CalibrationParameters) {
 }
 
-void RecognitionTest::prepareNextStimulus(TrialParameters p) {
-	StimulusPlayer::Preparation toPlay;
-	if (!failedOnLastPlayRequest)
-		currentStimulus_ = list->next();
-	toPlay.audioDevice = p.audioDevice;
-	toPlay.channels = 0;
-	toPlay.framesPerBuffer = 0;
-	toPlay.sampleRate = 0;
-	player->prepareToPlay(std::move(toPlay));
-}
-
-void RecognitionTest::playTrial(TrialParameters) {
-
-}
-
-void RecognitionTest::playCalibration(CalibrationParameters p) {
-	try {
-		playCalibration_(std::move(p));
-	}
-	catch (const StimulusPlayer::PreparationFailure & e) {
-		throw CalibrationFailure{ e.what() };
-	}
-}
-
-void RecognitionTest::playCalibration_(CalibrationParameters p) {
-	StimulusPlayer::Preparation request;
-	request.audioDevice = p.audioDevice;
-	player->prepareToPlay(std::move(request));
+void RecognitionTest::playCalibration_(CalibrationParameters) {
 }
 
 void RecognitionTest::stopCalibration() {
@@ -101,8 +65,4 @@ void RecognitionTest::documentTrialParameters(TrialParameters p) {
 	global.stimulus = currentStimulus_;
 	documenting.global = &global;
 	documenter->documentTrialParameters(std::move(documenting));
-}
-
-std::vector<std::string> RecognitionTest::audioDeviceDescriptions() {
-	return player->audioDeviceDescriptions();
 }

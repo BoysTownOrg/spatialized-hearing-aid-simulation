@@ -17,6 +17,10 @@ void AudioPlayer::throwIfDeviceFailed() {
 		throw exception{ device->errorMessage() };
 }
 
+void AudioPlayer::setAudioLoader(AudioLoader *a) {
+	loader = a;
+}
+
 void AudioPlayer::prepareToPlay(Preparation p) {
 	if (device->streaming())
 		return;
@@ -24,7 +28,6 @@ void AudioPlayer::prepareToPlay(Preparation p) {
 }
 
 void AudioPlayer::prepareToPlay_(Preparation p) {
-	loader->reset();
 	audio.resize(p.channels);
 	reopenStream(std::move(p));
 }
