@@ -6,6 +6,7 @@
 class AudioProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioProcessor);
+	virtual int sampleRate() = 0;
 };
 
 class SpeechPerceptionTest {
@@ -69,6 +70,8 @@ public:
 		compression.release_ms = testParameters.release_ms;
 		compression.chunkSize = testParameters.chunkSize;
 		compression.windowSize = testParameters.windowSize;
+
+		compression.sampleRate = processor->sampleRate();
 
 		auto dsl = prescriptionReader->read({});
 		compression.compressionRatios = dsl.compressionRatios;
@@ -187,6 +190,10 @@ class AudioProcessorStub : public AudioProcessor {
 public:
 	void setSampleRate(int fs) {
 		sampleRate_ = fs;
+	}
+
+	int sampleRate() override {
+		return sampleRate_;
 	}
 };
 
