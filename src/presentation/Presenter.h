@@ -56,8 +56,9 @@ private:
 		std::string,
 		std::function<void(std::string)>
 	);
-	void prepareTest();
-	void initializeModel();
+	void prepareNewTest();
+	Model::TestParameters testParameters(GlobalTestParameters *);
+	Model::TrialParameters trialParameters();
 	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);

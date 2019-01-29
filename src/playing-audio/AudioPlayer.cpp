@@ -17,10 +17,10 @@ void AudioPlayer::throwIfDeviceFailed() {
 		throw exception{ device->errorMessage() };
 }
 
-void AudioPlayer::prepareToPlay(Preparation request) {
+void AudioPlayer::prepareToPlay(Preparation p) {
 	if (device->streaming())
 		return;
-	prepareToPlay_(std::move(request));
+	prepareToPlay_(std::move(p));
 }
 
 void AudioPlayer::prepareToPlay_(Preparation p) {

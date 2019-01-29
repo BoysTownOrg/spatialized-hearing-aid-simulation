@@ -103,39 +103,39 @@ void Presenter::browseForBrir() {
 
 void Presenter::confirmTestSetup() {
 	try {
-		prepareTest();
+		prepareNewTest();
 	}
 	catch (const std::runtime_error &failure) {
 		view->showErrorDialog(failure.what());
 	}
 }
 
-void Presenter::prepareTest() {
-	initializeModel();
+void Presenter::prepareNewTest() {
+	GlobalTestParameters global;
+	model->prepareNewTest(testParameters(&global));
 	view->hideTestSetup();
 	view->showTesterView();
 }
 
-void Presenter::initializeModel() {
+Model::TestParameters Presenter::testParameters(GlobalTestParameters *global) {
 	Model::TestParameters test;
-	GlobalTestParameters global;
-	global.subjectId = view->subjectId();
-	global.testerId = view->testerId();
-	global.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	global.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	global.brirFilePath = view->brirFilePath();
+	global->subjectId = view->subjectId();
+	global->testerId = view->testerId();
+	global->leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	global->rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	global->brirFilePath = view->brirFilePath();
 	if (view->usingHearingAidSimulation()) {
-		global.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		global.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		global.release_ms = convertToDouble(view->release_ms(), "release time");
-		global.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		global->chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+		global->windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		global->release_ms = convertToDouble(view->release_ms(), "release time");
+		global->attack_ms = convertToDouble(view->attack_ms(), "attack time");
 	}
-	global.usingSpatialization = view->usingSpatialization();
-	global.usingHearingAidSimulation = view->usingHearingAidSimulation();
+	global->usingSpatialization = view->usingSpatialization();
+	global->usingHearingAidSimulation = view->usingHearingAidSimulation();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
-	test.global = &global;
-	model->prepareNewTest(std::move(test));
+	test.global = global;
+	return test;
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {
@@ -183,11 +183,15 @@ void Presenter::playTrial() {
 }
 
 void Presenter::playTrial_() {
-	Model::TrialParameters p;
-	p.audioDevice = view->audioDevice();
-	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-	model->playTrial(std::move(p));
+	model->playTrial(trialParameters());
 	switchViewIfTestComplete();
+}
+
+Model::TrialParameters Presenter::trialParameters() {
+	Model::TrialParameters trial;
+	trial.audioDevice = view->audioDevice();
+	trial.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	return trial;
 }
 
 void Presenter::switchViewIfTestComplete() {
