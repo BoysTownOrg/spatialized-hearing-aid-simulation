@@ -13,7 +13,7 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
-	virtual void playNextTrial() = 0;
+	virtual void playNextTrial(StimulusPlayer *) = 0;
 	virtual std::string nextStimulus() = 0;
 };
 
@@ -24,6 +24,7 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 	FilterbankCompressorFactory *compressorFactory;
 	AudioFrameReaderFactory *readerFactory;
+	StimulusPlayer *player;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
@@ -31,13 +32,14 @@ public:
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
 		AudioFrameReaderFactory *readerFactory,
-		StimulusPlayer *
+		StimulusPlayer *player
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
 		test{ test },
 		compressorFactory{ compressorFactory },
-		readerFactory{ readerFactory } {}
+		readerFactory{ readerFactory },
+		player{ player } {}
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters = p;
@@ -52,7 +54,7 @@ public:
 	}
 
 	void playTrial(TrialParameters p) override {
-		test->playNextTrial();
+		test->playNextTrial(player);
 		auto reader = readerFactory->make(test->nextStimulus());
 		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), reader->sampleRate());
 		makeCompressor(prescriptionReader->read(testParameters.rightDslPrescriptionFilePath), reader->sampleRate());
@@ -160,7 +162,8 @@ public:
 		testParameters_ = std::move(p);
 	}
 
-	void playNextTrial() override {
+	void playNextTrial(StimulusPlayer *p) override {
+		player_ = p;
 		trialLog_ += "playNextTrial ";
 	}
 
