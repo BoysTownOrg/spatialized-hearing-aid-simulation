@@ -6,7 +6,6 @@
 class AudioProcessor {
 public:
 	INTERFACE_OPERATIONS(AudioProcessor);
-	virtual int sampleRate() = 0;
 };
 
 class SpeechPerceptionTest {
@@ -78,7 +77,7 @@ private:
 		compression.chunkSize = testParameters.chunkSize;
 		compression.windowSize = testParameters.windowSize;
 
-		compression.sampleRate = processor->sampleRate();
+		//compression.sampleRate = processor->sampleRate();
 		compression.compressionRatios = dsl.compressionRatios;
 		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
 		compression.kneepointGains_dB = dsl.kneepointGains_dB;
@@ -193,15 +192,6 @@ public:
 };
 
 class AudioProcessorStub : public AudioProcessor {
-	int sampleRate_{};
-public:
-	void setSampleRate(int fs) {
-		sampleRate_ = fs;
-	}
-
-	int sampleRate() override {
-		return sampleRate_;
-	}
 };
 
 #include "assert-utility.h"
@@ -297,7 +287,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
 	rightPrescription.channels = 12;
 	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
-	processor.setSampleRate(7);
+	//processor.setSampleRate(7);
 	testing.usingHearingAidSimulation = true;
 	testing.attack_ms = 8;
 	testing.release_ms = 9;
