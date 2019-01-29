@@ -74,18 +74,12 @@ namespace {
 		assertEqual("c", model.nextStimulus());
 	}
 
-	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialPassesParametersToPlayer) {
-		nextTrial.audioDevice = "a";
-		//prepareNextTrial();
-		//assertEqual("a", player.preparation().audioDevice);
-	}
-
-	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialDoesNotAdvanceListWhenPlayerPlaying) {
+	TEST_F(RecognitionTestTests, playNextTrialDoesNotAdvanceListWhenPlayerPlaying) {
 		list.setContents({ "a", "b", "c" });
-		//prepareNextTrial();
+		prepareNewTest();
 		player.setPlaying();
-		//prepareNextTrial();
-		//assertEqual("a", model.currentStimulus());
+		playNextTrial();
+		assertEqual("a", model.nextStimulus());
 	}
 
 	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialDoesNotAdvanceListWhenPlayerFails) {
