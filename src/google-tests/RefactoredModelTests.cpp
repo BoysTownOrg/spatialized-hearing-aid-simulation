@@ -55,7 +55,7 @@ public:
 			throw TestInitializationFailure{ e.what() };
 		}
 		if (p.usingSpatialization)
-			brirReader->read(p.brirFilePath);
+			readBrir(p);
 		if (p.usingHearingAidSimulation)
 			readPrescriptions(p);
 	}
@@ -105,6 +105,15 @@ private:
 		}
 		catch (const PrescriptionReader::ReadFailure &) {
 			throw TestInitializationFailure{ "Unable to read '" + p.leftDslPrescriptionFilePath + "'." };
+		}
+	}
+
+	void readBrir(Model::TestParameters p) {
+		try {
+			brirReader->read(p.brirFilePath);
+		}
+		catch (const BrirReader::ReadFailure &) {
+			throw TestInitializationFailure{ "Unable to read '" + p.brirFilePath + "'." };
 		}
 	}
 };
