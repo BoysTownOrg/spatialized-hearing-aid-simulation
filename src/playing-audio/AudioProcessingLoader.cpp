@@ -44,48 +44,6 @@ std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string 
 	}
 }
 
-class RmsComputer {
-    std::vector<std::vector<float>> entireAudioFile;
-public:
-	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile(
-			reader.channels(), 
-			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
-		)
-	{
-		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile)
-			pointers.push_back({ channel });
-		reader.read(pointers);
-	}
-
-    double compute(int channel) {
-		return rms(entireAudioFile.at(channel));
-    }
-
-private:
-	template<typename T>
-	T rms(std::vector<T> x) {
-		return std::sqrt(
-			std::accumulate(
-				x.begin(),
-				x.end(),
-				T{ 0 },
-				[](T a, T b) { return a += b * b; }
-			) / x.size()
-		);
-	}
-};
-
-std::vector<double> AudioProcessingLoader::computeChannelScalars(double level_dB_Spl) {
-    RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (level_dB_Spl - processorFactory->fullScale_dB_Spl()) / 20.0);
-    std::vector<double> scalars{};
-    for (int i = 0; i < reader->channels(); ++i)
-        scalars.push_back(desiredRms / rms.compute(i));
-    return scalars;
-}
-
 std::shared_ptr<AudioFrameProcessor> AudioProcessingLoader::makeProcessor(
 	AudioFrameProcessorFactory::Parameters p
 ) {
