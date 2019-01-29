@@ -205,6 +205,11 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToSpeechPerceptionTest) {
 	EXPECT_EQ(1.1, test.trialParameters().level_dB_Spl);
 }
 
+TEST_F(RefactoredModelTests, playTrialPreparesSpeechPerceptionTestBeforePlaying) {
+	playTrial();
+	assertEqual("prepareNextTrial playTrial ", test.trialLog());
+}
+
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters testing{};
