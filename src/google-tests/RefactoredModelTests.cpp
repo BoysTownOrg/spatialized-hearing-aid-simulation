@@ -2,13 +2,23 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <presentation/Model.h>
 
+class SpeechPerceptionTest {
+public:
+	INTERFACE_OPERATIONS(SpeechPerceptionTest);
+	struct TestParameters {
+		std::string audioDirectory;
+		std::string testFilePath;
+	};
+};
+
 class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 public:
 	RefactoredModel(
 		PrescriptionReader* prescriptionReader,
-		BrirReader *brirReader
+		BrirReader *brirReader,
+		SpeechPerceptionTest *
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader } {}
@@ -89,6 +99,14 @@ public:
 	}
 };
 
+class SpeechPerceptionTestStub : public SpeechPerceptionTest {
+	TestParameters testParameters_{};
+public:
+	const TestParameters &testParameters() const {
+		return testParameters_;
+	}
+};
+
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
@@ -97,7 +115,8 @@ protected:
 	RefactoredModel::TestParameters testing{};
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
-	RefactoredModel model{ &prescriptionReader, &brirReader };
+	SpeechPerceptionTestStub test{};
+	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
 
 	void initializeTest() {
 		model.initializeTest(testing);
@@ -139,19 +158,20 @@ TEST_F(RefactoredModelTests, initializeTestPassesParametersToSpeechPerceptionTes
 	testing.audioDirectory = "a";
 	testing.testFilePath = "b";
 	initializeTest();
-	assertEqual("a", test.initialization().audioDirectory);
-	assertEqual("b", test.initialization().testFilePath);
+	assertEqual("a", test.testParameters().audioDirectory);
+	assertEqual("b", test.testParameters().testFilePath);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
 protected:
-	RefactoredModel::TestParameters test{};
+	RefactoredModel::TestParameters testing{};
 	FailingPrescriptionReader prescriptionReader{};
 	BrirReaderStub brirReader{};
-	RefactoredModel model{ &prescriptionReader, &brirReader };
+	SpeechPerceptionTestStub test{};
+	RefactoredModel model{ &prescriptionReader, &brirReader, &test };
 
 	void initializeTest() {
-		model.initializeTest(test);
+		model.initializeTest(testing);
 	}
 };
 
@@ -161,8 +181,8 @@ TEST_F(
 ) {
 	prescriptionReader.setErrorMessage("irrelevant");
 	try {
-		test.usingHearingAidSimulation = true;
-		test.leftDslPrescriptionFilePath = "a";
+		testing.usingHearingAidSimulation = true;
+		testing.leftDslPrescriptionFilePath = "a";
 		initializeTest();
 		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 	}
