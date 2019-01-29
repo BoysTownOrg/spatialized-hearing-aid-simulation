@@ -26,22 +26,28 @@ public:
 };
 
 class RefactoredModel : public Model {
+	TestParameters testParameters{};
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *test;
+	AudioProcessor *processor;
+	FilterbankCompressorFactory *compressorFactory;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
-		AudioProcessor *,
+		AudioProcessor *processor,
 		PrescriptionReader* prescriptionReader,
 		BrirReader *brirReader,
-		FilterbankCompressorFactory *
+		FilterbankCompressorFactory *compressorFactory
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
-		test{ test } {}
+		test{ test },
+		processor{ processor },
+		compressorFactory{ compressorFactory } {}
 
 	void prepareNewTest(TestParameters p) override {
+		testParameters = p;
 		SpeechPerceptionTest::TestParameters adapted;
 		adapted.audioDirectory = p.audioDirectory;
 		adapted.testFilePath = p.testFilePath;
@@ -58,6 +64,20 @@ public:
 		adapted.level_dB_Spl = p.level_dB_Spl;
 		test->prepareNextTrial(adapted);
 		test->playTrial();
+		FilterbankCompressor::Parameters compression;
+		compression.attack_ms = testParameters.attack_ms;
+		compression.release_ms = testParameters.release_ms;
+		compression.chunkSize = testParameters.chunkSize;
+		compression.windowSize = testParameters.windowSize;
+
+		auto dsl = prescriptionReader->read({});
+		compression.compressionRatios = dsl.compressionRatios;
+		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
+		compression.kneepointGains_dB = dsl.kneepointGains_dB;
+		compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
+		compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
+		compression.channels = dsl.channels;
+		compressorFactory->make(compression);
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override {
