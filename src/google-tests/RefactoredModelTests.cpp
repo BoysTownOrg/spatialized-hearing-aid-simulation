@@ -15,6 +15,7 @@ public:
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
+	virtual void prepareNextTrial(TrialParameters) = 0;
 };
 
 class RefactoredModel : public Model {
@@ -42,7 +43,11 @@ public:
 			readPrescriptions(p);
 	}
 
-	void playTrial(TrialParameters) override {
+	void playTrial(TrialParameters p) override {
+		SpeechPerceptionTest::TrialParameters adapted;
+		adapted.audioDevice = p.audioDevice;
+		adapted.level_dB_Spl = p.level_dB_Spl;
+		test->prepareNextTrial(adapted);
 	}
 
 	std::vector<std::string> audioDeviceDescriptions() override {
@@ -125,6 +130,10 @@ public:
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
+	}
+
+	void prepareNextTrial(TrialParameters p) override {
+		trialParameters_ = std::move(p);
 	}
 };
 
