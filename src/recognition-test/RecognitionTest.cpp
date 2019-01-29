@@ -26,10 +26,6 @@ void RecognitionTest::prepareNewTest(TestParameters p) {
 	}
 }
 
-void RecognitionTest::prepareNextTrial(TrialParameters)
-{
-}
-
 void RecognitionTest::prepareNewTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
@@ -52,14 +48,5 @@ void RecognitionTest::documentTestParameters(TestParameters) {
 void RecognitionTest::playNextTrial() {
 	if (player->isPlaying())
 		return; 
-	documentTrialParameters({});
 	nextStimulus_ = list->next();
-}
-
-void RecognitionTest::documentTrialParameters(TrialParameters p) {
-	Documenter::TrialParameters documenting{};
-	GlobalTrialParameters global;
-	global.level_dB_Spl = p.level_dB_Spl;
-	documenting.global = &global;
-	documenter->documentTrialParameters(std::move(documenting));
 }

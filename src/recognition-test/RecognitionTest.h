@@ -26,11 +26,6 @@ public:
 	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);
 
-	struct TrialParameters {
-		std::string audioDevice;
-		double level_dB_Spl;
-	};
-	virtual void prepareNextTrial(TrialParameters) = 0;
 	virtual void playNextTrial() = 0;
 	virtual std::string nextStimulus() = 0;
 };
@@ -48,7 +43,6 @@ public:
 		Documenter *
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
-	void prepareNextTrial(TrialParameters) override;
 	RECOGNITION_TEST_API void playNextTrial() override;
 	RECOGNITION_TEST_API bool testComplete();
 	std::string nextStimulus() override;
@@ -57,5 +51,4 @@ private:
 	void initializeStimulusList(std::string directory);
 	void initializeDocumenter(std::string testFilePath);
 	void documentTestParameters(TestParameters);
-	void documentTrialParameters(TrialParameters);
 };
