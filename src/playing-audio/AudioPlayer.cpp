@@ -23,13 +23,13 @@ void AudioPlayer::prepareToPlay(Preparation request) {
 	prepareToPlay_(std::move(request));
 }
 
-void AudioPlayer::prepareToPlay_(Preparation request) {
-	AudioLoader::Preparation p;
-	p.audioFilePath = request.audioFilePath;
-	p.level_dB_Spl = request.level_dB_Spl;
-	prepareLoader(std::move(p));
+void AudioPlayer::prepareToPlay_(Preparation p) {
+	AudioLoader::Preparation loaderPreparation;
+	loaderPreparation.audioFilePath = p.audioFilePath;
+	loaderPreparation.level_dB_Spl = p.level_dB_Spl;
+	prepareLoader(std::move(loaderPreparation));
 	audio.resize(loader->channels());
-	reopenStream(request.audioDevice);
+	reopenStream(p.audioDevice);
 }
 
 void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
