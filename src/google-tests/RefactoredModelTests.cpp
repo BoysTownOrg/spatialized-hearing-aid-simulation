@@ -17,12 +17,6 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
-
-	struct TrialParameters {
-		std::string audioDevice;
-		double level_dB_Spl;
-	};
-	virtual void prepareNextTrial(TrialParameters) = 0;
 	virtual void playTrial() = 0;
 };
 
@@ -63,10 +57,6 @@ public:
 	}
 
 	void playTrial(TrialParameters p) override {
-		SpeechPerceptionTest::TrialParameters adapted;
-		adapted.audioDevice = p.audioDevice;
-		adapted.level_dB_Spl = p.level_dB_Spl;
-		test->prepareNextTrial(adapted);
 		test->playTrial();
 
 		makeCompressor(prescriptionReader->read(testParameters.leftDslPrescriptionFilePath));
@@ -162,13 +152,8 @@ public:
 
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
-	TrialParameters trialParameters_{};
 	std::string trialLog_{};
 public:
-	const TrialParameters &trialParameters() const {
-		return trialParameters_;
-	}
-
 	const TestParameters &testParameters() const {
 		return testParameters_;
 	}
@@ -177,13 +162,8 @@ public:
 		testParameters_ = std::move(p);
 	}
 
-	void prepareNextTrial(TrialParameters p) override {
-		trialParameters_ = std::move(p);
-		trialLog_ += "prepareNextTrial ";
-	}
-
 	void playTrial() override {
-		trialLog_ += "prepareNextTrial ";
+		trialLog_ += "playTrial ";
 	}
 
 	std::string trialLog() const {
@@ -210,7 +190,14 @@ protected:
 	FilterbankCompressorSpyFactory compressorFactory{};
 	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{reader};
-	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory, &readerFactory };
+	RefactoredModel model{ 
+		&test, 
+		&processor, 
+		&prescriptionReader, 
+		&brirReader, 
+		&compressorFactory, 
+		&readerFactory 
+	};
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
@@ -260,17 +247,15 @@ TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTes
 	assertEqual("b", test.testParameters().testFilePath);
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesParametersToSpeechPerceptionTest) {
-	trial.audioDevice = "a";
-	trial.level_dB_Spl = 1.1;
+TEST_F(RefactoredModelTests, DISABLED_playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
 	playTrial();
-	assertEqual("a", test.trialParameters().audioDevice);
-	EXPECT_EQ(1.1, test.trialParameters().level_dB_Spl);
+	//EXPECT_EQ(&player, test.stimulusPlayer());
 }
 
-TEST_F(RefactoredModelTests, playTrialPreparesSpeechPerceptionTestBeforePlaying) {
+TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
+	test.setNextStimulus("a");
 	playTrial();
-	assertEqual("prepareNextTrial prepareNextTrial ", test.trialLog());
+	assertEqual("a", readerFactory.filePath());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
@@ -335,7 +320,14 @@ protected:
 	AudioProcessorStub processor{};
 	FilterbankCompressorSpyFactory compressorFactory{};
 	AudioFrameReaderStubFactory readerFactory{};
-	RefactoredModel model{ &test, &processor, &prescriptionReader, &brirReader, &compressorFactory, &readerFactory };
+	RefactoredModel model{ 
+		&test, 
+		&processor, 
+		&prescriptionReader, 
+		&brirReader, 
+		&compressorFactory, 
+		&readerFactory 
+	};
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
