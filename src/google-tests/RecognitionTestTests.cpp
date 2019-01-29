@@ -96,34 +96,15 @@ namespace {
 		//assertEqual("a", model.nextStimulus());
 	}
 
-	TEST_F(RecognitionTestTests, DISABLED_prepareNextTrialDoesNotPrepareAgainWhenPlayerAlreadyPlaying) {
-		player.setPlaying();
-		//prepareNextTrial();
-		//EXPECT_FALSE(player.prepareToPlayCalled());
-	}
-
 	TEST_F(
 		RecognitionTestTests,
-		prepareNextTrialDocumentsTrial
+		playNextTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
 		nextTrial.level_dB_Spl = 1;
-		//prepareNextTrial();
+		playNextTrial();
 		EXPECT_EQ(1, documenter.globalTrialParameters.level_dB_Spl);
 		assertEqual("a", documenter.globalTrialParameters.stimulus);
-	}
-
-	TEST_F(RecognitionTestTests, DISABLED_playCalibrationPassesRequestToPlayer) {
-		//calibration.audioDevice = "a";
-		//calibration.audioFilePath = "b";
-		//playCalibration();
-		//assertEqual("a", player.preparation().audioDevice);
-		//assertEqual("b", player.preparation().audioFilePath);
-	}
-
-	TEST_F(RecognitionTestTests, DISABLED_stopCalibrationStopsPlayer) {
-		//model.stopCalibration();
-		EXPECT_TRUE(player.stopped());
 	}
 
 	TEST_F(

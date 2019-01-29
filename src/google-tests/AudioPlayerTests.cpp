@@ -66,21 +66,21 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayOpensStream) {
-		AudioPlayer::Preparation request;
-		request.framesPerBuffer = 2;
-		request.channels = 3;
-		request.sampleRate = 4;
-		prepareToPlay(request);
+		AudioPlayer::Preparation p;
+		p.framesPerBuffer = 2;
+		p.channels = 3;
+		p.sampleRate = 4;
+		prepareToPlay(p);
 		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(3, device.streamParameters().channels);
 		EXPECT_EQ(4, device.streamParameters().sampleRate);
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayFindsDeviceIndex) {
-		AudioPlayer::Preparation request;
+		AudioPlayer::Preparation p;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
-		request.audioDevice = "second";
-		prepareToPlay(request);
+		p.audioDevice = "second";
+		prepareToPlay(p);
 		EXPECT_EQ(2, device.streamParameters().deviceIndex);
 	}
 
