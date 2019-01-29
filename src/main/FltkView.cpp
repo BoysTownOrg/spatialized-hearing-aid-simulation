@@ -59,7 +59,7 @@ FltkCalibrationView::FltkCalibrationView(int x, int y, int w, int h, const char 
 	Fl_Group{ x, y, w, h },
 	audioFilePath_{250, 300, 200, 45, "audio file path"},
 	calibrationLevel_dB_Spl_{ 250, 400, 200, 45, "calibrated level (dB SPL)" },
-	play{ 50, 600, 60, 45, "play" },
+	play{ 50, 600, 60, 45, "prepareToPlay" },
 	stop{ 150, 600, 60, 45, "stop" }
 {
 }
@@ -93,7 +93,7 @@ FltkTesterView::FltkTesterView(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	level_dB_Spl_(250, 250, 200, 45, "level (dB SPL)"),
 	audioDevice_(250, 500, 200, 45, "audio device"),
-	play(250, 550, 60, 45, "play trial")
+	play(250, 550, 60, 45, "prepareToPlay trial")
 {
 	end();
 }

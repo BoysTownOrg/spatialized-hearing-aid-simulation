@@ -15,15 +15,15 @@ namespace {
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
 				play();
-				FAIL() << "Expected AudioPlayer::RequestFailure";
+				FAIL() << "Expected AudioPlayer::PreparationFailure";
 			}
-			catch (const AudioPlayer::RequestFailure &e) {
+			catch (const AudioPlayer::PreparationFailure &e) {
 				assertEqual(std::move(errorMessage), e.what());
 			}
 		}
 
-		void play(AudioPlayer::PlayRequest r = {}) {
-			player.play(std::move(r));
+		void play(AudioPlayer::Preparation r = {}) {
+			player.prepareToPlay(std::move(r));
 		}
 
 		void stop() {
@@ -56,7 +56,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
-		StimulusPlayer::PlayRequest request;
+		StimulusPlayer::Preparation request;
 		request.audioFilePath = "a";
 		request.level_dB_Spl = 1;
 		loader.setBufferSize(2);
@@ -71,7 +71,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, playFindsDeviceIndex) {
-		StimulusPlayer::PlayRequest request;
+		StimulusPlayer::Preparation request;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		request.audioDevice = "second";
 		play(request);
@@ -144,10 +144,10 @@ namespace {
 		void assertPlayThrowsRequestFailure(std::string what) {
 			auto player = makePlayer();
 			try {
-				player.play({});
-				FAIL() << "Expected AudioPlayer::RequestFailure";
+				player.prepareToPlay({});
+				FAIL() << "Expected AudioPlayer::PreparationFailure";
 			}
-			catch (const AudioPlayer::RequestFailure &e) {
+			catch (const AudioPlayer::PreparationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}

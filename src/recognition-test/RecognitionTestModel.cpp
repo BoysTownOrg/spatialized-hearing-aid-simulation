@@ -54,37 +54,37 @@ void RecognitionTestModel::playTrial_(TrialParameters p) {
 	try {
 		playNextStimulus(std::move(p));
 	}
-	catch (const StimulusPlayer::RequestFailure &e) {
+	catch (const StimulusPlayer::PreparationFailure &e) {
 		failedOnLastPlayRequest = true;
 		throw TrialFailure{ e.what() };
 	}
 }
 
 void RecognitionTestModel::playNextStimulus(TrialParameters p) {
-	StimulusPlayer::PlayRequest request;
+	StimulusPlayer::Preparation request;
 	if (!failedOnLastPlayRequest)
 		currentStimulus_ = list->next();
 	request.audioFilePath = currentStimulus_;
 	request.audioDevice = p.audioDevice;
 	request.level_dB_Spl = p.level_dB_Spl;
-	player->play(std::move(request));
+	player->prepareToPlay(std::move(request));
 }
 
 void RecognitionTestModel::playCalibration(CalibrationParameters p) {
 	try {
 		playCalibration_(std::move(p));
 	}
-	catch (const StimulusPlayer::RequestFailure & e) {
+	catch (const StimulusPlayer::PreparationFailure & e) {
 		throw CalibrationFailure{ e.what() };
 	}
 }
 
 void RecognitionTestModel::playCalibration_(CalibrationParameters p) {
-	StimulusPlayer::PlayRequest request;
+	StimulusPlayer::Preparation request;
 	request.audioDevice = p.audioDevice;
 	request.audioFilePath = p.audioFilePath;
 	request.level_dB_Spl = p.level_dB_Spl;
-	player->play(std::move(request));
+	player->prepareToPlay(std::move(request));
 }
 
 void RecognitionTestModel::stopCalibration() {

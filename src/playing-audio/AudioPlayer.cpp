@@ -17,19 +17,19 @@ void AudioPlayer::throwIfDeviceFailed() {
 		throw exception{ device->errorMessage() };
 }
 
-void AudioPlayer::play(PlayRequest request) {
+void AudioPlayer::prepareToPlay(Preparation request) {
 	if (device->streaming())
 		return;
 	play_(std::move(request));
 }
 
-void AudioPlayer::play_(PlayRequest request) {
+void AudioPlayer::play_(Preparation request) {
 	AudioLoader::Preparation p;
 	p.audioFilePath = request.audioFilePath;
 	p.level_dB_Spl = request.level_dB_Spl;
 	prepareLoader(std::move(p));
 	audio.resize(loader->channels());
-	restartStream(request.audioDevice);
+	reopenStream(request.audioDevice);
 }
 
 void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
@@ -37,16 +37,15 @@ void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
 		loader->prepare(std::move(p));
 	}
 	catch (const AudioLoader::PreparationFailure &e) {
-		throw RequestFailure{ e.what() };
+		throw PreparationFailure{ e.what() };
 	}
 }
 
-void AudioPlayer::restartStream(std::string deviceName) {
+void AudioPlayer::reopenStream(std::string deviceName) {
 	device->closeStream();
 	openStream(std::move(deviceName));
-	throwIfDeviceFailed<RequestFailure>();
+	throwIfDeviceFailed<PreparationFailure>();
 	device->setCallbackResultToContinue();
-	device->startStream();
 }
 
 void AudioPlayer::openStream(std::string deviceName) {
@@ -68,6 +67,10 @@ int AudioPlayer::findDeviceIndex(std::string deviceName) {
 
 void AudioPlayer::stop() {
 	device->stopStream();
+}
+
+void AudioPlayer::play() {
+	device->startStream();
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {

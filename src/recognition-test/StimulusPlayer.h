@@ -12,14 +12,15 @@ public:
 	INTERFACE_OPERATIONS(StimulusPlayer);
 	RUNTIME_ERROR(DeviceFailure);
 
-	struct PlayRequest {
+	struct Preparation {
 		std::string audioFilePath;
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void play(PlayRequest) = 0;
-	RUNTIME_ERROR(RequestFailure);
+	virtual void prepareToPlay(Preparation) = 0;
+	RUNTIME_ERROR(PreparationFailure);
 
+	virtual void play() = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual bool isPlaying() = 0;
 	virtual void stop() = 0;
