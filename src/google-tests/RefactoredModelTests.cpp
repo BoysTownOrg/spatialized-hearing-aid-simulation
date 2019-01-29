@@ -10,6 +10,11 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
+
+	struct TrialParameters {
+		std::string audioDevice;
+		double level_dB_Spl;
+	};
 };
 
 class RefactoredModel : public Model {
@@ -108,7 +113,12 @@ public:
 
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
+	TrialParameters trialParameters_{};
 public:
+	const TrialParameters &trialParameters() const {
+		return trialParameters_;
+	}
+
 	const TestParameters &testParameters() const {
 		return testParameters_;
 	}
@@ -132,6 +142,10 @@ protected:
 
 	void prepareNewTest() {
 		model.prepareNewTest(testing);
+	}
+
+	void playTrial() {
+		model.playTrial(trial);
 	}
 };
 
