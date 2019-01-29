@@ -255,6 +255,11 @@ TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
 	assertEqual("a", readerFactory.filePath());
 }
 
+TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
+	playTrial();
+	EXPECT_TRUE(reader->readingLog().endsWith("reset "));
+}
+
 TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	PrescriptionReader::Dsl leftPrescription;
 	leftPrescription.compressionRatios = { 1 };

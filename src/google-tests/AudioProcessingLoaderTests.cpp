@@ -87,11 +87,6 @@ namespace {
 		);*/
 	}
 
-	TEST_F(AudioProcessingLoaderTests, DISABLED_prepareResetsReaderAfterComputingRms) {
-		reset();
-		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
-	}
-
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfReadInput) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
