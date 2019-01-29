@@ -261,6 +261,24 @@ TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
 	EXPECT_TRUE(reader->readingLog().endsWith("reset "));
 }
 
+TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
+	//FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+	//fakeReader.setChannels(2);
+	//setInMemoryReader(fakeReader);
+	//preparation.level_dB_Spl = 7;
+	//processorFactory.setFullScale_dB_Spl(8);
+	playTrial();
+//		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
+	/*assertEqual(
+		{
+			desiredRms / rms<float>({ 1, 3, 5 }),
+			desiredRms / rms<float>({ 2, 4, 6 })
+		},
+		processorFactory.parameters().channelScalars,
+		1e-6
+	);*/
+}
+
 TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	PrescriptionReader::Dsl leftPrescription;
 	leftPrescription.compressionRatios = { 1 };

@@ -17,7 +17,8 @@ class NullReader : public AudioFrameReader {
 
 AudioProcessingLoader::AudioProcessingLoader() :
 	reader{ std::make_shared<NullReader>() },
-	processor{ std::make_shared<NullProcessor>() } {}
+	processor{ std::make_shared<NullProcessor>() },
+	paddedZeros{ 0 } {}
 
 void AudioProcessingLoader::reset() {
 	paddedZeros = 0;
