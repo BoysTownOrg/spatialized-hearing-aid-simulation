@@ -2,11 +2,9 @@
 
 RecognitionTest::RecognitionTest(
 	StimulusList *list,
-	StimulusPlayer *player,
 	Documenter *documenter
 ) :
 	list{ list },
-	player{ player },
 	documenter{ documenter } {}
 
 bool RecognitionTest::testComplete() {
@@ -45,7 +43,7 @@ void RecognitionTest::documentTestParameters(TestParameters) {
 	documenter->documentTestParameters({});
 }
 
-void RecognitionTest::playNextTrial() {
+void RecognitionTest::playNextTrial(StimulusPlayer *player) {
 	if (player->isPlaying())
 		return; 
 	nextStimulus_ = list->next();

@@ -26,24 +26,22 @@ public:
 	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);
 
-	virtual void playNextTrial() = 0;
+	virtual void playNextTrial(StimulusPlayer *) = 0;
 	virtual std::string nextStimulus() = 0;
 };
 
 class RecognitionTest : public SpeechPerceptionTest_ {
 	std::string nextStimulus_{};
 	StimulusList *list;
-	StimulusPlayer *player;
 	Documenter *documenter;
 	bool failedOnLastPlayRequest{};
 public:
 	RECOGNITION_TEST_API RecognitionTest(
 		StimulusList *,
-		StimulusPlayer *,
 		Documenter *
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
-	RECOGNITION_TEST_API void playNextTrial() override;
+	RECOGNITION_TEST_API void playNextTrial(StimulusPlayer *) override;
 	RECOGNITION_TEST_API bool testComplete();
 	std::string nextStimulus() override;
 private:

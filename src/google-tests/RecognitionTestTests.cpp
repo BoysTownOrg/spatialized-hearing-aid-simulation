@@ -13,14 +13,14 @@ namespace {
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
-		RecognitionTest model{ &list, &player, &documenter };
+		RecognitionTest model{ &list, &documenter };
 
 		void prepareNewTest() {
 			model.prepareNewTest(newTest);
 		}
 
 		void playNextTrial() {
-			model.playNextTrial();
+			model.playNextTrial(&player);
 		}
 	};
 
@@ -117,9 +117,8 @@ namespace {
 	class RecognitionTestModelWithInitializationFailingDocumenter : public ::testing::Test {
 	protected:
 		FakeStimulusList list{};
-		StimulusPlayerStub player{};
 		InitializationFailingDocumenter documenter{};
-		RecognitionTest model{ &list, &player, &documenter };
+		RecognitionTest model{ &list, &documenter };
 
 		void assertPrepareNewTestThrowsInitializationFailure(std::string what) {
 			try {
