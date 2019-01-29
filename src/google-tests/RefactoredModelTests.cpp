@@ -4,11 +4,6 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <presentation/Model.h>
 
-class AudioProcessor {
-public:
-	INTERFACE_OPERATIONS(AudioProcessor);
-};
-
 class SpeechPerceptionTest {
 public:
 	INTERFACE_OPERATIONS(SpeechPerceptionTest);
@@ -26,13 +21,11 @@ class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *test;
-	AudioProcessor *processor;
 	FilterbankCompressorFactory *compressorFactory;
 	AudioFrameReaderFactory *readerFactory;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
-		AudioProcessor *processor,
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
@@ -41,7 +34,6 @@ public:
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
 		test{ test },
-		processor{ processor },
 		compressorFactory{ compressorFactory },
 		readerFactory{ readerFactory } {}
 
@@ -181,9 +173,6 @@ public:
 	}
 };
 
-class AudioProcessorStub : public AudioProcessor {
-};
-
 #include "assert-utility.h"
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
@@ -196,13 +185,11 @@ protected:
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
-	AudioProcessorStub processor{};
 	FilterbankCompressorSpyFactory compressorFactory{};
 	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{reader};
 	RefactoredModel model{ 
-		&test, 
-		&processor, 
+		&test,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
@@ -327,12 +314,10 @@ protected:
 	FailingPrescriptionReader prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
-	AudioProcessorStub processor{};
 	FilterbankCompressorSpyFactory compressorFactory{};
 	AudioFrameReaderStubFactory readerFactory{};
 	RefactoredModel model{ 
-		&test, 
-		&processor, 
+		&test,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
