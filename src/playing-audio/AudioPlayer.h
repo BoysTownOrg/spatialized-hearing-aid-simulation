@@ -21,7 +21,7 @@ public:
 	void stop() override;
 	void play() override;
 private:
-	void play_(Preparation);
+	void prepareToPlay_(Preparation);
 	void reopenStream(std::string deviceName);
 	template<typename exception>
 		void throwIfDeviceFailed();

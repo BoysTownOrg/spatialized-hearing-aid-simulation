@@ -20,10 +20,10 @@ void AudioPlayer::throwIfDeviceFailed() {
 void AudioPlayer::prepareToPlay(Preparation request) {
 	if (device->streaming())
 		return;
-	play_(std::move(request));
+	prepareToPlay_(std::move(request));
 }
 
-void AudioPlayer::play_(Preparation request) {
+void AudioPlayer::prepareToPlay_(Preparation request) {
 	AudioLoader::Preparation p;
 	p.audioFilePath = request.audioFilePath;
 	p.level_dB_Spl = request.level_dB_Spl;
@@ -65,12 +65,12 @@ int AudioPlayer::findDeviceIndex(std::string deviceName) {
 	return deviceIndex;
 }
 
-void AudioPlayer::stop() {
-	device->stopStream();
-}
-
 void AudioPlayer::play() {
 	device->startStream();
+}
+
+void AudioPlayer::stop() {
+	device->stopStream();
 }
 
 void AudioPlayer::fillStreamBuffer(void * channels, int frames) {
