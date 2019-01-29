@@ -124,6 +124,7 @@ public:
 class RefactoredModelTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters testing{};
+	RefactoredModel::TrialParameters trial{};
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
@@ -134,7 +135,7 @@ protected:
 	}
 };
 
-TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
+TEST_F(RefactoredModelTests, prepareNewTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
 	testing.usingHearingAidSimulation = true;
 	testing.leftDslPrescriptionFilePath = "a";
 	testing.rightDslPrescriptionFilePath = "b";
@@ -143,7 +144,7 @@ TEST_F(RefactoredModelTests, initializeTestReadsPrescriptionsWhenUsingHearingAid
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
-TEST_F(RefactoredModelTests, initializeTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
+TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
 	testing.usingHearingAidSimulation = false;
 	testing.leftDslPrescriptionFilePath = "a";
 	testing.rightDslPrescriptionFilePath = "b";
@@ -151,26 +152,34 @@ TEST_F(RefactoredModelTests, initializeTestDoesNotReadPrescriptionsWhenNotUsingH
 	EXPECT_TRUE(prescriptionReader.filePaths().empty());
 }
 
-TEST_F(RefactoredModelTests, initializeTestReadsBrirWhenUsingSpatialization) {
+TEST_F(RefactoredModelTests, prepareNewTestReadsBrirWhenUsingSpatialization) {
 	testing.usingSpatialization = true;
 	testing.brirFilePath = "a";
 	prepareNewTest();
 	assertEqual("a", brirReader.filePath());
 }
 
-TEST_F(RefactoredModelTests, initializeTestDoesNotReadBrirWhenNotUsingSpatialization) {
+TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
 	testing.usingSpatialization = false;
 	testing.brirFilePath = "a";
 	prepareNewTest();
 	EXPECT_TRUE(brirReader.filePath().empty());
 }
 
-TEST_F(RefactoredModelTests, initializeTestPassesParametersToSpeechPerceptionTest) {
+TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
 	testing.audioDirectory = "a";
 	testing.testFilePath = "b";
 	prepareNewTest();
 	assertEqual("a", test.testParameters().audioDirectory);
 	assertEqual("b", test.testParameters().testFilePath);
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesParametersToSpeechPerceptionTest) {
+	trial.audioDevice = "a";
+	trial.level_dB_Spl = 1.1;
+	playTrial();
+	assertEqual("a", test.trialParameters().audioDevice);
+	EXPECT_EQ(1.1, test.trialParameters().level_dB_Spl);
 }
 
 class RefactoredModelWithFailingPrescriptionReaderTests : public ::testing::Test {
@@ -188,7 +197,7 @@ protected:
 
 TEST_F(
 	RefactoredModelWithFailingPrescriptionReaderTests, 
-	initializeTestThrowsTestInitializationFailureWhenUsingHearingAidSimulation
+	prepareNewTestThrowsTestInitializationFailureWhenUsingHearingAidSimulation
 ) {
 	prescriptionReader.setErrorMessage("irrelevant");
 	try {
