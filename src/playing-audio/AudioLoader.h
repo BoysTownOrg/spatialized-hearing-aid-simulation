@@ -10,7 +10,6 @@ class AudioLoader {
 public:
 	struct Preparation {
 		std::string audioFilePath;
-		double level_dB_Spl;
 	};
 	virtual void prepare(Preparation) = 0;
 	RUNTIME_ERROR(PreparationFailure);

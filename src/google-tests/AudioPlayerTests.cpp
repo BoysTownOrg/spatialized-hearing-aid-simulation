@@ -68,13 +68,11 @@ namespace {
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
 		StimulusPlayer::Preparation request;
 		request.audioFilePath = "a";
-		request.level_dB_Spl = 1;
 		loader.setBufferSize(2);
 		loader.setChannels(3);
 		loader.setSampleRate(4);
 		prepareToPlay(request);
 		assertEqual("a", loader.preparation().audioFilePath);
-		EXPECT_EQ(1, loader.preparation().level_dB_Spl);
 		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(3, device.streamParameters().channels);
 		EXPECT_EQ(4, device.streamParameters().sampleRate);

@@ -27,7 +27,7 @@ AudioProcessingLoader::AudioProcessingLoader(
 void AudioProcessingLoader::prepare(Preparation p) {
 	reader = makeReader(p.audioFilePath);
 	AudioFrameProcessorFactory::Parameters processing;
-    processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
+//    processing.channelScalars = computeChannelScalars(p.level_dB_Spl);
 	processing.channels = reader->channels();
 	processing.sampleRate = reader->sampleRate();
 	processor = makeProcessor(std::move(processing));

@@ -26,7 +26,6 @@ void AudioPlayer::prepareToPlay(Preparation p) {
 void AudioPlayer::prepareToPlay_(Preparation p) {
 	AudioLoader::Preparation loaderPreparation;
 	loaderPreparation.audioFilePath = p.audioFilePath;
-	loaderPreparation.level_dB_Spl = p.level_dB_Spl;
 	prepareLoader(std::move(loaderPreparation));
 	audio.resize(loader->channels());
 	reopenStream(p.audioDevice);

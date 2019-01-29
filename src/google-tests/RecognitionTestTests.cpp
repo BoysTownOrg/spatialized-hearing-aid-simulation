@@ -81,9 +81,7 @@ namespace {
 
 	TEST_F(RecognitionTestTests, prepareNextTrialPassesParametersToPlayer) {
 		nextTrial.audioDevice = "a";
-		nextTrial.level_dB_Spl = 1;
 		prepareNextTrial();
-		EXPECT_EQ(1, player.preparation().level_dB_Spl);
 		assertEqual("a", player.preparation().audioDevice);
 	}
 
@@ -129,11 +127,9 @@ namespace {
 	TEST_F(RecognitionTestTests, playCalibrationPassesRequestToPlayer) {
 		calibration.audioDevice = "a";
 		calibration.audioFilePath = "b";
-		calibration.level_dB_Spl = 1;
 		playCalibration();
 		assertEqual("a", player.preparation().audioDevice);
 		assertEqual("b", player.preparation().audioFilePath);
-		EXPECT_EQ(1, player.preparation().level_dB_Spl);
 	}
 
 	TEST_F(RecognitionTestTests, stopCalibrationStopsPlayer) {
