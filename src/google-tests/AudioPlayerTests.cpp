@@ -68,7 +68,7 @@ namespace {
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
 		StimulusPlayer::Preparation request;
 		request.audioFilePath = "a";
-		loader.setBufferSize(2);
+		request.framesPerBuffer = 2;
 		loader.setChannels(3);
 		loader.setSampleRate(4);
 		prepareToPlay(request);

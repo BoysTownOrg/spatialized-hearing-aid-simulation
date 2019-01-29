@@ -28,7 +28,7 @@ void AudioPlayer::prepareToPlay_(Preparation p) {
 	loaderPreparation.audioFilePath = p.audioFilePath;
 	prepareLoader(std::move(loaderPreparation));
 	audio.resize(loader->channels());
-	reopenStream(p.audioDevice);
+	reopenStream(std::move(p));
 }
 
 void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
@@ -40,19 +40,19 @@ void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
 	}
 }
 
-void AudioPlayer::reopenStream(std::string deviceName) {
+void AudioPlayer::reopenStream(Preparation p) {
 	device->closeStream();
-	openStream(std::move(deviceName));
+	openStream(std::move(p));
 	throwIfDeviceFailed<PreparationFailure>();
 	device->setCallbackResultToContinue();
 }
 
-void AudioPlayer::openStream(std::string deviceName) {
+void AudioPlayer::openStream(Preparation p) {
 	AudioDevice::StreamParameters streaming;
 	streaming.sampleRate = loader->sampleRate();
 	streaming.channels = loader->channels();
-	streaming.framesPerBuffer = loader->bufferSize();
-	streaming.deviceIndex = findDeviceIndex(std::move(deviceName));
+	streaming.framesPerBuffer = p.framesPerBuffer;
+	streaming.deviceIndex = findDeviceIndex(p.audioDevice);
 	device->openStream(std::move(streaming));
 }
 

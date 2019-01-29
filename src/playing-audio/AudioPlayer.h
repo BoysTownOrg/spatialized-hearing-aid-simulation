@@ -22,10 +22,10 @@ public:
 	void play() override;
 private:
 	void prepareToPlay_(Preparation);
-	void reopenStream(std::string deviceName);
+	void reopenStream(Preparation);
 	template<typename exception>
 		void throwIfDeviceFailed();
-	void openStream(std::string deviceName);
+	void openStream(Preparation);
 	void prepareLoader(AudioLoader::Preparation);
 	void prepareAudioForLoading(void * channels, int frames);
 	void signalDeviceIfDoneLoading();

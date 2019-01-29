@@ -15,6 +15,7 @@ public:
 	struct Preparation {
 		std::string audioFilePath;
 		std::string audioDevice;
+		int framesPerBuffer;
 	};
 	virtual void prepareToPlay(Preparation) = 0;
 	RUNTIME_ERROR(PreparationFailure);
