@@ -155,6 +155,18 @@ public:
 	}
 };
 
+class FailingBrirReader : public BrirReader {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	BinauralRoomImpulseResponse read(std::string) override {
+		throw ReadFailure{ errorMessage };
+	}
+};
+
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
