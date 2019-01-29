@@ -283,7 +283,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
 	rightPrescription.channels = 12;
 	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
-	//processor.setSampleRate(7);
+	reader->setSampleRate(7);
 	testing.usingHearingAidSimulation = true;
 	testing.attack_ms = 8;
 	testing.release_ms = 9;
