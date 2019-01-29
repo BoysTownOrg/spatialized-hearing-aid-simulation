@@ -3,7 +3,7 @@
 #include "DirectoryReader.h"
 #include "Randomizer.h"
 #include "stimulus-list-exports.h"
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTest.h>
 
 class RandomizedStimulusList : public StimulusList {
     std::vector<std::string> files{};

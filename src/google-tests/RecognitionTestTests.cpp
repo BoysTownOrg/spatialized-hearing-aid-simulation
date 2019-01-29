@@ -2,20 +2,20 @@
 #include "StimulusPlayerStub.h"
 #include "FakeStimulusList.h"
 #include "DocumenterStub.h"
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTest.h>
 #include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
-	class RecognitionTestModelTests : public ::testing::Test {
+	class RecognitionTestTests : public ::testing::Test {
 	protected:
-		RecognitionTestModel::TestParameters testParameters;
-		RecognitionTestModel::TrialParameters trial;
-		RecognitionTestModel::CalibrationParameters calibration;
+		RecognitionTest::TestParameters testParameters;
+		RecognitionTest::TrialParameters trial;
+		RecognitionTest::CalibrationParameters calibration;
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
-		RecognitionTestModel model{ &list, &player, &documenter };
+		RecognitionTest model{ &list, &player, &documenter };
 
 		void initializeTest() {
 			model.initializeTest(testParameters);
@@ -31,7 +31,7 @@ namespace {
 	};
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		initializeTestInitializesStimulusList
 	) {
 		testParameters.audioDirectory = "a";
@@ -40,7 +40,7 @@ namespace {
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		initializeTestInitializesDocumenter
 	) {
 		testParameters.testFilePath = "a";
@@ -49,7 +49,7 @@ namespace {
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		initializeTestDocumentsTestParameters
 	) {
 		GlobalTestParameters global;
@@ -59,7 +59,7 @@ namespace {
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		initializeTestDocumentsTestParametersAfterInitializing
 	) {
 		initializeTest();
@@ -67,7 +67,7 @@ namespace {
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		playTrialPassesNextStimulusToStimulusPlayer
 	) {
 		list.setContents({ "a", "b", "c" });
@@ -79,7 +79,7 @@ namespace {
 		assertEqual("c", player.request().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestModelTests, playTrialPassesRequestToPlayer) {
+	TEST_F(RecognitionTestTests, playTrialPassesRequestToPlayer) {
 		trial.audioDevice = "a";
 		trial.level_dB_Spl = 1;
 		playTrial();
@@ -87,7 +87,7 @@ namespace {
 		assertEqual("a", player.request().audioDevice);
 	}
 
-	TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
+	TEST_F(RecognitionTestTests, playTrialDoesNotAdvanceListWhenPlayerPlaying) {
 		list.setContents({ "a", "b", "c" });
 		playTrial();
 		player.setPlaying();
@@ -95,13 +95,13 @@ namespace {
 		assertEqual("a", player.request().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestModelTests, playTrialDoesNotAdvanceListWhenPlayerFails) {
+	TEST_F(RecognitionTestTests, playTrialDoesNotAdvanceListWhenPlayerFails) {
 		list.setContents({ "a", "b", "c" });
 		player.failOnPlay();
 		try {
 			playTrial();
 		}
-		catch (const RecognitionTestModel::TrialFailure &) {
+		catch (const RecognitionTest::TrialFailure &) {
 
 		}
 		player.dontFailOnPlay();
@@ -109,14 +109,14 @@ namespace {
 		assertEqual("a", player.request().audioFilePath);
 	}
 
-	TEST_F(RecognitionTestModelTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
+	TEST_F(RecognitionTestTests, playTrialDoesNotPlayAgainWhenPlayerAlreadyPlaying) {
 		player.setPlaying();
 		playTrial();
 		EXPECT_FALSE(player.playCalled());
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		playTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
@@ -126,7 +126,7 @@ namespace {
 		assertEqual("a", documenter.globalTrialParameters.stimulus);
 	}
 
-	TEST_F(RecognitionTestModelTests, playCalibrationPassesRequestToPlayer) {
+	TEST_F(RecognitionTestTests, playCalibrationPassesRequestToPlayer) {
 		calibration.audioDevice = "a";
 		calibration.audioFilePath = "b";
 		calibration.level_dB_Spl = 1;
@@ -136,13 +136,13 @@ namespace {
 		EXPECT_EQ(1, player.request().level_dB_Spl);
 	}
 
-	TEST_F(RecognitionTestModelTests, stopCalibrationStopsPlayer) {
+	TEST_F(RecognitionTestTests, stopCalibrationStopsPlayer) {
 		model.stopCalibration();
 		EXPECT_TRUE(player.stopped());
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		testCompleteWhenListEmpty
 	) {
 		list.setContents({});
@@ -150,7 +150,7 @@ namespace {
 	}
 
 	TEST_F(
-		RecognitionTestModelTests,
+		RecognitionTestTests,
 		audioDeviceDescriptionsReturnsThatOfTheAudioPlayer
 	) {
 		player.setAudioDeviceDescriptions({ "a", "b", "c" });
@@ -162,14 +162,14 @@ namespace {
 		FakeStimulusList list{};
 		StimulusPlayerStub player{};
 		InitializationFailingDocumenter documenter{};
-		RecognitionTestModel model{ &list, &player, &documenter };
+		RecognitionTest model{ &list, &player, &documenter };
 
 		void assertInitializeTestThrowsInitializationFailure(std::string what) {
 			try {
 				model.initializeTest({});
-				FAIL() << "Expected RecognitionTestModel::TestInitializationFailure";
+				FAIL() << "Expected RecognitionTest::TestInitializationFailure";
 			}
-			catch (const RecognitionTestModel::TestInitializationFailure &e) {
+			catch (const RecognitionTest::TestInitializationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -188,14 +188,14 @@ namespace {
 		FakeStimulusList list{};
 		RequestFailingStimulusPlayer player{};
 		DocumenterStub documenter{};
-		RecognitionTestModel model{ &list, &player, &documenter };
+		RecognitionTest model{ &list, &player, &documenter };
 
 		void assertPlayTrialThrowsTrialFailure(std::string what) {
 			try {
 				model.playTrial({});
-				FAIL() << "Expected RecognitionTestModel::TrialFailure";
+				FAIL() << "Expected RecognitionTest::TrialFailure";
 			}
-			catch (const RecognitionTestModel::TrialFailure &e) {
+			catch (const RecognitionTest::TrialFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -203,9 +203,9 @@ namespace {
 		void assertPlayCalibrationThrowsCalibrationFailure(std::string what) {
 			try {
 				model.playCalibration({});
-				FAIL() << "Expected RecognitionTestModel::CalibrationFailure";
+				FAIL() << "Expected RecognitionTest::CalibrationFailure";
 			}
-			catch (const RecognitionTestModel::CalibrationFailure &e) {
+			catch (const RecognitionTest::CalibrationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}

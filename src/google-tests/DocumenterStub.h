@@ -2,7 +2,7 @@
 
 #include "LogString.h"
 #include <recognition-test/Documenter.h>
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTest.h>
 
 class DocumenterStub : public Documenter {
 	TestParameters testParameters_{};

@@ -16,14 +16,14 @@ struct GlobalTrialParameters {
 	double level_dB_Spl;
 };
 
-class RecognitionTestModel : public Model {
+class RecognitionTest : public Model {
 	std::string currentStimulus_{};
 	StimulusList *list;
 	StimulusPlayer *player;
 	Documenter *documenter;
 	bool failedOnLastPlayRequest{};
 public:
-	RECOGNITION_TEST_API RecognitionTestModel(
+	RECOGNITION_TEST_API RecognitionTest(
 		StimulusList *,
 		StimulusPlayer *,
 		Documenter *

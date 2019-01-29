@@ -13,7 +13,7 @@
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
 #include <playing-audio/AudioProcessingLoader.h>
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTest.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
@@ -43,7 +43,7 @@ int main() {
 	AudioPlayer player{&device, &loader};
 	FileSystemWriter writer;
 	TestDocumenter documenter{ &writer };
-	RecognitionTestModel model{ &list, &player, &documenter };
+	RecognitionTest model{ &list, &player, &documenter };
 	FltkView view{};
 	Presenter presenter{ &model, &view };
 	presenter.run();

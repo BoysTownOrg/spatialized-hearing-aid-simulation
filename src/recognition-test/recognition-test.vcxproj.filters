@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RecognitionTestModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StimulusList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -27,9 +24,12 @@
     <ClInclude Include="Documenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RecognitionTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RecognitionTestModel.cpp">
+    <ClCompile Include="RecognitionTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

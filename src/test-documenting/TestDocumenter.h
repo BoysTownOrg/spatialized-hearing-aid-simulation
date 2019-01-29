@@ -2,7 +2,7 @@
 
 #include "PersistentMemoryWriter.h"
 #include <presentation/Presenter.h>
-#include <recognition-test/RecognitionTestModel.h>
+#include <recognition-test/RecognitionTest.h>
 #include <common-includes/RuntimeError.h>
 
 #ifdef TEST_DOCUMENTING_EXPORTS

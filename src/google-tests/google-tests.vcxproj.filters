@@ -48,9 +48,6 @@
     <ClCompile Include="PrescriptionAdapterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecognitionTestModelTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioPlayerTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,6 +64,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RefactoredModelTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RecognitionTestTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

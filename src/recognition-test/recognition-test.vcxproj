@@ -139,12 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Documenter.h" />
-    <ClInclude Include="RecognitionTestModel.h" />
+    <ClInclude Include="RecognitionTest.h" />
     <ClInclude Include="StimulusList.h" />
     <ClInclude Include="StimulusPlayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RecognitionTestModel.cpp" />
+    <ClCompile Include="RecognitionTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

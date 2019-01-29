@@ -1,6 +1,6 @@
-#include "RecognitionTestModel.h"
+#include "RecognitionTest.h"
 
-RecognitionTestModel::RecognitionTestModel(
+RecognitionTest::RecognitionTest(
 	StimulusList *list,
 	StimulusPlayer *player,
 	Documenter *documenter
@@ -9,11 +9,11 @@ RecognitionTestModel::RecognitionTestModel(
 	player{ player },
 	documenter{ documenter } {}
 
-bool RecognitionTestModel::testComplete() {
+bool RecognitionTest::testComplete() {
 	return list->empty();
 }
 
-void RecognitionTestModel::initializeTest(TestParameters p) {
+void RecognitionTest::initializeTest(TestParameters p) {
 	try {
 		initializeTest_(std::move(p));
 	}
@@ -22,27 +22,27 @@ void RecognitionTestModel::initializeTest(TestParameters p) {
 	}
 }
 
-void RecognitionTestModel::initializeTest_(TestParameters p) {
+void RecognitionTest::initializeTest_(TestParameters p) {
 	initializeStimulusList(p.audioDirectory);
 	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
 }
 
-void RecognitionTestModel::initializeStimulusList(std::string directory) {
+void RecognitionTest::initializeStimulusList(std::string directory) {
 	list->initialize(std::move(directory));
 }
 
-void RecognitionTestModel::initializeDocumenter(std::string testFilePath) {
+void RecognitionTest::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
 }
 
-void RecognitionTestModel::documentTestParameters(TestParameters p) {
+void RecognitionTest::documentTestParameters(TestParameters p) {
 	Documenter::TestParameters documenting;
 	documenting.global = p.global;
 	documenter->documentTestParameters(std::move(documenting));
 }
 
-void RecognitionTestModel::playTrial(TrialParameters p) {
+void RecognitionTest::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return; 
 	playTrial_(p);
@@ -50,7 +50,7 @@ void RecognitionTestModel::playTrial(TrialParameters p) {
 	failedOnLastPlayRequest = false;
 }
 
-void RecognitionTestModel::playTrial_(TrialParameters p) {
+void RecognitionTest::playTrial_(TrialParameters p) {
 	try {
 		playNextStimulus(std::move(p));
 	}
@@ -60,7 +60,7 @@ void RecognitionTestModel::playTrial_(TrialParameters p) {
 	}
 }
 
-void RecognitionTestModel::playNextStimulus(TrialParameters p) {
+void RecognitionTest::playNextStimulus(TrialParameters p) {
 	StimulusPlayer::Preparation request;
 	if (!failedOnLastPlayRequest)
 		currentStimulus_ = list->next();
@@ -70,7 +70,7 @@ void RecognitionTestModel::playNextStimulus(TrialParameters p) {
 	player->prepareToPlay(std::move(request));
 }
 
-void RecognitionTestModel::playCalibration(CalibrationParameters p) {
+void RecognitionTest::playCalibration(CalibrationParameters p) {
 	try {
 		playCalibration_(std::move(p));
 	}
@@ -79,7 +79,7 @@ void RecognitionTestModel::playCalibration(CalibrationParameters p) {
 	}
 }
 
-void RecognitionTestModel::playCalibration_(CalibrationParameters p) {
+void RecognitionTest::playCalibration_(CalibrationParameters p) {
 	StimulusPlayer::Preparation request;
 	request.audioDevice = p.audioDevice;
 	request.audioFilePath = p.audioFilePath;
@@ -87,11 +87,11 @@ void RecognitionTestModel::playCalibration_(CalibrationParameters p) {
 	player->prepareToPlay(std::move(request));
 }
 
-void RecognitionTestModel::stopCalibration() {
+void RecognitionTest::stopCalibration() {
 	player->stop();
 }
 
-void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
+void RecognitionTest::documentTrialParameters(TrialParameters p) {
 	Documenter::TrialParameters documenting{};
 	GlobalTrialParameters global;
 	global.level_dB_Spl = p.level_dB_Spl;
@@ -100,6 +100,6 @@ void RecognitionTestModel::documentTrialParameters(TrialParameters p) {
 	documenter->documentTrialParameters(std::move(documenting));
 }
 
-std::vector<std::string> RecognitionTestModel::audioDeviceDescriptions() {
+std::vector<std::string> RecognitionTest::audioDeviceDescriptions() {
 	return player->audioDeviceDescriptions();
 }
