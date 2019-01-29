@@ -377,7 +377,7 @@ protected:
 	StimulusPlayerStub defaultStimulusPlayer{};
 	StimulusPlayer *stimulusPlayer{ &defaultStimulusPlayer };
 
-	void prepareNewTest() {
+	void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 		RefactoredModel model{ 
 			test,
 			prescriptionReader, 
@@ -386,7 +386,13 @@ protected:
 			audioReaderFactory,
 			stimulusPlayer
 		};
-		model.prepareNewTest(testing);
+		try {
+			model.prepareNewTest(testing);
+			FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
+		}
+		catch (const RefactoredModel::TestInitializationFailure & e) {
+			assertEqual(std::move(what), e.what());
+		}
 	}
 };
 
@@ -396,16 +402,10 @@ TEST_F(
 ) {
 	FailingPrescriptionReader failing;
 	failing.setErrorMessage("irrelevant");
-	try {
-		testing.usingHearingAidSimulation = true;
-		testing.leftDslPrescriptionFilePath = "a";
-		prescriptionReader = &failing;
-		prepareNewTest();
-		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
-	}
-	catch (const RefactoredModel::TestInitializationFailure & e) {
-		assertEqual("Unable to read 'a'.", e.what());
-	}
+	testing.usingHearingAidSimulation = true;
+	testing.leftDslPrescriptionFilePath = "a";
+	prescriptionReader = &failing;
+	assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 }
 
 TEST_F(
@@ -414,12 +414,6 @@ TEST_F(
 ) {
 	InitializationFailingSpeechPerceptionTest failing;
 	failing.setErrorMessage("error.");
-	try {
-		test = &failing;
-		prepareNewTest();
-		FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
-	}
-	catch (const RefactoredModel::TestInitializationFailure & e) {
-		assertEqual("error.", e.what());
-	}
+	test = &failing;
+	assertPreparingNewTestThrowsTestInitializationFailure("error.");
 }
