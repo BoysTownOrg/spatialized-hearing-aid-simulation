@@ -9,21 +9,28 @@ public:
 		std::string audioDirectory;
 		std::string testFilePath;
 	};
+	virtual void initializeTest(TestParameters) = 0;
 };
 
 class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
+	SpeechPerceptionTest *test;
 public:
 	RefactoredModel(
 		PrescriptionReader* prescriptionReader,
 		BrirReader *brirReader,
-		SpeechPerceptionTest *
+		SpeechPerceptionTest *test
 	) :
 		prescriptionReader{ prescriptionReader },
-		brirReader{ brirReader } {}
+		brirReader{ brirReader },
+		test{ test } {}
 
 	void initializeTest(TestParameters p) override {
+		SpeechPerceptionTest::TestParameters adapted;
+		adapted.audioDirectory = p.audioDirectory;
+		adapted.testFilePath = p.testFilePath;
+		test->initializeTest(adapted);
 		if (p.usingSpatialization)
 			brirReader->read(p.brirFilePath);
 		if (p.usingHearingAidSimulation)
@@ -104,6 +111,10 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 public:
 	const TestParameters &testParameters() const {
 		return testParameters_;
+	}
+
+	void initializeTest(TestParameters p) override {
+		testParameters_ = std::move(p);
 	}
 };
 
