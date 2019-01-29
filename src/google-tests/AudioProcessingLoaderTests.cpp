@@ -9,27 +9,30 @@
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
-		AudioProcessingLoader::Preparation preparation{};
 		using impulse_response_type = std::vector<float>;
 		impulse_response_type left{};
 		impulse_response_type right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
-		AudioFrameReaderStubFactory readerFactory{reader};
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
-		AudioProcessingLoader loader{ &readerFactory };
+		AudioProcessingLoader loader{};
 
 		AudioProcessingLoaderTests() {
-			loader.updateProcessor(processor);
+			setReader(reader);
+			setProcessor(processor);
 		}
 
-		void updateProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-			loader.updateProcessor(std::move(p));
+		void setReader(std::shared_ptr<AudioFrameReader> r) {
+			loader.setReader(std::move(r));
 		}
 
-		void prepare() {
-			loader.prepare(preparation);
+		void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+			loader.setProcessor(std::move(p));
+		}
+
+		void reset() {
+			loader.reset();
 		}
 
 		void loadMonoFrames(impulse_response_type::size_type n) {
@@ -58,20 +61,12 @@ namespace {
 		}
 
 		void setInMemoryReader(AudioFileReader &reader_) {
-			readerFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
+			setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
 	};
 
-	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrowIfNotPrepared) {
-		EXPECT_EQ(0, loader.channels());
-		EXPECT_EQ(0, loader.sampleRate());
+	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrow) {
 		EXPECT_TRUE(loader.complete());
-	}
-
-	TEST_F(AudioProcessingLoaderTests, preparePassesFilePathToFactory) {
-		preparation.audioFilePath = "a";
-		prepare();
-		assertEqual("a", readerFactory.filePath());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, DISABLED_preparePassesCalibratedScalarsToProcessorFactory) {
@@ -80,7 +75,7 @@ namespace {
 		setInMemoryReader(fakeReader);
 		//preparation.level_dB_Spl = 7;
 		//processorFactory.setFullScale_dB_Spl(8);
-		prepare();
+		reset();
 //		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
 		/*assertEqual(
 			{
@@ -93,22 +88,14 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, DISABLED_prepareResetsReaderAfterComputingRms) {
-		prepare();
+		reset();
 		EXPECT_TRUE(reader->readingLog().endsWith("reset "));
-	}
-
-	TEST_F(AudioProcessingLoaderTests, returnsSampleRateAndChannelsFromReader) {
-		reader->setChannels(1);
-		reader->setSampleRate(2);
-		prepare();
-		EXPECT_EQ(1, loader.channels());
-		EXPECT_EQ(2, loader.sampleRate());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfReadInput) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
-		prepare();
+		reset();
 		loadMonoFrames(4);
 		assertEqual({ 1, 2, 3, 0 }, left);
 	}
@@ -117,14 +104,14 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
-		prepare();
+		reset();
 		loadStereoFrames(4);
 		assertEqual({ 1, 3, 5, 0 }, left);
 		assertEqual({ 2, 4, 6, 0 }, right);
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
-		prepare();
+		reset();
 		processor->setGroupDelay(3);
 		loadMonoFrames(1);
 		EXPECT_FALSE(loader.complete());
@@ -135,17 +122,17 @@ namespace {
 	}
 
 	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
-		prepare();
+		reset();
 		reader->setRemainingFrames(1);
 		EXPECT_FALSE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, preparationResetsZeroPadCount) {
-		prepare();
+		reset();
 		processor->setGroupDelay(1);
 		loadMonoFrames(1);
 		EXPECT_TRUE(loader.complete());
-		prepare();
+		reset();
 		EXPECT_FALSE(loader.complete());
 	}
 
@@ -153,7 +140,7 @@ namespace {
 		std::vector<float> singleSample { 0 };
 		FakeAudioFileReader fakeReader{ singleSample };
 		setInMemoryReader(fakeReader);
-		prepare();
+		reset();
 		processor->setGroupDelay(2);
 		loadMonoFrames(2);
 		EXPECT_FALSE(loader.complete());
@@ -174,8 +161,8 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, loadReadsThenProcesses) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
-		updateProcessor(std::make_shared<TimesTwo>());
-		prepare();
+		setProcessor(std::make_shared<TimesTwo>());
+		reset();
 		loadMonoFrames(3);
 		assertEqual({ 2, 4, 6 }, left);
 	}
@@ -193,35 +180,9 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, loadPadsZerosBeforeProcessing) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
-		updateProcessor(std::make_shared<AddsOne>());
-		prepare();
+		setProcessor(std::make_shared<AddsOne>());
+		reset();
 		loadMonoFrames(4);
 		assertEqual({ 2, 3, 4, 1 }, left);
-	}
-
-	class AudioProcessingLoaderErrorTests : public ::testing::Test {
-	protected:
-		AudioFrameReaderStubFactory defaultReaderFactory{};
-		AudioFrameReaderFactory *readerFactory{&defaultReaderFactory};
-
-		void assertPrepareThrowsPreparationFailure(std::string what) {
-			AudioProcessingLoader loader{ readerFactory };
-			try {
-				loader.prepare({});
-				FAIL() << "Expected AudioProcessingLoader::PreparationFailure";
-			}
-			catch (const AudioProcessingLoader::PreparationFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-	};
-
-	TEST_F(
-		AudioProcessingLoaderErrorTests,
-		prepareThrowsPreparationFailureWhenReaderFactoryThrowsCreateError
-	) {
-		ErrorAudioFrameReaderFactory failingFactory{ "error." };
-		readerFactory = &failingFactory;
-		assertPrepareThrowsPreparationFailure("error.");
 	}
 }

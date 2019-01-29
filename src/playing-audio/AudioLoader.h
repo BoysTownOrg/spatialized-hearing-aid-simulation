@@ -8,15 +8,8 @@
 
 class AudioLoader {
 public:
-	struct Preparation {
-		std::string audioFilePath;
-	};
-	virtual void prepare(Preparation) = 0;
-	RUNTIME_ERROR(PreparationFailure);
-
+	virtual void reset() = 0;
 	virtual bool complete() = 0;
 	using channel_type = gsl::span<float>;
 	virtual void load(gsl::span<channel_type> audio) = 0;
-	virtual int sampleRate() = 0;
-	virtual int channels() = 0;
 };

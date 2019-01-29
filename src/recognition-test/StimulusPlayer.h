@@ -16,6 +16,8 @@ public:
 		std::string audioFilePath;
 		std::string audioDevice;
 		int framesPerBuffer;
+		int channels = 0;
+		int sampleRate;
 	};
 	virtual void prepareToPlay(Preparation) = 0;
 	RUNTIME_ERROR(PreparationFailure);

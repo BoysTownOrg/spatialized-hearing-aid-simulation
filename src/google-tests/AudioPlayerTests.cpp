@@ -67,12 +67,10 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playPreparesLoaderAndOpensStream) {
 		StimulusPlayer::Preparation request;
-		request.audioFilePath = "a";
 		request.framesPerBuffer = 2;
-		loader.setChannels(3);
-		loader.setSampleRate(4);
+		request.channels = 3;
+		request.sampleRate = 4;
 		prepareToPlay(request);
-		assertEqual("a", loader.preparation().audioFilePath);
 		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
 		EXPECT_EQ(3, device.streamParameters().channels);
 		EXPECT_EQ(4, device.streamParameters().sampleRate);
@@ -88,7 +86,7 @@ namespace {
 
 	TEST_F(AudioPlayerTests, playPreparesLoaderPriorToQueryingIt) {
 		prepareToPlay();
-		EXPECT_TRUE(loader.log().beginsWith("prepare "));
+		EXPECT_TRUE(loader.log().beginsWith("reset "));
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
@@ -100,8 +98,9 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
-		loader.setChannels(2);
-		prepareToPlay();
+		StimulusPlayer::Preparation request;
+		request.channels = 2;
+		prepareToPlay(request);
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
@@ -174,15 +173,6 @@ namespace {
 		FailsToOpenStream failingDevice{};
 		failingDevice.setErrorMessage("error.");
 		device = &failingDevice;
-		assertPlayThrowsRequestFailure("error.");
-	}
-
-	TEST_F(
-		AudioPlayerFailureTests,
-		playThrowsRequestFailureWhenAudioLoaderThrowsPreparationFailure
-	) {
-		PreparationFailureAudioLoader failingFactory{ "error." };
-		loader = &failingFactory;
 		assertPlayThrowsRequestFailure("error.");
 	}
 }

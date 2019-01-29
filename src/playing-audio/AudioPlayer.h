@@ -26,7 +26,6 @@ private:
 	template<typename exception>
 		void throwIfDeviceFailed();
 	void openStream(Preparation);
-	void prepareLoader(AudioLoader::Preparation);
 	void prepareAudioForLoading(void * channels, int frames);
 	void signalDeviceIfDoneLoading();
 	int findDeviceIndex(std::string deviceName);

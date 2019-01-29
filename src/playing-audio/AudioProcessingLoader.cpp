@@ -15,25 +15,20 @@ class NullReader : public AudioFrameReader {
 	long long remainingFrames() override { return 0; }
 };
 
-AudioProcessingLoader::AudioProcessingLoader(
-	AudioFrameReaderFactory *readerFactory
-) :
-	reader{std::make_shared<NullReader>()},
-	processor{std::make_shared<NullProcessor>()},
-	readerFactory{ readerFactory } {}
+AudioProcessingLoader::AudioProcessingLoader() :
+	reader{ std::make_shared<NullReader>() },
+	processor{ std::make_shared<NullProcessor>() } {}
 
-void AudioProcessingLoader::prepare(Preparation p) {
-	reader = makeReader(p.audioFilePath);
+void AudioProcessingLoader::reset() {
 	paddedZeros = 0;
 }
 
-std::shared_ptr<AudioFrameReader> AudioProcessingLoader::makeReader(std::string filePath) {
-	try {
-		return readerFactory->make(std::move(filePath));
-	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw PreparationFailure{ e.what() };
-	}
+void AudioProcessingLoader::setReader(std::shared_ptr<AudioFrameReader> r) {
+	reader = std::move(r);
+}
+
+void AudioProcessingLoader::setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+	processor = std::move(p);
 }
 
 void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
@@ -55,16 +50,4 @@ void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
 
 bool AudioProcessingLoader::complete() {
 	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
-}
-
-int AudioProcessingLoader::channels() {
-	return reader->channels();
-}
-
-int AudioProcessingLoader::sampleRate() {
-	return reader->sampleRate();
-}
-
-void AudioProcessingLoader::updateProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-	processor = std::move(p);
 }

@@ -24,20 +24,9 @@ void AudioPlayer::prepareToPlay(Preparation p) {
 }
 
 void AudioPlayer::prepareToPlay_(Preparation p) {
-	AudioLoader::Preparation loaderPreparation;
-	loaderPreparation.audioFilePath = p.audioFilePath;
-	prepareLoader(std::move(loaderPreparation));
-	audio.resize(loader->channels());
+	loader->reset();
+	audio.resize(p.channels);
 	reopenStream(std::move(p));
-}
-
-void AudioPlayer::prepareLoader(AudioLoader::Preparation p) {
-	try {
-		loader->prepare(std::move(p));
-	}
-	catch (const AudioLoader::PreparationFailure &e) {
-		throw PreparationFailure{ e.what() };
-	}
 }
 
 void AudioPlayer::reopenStream(Preparation p) {
@@ -49,8 +38,8 @@ void AudioPlayer::reopenStream(Preparation p) {
 
 void AudioPlayer::openStream(Preparation p) {
 	AudioDevice::StreamParameters streaming;
-	streaming.sampleRate = loader->sampleRate();
-	streaming.channels = loader->channels();
+	streaming.sampleRate = p.sampleRate;
+	streaming.channels = p.channels;
 	streaming.framesPerBuffer = p.framesPerBuffer;
 	streaming.deviceIndex = findDeviceIndex(p.audioDevice);
 	device->openStream(std::move(streaming));
