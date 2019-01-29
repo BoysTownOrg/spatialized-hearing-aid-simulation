@@ -464,3 +464,21 @@ TEST_F(
 	testing.brirFilePath = "a";
 	assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 }
+
+TEST_F(
+	RefactoredModelFailureTests,
+	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+) {
+	FAIL();
+	//defaultStimulusPlayer.setErrorMessage("error.");
+	//assertPrepareNextTrialThrowsTrialFailure("error.");
+}
+
+TEST_F(
+	RefactoredModelFailureTests,
+	playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
+) {
+	FAIL();
+	//defaultStimulusPlayer.setErrorMessage("error.");
+	//assertPlayCalibrationThrowsCalibrationFailure("error.");
+}

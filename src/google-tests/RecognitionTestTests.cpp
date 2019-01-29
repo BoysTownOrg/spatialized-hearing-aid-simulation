@@ -138,48 +138,4 @@ namespace {
 		documenter.setErrorMessage("error.");
 		assertPrepareNewTestThrowsInitializationFailure("error.");
 	}
-
-	class RecognitionTestModelWithRequestFailingStimulusPlayer : public ::testing::Test {
-	protected:
-		FakeStimulusList list{};
-		//RequestFailingStimulusPlayer defaultStimulusPlayer{};
-		DocumenterStub documenter{};
-		//RecognitionTest model{ &list, &defaultStimulusPlayer, &documenter };
-		/*
-		void assertPrepareNextTrialThrowsTrialFailure(std::string what) {
-			try {
-				//model.prepareNextTrial({});
-				FAIL() << "Expected RecognitionTest::TrialFailure";
-			}
-			catch (const RecognitionTest::TrialFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-
-		void assertPlayCalibrationThrowsCalibrationFailure(std::string what) {
-			try {
-				//model.playCalibration({});
-				FAIL() << "Expected RecognitionTest::CalibrationFailure";
-			}
-			catch (const RecognitionTest::CalibrationFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}*/
-	};
-
-	TEST_F(
-		RecognitionTestModelWithRequestFailingStimulusPlayer,
-		DISABLED_prepareNextTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
-	) {
-		//defaultStimulusPlayer.setErrorMessage("error.");
-		//assertPrepareNextTrialThrowsTrialFailure("error.");
-	}
-
-	TEST_F(
-		RecognitionTestModelWithRequestFailingStimulusPlayer,
-		DISABLED_playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
-	) {
-		//defaultStimulusPlayer.setErrorMessage("error.");
-		//assertPlayCalibrationThrowsCalibrationFailure("error.");
-	}
 }
