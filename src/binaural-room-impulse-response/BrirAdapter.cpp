@@ -17,13 +17,13 @@ public:
 		impulse_response_type result{};
 		auto i{ channel };
 		while (i < contents.size()) {
-			result.push_back(contents[i]);
+			result.push_back(contents.at(i));
 			i += channels;
 		}
 		return result;
 	}
 
-	bool empty() {
+	bool empty() noexcept {
 		return contents.empty();
 	}
 };

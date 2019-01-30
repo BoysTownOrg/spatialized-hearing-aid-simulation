@@ -7,7 +7,6 @@
 class PrescriptionReader {
 public:
 	INTERFACE_OPERATIONS(PrescriptionReader);
-	RUNTIME_ERROR(ReadFailure);
 	struct Dsl {
 		std::vector<double> crossFrequenciesHz;
 		std::vector<double> compressionRatios;
@@ -17,4 +16,5 @@ public:
 		int channels;
 	};
 	virtual Dsl read(std::string filePath) = 0;
+	RUNTIME_ERROR(ReadFailure);
 };

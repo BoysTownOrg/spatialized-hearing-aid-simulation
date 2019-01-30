@@ -21,7 +21,7 @@ void AudioFileInMemory::read(gsl::span<channel_type> audio) {
 		auto channel = audio[i];
 		samples = std::min(gsl::narrow<size_type>(channel.size()), remainingFrames_());
 		for (size_type j{ 0 }; j < samples; ++j)
-			channel[j] = buffer[head + i + j * channels_];
+			channel.at(j) = buffer.at(head + i + j * channels_);
 	}
 	head += samples * channels_;
 }

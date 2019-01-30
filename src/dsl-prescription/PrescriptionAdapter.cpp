@@ -44,7 +44,7 @@ public:
 };
 
 template<typename T>
-static bool allEqualTo(T expected, std::vector<T> toCheck) {
+static bool allEqualTo(T expected, std::vector<T> toCheck) noexcept {
 	for (auto item : toCheck)
 		if (item != expected)
 			return false;
@@ -61,7 +61,7 @@ auto PrescriptionAdapter::read_(std::string filePath) -> Dsl {
 	dsl.kneepoints_dBSpl = parser.parse(Property::kneepoints_dBSpl);
 	dsl.broadbandOutputLimitingThresholds_dBSpl =
 		parser.parse(Property::broadbandOutputLimitingThresholds_dBSpl);
-	auto channels = dsl.crossFrequenciesHz.size() + 1;
+	const auto channels = dsl.crossFrequenciesHz.size() + 1;
 	if (!allEqualTo(
 		channels, 
 		{
