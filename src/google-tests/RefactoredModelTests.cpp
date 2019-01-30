@@ -8,6 +8,10 @@ public:
 	auto coefficients() const {
 		return coefficients_;
 	}
+	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
+		coefficients_.push_back(std::move(b));
+		return {};
+	}
 };
 
 class AudioPlayerStub : public AudioStimulusPlayer {
@@ -317,6 +321,7 @@ TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
 	brir.left = { 1, 2 };
 	brir.right = { 3, 4 };
 	brirReader.setBrir(brir);
+	newTest.usingSpatialization = true;
 	prepareNewTest();
 	playTrial();
 	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 1, 2 }));

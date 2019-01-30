@@ -5,7 +5,7 @@ RefactoredModel::RefactoredModel(
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	FilterbankCompressorFactory *compressorFactory,
-	FirFilterFactory *,
+	FirFilterFactory *firFilterFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioStimulusPlayer *player,
 	AudioLoader *loader
@@ -14,6 +14,7 @@ RefactoredModel::RefactoredModel(
 	brirReader{ brirReader },
 	test{ test },
 	compressorFactory{ compressorFactory },
+	firFilterFactory{ firFilterFactory },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader }
@@ -24,7 +25,7 @@ RefactoredModel::RefactoredModel(
 void RefactoredModel::prepareNewTest(TestParameters p) {
 	prepareNewTest_(p);
 	if (p.usingSpatialization)
-		readBrir(p);
+		brir = readBrir(p);
 	if (p.usingHearingAidSimulation)
 		readPrescriptions(p);
 	testParameters = p;
@@ -73,6 +74,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setReader(reader);
 	makeCompressor(leftPrescription, reader->sampleRate());
 	makeCompressor(rightPrescription, reader->sampleRate());
+	firFilterFactory->make(brir.left);
+	firFilterFactory->make(brir.right);
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {

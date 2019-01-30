@@ -8,11 +8,13 @@
 #include <recognition-test/StimulusPlayer.h>
 #include <playing-audio/AudioPlayer.h>
 #include <playing-audio/AudioLoader.h>
+#include <signal-processing/SignalProcessor.h>
 #include <presentation/Model.h>
 
 class FirFilterFactory {
 public:
 	INTERFACE_OPERATIONS(FirFilterFactory);
+	virtual std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) = 0;
 };
 
 class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
@@ -36,11 +38,13 @@ public:
 class RefactoredModel : public Model {
 	PrescriptionReader::Dsl leftPrescription{};
 	PrescriptionReader::Dsl rightPrescription{};
+	BrirReader::BinauralRoomImpulseResponse brir{};
 	TestParameters testParameters{};
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *test;
 	FilterbankCompressorFactory *compressorFactory;
+	FirFilterFactory *firFilterFactory;
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioStimulusPlayer *player;
 	AudioLoader *loader;
@@ -50,7 +54,7 @@ public:
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
-		FirFilterFactory *,
+		FirFilterFactory *firFilterFactory,
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader
