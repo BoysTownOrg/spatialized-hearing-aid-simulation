@@ -324,26 +324,34 @@ TEST_F(RefactoredModelTests, playTrialPassesPrescriptionsToHearingAidFactory) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
-	audioFrameReader->setSampleRate(7);
 	newTest.usingHearingAidSimulation = true;
-	newTest.attack_ms = 8;
-	newTest.release_ms = 9;
-	newTest.chunkSize = 16;
-	newTest.windowSize = 32;
+	newTest.attack_ms = 1;
+	newTest.release_ms = 2;
+	newTest.chunkSize = 4;
+	newTest.windowSize = 8;
 	prepareNewTest();
 	playTrial();
 	auto left = hearingAidFactory.parameters().at(0);
-	EXPECT_EQ(7, left.sampleRate);
-	EXPECT_EQ(8, left.attack_ms);
-	EXPECT_EQ(9, left.release_ms);
-	EXPECT_EQ(16, left.chunkSize);
-	EXPECT_EQ(32, left.windowSize);
+	EXPECT_EQ(1, left.attack_ms);
+	EXPECT_EQ(2, left.release_ms);
+	EXPECT_EQ(4, left.chunkSize);
+	EXPECT_EQ(8, left.windowSize);
 	auto right = hearingAidFactory.parameters().at(1);
-	EXPECT_EQ(7, right.sampleRate);
-	EXPECT_EQ(8, right.attack_ms);
-	EXPECT_EQ(9, right.release_ms);
-	EXPECT_EQ(16, right.chunkSize);
-	EXPECT_EQ(32, right.windowSize);
+	EXPECT_EQ(1, right.attack_ms);
+	EXPECT_EQ(2, right.release_ms);
+	EXPECT_EQ(4, right.chunkSize);
+	EXPECT_EQ(8, right.windowSize);
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesSampleRateFromAudioReaderToHearingAidFactory) {
+	audioFrameReader->setSampleRate(1);
+	newTest.usingHearingAidSimulation = true;
+	prepareNewTest();
+	playTrial();
+	auto left = hearingAidFactory.parameters().at(0);
+	EXPECT_EQ(1, left.sampleRate);
+	auto right = hearingAidFactory.parameters().at(1);
+	EXPECT_EQ(1, right.sampleRate);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
