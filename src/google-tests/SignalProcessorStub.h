@@ -24,21 +24,27 @@ public:
 	}
 };
 
-class AddOne : public SignalProcessor {
+class AddsSamplesBy : public SignalProcessor {
+	signal_type::element_type c;
 public:
+	explicit AddsSamplesBy(signal_type::element_type c) : c{ c } {}
+
 	void process(signal_type signal) override {
 		for (auto &x : signal)
-			x += 1;
+			x += c;
 	}
 
 	index_type groupDelay() override { return {}; }
 };
 
-class TimesTwo : public SignalProcessor {
+class MultipliesSamplesBy : public SignalProcessor {
+	signal_type::element_type c;
 public:
+	explicit MultipliesSamplesBy(signal_type::element_type c) : c{ c } {}
+
 	void process(signal_type signal) override {
 		for (auto &x : signal)
-			x *= 2;
+			x *= c;
 	}
 
 	index_type groupDelay() override { return {}; }

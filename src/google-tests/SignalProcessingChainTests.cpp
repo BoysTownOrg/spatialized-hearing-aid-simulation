@@ -16,8 +16,8 @@ namespace {
 	};
 
 	TEST_F(SignalProcessingChainTests, chainCallsProcessorsInOrder) {
-		chain.add(std::make_shared<AddOne>());
-		chain.add(std::make_shared<TimesTwo>());
+		chain.add(std::make_shared<AddsSamplesBy>(1.0f));
+		chain.add(std::make_shared<MultipliesSamplesBy>(2.0f));
 		std::vector<float> x = { 1, 2, 3 };
 		chain.process(x);
 		assertEqual({ 4, 6, 8 }, x);
