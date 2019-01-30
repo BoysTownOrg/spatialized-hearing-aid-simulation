@@ -297,9 +297,9 @@ TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 	assertEqual("a", audioFrameReaderFactory.filePath());
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoader) {
+TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlayingNextTrial) {
+	perceptionTest.callOnPlayNextTrial([&]() { EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader()); });
 	playTrial();
-	EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {

@@ -157,7 +157,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (reader->channels() > 1)
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	prepareAudioPlayer(*reader, p);
-	loader->setReader(reader);
 	if (testParameters.usingSpatialization) {
 		leftChannel->add(firFilterFactory->make(brir.left));
 		rightChannel->add(firFilterFactory->make(brir.right));
@@ -170,6 +169,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->reset();
 	perceptionTest->playNextTrial(player);
+	loader->setReader(reader);
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
