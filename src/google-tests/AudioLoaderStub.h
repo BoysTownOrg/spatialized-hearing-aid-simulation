@@ -41,16 +41,7 @@ public:
 	const LogString &log() const {
 		return log_;
 	}
-};
 
-class InitializationFailingAudioLoader : public AudioLoader {
-	std::string errorMessage{};
-public:
-	explicit InitializationFailingAudioLoader(
-		std::string errorMessage
-	) :
-		errorMessage{ std::move(errorMessage) } {}
-
-	bool complete() override { return {}; }
-	void load(gsl::span<gsl::span<float>>) override {}
+	void setReader(std::shared_ptr<AudioFrameReader>) override {}
+	void setProcessor(std::shared_ptr<AudioFrameProcessor>) override {}
 };

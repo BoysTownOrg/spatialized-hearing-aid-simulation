@@ -14,6 +14,6 @@ public:
 	PLAYING_AUDIO_API void reset() override;
 	PLAYING_AUDIO_API void load(gsl::span<gsl::span<float>> audio) override;
 	PLAYING_AUDIO_API bool complete() override;
-	PLAYING_AUDIO_API void setReader(std::shared_ptr<AudioFrameReader>);
-	PLAYING_AUDIO_API void setProcessor(std::shared_ptr<AudioFrameProcessor>);
+	PLAYING_AUDIO_API void setReader(std::shared_ptr<AudioFrameReader>) override;
+	PLAYING_AUDIO_API void setProcessor(std::shared_ptr<AudioFrameProcessor>) override;
 };
