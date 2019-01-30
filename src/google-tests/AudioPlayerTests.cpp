@@ -10,7 +10,11 @@ namespace {
 	protected:
 		AudioDeviceStub device{};
 		AudioLoaderStub loader{};
-		AudioPlayer player{ &device, &loader };
+		AudioPlayer player{ &device };
+
+		AudioPlayerTests() {
+			player.setAudioLoader(&loader);
+		}
 
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
@@ -135,7 +139,9 @@ namespace {
 		}
 
 		AudioPlayer makePlayer() {
-			return { device, loader };
+			AudioPlayer player{ device };
+			player.setAudioLoader(loader);
+			return player;
 		}
 
 		void assertPrepareToPlayThrowsRequestFailure(std::string what) {

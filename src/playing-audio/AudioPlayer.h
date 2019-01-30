@@ -27,16 +27,15 @@ class AudioPlayer : public StimulusPlayer, public AudioDeviceController, public 
 	AudioLoader *loader;
 public:
 	PLAYING_AUDIO_API AudioPlayer(
-		AudioDevice *, 
-		AudioLoader *
+		AudioDevice *
 	);
 	PLAYING_AUDIO_API void prepareToPlay(Preparation) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
-	void setAudioLoader(AudioLoader *);
-	void fillStreamBuffer(void * channels, int frames) override;
-	bool isPlaying() override;
-	void stop() override;
-	void play() override;
+	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *);
+	PLAYING_AUDIO_API void fillStreamBuffer(void * channels, int frames) override;
+	PLAYING_AUDIO_API bool isPlaying() override;
+	PLAYING_AUDIO_API void stop() override;
+	PLAYING_AUDIO_API void play() override;
 private:
 	void prepareToPlay_(Preparation);
 	void reopenStream(Preparation);

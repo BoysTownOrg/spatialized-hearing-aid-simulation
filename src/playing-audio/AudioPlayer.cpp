@@ -1,11 +1,9 @@
 #include "AudioPlayer.h"
 
 AudioPlayer::AudioPlayer(
-	AudioDevice *device,
-	AudioLoader *loader
+	AudioDevice *device
 ) :
-	device{ device },
-	loader{ loader }
+	device{ device }
 {
 	throwIfDeviceFailed<DeviceFailure>();
 	device->setController(this);
