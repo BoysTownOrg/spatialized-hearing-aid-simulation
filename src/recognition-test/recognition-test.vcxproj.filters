@@ -18,13 +18,13 @@
     <ClInclude Include="StimulusList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StimulusPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Documenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RecognitionTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StimulusPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,6 +21,12 @@
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpeechPerceptionTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioStimulusPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">

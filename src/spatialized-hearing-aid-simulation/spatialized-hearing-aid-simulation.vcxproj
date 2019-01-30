@@ -154,8 +154,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioStimulusPlayer.h" />
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
+    <ClInclude Include="SpeechPerceptionTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp" />

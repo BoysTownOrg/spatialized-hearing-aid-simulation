@@ -1,12 +1,12 @@
 #pragma once
 
+#include "SpeechPerceptionTest.h"
+#include "AudioStimulusPlayer.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <dsl-prescription/PrescriptionReader.h>
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <audio-stream-processing/AudioFrameReader.h>
-#include <recognition-test/StimulusPlayer.h>
-#include <playing-audio/AudioPlayer.h>
 #include <playing-audio/AudioLoader.h>
 #include <signal-processing/SignalProcessor.h>
 #include <presentation/Model.h>
@@ -29,24 +29,6 @@ class ScalarFactory {
 public:
 	INTERFACE_OPERATIONS(ScalarFactory);
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
-};
-
-class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
-
-};
-
-class SpeechPerceptionTest {
-public:
-	INTERFACE_OPERATIONS(SpeechPerceptionTest);
-	struct TestParameters {
-		std::string audioDirectory;
-		std::string testFilePath;
-	};
-	virtual void prepareNewTest(TestParameters) = 0;
-	RUNTIME_ERROR(TestInitializationFailure);
-
-	virtual void playNextTrial(StimulusPlayer *) = 0;
-	virtual std::string nextStimulus() = 0;
 };
 
 class RefactoredModel : public Model {

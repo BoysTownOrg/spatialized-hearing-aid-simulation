@@ -3,26 +3,9 @@
 #include "AudioDevice.h"
 #include "AudioLoader.h"
 #include "playing-audio-exports.h"
-#include <recognition-test/StimulusPlayer.h>
+#include <spatialized-hearing-aid-simulation/AudioStimulusPlayer.h>
 
-class IAudioPlayer {
-public:
-	INTERFACE_OPERATIONS(IAudioPlayer);
-	RUNTIME_ERROR(DeviceFailure);
-
-	struct Preparation {
-		std::string audioDevice;
-		int framesPerBuffer;
-		int channels = 0;
-		int sampleRate;
-	};
-	virtual void prepareToPlay(Preparation) = 0;
-	RUNTIME_ERROR(PreparationFailure);
-	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
-	virtual void setAudioLoader(AudioLoader *) = 0;
-};
-
-class AudioPlayer : public StimulusPlayer, public AudioDeviceController, public IAudioPlayer {
+class AudioPlayer : public AudioDeviceController, public AudioStimulusPlayer {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioLoader *loader{};
