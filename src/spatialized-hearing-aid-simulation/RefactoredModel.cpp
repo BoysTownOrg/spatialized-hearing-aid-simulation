@@ -114,6 +114,7 @@ public:
 		for (auto &channel : entireAudioFile)
 			pointers.push_back({ channel });
 		reader.read(pointers);
+		reader.reset();
 	}
 
     float compute(int channel) {
@@ -136,7 +137,6 @@ private:
 
 void RefactoredModel::playTrial(TrialParameters p) {
 	auto reader = audioReaderFactory->make(test->nextStimulus());
-	//reader->reset();
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - 8) / 20.0);
 	if (reader->channels() > 0)
