@@ -319,14 +319,14 @@ TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory) {
-	PrescriptionReader::Dsl leftPrescription;
-	leftPrescription.compressionRatios = { 1 };
-	leftPrescription.crossFrequenciesHz = { 2 };
-	leftPrescription.kneepointGains_dB = { 3 };
-	leftPrescription.kneepoints_dBSpl = { 4 };
-	leftPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-	leftPrescription.channels = 6;
-	prescriptionReader.addPrescription("leftFilePath", leftPrescription);
+	PrescriptionReader::Dsl prescription;
+	prescription.compressionRatios = { 1 };
+	prescription.crossFrequenciesHz = { 2 };
+	prescription.kneepointGains_dB = { 3 };
+	prescription.kneepoints_dBSpl = { 4 };
+	prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+	prescription.channels = 6;
+	prescriptionReader.addPrescription("leftFilePath", prescription);
 	newTest.usingHearingAidSimulation = true;
 	newTest.leftDslPrescriptionFilePath = "leftFilePath";
 	prepareNewTest();
@@ -341,14 +341,14 @@ TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory)
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory) {
-	PrescriptionReader::Dsl rightPrescription;
-	rightPrescription.compressionRatios = { 1 };
-	rightPrescription.crossFrequenciesHz = { 2 };
-	rightPrescription.kneepointGains_dB = { 3 };
-	rightPrescription.kneepoints_dBSpl = { 4 };
-	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-	rightPrescription.channels = 6;
-	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
+	PrescriptionReader::Dsl prescription;
+	prescription.compressionRatios = { 1 };
+	prescription.crossFrequenciesHz = { 2 };
+	prescription.kneepointGains_dB = { 3 };
+	prescription.kneepoints_dBSpl = { 4 };
+	prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+	prescription.channels = 6;
+	prescriptionReader.addPrescription("rightFilePath", prescription);
 	newTest.usingHearingAidSimulation = true;
 	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
@@ -421,6 +421,24 @@ TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
 	processor->process(channels);
 	EXPECT_EQ((4 + 1) * 3 + 2, left.at(0));
 	EXPECT_EQ((5 + 1) * 3 + 2, right.at(0));
+}
+
+TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
+	newTest.usingSpatialization = false;
+	newTest.usingHearingAidSimulation = true;
+	audioFrameReader->setChannels(2);
+	prepareNewTest();
+	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
+	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
+	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
+	playTrial();
+	auto processor = loader.audioFrameProcessor();
+	std::vector<float> left{ 4 };
+	std::vector<float> right{ 5 };
+	std::vector<gsl::span<float>> channels{ left, right };
+	processor->process(channels);
+	EXPECT_EQ(4 + 1 + 2, left.at(0));
+	EXPECT_EQ(5 + 1 + 2, right.at(0));
 }
 
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
