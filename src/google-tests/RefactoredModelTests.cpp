@@ -1,5 +1,4 @@
 #include "ArgumentCollection.h"
-#include <fir-filtering/FirFilter.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class FirFilterFactoryStub : public FirFilterFactory {
@@ -12,12 +11,6 @@ public:
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
 		coefficients_.push_back(std::move(b));
 		return {};
-	}
-};
-
-class FailingFirFilterFactory : public FirFilterFactory {
-	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) override {
-		throw FirFilter::InvalidCoefficients{};
 	}
 };
 
@@ -489,9 +482,19 @@ TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
 
 TEST_F(
 	RefactoredModelFailureTests,
-	playTrialThrowsTrialFailureWhenFirFilterFactoryThrowsInvalidCoefficients
+	prepareNewTestThrowsTestInitializationFailureWhenCoefficientsAreEmpty
 ) {
-	FailingFirFilterFactory failing;
-	firFilterFactory = &failing;
-	assertPlayTrialThrowsTrialFailure("The BRIR coefficients are empty, therefore a filter operation cannot be defined.");
+	BrirReader::BinauralRoomImpulseResponse brir;
+	brir.left = {};
+	brir.right = { 0 };
+	defaultBrirReader.setBrir(brir);
+	assertPreparingNewTestThrowsTestInitializationFailure(
+		"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
+	);
+	brir.left = { 0 };
+	brir.right = {};
+	defaultBrirReader.setBrir(brir);
+	assertPreparingNewTestThrowsTestInitializationFailure(
+		"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
+	);
 }
