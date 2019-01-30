@@ -3,40 +3,55 @@
 
 class FirFilterFactoryStub : public FirFilterFactory {
 	ArgumentCollection<BrirReader::impulse_response_type> coefficients_{};
+	std::shared_ptr<SignalProcessor> processor{};
 public:
+	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+		processor = std::move(p);
+	}
+
 	auto coefficients() const {
 		return coefficients_;
 	}
 
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
 		coefficients_.push_back(std::move(b));
-		return {};
+		return processor;
 	}
 };
 
 class HearingAidFactoryStub : public HearingAidFactory {
 	ArgumentCollection<FilterbankCompressor::Parameters> parameters_{};
+	std::shared_ptr<SignalProcessor> processor{};
 public:
+	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+		processor = std::move(p);
+	}
+
 	ArgumentCollection<FilterbankCompressor::Parameters> parameters() const {
 		return parameters_;
 	}
 
 	std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
 		parameters_.push_back(std::move(p));
-		return {};
+		return processor;
 	}
 };
 
 class ScalarFactoryStub : public ScalarFactory {
 	ArgumentCollection<float> scalars_{};
+	std::shared_ptr<SignalProcessor> processor{};
 public:
+	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+		processor = std::move(p);
+	}
+
 	auto scalars() const {
 		return scalars_;
 	}
 
 	std::shared_ptr<SignalProcessor> make(float x) override {
 		scalars_.push_back(x);
-		return {};
+		return processor;
 	}
 };
 
@@ -159,6 +174,7 @@ public:
 #include "PrescriptionReaderStub.h"
 #include "BrirReaderStub.h"
 #include "FakeAudioFileReader.h"
+#include "SignalProcessorStub.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
@@ -387,6 +403,25 @@ TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
 	playTrial();
 	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 1, 2 }));
 	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 3, 4 }));
+}
+
+TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
+	newTest.usingSpatialization = true;
+	newTest.usingHearingAidSimulation = true;
+	prepareNewTest();
+	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
+	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
+	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
+	playTrial();
+	auto processor = loader.audioFrameProcessor();
+	std::vector<float> a{ 1 };
+	std::vector<float> b{ 2 };
+	std::vector<float> c{ 3 };
+	std::vector<gsl::span<float>> channels{ a, b, c };
+	processor->process(channels);
+	EXPECT_EQ((1 + 1) * 3 + 2, a.at(0));
+	EXPECT_EQ((2 + 1) * 3 + 2, b.at(0));
+	EXPECT_EQ((3 + 1) * 3 + 2, c.at(0));
 }
 
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
