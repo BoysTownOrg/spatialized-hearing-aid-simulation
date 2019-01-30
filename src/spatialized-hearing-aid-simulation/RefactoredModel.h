@@ -75,6 +75,8 @@ public:
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
 
 private:
+	void checkAndStorePrescriptions(TestParameters);
+	void checkAndStoreBrir(TestParameters);
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
