@@ -11,11 +11,6 @@
 	#define RECOGNITION_TEST_API __declspec(dllimport)
 #endif
 
-struct GlobalTrialParameters {
-	std::string stimulus;
-	double level_dB_Spl;
-};
-
 class SpeechPerceptionTest_ {
 public:
 	INTERFACE_OPERATIONS(SpeechPerceptionTest_);

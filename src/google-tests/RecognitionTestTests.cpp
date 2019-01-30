@@ -87,6 +87,7 @@ namespace {
 		playNextTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
+		prepareNewTest();
 		playNextTrial();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
 	}

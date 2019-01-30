@@ -11,6 +11,7 @@ class DocumenterStub : public Documenter {
 	LogString log_{};
 public:
 	void documentTrialParameters(TrialParameters p) override {
+		trialParameters_ = std::move(p);
 		log_ += LogString{ "documentTrialParameters " };
 	}
 

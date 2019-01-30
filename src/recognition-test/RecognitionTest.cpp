@@ -39,12 +39,18 @@ void RecognitionTest::initializeDocumenter(std::string testFilePath) {
 	documenter->initialize(std::move(testFilePath));
 }
 
-void RecognitionTest::documentTestParameters(TestParameters) {
-	documenter->documentTestParameters({});
+void RecognitionTest::documentTestParameters(TestParameters p) {
+	Documenter::TestParameters adapted;
+	adapted.subjectId = p.subjectId;
+	adapted.testerId = p.testerId;
+	documenter->documentTestParameters(adapted);
 }
 
 void RecognitionTest::playNextTrial(StimulusPlayer *player) {
 	if (player->isPlaying())
-		return; 
+		return;
+	Documenter::TrialParameters p;
+	p.stimulus = nextStimulus_;
+	documenter->documentTrialParameters(p);
 	nextStimulus_ = list->next();
 }
