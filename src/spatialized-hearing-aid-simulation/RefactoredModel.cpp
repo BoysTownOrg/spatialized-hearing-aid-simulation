@@ -22,6 +22,10 @@ RefactoredModel::RefactoredModel(
 	player->setAudioLoader(loader);
 }
 
+static constexpr bool powerOfTwo(int n) noexcept {
+	return n > 0 && (n & (n - 1)) == 0;
+}
+
 void RefactoredModel::prepareNewTest(TestParameters p) {
 	prepareNewTest_(p);
 	if (p.usingSpatialization) {
@@ -31,8 +35,19 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 		if (brir.right.empty())
 			throw TestInitializationFailure{"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."};
 	}
-	if (p.usingHearingAidSimulation)
+	if (p.usingHearingAidSimulation) {
 		readPrescriptions(p);
+		if (!powerOfTwo(p.chunkSize))
+			throw TestInitializationFailure{
+				"Both the chunk size and window size must be powers of two; " + 
+				std::to_string(p.chunkSize) + " is not a power of two."
+			};
+		if (!powerOfTwo(p.windowSize))
+			throw TestInitializationFailure{
+				"Both the chunk size and window size must be powers of two; " + 
+				std::to_string(p.windowSize) + " is not a power of two."
+			};
+	}
 	testParameters = p;
 }
 
