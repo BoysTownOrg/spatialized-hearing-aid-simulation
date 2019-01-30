@@ -157,8 +157,10 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
 	loader->setReader(reader);
-	leftChannel->add(firFilterFactory->make(brir.left));
-	rightChannel->add(firFilterFactory->make(brir.right));
+	if (testParameters.usingSpatialization) {
+		leftChannel->add(firFilterFactory->make(brir.left));
+		rightChannel->add(firFilterFactory->make(brir.right));
+	}
 	leftChannel->add(makeHearingAid(leftPrescription, reader->sampleRate()));
 	rightChannel->add(makeHearingAid(rightPrescription, reader->sampleRate()));
 	channels.push_back(leftChannel);
