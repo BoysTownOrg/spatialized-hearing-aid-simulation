@@ -119,6 +119,12 @@ public:
 	}
 
 	void playCalibration(CalibrationParameters) override {
+		try {
+			player->prepareToPlay({});
+		}
+		catch (const IAudioPlayer::PreparationFailure &e) {
+			throw CalibrationFailure{ e.what() };
+		}
 	}
 
 	void stopCalibration() override {
@@ -526,6 +532,17 @@ protected:
 		}
 	}
 
+	void assertPlayCalibrationThrowsCalibrationFailure(std::string what) {
+		auto model = makeModel();
+		try {
+			model.playCalibration({});
+			FAIL() << "Expected RefactoredModel::CalibrationFailure.";
+		}
+		catch (const RefactoredModel::CalibrationFailure &e) {
+			assertEqual(std::move(what), e.what());
+		}
+	}
+
 	RefactoredModel makeModel() {
 		return 
 		{ 
@@ -587,9 +604,10 @@ TEST_F(
 	RefactoredModelFailureTests,
 	playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
 ) {
-	FAIL();
-	//defaultStimulusPlayer.setErrorMessage("error.");
-	//assertPlayCalibrationThrowsCalibrationFailure("error.");
+	PreparationFailingAudioPlayer failing;
+	failing.setErrorMessage("error.");
+	player = &failing;
+	assertPlayCalibrationThrowsCalibrationFailure("error.");
 }
 
 TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
