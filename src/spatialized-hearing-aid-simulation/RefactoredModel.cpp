@@ -167,9 +167,9 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	}
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ leftChannel, rightChannel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
+	loader->setReader(reader);
 	loader->reset();
 	perceptionTest->playNextTrial(player);
-	loader->setReader(reader);
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
