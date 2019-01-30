@@ -354,6 +354,10 @@ protected:
 	}
 };
 
+TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
+	EXPECT_EQ(&loader, player.audioLoader());
+}
+
 TEST_F(RefactoredModelTests, prepareNewTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
 	testing.usingHearingAidSimulation = true;
 	testing.leftDslPrescriptionFilePath = "a";
