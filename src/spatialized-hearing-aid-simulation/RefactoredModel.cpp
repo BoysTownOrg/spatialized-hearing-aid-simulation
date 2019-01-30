@@ -1,4 +1,6 @@
 #include "RefactoredModel.h"
+#include <signal-processing/SignalProcessingChain.h>
+#include <signal-processing/ChannelProcessingGroup.h>
 #include <gsl/gsl>
 
 RefactoredModel::RefactoredModel(
@@ -136,20 +138,26 @@ private:
 };
 
 void RefactoredModel::playTrial(TrialParameters p) {
+	std::vector<ChannelProcessingGroup::channel_processing_type> channels{};
+	const auto leftChannel = std::make_shared<SignalProcessingChain>();
+	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	auto reader = audioReaderFactory->make(test->nextStimulus());
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - 8) / 20.0);
 	if (reader->channels() > 0)
-		scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0)));
+		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	if (reader->channels() > 1)
-		scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1)));
+		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
 	loader->setReader(reader);
-	makeHearingAid(leftPrescription, reader->sampleRate());
-	makeHearingAid(rightPrescription, reader->sampleRate());
-	firFilterFactory->make(brir.left);
-	firFilterFactory->make(brir.right);
+	leftChannel->add(firFilterFactory->make(brir.left));
+	rightChannel->add(firFilterFactory->make(brir.right));
+	leftChannel->add(makeHearingAid(leftPrescription, reader->sampleRate()));
+	rightChannel->add(makeHearingAid(rightPrescription, reader->sampleRate()));
+	channels.push_back(leftChannel);
+	channels.push_back(rightChannel);
+	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
