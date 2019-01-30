@@ -48,18 +48,6 @@ namespace {
 			loader.load(stereo);
 		}
 
-		template<typename T>
-		T rms(std::vector<T> x) {
-			return std::sqrt(
-				std::accumulate(
-					x.begin(),
-					x.end(),
-					T{ 0 },
-					[](T a, T b) { return a += b * b; }
-				) / x.size()
-			);
-		}
-
 		void setInMemoryReader(AudioFileReader &reader_) {
 			setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}

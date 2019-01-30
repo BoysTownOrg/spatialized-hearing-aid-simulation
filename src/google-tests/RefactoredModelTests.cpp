@@ -145,6 +145,8 @@ public:
 #include "AudioLoaderStub.h"
 #include "PrescriptionReaderStub.h"
 #include "BrirReaderStub.h"
+#include "FakeAudioFileReader.h"
+#include <audio-file-reading/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
@@ -186,6 +188,10 @@ protected:
 
 	void playTrial() {
 		model.playTrial(trial);
+	}
+
+	void setInMemoryReader(AudioFileReader &reader_) {
+		loader.setReader(std::make_shared<AudioFileInMemory>(reader_));
 	}
 };
 
@@ -267,22 +273,18 @@ TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
 	EXPECT_TRUE(audioFrameReader->readingLog().endsWith("reset "));
 }
 
-TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
-	//FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
-	//fakeReader.setChannels(2);
-	//setInMemoryReader(fakeReader);
-	//preparation.level_dB_Spl = 7;
+TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
+	FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+	fakeReader.setChannels(2);
+	setInMemoryReader(fakeReader);
+	trial.level_dB_Spl = 7;
 	//processorFactory.setFullScale_dB_Spl(8);
 	playTrial();
-//		auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
-	/*assertEqual(
-		{
-			desiredRms / rms<float>({ 1, 3, 5 }),
-			desiredRms / rms<float>({ 2, 4, 6 })
-		},
-		processorFactory.parameters().channelScalars,
-		1e-6
-	);*/
+	auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
+	auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3);
+	auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3);
+	EXPECT_EQ(desiredRms / leftChannelRms, scalarFactory.scalars().at(0));
+	EXPECT_EQ(desiredRms / rightChannelRms, scalarFactory.scalars().at(1));
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory) {
