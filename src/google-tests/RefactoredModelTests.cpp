@@ -285,7 +285,7 @@ TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
 	);*/
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFactory) {
+TEST_F(RefactoredModelTests, playTrialPassesPrescriptionsToHearingAidFactory) {
 	PrescriptionReader::Dsl leftPrescription;
 	leftPrescription.compressionRatios = { 1 };
 	leftPrescription.crossFrequenciesHz = { 2 };
@@ -302,12 +302,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
 	rightPrescription.channels = 12;
 	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
-	audioFrameReader->setSampleRate(7);
 	newTest.usingHearingAidSimulation = true;
-	newTest.attack_ms = 8;
-	newTest.release_ms = 9;
-	newTest.chunkSize = 16;
-	newTest.windowSize = 32;
 	newTest.leftDslPrescriptionFilePath = "leftFilePath";
 	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
@@ -319,11 +314,6 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	assertEqual({ 4 }, left.kneepoints_dBSpl);
 	assertEqual({ 5 }, left.broadbandOutputLimitingThresholds_dBSpl);
 	EXPECT_EQ(6, left.channels);
-	EXPECT_EQ(7, left.sampleRate);
-	EXPECT_EQ(8, left.attack_ms);
-	EXPECT_EQ(9, left.release_ms);
-	EXPECT_EQ(16, left.chunkSize);
-	EXPECT_EQ(32, left.windowSize);
 	auto right = hearingAidFactory.parameters().at(1);
 	assertEqual({ 1, 1 }, right.compressionRatios);
 	assertEqual({ 2, 2 }, right.crossFrequenciesHz);
@@ -331,6 +321,24 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	assertEqual({ 4, 4 }, right.kneepoints_dBSpl);
 	assertEqual({ 5, 5 }, right.broadbandOutputLimitingThresholds_dBSpl);
 	EXPECT_EQ(12, right.channels);
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
+	audioFrameReader->setSampleRate(7);
+	newTest.usingHearingAidSimulation = true;
+	newTest.attack_ms = 8;
+	newTest.release_ms = 9;
+	newTest.chunkSize = 16;
+	newTest.windowSize = 32;
+	prepareNewTest();
+	playTrial();
+	auto left = hearingAidFactory.parameters().at(0);
+	EXPECT_EQ(7, left.sampleRate);
+	EXPECT_EQ(8, left.attack_ms);
+	EXPECT_EQ(9, left.release_ms);
+	EXPECT_EQ(16, left.chunkSize);
+	EXPECT_EQ(32, left.windowSize);
+	auto right = hearingAidFactory.parameters().at(1);
 	EXPECT_EQ(7, right.sampleRate);
 	EXPECT_EQ(8, right.attack_ms);
 	EXPECT_EQ(9, right.release_ms);
