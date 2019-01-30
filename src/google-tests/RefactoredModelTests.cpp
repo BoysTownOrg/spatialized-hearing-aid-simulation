@@ -67,7 +67,7 @@ public:
 	void playTrial(TrialParameters p) override {
 		auto reader = audioReaderFactory->make(test->nextStimulus());
 		loader->setReader(reader);
-		prepareAudioPlayer(*reader);
+		prepareAudioPlayer(*reader, p);
 		test->playNextTrial(player);
 		makeCompressor(
 			prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), 
@@ -141,11 +141,12 @@ private:
 		return compressorFactory->make(compression);
 	}
 
-	void prepareAudioPlayer(AudioFrameReader &reader) {
+	void prepareAudioPlayer(AudioFrameReader &reader, Model::TrialParameters p) {
 		IAudioPlayer::Preparation playing{};
 		playing.channels = reader.channels();
 		playing.framesPerBuffer = testParameters.chunkSize;
 		playing.sampleRate = reader.sampleRate();
+		playing.audioDevice = p.audioDevice;
 		try {
 			player->prepareToPlay(playing);
 		}
