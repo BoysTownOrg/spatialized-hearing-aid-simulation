@@ -38,7 +38,7 @@ class RefactoredModel : public Model {
 	TestParameters testParameters{};
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
-	SpeechPerceptionTest *test;
+	SpeechPerceptionTest *perceptionTest;
 	HearingAidFactory *hearingAidFactory;
 	FirFilterFactory *firFilterFactory;
 	ScalarFactory *scalarFactory;
@@ -47,15 +47,15 @@ class RefactoredModel : public Model {
 	AudioLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
-		SpeechPerceptionTest *test,
-		PrescriptionReader *prescriptionReader,
-		BrirReader *brirReader,
-		HearingAidFactory *hearingAidFactory,
-		FirFilterFactory *firFilterFactory,
-		ScalarFactory *scalarFactory,
-		AudioFrameReaderFactory *audioReaderFactory,
+		SpeechPerceptionTest *perceptionTest,
 		AudioStimulusPlayer *player,
-		AudioLoader *loader
+		AudioLoader *loader,
+		AudioFrameReaderFactory *audioReaderFactory,
+		HearingAidFactory *hearingAidFactory,
+		PrescriptionReader *prescriptionReader,
+		FirFilterFactory *firFilterFactory,
+		BrirReader *brirReader,
+		ScalarFactory *scalarFactory
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters p) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters p) override;

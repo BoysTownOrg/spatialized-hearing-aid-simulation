@@ -7,19 +7,19 @@
 double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
 
 RefactoredModel::RefactoredModel(
-	SpeechPerceptionTest *test,
-	PrescriptionReader *prescriptionReader,
-	BrirReader *brirReader,
-	HearingAidFactory *hearingAidFactory,
-	FirFilterFactory *firFilterFactory,
-	ScalarFactory *scalarFactory,
-	AudioFrameReaderFactory *audioReaderFactory,
+	SpeechPerceptionTest *perceptionTest,
 	AudioStimulusPlayer *player,
-	AudioLoader *loader
+	AudioLoader *loader,
+	AudioFrameReaderFactory *audioReaderFactory,
+	HearingAidFactory *hearingAidFactory,
+	PrescriptionReader *prescriptionReader,
+	FirFilterFactory *firFilterFactory,
+	BrirReader *brirReader,
+	ScalarFactory *scalarFactory
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
-	test{ test },
+	perceptionTest{ perceptionTest },
 	hearingAidFactory{ hearingAidFactory },
 	firFilterFactory{ firFilterFactory },
 	scalarFactory{ scalarFactory },
@@ -76,7 +76,7 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	adapted.audioDirectory = p.audioDirectory;
 	adapted.testFilePath = p.testFilePath;
 	try {
-		test->prepareNewTest(adapted);
+		perceptionTest->prepareNewTest(adapted);
 	}
 	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
 		throw TestInitializationFailure{ e.what() };
@@ -149,7 +149,7 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
-	auto reader = audioReaderFactory->make(test->nextStimulus());
+	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	if (reader->channels() > 0)
@@ -157,7 +157,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (reader->channels() > 1)
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	prepareAudioPlayer(*reader, p);
-	test->playNextTrial(player);
+	perceptionTest->playNextTrial(player);
 	loader->setReader(reader);
 	if (testParameters.usingSpatialization) {
 		leftChannel->add(firFilterFactory->make(brir.left));

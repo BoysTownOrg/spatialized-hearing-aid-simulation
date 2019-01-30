@@ -27,7 +27,7 @@ public:
 		processor = std::move(p);
 	}
 
-	ArgumentCollection<FilterbankCompressor::Parameters> parameters() const {
+	auto parameters() const {
 		return parameters_;
 	}
 
@@ -122,7 +122,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	StimulusPlayer *player_{};
 	bool playNextTrialCalled_{};
 public:
-	const TestParameters &testParameters() const noexcept {
+	const auto &testParameters() const noexcept {
 		return testParameters_;
 	}
 
@@ -147,7 +147,7 @@ public:
 		return nextStimulus_;
 	}
 
-	const StimulusPlayer *player() const noexcept {
+	const auto player() const noexcept {
 		return player_;
 	}
 };
@@ -191,18 +191,18 @@ protected:
 	std::shared_ptr<AudioFrameReaderStub> audioFrameReader 
 		= std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
-	AudioPlayerStub player{};
-	AudioLoaderStub loader{};
+	AudioPlayerStub audioPlayer{};
+	AudioLoaderStub audioLoader{};
 	RefactoredModel model{ 
 		&perceptionTest,
-		&prescriptionReader, 
-		&brirReader, 
-		&hearingAidFactory, 
-		&firFilterFactory,
-		&scalarFactory,
+		&audioPlayer,
+		&audioLoader,
 		&audioFrameReaderFactory,
-		&player,
-		&loader
+		&hearingAidFactory, 
+		&prescriptionReader, 
+		&firFilterFactory,
+		&brirReader, 
+		&scalarFactory
 	};
 
 	RefactoredModelTests() {
@@ -232,7 +232,7 @@ protected:
 };
 
 TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
-	EXPECT_EQ(&loader, player.audioLoader());
+	EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
 }
 
 TEST_F(
@@ -282,7 +282,7 @@ TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTes
 
 TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
 	playTrial();
-	EXPECT_EQ(&player, perceptionTest.player());
+	EXPECT_EQ(&audioPlayer, perceptionTest.player());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
@@ -293,21 +293,21 @@ TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoader) {
 	playTrial();
-	EXPECT_EQ(audioFrameReader, loader.audioFrameReader());
+	EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
 	playTrial();
-	EXPECT_EQ(1, player.preparation().channels);
-	EXPECT_EQ(2, player.preparation().sampleRate);
+	EXPECT_EQ(1, audioPlayer.preparation().channels);
+	EXPECT_EQ(2, audioPlayer.preparation().sampleRate);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
 	trialParameters.audioDevice = "a";
 	playTrial();
-	assertEqual("a", player.preparation().audioDevice);
+	assertEqual("a", audioPlayer.preparation().audioDevice);
 }
 
 TEST_F(RefactoredModelTests, playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation) {
@@ -315,7 +315,7 @@ TEST_F(RefactoredModelTests, playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHea
 	testParameters.chunkSize = 1;
 	prepareNewTest();
 	playTrial();
-	EXPECT_EQ(1, player.preparation().framesPerBuffer);
+	EXPECT_EQ(1, audioPlayer.preparation().framesPerBuffer);
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
@@ -432,7 +432,7 @@ TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
 	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
 	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
 	playTrial();
-	auto processor = loader.audioFrameProcessor();
+	auto processor = audioLoader.audioFrameProcessor();
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
@@ -450,7 +450,7 @@ TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
 	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
 	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
 	playTrial();
-	auto processor = loader.audioFrameProcessor();
+	auto processor = audioLoader.audioFrameProcessor();
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
@@ -468,7 +468,7 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
 	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
 	playTrial();
-	auto processor = loader.audioFrameProcessor();
+	auto processor = audioLoader.audioFrameProcessor();
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
@@ -478,7 +478,7 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 }
 
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
-	player.setAudioDeviceDescriptions({ "a", "b", "c" });
+	audioPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
@@ -541,14 +541,14 @@ protected:
 		return 
 		{ 
 			test,
-			prescriptionReader, 
-			brirReader, 
-			hearingAidFactory, 
-			firFilterFactory,
-			scalarFactory,
-			audioReaderFactory,
 			player,
-			loader
+			loader,
+			audioReaderFactory,
+			hearingAidFactory, 
+			prescriptionReader, 
+			firFilterFactory,
+			brirReader, 
+			scalarFactory
 		};
 	}
 };

@@ -16,15 +16,15 @@ TEST_F(
 	TestDocumenter::TestParameters test;
 	//perceptionTest.subjectId = "a";
 	//perceptionTest.testerId = "b";
-	//test.usingHearingAidSimulation = true;
-	//test.leftDslPrescriptionFilePath = "c";
-	//test.rightDslPrescriptionFilePath = "d";
-	//test.usingSpatialization = true;
-	//test.brirFilePath = "e";
-	//test.attack_ms = 1;
-	//test.release_ms = 2;
-	//test.windowSize = 3;
-	//test.chunkSize = 4;
+	//perceptionTest.usingHearingAidSimulation = true;
+	//perceptionTest.leftDslPrescriptionFilePath = "c";
+	//perceptionTest.rightDslPrescriptionFilePath = "d";
+	//perceptionTest.usingSpatialization = true;
+	//perceptionTest.brirFilePath = "e";
+	//perceptionTest.attack_ms = 1;
+	//perceptionTest.release_ms = 2;
+	//perceptionTest.windowSize = 3;
+	//perceptionTest.chunkSize = 4;
 	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
@@ -48,15 +48,15 @@ TEST_F(
 	TestDocumenter::TestParameters test;
 	//perceptionTest.subjectId = "a";
 	//perceptionTest.testerId = "b";
-	//test.usingHearingAidSimulation = false;
-	//test.leftDslPrescriptionFilePath = "c";
-	//test.rightDslPrescriptionFilePath = "d";
-	//test.usingSpatialization = true;
-	//test.brirFilePath = "e";
-	//test.attack_ms = 1;
-	//test.release_ms = 2;
-	//test.windowSize = 3;
-	//test.chunkSize = 4;
+	//perceptionTest.usingHearingAidSimulation = false;
+	//perceptionTest.leftDslPrescriptionFilePath = "c";
+	//perceptionTest.rightDslPrescriptionFilePath = "d";
+	//perceptionTest.usingSpatialization = true;
+	//perceptionTest.brirFilePath = "e";
+	//perceptionTest.attack_ms = 1;
+	//perceptionTest.release_ms = 2;
+	//perceptionTest.windowSize = 3;
+	//perceptionTest.chunkSize = 4;
 	TestDocumenter::TestParameters p;
 	documenter.documentTestParameters(p);
 	assertEqual(
@@ -78,15 +78,15 @@ TEST_F(
 	TestDocumenter::TestParameters test;
 	//perceptionTest.subjectId = "a";
 	//perceptionTest.testerId = "b";
-	//test.usingHearingAidSimulation = true;
-	//test.leftDslPrescriptionFilePath = "c";
-	//test.rightDslPrescriptionFilePath = "d";
-	//test.usingSpatialization = false;
-	//test.brirFilePath = "e";
-	//test.attack_ms = 1;
-	//test.release_ms = 2;
-	//test.windowSize = 3;
-	//test.chunkSize = 4;
+	//perceptionTest.usingHearingAidSimulation = true;
+	//perceptionTest.leftDslPrescriptionFilePath = "c";
+	//perceptionTest.rightDslPrescriptionFilePath = "d";
+	//perceptionTest.usingSpatialization = false;
+	//perceptionTest.brirFilePath = "e";
+	//perceptionTest.attack_ms = 1;
+	//perceptionTest.release_ms = 2;
+	//perceptionTest.windowSize = 3;
+	//perceptionTest.chunkSize = 4;
 	TestDocumenter::TestParameters p;
 	documenter.documentTestParameters(p);
 	assertEqual(
