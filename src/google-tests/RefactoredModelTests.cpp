@@ -57,6 +57,7 @@ public:
 
 class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
+	std::function<void(void)> callOnPlay_{};
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
 public:
@@ -76,8 +77,13 @@ public:
 		audioDeviceDescriptions_ = std::move(v);
 	}
 
+	void callOnPlay(std::function<void(void)> f) {
+		callOnPlay_ = f;
+	}
+
 	void play() override
 	{
+		callOnPlay_();
 	}
 
 	bool isPlaying() override
@@ -467,12 +473,11 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
 	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
-	playTrial();
-	auto processor = audioLoader.audioFrameProcessor();
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
-	processor->process(channels);
+	audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+	playTrial();
 	EXPECT_EQ((4 + 1) * 3, left.at(0));
 	EXPECT_EQ((5 + 1) * 3, right.at(0));
 }
