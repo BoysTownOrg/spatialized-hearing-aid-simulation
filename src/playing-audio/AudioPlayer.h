@@ -25,11 +25,9 @@ public:
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController, public IAudioPlayer {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
-	AudioLoader *loader;
+	AudioLoader *loader{};
 public:
-	PLAYING_AUDIO_API AudioPlayer(
-		AudioDevice *
-	);
+	explicit PLAYING_AUDIO_API AudioPlayer(AudioDevice *);
 	PLAYING_AUDIO_API void prepareToPlay(Preparation) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
 	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *) override;

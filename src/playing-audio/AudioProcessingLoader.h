@@ -1,9 +1,7 @@
 #pragma once
 
-#include "AudioFrameProcessor.h"
 #include "AudioLoader.h"
 #include "playing-audio-exports.h"
-#include <audio-stream-processing/AudioFrameReader.h>
 
 class AudioProcessingLoader : public AudioLoader {
 	std::shared_ptr<AudioFrameProcessor> processor;

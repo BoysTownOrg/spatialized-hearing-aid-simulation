@@ -3,13 +3,11 @@
 #include "AudioFrameProcessor.h"
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <common-includes/Interface.h>
-#include <common-includes/RuntimeError.h>
 #include <gsl/gsl>
-#include <string>
-#include <vector>
 
 class AudioLoader {
 public:
+	INTERFACE_OPERATIONS(AudioLoader);
 	virtual void reset() = 0;
 	virtual bool complete() = 0;
 	using channel_type = gsl::span<float>;

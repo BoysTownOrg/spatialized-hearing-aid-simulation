@@ -1,8 +1,6 @@
 #include "AudioPlayer.h"
 
-AudioPlayer::AudioPlayer(
-	AudioDevice *device
-) :
+AudioPlayer::AudioPlayer(AudioDevice *device) :
 	device{ device }
 {
 	throwIfDeviceFailed<DeviceFailure>();
