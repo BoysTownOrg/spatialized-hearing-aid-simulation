@@ -3,6 +3,9 @@
 #include <signal-processing/ChannelProcessingGroup.h>
 #include <gsl/gsl>
 
+// The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
+double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
+
 RefactoredModel::RefactoredModel(
 	SpeechPerceptionTest *test,
 	PrescriptionReader *prescriptionReader,
@@ -148,7 +151,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	auto reader = audioReaderFactory->make(test->nextStimulus());
     RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - 8) / 20.0);
+    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	if (reader->channels() > 0)
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	if (reader->channels() > 1)
