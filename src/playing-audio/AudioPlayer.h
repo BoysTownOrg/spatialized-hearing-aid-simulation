@@ -19,6 +19,7 @@ public:
 	virtual void prepareToPlay(Preparation) = 0;
 	RUNTIME_ERROR(PreparationFailure);
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
+	virtual void setAudioLoader(AudioLoader *) = 0;
 };
 
 class AudioPlayer : public StimulusPlayer, public AudioDeviceController, public IAudioPlayer {
@@ -31,7 +32,7 @@ public:
 	);
 	PLAYING_AUDIO_API void prepareToPlay(Preparation) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
-	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *);
+	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *) override;
 	PLAYING_AUDIO_API void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API bool isPlaying() override;
 	PLAYING_AUDIO_API void stop() override;

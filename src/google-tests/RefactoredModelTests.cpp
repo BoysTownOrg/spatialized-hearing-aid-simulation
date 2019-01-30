@@ -246,6 +246,8 @@ public:
 	void stop() override
 	{
 	}
+
+	void setAudioLoader(AudioLoader *) override {}
 };
 
 class PreparationFailingAudioPlayer : public IIAudioPlayer {
@@ -263,6 +265,7 @@ public:
 	void play() override {}
 	bool isPlaying() override { return {}; }
 	void stop() override {}
+	void setAudioLoader(AudioLoader *) override {}
 };
 
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
