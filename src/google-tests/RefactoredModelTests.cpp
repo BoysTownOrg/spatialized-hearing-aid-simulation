@@ -441,6 +441,24 @@ TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
 	EXPECT_EQ(5 + 1 + 2, right.at(0));
 }
 
+TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
+	newTest.usingSpatialization = true;
+	newTest.usingHearingAidSimulation = false;
+	audioFrameReader->setChannels(2);
+	prepareNewTest();
+	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
+	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
+	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
+	playTrial();
+	auto processor = loader.audioFrameProcessor();
+	std::vector<float> left{ 4 };
+	std::vector<float> right{ 5 };
+	std::vector<gsl::span<float>> channels{ left, right };
+	processor->process(channels);
+	EXPECT_EQ((4 + 1) * 3, left.at(0));
+	EXPECT_EQ((5 + 1) * 3, right.at(0));
+}
+
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
 	player.setAudioDeviceDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
