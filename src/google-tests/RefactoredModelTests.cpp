@@ -57,7 +57,6 @@ public:
 
 class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
-	std::function<void(void)> callOnPlay_{};
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
 public:
@@ -77,13 +76,8 @@ public:
 		audioDeviceDescriptions_ = std::move(v);
 	}
 
-	void callOnPlay(std::function<void(void)> f) {
-		callOnPlay_ = f;
-	}
-
 	void play() override
 	{
-		callOnPlay_();
 	}
 
 	bool isPlaying() override
@@ -125,6 +119,7 @@ public:
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
+	std::function<void(void)> callOnPlayNextTrial_{ []() {} };
 	StimulusPlayer *player_{};
 	bool playNextTrialCalled_{};
 public:
@@ -136,9 +131,14 @@ public:
 		testParameters_ = std::move(p);
 	}
 
+	void callOnPlayNextTrial(std::function<void(void)> f) {
+		callOnPlayNextTrial_ = f;
+	}
+
 	void playNextTrial(StimulusPlayer *p) override {
 		player_ = p;
 		playNextTrialCalled_ = true;
+		callOnPlayNextTrial_();
 	}
 	
 	bool playNextTrialCalled() const noexcept {
@@ -476,7 +476,7 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
-	audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+	perceptionTest.callOnPlayNextTrial([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 	playTrial();
 	EXPECT_EQ((4 + 1) * 3, left.at(0));
 	EXPECT_EQ((5 + 1) * 3, right.at(0));
