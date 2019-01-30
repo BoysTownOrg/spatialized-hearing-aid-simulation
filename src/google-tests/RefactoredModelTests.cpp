@@ -300,6 +300,17 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	EXPECT_EQ(11, right.windowSize);
 }
 
+TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
+	BrirReader::BinauralRoomImpulseResponse brir;
+	brir.left = { 1, 2 };
+	brir.right = { 3, 4 };
+	brirReader.setBrir(brir);
+	prepareNewTest();
+	playTrial();
+	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 1, 2 }));
+	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 3, 4 }));
+}
+
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
 	player.setAudioDeviceDescriptions({ "a", "b", "c" });
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
