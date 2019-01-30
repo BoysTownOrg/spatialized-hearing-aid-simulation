@@ -54,9 +54,8 @@ void TestDocumenter::documentTestParameters(TestParameters) {
 
 void TestDocumenter::documentTrialParameters(TrialParameters p) {
 	FormattedStream stream;
-	auto global = p.global;
-	stream.insertLabeledParameterLine("stimulus", global->stimulus);
-	stream.insertLabeledParameterLine("level (dB SPL)", global->level_dB_Spl);
+	stream.insertLabeledParameterLine("stimulus", p.stimulus);
+	//stream.insertLabeledParameterLine("level (dB SPL)", global->level_dB_Spl);
 	stream.insertLine();
 	writer->write(stream.str());
 }

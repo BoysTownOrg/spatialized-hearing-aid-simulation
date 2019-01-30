@@ -20,6 +20,8 @@ class SpeechPerceptionTest_ {
 public:
 	INTERFACE_OPERATIONS(SpeechPerceptionTest_);
 	struct TestParameters {
+		std::string subjectId;
+		std::string testerId;
 		std::string audioDirectory;
 		std::string testFilePath;
 	};

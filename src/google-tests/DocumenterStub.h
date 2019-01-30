@@ -2,7 +2,6 @@
 
 #include "LogString.h"
 #include <recognition-test/Documenter.h>
-#include <recognition-test/RecognitionTest.h>
 
 class DocumenterStub : public Documenter {
 	TestParameters testParameters_{};
@@ -11,10 +10,7 @@ class DocumenterStub : public Documenter {
 	std::stringstream content_{};
 	LogString log_{};
 public:
-	GlobalTrialParameters globalTrialParameters{};
-
 	void documentTrialParameters(TrialParameters p) override {
-		globalTrialParameters = *p.global;
 		log_ += LogString{ "documentTrialParameters " };
 	}
 

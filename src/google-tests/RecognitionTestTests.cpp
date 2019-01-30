@@ -44,12 +44,13 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
-		DISABLED_prepareNewTestDocumentsTestParameters
+		prepareNewTestDocumentsTestParameters
 	) {
-		//GlobalTestParameters global;
-		//newTestParameters.global = &global;
+		newTest.subjectId = "a";
+		newTest.testerId = "b";
 		prepareNewTest();
-		//EXPECT_EQ(&global, documenter.documentedTestParameters().global);
+		assertEqual("a", documenter.documentedTestParameters().subjectId);
+		assertEqual("b", documenter.documentedTestParameters().testerId);
 	}
 
 	TEST_F(
@@ -83,13 +84,11 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
-		DISABLED_playNextTrialDocumentsTrial
+		playNextTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
-		//nextTrial.level_dB_Spl = 1;
 		playNextTrial();
-		EXPECT_EQ(1, documenter.globalTrialParameters.level_dB_Spl);
-		assertEqual("a", documenter.globalTrialParameters.stimulus);
+		assertEqual("a", documenter.documentedTrialParameters().stimulus);
 	}
 
 	TEST_F(

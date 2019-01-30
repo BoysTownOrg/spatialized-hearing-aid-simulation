@@ -4,9 +4,6 @@
 #include <common-includes/RuntimeError.h>
 #include <string>
 
-struct GlobalTestParameters;
-struct GlobalTrialParameters;
-
 class Documenter {
 public:
 	INTERFACE_OPERATIONS(Documenter);
@@ -14,12 +11,13 @@ public:
 	RUNTIME_ERROR(InitializationFailure);
 
 	struct TestParameters{
-		GlobalTestParameters *global;
+		std::string subjectId;
+		std::string testerId;
 	};
 	virtual void documentTestParameters(TestParameters) = 0;
 	
 	struct TrialParameters{
-		GlobalTrialParameters *global;
+		std::string stimulus;
 	};
 	virtual void documentTrialParameters(TrialParameters) = 0;
 };
