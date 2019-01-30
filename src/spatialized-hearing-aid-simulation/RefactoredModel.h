@@ -38,7 +38,7 @@ class RefactoredModel : public Model {
 	AudioStimulusPlayer *player;
 	AudioLoader *loader;
 public:
-	RefactoredModel(
+	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *test,
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
@@ -46,18 +46,7 @@ public:
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader
-	) :
-		prescriptionReader{ prescriptionReader },
-		brirReader{ brirReader },
-		test{ test },
-		compressorFactory{ compressorFactory },
-		audioReaderFactory{ audioReaderFactory },
-		player{ player },
-		loader{ loader }
-	{
-		player->setAudioLoader(loader);
-	}
-
+	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters p) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters p) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
@@ -66,10 +55,10 @@ public:
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
 
 private:
-	void readPrescriptions(Model::TestParameters p);
+	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
-	BrirReader::BinauralRoomImpulseResponse readBrir(Model::TestParameters p);
-	std::shared_ptr<FilterbankCompressor> makeCompressor(PrescriptionReader::Dsl dsl, int sampleRate);
-	void prepareAudioPlayer(AudioFrameReader &reader, Model::TrialParameters p);
-	void prepareNewTest_(Model::TestParameters p);
+	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
+	std::shared_ptr<FilterbankCompressor> makeCompressor(PrescriptionReader::Dsl, int sampleRate);
+	void prepareAudioPlayer(AudioFrameReader &, TrialParameters);
+	void prepareNewTest_(TestParameters);
 };

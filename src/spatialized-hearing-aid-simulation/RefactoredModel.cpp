@@ -1,5 +1,25 @@
 #include "RefactoredModel.h"
 
+RefactoredModel::RefactoredModel(
+	SpeechPerceptionTest *test,
+	PrescriptionReader *prescriptionReader,
+	BrirReader *brirReader,
+	FilterbankCompressorFactory *compressorFactory,
+	AudioFrameReaderFactory *audioReaderFactory,
+	AudioStimulusPlayer *player,
+	AudioLoader *loader
+) :
+	prescriptionReader{ prescriptionReader },
+	brirReader{ brirReader },
+	test{ test },
+	compressorFactory{ compressorFactory },
+	audioReaderFactory{ audioReaderFactory },
+	player{ player },
+	loader{ loader }
+{
+	player->setAudioLoader(loader);
+}
+
 void RefactoredModel::prepareNewTest(TestParameters p) {
 	prepareNewTest_(p);
 	if (p.usingSpatialization)
@@ -9,7 +29,7 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 	testParameters = p;
 }
 
-void RefactoredModel::prepareNewTest_(Model::TestParameters p) {
+void RefactoredModel::prepareNewTest_(TestParameters p) {
 	SpeechPerceptionTest::TestParameters adapted;
 	adapted.audioDirectory = p.audioDirectory;
 	adapted.testFilePath = p.testFilePath;
@@ -21,7 +41,7 @@ void RefactoredModel::prepareNewTest_(Model::TestParameters p) {
 	}
 }
 
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(Model::TestParameters p) {
+BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters p) {
 	try {
 		return brirReader->read(p.brirFilePath);
 	}
@@ -30,7 +50,7 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(Model::TestPar
 	}
 }
 
-void RefactoredModel::readPrescriptions(Model::TestParameters p) {
+void RefactoredModel::readPrescriptions(TestParameters p) {
 	readPrescription(p.leftDslPrescriptionFilePath);
 	readPrescription(p.rightDslPrescriptionFilePath);
 }
@@ -60,7 +80,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	reader->reset();
 }
 
-void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, Model::TrialParameters p) {
+void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
 	playing.framesPerBuffer = testParameters.chunkSize;
@@ -83,7 +103,6 @@ std::shared_ptr<FilterbankCompressor> RefactoredModel::makeCompressor(
 	compression.release_ms = testParameters.release_ms;
 	compression.chunkSize = testParameters.chunkSize;
 	compression.windowSize = testParameters.windowSize;
-
 	compression.sampleRate = sampleRate;
 	compression.compressionRatios = dsl.compressionRatios;
 	compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
