@@ -17,7 +17,11 @@ public:
 	using coefficients_type = std::vector<sample_type>;
 	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
 	class InvalidCoefficients {};
-	FIR_FILTERING_API ~FirFilter() override;
+	FIR_FILTERING_API ~FirFilter();
+	FirFilter(const FirFilter &) = delete;
+	FirFilter &operator=(const FirFilter &) = delete;
+	FirFilter(FirFilter&&) = delete;
+    FirFilter& operator=(FirFilter&&) = delete;
 	FIR_FILTERING_API void process(signal_type) override;
 	FIR_FILTERING_API index_type groupDelay() override;
 private:
@@ -33,10 +37,9 @@ private:
 	coefficients_type::size_type L{};
 	coefficients_type::size_type order;
 	
-	long nextPowerOfTwo(coefficients_type::size_type x);
 	void filterCompleteSegments(signal_type);
 	void filterRemaining(signal_type);
 	void filter(signal_type);
 	void overlapAdd();
-	void shiftOverlap(index_type x);
+	void shiftOverlap(index_type);
 };

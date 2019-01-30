@@ -1,6 +1,13 @@
 #include "FirFilter.h"
 #include <algorithm>
 
+static constexpr long nextPowerOfTwo(FirFilter::coefficients_type::size_type x) noexcept {
+	int power{};
+	while (x /= 2)
+		++power;
+	return 1 << (power + 1);
+}
+
 FirFilter::FirFilter(coefficients_type b) :
 	order{ b.size() - 1 }
 {
@@ -29,13 +36,6 @@ FirFilter::FirFilter(coefficients_type b) :
 	H = dftComplex;
 }
 
-long FirFilter::nextPowerOfTwo(coefficients_type::size_type x) {
-	int power{};
-	while (x /= 2)
-		++power;
-	return 1 << (power + 1);
-}
-
 FirFilter::~FirFilter() {
 	fftwf_destroy_plan(fftPlan);
 	fftwf_destroy_plan(ifftPlan);
@@ -59,7 +59,7 @@ void FirFilter::filter(signal_type signal) {
 	std::fill(std::copy(signal.begin(), signal.end(), dftReal.begin()), dftReal.end(), sample_type{ 0 });
 	overlapAdd();
 	for (index_type i = 0; i < signal.size(); ++i)
-		signal[i] = overlap[i] / N;
+		signal[i] = overlap.at(i) / N;
 	shiftOverlap(signal.size());
 }
 
@@ -84,7 +84,7 @@ void FirFilter::overlapAdd() {
 
 void FirFilter::shiftOverlap(index_type n) {
 	for (index_type i = 0; i < N - n; ++i)
-		overlap[i] = overlap[i + n];
+		overlap.at(i) = overlap.at(i + n);
 	std::fill(overlap.end() - n, overlap.end(), sample_type{ 0 });
 }
 
