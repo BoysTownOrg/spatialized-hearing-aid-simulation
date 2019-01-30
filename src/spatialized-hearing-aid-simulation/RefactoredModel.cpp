@@ -104,23 +104,29 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 }
 
 class RmsComputer {
-    std::vector<std::vector<float>> entireAudioFile;
+	using sample_type = AudioFrameReader::channel_type::element_type;
+	using channel_type = std::vector<sample_type>;
+    std::vector<channel_type> audioFileContents;
 public:
 	explicit RmsComputer(AudioFrameReader &reader) :
-		entireAudioFile(
+		audioFileContents(
 			reader.channels(), 
-			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
+			channel_type(gsl::narrow<channel_type::size_type>(reader.frames()))
 		)
 	{
-		std::vector<gsl::span<float>> pointers;
-		for (auto &channel : entireAudioFile)
-			pointers.push_back({ channel });
-		reader.read(pointers);
+		read(reader);
+	}
+
+	void read(AudioFrameReader & reader) {
+		std::vector<AudioFrameReader::channel_type> adapted;
+		for (auto &channel : audioFileContents)
+			adapted.push_back({ channel });
+		reader.read(adapted);
 		reader.reset();
 	}
 
-    float compute(int channel) {
-		return rms(entireAudioFile.at(channel));
+    auto compute(int channel) {
+		return rms(audioFileContents.at(channel));
     }
 
 private:
