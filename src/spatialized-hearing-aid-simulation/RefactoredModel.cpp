@@ -24,8 +24,13 @@ RefactoredModel::RefactoredModel(
 
 void RefactoredModel::prepareNewTest(TestParameters p) {
 	prepareNewTest_(p);
-	if (p.usingSpatialization)
+	if (p.usingSpatialization) {
 		brir = readBrir(p);
+		if (brir.left.empty())
+			throw TestInitializationFailure{"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."};
+		if (brir.right.empty())
+			throw TestInitializationFailure{"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."};
+	}
 	if (p.usingHearingAidSimulation)
 		readPrescriptions(p);
 	testParameters = p;

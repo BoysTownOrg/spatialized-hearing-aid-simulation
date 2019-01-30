@@ -488,6 +488,7 @@ TEST_F(
 	brir.left = {};
 	brir.right = { 0 };
 	defaultBrirReader.setBrir(brir);
+	newTest.usingSpatialization = true;
 	assertPreparingNewTestThrowsTestInitializationFailure(
 		"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
 	);
