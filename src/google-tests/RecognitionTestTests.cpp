@@ -47,7 +47,7 @@ namespace {
 		DISABLED_prepareNewTestDocumentsTestParameters
 	) {
 		//GlobalTestParameters global;
-		//newTest.global = &global;
+		//newTestParameters.global = &global;
 		prepareNewTest();
 		//EXPECT_EQ(&global, documenter.documentedTestParameters().global);
 	}

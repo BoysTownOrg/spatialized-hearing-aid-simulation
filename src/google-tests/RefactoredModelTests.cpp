@@ -5,7 +5,7 @@ class FirFilterFactoryStub : public FirFilterFactory {
 	ArgumentCollection<BrirReader::impulse_response_type> coefficients_{};
 	std::shared_ptr<SignalProcessor> processor{};
 public:
-	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+	void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
 		processor = std::move(p);
 	}
 
@@ -23,7 +23,7 @@ class HearingAidFactoryStub : public HearingAidFactory {
 	ArgumentCollection<FilterbankCompressor::Parameters> parameters_{};
 	std::shared_ptr<SignalProcessor> processor{};
 public:
-	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+	void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
 		processor = std::move(p);
 	}
 
@@ -41,7 +41,7 @@ class ScalarFactoryStub : public ScalarFactory {
 	ArgumentCollection<float> scalars_{};
 	std::shared_ptr<SignalProcessor> processor{};
 public:
-	void setProcessor(std::shared_ptr<SignalProcessor> p) {
+	void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
 		processor = std::move(p);
 	}
 
@@ -64,7 +64,7 @@ public:
 		preparation_ = std::move(p);
 	}
 
-	const Preparation &preparation() const {
+	const Preparation &preparation() const noexcept {
 		return preparation_;
 	}
 	
@@ -93,7 +93,7 @@ public:
 		audioLoader_ = a;
 	}
 
-	const AudioLoader *audioLoader() const {
+	const AudioLoader *audioLoader() const noexcept {
 		return audioLoader_;
 	}
 };
@@ -122,7 +122,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	StimulusPlayer *player_{};
 	bool playNextTrialCalled_{};
 public:
-	const TestParameters &testParameters() const {
+	const TestParameters &testParameters() const noexcept {
 		return testParameters_;
 	}
 
@@ -135,7 +135,7 @@ public:
 		playNextTrialCalled_ = true;
 	}
 	
-	bool playNextTrialCalled() const {
+	bool playNextTrialCalled() const noexcept {
 		return playNextTrialCalled_;
 	}
 
@@ -147,7 +147,7 @@ public:
 		return nextStimulus_;
 	}
 
-	const StimulusPlayer *player() const {
+	const StimulusPlayer *player() const noexcept {
 		return player_;
 	}
 };
@@ -180,15 +180,16 @@ public:
 
 class RefactoredModelTests : public ::testing::Test {
 protected:
-	RefactoredModel::TestParameters newTest{};
-	RefactoredModel::TrialParameters trial{};
+	RefactoredModel::TestParameters newTestParameters{};
+	RefactoredModel::TrialParameters trialParameters{};
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub perceptionTest{};
 	HearingAidFactoryStub hearingAidFactory{};
 	FirFilterFactoryStub firFilterFactory{};
 	ScalarFactoryStub scalarFactory{};
-	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
+	std::shared_ptr<AudioFrameReaderStub> audioFrameReader 
+		= std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
 	AudioPlayerStub player{};
 	AudioLoaderStub loader{};
@@ -205,20 +206,24 @@ protected:
 	};
 
 	RefactoredModelTests() {
+		setValidDefaults();
+	}
+
+	void setValidDefaults() {
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 0 };
 		brir.right = { 0 };
 		brirReader.setBrir(brir);
-		newTest.chunkSize = 1;
-		newTest.windowSize = 1;
+		newTestParameters.chunkSize = 1;
+		newTestParameters.windowSize = 1;
 	}
 
 	void prepareNewTest() {
-		model.prepareNewTest(newTest);
+		model.prepareNewTest(newTestParameters);
 	}
 
 	void playTrial() {
-		model.playTrial(trial);
+		model.playTrial(trialParameters);
 	}
 
 	void setInMemoryReader(AudioFileReader &reader_) {
@@ -230,40 +235,46 @@ TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
 	EXPECT_EQ(&loader, player.audioLoader());
 }
 
-TEST_F(RefactoredModelTests, prepareNewTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
-	newTest.usingHearingAidSimulation = true;
-	newTest.leftDslPrescriptionFilePath = "a";
-	newTest.rightDslPrescriptionFilePath = "b";
+TEST_F(
+	RefactoredModelTests, 
+	prepareNewTestPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
+) {
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.leftDslPrescriptionFilePath = "a";
+	newTestParameters.rightDslPrescriptionFilePath = "b";
 	prepareNewTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
-TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
-	newTest.usingHearingAidSimulation = false;
-	newTest.leftDslPrescriptionFilePath = "a";
-	newTest.rightDslPrescriptionFilePath = "b";
+TEST_F(
+	RefactoredModelTests, 
+	prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
+) {
+	newTestParameters.usingHearingAidSimulation = false;
 	prepareNewTest();
-	EXPECT_TRUE(prescriptionReader.filePaths().empty());
+	EXPECT_FALSE(prescriptionReader.readCalled());
 }
 
-TEST_F(RefactoredModelTests, prepareNewTestReadsBrirWhenUsingSpatialization) {
-	newTest.usingSpatialization = true;
-	newTest.brirFilePath = "a";
+TEST_F(
+	RefactoredModelTests, 
+	prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
+) {
+	newTestParameters.usingSpatialization = true;
+	newTestParameters.brirFilePath = "a";
 	prepareNewTest();
 	assertEqual("a", brirReader.filePath());
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-	newTest.usingSpatialization = false;
-	newTest.brirFilePath = "a";
+	newTestParameters.usingSpatialization = false;
 	prepareNewTest();
-	EXPECT_TRUE(brirReader.filePath().empty());
+	EXPECT_FALSE(brirReader.readCalled());
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
-	newTest.audioDirectory = "a";
-	newTest.testFilePath = "b";
+	newTestParameters.audioDirectory = "a";
+	newTestParameters.testFilePath = "b";
 	prepareNewTest();
 	assertEqual("a", perceptionTest.testParameters().audioDirectory);
 	assertEqual("b", perceptionTest.testParameters().testFilePath);
@@ -286,12 +297,12 @@ TEST_F(RefactoredModelTests, playTrialPassesAudioReaderToAudioLoader) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
-	newTest.usingHearingAidSimulation = true;
-	newTest.chunkSize = 4;
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.chunkSize = 4;
 	prepareNewTest();
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
-	trial.audioDevice = "a";
+	trialParameters.audioDevice = "a";
 	playTrial();
 	EXPECT_EQ(1, player.preparation().channels);
 	EXPECT_EQ(2, player.preparation().sampleRate);
@@ -308,7 +319,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
 	FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 	fakeReader.setChannels(2);
 	setInMemoryReader(fakeReader);
-	trial.level_dB_Spl = 7;
+	trialParameters.level_dB_Spl = 7;
 	//processorFactory.setFullScale_dB_Spl(8);
 	playTrial();
 	const auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
@@ -327,8 +338,8 @@ TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory)
 	prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 	prescription.channels = 6;
 	prescriptionReader.addPrescription("leftFilePath", prescription);
-	newTest.usingHearingAidSimulation = true;
-	newTest.leftDslPrescriptionFilePath = "leftFilePath";
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.leftDslPrescriptionFilePath = "leftFilePath";
 	prepareNewTest();
 	playTrial();
 	auto left = hearingAidFactory.parameters().at(0);
@@ -349,8 +360,8 @@ TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory
 	prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 	prescription.channels = 6;
 	prescriptionReader.addPrescription("rightFilePath", prescription);
-	newTest.usingHearingAidSimulation = true;
-	newTest.rightDslPrescriptionFilePath = "rightFilePath";
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
 	playTrial();
 	auto right = hearingAidFactory.parameters().at(1);
@@ -363,11 +374,11 @@ TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
-	newTest.usingHearingAidSimulation = true;
-	newTest.attack_ms = 1;
-	newTest.release_ms = 2;
-	newTest.chunkSize = 4;
-	newTest.windowSize = 8;
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.attack_ms = 1;
+	newTestParameters.release_ms = 2;
+	newTestParameters.chunkSize = 4;
+	newTestParameters.windowSize = 8;
 	prepareNewTest();
 	playTrial();
 	auto left = hearingAidFactory.parameters().at(0);
@@ -384,7 +395,7 @@ TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingA
 
 TEST_F(RefactoredModelTests, playTrialPassesSampleRateFromAudioReaderToHearingAidFactory) {
 	audioFrameReader->setSampleRate(1);
-	newTest.usingHearingAidSimulation = true;
+	newTestParameters.usingHearingAidSimulation = true;
 	prepareNewTest();
 	playTrial();
 	auto left = hearingAidFactory.parameters().at(0);
@@ -398,7 +409,7 @@ TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
 	brir.left = { 1, 2 };
 	brir.right = { 3, 4 };
 	brirReader.setBrir(brir);
-	newTest.usingSpatialization = true;
+	newTestParameters.usingSpatialization = true;
 	prepareNewTest();
 	playTrial();
 	EXPECT_TRUE(firFilterFactory.coefficients().contains({ 1, 2 }));
@@ -406,8 +417,8 @@ TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
 }
 
 TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
-	newTest.usingSpatialization = true;
-	newTest.usingHearingAidSimulation = true;
+	newTestParameters.usingSpatialization = true;
+	newTestParameters.usingHearingAidSimulation = true;
 	audioFrameReader->setChannels(2);
 	prepareNewTest();
 	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
@@ -424,8 +435,8 @@ TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
 }
 
 TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
-	newTest.usingSpatialization = false;
-	newTest.usingHearingAidSimulation = true;
+	newTestParameters.usingSpatialization = false;
+	newTestParameters.usingHearingAidSimulation = true;
 	audioFrameReader->setChannels(2);
 	prepareNewTest();
 	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
@@ -442,8 +453,8 @@ TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
 }
 
 TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
-	newTest.usingSpatialization = true;
-	newTest.usingHearingAidSimulation = false;
+	newTestParameters.usingSpatialization = true;
+	newTestParameters.usingHearingAidSimulation = false;
 	audioFrameReader->setChannels(2);
 	prepareNewTest();
 	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));

@@ -5,18 +5,24 @@
 class BrirReaderStub : public BrirReader {
 	BinauralRoomImpulseResponse brir_{};
 	std::string filePath_{};
+	bool readCalled_{};
 public:
 	void setBrir(BinauralRoomImpulseResponse brir) {
 		brir_ = std::move(brir);
 	}
 
 	BinauralRoomImpulseResponse read(std::string filePath) override {
+		readCalled_ = true;
 		filePath_ = std::move(filePath);
 		return brir_;
 	}
 
 	std::string filePath() const {
 		return filePath_;
+	}
+
+	auto readCalled() const {
+		return readCalled_;
 	}
 };
 
