@@ -40,7 +40,7 @@ public:
 		log_ += std::string{ "reset " };
 	}
 
-	const LogString &log() const {
+	LogString log() const {
 		return log_;
 	}
 

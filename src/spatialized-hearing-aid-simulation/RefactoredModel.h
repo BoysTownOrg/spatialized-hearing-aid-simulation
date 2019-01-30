@@ -57,8 +57,8 @@ public:
 		BrirReader *brirReader,
 		ScalarFactory *scalarFactory
 	);
-	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters p) override;
-	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters p) override;
+	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
+	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
 	SPATIALIZED_HA_SIMULATION_API void playCalibration(CalibrationParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;

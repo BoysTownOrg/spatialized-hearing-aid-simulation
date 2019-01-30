@@ -482,6 +482,11 @@ TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlaye
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
+TEST_F(RefactoredModelTests, playTrialResetsAudioLoader) {
+	playTrial();
+	EXPECT_TRUE(audioLoader.log().contains("reset"));
+}
+
 class RefactoredModelFailureTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters newTest{};
