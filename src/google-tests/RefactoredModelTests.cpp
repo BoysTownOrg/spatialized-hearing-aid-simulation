@@ -506,3 +506,20 @@ TEST_F(
 		"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
 	);
 }
+
+TEST_F(
+	RefactoredModelFailureTests,
+	prepareNewTestThrowsTestInitializationFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
+) {
+	newTest.chunkSize = 0;
+	newTest.windowSize = 1;
+	newTest.usingHearingAidSimulation = true;
+	assertPreparingNewTestThrowsTestInitializationFailure(
+		"Both the chunk size and window size must be powers of two; 0 is not a power of two."
+	);
+	newTest.chunkSize = 2;
+	newTest.windowSize = 3;
+	assertPreparingNewTestThrowsTestInitializationFailure(
+		"Both the chunk size and window size must be powers of two; 3 is not a power of two."
+	);
+}
