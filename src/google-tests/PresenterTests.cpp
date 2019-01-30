@@ -396,17 +396,17 @@ namespace {
 		view.setWindowSize("4");
 		view.setChunkSize("5");
 		view.confirmTestSetup();
-		assertEqual("a", model.globalTestParameters.leftDslPrescriptionFilePath);
-		assertEqual("b", model.globalTestParameters.rightDslPrescriptionFilePath);
+		assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
+		assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().audioDirectory);
-		assertEqual("d", model.globalTestParameters.brirFilePath);
+		assertEqual("d", model.testParameters().brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
-		assertEqual("f", model.globalTestParameters.subjectId);
-		assertEqual("g", model.globalTestParameters.testerId);
-		EXPECT_EQ(2.2, model.globalTestParameters.attack_ms);
-		EXPECT_EQ(3.3, model.globalTestParameters.release_ms);
-		EXPECT_EQ(4, model.globalTestParameters.windowSize);
-		EXPECT_EQ(5, model.globalTestParameters.chunkSize);
+		assertEqual("f", model.testParameters().subjectId);
+		assertEqual("g", model.testParameters().testerId);
+		EXPECT_EQ(2.2, model.testParameters().attack_ms);
+		EXPECT_EQ(3.3, model.testParameters().release_ms);
+		EXPECT_EQ(4, model.testParameters().windowSize);
+		EXPECT_EQ(5, model.testParameters().chunkSize);
 	}
 
 	TEST_F(
@@ -415,7 +415,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.globalTestParameters.usingSpatialization);
+		EXPECT_TRUE(model.testParameters().usingSpatialization);
 	}
 
 	TEST_F(
@@ -424,7 +424,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.globalTestParameters.usingSpatialization);
+		EXPECT_FALSE(model.testParameters().usingSpatialization);
 	}
 
 	TEST_F(
@@ -433,7 +433,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.globalTestParameters.usingHearingAidSimulation);
+		EXPECT_TRUE(model.testParameters().usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -442,7 +442,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.globalTestParameters.usingHearingAidSimulation);
+		EXPECT_FALSE(model.testParameters().usingHearingAidSimulation);
 	}
 
 	TEST_F(

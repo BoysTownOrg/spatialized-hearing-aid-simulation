@@ -13,7 +13,6 @@ class ModelStub : public Model {
 	bool trialPlayed_{};
 	bool calibrationStopped_{};
 public:
-	GlobalTestParameters globalTestParameters{};
 
 	const CalibrationParameters &calibrationParameters() {
 		return calibrationParameters_;
@@ -45,7 +44,6 @@ public:
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
-		globalTestParameters = *p.global;
 	}
 
 	void setTestIncomplete() {

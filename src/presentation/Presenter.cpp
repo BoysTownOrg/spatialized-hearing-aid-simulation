@@ -111,30 +111,28 @@ void Presenter::confirmTestSetup() {
 }
 
 void Presenter::prepareNewTest() {
-	GlobalTestParameters global;
-	model->prepareNewTest(testParameters(&global));
+	model->prepareNewTest(testParameters());
 	view->hideTestSetup();
 	view->showTesterView();
 }
 
-Model::TestParameters Presenter::testParameters(GlobalTestParameters *global) {
+Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
-	global->subjectId = view->subjectId();
-	global->testerId = view->testerId();
-	global->leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	global->rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	global->brirFilePath = view->brirFilePath();
+	test.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	test.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	test.brirFilePath = view->brirFilePath();
 	if (view->usingHearingAidSimulation()) {
-		global->chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		global->windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		global->release_ms = convertToDouble(view->release_ms(), "release time");
-		global->attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		test.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+		test.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		test.release_ms = convertToDouble(view->release_ms(), "release time");
+		test.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 	}
-	global->usingSpatialization = view->usingSpatialization();
-	global->usingHearingAidSimulation = view->usingHearingAidSimulation();
+	test.usingSpatialization = view->usingSpatialization();
+	test.usingHearingAidSimulation = view->usingHearingAidSimulation();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
-	test.global = global;
+	test.subjectId = view->subjectId();
+	test.testerId = view->testerId();
 	return test;
 }
 
@@ -154,7 +152,7 @@ double Presenter::convertToDouble(
 	}
 }
 
-static bool containsOnlyDigits(std::string s) {
+static bool containsOnlyDigits(std::string s) noexcept {
 	return s.find_first_not_of("0123456789") == std::string::npos;
 }
 

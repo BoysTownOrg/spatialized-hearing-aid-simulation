@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 
-struct GlobalTestParameters;
-
 class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
 
 	struct TestParameters {
+		std::string subjectId;
+		std::string testerId;
 		std::string audioDirectory;
 		std::string testFilePath;
 		std::string leftDslPrescriptionFilePath;
@@ -23,7 +23,6 @@ public:
 		int chunkSize;
 		bool usingHearingAidSimulation;
 		bool usingSpatialization;
-		GlobalTestParameters *global;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);

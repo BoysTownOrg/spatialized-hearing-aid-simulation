@@ -14,6 +14,18 @@
 	#define SPATIALIZED_HA_SIMULATION_API __declspec(dllimport)
 #endif
 
+struct GlobalTestParameters{
+	std::string leftDslPrescriptionFilePath;
+	std::string rightDslPrescriptionFilePath;
+	std::string brirFilePath;
+	double attack_ms;
+	double release_ms;
+	int windowSize;
+	int chunkSize;
+	bool usingSpatialization;
+	bool usingHearingAidSimulation;
+};
+
 class SpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {
 	std::shared_ptr<FilterbankCompressorFactory> compressorFactory;
 	std::shared_ptr<PrescriptionReader> prescriptionReader;

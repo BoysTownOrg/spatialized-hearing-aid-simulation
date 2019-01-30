@@ -46,10 +46,10 @@ namespace {
 		RecognitionTestTests,
 		DISABLED_prepareNewTestDocumentsTestParameters
 	) {
-		GlobalTestParameters global;
+		//GlobalTestParameters global;
 		//newTest.global = &global;
 		prepareNewTest();
-		EXPECT_EQ(&global, documenter.documentedTestParameters().global);
+		//EXPECT_EQ(&global, documenter.documentedTestParameters().global);
 	}
 
 	TEST_F(

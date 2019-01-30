@@ -12,20 +12,6 @@
 	#define PRESENTATION_API __declspec(dllimport)
 #endif
 
-struct GlobalTestParameters {
-	std::string subjectId;
-	std::string testerId;
-	std::string leftDslPrescriptionFilePath;
-	std::string rightDslPrescriptionFilePath;
-	std::string brirFilePath;
-	double attack_ms;
-	double release_ms;
-	int windowSize;
-	int chunkSize;
-	bool usingSpatialization;
-	bool usingHearingAidSimulation;
-};
-
 class Presenter : public EventListener {
 	Model *model;
 	View *view;
@@ -57,7 +43,7 @@ private:
 		std::function<void(std::string)>
 	);
 	void prepareNewTest();
-	Model::TestParameters testParameters(GlobalTestParameters *);
+	Model::TestParameters testParameters();
 	Model::TrialParameters trialParameters();
 	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);

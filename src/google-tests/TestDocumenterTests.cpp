@@ -1,6 +1,7 @@
 #include "assert-utility.h"
 #include "PersistentMemoryWriterStub.h"
 #include <test-documenting/TestDocumenter.h>
+#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <gtest/gtest.h>
 
 class TestDocumenterTests : public ::testing::Test {
@@ -14,8 +15,8 @@ TEST_F(
 	formatsTestParameters
 ) {
 	GlobalTestParameters test;
-	test.subjectId = "a";
-	test.testerId = "b";
+	//test.subjectId = "a";
+	//test.testerId = "b";
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";
@@ -48,8 +49,8 @@ TEST_F(
 	ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	GlobalTestParameters test;
-	test.subjectId = "a";
-	test.testerId = "b";
+	//test.subjectId = "a";
+	//test.testerId = "b";
 	test.usingHearingAidSimulation = false;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";
@@ -79,8 +80,8 @@ TEST_F(
 	ignoresBrirIfNotUsingSpatialization
 ) {
 	GlobalTestParameters test;
-	test.subjectId = "a";
-	test.testerId = "b";
+	//test.subjectId = "a";
+	//test.testerId = "b";
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";

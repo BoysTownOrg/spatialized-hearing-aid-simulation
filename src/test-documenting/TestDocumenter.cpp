@@ -44,24 +44,10 @@ void TestDocumenter::initialize(std::string filePath) {
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void TestDocumenter::documentTestParameters(TestParameters p) {
+void TestDocumenter::documentTestParameters(TestParameters) {
 	FormattedStream stream;
-	auto global = p.global;
-	stream.insertLabeledParameterLine("subject", global->subjectId);
-	stream.insertLabeledParameterLine("tester", global->testerId);
-	if (global->usingHearingAidSimulation) {
-		stream.insertLine("DSL prescription");
-		stream.insertIndentedLabeledParameterLine("left", global->leftDslPrescriptionFilePath);
-		stream.insertIndentedLabeledParameterLine("right", global->rightDslPrescriptionFilePath);
-	}
-	if (global->usingSpatialization)
-		stream.insertLabeledParameterLine("BRIR", global->brirFilePath);
 	stream.insertFixed();
 	stream.insertPrecision(1);
-	stream.insertLabeledParameterLine("attack (ms)", global->attack_ms);
-	stream.insertLabeledParameterLine("release (ms)", global->release_ms);
-	stream.insertLabeledParameterLine("window size (samples)", global->windowSize);
-	stream.insertLabeledParameterLine("chunk size (samples)", global->chunkSize);
 	stream.insertLine();
 	writer->write(stream.str());
 }
