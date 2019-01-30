@@ -168,64 +168,6 @@ private:
 	}
 };
 
-#include "ArgumentCollection.h"
-#include <map>
-
-class PrescriptionReaderStub : public PrescriptionReader {
-	ArgumentCollection<std::string> filePaths_{};
-	std::map<std::string, Dsl> prescriptions_{};
-public:
-	void addPrescription(std::string filePath, Dsl dsl) {
-		prescriptions_[filePath] = dsl;
-	}
-
-	Dsl read(std::string filePath) override {
-		filePaths_.push_back(filePath);
-		return prescriptions_[filePath];
-	}
-
-	ArgumentCollection<std::string> filePaths() const {
-		return filePaths_;
-	}
-};
-
-class FailingPrescriptionReader : public PrescriptionReader {
-	std::string errorMessage{};
-public:
-	void setErrorMessage(std::string s) {
-		errorMessage = std::move(s);
-	}
-
-	Dsl read(std::string) override {
-		throw ReadFailure{ errorMessage };
-	}
-};
-
-class BrirReaderStub : public BrirReader {
-	std::string filePath_{};
-public:
-	BinauralRoomImpulseResponse read(std::string filePath) override {
-		filePath_ = std::move(filePath);
-		return {};
-	}
-
-	std::string filePath() const {
-		return filePath_;
-	}
-};
-
-class FailingBrirReader : public BrirReader {
-	std::string errorMessage{};
-public:
-	void setErrorMessage(std::string s) {
-		errorMessage = std::move(s);
-	}
-
-	BinauralRoomImpulseResponse read(std::string) override {
-		throw ReadFailure{ errorMessage };
-	}
-};
-
 class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
@@ -343,6 +285,8 @@ public:
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioLoaderStub.h"
+#include "PrescriptionReaderStub.h"
+#include "BrirReaderStub.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
