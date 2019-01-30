@@ -25,6 +25,11 @@ public:
 	) = 0;
 };
 
+class ScalarFactory {
+public:
+	INTERFACE_OPERATIONS(ScalarFactory);
+};
+
 class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
 
 };
@@ -63,6 +68,7 @@ public:
 		BrirReader *brirReader,
 		HearingAidFactory *hearingAidFactory,
 		FirFilterFactory *firFilterFactory,
+		ScalarFactory *,
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader

@@ -27,6 +27,14 @@ public:
 	}
 };
 
+class ScalarFactoryStub : public ScalarFactory {
+	ArgumentCollection<float> scalars_{};
+public:
+	auto scalars() const {
+		return scalars_;
+	}
+};
+
 class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
@@ -158,6 +166,7 @@ protected:
 	SpeechPerceptionTestStub perceptionTest{};
 	HearingAidFactoryStub hearingAidFactory{};
 	FirFilterFactoryStub firFilterFactory{};
+	ScalarFactoryStub scalarFactory{};
 	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
 	AudioPlayerStub player{};
@@ -168,6 +177,7 @@ protected:
 		&brirReader, 
 		&hearingAidFactory, 
 		&firFilterFactory,
+		&scalarFactory,
 		&audioFrameReaderFactory,
 		&player,
 		&loader
@@ -392,6 +402,8 @@ protected:
 	HearingAidFactory *hearingAidFactory{&defaultHearingAidFactory};
 	FirFilterFactoryStub defaultFirFilterFactory{};
 	FirFilterFactory *firFilterFactory{ &defaultFirFilterFactory };
+	ScalarFactoryStub defaultScalarFactory{};
+	ScalarFactory *scalarFactory{ &defaultScalarFactory };
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
 	AudioPlayerStub defaultPlayer{};
@@ -440,6 +452,7 @@ protected:
 			brirReader, 
 			hearingAidFactory, 
 			firFilterFactory,
+			scalarFactory,
 			audioReaderFactory,
 			player,
 			loader

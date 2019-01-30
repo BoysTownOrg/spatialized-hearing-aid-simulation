@@ -6,6 +6,7 @@ RefactoredModel::RefactoredModel(
 	BrirReader *brirReader,
 	HearingAidFactory *hearingAidFactory,
 	FirFilterFactory *firFilterFactory,
+	ScalarFactory *,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioStimulusPlayer *player,
 	AudioLoader *loader
