@@ -17,6 +17,14 @@ public:
 	virtual std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) = 0;
 };
 
+class HearingAidFactory {
+public:
+	INTERFACE_OPERATIONS(HearingAidFactory);
+	virtual std::shared_ptr<SignalProcessor> make(
+		FilterbankCompressor::Parameters
+	) = 0;
+};
+
 class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
 
 };
@@ -43,7 +51,7 @@ class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *test;
-	FilterbankCompressorFactory *compressorFactory;
+	HearingAidFactory *hearingAidFactory;
 	FirFilterFactory *firFilterFactory;
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioStimulusPlayer *player;
@@ -53,7 +61,7 @@ public:
 		SpeechPerceptionTest *test,
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
-		FilterbankCompressorFactory *compressorFactory,
+		HearingAidFactory *hearingAidFactory,
 		FirFilterFactory *firFilterFactory,
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
@@ -70,7 +78,7 @@ private:
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
-	std::shared_ptr<FilterbankCompressor> makeCompressor(PrescriptionReader::Dsl, int sampleRate);
+	std::shared_ptr<SignalProcessor> makeHearingAid(PrescriptionReader::Dsl, int sampleRate);
 	void prepareAudioPlayer(AudioFrameReader &, TrialParameters);
 	void prepareNewTest_(TestParameters);
 };

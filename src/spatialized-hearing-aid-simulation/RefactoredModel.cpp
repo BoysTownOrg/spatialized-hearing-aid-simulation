@@ -4,7 +4,7 @@ RefactoredModel::RefactoredModel(
 	SpeechPerceptionTest *test,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	FilterbankCompressorFactory *compressorFactory,
+	HearingAidFactory *hearingAidFactory,
 	FirFilterFactory *firFilterFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioStimulusPlayer *player,
@@ -13,7 +13,7 @@ RefactoredModel::RefactoredModel(
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
 	test{ test },
-	compressorFactory{ compressorFactory },
+	hearingAidFactory{ hearingAidFactory },
 	firFilterFactory{ firFilterFactory },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
@@ -72,8 +72,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
 	loader->setReader(reader);
-	makeCompressor(leftPrescription, reader->sampleRate());
-	makeCompressor(rightPrescription, reader->sampleRate());
+	makeHearingAid(leftPrescription, reader->sampleRate());
+	makeHearingAid(rightPrescription, reader->sampleRate());
 	firFilterFactory->make(brir.left);
 	firFilterFactory->make(brir.right);
 }
@@ -92,7 +92,7 @@ void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParamet
 	}
 }
 
-std::shared_ptr<FilterbankCompressor> RefactoredModel::makeCompressor(
+std::shared_ptr<SignalProcessor> RefactoredModel::makeHearingAid(
 	PrescriptionReader::Dsl dsl, 
 	int sampleRate
 ) {
@@ -108,7 +108,7 @@ std::shared_ptr<FilterbankCompressor> RefactoredModel::makeCompressor(
 	compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
 	compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
 	compression.channels = dsl.channels;
-	return compressorFactory->make(compression);
+	return hearingAidFactory->make(compression);
 }
 
 bool RefactoredModel::testComplete() {

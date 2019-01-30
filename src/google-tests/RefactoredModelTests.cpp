@@ -4,12 +4,25 @@
 class FirFilterFactoryStub : public FirFilterFactory {
 	ArgumentCollection<BrirReader::impulse_response_type> coefficients_{};
 public:
-
 	auto coefficients() const {
 		return coefficients_;
 	}
+
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
 		coefficients_.push_back(std::move(b));
+		return {};
+	}
+};
+
+class HearingAidFactoryStub : public HearingAidFactory {
+	ArgumentCollection<FilterbankCompressor::Parameters> parameters_{};
+public:
+	ArgumentCollection<FilterbankCompressor::Parameters> parameters() const {
+		return parameters_;
+	}
+
+	std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
+		parameters_.push_back(std::move(p));
 		return {};
 	}
 };
@@ -141,7 +154,7 @@ protected:
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub perceptionTest{};
-	FilterbankCompressorSpyFactory compressorFactory{};
+	HearingAidFactoryStub hearingAidFactory{};
 	FirFilterFactoryStub firFilterFactory{};
 	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
@@ -151,7 +164,7 @@ protected:
 		&perceptionTest,
 		&prescriptionReader, 
 		&brirReader, 
-		&compressorFactory, 
+		&hearingAidFactory, 
 		&firFilterFactory,
 		&audioFrameReaderFactory,
 		&player,
@@ -342,8 +355,8 @@ protected:
 	BrirReader *brirReader{&defaultBrirReader};
 	SpeechPerceptionTestStub defaultTest{};
 	SpeechPerceptionTest *test{&defaultTest};
-	FilterbankCompressorSpyFactory defaultCompressorFactory{};
-	FilterbankCompressorFactory *compressorFactory{&defaultCompressorFactory};
+	HearingAidFactoryStub defaultHearingAidFactory{};
+	HearingAidFactory *hearingAidFactory{&defaultHearingAidFactory};
 	FirFilterFactoryStub defaultFirFilterFactory{};
 	FirFilterFactory *firFilterFactory{ &defaultFirFilterFactory };
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
@@ -392,7 +405,7 @@ protected:
 			test,
 			prescriptionReader, 
 			brirReader, 
-			compressorFactory, 
+			hearingAidFactory, 
 			firFilterFactory,
 			audioReaderFactory,
 			player,
