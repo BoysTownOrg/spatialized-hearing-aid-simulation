@@ -156,11 +156,9 @@
   <ItemGroup>
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

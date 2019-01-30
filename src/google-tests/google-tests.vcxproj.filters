@@ -60,9 +60,6 @@
     <ClCompile Include="TestDocumenterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpatializedHearingAidSimulationFactoryTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RefactoredModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

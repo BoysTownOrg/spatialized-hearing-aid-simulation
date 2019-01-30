@@ -170,7 +170,6 @@
     <ClCompile Include="HearingAidProcessorTests.cpp" />
     <ClCompile Include="SignalProcessingChainTests.cpp" />
     <ClCompile Include="PresenterTests.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactoryTests.cpp" />
     <ClCompile Include="TestDocumenterTests.cpp" />
   </ItemGroup>
   <ItemGroup>
