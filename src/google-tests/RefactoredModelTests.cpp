@@ -33,6 +33,7 @@ class RefactoredModel : public Model {
 	FilterbankCompressorFactory *compressorFactory;
 	AudioFrameReaderFactory *readerFactory;
 	IIAudioPlayer *player;
+	AudioLoader *loader;
 public:
 	RefactoredModel(
 		SpeechPerceptionTest *test,
@@ -48,7 +49,8 @@ public:
 		test{ test },
 		compressorFactory{ compressorFactory },
 		readerFactory{ readerFactory },
-		player{ player } 
+		player{ player },
+		loader{ loader }
 	{
 		player->setAudioLoader(loader);
 	}
@@ -78,6 +80,7 @@ private:
 public:
 	void playTrial(TrialParameters p) override {
 		auto reader = readerFactory->make(test->nextStimulus());
+		loader->setReader(reader);
 		IAudioPlayer::Preparation playing{};
 		playing.channels = reader->channels();
 		playing.framesPerBuffer = testParameters.chunkSize;
