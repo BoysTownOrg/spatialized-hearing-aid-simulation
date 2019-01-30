@@ -4,26 +4,6 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AddOne : public SignalProcessor {
-	public:
-		void process(signal_type signal) override {
-			for (auto &x : signal)
-				x += 1;
-		}
-
-		index_type groupDelay() override { return {}; }
-	};
-
-	class TimesTwo : public SignalProcessor {
-	public:
-		void process(signal_type signal) override {
-			for (auto &x : signal)
-				x *= 2;
-		}
-
-		index_type groupDelay() override { return {}; }
-	};
-
 	class SignalProcessingChainTests : public ::testing::Test {
 	protected:
 		SignalProcessingChain chain{};
