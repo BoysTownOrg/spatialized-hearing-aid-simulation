@@ -51,8 +51,8 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters
 }
 
 void RefactoredModel::readPrescriptions(TestParameters p) {
-	readPrescription(p.leftDslPrescriptionFilePath);
-	readPrescription(p.rightDslPrescriptionFilePath);
+	leftPrescription = readPrescription(p.leftDslPrescriptionFilePath);
+	rightPrescription = readPrescription(p.rightDslPrescriptionFilePath);
 }
 
 PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
@@ -70,14 +70,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
 	loader->setReader(reader);
-	makeCompressor(
-		prescriptionReader->read(testParameters.leftDslPrescriptionFilePath),
-		reader->sampleRate()
-	);
-	makeCompressor(
-		prescriptionReader->read(testParameters.rightDslPrescriptionFilePath),
-		reader->sampleRate()
-	);
+	makeCompressor(leftPrescription, reader->sampleRate());
+	makeCompressor(rightPrescription, reader->sampleRate());
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {

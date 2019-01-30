@@ -29,6 +29,8 @@ public:
 };
 
 class RefactoredModel : public Model {
+	PrescriptionReader::Dsl leftPrescription{};
+	PrescriptionReader::Dsl rightPrescription{};
 	TestParameters testParameters{};
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
