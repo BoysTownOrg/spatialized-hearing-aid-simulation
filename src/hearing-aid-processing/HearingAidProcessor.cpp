@@ -12,7 +12,7 @@ HearingAidProcessor::HearingAidProcessor(
 	throwIfNotPowerOfTwo(this->compressor->windowSize(), "window size");
 }
 
-static bool powerOfTwo(int n) {
+static constexpr bool powerOfTwo(int n) noexcept {
 	return n > 0 && (n & (n - 1)) == 0;
 }
 

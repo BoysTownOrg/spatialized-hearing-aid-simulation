@@ -14,7 +14,7 @@
 
 class HearingAidProcessor : public SignalProcessor {
 	// Order important for construction.
-	std::vector<float> buffer;
+	std::vector<FilterbankCompressor::complex_type> buffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
