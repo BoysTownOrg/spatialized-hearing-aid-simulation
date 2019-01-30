@@ -4,6 +4,7 @@
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <recognition-test/StimulusPlayer.h>
 #include <playing-audio/AudioPlayer.h>
+#include <playing-audio/AudioLoader.h>
 #include <presentation/Model.h>
 
 class IIAudioPlayer : public IAudioPlayer, public StimulusPlayer {
@@ -39,7 +40,8 @@ public:
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
 		AudioFrameReaderFactory *readerFactory,
-		IIAudioPlayer *player
+		IIAudioPlayer *player,
+		AudioLoader *
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
@@ -216,6 +218,7 @@ public:
 class AudioPlayerStub : public IIAudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
+	AudioLoader *audioLoader_{};
 public:
 	void prepareToPlay(Preparation p) override
 	{
@@ -247,7 +250,13 @@ public:
 	{
 	}
 
-	void setAudioLoader(AudioLoader *) override {}
+	void setAudioLoader(AudioLoader *a) override {
+		audioLoader_ = a;
+	}
+
+	const AudioLoader *audioLoader() const {
+		return audioLoader_;
+	}
 };
 
 class PreparationFailingAudioPlayer : public IIAudioPlayer {
@@ -322,7 +331,7 @@ public:
 #include "assert-utility.h"
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
-#include "StimulusPlayerStub.h"
+#include "AudioLoaderStub.h"
 #include <gtest/gtest.h>
 
 class RefactoredModelTests : public ::testing::Test {
@@ -336,13 +345,15 @@ protected:
 	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory readerFactory{reader};
 	AudioPlayerStub player{};
+	AudioLoaderStub loader{};
 	RefactoredModel model{ 
 		&test,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
 		&readerFactory,
-		&player
+		&player,
+		&loader
 	};
 
 	void prepareNewTest() {
@@ -516,6 +527,8 @@ protected:
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
 	AudioPlayerStub defaultPlayer{};
 	IIAudioPlayer *player{ &defaultPlayer };
+	AudioLoaderStub defaultLoader{};
+	AudioLoader *loader{ &defaultLoader };
 
 	void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 		auto model = makeModel();
@@ -558,7 +571,8 @@ protected:
 			brirReader, 
 			compressorFactory, 
 			audioReaderFactory,
-			player
+			player,
+			loader
 		};
 	}
 };
