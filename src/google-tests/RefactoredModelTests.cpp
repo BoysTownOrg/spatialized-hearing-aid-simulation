@@ -5,8 +5,7 @@ class AudioPlayerStub : public AudioStimulusPlayer {
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
 public:
-	void prepareToPlay(Preparation p) override
-	{
+	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
 	}
 

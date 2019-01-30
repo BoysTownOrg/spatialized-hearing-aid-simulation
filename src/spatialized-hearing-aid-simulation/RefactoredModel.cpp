@@ -66,9 +66,10 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 
 void RefactoredModel::playTrial(TrialParameters p) {
 	auto reader = audioReaderFactory->make(test->nextStimulus());
-	loader->setReader(reader);
+	reader->reset();
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
+	loader->setReader(reader);
 	makeCompressor(
 		prescriptionReader->read(testParameters.leftDslPrescriptionFilePath),
 		reader->sampleRate()
@@ -77,7 +78,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		prescriptionReader->read(testParameters.rightDslPrescriptionFilePath),
 		reader->sampleRate()
 	);
-	reader->reset();
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
