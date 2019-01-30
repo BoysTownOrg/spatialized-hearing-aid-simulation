@@ -285,29 +285,37 @@ TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest
 	EXPECT_EQ(&player, perceptionTest.player());
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
+TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 	perceptionTest.setNextStimulus("a");
 	playTrial();
 	assertEqual("a", audioFrameReaderFactory.filePath());
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesAudioReaderToAudioLoader) {
+TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoader) {
 	playTrial();
 	EXPECT_EQ(audioFrameReader, loader.audioFrameReader());
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
-	newTestParameters.usingHearingAidSimulation = true;
-	newTestParameters.chunkSize = 4;
-	prepareNewTest();
+TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
-	trialParameters.audioDevice = "a";
 	playTrial();
 	EXPECT_EQ(1, player.preparation().channels);
 	EXPECT_EQ(2, player.preparation().sampleRate);
-	EXPECT_EQ(4, player.preparation().framesPerBuffer);
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
+	trialParameters.audioDevice = "a";
+	playTrial();
 	assertEqual("a", player.preparation().audioDevice);
+}
+
+TEST_F(RefactoredModelTests, playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation) {
+	newTestParameters.usingHearingAidSimulation = true;
+	newTestParameters.chunkSize = 1;
+	prepareNewTest();
+	playTrial();
+	EXPECT_EQ(1, player.preparation().framesPerBuffer);
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
