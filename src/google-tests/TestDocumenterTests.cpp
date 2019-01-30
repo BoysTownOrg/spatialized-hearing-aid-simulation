@@ -12,7 +12,7 @@ protected:
 
 TEST_F(
 	TestDocumenterTests,
-	formatsTestParameters
+	DISABLED_formatsTestParameters
 ) {
 	GlobalTestParameters test;
 	//test.subjectId = "a";
@@ -46,7 +46,7 @@ TEST_F(
 
 TEST_F(
 	TestDocumenterTests,
-	ignoresPrescriptionsIfNotUsingHearingAidSimulation
+	DISABLED_ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	GlobalTestParameters test;
 	//test.subjectId = "a";
@@ -77,7 +77,7 @@ TEST_F(
 
 TEST_F(
 	TestDocumenterTests,
-	ignoresBrirIfNotUsingSpatialization
+	DISABLED_ignoresBrirIfNotUsingSpatialization
 ) {
 	GlobalTestParameters test;
 	//test.subjectId = "a";

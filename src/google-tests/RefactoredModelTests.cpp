@@ -31,7 +31,7 @@ class RefactoredModel : public Model {
 	BrirReader *brirReader;
 	SpeechPerceptionTest *test;
 	FilterbankCompressorFactory *compressorFactory;
-	AudioFrameReaderFactory *readerFactory;
+	AudioFrameReaderFactory *audioReaderFactory;
 	AudioStimulusPlayer *player;
 	AudioLoader *loader;
 public:
@@ -40,7 +40,7 @@ public:
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
-		AudioFrameReaderFactory *readerFactory,
+		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader
 	) :
@@ -48,7 +48,7 @@ public:
 		brirReader{ brirReader },
 		test{ test },
 		compressorFactory{ compressorFactory },
-		readerFactory{ readerFactory },
+		audioReaderFactory{ audioReaderFactory },
 		player{ player },
 		loader{ loader }
 	{
@@ -65,7 +65,7 @@ public:
 	}
 
 	void playTrial(TrialParameters p) override {
-		auto reader = readerFactory->make(test->nextStimulus());
+		auto reader = audioReaderFactory->make(test->nextStimulus());
 		loader->setReader(reader);
 		prepareAudioPlayer(*reader);
 		test->playNextTrial(player);
@@ -440,10 +440,12 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
 	prepareNewTest();
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
+	trial.audioDevice = "a";
 	playTrial();
 	EXPECT_EQ(1, player.preparation().channels);
 	EXPECT_EQ(2, player.preparation().sampleRate);
 	EXPECT_EQ(3, player.preparation().framesPerBuffer);
+	assertEqual("a", player.preparation().audioDevice);
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
