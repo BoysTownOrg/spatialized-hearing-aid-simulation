@@ -144,7 +144,6 @@ private:
 };
 
 void RefactoredModel::playTrial(TrialParameters p) {
-	std::vector<ChannelProcessingGroup::channel_processing_type> channels{};
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	auto reader = audioReaderFactory->make(test->nextStimulus());
@@ -165,8 +164,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		leftChannel->add(makeHearingAid(leftPrescription, reader->sampleRate()));
 		rightChannel->add(makeHearingAid(rightPrescription, reader->sampleRate()));
 	}
-	channels.push_back(leftChannel);
-	channels.push_back(rightChannel);
+	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ leftChannel, rightChannel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 }
 
