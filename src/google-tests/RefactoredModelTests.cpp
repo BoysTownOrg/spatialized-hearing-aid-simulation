@@ -176,6 +176,8 @@ protected:
 		brir.left = { 0 };
 		brir.right = { 0 };
 		brirReader.setBrir(brir);
+		newTest.chunkSize = 1;
+		newTest.windowSize = 1;
 	}
 
 	void prepareNewTest() {
@@ -248,7 +250,7 @@ TEST_F(RefactoredModelTests, playTrialPassesAudioReaderToAudioLoader) {
 
 TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
 	newTest.usingHearingAidSimulation = true;
-	newTest.chunkSize = 3;
+	newTest.chunkSize = 4;
 	prepareNewTest();
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
@@ -256,7 +258,7 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
 	playTrial();
 	EXPECT_EQ(1, player.preparation().channels);
 	EXPECT_EQ(2, player.preparation().sampleRate);
-	EXPECT_EQ(3, player.preparation().framesPerBuffer);
+	EXPECT_EQ(4, player.preparation().framesPerBuffer);
 	assertEqual("a", player.preparation().audioDevice);
 }
 
@@ -304,8 +306,8 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	newTest.usingHearingAidSimulation = true;
 	newTest.attack_ms = 8;
 	newTest.release_ms = 9;
-	newTest.chunkSize = 10;
-	newTest.windowSize = 11;
+	newTest.chunkSize = 16;
+	newTest.windowSize = 32;
 	newTest.leftDslPrescriptionFilePath = "leftFilePath";
 	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
@@ -320,8 +322,8 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	EXPECT_EQ(7, left.sampleRate);
 	EXPECT_EQ(8, left.attack_ms);
 	EXPECT_EQ(9, left.release_ms);
-	EXPECT_EQ(10, left.chunkSize);
-	EXPECT_EQ(11, left.windowSize);
+	EXPECT_EQ(16, left.chunkSize);
+	EXPECT_EQ(32, left.windowSize);
 	auto right = hearingAidFactory.parameters().at(1);
 	assertEqual({ 1, 1 }, right.compressionRatios);
 	assertEqual({ 2, 2 }, right.crossFrequenciesHz);
@@ -332,8 +334,8 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFac
 	EXPECT_EQ(7, right.sampleRate);
 	EXPECT_EQ(8, right.attack_ms);
 	EXPECT_EQ(9, right.release_ms);
-	EXPECT_EQ(10, right.chunkSize);
-	EXPECT_EQ(11, right.windowSize);
+	EXPECT_EQ(16, right.chunkSize);
+	EXPECT_EQ(32, right.windowSize);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
