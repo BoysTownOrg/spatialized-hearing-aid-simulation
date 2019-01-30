@@ -18,9 +18,18 @@
     <ClInclude Include="SpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RefactoredModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spatialized-hearing-aid-simulation-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RefactoredModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

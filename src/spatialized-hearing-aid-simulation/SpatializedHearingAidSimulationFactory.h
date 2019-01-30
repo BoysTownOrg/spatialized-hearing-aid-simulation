@@ -1,5 +1,6 @@
 #pragma once
 
+#include "spatialized-hearing-aid-simulation-exports.h"
 #include <playing-audio/AudioFrameProcessor.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 #include <dsl-prescription/ConfigurationFileParser.h>
@@ -7,12 +8,6 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <signal-processing/SignalProcessor.h>
 #include <presentation/Presenter.h>
-
-#ifdef SPATIALIZED_HA_SIMULATION_EXPORTS
-	#define SPATIALIZED_HA_SIMULATION_API __declspec(dllexport)
-#else
-	#define SPATIALIZED_HA_SIMULATION_API __declspec(dllimport)
-#endif
 
 struct GlobalTestParameters{
 	std::string leftDslPrescriptionFilePath;
