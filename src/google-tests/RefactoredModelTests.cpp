@@ -345,8 +345,8 @@ protected:
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub test{};
 	FilterbankCompressorSpyFactory compressorFactory{};
-	std::shared_ptr<AudioFrameReaderStub> reader = std::make_shared<AudioFrameReaderStub>();
-	AudioFrameReaderStubFactory readerFactory{reader};
+	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
+	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
 	AudioPlayerStub player{};
 	AudioLoaderStub loader{};
 	RefactoredModel model{ 
@@ -354,7 +354,7 @@ protected:
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
-		&readerFactory,
+		&audioFrameReaderFactory,
 		&player,
 		&loader
 	};
@@ -419,15 +419,20 @@ TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest
 TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
 	test.setNextStimulus("a");
 	playTrial();
-	assertEqual("a", readerFactory.filePath());
+	assertEqual("a", audioFrameReaderFactory.filePath());
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesAudioReaderToAudioLoader) {
+	playTrial();
+	EXPECT_EQ(audioFrameReader, loader.audioFrameReader());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
 	testing.usingHearingAidSimulation = true;
 	testing.chunkSize = 3;
 	prepareNewTest();
-	reader->setChannels(1);
-	reader->setSampleRate(2);
+	audioFrameReader->setChannels(1);
+	audioFrameReader->setSampleRate(2);
 	playTrial();
 	EXPECT_EQ(1, player.preparation().channels);
 	EXPECT_EQ(2, player.preparation().sampleRate);
@@ -436,7 +441,7 @@ TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
 
 TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
 	playTrial();
-	EXPECT_TRUE(reader->readingLog().endsWith("reset "));
+	EXPECT_TRUE(audioFrameReader->readingLog().endsWith("reset "));
 }
 
 TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
@@ -474,7 +479,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
 	rightPrescription.channels = 12;
 	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
-	reader->setSampleRate(7);
+	audioFrameReader->setSampleRate(7);
 	testing.usingHearingAidSimulation = true;
 	testing.attack_ms = 8;
 	testing.release_ms = 9;
