@@ -7,7 +7,7 @@
 #include <playing-audio/AudioLoader.h>
 #include <presentation/Model.h>
 
-class IIAudioPlayer : public IAudioPlayer, public StimulusPlayer {
+class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
 
 };
 
@@ -32,7 +32,7 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 	FilterbankCompressorFactory *compressorFactory;
 	AudioFrameReaderFactory *readerFactory;
-	IIAudioPlayer *player;
+	AudioStimulusPlayer *player;
 	AudioLoader *loader;
 public:
 	RefactoredModel(
@@ -41,7 +41,7 @@ public:
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
 		AudioFrameReaderFactory *readerFactory,
-		IIAudioPlayer *player,
+		AudioStimulusPlayer *player,
 		AudioLoader *loader
 	) :
 		prescriptionReader{ prescriptionReader },
@@ -64,33 +64,10 @@ public:
 		testParameters = p;
 	}
 
-private:
-	void prepareNewTest_(Model::TestParameters p) {
-		SpeechPerceptionTest::TestParameters adapted;
-		adapted.audioDirectory = p.audioDirectory;
-		adapted.testFilePath = p.testFilePath;
-		try {
-			test->prepareNewTest(adapted);
-		}
-		catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
-			throw TestInitializationFailure{ e.what() };
-		}
-	}
-
-public:
 	void playTrial(TrialParameters p) override {
 		auto reader = readerFactory->make(test->nextStimulus());
 		loader->setReader(reader);
-		IAudioPlayer::Preparation playing{};
-		playing.channels = reader->channels();
-		playing.framesPerBuffer = testParameters.chunkSize;
-		playing.sampleRate = reader->sampleRate();
-		try {
-			player->prepareToPlay(playing);
-		}
-		catch (const IAudioPlayer::PreparationFailure &e) {
-			throw TrialFailure{ e.what() };
-		}
+		prepareAudioPlayer(*reader);
 		test->playNextTrial(player);
 		makeCompressor(
 			prescriptionReader->read(testParameters.leftDslPrescriptionFilePath), 
@@ -103,25 +80,6 @@ public:
 		reader->reset();
 	}
 
-private:
-	void makeCompressor(PrescriptionReader::Dsl dsl, int sampleRate) {
-		FilterbankCompressor::Parameters compression;
-		compression.attack_ms = testParameters.attack_ms;
-		compression.release_ms = testParameters.release_ms;
-		compression.chunkSize = testParameters.chunkSize;
-		compression.windowSize = testParameters.windowSize;
-
-		compression.sampleRate = sampleRate;
-		compression.compressionRatios = dsl.compressionRatios;
-		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
-		compression.kneepointGains_dB = dsl.kneepointGains_dB;
-		compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
-		compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
-		compression.channels = dsl.channels;
-		compressorFactory->make(compression);
-	}
-
-public:
 	bool testComplete() override {
 		return false;
 	}
@@ -144,21 +102,67 @@ public:
 
 private:
 	void readPrescriptions(Model::TestParameters p) {
+		readPrescription(p.leftDslPrescriptionFilePath);
+		readPrescription(p.rightDslPrescriptionFilePath);
+	}
+
+	PrescriptionReader::Dsl readPrescription(std::string filePath) {
 		try {
-			prescriptionReader->read(p.leftDslPrescriptionFilePath);
-			prescriptionReader->read(p.rightDslPrescriptionFilePath);
+			return prescriptionReader->read(filePath);
 		}
 		catch (const PrescriptionReader::ReadFailure &) {
-			throw TestInitializationFailure{ "Unable to read '" + p.leftDslPrescriptionFilePath + "'." };
+			throw TestInitializationFailure{ "Unable to read '" + filePath + "'." };
 		}
 	}
 
-	void readBrir(Model::TestParameters p) {
+	BrirReader::BinauralRoomImpulseResponse readBrir(Model::TestParameters p) {
 		try {
-			brirReader->read(p.brirFilePath);
+			return brirReader->read(p.brirFilePath);
 		}
 		catch (const BrirReader::ReadFailure &) {
 			throw TestInitializationFailure{ "Unable to read '" + p.brirFilePath + "'." };
+		}
+	}
+
+	std::shared_ptr<FilterbankCompressor> makeCompressor(PrescriptionReader::Dsl dsl, int sampleRate) {
+		FilterbankCompressor::Parameters compression;
+		compression.attack_ms = testParameters.attack_ms;
+		compression.release_ms = testParameters.release_ms;
+		compression.chunkSize = testParameters.chunkSize;
+		compression.windowSize = testParameters.windowSize;
+
+		compression.sampleRate = sampleRate;
+		compression.compressionRatios = dsl.compressionRatios;
+		compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
+		compression.kneepointGains_dB = dsl.kneepointGains_dB;
+		compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
+		compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
+		compression.channels = dsl.channels;
+		return compressorFactory->make(compression);
+	}
+
+	void prepareAudioPlayer(AudioFrameReader &reader) {
+		IAudioPlayer::Preparation playing{};
+		playing.channels = reader.channels();
+		playing.framesPerBuffer = testParameters.chunkSize;
+		playing.sampleRate = reader.sampleRate();
+		try {
+			player->prepareToPlay(playing);
+		}
+		catch (const IAudioPlayer::PreparationFailure &e) {
+			throw TrialFailure{ e.what() };
+		}
+	}
+
+	void prepareNewTest_(Model::TestParameters p) {
+		SpeechPerceptionTest::TestParameters adapted;
+		adapted.audioDirectory = p.audioDirectory;
+		adapted.testFilePath = p.testFilePath;
+		try {
+			test->prepareNewTest(adapted);
+		}
+		catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
+			throw TestInitializationFailure{ e.what() };
 		}
 	}
 };
@@ -221,7 +225,7 @@ public:
 	}
 };
 
-class AudioPlayerStub : public IIAudioPlayer {
+class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
@@ -265,7 +269,7 @@ public:
 	}
 };
 
-class PreparationFailingAudioPlayer : public IIAudioPlayer {
+class PreparationFailingAudioPlayer : public AudioStimulusPlayer {
 	std::string errorMessage{};
 public:
 	void setErrorMessage(std::string s) {
@@ -537,7 +541,7 @@ protected:
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
 	AudioPlayerStub defaultPlayer{};
-	IIAudioPlayer *player{ &defaultPlayer };
+	AudioStimulusPlayer *player{ &defaultPlayer };
 	AudioLoaderStub defaultLoader{};
 	AudioLoader *loader{ &defaultLoader };
 
