@@ -263,7 +263,7 @@ TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
 	);*/
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
+TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToHearingAidFactory) {
 	PrescriptionReader::Dsl leftPrescription;
 	leftPrescription.compressionRatios = { 1 };
 	leftPrescription.crossFrequenciesHz = { 2 };
@@ -290,7 +290,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
 	playTrial();
-	auto left = compressorFactory.parameters().at(0);
+	auto left = hearingAidFactory.parameters().at(0);
 	assertEqual({ 1 }, left.compressionRatios);
 	assertEqual({ 2 }, left.crossFrequenciesHz);
 	assertEqual({ 3 }, left.kneepointGains_dB);
@@ -302,7 +302,7 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	EXPECT_EQ(9, left.release_ms);
 	EXPECT_EQ(10, left.chunkSize);
 	EXPECT_EQ(11, left.windowSize);
-	auto right = compressorFactory.parameters().at(1);
+	auto right = hearingAidFactory.parameters().at(1);
 	assertEqual({ 1, 1 }, right.compressionRatios);
 	assertEqual({ 2, 2 }, right.crossFrequenciesHz);
 	assertEqual({ 3, 3 }, right.kneepointGains_dB);
