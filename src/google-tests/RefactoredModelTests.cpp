@@ -33,6 +33,11 @@ public:
 	auto scalars() const {
 		return scalars_;
 	}
+
+	std::shared_ptr<SignalProcessor> make(float x) override {
+		scalars_.push_back(x);
+		return {};
+	}
 };
 
 class AudioPlayerStub : public AudioStimulusPlayer {

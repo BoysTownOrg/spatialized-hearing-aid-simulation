@@ -28,6 +28,7 @@ public:
 class ScalarFactory {
 public:
 	INTERFACE_OPERATIONS(ScalarFactory);
+	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 
 class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
@@ -58,6 +59,7 @@ class RefactoredModel : public Model {
 	SpeechPerceptionTest *test;
 	HearingAidFactory *hearingAidFactory;
 	FirFilterFactory *firFilterFactory;
+	ScalarFactory *scalarFactory;
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioStimulusPlayer *player;
 	AudioLoader *loader;
@@ -68,7 +70,7 @@ public:
 		BrirReader *brirReader,
 		HearingAidFactory *hearingAidFactory,
 		FirFilterFactory *firFilterFactory,
-		ScalarFactory *,
+		ScalarFactory *scalarFactory,
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader

@@ -1,4 +1,5 @@
 #include "RefactoredModel.h"
+#include <gsl/gsl>
 
 RefactoredModel::RefactoredModel(
 	SpeechPerceptionTest *test,
@@ -6,7 +7,7 @@ RefactoredModel::RefactoredModel(
 	BrirReader *brirReader,
 	HearingAidFactory *hearingAidFactory,
 	FirFilterFactory *firFilterFactory,
-	ScalarFactory *,
+	ScalarFactory *scalarFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioStimulusPlayer *player,
 	AudioLoader *loader
@@ -16,6 +17,7 @@ RefactoredModel::RefactoredModel(
 	test{ test },
 	hearingAidFactory{ hearingAidFactory },
 	firFilterFactory{ firFilterFactory },
+	scalarFactory{ scalarFactory },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader }
@@ -99,8 +101,45 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 	}
 }
 
+class RmsComputer {
+    std::vector<std::vector<float>> entireAudioFile;
+public:
+	explicit RmsComputer(AudioFrameReader &reader) :
+		entireAudioFile(
+			reader.channels(), 
+			std::vector<float>(gsl::narrow<std::vector<float>::size_type>(reader.frames()))
+		)
+	{
+		std::vector<gsl::span<float>> pointers;
+		for (auto &channel : entireAudioFile)
+			pointers.push_back({ channel });
+		reader.read(pointers);
+	}
+
+    float compute(int channel) {
+		return rms(entireAudioFile.at(channel));
+    }
+
+private:
+	template<typename T>
+	T rms(std::vector<T> x) {
+		return std::sqrt(
+			std::accumulate(
+				x.begin(),
+				x.end(),
+				T{ 0 },
+				[](T a, T b) { return a += b * b; }
+			) / x.size()
+		);
+	}
+};
+
 void RefactoredModel::playTrial(TrialParameters p) {
 	auto reader = audioReaderFactory->make(test->nextStimulus());
+    RmsComputer rms{ *reader };
+    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - 8) / 20.0);
+	scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0)));
+	scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1)));
 	reader->reset();
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
