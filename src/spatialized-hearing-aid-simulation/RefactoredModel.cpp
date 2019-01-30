@@ -161,8 +161,10 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		leftChannel->add(firFilterFactory->make(brir.left));
 		rightChannel->add(firFilterFactory->make(brir.right));
 	}
-	leftChannel->add(makeHearingAid(leftPrescription, reader->sampleRate()));
-	rightChannel->add(makeHearingAid(rightPrescription, reader->sampleRate()));
+	if (testParameters.usingHearingAidSimulation) {
+		leftChannel->add(makeHearingAid(leftPrescription, reader->sampleRate()));
+		rightChannel->add(makeHearingAid(rightPrescription, reader->sampleRate()));
+	}
 	channels.push_back(leftChannel);
 	channels.push_back(rightChannel);
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
