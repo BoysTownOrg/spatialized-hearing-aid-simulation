@@ -408,20 +408,19 @@ TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
 TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
 	newTest.usingSpatialization = true;
 	newTest.usingHearingAidSimulation = true;
+	audioFrameReader->setChannels(2);
 	prepareNewTest();
 	scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 	firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(3.0f));
 	hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(2.0f));
 	playTrial();
 	auto processor = loader.audioFrameProcessor();
-	std::vector<float> a{ 1 };
-	std::vector<float> b{ 2 };
-	std::vector<float> c{ 3 };
-	std::vector<gsl::span<float>> channels{ a, b, c };
+	std::vector<float> left{ 4 };
+	std::vector<float> right{ 5 };
+	std::vector<gsl::span<float>> channels{ left, right };
 	processor->process(channels);
-	EXPECT_EQ((1 + 1) * 3 + 2, a.at(0));
-	EXPECT_EQ((2 + 1) * 3 + 2, b.at(0));
-	EXPECT_EQ((3 + 1) * 3 + 2, c.at(0));
+	EXPECT_EQ((4 + 1) * 3 + 2, left.at(0));
+	EXPECT_EQ((5 + 1) * 3 + 2, right.at(0));
 }
 
 TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
