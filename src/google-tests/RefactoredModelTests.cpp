@@ -285,7 +285,7 @@ TEST_F(RefactoredModelTests, DISABLED_playTrialComputesCalibrationScalars) {
 	);*/
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesPrescriptionsToHearingAidFactory) {
+TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory) {
 	PrescriptionReader::Dsl leftPrescription;
 	leftPrescription.compressionRatios = { 1 };
 	leftPrescription.crossFrequenciesHz = { 2 };
@@ -294,17 +294,8 @@ TEST_F(RefactoredModelTests, playTrialPassesPrescriptionsToHearingAidFactory) {
 	leftPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 	leftPrescription.channels = 6;
 	prescriptionReader.addPrescription("leftFilePath", leftPrescription);
-	PrescriptionReader::Dsl rightPrescription;
-	rightPrescription.compressionRatios = { 1, 1 };
-	rightPrescription.crossFrequenciesHz = { 2, 2 };
-	rightPrescription.kneepointGains_dB = { 3, 3 };
-	rightPrescription.kneepoints_dBSpl = { 4, 4 };
-	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5, 5 };
-	rightPrescription.channels = 12;
-	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
 	newTest.usingHearingAidSimulation = true;
 	newTest.leftDslPrescriptionFilePath = "leftFilePath";
-	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
 	playTrial();
 	auto left = hearingAidFactory.parameters().at(0);
@@ -314,13 +305,28 @@ TEST_F(RefactoredModelTests, playTrialPassesPrescriptionsToHearingAidFactory) {
 	assertEqual({ 4 }, left.kneepoints_dBSpl);
 	assertEqual({ 5 }, left.broadbandOutputLimitingThresholds_dBSpl);
 	EXPECT_EQ(6, left.channels);
+}
+
+TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory) {
+	PrescriptionReader::Dsl rightPrescription;
+	rightPrescription.compressionRatios = { 1 };
+	rightPrescription.crossFrequenciesHz = { 2 };
+	rightPrescription.kneepointGains_dB = { 3 };
+	rightPrescription.kneepoints_dBSpl = { 4 };
+	rightPrescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+	rightPrescription.channels = 6;
+	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
+	newTest.usingHearingAidSimulation = true;
+	newTest.rightDslPrescriptionFilePath = "rightFilePath";
+	prepareNewTest();
+	playTrial();
 	auto right = hearingAidFactory.parameters().at(1);
-	assertEqual({ 1, 1 }, right.compressionRatios);
-	assertEqual({ 2, 2 }, right.crossFrequenciesHz);
-	assertEqual({ 3, 3 }, right.kneepointGains_dB);
-	assertEqual({ 4, 4 }, right.kneepoints_dBSpl);
-	assertEqual({ 5, 5 }, right.broadbandOutputLimitingThresholds_dBSpl);
-	EXPECT_EQ(12, right.channels);
+	assertEqual({ 1 }, right.compressionRatios);
+	assertEqual({ 2 }, right.crossFrequenciesHz);
+	assertEqual({ 3 }, right.kneepointGains_dB);
+	assertEqual({ 4 }, right.kneepoints_dBSpl);
+	assertEqual({ 5 }, right.broadbandOutputLimitingThresholds_dBSpl);
+	EXPECT_EQ(6, right.channels);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
