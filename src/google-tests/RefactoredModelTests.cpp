@@ -171,6 +171,13 @@ protected:
 		&loader
 	};
 
+	RefactoredModelTests() {
+		BrirReader::BinauralRoomImpulseResponse brir;
+		brir.left = { 0 };
+		brir.right = { 0 };
+		brirReader.setBrir(brir);
+	}
+
 	void prepareNewTest() {
 		model.prepareNewTest(newTest);
 	}
