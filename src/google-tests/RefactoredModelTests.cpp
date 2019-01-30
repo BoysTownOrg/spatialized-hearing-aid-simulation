@@ -41,14 +41,17 @@ public:
 		FilterbankCompressorFactory *compressorFactory,
 		AudioFrameReaderFactory *readerFactory,
 		IIAudioPlayer *player,
-		AudioLoader *
+		AudioLoader *loader
 	) :
 		prescriptionReader{ prescriptionReader },
 		brirReader{ brirReader },
 		test{ test },
 		compressorFactory{ compressorFactory },
 		readerFactory{ readerFactory },
-		player{ player } {}
+		player{ player } 
+	{
+		player->setAudioLoader(loader);
+	}
 
 	void prepareNewTest(TestParameters p) override {
 		prepareNewTest_(p);
