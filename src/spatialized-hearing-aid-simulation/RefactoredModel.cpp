@@ -5,6 +5,7 @@ RefactoredModel::RefactoredModel(
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	FilterbankCompressorFactory *compressorFactory,
+	FirFilterFactory *,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioStimulusPlayer *player,
 	AudioLoader *loader

@@ -1,4 +1,14 @@
+#include "ArgumentCollection.h"
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
+
+class FirFilterFactoryStub : public FirFilterFactory {
+	ArgumentCollection<BrirReader::impulse_response_type> coefficients_{};
+public:
+
+	auto coefficients() const {
+		return coefficients_;
+	}
+};
 
 class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
@@ -128,6 +138,7 @@ protected:
 	BrirReaderStub brirReader{};
 	SpeechPerceptionTestStub perceptionTest{};
 	FilterbankCompressorSpyFactory compressorFactory{};
+	FirFilterFactoryStub firFilterFactory{};
 	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
 	AudioPlayerStub player{};
@@ -137,6 +148,7 @@ protected:
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
+		&firFilterFactory,
 		&audioFrameReaderFactory,
 		&player,
 		&loader
@@ -327,6 +339,8 @@ protected:
 	SpeechPerceptionTest *test{&defaultTest};
 	FilterbankCompressorSpyFactory defaultCompressorFactory{};
 	FilterbankCompressorFactory *compressorFactory{&defaultCompressorFactory};
+	FirFilterFactoryStub defaultFirFilterFactory{};
+	FirFilterFactory *firFilterFactory{ &defaultFirFilterFactory };
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
 	AudioPlayerStub defaultPlayer{};
@@ -374,6 +388,7 @@ protected:
 			prescriptionReader, 
 			brirReader, 
 			compressorFactory, 
+			firFilterFactory,
 			audioReaderFactory,
 			player,
 			loader

@@ -10,6 +10,11 @@
 #include <playing-audio/AudioLoader.h>
 #include <presentation/Model.h>
 
+class FirFilterFactory {
+public:
+	INTERFACE_OPERATIONS(FirFilterFactory);
+};
+
 class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {
 
 };
@@ -45,6 +50,7 @@ public:
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		FilterbankCompressorFactory *compressorFactory,
+		FirFilterFactory *,
 		AudioFrameReaderFactory *audioReaderFactory,
 		AudioStimulusPlayer *player,
 		AudioLoader *loader

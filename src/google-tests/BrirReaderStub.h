@@ -3,11 +3,16 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 
 class BrirReaderStub : public BrirReader {
+	BinauralRoomImpulseResponse brir_{};
 	std::string filePath_{};
 public:
+	void setBrir(BinauralRoomImpulseResponse brir) {
+		brir_ = std::move(brir);
+	}
+
 	BinauralRoomImpulseResponse read(std::string filePath) override {
 		filePath_ = std::move(filePath);
-		return {};
+		return brir_;
 	}
 
 	std::string filePath() const {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 template<typename T>
 class ArgumentCollection {
 	std::vector<T> collection{};
