@@ -30,7 +30,7 @@ public:
 
 	void read(gsl::span<channel_type> audio) override {
 		audioBuffer_ = audio;
-		readingLog_ += LogString{ "reset " };
+		readingLog_ += LogString{ "read " };
 	}
 
 	void setComplete() {

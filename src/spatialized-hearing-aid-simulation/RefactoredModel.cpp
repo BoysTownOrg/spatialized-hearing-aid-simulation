@@ -136,13 +136,13 @@ private:
 
 void RefactoredModel::playTrial(TrialParameters p) {
 	auto reader = audioReaderFactory->make(test->nextStimulus());
+	//reader->reset();
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - 8) / 20.0);
 	if (reader->channels() > 0)
 		scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0)));
 	if (reader->channels() > 1)
 		scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1)));
-	reader->reset();
 	prepareAudioPlayer(*reader, p);
 	test->playNextTrial(player);
 	loader->setReader(reader);
