@@ -15,8 +15,8 @@ TEST_F(
 	DISABLED_formatsTestParameters
 ) {
 	GlobalTestParameters test;
-	//test.subjectId = "a";
-	//test.testerId = "b";
+	//perceptionTest.subjectId = "a";
+	//perceptionTest.testerId = "b";
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";
@@ -49,8 +49,8 @@ TEST_F(
 	DISABLED_ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	GlobalTestParameters test;
-	//test.subjectId = "a";
-	//test.testerId = "b";
+	//perceptionTest.subjectId = "a";
+	//perceptionTest.testerId = "b";
 	test.usingHearingAidSimulation = false;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";
@@ -80,8 +80,8 @@ TEST_F(
 	DISABLED_ignoresBrirIfNotUsingSpatialization
 ) {
 	GlobalTestParameters test;
-	//test.subjectId = "a";
-	//test.testerId = "b";
+	//perceptionTest.subjectId = "a";
+	//perceptionTest.testerId = "b";
 	test.usingHearingAidSimulation = true;
 	test.leftDslPrescriptionFilePath = "c";
 	test.rightDslPrescriptionFilePath = "d";

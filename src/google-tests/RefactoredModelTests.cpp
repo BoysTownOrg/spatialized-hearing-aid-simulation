@@ -123,18 +123,18 @@ public:
 
 class RefactoredModelTests : public ::testing::Test {
 protected:
-	RefactoredModel::TestParameters testing{};
+	RefactoredModel::TestParameters newTest{};
 	RefactoredModel::TrialParameters trial{};
 	PrescriptionReaderStub prescriptionReader{};
 	BrirReaderStub brirReader{};
-	SpeechPerceptionTestStub test{};
+	SpeechPerceptionTestStub perceptionTest{};
 	FilterbankCompressorSpyFactory compressorFactory{};
 	std::shared_ptr<AudioFrameReaderStub> audioFrameReader = std::make_shared<AudioFrameReaderStub>();
 	AudioFrameReaderStubFactory audioFrameReaderFactory{audioFrameReader};
 	AudioPlayerStub player{};
 	AudioLoaderStub loader{};
 	RefactoredModel model{ 
-		&test,
+		&perceptionTest,
 		&prescriptionReader, 
 		&brirReader, 
 		&compressorFactory, 
@@ -144,7 +144,7 @@ protected:
 	};
 
 	void prepareNewTest() {
-		model.prepareNewTest(testing);
+		model.prepareNewTest(newTest);
 	}
 
 	void playTrial() {
@@ -157,51 +157,51 @@ TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestReadsPrescriptionsWhenUsingHearingAidSimulation) {
-	testing.usingHearingAidSimulation = true;
-	testing.leftDslPrescriptionFilePath = "a";
-	testing.rightDslPrescriptionFilePath = "b";
+	newTest.usingHearingAidSimulation = true;
+	newTest.leftDslPrescriptionFilePath = "a";
+	newTest.rightDslPrescriptionFilePath = "b";
 	prepareNewTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
 	EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation) {
-	testing.usingHearingAidSimulation = false;
-	testing.leftDslPrescriptionFilePath = "a";
-	testing.rightDslPrescriptionFilePath = "b";
+	newTest.usingHearingAidSimulation = false;
+	newTest.leftDslPrescriptionFilePath = "a";
+	newTest.rightDslPrescriptionFilePath = "b";
 	prepareNewTest();
 	EXPECT_TRUE(prescriptionReader.filePaths().empty());
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestReadsBrirWhenUsingSpatialization) {
-	testing.usingSpatialization = true;
-	testing.brirFilePath = "a";
+	newTest.usingSpatialization = true;
+	newTest.brirFilePath = "a";
 	prepareNewTest();
 	assertEqual("a", brirReader.filePath());
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-	testing.usingSpatialization = false;
-	testing.brirFilePath = "a";
+	newTest.usingSpatialization = false;
+	newTest.brirFilePath = "a";
 	prepareNewTest();
 	EXPECT_TRUE(brirReader.filePath().empty());
 }
 
 TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
-	testing.audioDirectory = "a";
-	testing.testFilePath = "b";
+	newTest.audioDirectory = "a";
+	newTest.testFilePath = "b";
 	prepareNewTest();
-	assertEqual("a", test.testParameters().audioDirectory);
-	assertEqual("b", test.testParameters().testFilePath);
+	assertEqual("a", perceptionTest.testParameters().audioDirectory);
+	assertEqual("b", perceptionTest.testParameters().testFilePath);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
 	playTrial();
-	EXPECT_EQ(&player, test.player());
+	EXPECT_EQ(&player, perceptionTest.player());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFilePathToFactory) {
-	test.setNextStimulus("a");
+	perceptionTest.setNextStimulus("a");
 	playTrial();
 	assertEqual("a", audioFrameReaderFactory.filePath());
 }
@@ -212,8 +212,8 @@ TEST_F(RefactoredModelTests, playTrialPassesAudioReaderToAudioLoader) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesParametersToPlayer) {
-	testing.usingHearingAidSimulation = true;
-	testing.chunkSize = 3;
+	newTest.usingHearingAidSimulation = true;
+	newTest.chunkSize = 3;
 	prepareNewTest();
 	audioFrameReader->setChannels(1);
 	audioFrameReader->setSampleRate(2);
@@ -266,13 +266,13 @@ TEST_F(RefactoredModelTests, playTrialPassesCompressionParametersToFactory) {
 	rightPrescription.channels = 12;
 	prescriptionReader.addPrescription("rightFilePath", rightPrescription);
 	audioFrameReader->setSampleRate(7);
-	testing.usingHearingAidSimulation = true;
-	testing.attack_ms = 8;
-	testing.release_ms = 9;
-	testing.chunkSize = 10;
-	testing.windowSize = 11;
-	testing.leftDslPrescriptionFilePath = "leftFilePath";
-	testing.rightDslPrescriptionFilePath = "rightFilePath";
+	newTest.usingHearingAidSimulation = true;
+	newTest.attack_ms = 8;
+	newTest.release_ms = 9;
+	newTest.chunkSize = 10;
+	newTest.windowSize = 11;
+	newTest.leftDslPrescriptionFilePath = "leftFilePath";
+	newTest.rightDslPrescriptionFilePath = "rightFilePath";
 	prepareNewTest();
 	playTrial();
 	auto left = compressorFactory.parameters().at(0);
@@ -308,7 +308,7 @@ TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlaye
 
 class RefactoredModelFailureTests : public ::testing::Test {
 protected:
-	RefactoredModel::TestParameters testing{};
+	RefactoredModel::TestParameters newTest{};
 	PrescriptionReaderStub defaultPrescriptionReader{};
 	PrescriptionReader *prescriptionReader{&defaultPrescriptionReader};
 	BrirReaderStub defaultBrirReader{};
@@ -327,7 +327,7 @@ protected:
 	void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 		auto model = makeModel();
 		try {
-			model.prepareNewTest(testing);
+			model.prepareNewTest(newTest);
 			FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 		}
 		catch (const RefactoredModel::TestInitializationFailure & e) {
@@ -377,8 +377,8 @@ TEST_F(
 ) {
 	FailingPrescriptionReader failing;
 	failing.setErrorMessage("irrelevant");
-	testing.usingHearingAidSimulation = true;
-	testing.leftDslPrescriptionFilePath = "a";
+	newTest.usingHearingAidSimulation = true;
+	newTest.leftDslPrescriptionFilePath = "a";
 	prescriptionReader = &failing;
 	assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 }
@@ -400,8 +400,8 @@ TEST_F(
 	FailingBrirReader failing;
 	failing.setErrorMessage("irrelevant.");
 	brirReader = &failing;
-	testing.usingSpatialization = true;
-	testing.brirFilePath = "a";
+	newTest.usingSpatialization = true;
+	newTest.brirFilePath = "a";
 	assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 }
 
