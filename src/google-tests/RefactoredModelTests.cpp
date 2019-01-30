@@ -487,9 +487,9 @@ TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlaye
 	assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 }
 
-TEST_F(RefactoredModelTests, playTrialResetsAudioLoader) {
+TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
+	perceptionTest.callOnPlayNextTrial([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
 	playTrial();
-	EXPECT_TRUE(audioLoader.log().contains("reset"));
 }
 
 class RefactoredModelFailureTests : public ::testing::Test {
