@@ -206,7 +206,7 @@ protected:
 	}
 
 	void setInMemoryReader(AudioFileReader &reader_) {
-		loader.setReader(std::make_shared<AudioFileInMemory>(reader_));
+		audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 	}
 };
 
@@ -295,11 +295,11 @@ TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
 	trial.level_dB_Spl = 7;
 	//processorFactory.setFullScale_dB_Spl(8);
 	playTrial();
-	auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
-	auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5) / 3);
-	auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6) / 3);
-	EXPECT_EQ(desiredRms / leftChannelRms, scalarFactory.scalars().at(0));
-	EXPECT_EQ(desiredRms / rightChannelRms, scalarFactory.scalars().at(1));
+	const auto desiredRms = std::pow(10.0, (7 - 8) / 20.0);
+	const auto leftChannelRms = std::sqrt((1.0 * 1.0 + 3.0 * 3.0 + 5.0 * 5.0) / 3);
+	const auto rightChannelRms = std::sqrt((2.0 * 2.0 + 4.0 * 4.0 + 6.0 * 6.0) / 3);
+	EXPECT_NEAR(desiredRms / leftChannelRms, scalarFactory.scalars().at(0), 1e-6);
+	EXPECT_NEAR(desiredRms / rightChannelRms, scalarFactory.scalars().at(1), 1e-6);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory) {
