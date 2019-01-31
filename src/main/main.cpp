@@ -20,6 +20,7 @@
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
+#include <spatialized-hearing-aid-simulation/RefactoredSpatializedHearingAidSimulationFactory.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class HearingAidFactoryImpl : public HearingAidFactory {
@@ -61,22 +62,25 @@ int main() {
 			std::make_shared<LibsndfileReaderFactory>()
 		) 
 	};
-	ChaproFactory compressorFactory{};
-	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
 	PrescriptionAdapter prescriptionReader{ std::make_shared<NlohmannJsonParserFactory>() };
-	FirFilterFactoryImpl firFilterFactory{};
 	BrirAdapter brirReader{ std::make_shared<LibsndfileReaderFactory>() };
 	ScalarFactoryImpl scalarFactory{};
+	ChaproFactory compressorFactory{};
+	FirFilterFactoryImpl firFilterFactory{};
+	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
+	RefactoredSpatializedHearingAidSimulationFactory simulationFactory{
+		&scalarFactory, 
+		&firFilterFactory, 
+		&hearingAidFactory
+	};
 	RefactoredModel model{
 		&perceptionTest,
 		&player,
 		&audioLoader,
 		&audioFrameReaderFactory,
-		&hearingAidFactory, 
 		&prescriptionReader, 
-		&firFilterFactory,
 		&brirReader, 
-		&scalarFactory
+		&simulationFactory
 	};
 	FltkView view{};
 	Presenter presenter{ &model, &view };
