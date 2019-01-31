@@ -168,12 +168,14 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (reader->channels() > 0) {
 		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
+		sp.prescription = leftPrescription;
 		simulationFactory->make(sp);
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	}
 	if (reader->channels() > 1) {
 		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
+		sp.prescription = rightPrescription;
 		simulationFactory->make(sp);
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	}
