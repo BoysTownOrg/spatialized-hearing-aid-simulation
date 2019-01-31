@@ -498,6 +498,11 @@ TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
 	playTrial();
 }
 
+TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
+	perceptionTest.setComplete();
+	EXPECT_TRUE(model.testComplete());
+}
+
 class RefactoredModelFailureTests : public ::testing::Test {
 protected:
 	RefactoredModel::TestParameters newTest{};
