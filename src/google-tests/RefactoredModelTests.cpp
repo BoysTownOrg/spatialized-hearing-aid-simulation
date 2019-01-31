@@ -123,6 +123,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	StimulusPlayer *player_{};
 	bool playNextTrialCalled_{};
 	bool prepareNewTestCalled_{};
+	bool complete_{};
 public:
 	const auto &testParameters() const noexcept {
 		return testParameters_;
@@ -161,6 +162,10 @@ public:
 
 	const auto player() const noexcept {
 		return player_;
+	}
+
+	void setComplete() {
+		complete_ = true;
 	}
 };
 
