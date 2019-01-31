@@ -49,7 +49,8 @@ public:
 		compression.windowSize = p.windowSize;
 		compression.sampleRate = p.sampleRate;
 		compression.max_dB_Spl = p.fullScale_dB_Spl;
-		chain->add(hearingAidFactory->make(compression));
+		if (p.usingHearingAidSimulation)
+			chain->add(hearingAidFactory->make(compression));
 		return chain;
 	}
 };
