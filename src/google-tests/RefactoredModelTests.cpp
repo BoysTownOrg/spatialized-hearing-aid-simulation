@@ -519,6 +519,11 @@ TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 	EXPECT_TRUE(audioLoader.log().isEmpty());
 }
 
+TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
+	playTrial();
+	EXPECT_EQ(LogString{ "prepareToPlay play " }, audioPlayer.log());
+}
+
 TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
 	perceptionTest.setComplete();
 	EXPECT_TRUE(model.testComplete());
@@ -679,18 +684,6 @@ TEST_F(
 	failing.setErrorMessage("error.");
 	player = &failing;
 	assertPlayCalibrationThrowsCalibrationFailure("error.");
-}
-
-TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
-	PreparationFailingAudioPlayer failing;
-	player = &failing;
-	auto model = makeModel();
-	try {
-		model.playTrial({});
-	}
-	catch (const RefactoredModel::TrialFailure &) {
-	}
-	EXPECT_FALSE(defaultTest.advanceTrialCalled());
 }
 
 TEST_F(

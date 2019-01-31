@@ -159,7 +159,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
-	prepareAudioPlayer(*reader, p);
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
     RmsComputer rms{ *reader };
@@ -181,6 +180,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setReader(reader);
 	loader->reset();
 	player->play();
+	prepareAudioPlayer(*reader, p);
 	perceptionTest->advanceTrial();
 }
 
