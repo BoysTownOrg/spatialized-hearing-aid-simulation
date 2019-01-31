@@ -169,6 +169,10 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
 		sp.prescription = leftPrescription;
+		sp.attack_ms = testParameters.attack_ms;
+		sp.release_ms = testParameters.release_ms;
+		sp.chunkSize = testParameters.chunkSize;
+		sp.windowSize = testParameters.windowSize;
 		simulationFactory->make(sp);
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	}
@@ -176,6 +180,10 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
 		sp.prescription = rightPrescription;
+		sp.attack_ms = testParameters.attack_ms;
+		sp.release_ms = testParameters.release_ms;
+		sp.chunkSize = testParameters.chunkSize;
+		sp.windowSize = testParameters.windowSize;
 		simulationFactory->make(sp);
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	}
