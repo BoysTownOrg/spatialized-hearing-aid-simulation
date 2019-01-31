@@ -16,6 +16,7 @@ public:
 		PrescriptionReader::Dsl prescription;
 		double attack_ms;
 		double release_ms;
+		double fullScale_dB_Spl;
 		float scale;
 		int sampleRate;
 		int windowSize;
@@ -131,11 +132,13 @@ namespace {
 		simulationParameters.chunkSize = 3;
 		simulationParameters.windowSize = 4;
 		simulationParameters.sampleRate = 5;
+		simulationParameters.fullScale_dB_Spl = 6;
 		simulationFactory.make(simulationParameters);
 		EXPECT_EQ(1, hearingAidFactory.parameters().attack_ms);
 		EXPECT_EQ(2, hearingAidFactory.parameters().release_ms);
 		EXPECT_EQ(3, hearingAidFactory.parameters().chunkSize);
 		EXPECT_EQ(4, hearingAidFactory.parameters().windowSize);
 		EXPECT_EQ(5, hearingAidFactory.parameters().sampleRate);
+		EXPECT_EQ(6, hearingAidFactory.parameters().max_dB_Spl);
 	}
 }
