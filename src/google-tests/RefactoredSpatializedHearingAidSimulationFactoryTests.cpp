@@ -14,7 +14,11 @@ public:
 
 	struct SimulationParameters {
 		PrescriptionReader::Dsl prescription;
+		double attack_ms;
+		double release_ms;
 		float scale;
+		int windowSize;
+		int chunkSize;
 		bool usingHearingAidSimulation;
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
@@ -109,5 +113,20 @@ namespace {
 		assertEqual({ 4 }, hearingAidFactory.parameters().kneepoints_dBSpl);
 		assertEqual({ 5 }, hearingAidFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
 		EXPECT_EQ(6, hearingAidFactory.parameters().channels);
+	}
+
+	TEST_F(
+		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		makePassesOtherCompressionParametersToHearingAidFactory
+	) {
+		simulationParameters.usingHearingAidSimulation = true;
+		simulationParameters.attack_ms = 1;
+		simulationParameters.release_ms = 2;
+		simulationParameters.chunkSize = 3;
+		simulationParameters.windowSize = 4;
+		EXPECT_EQ(1, hearingAidFactory.parameters().attack_ms);
+		EXPECT_EQ(2, hearingAidFactory.parameters().release_ms);
+		EXPECT_EQ(3, hearingAidFactory.parameters().chunkSize);
+		EXPECT_EQ(4, hearingAidFactory.parameters().windowSize);
 	}
 }
