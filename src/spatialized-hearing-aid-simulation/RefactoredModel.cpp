@@ -182,17 +182,17 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, p);
+	prepareAudioPlayer(*reader, p.audioDevice);
 	player->play();
 	perceptionTest->advanceTrial();
 }
 
-void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
+void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, std::string audioDevice) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
 	playing.framesPerBuffer = testParameters.chunkSize;
 	playing.sampleRate = reader.sampleRate();
-	playing.audioDevice = p.audioDevice;
+	playing.audioDevice = std::move(audioDevice);
 	try {
 		player->prepareToPlay(playing);
 	}
