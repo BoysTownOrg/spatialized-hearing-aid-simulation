@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="IAudioPlayer.h" />
+    <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
     <ClInclude Include="SpeechPerceptionTest.h" />

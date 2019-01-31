@@ -1,6 +1,9 @@
+#include <spatialized-hearing-aid-simulation/IRefactoredSpatializedHearingAidSimulationFactory.h>
 #include <signal-processing/SignalProcessor.h>
-#include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 #include <signal-processing/SignalProcessingChain.h>
+#include <binaural-room-impulse-response/BrirReader.h>
+#include <hearing-aid-processing/FilterbankCompressor.h>
+#include <dsl-prescription/PrescriptionReader.h>
 
 class FirFilterFactory {
 public:
@@ -22,7 +25,9 @@ public:
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 
-class RefactoredSpatializedHearingAidSimulationFactory {
+class RefactoredSpatializedHearingAidSimulationFactory :
+	public IRefactoredSpatializedHearingAidSimulationFactory
+{
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
 	HearingAidFactory *hearingAidFactory;
@@ -36,20 +41,7 @@ public:
 		firFilterFactory{ firFilterFactory },
 		hearingAidFactory{ hearingAidFactory } {}
 
-	struct SimulationParameters {
-		PrescriptionReader::Dsl prescription;
-		BrirReader::impulse_response_type filterCoefficients;
-		double attack_ms;
-		double release_ms;
-		double fullScaleLevel_dB_Spl;
-		float scale;
-		int sampleRate;
-		int windowSize;
-		int chunkSize;
-		bool usingHearingAidSimulation;
-		bool usingSpatialization;
-	};
-	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
+	std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
 		auto chain = std::make_shared<SignalProcessingChain>();
 		chain->add(scalarFactory->make(p.scale));
 		if (p.usingSpatialization)
