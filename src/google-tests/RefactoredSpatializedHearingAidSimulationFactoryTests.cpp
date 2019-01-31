@@ -36,6 +36,7 @@ public:
 		compression.release_ms = p.release_ms;
 		compression.chunkSize = p.chunkSize;
 		compression.windowSize = p.windowSize;
+		compression.sampleRate = p.sampleRate;
 		hearingAidFactory->make(compression);
 		return {};
 	}
