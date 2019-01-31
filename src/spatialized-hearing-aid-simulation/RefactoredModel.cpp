@@ -173,6 +173,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.release_ms = testParameters.release_ms;
 		sp.chunkSize = testParameters.chunkSize;
 		sp.windowSize = testParameters.windowSize;
+		sp.sampleRate = reader->sampleRate();
 		simulationFactory->make(sp);
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	}
@@ -184,6 +185,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.release_ms = testParameters.release_ms;
 		sp.chunkSize = testParameters.chunkSize;
 		sp.windowSize = testParameters.windowSize;
+		sp.sampleRate = reader->sampleRate();
 		simulationFactory->make(sp);
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	}
