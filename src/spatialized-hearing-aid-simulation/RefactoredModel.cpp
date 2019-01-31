@@ -176,7 +176,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.sampleRate = reader->sampleRate();
 		sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 		sp.filterCoefficients = brir.left;
-		simulationFactory->make(sp);
+		leftChannel->add(simulationFactory->make(sp));
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	}
 	if (reader->channels() > 1) {
@@ -190,7 +190,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.sampleRate = reader->sampleRate();
 		sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 		sp.filterCoefficients = brir.right;
-		simulationFactory->make(sp);
+		rightChannel->add(simulationFactory->make(sp));
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	}
 	if (testParameters.usingSpatialization) {
