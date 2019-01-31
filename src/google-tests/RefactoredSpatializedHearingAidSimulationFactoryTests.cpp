@@ -3,12 +3,14 @@
 
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
+	HearingAidFactory *hearingAidFactory;
 public:
 	RefactoredSpatializedHearingAidSimulationFactory(
 		ScalarFactory *scalarFactory,
-		HearingAidFactory *
+		HearingAidFactory *hearingAidFactory
 	) :
-		scalarFactory{ scalarFactory } {}
+		scalarFactory{ scalarFactory },
+		hearingAidFactory{ hearingAidFactory } {}
 
 	struct SimulationParameters {
 		PrescriptionReader::Dsl prescription;
@@ -17,6 +19,15 @@ public:
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
 		scalarFactory->make(p.scale);
+		FilterbankCompressor::Parameters compression;
+		compression.compressionRatios = p.prescription.compressionRatios;
+		compression.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
+		compression.kneepointGains_dB = p.prescription.kneepointGains_dB;
+		compression.kneepoints_dBSpl = p.prescription.kneepoints_dBSpl;
+		compression.broadbandOutputLimitingThresholds_dBSpl = 
+			p.prescription.broadbandOutputLimitingThresholds_dBSpl;
+		compression.channels = p.prescription.channels;
+		hearingAidFactory->make(compression);
 		return {};
 	}
 };
