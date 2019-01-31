@@ -472,6 +472,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
+		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();
