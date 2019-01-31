@@ -122,6 +122,7 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	std::function<void(void)> callOnPlayNextTrial_{ []() {} };
 	StimulusPlayer *player_{};
 	bool playNextTrialCalled_{};
+	bool prepareNewTestCalled_{};
 public:
 	const auto &testParameters() const noexcept {
 		return testParameters_;
@@ -129,6 +130,11 @@ public:
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
+		prepareNewTestCalled_ = true;
+	}
+
+	auto prepareNewTestCalled() const {
+		return prepareNewTestCalled_;
 	}
 
 	void callOnPlayNextTrial(std::function<void(void)> f) {
