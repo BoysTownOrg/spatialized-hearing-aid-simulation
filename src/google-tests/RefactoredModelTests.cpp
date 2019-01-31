@@ -472,6 +472,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
+		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.usingSpatialization = true;
 		prepareNewTest();

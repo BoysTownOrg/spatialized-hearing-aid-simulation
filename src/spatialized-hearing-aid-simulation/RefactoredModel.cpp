@@ -176,6 +176,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.sampleRate = reader->sampleRate();
 		sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 		sp.filterCoefficients = brir.left;
+		sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
+		sp.usingSpatialization = testParameters.usingSpatialization;
 		leftChannel->add(simulationFactory->make(sp));
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	}
@@ -190,6 +192,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.sampleRate = reader->sampleRate();
 		sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 		sp.filterCoefficients = brir.right;
+		sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
+		sp.usingSpatialization = testParameters.usingSpatialization;
 		rightChannel->add(simulationFactory->make(sp));
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
 	}
