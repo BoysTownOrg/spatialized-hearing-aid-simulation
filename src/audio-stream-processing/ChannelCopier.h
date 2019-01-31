@@ -29,10 +29,10 @@ private:
 };
 
 class ChannelCopierFactory : public AudioFrameReaderFactory {
-	std::shared_ptr<AudioFrameReaderFactory> factory;
+	AudioFrameReaderFactory *factory;
 public:
 	AUDIO_STREAM_PROCESSING_API explicit ChannelCopierFactory(
-		std::shared_ptr<AudioFrameReaderFactory>
+		AudioFrameReaderFactory *
 	);
 	AUDIO_STREAM_PROCESSING_API 
 		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;

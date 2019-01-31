@@ -54,9 +54,9 @@ namespace {
 	}
 
 	TEST(ChannelCopierOtherTests, factoryPassesFilePath) {
-		const auto factory = std::make_shared<AudioFrameReaderStubFactory>();
-		ChannelCopierFactory adapter{ factory };
+		AudioFrameReaderStubFactory factory;
+		ChannelCopierFactory adapter{ &factory };
 		adapter.make("a");
-		assertEqual("a", factory->filePath());
+		assertEqual("a", factory.filePath());
 	}
 }

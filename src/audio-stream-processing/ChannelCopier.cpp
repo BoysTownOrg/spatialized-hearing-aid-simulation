@@ -50,9 +50,9 @@ long long ChannelCopier::remainingFrames() {
 }
 
 ChannelCopierFactory::ChannelCopierFactory(
-	std::shared_ptr<AudioFrameReaderFactory> factory
+	AudioFrameReaderFactory* factory
 ) :
-	factory{ std::move(factory) }
+	factory{ factory }
 {
 }
 
