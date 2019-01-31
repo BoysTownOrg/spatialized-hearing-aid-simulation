@@ -15,7 +15,8 @@ RefactoredModel::RefactoredModel(
 	PrescriptionReader *prescriptionReader,
 	FirFilterFactory *firFilterFactory,
 	BrirReader *brirReader,
-	ScalarFactory *scalarFactory
+	ScalarFactory *scalarFactory,
+	IRefactoredSpatializedHearingAidSimulationFactory *
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },

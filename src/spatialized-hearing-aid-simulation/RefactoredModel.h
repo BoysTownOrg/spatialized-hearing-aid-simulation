@@ -31,6 +31,25 @@ public:
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 
+class IRefactoredSpatializedHearingAidSimulationFactory {
+public:
+	INTERFACE_OPERATIONS(IRefactoredSpatializedHearingAidSimulationFactory);
+	struct SimulationParameters {
+		PrescriptionReader::Dsl prescription;
+		BrirReader::impulse_response_type filterCoefficients;
+		double attack_ms;
+		double release_ms;
+		double fullScale_dB_Spl;
+		float scale;
+		int sampleRate;
+		int windowSize;
+		int chunkSize;
+		bool usingHearingAidSimulation;
+		bool usingSpatialization;
+	};
+	virtual std::shared_ptr<SignalProcessor> make(SimulationParameters p) = 0;
+};
+
 class RefactoredModel : public Model {
 	PrescriptionReader::Dsl leftPrescription{};
 	PrescriptionReader::Dsl rightPrescription{};
@@ -55,7 +74,8 @@ public:
 		PrescriptionReader *prescriptionReader,
 		FirFilterFactory *firFilterFactory,
 		BrirReader *brirReader,
-		ScalarFactory *scalarFactory
+		ScalarFactory *scalarFactory,
+		IRefactoredSpatializedHearingAidSimulationFactory *
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;

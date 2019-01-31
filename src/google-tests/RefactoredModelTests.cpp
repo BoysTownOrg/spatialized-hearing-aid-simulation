@@ -67,6 +67,26 @@ namespace {
 		}
 	};
 
+	class RefactoredSpatializedHearingAidSimulationFactoryStub : 
+		public IRefactoredSpatializedHearingAidSimulationFactory 
+	{
+		SimulationParameters parameters_{};
+		std::shared_ptr<SignalProcessor> processor{};
+	public:
+		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
+			processor = std::move(p);
+		}
+
+		std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
+			parameters_ = std::move(p);
+			return processor;
+		}
+
+		auto parameters() const {
+			return parameters_;
+		}
+	};
+
 	class AudioPlayerStub : public IAudioPlayer {
 		std::vector<std::string> audioDeviceDescriptions_{};
 		Preparation preparation_{};
@@ -221,6 +241,7 @@ namespace {
 		AudioFrameReaderStubFactory audioFrameReaderFactory{ audioFrameReader };
 		AudioPlayerStub audioPlayer{};
 		AudioLoaderStub audioLoader{};
+		RefactoredSpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		RefactoredModel model{
 			&perceptionTest,
 			&audioPlayer,
@@ -230,7 +251,8 @@ namespace {
 			&prescriptionReader,
 			&firFilterFactory,
 			&brirReader,
-			&scalarFactory
+			&scalarFactory,
+			&simulationFactory
 		};
 
 		RefactoredModelTests() {
@@ -585,6 +607,8 @@ namespace {
 		IAudioPlayer *player{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
 		AudioLoader *loader{ &defaultLoader };
+		RefactoredSpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
+		IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 
 		void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 			auto model = makeModel();
@@ -630,7 +654,8 @@ namespace {
 				prescriptionReader,
 				firFilterFactory,
 				brirReader,
-				scalarFactory
+				scalarFactory,
+				simulationFactory
 			};
 		}
 	};
