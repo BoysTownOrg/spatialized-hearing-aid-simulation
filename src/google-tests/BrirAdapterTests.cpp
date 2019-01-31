@@ -8,9 +8,8 @@ namespace {
 	protected:
 		std::shared_ptr<FakeAudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>();
-		std::shared_ptr<FakeAudioFileReaderFactory> factory =
-			std::make_shared<FakeAudioFileReaderFactory>(reader);
-		BrirAdapter adapter{ factory };
+		FakeAudioFileReaderFactory factory{ reader };
+		BrirAdapter adapter{ &factory };
 
 		BrirAdapter::BinauralRoomImpulseResponse read(std::string f = {}) {
 			return adapter.read(std::move(f));
@@ -55,7 +54,7 @@ namespace {
 
 	TEST_F(BrirAdapterTests, readPassesFilePathToFactory) {
 		read("a");
-		assertEqual("a", factory->filePath());
+		assertEqual("a", factory.filePath());
 	}
 
 	TEST_F(BrirAdapterTests, failedReaderThrowsReadError) {

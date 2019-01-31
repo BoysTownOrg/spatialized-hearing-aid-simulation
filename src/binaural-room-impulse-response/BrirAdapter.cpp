@@ -28,8 +28,8 @@ public:
 	}
 };
 
-BrirAdapter::BrirAdapter(std::shared_ptr<AudioFileReaderFactory> factory) :
-	factory{ std::move(factory) }
+BrirAdapter::BrirAdapter(AudioFileReaderFactory *factory) :
+	factory{ factory }
 {
 }
 

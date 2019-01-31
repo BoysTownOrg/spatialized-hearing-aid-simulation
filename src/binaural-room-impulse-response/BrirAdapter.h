@@ -10,10 +10,10 @@
 #endif
 
 class BrirAdapter : public BrirReader {
-	std::shared_ptr<AudioFileReaderFactory> factory;
+	AudioFileReaderFactory *factory;
 public:
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
-		explicit BrirAdapter(std::shared_ptr<AudioFileReaderFactory>);
+		explicit BrirAdapter(AudioFileReaderFactory *);
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
 		BinauralRoomImpulseResponse read(std::string filePath) override;
 private:
