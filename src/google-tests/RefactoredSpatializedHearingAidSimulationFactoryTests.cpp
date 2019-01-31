@@ -33,7 +33,8 @@ public:
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
 		auto chain = std::make_shared<SignalProcessingChain>();
 		chain->add(scalarFactory->make(p.scale));
-		chain->add(firFilterFactory->make(p.filterCoefficients));
+		if (p.usingSpatialization)
+			chain->add(firFilterFactory->make(p.filterCoefficients));
 		FilterbankCompressor::Parameters compression;
 		compression.compressionRatios = p.prescription.compressionRatios;
 		compression.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
