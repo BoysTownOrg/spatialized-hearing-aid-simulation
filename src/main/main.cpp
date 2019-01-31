@@ -35,7 +35,7 @@ public:
 
 class FirFilterFactoryImpl : public FirFilterFactory {
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
-		return std::make_shared<FirFilter>(b);
+		return std::make_shared<FirFilter>(std::move(b));
 	}
 };
 
@@ -47,36 +47,36 @@ class ScalarFactoryImpl : public ScalarFactory {
 
 int main() {
 	WindowsDirectoryReader directoryReader{};
-	FileFilterDecorator decorator{&directoryReader, ".wav"};
+	FileFilterDecorator fileDecorator{&directoryReader, ".wav"};
 	MersenneTwisterRandomizer randomizer{};
-	RandomizedStimulusList stimulusList{&decorator, &randomizer};
+	RandomizedStimulusList stimulusList{&fileDecorator, &randomizer};
+	FileSystemWriter persistentWriter;
+	TestDocumenter testDocumenter{ &persistentWriter };
+	RecognitionTest perceptionTest{ &stimulusList, &testDocumenter };
 	PortAudioDevice audioDevice{};
+	AudioPlayer player{&audioDevice};
+	AudioProcessingLoader audioLoader{};
 	ChannelCopierFactory audioFrameReaderFactory{ 
 		std::make_shared<AudioFileInMemoryFactory>(
 			std::make_shared<LibsndfileReaderFactory>()
 		) 
 	};
-	AudioProcessingLoader audioLoader{};
-	AudioPlayer player{&audioDevice};
-	FileSystemWriter persistentWriter;
-	TestDocumenter testDocumenter{ &persistentWriter };
-	RecognitionTest perceptionTest{ &stimulusList, &testDocumenter };
-	PrescriptionAdapter prescriptionReader{ std::make_shared<NlohmannJsonParserFactory>() };
-	BrirAdapter brirReader{ std::make_shared<LibsndfileReaderFactory>() };
 	ChaproFactory compressorFactory{};
 	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
+	PrescriptionAdapter prescriptionReader{ std::make_shared<NlohmannJsonParserFactory>() };
 	FirFilterFactoryImpl firFilterFactory{};
+	BrirAdapter brirReader{ std::make_shared<LibsndfileReaderFactory>() };
 	ScalarFactoryImpl scalarFactory{};
 	RefactoredModel model{
 		&perceptionTest,
-		&prescriptionReader, 
-		&brirReader, 
-		&hearingAidFactory, 
-		&firFilterFactory,
-		&scalarFactory,
-		&audioFrameReaderFactory,
 		&player,
-		&audioLoader
+		&audioLoader,
+		&audioFrameReaderFactory,
+		&hearingAidFactory, 
+		&prescriptionReader, 
+		&firFilterFactory,
+		&brirReader, 
+		&scalarFactory
 	};
 	FltkView view{};
 	Presenter presenter{ &model, &view };
