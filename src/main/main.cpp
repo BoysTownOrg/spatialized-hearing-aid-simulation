@@ -60,8 +60,9 @@ int main() {
 	LibsndfileReaderFactory audioFileReaderFactory{};
 	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
-	PrescriptionAdapter prescriptionReader{ std::make_shared<NlohmannJsonParserFactory>() };
-	BrirAdapter brirReader{ std::make_shared<LibsndfileReaderFactory>() };
+	NlohmannJsonParserFactory parserFactory{};
+	PrescriptionAdapter prescriptionReader{ &parserFactory };
+	BrirAdapter brirReader{ &audioFileReaderFactory };
 	ScalarFactoryImpl scalarFactory{};
 	ChaproFactory compressorFactory{};
 	FirFilterFactoryImpl firFilterFactory{};
