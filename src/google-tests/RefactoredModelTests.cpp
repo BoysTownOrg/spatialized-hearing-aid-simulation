@@ -60,6 +60,7 @@ class AudioPlayerStub : public AudioStimulusPlayer {
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
 	bool isPlaying_{};
+	bool played_{};
 public:
 	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
@@ -77,8 +78,13 @@ public:
 		audioDeviceDescriptions_ = std::move(v);
 	}
 
+	auto played() const {
+		return played_;
+	}
+
 	void play() override
 	{
+		played_ = true;
 	}
 
 	void setPlaying() {
@@ -309,9 +315,9 @@ TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTes
 	assertEqual("d", perceptionTest.testParameters().testerId);
 }
 
-TEST_F(RefactoredModelTests, playTrialPassesStimulusPlayerToSpeechPerceptionTest) {
+TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 	playTrial();
-	EXPECT_EQ(&audioPlayer, perceptionTest.player());
+	EXPECT_TRUE(audioPlayer.played());
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {

@@ -1,5 +1,4 @@
 #include "assert-utility.h"
-#include "StimulusPlayerStub.h"
 #include "FakeStimulusList.h"
 #include "DocumenterStub.h"
 #include <recognition-test/RecognitionTest.h>
@@ -11,7 +10,6 @@ namespace {
 	protected:
 		RecognitionTest::TestParameters newTest;
 		FakeStimulusList list{};
-		StimulusPlayerStub player{};
 		DocumenterStub documenter{};
 		RecognitionTest model{ &list, &documenter };
 
@@ -74,14 +72,6 @@ namespace {
 		assertEqual("c", model.nextStimulus());
 	}
 
-	TEST_F(RecognitionTestTests, playNextTrialDoesNotAdvanceListWhenPlayerPlaying) {
-		list.setContents({ "a", "b", "c" });
-		prepareNewTest();
-		player.setPlaying();
-		advanceTrial();
-		assertEqual("a", model.nextStimulus());
-	}
-
 	TEST_F(
 		RecognitionTestTests,
 		playNextTrialDocumentsTrial
@@ -90,23 +80,6 @@ namespace {
 		prepareNewTest();
 		advanceTrial();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
-	}
-
-	TEST_F(
-		RecognitionTestTests,
-		playNextTrialPlaysPlayer
-	) {
-		advanceTrial();
-		EXPECT_TRUE(player.played());
-	}
-
-	TEST_F(
-		RecognitionTestTests,
-		playNextTrialDoesNotPlayPlayerWhenAlreadyPlaying
-	) {
-		player.setPlaying();
-		advanceTrial();
-		EXPECT_FALSE(player.played());
 	}
 
 	TEST_F(
