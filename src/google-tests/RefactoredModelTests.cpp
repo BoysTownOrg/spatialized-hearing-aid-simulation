@@ -333,7 +333,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToFactory) {
-		audioFrameReader->setChannels(1);
 		PrescriptionReader::Dsl prescription;
 		prescription.compressionRatios = { 1 };
 		prescription.crossFrequenciesHz = { 2 };
@@ -356,7 +355,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToFactory) {
-		audioFrameReader->setChannels(2);
 		PrescriptionReader::Dsl prescription;
 		prescription.compressionRatios = { 1 };
 		prescription.crossFrequenciesHz = { 2 };
@@ -379,7 +377,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToFactory) {
-		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
@@ -400,7 +397,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToFactory) {
-		audioFrameReader->setChannels(2);
 		audioFrameReader->setSampleRate(1);
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
@@ -412,7 +408,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
-		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.usingSpatialization = true;
 		prepareNewTest();
@@ -425,8 +420,46 @@ namespace {
 		EXPECT_TRUE(right.usingSpatialization);
 	}
 
+	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory2) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
+		prepareNewTest();
+		playTrial();
+		auto left = simulationFactory.parameters().at(0);
+		EXPECT_TRUE(left.usingHearingAidSimulation);
+		EXPECT_FALSE(left.usingSpatialization);
+		auto right = simulationFactory.parameters().at(1);
+		EXPECT_TRUE(right.usingHearingAidSimulation);
+		EXPECT_FALSE(right.usingSpatialization);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory3) {
+		testParameters.usingHearingAidSimulation = false;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		playTrial();
+		auto left = simulationFactory.parameters().at(0);
+		EXPECT_FALSE(left.usingHearingAidSimulation);
+		EXPECT_TRUE(left.usingSpatialization);
+		auto right = simulationFactory.parameters().at(1);
+		EXPECT_FALSE(right.usingHearingAidSimulation);
+		EXPECT_TRUE(right.usingSpatialization);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory4) {
+		testParameters.usingHearingAidSimulation = false;
+		testParameters.usingSpatialization = false;
+		prepareNewTest();
+		playTrial();
+		auto left = simulationFactory.parameters().at(0);
+		EXPECT_FALSE(left.usingHearingAidSimulation);
+		EXPECT_FALSE(left.usingSpatialization);
+		auto right = simulationFactory.parameters().at(1);
+		EXPECT_FALSE(right.usingHearingAidSimulation);
+		EXPECT_FALSE(right.usingSpatialization);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
-		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();

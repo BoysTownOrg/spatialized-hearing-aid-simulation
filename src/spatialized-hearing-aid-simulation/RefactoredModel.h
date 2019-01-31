@@ -8,7 +8,6 @@
 #include <binaural-room-impulse-response/BrirReader.h>
 #include <audio-stream-processing/AudioFrameReader.h>
 #include <playing-audio/AudioLoader.h>
-#include <signal-processing/SignalProcessor.h>
 #include <presentation/Model.h>
 
 class RefactoredModel : public Model {

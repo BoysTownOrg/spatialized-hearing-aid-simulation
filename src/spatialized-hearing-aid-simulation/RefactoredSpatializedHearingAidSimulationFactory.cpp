@@ -19,7 +19,9 @@ std::shared_ptr<SignalProcessor> RefactoredSpatializedHearingAidSimulationFactor
 	return chain;
 }
 
-FilterbankCompressor::Parameters RefactoredSpatializedHearingAidSimulationFactory::compression(SimulationParameters p) {
+FilterbankCompressor::Parameters RefactoredSpatializedHearingAidSimulationFactory::compression(
+	SimulationParameters p
+) {
 	FilterbankCompressor::Parameters compression_;
 	compression_.compressionRatios = p.prescription.compressionRatios;
 	compression_.crossFrequenciesHz = p.prescription.crossFrequenciesHz;

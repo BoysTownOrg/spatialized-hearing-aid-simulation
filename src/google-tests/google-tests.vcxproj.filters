@@ -98,9 +98,6 @@
     <ClInclude Include="AudioLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StimulusPlayerStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ViewStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
