@@ -17,6 +17,7 @@ public:
 		double attack_ms;
 		double release_ms;
 		float scale;
+		int sampleRate;
 		int windowSize;
 		int chunkSize;
 		bool usingHearingAidSimulation;
@@ -128,10 +129,12 @@ namespace {
 		simulationParameters.release_ms = 2;
 		simulationParameters.chunkSize = 3;
 		simulationParameters.windowSize = 4;
+		simulationParameters.sampleRate = 5;
 		simulationFactory.make(simulationParameters);
 		EXPECT_EQ(1, hearingAidFactory.parameters().attack_ms);
 		EXPECT_EQ(2, hearingAidFactory.parameters().release_ms);
 		EXPECT_EQ(3, hearingAidFactory.parameters().chunkSize);
 		EXPECT_EQ(4, hearingAidFactory.parameters().windowSize);
+		EXPECT_EQ(5, hearingAidFactory.parameters().sampleRate);
 	}
 }
