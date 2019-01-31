@@ -460,13 +460,14 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToHearingAidFactory) {
+		audioFrameReader->setChannels(2);
 		audioFrameReader->setSampleRate(1);
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();
-		auto left = hearingAidFactory.parameters().at(0);
+		auto left = simulationFactory.parameters().at(0);
 		EXPECT_EQ(1, left.sampleRate);
-		auto right = hearingAidFactory.parameters().at(1);
+		auto right = simulationFactory.parameters().at(1);
 		EXPECT_EQ(1, right.sampleRate);
 	}
 
