@@ -30,9 +30,15 @@
     <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

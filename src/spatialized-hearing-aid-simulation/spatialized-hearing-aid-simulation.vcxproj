@@ -157,11 +157,13 @@
     <ClInclude Include="IAudioPlayer.h" />
     <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="RefactoredModel.h" />
+    <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
     <ClInclude Include="SpeechPerceptionTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp" />
+    <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
