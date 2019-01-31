@@ -38,6 +38,7 @@ public:
 		compression.chunkSize = p.chunkSize;
 		compression.windowSize = p.windowSize;
 		compression.sampleRate = p.sampleRate;
+		compression.max_dB_Spl = p.fullScale_dB_Spl;
 		hearingAidFactory->make(compression);
 		return {};
 	}
