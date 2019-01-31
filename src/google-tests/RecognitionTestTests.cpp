@@ -19,8 +19,8 @@ namespace {
 			model.prepareNewTest(newTest);
 		}
 
-		void playNextTrial() {
-			model.playNextTrial(&player);
+		void advanceTrial() {
+			model.advanceTrial();
 		}
 	};
 
@@ -68,9 +68,9 @@ namespace {
 		list.setContents({ "a", "b", "c" });
 		prepareNewTest();
 		assertEqual("a", model.nextStimulus());
-		playNextTrial();
+		advanceTrial();
 		assertEqual("b", model.nextStimulus());
-		playNextTrial();
+		advanceTrial();
 		assertEqual("c", model.nextStimulus());
 	}
 
@@ -78,7 +78,7 @@ namespace {
 		list.setContents({ "a", "b", "c" });
 		prepareNewTest();
 		player.setPlaying();
-		playNextTrial();
+		advanceTrial();
 		assertEqual("a", model.nextStimulus());
 	}
 
@@ -88,7 +88,7 @@ namespace {
 	) {
 		list.setContents({ "a", "b", "c" });
 		prepareNewTest();
-		playNextTrial();
+		advanceTrial();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
 	}
 
@@ -96,7 +96,7 @@ namespace {
 		RecognitionTestTests,
 		playNextTrialPlaysPlayer
 	) {
-		playNextTrial();
+		advanceTrial();
 		EXPECT_TRUE(player.played());
 	}
 
@@ -105,7 +105,7 @@ namespace {
 		playNextTrialDoesNotPlayPlayerWhenAlreadyPlaying
 	) {
 		player.setPlaying();
-		playNextTrial();
+		advanceTrial();
 		EXPECT_FALSE(player.played());
 	}
 

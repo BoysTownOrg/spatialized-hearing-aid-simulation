@@ -123,9 +123,9 @@ public:
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
-	std::function<void(void)> callOnPlayNextTrial_{ []() {} };
+	std::function<void(void)> callOnAdvanceTrial_{ []() {} };
 	StimulusPlayer *player_{};
-	bool playNextTrialCalled_{};
+	bool advanceTrialCalled_{};
 	bool prepareNewTestCalled_{};
 	bool complete_{};
 public:
@@ -142,18 +142,17 @@ public:
 		return prepareNewTestCalled_;
 	}
 
-	void callOnPlayNextTrial(std::function<void(void)> f) {
-		callOnPlayNextTrial_ = f;
+	void callOnAdvanceTrial(std::function<void(void)> f) {
+		callOnAdvanceTrial_ = f;
 	}
 
-	void playNextTrial(StimulusPlayer *p) override {
-		player_ = p;
-		playNextTrialCalled_ = true;
-		callOnPlayNextTrial_();
+	void advanceTrial() override {
+		advanceTrialCalled_ = true;
+		callOnAdvanceTrial_();
 	}
 	
-	bool playNextTrialCalled() const noexcept {
-		return playNextTrialCalled_;
+	bool advanceTrialCalled() const noexcept {
+		return advanceTrialCalled_;
 	}
 
 	void setNextStimulus(std::string s) {
@@ -188,7 +187,7 @@ public:
 		throw TestInitializationFailure{ errorMessage };
 	}
 
-	void playNextTrial(StimulusPlayer *) override {}
+	void advanceTrial() override {}
 	std::string nextStimulus() override { return {}; }
 	bool testComplete() override { return {}; }
 };
@@ -322,7 +321,7 @@ TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlayingNextTrial) {
-	perceptionTest.callOnPlayNextTrial([&]() { EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader()); });
+	perceptionTest.callOnAdvanceTrial([&]() { EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader()); });
 	playTrial();
 }
 
@@ -502,7 +501,7 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
-	perceptionTest.callOnPlayNextTrial([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+	perceptionTest.callOnAdvanceTrial([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 	playTrial();
 	EXPECT_EQ((4 + 1) * 3, left.at(0));
 	EXPECT_EQ((5 + 1) * 3, right.at(0));
@@ -514,7 +513,7 @@ TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlaye
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
-	perceptionTest.callOnPlayNextTrial([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
+	perceptionTest.callOnAdvanceTrial([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
 	playTrial();
 }
 
@@ -695,7 +694,7 @@ TEST_F(RefactoredModelFailureTests, playTrialDoesNotPlayTrialWhenPlayerFails) {
 	}
 	catch (const RefactoredModel::TrialFailure &) {
 	}
-	EXPECT_FALSE(defaultTest.playNextTrialCalled());
+	EXPECT_FALSE(defaultTest.advanceTrialCalled());
 }
 
 TEST_F(

@@ -180,7 +180,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	perceptionTest->playNextTrial(player);
+	player->play();
+	perceptionTest->advanceTrial();
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParameters p) {
@@ -211,7 +212,8 @@ std::shared_ptr<SignalProcessor> RefactoredModel::makeHearingAid(
 	compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
 	compression.kneepointGains_dB = dsl.kneepointGains_dB;
 	compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
-	compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
+	compression.broadbandOutputLimitingThresholds_dBSpl = 
+		dsl.broadbandOutputLimitingThresholds_dBSpl;
 	compression.channels = dsl.channels;
 	compression.max_dB_Spl = fullScaleLevel_dB_Spl;
 	return hearingAidFactory->make(compression);
