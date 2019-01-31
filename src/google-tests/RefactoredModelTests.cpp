@@ -439,6 +439,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
+		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
@@ -446,12 +447,12 @@ namespace {
 		testParameters.windowSize = 8;
 		prepareNewTest();
 		playTrial();
-		auto left = hearingAidFactory.parameters().at(0);
+		auto left = simulationFactory.parameters().at(0);
 		EXPECT_EQ(1, left.attack_ms);
 		EXPECT_EQ(2, left.release_ms);
 		EXPECT_EQ(4, left.chunkSize);
 		EXPECT_EQ(8, left.windowSize);
-		auto right = hearingAidFactory.parameters().at(1);
+		auto right = simulationFactory.parameters().at(1);
 		EXPECT_EQ(1, right.attack_ms);
 		EXPECT_EQ(2, right.release_ms);
 		EXPECT_EQ(4, right.chunkSize);
