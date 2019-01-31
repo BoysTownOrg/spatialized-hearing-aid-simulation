@@ -70,7 +70,7 @@ namespace {
 	class RefactoredSpatializedHearingAidSimulationFactoryStub : 
 		public IRefactoredSpatializedHearingAidSimulationFactory 
 	{
-		SimulationParameters parameters_{};
+		ArgumentCollection<SimulationParameters> parameters_{};
 		std::shared_ptr<SignalProcessor> processor{};
 	public:
 		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
@@ -78,7 +78,7 @@ namespace {
 		}
 
 		std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
-			parameters_ = std::move(p);
+			parameters_.push_back(std::move(p));
 			return processor;
 		}
 
@@ -388,8 +388,8 @@ namespace {
 		const auto desiredRms = std::pow(10.0, (7 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1.0 * 1.0 + 3.0 * 3.0 + 5.0 * 5.0) / 3);
 		const auto rightChannelRms = std::sqrt((2.0 * 2.0 + 4.0 * 4.0 + 6.0 * 6.0) / 3);
-		EXPECT_NEAR(desiredRms / leftChannelRms, scalarFactory.scalars().at(0), 1e-6);
-		EXPECT_NEAR(desiredRms / rightChannelRms, scalarFactory.scalars().at(1), 1e-6);
+		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.parameters().at(0).scale, 1e-6);
+		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.parameters().at(1).scale, 1e-6);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory) {
