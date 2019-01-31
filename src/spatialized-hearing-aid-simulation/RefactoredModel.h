@@ -66,7 +66,9 @@ public:
 	SPATIALIZED_HA_SIMULATION_API static const double fullScaleLevel_dB_Spl;
 
 private:
+	void checkAndStore(TestParameters);
 	void checkAndStorePrescriptions(TestParameters);
+	void checkSizeIsPowerOfTwo(int);
 	void checkAndStoreBrir(TestParameters);
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);

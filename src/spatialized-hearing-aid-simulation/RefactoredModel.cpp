@@ -30,14 +30,21 @@ RefactoredModel::RefactoredModel(
 	player->setAudioLoader(loader);
 }
 
-static constexpr bool powerOfTwo(int n) noexcept {
-	return n > 0 && (n & (n - 1)) == 0;
+void RefactoredModel::prepareNewTest(TestParameters p) {
+	checkAndStore(p);
+	prepareNewTest_(std::move(p));
 }
 
-static std::string coefficientErrorMessage(std::string which) {
-	return 
-		"The " + which + " BRIR coefficients are empty, "
-		"therefore a filter operation cannot be defined.";
+void RefactoredModel::checkAndStore(TestParameters p) {
+	if (p.usingSpatialization)
+		checkAndStoreBrir(p);
+	if (p.usingHearingAidSimulation)
+		checkAndStorePrescriptions(p);
+	testParameters = std::move(p);
+}
+
+static constexpr bool powerOfTwo(int n) noexcept {
+	return n > 0 && (n & (n - 1)) == 0;
 }
 
 static std::string windowChunkSizesErrorMessage(int offender) {
@@ -46,25 +53,25 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 		std::to_string(offender) + " is not a power of two.";
 }
 
-void RefactoredModel::prepareNewTest(TestParameters p) {
-	if (p.usingSpatialization)
-		checkAndStoreBrir(p);
-	if (p.usingHearingAidSimulation)
-		checkAndStorePrescriptions(p);
-	prepareNewTest_(p);
-	testParameters = p;
-}
-
 void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
 	readPrescriptions(p);
-	if (!powerOfTwo(p.chunkSize))
-		throw TestInitializationFailure{ windowChunkSizesErrorMessage(p.chunkSize) };
-	if (!powerOfTwo(p.windowSize))
-		throw TestInitializationFailure{ windowChunkSizesErrorMessage(p.windowSize) };
+	checkSizeIsPowerOfTwo(p.chunkSize);
+	checkSizeIsPowerOfTwo(p.windowSize);
+}
+
+void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
+	if (!powerOfTwo(size))
+		throw TestInitializationFailure{ windowChunkSizesErrorMessage(size) };
+}
+
+static std::string coefficientErrorMessage(std::string which) {
+	return 
+		"The " + which + " BRIR coefficients are empty, "
+		"therefore a filter operation cannot be defined.";
 }
 
 void RefactoredModel::checkAndStoreBrir(TestParameters p) {
-	brir = readBrir(p);
+	brir = readBrir(std::move(p));
 	if (brir.left.empty())
 		throw TestInitializationFailure{ coefficientErrorMessage("left") };
 	if (brir.right.empty())
