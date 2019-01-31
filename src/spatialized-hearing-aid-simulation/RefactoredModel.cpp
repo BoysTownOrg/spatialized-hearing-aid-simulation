@@ -16,7 +16,7 @@ RefactoredModel::RefactoredModel(
 	FirFilterFactory *firFilterFactory,
 	BrirReader *brirReader,
 	ScalarFactory *scalarFactory,
-	IRefactoredSpatializedHearingAidSimulationFactory *
+	IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
@@ -26,7 +26,8 @@ RefactoredModel::RefactoredModel(
 	scalarFactory{ scalarFactory },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
-	loader{ loader }
+	loader{ loader },
+	simulationFactory{ simulationFactory }
 {
 	player->setAudioLoader(loader);
 }
@@ -164,10 +165,18 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
-	if (reader->channels() > 0)
+	if (reader->channels() > 0) {
+		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
+		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
+		simulationFactory->make(sp);
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
-	if (reader->channels() > 1)
+	}
+	if (reader->channels() > 1) {
+		IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
+		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
+		simulationFactory->make(sp);
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
+	}
 	if (testParameters.usingSpatialization) {
 		leftChannel->add(firFilterFactory->make(brir.left));
 		rightChannel->add(firFilterFactory->make(brir.right));

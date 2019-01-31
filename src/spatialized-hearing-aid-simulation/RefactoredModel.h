@@ -64,6 +64,7 @@ class RefactoredModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
+	IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
@@ -75,7 +76,7 @@ public:
 		FirFilterFactory *firFilterFactory,
 		BrirReader *brirReader,
 		ScalarFactory *scalarFactory,
-		IRefactoredSpatializedHearingAidSimulationFactory *
+		IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;
