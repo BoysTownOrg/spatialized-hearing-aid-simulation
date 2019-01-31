@@ -523,57 +523,17 @@ namespace {
 		EXPECT_EQ(5 + 1, right.front());
 	}
 
-	TEST_F(RefactoredModelTests, playTrialNoSpatialization) {
-		testParameters.usingSpatialization = false;
-		testParameters.usingHearingAidSimulation = true;
-		audioFrameReader->setChannels(2);
-		prepareNewTest();
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
-		playTrial();
-		auto processor = audioLoader.audioFrameProcessor();
-		std::vector<float> left{ 4 };
-		std::vector<float> right{ 5 };
-		std::vector<gsl::span<float>> channels{ left, right };
-		processor->process(channels);
-		EXPECT_EQ(4 + 1 + 3, left.at(0));
-		EXPECT_EQ(5 + 1 + 3, right.at(0));
-	}
-
-	TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
-		testParameters.usingSpatialization = true;
-		testParameters.usingHearingAidSimulation = false;
-		audioFrameReader->setChannels(2);
-		prepareNewTest();
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
-		playTrial();
-		auto processor = audioLoader.audioFrameProcessor();
-		std::vector<float> left{ 4 };
-		std::vector<float> right{ 5 };
-		std::vector<gsl::span<float>> channels{ left, right };
-		processor->process(channels);
-		EXPECT_EQ((4 + 1) * 2, left.at(0));
-		EXPECT_EQ((5 + 1) * 2, right.at(0));
-	}
-
 	TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessorBeforePlayingPlayer) {
-		testParameters.usingSpatialization = true;
-		testParameters.usingHearingAidSimulation = true;
 		audioFrameReader->setChannels(2);
 		prepareNewTest();
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
+		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		std::vector<float> left{ 4 };
 		std::vector<float> right{ 5 };
 		std::vector<gsl::span<float>> channels{ left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 		playTrial();
-		EXPECT_EQ((4 + 1) * 2 + 3, left.at(0));
-		EXPECT_EQ((5 + 1) * 2 + 3, right.at(0));
+		EXPECT_EQ(4 + 1, left.front());
+		EXPECT_EQ(5 + 1, right.front());
 	}
 
 	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
