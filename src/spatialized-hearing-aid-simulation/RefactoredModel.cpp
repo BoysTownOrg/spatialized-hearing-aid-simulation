@@ -156,6 +156,8 @@ private:
 };
 
 void RefactoredModel::playTrial(TrialParameters p) {
+	if (player->isPlaying())
+		return;
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
 	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
