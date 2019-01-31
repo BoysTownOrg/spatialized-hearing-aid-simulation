@@ -7,6 +7,7 @@ class RefactoredSpatializedHearingAidSimulationFactory {
 public:
 	RefactoredSpatializedHearingAidSimulationFactory(
 		ScalarFactory *scalarFactory,
+		FirFilterFactory *,
 		HearingAidFactory *hearingAidFactory
 	) :
 		scalarFactory{ scalarFactory },
@@ -14,6 +15,7 @@ public:
 
 	struct SimulationParameters {
 		PrescriptionReader::Dsl prescription;
+		BrirReader::impulse_response_type filterCoefficients;
 		double attack_ms;
 		double release_ms;
 		double fullScale_dB_Spl;
@@ -22,6 +24,7 @@ public:
 		int windowSize;
 		int chunkSize;
 		bool usingHearingAidSimulation;
+		bool usingSpatialization;
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
 		scalarFactory->make(p.scale);
@@ -84,13 +87,33 @@ namespace {
 		}
 	};
 
+	class FirFilterFactoryStub : public FirFilterFactory {
+		BrirReader::impulse_response_type coefficients_{};
+		std::shared_ptr<SignalProcessor> processor{};
+	public:
+		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
+			processor = std::move(p);
+		}
+
+		auto coefficients() const {
+			return coefficients_;
+		}
+
+		std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
+			coefficients_ = std::move(b);
+			return processor;
+		}
+	};
+
 	class RefactoredSpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 	protected:
 		RefactoredSpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
+		FirFilterFactoryStub firFilterFactory{};
 		HearingAidFactoryStub hearingAidFactory{};
 		RefactoredSpatializedHearingAidSimulationFactory simulationFactory{ 
 			&scalarFactory, 
+			&firFilterFactory,
 			&hearingAidFactory 
 		};
 	};
@@ -141,5 +164,15 @@ namespace {
 		EXPECT_EQ(4, hearingAidFactory.parameters().windowSize);
 		EXPECT_EQ(5, hearingAidFactory.parameters().sampleRate);
 		EXPECT_EQ(6, hearingAidFactory.parameters().max_dB_Spl);
+	}
+
+	TEST_F(
+		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		makePassesCoefficientsToFirFilterFactory
+	) {
+		simulationParameters.usingSpatialization = true;
+		simulationParameters.filterCoefficients = { 1 };
+		simulationFactory.make(simulationParameters);
+		assertEqual({ 1 }, firFilterFactory.coefficients());
 	}
 }
