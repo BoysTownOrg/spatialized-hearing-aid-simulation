@@ -118,7 +118,12 @@ FltkView::FltkView() :
 	turnOnSpatialization();
 	turnOnHearingAidSimulation();
 	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+	window.setupView.chunkSize_.value(4);
 	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
+	window.setupView.windowSize_.value(2);
+	window.setupView.attack_ms_.value("5");
+	window.setupView.release_ms_.value("50");
+	window.testerView.level_dB_Spl_.value("65");
 }
 
 void FltkView::registerCallbacks() {
