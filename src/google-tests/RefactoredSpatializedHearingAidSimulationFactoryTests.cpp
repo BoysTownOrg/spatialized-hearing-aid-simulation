@@ -1,5 +1,7 @@
 #include <signal-processing/SignalProcessor.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
+#include <signal-processing/SignalProcessingChain.h>
+
 
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
@@ -29,8 +31,9 @@ public:
 		bool usingSpatialization;
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
-		scalarFactory->make(p.scale);
-		firFilterFactory->make(p.filterCoefficients);
+		auto chain = std::make_shared<SignalProcessingChain>();
+		chain->add(scalarFactory->make(p.scale));
+		chain->add(firFilterFactory->make(p.filterCoefficients));
 		FilterbankCompressor::Parameters compression;
 		compression.compressionRatios = p.prescription.compressionRatios;
 		compression.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
@@ -45,8 +48,8 @@ public:
 		compression.windowSize = p.windowSize;
 		compression.sampleRate = p.sampleRate;
 		compression.max_dB_Spl = p.fullScale_dB_Spl;
-		hearingAidFactory->make(compression);
-		return {};
+		chain->add(hearingAidFactory->make(compression));
+		return chain;
 	}
 };
 
