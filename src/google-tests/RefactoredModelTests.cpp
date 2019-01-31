@@ -471,6 +471,19 @@ namespace {
 		EXPECT_EQ(1, right.sampleRate);
 	}
 
+	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		playTrial();
+		auto left = simulationFactory.parameters().at(0);
+		EXPECT_TRUE(left.usingHearingAidSimulation);
+		EXPECT_TRUE(left.usingSpatialization);
+		auto right = simulationFactory.parameters().at(1);
+		EXPECT_TRUE(right.usingHearingAidSimulation);
+		EXPECT_TRUE(right.usingSpatialization);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
 		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
