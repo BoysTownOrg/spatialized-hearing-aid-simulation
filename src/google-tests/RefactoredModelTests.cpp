@@ -482,7 +482,8 @@ namespace {
 		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, right.fullScaleLevel_dB_Spl);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {
+	TEST_F(RefactoredModelTests, playTrialPassesBrirToFactory) {
+		audioFrameReader->setChannels(2);
 		testParameters.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
@@ -490,8 +491,8 @@ namespace {
 		brirReader.setBrir(brir);
 		prepareNewTest();
 		playTrial();
-		EXPECT_TRUE(firFilterFactory.coefficients().contains({ 1, 2 }));
-		EXPECT_TRUE(firFilterFactory.coefficients().contains({ 3, 4 }));
+		assertEqual({ 1, 2, }, simulationFactory.parameters().at(0).filterCoefficients);
+		assertEqual({ 3, 4, }, simulationFactory.parameters().at(1).filterCoefficients);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
