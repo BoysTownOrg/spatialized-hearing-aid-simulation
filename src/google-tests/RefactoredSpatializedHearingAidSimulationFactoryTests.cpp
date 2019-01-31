@@ -39,14 +39,36 @@ namespace {
 
 	class RefactoredSpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 	protected:
+		RefactoredSpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
 		RefactoredSpatializedHearingAidSimulationFactory simulationFactory{ &scalarFactory };
 	};
 
 	TEST_F(RefactoredSpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
-		RefactoredSpatializedHearingAidSimulationFactory::SimulationParameters p;
-		p.scale = 1;
-		simulationFactory.make(p);
+		simulationParameters.scale = 1;
+		simulationFactory.make(simulationParameters);
 		EXPECT_EQ(1, scalarFactory.scalar());
+	}
+
+	TEST_F(
+		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		makePassesPrescriptionToHearingAidFactory
+	) {
+		simulationParameters.usingHearingAidSimulation = true;
+		PrescriptionReader::Dsl prescription;
+		prescription.compressionRatios = { 1 };
+		prescription.crossFrequenciesHz = { 2 };
+		prescription.kneepointGains_dB = { 3 };
+		prescription.kneepoints_dBSpl = { 4 };
+		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		prescription.channels = 6;
+		simulationParameters.prescription = prescription;
+		simulationFactory.make(simulationParameters);
+		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
+		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
+		assertEqual({ 3 }, hearingAidFactory.parameters().kneepointGains_dB);
+		assertEqual({ 4 }, hearingAidFactory.parameters().kneepoints_dBSpl);
+		assertEqual({ 5 }, hearingAidFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
+		EXPECT_EQ(6, hearingAidFactory.parameters().channels);
 	}
 }
