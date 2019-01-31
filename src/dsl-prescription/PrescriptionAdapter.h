@@ -23,10 +23,10 @@ namespace dsl_prescription {
 }
 
 class PrescriptionAdapter : public PrescriptionReader {
-	std::shared_ptr<ConfigurationFileParserFactory> factory;
+	ConfigurationFileParserFactory *factory;
 public:
 	DSL_PRESCRIPTION_API explicit PrescriptionAdapter(
-		std::shared_ptr<ConfigurationFileParserFactory> 
+		ConfigurationFileParserFactory *
 	);
 	DSL_PRESCRIPTION_API Dsl read(std::string filePath) override;
 private:

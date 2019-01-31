@@ -8,9 +8,8 @@ namespace {
 	protected:
 		std::shared_ptr<FakeConfigurationFileParser> parser =
 			std::make_shared<FakeConfigurationFileParser>();
-		std::shared_ptr<FakeConfigurationFileParserFactory> factory = 
-			std::make_shared<FakeConfigurationFileParserFactory>(parser);
-		PrescriptionAdapter adapter{ factory };
+		FakeConfigurationFileParserFactory factory{ parser };
+		PrescriptionAdapter adapter{ &factory };
 
 		void assertReadThrowsReadFailureOnChannelCountMismatch(
 			std::string property
@@ -70,7 +69,7 @@ namespace {
 		PrescriptionAdapterTests,
 		throwsWhenParserThrows
 	) {
-		factory->setParser(std::make_shared<ErrorParser>("error."));
+		factory.setParser(std::make_shared<ErrorParser>("error."));
 		assertReadThrowsReadFailure("error.");
 	}
 }

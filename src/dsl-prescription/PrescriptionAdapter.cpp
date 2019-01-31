@@ -18,8 +18,8 @@ std::string dsl_prescription::propertyName(Property p) {
 	}
 }
 
-PrescriptionAdapter::PrescriptionAdapter(std::shared_ptr<ConfigurationFileParserFactory> factory) :
-	factory{ std::move(factory) }
+PrescriptionAdapter::PrescriptionAdapter(ConfigurationFileParserFactory *factory) :
+	factory{ factory }
 {
 }
 
