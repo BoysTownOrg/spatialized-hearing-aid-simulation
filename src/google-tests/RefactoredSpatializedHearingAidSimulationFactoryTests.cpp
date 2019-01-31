@@ -3,14 +3,16 @@
 
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
+	FirFilterFactory *firFilterFactory;
 	HearingAidFactory *hearingAidFactory;
 public:
 	RefactoredSpatializedHearingAidSimulationFactory(
 		ScalarFactory *scalarFactory,
-		FirFilterFactory *,
+		FirFilterFactory *firFilterFactory,
 		HearingAidFactory *hearingAidFactory
 	) :
 		scalarFactory{ scalarFactory },
+		firFilterFactory{ firFilterFactory },
 		hearingAidFactory{ hearingAidFactory } {}
 
 	struct SimulationParameters {
@@ -28,6 +30,7 @@ public:
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
 		scalarFactory->make(p.scale);
+		firFilterFactory->make(p.filterCoefficients);
 		FilterbankCompressor::Parameters compression;
 		compression.compressionRatios = p.prescription.compressionRatios;
 		compression.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
