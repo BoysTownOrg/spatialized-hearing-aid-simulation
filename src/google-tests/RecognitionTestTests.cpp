@@ -94,6 +94,14 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
+		playNextTrialPlaysPlayer
+	) {
+		playNextTrial();
+		EXPECT_TRUE(player.played());
+	}
+
+	TEST_F(
+		RecognitionTestTests,
 		testCompleteWhenListEmpty
 	) {
 		list.setContents({});
