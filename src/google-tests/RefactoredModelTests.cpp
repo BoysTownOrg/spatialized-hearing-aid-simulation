@@ -577,6 +577,22 @@ TEST_F(
 
 TEST_F(
 	RefactoredModelFailureTests, 
+	prepareNewTestDoesNotPrepareTestWhenPrescriptionReaderFails
+) {
+	FailingPrescriptionReader failing;
+	newTest.usingHearingAidSimulation = true;
+	prescriptionReader = &failing;
+	auto model = makeModel();
+	try {
+		model.prepareNewTest(newTest);
+	}
+	catch (const RefactoredModel::TestInitializationFailure &) {
+	}
+	EXPECT_FALSE(defaultTest.prepareNewTestCalled());
+}
+
+TEST_F(
+	RefactoredModelFailureTests, 
 	prepareNewTestThrowsTestInitializationFailureWhenTestFailsToInitialize
 ) {
 	InitializationFailingSpeechPerceptionTest failing;
