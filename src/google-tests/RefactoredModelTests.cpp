@@ -386,6 +386,7 @@ TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToHearingAidFactory)
 	assertEqual({ 4 }, left.kneepoints_dBSpl);
 	assertEqual({ 5 }, left.broadbandOutputLimitingThresholds_dBSpl);
 	EXPECT_EQ(6, left.channels);
+	EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, left.max_dB_Spl);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory) {
@@ -408,6 +409,7 @@ TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToHearingAidFactory
 	assertEqual({ 4 }, right.kneepoints_dBSpl);
 	assertEqual({ 5 }, right.broadbandOutputLimitingThresholds_dBSpl);
 	EXPECT_EQ(6, right.channels);
+	EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, right.max_dB_Spl);
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {

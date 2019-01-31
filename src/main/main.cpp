@@ -29,7 +29,7 @@ public:
 		compressorFactory{ compressorFactory } {}
 
 	std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
-		return std::make_shared<HearingAidProcessor>(compressorFactory->make(p));
+		return std::make_shared<HearingAidProcessor>(compressorFactory->make(std::move(p)));
 	}
 };
 
