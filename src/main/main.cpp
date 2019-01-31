@@ -57,11 +57,9 @@ int main() {
 	PortAudioDevice audioDevice{};
 	AudioPlayer player{&audioDevice};
 	AudioProcessingLoader audioLoader{};
-	ChannelCopierFactory audioFrameReaderFactory{ 
-		std::make_shared<AudioFileInMemoryFactory>(
-			std::make_shared<LibsndfileReaderFactory>()
-		) 
-	};
+	LibsndfileReaderFactory audioFileReaderFactory{};
+	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
+	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
 	PrescriptionAdapter prescriptionReader{ std::make_shared<NlohmannJsonParserFactory>() };
 	BrirAdapter brirReader{ std::make_shared<LibsndfileReaderFactory>() };
 	ScalarFactoryImpl scalarFactory{};
