@@ -213,6 +213,7 @@ std::shared_ptr<SignalProcessor> RefactoredModel::makeHearingAid(
 	compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
 	compression.broadbandOutputLimitingThresholds_dBSpl = dsl.broadbandOutputLimitingThresholds_dBSpl;
 	compression.channels = dsl.channels;
+	compression.max_dB_Spl = fullScaleLevel_dB_Spl;
 	return hearingAidFactory->make(compression);
 }
 
