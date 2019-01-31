@@ -197,4 +197,19 @@ namespace {
 		processor->process(left);
 		EXPECT_EQ((4 + 1) * 2 + 3, left.at(0));
 	}
+
+	TEST_F(
+		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		makeCombinesProcessorsInOrderWithoutSpatialization
+	) {
+		simulationParameters.usingSpatialization = false;
+		simulationParameters.usingHearingAidSimulation = true;
+		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
+		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
+		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
+		auto processor = simulationFactory.make(simulationParameters);
+		std::vector<float> left{ 4 };
+		processor->process(left);
+		EXPECT_EQ(4 + 1 + 3, left.at(0));
+	}
 }
