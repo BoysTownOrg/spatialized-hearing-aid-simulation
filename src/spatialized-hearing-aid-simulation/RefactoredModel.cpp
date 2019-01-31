@@ -179,8 +179,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	player->play();
 	prepareAudioPlayer(*reader, p);
+	player->play();
 	perceptionTest->advanceTrial();
 }
 
