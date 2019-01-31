@@ -4,11 +4,16 @@
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
 public:
-	RefactoredSpatializedHearingAidSimulationFactory(ScalarFactory *scalarFactory) :
+	RefactoredSpatializedHearingAidSimulationFactory(
+		ScalarFactory *scalarFactory,
+		HearingAidFactory *
+	) :
 		scalarFactory{ scalarFactory } {}
 
 	struct SimulationParameters {
+		PrescriptionReader::Dsl prescription;
 		float scale;
+		bool usingHearingAidSimulation;
 	};
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
 		scalarFactory->make(p.scale);
@@ -16,6 +21,7 @@ public:
 	}
 };
 
+#include "assert-utility.h"
 #include <gtest/gtest.h>
 
 namespace {
@@ -37,11 +43,33 @@ namespace {
 		}
 	};
 
+	class HearingAidFactoryStub : public HearingAidFactory {
+		FilterbankCompressor::Parameters parameters_{};
+		std::shared_ptr<SignalProcessor> processor{};
+	public:
+		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
+			processor = std::move(p);
+		}
+
+		auto parameters() const {
+			return parameters_;
+		}
+
+		std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
+			parameters_ = std::move(p);
+			return processor;
+		}
+	};
+
 	class RefactoredSpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 	protected:
 		RefactoredSpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
-		RefactoredSpatializedHearingAidSimulationFactory simulationFactory{ &scalarFactory };
+		HearingAidFactoryStub hearingAidFactory{};
+		RefactoredSpatializedHearingAidSimulationFactory simulationFactory{ 
+			&scalarFactory, 
+			&hearingAidFactory 
+		};
 	};
 
 	TEST_F(RefactoredSpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
