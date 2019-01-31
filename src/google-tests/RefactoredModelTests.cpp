@@ -1,4 +1,5 @@
 #include "ArgumentCollection.h"
+#include "LogString.h"
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class FirFilterFactoryStub : public FirFilterFactory {
@@ -58,6 +59,7 @@ public:
 class AudioPlayerStub : public IAudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
+	LogString log_{};
 	std::function<void(void)> callOnPlay_{ []() {} };
 	AudioLoader *audioLoader_{};
 	bool isPlaying_{};
@@ -65,6 +67,7 @@ class AudioPlayerStub : public IAudioPlayer {
 public:
 	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
+		log_ += LogString{ "prepareToPlay " };
 	}
 
 	const Preparation &preparation() const noexcept {
@@ -87,6 +90,7 @@ public:
 	{
 		played_ = true;
 		callOnPlay_();
+		log_ += LogString{ "play " };
 	}
 
 	void setPlaying() {
@@ -107,6 +111,10 @@ public:
 
 	void callOnPlay(std::function<void(void)> f) {
 		callOnPlay_ = f;
+	}
+
+	auto log() const {
+		return log_;
 	}
 };
 
@@ -521,7 +529,7 @@ TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 
 TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
 	playTrial();
-	EXPECT_EQ(LogString{ "prepareToPlay play " }, audioPlayer.log());
+	assertEqual("prepareToPlay play ", audioPlayer.log());
 }
 
 TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {

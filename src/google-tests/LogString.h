@@ -36,4 +36,6 @@ public:
 		s += appended.s;
 		return *this;
 	}
+
+	operator std::string() const { return s; }
 };
