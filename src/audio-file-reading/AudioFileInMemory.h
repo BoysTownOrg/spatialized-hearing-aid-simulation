@@ -35,10 +35,10 @@ private:
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
-	std::shared_ptr<AudioFileReaderFactory> factory;
+	AudioFileReaderFactory *factory;
 public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemoryFactory(
-		std::shared_ptr<AudioFileReaderFactory>
+		AudioFileReaderFactory *
 	);
 	AUDIO_FILE_READING_API 
 		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;

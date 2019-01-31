@@ -59,9 +59,9 @@ unsigned int AudioFileInMemory::remainingFrames_() {
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
-	std::shared_ptr<AudioFileReaderFactory> factory
+	AudioFileReaderFactory *factory
 ) :
-	factory{ std::move(factory) }
+	factory{ factory }
 {
 }
 

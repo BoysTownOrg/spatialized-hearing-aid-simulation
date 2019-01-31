@@ -141,9 +141,8 @@ namespace {
 	protected:
 		std::shared_ptr<FakeAudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>();
-		std::shared_ptr<FakeAudioFileReaderFactory> factory =
-			std::make_shared<FakeAudioFileReaderFactory>(reader);
-		AudioFileInMemoryFactory adapter{ factory };
+		FakeAudioFileReaderFactory factory{ reader };
+		AudioFileInMemoryFactory adapter{ &factory };
 
 		void assertMakeThrowsCreateError(std::string what) {
 			try {
@@ -168,6 +167,6 @@ namespace {
 
 	TEST_F(AudioFileInMemoryFactoryTests, factoryPassesFilePath) {
 		make("a");
-		assertEqual("a", factory->filePath());
+		assertEqual("a", factory.filePath());
 	}
 }
