@@ -105,6 +105,8 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	SpeechPerceptionTest::TestParameters adapted;
 	adapted.audioDirectory = p.audioDirectory;
 	adapted.testFilePath = p.testFilePath;
+	adapted.subjectId = p.subjectId;
+	adapted.testerId = p.testerId;
 	try {
 		perceptionTest->prepareNewTest(adapted);
 	}
