@@ -47,9 +47,9 @@ void RecognitionTest::documentTestParameters(TestParameters p) {
 }
 
 void RecognitionTest::playNextTrial(StimulusPlayer *player) {
-	player->play();
 	if (player->isPlaying())
 		return;
+	player->play();
 	Documenter::TrialParameters p;
 	p.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(p);
