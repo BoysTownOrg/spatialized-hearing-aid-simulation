@@ -47,11 +47,11 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 }
 
 void RefactoredModel::prepareNewTest(TestParameters p) {
-	prepareNewTest_(p);
 	if (p.usingSpatialization)
 		checkAndStoreBrir(p);
 	if (p.usingHearingAidSimulation)
 		checkAndStorePrescriptions(p);
+	prepareNewTest_(p);
 	testParameters = p;
 }
 
