@@ -512,6 +512,12 @@ TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
 	playTrial();
 }
 
+TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
+	audioPlayer.setPlaying();
+	playTrial();
+	EXPECT_TRUE(audioLoader.log().isEmpty());
+}
+
 TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
 	perceptionTest.setComplete();
 	EXPECT_TRUE(model.testComplete());
