@@ -2,7 +2,6 @@
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 #include <signal-processing/SignalProcessingChain.h>
 
-
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
@@ -35,23 +34,27 @@ public:
 		chain->add(scalarFactory->make(p.scale));
 		if (p.usingSpatialization)
 			chain->add(firFilterFactory->make(p.filterCoefficients));
-		FilterbankCompressor::Parameters compression;
-		compression.compressionRatios = p.prescription.compressionRatios;
-		compression.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
-		compression.kneepointGains_dB = p.prescription.kneepointGains_dB;
-		compression.kneepoints_dBSpl = p.prescription.kneepoints_dBSpl;
-		compression.broadbandOutputLimitingThresholds_dBSpl = 
-			p.prescription.broadbandOutputLimitingThresholds_dBSpl;
-		compression.channels = p.prescription.channels;
-		compression.attack_ms = p.attack_ms;
-		compression.release_ms = p.release_ms;
-		compression.chunkSize = p.chunkSize;
-		compression.windowSize = p.windowSize;
-		compression.sampleRate = p.sampleRate;
-		compression.max_dB_Spl = p.fullScale_dB_Spl;
 		if (p.usingHearingAidSimulation)
-			chain->add(hearingAidFactory->make(compression));
+			chain->add(hearingAidFactory->make(compression(p)));
 		return chain;
+	}
+
+	FilterbankCompressor::Parameters compression(SimulationParameters p) {
+		FilterbankCompressor::Parameters compression_;
+		compression_.compressionRatios = p.prescription.compressionRatios;
+		compression_.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
+		compression_.kneepointGains_dB = p.prescription.kneepointGains_dB;
+		compression_.kneepoints_dBSpl = p.prescription.kneepoints_dBSpl;
+		compression_.broadbandOutputLimitingThresholds_dBSpl = 
+			p.prescription.broadbandOutputLimitingThresholds_dBSpl;
+		compression_.channels = p.prescription.channels;
+		compression_.attack_ms = p.attack_ms;
+		compression_.release_ms = p.release_ms;
+		compression_.chunkSize = p.chunkSize;
+		compression_.windowSize = p.windowSize;
+		compression_.sampleRate = p.sampleRate;
+		compression_.max_dB_Spl = p.fullScale_dB_Spl;
+		return compression_;
 	}
 };
 
@@ -193,11 +196,11 @@ namespace {
 		simulationParameters.usingHearingAidSimulation = true;
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
+		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> left{ 4 };
-		processor->process(left);
-		EXPECT_EQ((4 + 1) * 2 + 3, left.at(0));
+		std::vector<float> x{ 4 };
+		processor->process(x);
+		EXPECT_EQ((4 + 1) * 2 + 3, x.front());
 	}
 
 	TEST_F(
@@ -208,11 +211,11 @@ namespace {
 		simulationParameters.usingHearingAidSimulation = true;
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
+		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> left{ 4 };
-		processor->process(left);
-		EXPECT_EQ(4 + 1 + 3, left.at(0));
+		std::vector<float> x{ 4 };
+		processor->process(x);
+		EXPECT_EQ(4 + 1 + 3, x.front());
 	}
 
 	TEST_F(
@@ -223,10 +226,10 @@ namespace {
 		simulationParameters.usingHearingAidSimulation = false;
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared <AddsSamplesBy>(3.0f));
+		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> left{ 4 };
-		processor->process(left);
-		EXPECT_EQ((4 + 1) * 2, left.at(0));
+		std::vector<float> x{ 4 };
+		processor->process(x);
+		EXPECT_EQ((4 + 1) * 2, x.front());
 	}
 }
