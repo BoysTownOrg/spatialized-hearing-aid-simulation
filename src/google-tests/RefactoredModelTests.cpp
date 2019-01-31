@@ -55,7 +55,7 @@ public:
 	}
 };
 
-class AudioPlayerStub : public AudioStimulusPlayer {
+class AudioPlayerStub : public IAudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
@@ -94,10 +94,6 @@ public:
 	bool isPlaying() override {
 		return isPlaying_;
 	}
-	
-	void stop() override
-	{
-	}
 
 	void setAudioLoader(AudioLoader *a) override {
 		audioLoader_ = a;
@@ -108,7 +104,7 @@ public:
 	}
 };
 
-class PreparationFailingAudioPlayer : public AudioStimulusPlayer {
+class PreparationFailingAudioPlayer : public IAudioPlayer {
 	std::string errorMessage{};
 public:
 	void setErrorMessage(std::string s) {
@@ -122,7 +118,6 @@ public:
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void play() override {}
 	bool isPlaying() override { return {}; }
-	void stop() override {}
 	void setAudioLoader(AudioLoader *) override {}
 };
 
@@ -130,7 +125,6 @@ class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
 	std::function<void(void)> callOnAdvanceTrial_{ []() {} };
-	StimulusPlayer *player_{};
 	bool advanceTrialCalled_{};
 	bool prepareNewTestCalled_{};
 	bool complete_{};
@@ -167,10 +161,6 @@ public:
 
 	std::string nextStimulus() override {
 		return nextStimulus_;
-	}
-
-	const auto player() const noexcept {
-		return player_;
 	}
 
 	void setComplete() {
@@ -552,7 +542,7 @@ protected:
 	AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 	AudioFrameReaderFactory *audioReaderFactory{&defaultAudioReaderFactory};
 	AudioPlayerStub defaultPlayer{};
-	AudioStimulusPlayer *player{ &defaultPlayer };
+	IAudioPlayer *player{ &defaultPlayer };
 	AudioLoaderStub defaultLoader{};
 	AudioLoader *loader{ &defaultLoader };
 

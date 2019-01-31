@@ -24,9 +24,6 @@
     <ClInclude Include="RecognitionTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StimulusPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RecognitionTest.cpp">

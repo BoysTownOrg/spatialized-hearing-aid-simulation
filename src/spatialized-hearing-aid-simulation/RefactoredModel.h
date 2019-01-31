@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SpeechPerceptionTest.h"
-#include "AudioStimulusPlayer.h"
+#include "IAudioPlayer.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <dsl-prescription/PrescriptionReader.h>
 #include <binaural-room-impulse-response/BrirReader.h>
@@ -43,12 +43,12 @@ class RefactoredModel : public Model {
 	FirFilterFactory *firFilterFactory;
 	ScalarFactory *scalarFactory;
 	AudioFrameReaderFactory *audioReaderFactory;
-	AudioStimulusPlayer *player;
+	IAudioPlayer *player;
 	AudioLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
-		AudioStimulusPlayer *player,
+		IAudioPlayer *player,
 		AudioLoader *loader,
 		AudioFrameReaderFactory *audioReaderFactory,
 		HearingAidFactory *hearingAidFactory,

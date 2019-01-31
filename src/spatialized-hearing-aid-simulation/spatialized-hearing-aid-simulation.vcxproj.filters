@@ -24,7 +24,7 @@
     <ClInclude Include="SpeechPerceptionTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioStimulusPlayer.h">
+    <ClInclude Include="IAudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,9 +3,9 @@
 #include "AudioDevice.h"
 #include "AudioLoader.h"
 #include "playing-audio-exports.h"
-#include <spatialized-hearing-aid-simulation/AudioStimulusPlayer.h>
+#include <spatialized-hearing-aid-simulation/IAudioPlayer.h>
 
-class AudioPlayer : public AudioDeviceController, public AudioStimulusPlayer {
+class AudioPlayer : public AudioDeviceController, public IAudioPlayer {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioLoader *loader{};
@@ -16,7 +16,7 @@ public:
 	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *) override;
 	PLAYING_AUDIO_API void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API bool isPlaying() override;
-	PLAYING_AUDIO_API void stop() override;
+	PLAYING_AUDIO_API void stop();
 	PLAYING_AUDIO_API void play() override;
 private:
 	void prepareToPlay_(Preparation);

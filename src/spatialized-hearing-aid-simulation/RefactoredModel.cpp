@@ -8,7 +8,7 @@ double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
 
 RefactoredModel::RefactoredModel(
 	SpeechPerceptionTest *perceptionTest,
-	AudioStimulusPlayer *player,
+	IAudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
 	HearingAidFactory *hearingAidFactory,

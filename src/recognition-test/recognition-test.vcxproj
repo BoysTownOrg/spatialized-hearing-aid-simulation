@@ -141,7 +141,6 @@
     <ClInclude Include="Documenter.h" />
     <ClInclude Include="RecognitionTest.h" />
     <ClInclude Include="StimulusList.h" />
-    <ClInclude Include="StimulusPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RecognitionTest.cpp" />

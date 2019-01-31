@@ -1,6 +1,5 @@
 #pragma once
 
-#include <recognition-test/StimulusPlayer.h>
 #include <playing-audio/AudioLoader.h>
 #include <common-includes/Interface.h>
 #include <common-includes/RuntimeError.h>
@@ -22,6 +21,6 @@ public:
 	RUNTIME_ERROR(PreparationFailure);
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual void setAudioLoader(AudioLoader *) = 0;
+	virtual void play() = 0;
+	virtual bool isPlaying() = 0;
 };
-
-class AudioStimulusPlayer : public IAudioPlayer, public StimulusPlayer {};
