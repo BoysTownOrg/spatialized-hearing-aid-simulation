@@ -22,7 +22,7 @@ public:
 	);
 	RECOGNITION_TEST_API void prepareNewTest(TestParameters) override;
 	RECOGNITION_TEST_API void playNextTrial(StimulusPlayer *) override;
-	RECOGNITION_TEST_API bool testComplete();
+	RECOGNITION_TEST_API bool testComplete() override;
 	std::string nextStimulus() override;
 private:
 	void prepareNewTest_(TestParameters);

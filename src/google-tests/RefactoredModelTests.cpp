@@ -167,6 +167,10 @@ public:
 	void setComplete() {
 		complete_ = true;
 	}
+
+	bool testComplete() override {
+		return complete_;
+	}
 };
 
 class InitializationFailingSpeechPerceptionTest : public SpeechPerceptionTest {
@@ -182,6 +186,7 @@ public:
 
 	void playNextTrial(StimulusPlayer *) override {}
 	std::string nextStimulus() override { return {}; }
+	bool testComplete() override { return {}; }
 };
 
 #include "assert-utility.h"

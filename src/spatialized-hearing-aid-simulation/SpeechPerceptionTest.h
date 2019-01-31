@@ -19,4 +19,5 @@ public:
 
 	virtual void playNextTrial(StimulusPlayer *) = 0;
 	virtual std::string nextStimulus() = 0;
+	virtual bool testComplete() = 0;
 };

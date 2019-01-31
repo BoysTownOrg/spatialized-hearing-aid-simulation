@@ -213,7 +213,7 @@ std::shared_ptr<SignalProcessor> RefactoredModel::makeHearingAid(
 }
 
 bool RefactoredModel::testComplete() {
-	return false;
+	return perceptionTest->testComplete();
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters) {
