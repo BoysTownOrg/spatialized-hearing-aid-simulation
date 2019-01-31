@@ -438,7 +438,7 @@ namespace {
 		EXPECT_EQ(6, actual.channels);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToHearingAidFactory) {
+	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToFactory) {
 		audioFrameReader->setChannels(2);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.attack_ms = 1;
@@ -459,7 +459,7 @@ namespace {
 		EXPECT_EQ(8, right.windowSize);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToHearingAidFactory) {
+	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToFactory) {
 		audioFrameReader->setChannels(2);
 		audioFrameReader->setSampleRate(1);
 		testParameters.usingHearingAidSimulation = true;
@@ -471,14 +471,14 @@ namespace {
 		EXPECT_EQ(1, right.sampleRate);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToHearingAidFactory) {
+	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();
-		auto left = hearingAidFactory.parameters().at(0);
-		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, left.max_dB_Spl);
-		auto right = hearingAidFactory.parameters().at(1);
-		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, right.max_dB_Spl);
+		auto left = simulationFactory.parameters().at(0);
+		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, left.fullScaleLevel_dB_Spl);
+		auto right = simulationFactory.parameters().at(1);
+		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, right.fullScaleLevel_dB_Spl);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBrirToFirFilterFactory) {

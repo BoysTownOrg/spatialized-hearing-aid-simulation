@@ -39,7 +39,7 @@ public:
 		BrirReader::impulse_response_type filterCoefficients;
 		double attack_ms;
 		double release_ms;
-		double fullScale_dB_Spl;
+		double fullScaleLevel_dB_Spl;
 		float scale;
 		int sampleRate;
 		int windowSize;

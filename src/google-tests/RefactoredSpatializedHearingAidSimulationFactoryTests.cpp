@@ -21,7 +21,7 @@ public:
 		BrirReader::impulse_response_type filterCoefficients;
 		double attack_ms;
 		double release_ms;
-		double fullScale_dB_Spl;
+		double fullScaleLevel_dB_Spl;
 		float scale;
 		int sampleRate;
 		int windowSize;
@@ -53,7 +53,7 @@ public:
 		compression_.chunkSize = p.chunkSize;
 		compression_.windowSize = p.windowSize;
 		compression_.sampleRate = p.sampleRate;
-		compression_.max_dB_Spl = p.fullScale_dB_Spl;
+		compression_.max_dB_Spl = p.fullScaleLevel_dB_Spl;
 		return compression_;
 	}
 };
@@ -168,7 +168,7 @@ namespace {
 		simulationParameters.chunkSize = 3;
 		simulationParameters.windowSize = 4;
 		simulationParameters.sampleRate = 5;
-		simulationParameters.fullScale_dB_Spl = 6;
+		simulationParameters.fullScaleLevel_dB_Spl = 6;
 		simulationFactory.make(simulationParameters);
 		EXPECT_EQ(1, hearingAidFactory.parameters().attack_ms);
 		EXPECT_EQ(2, hearingAidFactory.parameters().release_ms);
