@@ -2,13 +2,16 @@
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class RefactoredSpatializedHearingAidSimulationFactory {
+	ScalarFactory *scalarFactory;
 public:
-	RefactoredSpatializedHearingAidSimulationFactory(ScalarFactory *) {}
+	RefactoredSpatializedHearingAidSimulationFactory(ScalarFactory *scalarFactory) :
+		scalarFactory{ scalarFactory } {}
 
 	struct SimulationParameters {
 		float scale;
 	};
-	std::shared_ptr<SignalProcessor> make(SimulationParameters) {
+	std::shared_ptr<SignalProcessor> make(SimulationParameters p) {
+		scalarFactory->make(p.scale);
 		return {};
 	}
 };
