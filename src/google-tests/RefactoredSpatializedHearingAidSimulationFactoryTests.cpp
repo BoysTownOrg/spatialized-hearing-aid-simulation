@@ -31,6 +31,10 @@ public:
 		compression.broadbandOutputLimitingThresholds_dBSpl = 
 			p.prescription.broadbandOutputLimitingThresholds_dBSpl;
 		compression.channels = p.prescription.channels;
+		compression.attack_ms = p.attack_ms;
+		compression.release_ms = p.release_ms;
+		compression.chunkSize = p.chunkSize;
+		compression.windowSize = p.windowSize;
 		hearingAidFactory->make(compression);
 		return {};
 	}
