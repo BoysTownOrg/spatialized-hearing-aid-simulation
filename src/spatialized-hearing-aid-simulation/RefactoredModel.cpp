@@ -153,28 +153,31 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
-	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
-    RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
 	sp.attack_ms = testParameters.attack_ms;
 	sp.release_ms = testParameters.release_ms;
 	sp.chunkSize = testParameters.chunkSize;
 	sp.windowSize = testParameters.windowSize;
-	sp.sampleRate = reader->sampleRate();
 	sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 	sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
 	sp.usingSpatialization = testParameters.usingSpatialization;
+	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
+	sp.sampleRate = reader->sampleRate();
+
+    RmsComputer rms{ *reader };
+    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	if (reader->channels() > 0)
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
 	sp.prescription = leftPrescription;
 	sp.filterCoefficients = brir.left;
 	auto leftChannel = simulationFactory->make(sp);
+	
 	if (reader->channels() > 1)
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
 	sp.prescription = rightPrescription;
 	sp.filterCoefficients = brir.right;
 	auto rightChannel = simulationFactory->make(sp);
+
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ leftChannel, rightChannel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);

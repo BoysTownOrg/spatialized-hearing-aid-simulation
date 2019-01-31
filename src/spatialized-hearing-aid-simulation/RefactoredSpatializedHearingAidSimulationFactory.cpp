@@ -9,7 +9,9 @@ RefactoredSpatializedHearingAidSimulationFactory::RefactoredSpatializedHearingAi
 	firFilterFactory{ firFilterFactory },
 	hearingAidFactory{ hearingAidFactory } {}
 
-std::shared_ptr<SignalProcessor> RefactoredSpatializedHearingAidSimulationFactory::make(SimulationParameters p) {
+std::shared_ptr<SignalProcessor> RefactoredSpatializedHearingAidSimulationFactory::make(
+	SimulationParameters p
+) {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(scalarFactory->make(p.scale));
 	if (p.usingSpatialization)

@@ -470,7 +470,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBrirToFactory) {
-		audioFrameReader->setChannels(2);
 		testParameters.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
@@ -482,22 +481,7 @@ namespace {
 		assertEqual({ 3, 4, }, simulationFactory.parameters().at(1).filterCoefficients);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessor) {
-		audioFrameReader->setChannels(2);
-		prepareNewTest();
-		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		playTrial();
-		auto processor = audioLoader.audioFrameProcessor();
-		std::vector<float> left{ 4 };
-		std::vector<float> right{ 5 };
-		std::vector<gsl::span<float>> channels{ left, right };
-		processor->process(channels);
-		EXPECT_EQ(4 + 1, left.front());
-		EXPECT_EQ(5 + 1, right.front());
-	}
-
 	TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessorBeforePlayingPlayer) {
-		audioFrameReader->setChannels(2);
 		prepareNewTest();
 		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		std::vector<float> left{ 4 };
