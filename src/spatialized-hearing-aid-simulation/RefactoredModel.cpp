@@ -43,27 +43,6 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 	testParameters = std::move(p);
 }
 
-static constexpr bool powerOfTwo(int n) noexcept {
-	return n > 0 && (n & (n - 1)) == 0;
-}
-
-static std::string windowChunkSizesErrorMessage(int offender) {
-	return
-		"Both the chunk size and window size must be powers of two; " +
-		std::to_string(offender) + " is not a power of two.";
-}
-
-void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
-	readPrescriptions(p);
-	checkSizeIsPowerOfTwo(p.chunkSize);
-	checkSizeIsPowerOfTwo(p.windowSize);
-}
-
-void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
-	if (!powerOfTwo(size))
-		throw TestInitializationFailure{ windowChunkSizesErrorMessage(size) };
-}
-
 static std::string coefficientErrorMessage(std::string which) {
 	return 
 		"The " + which + " BRIR coefficients are empty, "
@@ -78,18 +57,6 @@ void RefactoredModel::checkAndStoreBrir(TestParameters p) {
 		throw TestInitializationFailure{ coefficientErrorMessage("right") };
 }
 
-void RefactoredModel::prepareNewTest_(TestParameters p) {
-	SpeechPerceptionTest::TestParameters adapted;
-	adapted.audioDirectory = p.audioDirectory;
-	adapted.testFilePath = p.testFilePath;
-	try {
-		perceptionTest->prepareNewTest(adapted);
-	}
-	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
-		throw TestInitializationFailure{ e.what() };
-	}
-}
-
 BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters p) {
 	try {
 		return brirReader->read(p.brirFilePath);
@@ -97,6 +64,12 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters
 	catch (const BrirReader::ReadFailure &) {
 		throw TestInitializationFailure{ "Unable to read '" + p.brirFilePath + "'." };
 	}
+}
+
+void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
+	readPrescriptions(p);
+	checkSizeIsPowerOfTwo(p.chunkSize);
+	checkSizeIsPowerOfTwo(p.windowSize);
 }
 
 void RefactoredModel::readPrescriptions(TestParameters p) {
@@ -110,6 +83,33 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 	}
 	catch (const PrescriptionReader::ReadFailure &) {
 		throw TestInitializationFailure{ "Unable to read '" + filePath + "'." };
+	}
+}
+
+static constexpr bool powerOfTwo(int n) noexcept {
+	return n > 0 && (n & (n - 1)) == 0;
+}
+
+static std::string windowChunkSizesErrorMessage(int offender) {
+	return
+		"Both the chunk size and window size must be powers of two; " +
+		std::to_string(offender) + " is not a power of two.";
+}
+
+void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
+	if (!powerOfTwo(size))
+		throw TestInitializationFailure{ windowChunkSizesErrorMessage(size) };
+}
+
+void RefactoredModel::prepareNewTest_(TestParameters p) {
+	SpeechPerceptionTest::TestParameters adapted;
+	adapted.audioDirectory = p.audioDirectory;
+	adapted.testFilePath = p.testFilePath;
+	try {
+		perceptionTest->prepareNewTest(adapted);
+	}
+	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
+		throw TestInitializationFailure{ e.what() };
 	}
 }
 
