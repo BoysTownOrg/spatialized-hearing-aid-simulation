@@ -59,6 +59,7 @@ class AudioPlayerStub : public AudioStimulusPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
 	AudioLoader *audioLoader_{};
+	bool isPlaying_{};
 public:
 	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
@@ -80,9 +81,12 @@ public:
 	{
 	}
 
-	bool isPlaying() override
-	{
-		return false;
+	void setPlaying() {
+		isPlaying_ = true;
+	}
+
+	bool isPlaying() override {
+		return isPlaying_;
 	}
 	
 	void stop() override

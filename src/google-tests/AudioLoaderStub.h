@@ -54,9 +54,11 @@ public:
 
 	void setReader(std::shared_ptr<AudioFrameReader> r) override {
 		audioFrameReader_ = std::move(r);
+		log_ += std::string{ "setReader " };
 	}
 
 	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) override {
 		audioFrameProcessor_ = std::move(p);
+		log_ += std::string{ "setProcessor " };
 	}
 };
