@@ -11,26 +11,6 @@
 #include <signal-processing/SignalProcessor.h>
 #include <presentation/Model.h>
 
-class FirFilterFactory {
-public:
-	INTERFACE_OPERATIONS(FirFilterFactory);
-	virtual std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) = 0;
-};
-
-class HearingAidFactory {
-public:
-	INTERFACE_OPERATIONS(HearingAidFactory);
-	virtual std::shared_ptr<SignalProcessor> make(
-		FilterbankCompressor::Parameters
-	) = 0;
-};
-
-class ScalarFactory {
-public:
-	INTERFACE_OPERATIONS(ScalarFactory);
-	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
-};
-
 class IRefactoredSpatializedHearingAidSimulationFactory {
 public:
 	INTERFACE_OPERATIONS(IRefactoredSpatializedHearingAidSimulationFactory);
@@ -58,9 +38,6 @@ class RefactoredModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *perceptionTest;
-	HearingAidFactory *hearingAidFactory;
-	FirFilterFactory *firFilterFactory;
-	ScalarFactory *scalarFactory;
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
@@ -71,11 +48,8 @@ public:
 		IAudioPlayer *player,
 		AudioLoader *loader,
 		AudioFrameReaderFactory *audioReaderFactory,
-		HearingAidFactory *hearingAidFactory,
 		PrescriptionReader *prescriptionReader,
-		FirFilterFactory *firFilterFactory,
 		BrirReader *brirReader,
-		ScalarFactory *scalarFactory,
 		IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
@@ -94,7 +68,6 @@ private:
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
-	std::shared_ptr<SignalProcessor> makeHearingAid(PrescriptionReader::Dsl, int sampleRate);
 	void prepareAudioPlayer(AudioFrameReader &, TrialParameters);
 	void prepareNewTest_(TestParameters);
 };

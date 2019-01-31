@@ -10,19 +10,13 @@ RefactoredModel::RefactoredModel(
 	IAudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
-	HearingAidFactory *hearingAidFactory,
 	PrescriptionReader *prescriptionReader,
-	FirFilterFactory *firFilterFactory,
 	BrirReader *brirReader,
-	ScalarFactory *scalarFactory,
 	IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
 	perceptionTest{ perceptionTest },
-	hearingAidFactory{ hearingAidFactory },
-	firFilterFactory{ firFilterFactory },
-	scalarFactory{ scalarFactory },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
@@ -202,27 +196,6 @@ void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, TrialParamet
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw TrialFailure{ e.what() };
 	}
-}
-
-std::shared_ptr<SignalProcessor> RefactoredModel::makeHearingAid(
-	PrescriptionReader::Dsl dsl, 
-	int sampleRate
-) {
-	FilterbankCompressor::Parameters compression;
-	compression.attack_ms = testParameters.attack_ms;
-	compression.release_ms = testParameters.release_ms;
-	compression.chunkSize = testParameters.chunkSize;
-	compression.windowSize = testParameters.windowSize;
-	compression.sampleRate = sampleRate;
-	compression.compressionRatios = dsl.compressionRatios;
-	compression.crossFrequenciesHz = dsl.crossFrequenciesHz;
-	compression.kneepointGains_dB = dsl.kneepointGains_dB;
-	compression.kneepoints_dBSpl = dsl.kneepoints_dBSpl;
-	compression.broadbandOutputLimitingThresholds_dBSpl = 
-		dsl.broadbandOutputLimitingThresholds_dBSpl;
-	compression.channels = dsl.channels;
-	compression.max_dB_Spl = fullScaleLevel_dB_Spl;
-	return hearingAidFactory->make(compression);
 }
 
 bool RefactoredModel::testComplete() {

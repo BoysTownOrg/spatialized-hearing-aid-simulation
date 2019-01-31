@@ -13,60 +13,6 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class FirFilterFactoryStub : public FirFilterFactory {
-		ArgumentCollection<BrirReader::impulse_response_type> coefficients_{};
-		std::shared_ptr<SignalProcessor> processor{};
-	public:
-		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
-			processor = std::move(p);
-		}
-
-		auto coefficients() const {
-			return coefficients_;
-		}
-
-		std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
-			coefficients_.push_back(std::move(b));
-			return processor;
-		}
-	};
-
-	class HearingAidFactoryStub : public HearingAidFactory {
-		ArgumentCollection<FilterbankCompressor::Parameters> parameters_{};
-		std::shared_ptr<SignalProcessor> processor{};
-	public:
-		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
-			processor = std::move(p);
-		}
-
-		auto parameters() const {
-			return parameters_;
-		}
-
-		std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
-			parameters_.push_back(std::move(p));
-			return processor;
-		}
-	};
-
-	class ScalarFactoryStub : public ScalarFactory {
-		ArgumentCollection<float> scalars_{};
-		std::shared_ptr<SignalProcessor> processor{};
-	public:
-		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
-			processor = std::move(p);
-		}
-
-		auto scalars() const {
-			return scalars_;
-		}
-
-		std::shared_ptr<SignalProcessor> make(float x) override {
-			scalars_.push_back(x);
-			return processor;
-		}
-	};
-
 	class RefactoredSpatializedHearingAidSimulationFactoryStub : 
 		public IRefactoredSpatializedHearingAidSimulationFactory 
 	{
@@ -233,9 +179,6 @@ namespace {
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
 		SpeechPerceptionTestStub perceptionTest{};
-		HearingAidFactoryStub hearingAidFactory{};
-		FirFilterFactoryStub firFilterFactory{};
-		ScalarFactoryStub scalarFactory{};
 		std::shared_ptr<AudioFrameReaderStub> audioFrameReader
 			= std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory audioFrameReaderFactory{ audioFrameReader };
@@ -247,11 +190,8 @@ namespace {
 			&audioPlayer,
 			&audioLoader,
 			&audioFrameReaderFactory,
-			&hearingAidFactory,
 			&prescriptionReader,
-			&firFilterFactory,
 			&brirReader,
-			&scalarFactory,
 			&simulationFactory
 		};
 
@@ -571,12 +511,6 @@ namespace {
 		BrirReader *brirReader{ &defaultBrirReader };
 		SpeechPerceptionTestStub defaultTest{};
 		SpeechPerceptionTest *test{ &defaultTest };
-		HearingAidFactoryStub defaultHearingAidFactory{};
-		HearingAidFactory *hearingAidFactory{ &defaultHearingAidFactory };
-		FirFilterFactoryStub defaultFirFilterFactory{};
-		FirFilterFactory *firFilterFactory{ &defaultFirFilterFactory };
-		ScalarFactoryStub defaultScalarFactory{};
-		ScalarFactory *scalarFactory{ &defaultScalarFactory };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioPlayerStub defaultPlayer{};
@@ -626,11 +560,8 @@ namespace {
 				player,
 				loader,
 				audioReaderFactory,
-				hearingAidFactory,
 				prescriptionReader,
-				firFilterFactory,
 				brirReader,
-				scalarFactory,
 				simulationFactory
 			};
 		}

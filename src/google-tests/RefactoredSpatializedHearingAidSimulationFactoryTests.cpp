@@ -2,6 +2,26 @@
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 #include <signal-processing/SignalProcessingChain.h>
 
+class FirFilterFactory {
+public:
+	INTERFACE_OPERATIONS(FirFilterFactory);
+	virtual std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) = 0;
+};
+
+class HearingAidFactory {
+public:
+	INTERFACE_OPERATIONS(HearingAidFactory);
+	virtual std::shared_ptr<SignalProcessor> make(
+		FilterbankCompressor::Parameters
+	) = 0;
+};
+
+class ScalarFactory {
+public:
+	INTERFACE_OPERATIONS(ScalarFactory);
+	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
+};
+
 class RefactoredSpatializedHearingAidSimulationFactory {
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
