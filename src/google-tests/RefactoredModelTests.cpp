@@ -684,6 +684,18 @@ TEST_F(
 	assertPlayTrialThrowsTrialFailure("error.");
 }
 
+TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvanceTrialWhenPlayerFails) {
+	PreparationFailingAudioPlayer failing;
+	player = &failing;
+	auto model = makeModel();
+	try {
+		model.playTrial({});
+	}
+	catch (const RefactoredModel::TrialFailure &) {
+	}
+	EXPECT_FALSE(defaultTest.advanceTrialCalled());
+}
+
 TEST_F(
 	RefactoredModelFailureTests,
 	playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
