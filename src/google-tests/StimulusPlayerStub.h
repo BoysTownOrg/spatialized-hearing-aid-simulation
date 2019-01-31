@@ -5,6 +5,7 @@
 class StimulusPlayerStub : public StimulusPlayer {
 	bool playing_{};
 	bool stopped_{};
+	bool played_{};
 public:
 	void setPlaying() {
 		playing_ = true;
@@ -22,5 +23,11 @@ public:
 		stopped_ = true;
 	}
 
-	void play() override {}
+	void play() override {
+		played_ = true;
+	}
+
+	auto played() const {
+		return played_;
+	}
 };
