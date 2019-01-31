@@ -102,6 +102,15 @@ namespace {
 
 	TEST_F(
 		RecognitionTestTests,
+		playNextTrialDoesNotPlayPlayerWhenAlreadyPlaying
+	) {
+		player.setPlaying();
+		playNextTrial();
+		EXPECT_FALSE(player.played());
+	}
+
+	TEST_F(
+		RecognitionTestTests,
 		testCompleteWhenListEmpty
 	) {
 		list.setContents({});
