@@ -58,6 +58,7 @@ public:
 class AudioPlayerStub : public IAudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
+	std::function<void(void)> callOnPlay_{ []() {} };
 	AudioLoader *audioLoader_{};
 	bool isPlaying_{};
 	bool played_{};
@@ -85,6 +86,7 @@ public:
 	void play() override
 	{
 		played_ = true;
+		callOnPlay_();
 	}
 
 	void setPlaying() {
@@ -101,6 +103,10 @@ public:
 
 	const AudioLoader *audioLoader() const noexcept {
 		return audioLoader_;
+	}
+
+	void callOnPlay(std::function<void(void)> f) {
+		callOnPlay_ = f;
 	}
 };
 
@@ -124,7 +130,6 @@ public:
 class SpeechPerceptionTestStub : public SpeechPerceptionTest {
 	TestParameters testParameters_{};
 	std::string nextStimulus_{};
-	std::function<void(void)> callOnAdvanceTrial_{ []() {} };
 	bool advanceTrialCalled_{};
 	bool prepareNewTestCalled_{};
 	bool complete_{};
@@ -142,13 +147,8 @@ public:
 		return prepareNewTestCalled_;
 	}
 
-	void callOnAdvanceTrial(std::function<void(void)> f) {
-		callOnAdvanceTrial_ = f;
-	}
-
 	void advanceTrial() override {
 		advanceTrialCalled_ = true;
-		callOnAdvanceTrial_();
 	}
 	
 	bool advanceTrialCalled() const noexcept {
@@ -317,7 +317,7 @@ TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 }
 
 TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlayingNextTrial) {
-	perceptionTest.callOnAdvanceTrial([&]() { EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader()); });
+	audioPlayer.callOnPlay([&]() { EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader()); });
 	playTrial();
 }
 
@@ -497,7 +497,7 @@ TEST_F(RefactoredModelTests, playTrialNoHearingAidSimulation) {
 	std::vector<float> left{ 4 };
 	std::vector<float> right{ 5 };
 	std::vector<gsl::span<float>> channels{ left, right };
-	perceptionTest.callOnAdvanceTrial([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+	audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 	playTrial();
 	EXPECT_EQ((4 + 1) * 3, left.at(0));
 	EXPECT_EQ((5 + 1) * 3, right.at(0));
@@ -509,7 +509,7 @@ TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlaye
 }
 
 TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
-	perceptionTest.callOnAdvanceTrial([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
+	audioPlayer.callOnPlay([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
 	playTrial();
 }
 
