@@ -620,6 +620,22 @@ TEST_F(
 }
 
 TEST_F(
+	RefactoredModelFailureTests, 
+	prepareNewTestDoesNotPrepareTestWhenBrirReaderFails
+) {
+	FailingBrirReader failing;
+	brirReader = &failing;
+	newTest.usingSpatialization = true;
+	auto model = makeModel();
+	try {
+		model.prepareNewTest(newTest);
+	}
+	catch (const RefactoredModel::TestInitializationFailure &) {
+	}
+	EXPECT_FALSE(defaultTest.prepareNewTestCalled());
+}
+
+TEST_F(
 	RefactoredModelFailureTests,
 	playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
 ) {
