@@ -158,16 +158,16 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
+	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
+	prepareAudioPlayer(*reader, p);
 	const auto leftChannel = std::make_shared<SignalProcessingChain>();
 	const auto rightChannel = std::make_shared<SignalProcessingChain>();
-	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	if (reader->channels() > 0)
 		leftChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(0))));
 	if (reader->channels() > 1)
 		rightChannel->add(scalarFactory->make(gsl::narrow_cast<float>(desiredRms / rms.compute(1))));
-	prepareAudioPlayer(*reader, p);
 	if (testParameters.usingSpatialization) {
 		leftChannel->add(firFilterFactory->make(brir.left));
 		rightChannel->add(firFilterFactory->make(brir.right));
