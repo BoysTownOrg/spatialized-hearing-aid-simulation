@@ -13,7 +13,7 @@ class BrirAdapter : public BrirReader {
 	AudioFileReaderFactory *factory;
 public:
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
-		explicit BrirAdapter(AudioFileReaderFactory *);
+		explicit BrirAdapter(AudioFileReaderFactory *) noexcept;
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
 		BinauralRoomImpulseResponse read(std::string filePath) override;
 private:

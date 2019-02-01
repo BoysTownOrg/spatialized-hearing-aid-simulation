@@ -27,7 +27,7 @@ class PrescriptionAdapter : public PrescriptionReader {
 public:
 	DSL_PRESCRIPTION_API explicit PrescriptionAdapter(
 		ConfigurationFileParserFactory *
-	);
+	) noexcept;
 	DSL_PRESCRIPTION_API Dsl read(std::string filePath) override;
 private:
 	Dsl read_(std::string filePath);

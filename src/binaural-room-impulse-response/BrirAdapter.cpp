@@ -28,10 +28,8 @@ public:
 	}
 };
 
-BrirAdapter::BrirAdapter(AudioFileReaderFactory *factory) :
-	factory{ factory }
-{
-}
+BrirAdapter::BrirAdapter(AudioFileReaderFactory *factory) noexcept :
+	factory{ factory } {}
 
 auto BrirAdapter::read(std::string filePath) -> BinauralRoomImpulseResponse {
 	return makeBrir(*makeReader(std::move(filePath)));

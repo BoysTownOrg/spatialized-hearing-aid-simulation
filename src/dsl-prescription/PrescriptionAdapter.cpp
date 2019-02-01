@@ -18,10 +18,8 @@ std::string dsl_prescription::propertyName(Property p) {
 	}
 }
 
-PrescriptionAdapter::PrescriptionAdapter(ConfigurationFileParserFactory *factory) :
-	factory{ factory }
-{
-}
+PrescriptionAdapter::PrescriptionAdapter(ConfigurationFileParserFactory *factory) noexcept :
+	factory{ factory } {}
 
 auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 	try {
@@ -35,7 +33,7 @@ auto PrescriptionAdapter::read(std::string filePath) -> Dsl {
 class VectorParser {
 	std::shared_ptr<ConfigurationFileParser> parser;
 public:
-	explicit VectorParser(std::shared_ptr<ConfigurationFileParser> parser) :
+	explicit VectorParser(std::shared_ptr<ConfigurationFileParser> parser) noexcept :
 		parser{ std::move(parser) } {}
 
 	std::vector<double> parse(dsl_prescription::Property p) {
