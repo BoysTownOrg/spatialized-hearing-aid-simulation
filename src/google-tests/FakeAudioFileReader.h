@@ -13,14 +13,14 @@ class FakeAudioFileReader : public AudioFileReader {
 public:
 	explicit FakeAudioFileReader(
 		std::vector<float> contents = {}
-	) :
+	) noexcept :
 		contents{ std::move(contents) } {}
 
 	void setContents(std::vector<float> c) {
 		contents = std::move(c);
 	}
 
-	void setChannels(int c) {
+	void setChannels(int c) noexcept {
 		channels_ = c;
 	}
 
@@ -37,7 +37,7 @@ public:
 			x[i] = contents.at(i);
 	}
 
-	void fail() {
+	void fail() noexcept {
 		failed_ = true;
 	}
 
@@ -53,7 +53,7 @@ public:
 		return errorMessage_;
 	}
 
-	void setSampleRate(int s) {
+	void setSampleRate(int s) noexcept {
 		sampleRate_ = s;
 	}
 
@@ -69,7 +69,7 @@ public:
 	explicit FakeAudioFileReaderFactory(
 		std::shared_ptr<AudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>()
-	) :
+	) noexcept :
 		reader{ std::move(reader) } {}
 
 	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
@@ -77,7 +77,7 @@ public:
 		return reader;
 	}
 
-	std::string filePath() const {
+	auto filePath() const {
 		return filePath_;
 	}
 };

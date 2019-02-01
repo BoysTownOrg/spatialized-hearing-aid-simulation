@@ -17,11 +17,11 @@ public:
 		return brir_;
 	}
 
-	std::string filePath() const {
+	auto filePath() const {
 		return filePath_;
 	}
 
-	auto readCalled() const {
+	auto readCalled() const noexcept {
 		return readCalled_;
 	}
 };

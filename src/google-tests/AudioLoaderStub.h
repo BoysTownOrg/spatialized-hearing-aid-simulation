@@ -4,7 +4,7 @@
 #include <spatialized-hearing-aid-simulation/AudioLoader.h>
 
 class AudioLoaderStub : public AudioLoader {
-	gsl::span<gsl::span<float>> audioBuffer_{};
+	gsl::span<channel_type> audioBuffer_{};
 	LogString log_{};
 	std::shared_ptr<AudioFrameReader> audioFrameReader_{};
 	std::shared_ptr<AudioFrameProcessor> audioFrameProcessor_{};
@@ -12,7 +12,7 @@ class AudioLoaderStub : public AudioLoader {
 	int channels_{};
 	bool complete_{};
 public:
-	void setComplete() {
+	void setComplete() noexcept {
 		complete_ = true;
 	}
 
@@ -20,19 +20,19 @@ public:
 		return complete_;
 	}
 
-	const gsl::span<gsl::span<float>> audioBuffer() const {
+	auto audioBuffer() const noexcept {
 		return audioBuffer_;
 	}
 
-	void load(gsl::span<gsl::span<float>> audio) override {
+	void load(gsl::span<channel_type> audio) override {
 		audioBuffer_ = std::move(audio);
 	}
 
-	void setSampleRate(int r) {
+	void setSampleRate(int r) noexcept {
 		sampleRate_ = r;
 	}
 
-	void setChannels(int c) {
+	void setChannels(int c) noexcept {
 		channels_ = c;
 	}
 
@@ -40,15 +40,15 @@ public:
 		log_ += std::string{ "reset " };
 	}
 
-	LogString log() const {
+	auto log() const {
 		return log_;
 	}
 
-	auto audioFrameReader() const {
+	auto audioFrameReader() const noexcept {
 		return audioFrameReader_;
 	}
 
-	auto audioFrameProcessor() const {
+	auto audioFrameProcessor() const noexcept {
 		return audioFrameProcessor_;
 	}
 

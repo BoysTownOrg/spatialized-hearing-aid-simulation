@@ -15,7 +15,7 @@ public:
 		log_ += LogString{ "documentTrialParameters " };
 	}
 
-	TrialParameters documentedTrialParameters() {
+	auto documentedTrialParameters() {
 		return trialParameters_;
 	}
 
@@ -24,11 +24,11 @@ public:
 		log_ += LogString{ "documentTestParameters " };
 	}
 
-	const TestParameters &documentedTestParameters() {
+	auto documentedTestParameters() {
 		return testParameters_;
 	}
 
-	std::string filePath() const {
+	auto filePath() const {
 		return filePath_;
 	}
 
@@ -37,11 +37,11 @@ public:
 		log_ += LogString{ "initialize " };
 	}
 
-	std::string content() const {
+	auto content() const {
 		return content_.str();
 	}
 
-	LogString log() const {
+	auto log() const {
 		return log_;
 	}
 };
