@@ -2,7 +2,6 @@
 #include "AudioLoaderStub.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioPlayer.h>
-#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -16,6 +15,14 @@ namespace {
 			player.setAudioLoader(&loader);
 		}
 
+		auto prepareToPlay(AudioPlayer::Preparation r = {}) {
+			return player.prepareToPlay(std::move(r));
+		}
+
+		auto fillStreamBuffer(void *x = {}, int n = {}) {
+			return device.fillStreamBuffer(x, n);
+		}
+
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
 				prepareToPlay();
@@ -24,18 +31,6 @@ namespace {
 			catch (const AudioPlayer::PreparationFailure &e) {
 				assertEqual(std::move(errorMessage), e.what());
 			}
-		}
-
-		void prepareToPlay(AudioPlayer::Preparation r = {}) {
-			player.prepareToPlay(std::move(r));
-		}
-
-		void stop() {
-			player.stop();
-		}
-
-		void fillStreamBuffer(void *x = {}, int n = {}) {
-			device.fillStreamBuffer(x, n);
 		}
 	};
 
@@ -59,7 +54,7 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, stopStopsStream) {
-		stop();
+		player.stop();
 		assertEqual("stop ", device.streamLog());
 	}
 
@@ -69,7 +64,7 @@ namespace {
 		EXPECT_TRUE(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayOpensStream) {
+	TEST_F(AudioPlayerTests, prepareToPlayPassesStreamParametersToDevice) {
 		AudioPlayer::Preparation p;
 		p.framesPerBuffer = 2;
 		p.channels = 3;
@@ -97,9 +92,9 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
-		AudioPlayer::Preparation request;
-		request.channels = 2;
-		prepareToPlay(request);
+		AudioPlayer::Preparation p;
+		p.channels = 2;
+		prepareToPlay(p);
 		float left{};
 		float right{};
 		float *x[]{ &left, &right };
@@ -130,7 +125,7 @@ namespace {
 
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {
-				makePlayer();
+				auto player = makePlayer();
 				FAIL() << "Expected AudioPlayer::DeviceFailure";
 			}
 			catch (const AudioPlayer::DeviceFailure &e) {
@@ -144,7 +139,7 @@ namespace {
 			return player;
 		}
 
-		void assertPrepareToPlayThrowsRequestFailure(std::string what) {
+		void assertPrepareToPlayThrowsPreparationFailure(std::string what) {
 			auto player = makePlayer();
 			try {
 				player.prepareToPlay({});
@@ -169,11 +164,11 @@ namespace {
 
 	TEST_F(
 		AudioPlayerFailureTests,
-		prepareToPlayThrowsDeviceFailureWhenDeviceFailsToOpenStream
+		prepareToPlayThrowsPreparationFailureWhenDeviceFailsToOpenStream
 	) {
 		FailsToOpenStream failingDevice{};
 		failingDevice.setErrorMessage("error.");
 		device = &failingDevice;
-		assertPrepareToPlayThrowsRequestFailure("error.");
+		assertPrepareToPlayThrowsPreparationFailure("error.");
 	}
 }
