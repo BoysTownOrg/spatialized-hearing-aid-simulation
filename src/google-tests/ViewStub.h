@@ -70,7 +70,7 @@ public:
 		calibrationHidden_ = true;
 	}
 
-	bool calibrationHidden() const {
+	auto calibrationHidden() const noexcept {
 		return calibrationHidden_;
 	}
 
@@ -94,7 +94,7 @@ public:
 		calibrationShown_ = true;
 	}
 
-	bool calibrationShown() const {
+	auto calibrationShown() const noexcept {
 		return calibrationShown_;
 	}
 
@@ -174,15 +174,15 @@ public:
 		return usingHearingAidSimulation_;
 	}
 	
-	void setHearingAidSimulationOn() {
+	void setHearingAidSimulationOn() noexcept {
 		usingHearingAidSimulation_ = true;
 	}
 
-	void setHearingAidSimulationOff() {
+	void setHearingAidSimulationOff() noexcept {
 		usingHearingAidSimulation_ = false;
 	}
 
-	void clearActivationState() {
+	void clearActivationState() noexcept {
 		browseForBrirButtonActivated_ = false;
 		brirFilePathActivated_ = false;
 		browseForBrirButtonDeactivated_ = false;
@@ -217,15 +217,15 @@ public:
 		brirFilePathActivated_ = true;
 	}
 
-	bool browseForBrirButtonActivated() const {
+	auto browseForBrirButtonActivated() const noexcept {
 		return browseForBrirButtonActivated_;
 	}
 
-	bool brirFilePathActivated() const {
+	auto brirFilePathActivated() const noexcept {
 		return brirFilePathActivated_;
 	}
 
-	void setSpatializationOn() {
+	void setSpatializationOn() noexcept {
 		usingSpatialization_ = true;
 	}
 
@@ -237,11 +237,11 @@ public:
 		brirFilePathDeactivated_ = true;
 	}
 
-	bool browseForBrirButtonDeactivated() const {
+	auto browseForBrirButtonDeactivated() const noexcept {
 		return browseForBrirButtonDeactivated_;
 	}
 
-	bool brirFilePathDeactivated() const {
+	auto brirFilePathDeactivated() const noexcept {
 		return brirFilePathDeactivated_;
 	}
 
@@ -249,7 +249,7 @@ public:
 		listener_->toggleUsingSpatialization();
 	}
 
-	void setSpatializationOff() {
+	void setSpatializationOff() noexcept {
 		usingSpatialization_ = false;
 	}
 
@@ -273,7 +273,7 @@ public:
 		listener_ = listener;
 	}
 
-	EventListener *listener() const {
+	auto listener() const noexcept {
 		return listener_;
 	}
 
@@ -281,7 +281,7 @@ public:
 		runningEventLoop_ = true;
 	}
 
-	bool runningEventLoop() const {
+	auto runningEventLoop() const noexcept {
 		return runningEventLoop_;
 	}
 
@@ -300,7 +300,7 @@ public:
 		return browseCancelled_;
 	}
 
-	void setBrowseCancelled() {
+	void setBrowseCancelled() noexcept {
 		browseCancelled_ = true;
 	}
 
@@ -363,7 +363,7 @@ public:
 		return brirFilePath_;
 	}
 
-	std::vector<std::string> browseFilters() const {
+	auto browseFilters() const {
 		return browseFilters_;
 	}
 
@@ -407,7 +407,7 @@ public:
 		return chunkSize_;
 	}
 
-	std::string errorMessage() const {
+	auto errorMessage() const {
 		return errorMessage_;
 	}
 
@@ -415,7 +415,7 @@ public:
 		errorMessage_ = std::move(message);
 	}
 
-	std::vector<std::string> audioDeviceMenuItems() const {
+	auto audioDeviceMenuItems() const {
 		return audioDeviceMenuItems_;
 	}
 
@@ -447,7 +447,7 @@ public:
 		audioDirectory_ = std::move(d);
 	}
 
-	bool testSetupShown() const {
+	auto testSetupShown() const noexcept {
 		return testSetupShown_;
 	}
 
@@ -459,7 +459,7 @@ public:
 		listener_->confirmTestSetup();
 	}
 
-	bool testSetupHidden() const {
+	auto testSetupHidden() const noexcept {
 		return testSetupHidden_;
 	}
 
@@ -467,7 +467,7 @@ public:
 		testSetupHidden_ = true;
 	}
 
-	bool testerViewShown() const {
+	auto testerViewShown() const noexcept {
 		return testerViewShown_;
 	}
 
@@ -479,15 +479,15 @@ public:
 		listener_->playTrial();
 	}
 
-	bool testerViewHidden() const {
+	auto testerViewHidden() const noexcept {
 		return testerViewHidden_;
 	}
 
-	std::vector<std::string> chunkSizeItems() const {
+	auto chunkSizeItems() const {
 		return chunkSizeItems_;
 	}
 
-	std::vector<std::string> windowSizeItems() const {
+	auto windowSizeItems() const {
 		return windowSizeItems_;
 	}
 
