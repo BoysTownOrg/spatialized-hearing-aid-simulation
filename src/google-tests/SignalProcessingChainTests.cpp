@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "SignalProcessorStub.h"
-#include <signal-processing/SignalProcessingChain.h>
+#include <spatialized-hearing-aid-simulation/SignalProcessingChain.h>
 #include <gtest/gtest.h>
 
 namespace {
