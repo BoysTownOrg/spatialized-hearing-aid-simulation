@@ -2,7 +2,6 @@
 #include "FakeStimulusList.h"
 #include "DocumenterStub.h"
 #include <recognition-test/RecognitionTest.h>
-#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
