@@ -51,7 +51,7 @@ namespace {
 		reader->setContents({ 1, 2, 3, 4 });
 		const auto brir = read();
 		assertEqual({ 1, 2, 3, 4 }, brir.left);
-		EXPECT_TRUE(brir.right.empty());
+		assertTrue(brir.right.empty());
 	}
 
 	TEST_F(BrirAdapterTests, threeOrMoreChannelsIgnoresBeyondTheFirstTwo) {

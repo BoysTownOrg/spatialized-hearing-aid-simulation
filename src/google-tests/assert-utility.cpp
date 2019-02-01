@@ -5,6 +5,16 @@ void assertEqual(std::string expected, std::string actual) {
 	EXPECT_EQ(expected, actual);
 }
 
+void assertTrue(bool condition)
+{
+	EXPECT_TRUE(condition);
+}
+
+void assertFalse(bool condition)
+{
+	EXPECT_FALSE(condition);
+}
+
 template<typename T>
 void assertEqual(
 	std::vector<T> expected,

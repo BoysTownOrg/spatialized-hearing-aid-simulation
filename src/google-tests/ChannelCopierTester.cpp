@@ -14,9 +14,9 @@ namespace {
 	};
 
 	TEST_F(ChannelCopierTests, completeWhenDecoratedReaderIsComplete) {
-		EXPECT_FALSE(copier.complete());
+		assertFalse(copier.complete());
 		decorated->setComplete();
-		EXPECT_TRUE(copier.complete());
+		assertTrue(copier.complete());
 	}
 
 	TEST_F(ChannelCopierTests, returnsDecoratedReaderParameters) {
@@ -37,7 +37,7 @@ namespace {
 
 	TEST_F(ChannelCopierTests, resetsDecoratedReaderWhenReset) {
 		copier.reset();
-		EXPECT_TRUE(decorated->readingLog().contains("reset "));
+		assertTrue(decorated->readingLog().contains("reset "));
 	}
 
 	class ChannelCopierFacade {

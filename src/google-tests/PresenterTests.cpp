@@ -43,22 +43,22 @@ namespace {
 
 		void confirmTestSetupDoesNotHideSetupView() {
 			view.confirmTestSetup();
-			EXPECT_FALSE(view.testSetupHidden());
+			assertFalse(view.testSetupHidden());
 		}
 
 		void confirmTestSetupHidesSetupView() {
 			view.confirmTestSetup();
-			EXPECT_TRUE(view.testSetupHidden());
+			assertTrue(view.testSetupHidden());
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
 			view.confirmTestSetup();
-			EXPECT_FALSE(view.testerViewShown());
+			assertFalse(view.testerViewShown());
 		}
 
 		void confirmTestSetupShowsTesterView() {
 			view.confirmTestSetup();
-			EXPECT_TRUE(view.testerViewShown());
+			assertTrue(view.testerViewShown());
 		}
 
 		void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
@@ -102,13 +102,13 @@ namespace {
 		}
 
 		void assertSpatializationUIHasBeenDeactivated() {
-			EXPECT_TRUE(view.brirFilePathDeactivated());
-			EXPECT_TRUE(view.browseForBrirButtonDeactivated());
+			assertTrue(view.brirFilePathDeactivated());
+			assertTrue(view.browseForBrirButtonDeactivated());
 		}
 
 		void assertSpatializationUIHasNotBeenActivated() {
-			EXPECT_FALSE(view.brirFilePathActivated());
-			EXPECT_FALSE(view.browseForBrirButtonActivated());
+			assertFalse(view.brirFilePathActivated());
+			assertFalse(view.browseForBrirButtonActivated());
 		}
 
 		void assertSpatializationUIHasOnlyBeenActivated() {
@@ -117,13 +117,13 @@ namespace {
 		}
 
 		void assertSpatializationUIHasBeenActivated() {
-			EXPECT_TRUE(view.brirFilePathActivated());
-			EXPECT_TRUE(view.browseForBrirButtonActivated());
+			assertTrue(view.brirFilePathActivated());
+			assertTrue(view.browseForBrirButtonActivated());
 		}
 
 		void assertSpatializationUIHasNotBeenDeactivated() {
-			EXPECT_FALSE(view.brirFilePathDeactivated());
-			EXPECT_FALSE(view.browseForBrirButtonDeactivated());
+			assertFalse(view.brirFilePathDeactivated());
+			assertFalse(view.browseForBrirButtonDeactivated());
 		}
 
 		void assertHearingAidUIHasOnlyBeenActivated() {
@@ -132,25 +132,25 @@ namespace {
 		}
 
 		void assertHearingAidUIHasBeenActivated() {
-			EXPECT_TRUE(view.leftDslPrescriptionFilePathActivated_);
-			EXPECT_TRUE(view.rightDslPrescriptionFilePathActivated_);
-			EXPECT_TRUE(view.browseForLeftDslPrescriptionButtonActivated_);
-			EXPECT_TRUE(view.browseForRightDslPrescriptionButtonActivated_);
-			EXPECT_TRUE(view.chunkSizeActivated_);
-			EXPECT_TRUE(view.windowSizeActivated_);
-			EXPECT_TRUE(view.attack_msActivated_);
-			EXPECT_TRUE(view.release_msActivated_);
+			assertTrue(view.leftDslPrescriptionFilePathActivated_);
+			assertTrue(view.rightDslPrescriptionFilePathActivated_);
+			assertTrue(view.browseForLeftDslPrescriptionButtonActivated_);
+			assertTrue(view.browseForRightDslPrescriptionButtonActivated_);
+			assertTrue(view.chunkSizeActivated_);
+			assertTrue(view.windowSizeActivated_);
+			assertTrue(view.attack_msActivated_);
+			assertTrue(view.release_msActivated_);
 		}
 
 		void assertHearingAidUIHasNotBeenDeactivated() {
-			EXPECT_FALSE(view.leftDslPrescriptionFilePathDeactivated_);
-			EXPECT_FALSE(view.rightDslPrescriptionFilePathDeactivated_);
-			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonDeactivated_);
-			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonDeactivated_);
-			EXPECT_FALSE(view.chunkSizeDeactivated_);
-			EXPECT_FALSE(view.windowSizeDeactivated_);
-			EXPECT_FALSE(view.attack_msDeactivated_);
-			EXPECT_FALSE(view.release_msDeactivated_);
+			assertFalse(view.leftDslPrescriptionFilePathDeactivated_);
+			assertFalse(view.rightDslPrescriptionFilePathDeactivated_);
+			assertFalse(view.browseForLeftDslPrescriptionButtonDeactivated_);
+			assertFalse(view.browseForRightDslPrescriptionButtonDeactivated_);
+			assertFalse(view.chunkSizeDeactivated_);
+			assertFalse(view.windowSizeDeactivated_);
+			assertFalse(view.attack_msDeactivated_);
+			assertFalse(view.release_msDeactivated_);
 		}
 
 		void assertHearingAidUIHasOnlyBeenDeactivated() {
@@ -159,25 +159,25 @@ namespace {
 		}
 
 		void assertHearingAidUIHasNotBeenActivated() {
-			EXPECT_FALSE(view.leftDslPrescriptionFilePathActivated_);
-			EXPECT_FALSE(view.rightDslPrescriptionFilePathActivated_);
-			EXPECT_FALSE(view.browseForLeftDslPrescriptionButtonActivated_);
-			EXPECT_FALSE(view.browseForRightDslPrescriptionButtonActivated_);
-			EXPECT_FALSE(view.chunkSizeActivated_);
-			EXPECT_FALSE(view.windowSizeActivated_);
-			EXPECT_FALSE(view.attack_msActivated_);
-			EXPECT_FALSE(view.release_msActivated_);
+			assertFalse(view.leftDslPrescriptionFilePathActivated_);
+			assertFalse(view.rightDslPrescriptionFilePathActivated_);
+			assertFalse(view.browseForLeftDslPrescriptionButtonActivated_);
+			assertFalse(view.browseForRightDslPrescriptionButtonActivated_);
+			assertFalse(view.chunkSizeActivated_);
+			assertFalse(view.windowSizeActivated_);
+			assertFalse(view.attack_msActivated_);
+			assertFalse(view.release_msActivated_);
 		}
 
 		void assertHearingAidUIHasBeenDeactivated() {
-			EXPECT_TRUE(view.leftDslPrescriptionFilePathDeactivated_);
-			EXPECT_TRUE(view.rightDslPrescriptionFilePathDeactivated_);
-			EXPECT_TRUE(view.browseForLeftDslPrescriptionButtonDeactivated_);
-			EXPECT_TRUE(view.browseForRightDslPrescriptionButtonDeactivated_);
-			EXPECT_TRUE(view.chunkSizeDeactivated_);
-			EXPECT_TRUE(view.windowSizeDeactivated_);
-			EXPECT_TRUE(view.attack_msDeactivated_);
-			EXPECT_TRUE(view.release_msDeactivated_);
+			assertTrue(view.leftDslPrescriptionFilePathDeactivated_);
+			assertTrue(view.rightDslPrescriptionFilePathDeactivated_);
+			assertTrue(view.browseForLeftDslPrescriptionButtonDeactivated_);
+			assertTrue(view.browseForRightDslPrescriptionButtonDeactivated_);
+			assertTrue(view.chunkSizeDeactivated_);
+			assertTrue(view.windowSizeDeactivated_);
+			assertTrue(view.attack_msDeactivated_);
+			assertTrue(view.release_msDeactivated_);
 		}
 	};
 
@@ -187,11 +187,11 @@ namespace {
 
 	TEST_F(PresenterTests, runRunsEventLoop) {
 		presenter.run();
-		EXPECT_TRUE(view.runningEventLoop());
+		assertTrue(view.runningEventLoop());
 	}
 
 	TEST_F(PresenterTests, constructorShowsTestSetupView) {
-		EXPECT_TRUE(view.testSetupShown());
+		assertTrue(view.testSetupShown());
 	}
 
 	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {
@@ -230,7 +230,7 @@ namespace {
 
 	TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
 		view.confirmTestSetup();
-		EXPECT_TRUE(view.testerViewShown());
+		assertTrue(view.testerViewShown());
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {
@@ -415,7 +415,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.testParameters().usingSpatialization);
+		assertTrue(model.testParameters().usingSpatialization);
 	}
 
 	TEST_F(
@@ -424,7 +424,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.testParameters().usingSpatialization);
+		assertFalse(model.testParameters().usingSpatialization);
 	}
 
 	TEST_F(
@@ -433,7 +433,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.confirmTestSetup();
-		EXPECT_TRUE(model.testParameters().usingHearingAidSimulation);
+		assertTrue(model.testParameters().usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -442,7 +442,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.confirmTestSetup();
-		EXPECT_FALSE(model.testParameters().usingHearingAidSimulation);
+		assertFalse(model.testParameters().usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -577,20 +577,20 @@ namespace {
 
 	TEST_F(PresenterTests, playingTrialPlaysTrial) {
 		view.playTrial();
-		EXPECT_TRUE(model.trialPlayed());
+		assertTrue(model.trialPlayed());
 	}
 
 	TEST_F(PresenterTests, playingTrialDoesNotHideTesterViewWhileTestInProgress) {
 		model.setTestIncomplete();
 		view.playTrial();
-		EXPECT_FALSE(view.testerViewHidden());
+		assertFalse(view.testerViewHidden());
 	}
 
 	TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
 		model.setTestComplete();
 		view.playTrial();
-		EXPECT_TRUE(view.testerViewHidden());
-		EXPECT_TRUE(view.testSetupShown());
+		assertTrue(view.testerViewHidden());
+		assertTrue(view.testSetupShown());
 	}
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
@@ -603,7 +603,7 @@ namespace {
 
 	TEST_F(PresenterTests, calibrateShowsCalibrationView) {
 		view.calibrate();
-		EXPECT_TRUE(view.calibrationShown());
+		assertTrue(view.calibrationShown());
 	}
 
 	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
@@ -624,7 +624,7 @@ namespace {
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
-		EXPECT_TRUE(model.calibrationStopped());
+		assertTrue(model.calibrationStopped());
 	}
 
 	class PresenterWithInitializationFailingModel : public ::testing::Test {
@@ -642,12 +642,12 @@ namespace {
 
 	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotShowTesterView) {
 		view.confirmTestSetup();
-		EXPECT_FALSE(view.testerViewShown());
+		assertFalse(view.testerViewShown());
 	}
 
 	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetupView) {
 		view.confirmTestSetup();
-		EXPECT_FALSE(view.testSetupHidden());
+		assertFalse(view.testSetupHidden());
 	}
 
 	class PresenterWithTrialFailingModel : public ::testing::Test {

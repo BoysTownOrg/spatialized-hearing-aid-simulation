@@ -80,27 +80,27 @@ namespace {
 		reader.setContents({ 2, 3 });
 		AudioFileInMemoryFacade facade{ reader };
 		facade.readMonoFrames(1);
-		EXPECT_FALSE(facade.complete());
+		assertFalse(facade.complete());
 		facade.readMonoFrames(1);
-		EXPECT_TRUE(facade.complete());
+		assertTrue(facade.complete());
 	}
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingMoreThanOneSampleAtATime) {
 		reader.setContents({ 3, 4, 5, 6 });
 		AudioFileInMemoryFacade facade{ reader };
 		facade.readMonoFrames(2);
-		EXPECT_FALSE(facade.complete());
+		assertFalse(facade.complete());
 		facade.readMonoFrames(2);
-		EXPECT_TRUE(facade.complete());
+		assertTrue(facade.complete());
 	}
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingBeyondContents) {
 		reader.setContents({ 2, 3, 4, 5 });
 		AudioFileInMemoryFacade facade{ reader };
 		facade.readMonoFrames(3);
-		EXPECT_FALSE(facade.complete());
+		assertFalse(facade.complete());
 		facade.readMonoFrames(3);
-		EXPECT_TRUE(facade.complete());
+		assertTrue(facade.complete());
 	}
 
 	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReads) {

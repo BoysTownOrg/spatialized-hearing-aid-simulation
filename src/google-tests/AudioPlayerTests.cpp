@@ -61,7 +61,7 @@ namespace {
 	TEST_F(AudioPlayerTests, prepareToPlayWhileStreamingDoesNotAlterStream) {
 		device.setStreaming();
 		prepareToPlay();
-		EXPECT_TRUE(device.streamLog().empty());
+		assertTrue(device.streamLog().empty());
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayPassesStreamParametersToDevice) {
@@ -85,10 +85,10 @@ namespace {
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
 		fillStreamBuffer();
-		EXPECT_FALSE(device.complete());
+		assertFalse(device.complete());
 		loader.setComplete();
 		fillStreamBuffer();
-		EXPECT_TRUE(device.complete());
+		assertTrue(device.complete());
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
@@ -106,9 +106,9 @@ namespace {
 	}
 
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
-		EXPECT_FALSE(player.isPlaying());
+		assertFalse(player.isPlaying());
 		device.setStreaming();
-		EXPECT_TRUE(player.isPlaying());
+		assertTrue(player.isPlaying());
 	}
 
 	TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {

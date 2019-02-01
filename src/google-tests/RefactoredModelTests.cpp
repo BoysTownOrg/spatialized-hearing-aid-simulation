@@ -233,8 +233,8 @@ namespace {
 		testParameters.leftDslPrescriptionFilePath = "a";
 		testParameters.rightDslPrescriptionFilePath = "b";
 		prepareNewTest();
-		EXPECT_TRUE(prescriptionReader.filePaths().contains("a"));
-		EXPECT_TRUE(prescriptionReader.filePaths().contains("b"));
+		assertTrue(prescriptionReader.filePaths().contains("a"));
+		assertTrue(prescriptionReader.filePaths().contains("b"));
 	}
 
 	TEST_F(
@@ -243,7 +243,7 @@ namespace {
 	) {
 		testParameters.usingHearingAidSimulation = false;
 		prepareNewTest();
-		EXPECT_FALSE(prescriptionReader.readCalled());
+		assertFalse(prescriptionReader.readCalled());
 	}
 
 	TEST_F(
@@ -259,7 +259,7 @@ namespace {
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
 		testParameters.usingSpatialization = false;
 		prepareNewTest();
-		EXPECT_FALSE(brirReader.readCalled());
+		assertFalse(brirReader.readCalled());
 	}
 
 	TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
@@ -276,7 +276,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playTrial();
-		EXPECT_TRUE(audioPlayer.played());
+		assertTrue(audioPlayer.played());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
@@ -316,7 +316,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
 		playTrial();
-		EXPECT_TRUE(audioFrameReader->readingLog().endsWith("reset "));
+		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
@@ -413,11 +413,11 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_TRUE(left.usingHearingAidSimulation);
-		EXPECT_TRUE(left.usingSpatialization);
+		assertTrue(left.usingHearingAidSimulation);
+		assertTrue(left.usingSpatialization);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_TRUE(right.usingHearingAidSimulation);
-		EXPECT_TRUE(right.usingSpatialization);
+		assertTrue(right.usingHearingAidSimulation);
+		assertTrue(right.usingSpatialization);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory2) {
@@ -426,11 +426,11 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_TRUE(left.usingHearingAidSimulation);
-		EXPECT_FALSE(left.usingSpatialization);
+		assertTrue(left.usingHearingAidSimulation);
+		assertFalse(left.usingSpatialization);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_TRUE(right.usingHearingAidSimulation);
-		EXPECT_FALSE(right.usingSpatialization);
+		assertTrue(right.usingHearingAidSimulation);
+		assertFalse(right.usingSpatialization);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory3) {
@@ -439,11 +439,11 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_FALSE(left.usingHearingAidSimulation);
-		EXPECT_TRUE(left.usingSpatialization);
+		assertFalse(left.usingHearingAidSimulation);
+		assertTrue(left.usingSpatialization);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_FALSE(right.usingHearingAidSimulation);
-		EXPECT_TRUE(right.usingSpatialization);
+		assertFalse(right.usingHearingAidSimulation);
+		assertTrue(right.usingSpatialization);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory4) {
@@ -452,11 +452,11 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_FALSE(left.usingHearingAidSimulation);
-		EXPECT_FALSE(left.usingSpatialization);
+		assertFalse(left.usingHearingAidSimulation);
+		assertFalse(left.usingSpatialization);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_FALSE(right.usingHearingAidSimulation);
-		EXPECT_FALSE(right.usingSpatialization);
+		assertFalse(right.usingHearingAidSimulation);
+		assertFalse(right.usingSpatialization);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
@@ -499,14 +499,14 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
-		audioPlayer.callOnPlay([&]() { EXPECT_TRUE(audioLoader.log().contains("reset")); });
+		audioPlayer.callOnPlay([&]() { assertTrue(audioLoader.log().contains("reset")); });
 		playTrial();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
 		playTrial();
-		EXPECT_TRUE(audioLoader.log().isEmpty());
+		assertTrue(audioLoader.log().isEmpty());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
@@ -516,7 +516,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
 		perceptionTest.setComplete();
-		EXPECT_TRUE(model.testComplete());
+		assertTrue(model.testComplete());
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {
@@ -609,7 +609,7 @@ namespace {
 		}
 		catch (const RefactoredModel::TestInitializationFailure &) {
 		}
-		EXPECT_FALSE(defaultTest.prepareNewTestCalled());
+		assertFalse(defaultTest.prepareNewTestCalled());
 	}
 
 	TEST_F(
@@ -647,7 +647,7 @@ namespace {
 		}
 		catch (const RefactoredModel::TestInitializationFailure &) {
 		}
-		EXPECT_FALSE(defaultTest.prepareNewTestCalled());
+		assertFalse(defaultTest.prepareNewTestCalled());
 	}
 
 	TEST_F(
@@ -669,7 +669,7 @@ namespace {
 		}
 		catch (const RefactoredModel::TrialFailure &) {
 		}
-		EXPECT_FALSE(defaultTest.advanceTrialCalled());
+		assertFalse(defaultTest.advanceTrialCalled());
 	}
 
 	TEST_F(

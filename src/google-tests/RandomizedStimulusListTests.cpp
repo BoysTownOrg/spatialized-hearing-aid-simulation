@@ -55,13 +55,13 @@ namespace {
 	) {
 		reader.setFileNames({ "a", "b", "c" });
 		list.initialize({});
-		EXPECT_FALSE(list.empty());
+		assertFalse(list.empty());
 		list.next();
-		EXPECT_FALSE(list.empty());
+		assertFalse(list.empty());
 		list.next();
-		EXPECT_FALSE(list.empty());
+		assertFalse(list.empty());
 		list.next();
-		EXPECT_TRUE(list.empty());
+		assertTrue(list.empty());
 	}
 
 	TEST_F(

@@ -15,3 +15,6 @@ void assertEqual(
 	std::vector<T> actual,
 	T tolerance
 );
+
+void assertTrue(bool condition);
+void assertFalse(bool condition);

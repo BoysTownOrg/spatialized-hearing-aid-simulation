@@ -53,7 +53,7 @@ namespace {
 	};
 
 	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrow) {
-		EXPECT_TRUE(loader.complete());
+		assertTrue(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfInput_Mono) {
@@ -75,11 +75,11 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		processor->setGroupDelay(3);
 		loadMonoFrames(1);
-		EXPECT_FALSE(loader.complete());
+		assertFalse(loader.complete());
 		loadMonoFrames(1);
-		EXPECT_FALSE(loader.complete());
+		assertFalse(loader.complete());
 		loadMonoFrames(1);
-		EXPECT_TRUE(loader.complete());
+		assertTrue(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
@@ -88,22 +88,22 @@ namespace {
 		setInMemoryReader(fakeReader);
 		processor->setGroupDelay(2);
 		loadMonoFrames(10 + 1);
-		EXPECT_FALSE(loader.complete());
+		assertFalse(loader.complete());
 		loadMonoFrames(1);
-		EXPECT_TRUE(loader.complete());
+		assertTrue(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
 		reader->setRemainingFrames(1);
-		EXPECT_FALSE(loader.complete());
+		assertFalse(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, resetResetsZeroPadCount) {
 		processor->setGroupDelay(1);
 		loadMonoFrames(1);
-		EXPECT_TRUE(loader.complete());
+		assertTrue(loader.complete());
 		reset();
-		EXPECT_FALSE(loader.complete());
+		assertFalse(loader.complete());
 	}
 
 	class TimesTwo : public AudioFrameProcessor {

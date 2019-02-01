@@ -56,7 +56,7 @@ namespace {
 		prepareNewTestDocumentsTestParametersAfterInitializing
 	) {
 		prepareNewTest();
-		EXPECT_TRUE(documenter.log().beginsWith("initialize"));
+		assertTrue(documenter.log().beginsWith("initialize"));
 	}
 
 	TEST_F(
@@ -87,7 +87,7 @@ namespace {
 		testCompleteWhenListEmpty
 	) {
 		list.setContents({});
-		EXPECT_TRUE(model.testComplete());
+		assertTrue(model.testComplete());
 	}
 
 	class RecognitionTestModelWithInitializationFailingDocumenter : public ::testing::Test {
