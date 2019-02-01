@@ -11,28 +11,34 @@ namespace {
 		DirectoryReaderStub reader{};
 		RandomizerStub randomizer{};
 		RandomizedStimulusList list{ &reader, &randomizer };
+
+		auto initialize(std::string d = {}) {
+			return list.initialize(std::move(d));
+		}
+
+		auto next() {
+			return list.next();
+		}
 	};
 
 	TEST_F(
 		RandomizedStimulusListTests,
 		initializePassesDirectoryToDirectoryReader
 	) {
-		list.initialize("a");
+		initialize("a");
 		assertEqual("a", reader.directory());
 	}
 
 	TEST_F(
 		RandomizedStimulusListTests,
-		emptyWhenEmpty
+		emptyWhenExhausted
 	) {
-		reader.setFileNames({ "a", "b", "c" });
-		list.initialize({});
+		reader.setFileNames({ "a", "b" });
+		initialize();
 		assertFalse(list.empty());
-		list.next();
+		next();
 		assertFalse(list.empty());
-		list.next();
-		assertFalse(list.empty());
-		list.next();
+		next();
 		assertTrue(list.empty());
 	}
 
@@ -41,24 +47,20 @@ namespace {
 		nextReturnsFullPathToFileAtFront
 	) {
 		reader.setFileNames({ "a", "b", "c" });
-		list.initialize({ "C:" });
-		assertEqual("C:/a", list.next());
-		assertEqual("C:/b", list.next());
-		assertEqual("C:/c", list.next());
+		initialize({ "C:" });
+		assertEqual("C:/a", next());
+		assertEqual("C:/b", next());
+		assertEqual("C:/c", next());
 	}
 
 	TEST_F(
 		RandomizedStimulusListTests,
 		nextReturnsFullPathToLastFileWhenExhausted
 	) {
-		reader.setFileNames({ "a", "b", "c" });
-		list.initialize({ "C:" });
-		list.next();
-		list.next();
-		list.next();
-		assertEqual("C:/c", list.next());
-		assertEqual("C:/c", list.next());
-		assertEqual("C:/c", list.next());
+		reader.setFileNames({ "a" });
+		initialize({ "C:" });
+		assertEqual("C:/a", next());
+		assertEqual("C:/a", next());
 	}
 
 	TEST_F(
@@ -66,20 +68,27 @@ namespace {
 		initializeShufflesFileNames
 	) {
 		reader.setFileNames({ "a", "b", "c" });
-		list.initialize({});
+		initialize();
 		assertEqual({ "a", "b", "c" }, randomizer.toShuffle());
 	}
 
-	TEST(FileFilterDecoratorTests, passesDirectoryToDecorated) {
-		DirectoryReaderStub reader;
-		FileFilterDecorator decorator{ &reader, {} };
+	class FileFilterDecoratorTests : public ::testing::Test {
+	protected:
+		DirectoryReaderStub reader{};
+
+		FileFilterDecorator makeDecorator(std::string f = {}) {
+			return FileFilterDecorator{ &reader, f };
+		}
+	};
+
+	TEST_F(FileFilterDecoratorTests, passesDirectoryToDecorated) {
+		auto decorator = makeDecorator();
 		decorator.filesIn({ "a" });
 		assertEqual("a", reader.directory());
 	}
 
-	TEST(FileFilterDecoratorTests, returnsFilteredFiles) {
-		DirectoryReaderStub reader;
-		FileFilterDecorator decorator{ &reader, ".c" };
+	TEST_F(FileFilterDecoratorTests, returnsFilteredFiles) {
+		auto decorator = makeDecorator(".c");
 		reader.setFileNames({ "a", "b.c", "d.e", "f.c", "g.h" });
 		assertEqual({ "b.c", "f.c" }, decorator.filesIn({}));
 	}
