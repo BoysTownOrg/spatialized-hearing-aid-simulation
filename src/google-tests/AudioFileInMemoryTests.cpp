@@ -103,53 +103,73 @@ namespace {
 		EXPECT_TRUE(facade.complete());
 	}
 
-	TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
+	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReads) {
 		reader.setContents({ 1, 2, 3 });
-		AudioFileInMemoryFacade adapter{ reader };
-		EXPECT_EQ(3, adapter.remainingFrames());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(2, adapter.remainingFrames());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(1, adapter.remainingFrames());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(0, adapter.remainingFrames());
+		AudioFileInMemoryFacade facade{ reader };
+		EXPECT_EQ(3, facade.remainingFrames());
+		facade.readMonoFrames(1);
+		EXPECT_EQ(2, facade.remainingFrames());
+		facade.readMonoFrames(1);
+		EXPECT_EQ(1, facade.remainingFrames());
+		facade.readMonoFrames(1);
+		EXPECT_EQ(0, facade.remainingFrames());
 	}
 
-	TEST_F(AudioFileInMemoryTests, returnsFramesRemainingStereo) {
-		reader.setContents({ 1, 2, 3, 4, 5, 6 });
+	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReads_Stereo) {
 		reader.setChannels(2);
-		AudioFileInMemoryFacade adapter{ reader };
-		EXPECT_EQ(3, adapter.remainingFrames());
-		adapter.readStereoFrames(1);
-		EXPECT_EQ(2, adapter.remainingFrames());
-		adapter.readStereoFrames(1);
-		EXPECT_EQ(1, adapter.remainingFrames());
-		adapter.readStereoFrames(1);
-		EXPECT_EQ(0, adapter.remainingFrames());
+		reader.setContents({ 1, 2, 3, 4, 5, 6 });
+		AudioFileInMemoryFacade facade{ reader };
+		EXPECT_EQ(3, facade.remainingFrames());
+		facade.readStereoFrames(1);
+		EXPECT_EQ(2, facade.remainingFrames());
+		facade.readStereoFrames(1);
+		EXPECT_EQ(1, facade.remainingFrames());
+		facade.readStereoFrames(1);
+		EXPECT_EQ(0, facade.remainingFrames());
 	}
 
 	TEST_F(AudioFileInMemoryTests, returnsFileParameters) {
-		reader.setContents({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
-		reader.setChannels(3);
 		reader.setSampleRate(2);
-		AudioFileInMemory adapter{ reader };
-		EXPECT_EQ(12/3, adapter.frames());
-		EXPECT_EQ(3, adapter.channels());
-		EXPECT_EQ(2, adapter.sampleRate());
+		reader.setChannels(3);
+		reader.setContents({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
+		AudioFileInMemory inMemory{ reader };
+		EXPECT_EQ(12/3, inMemory.frames());
+		EXPECT_EQ(3, inMemory.channels());
+		EXPECT_EQ(2, inMemory.sampleRate());
 	}
 
-	TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset) {
-		reader.setContents({ 3, 4 });
-		AudioFileInMemoryFacade adapter{ reader };
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(3, adapter.left.front());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(4, adapter.left.front());
-		adapter.reset();
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(3, adapter.left.front());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(4, adapter.left.front());
+	TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset_Mono) {
+		reader.setChannels(1);
+		reader.setContents({ 2, 3 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(1);
+		assertEqual({ 2 }, facade.left);
+		facade.readMonoFrames(1);
+		assertEqual({ 3 }, facade.left);
+		facade.reset();
+		facade.readMonoFrames(1);
+		assertEqual({ 2 }, facade.left);
+		facade.readMonoFrames(1);
+		assertEqual({ 3 }, facade.left);
+	}
+
+	TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset_Stereo) {
+		reader.setChannels(2);
+		reader.setContents({ 3, 4, 5, 6 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readStereoFrames(1);
+		assertEqual({ 3 }, facade.left);
+		assertEqual({ 4 }, facade.right);
+		facade.readStereoFrames(1);
+		assertEqual({ 5 }, facade.left);
+		assertEqual({ 6 }, facade.right);
+		facade.reset();
+		facade.readStereoFrames(1);
+		assertEqual({ 3 }, facade.left);
+		assertEqual({ 4 }, facade.right);
+		facade.readStereoFrames(1);
+		assertEqual({ 5 }, facade.left);
+		assertEqual({ 6 }, facade.right);
 	}
 
 	class AudioFileInMemoryFactoryTests : public ::testing::Test {
