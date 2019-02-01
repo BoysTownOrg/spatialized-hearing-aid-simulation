@@ -2,7 +2,7 @@
 #include "AudioFrameReaderStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
-#include <audio-stream-processing/ChannelCopier.h>
+#include <audio-file-reading/ChannelCopier.h>
 #include <gtest/gtest.h>
 
 namespace {

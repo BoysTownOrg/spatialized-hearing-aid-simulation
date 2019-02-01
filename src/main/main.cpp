@@ -6,7 +6,7 @@
 #include "WindowsDirectoryReader.h"
 #include "FileSystemWriter.h"
 #include "MersenneTwisterRandomizer.h"
-#include <audio-stream-processing/ChannelCopier.h>
+#include <audio-file-reading/ChannelCopier.h>
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <dsl-prescription/PrescriptionAdapter.h>
