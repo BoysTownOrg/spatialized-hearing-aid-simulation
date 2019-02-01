@@ -15,7 +15,7 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class RefactoredSpatializedHearingAidSimulationFactoryStub : 
+	class SpatializedHearingAidSimulationFactoryStub : 
 		public ISpatializedHearingAidSimulationFactory 
 	{
 		ArgumentCollection<SimulationParameters> parameters_{};
@@ -47,7 +47,7 @@ namespace {
 		AudioFrameReaderStubFactory audioFrameReaderFactory{ audioFrameReader };
 		AudioPlayerStub audioPlayer{};
 		AudioLoaderStub audioLoader{};
-		RefactoredSpatializedHearingAidSimulationFactoryStub simulationFactory{};
+		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		RefactoredModel model{
 			&perceptionTest,
 			&audioPlayer,
@@ -403,7 +403,7 @@ namespace {
 		IAudioPlayer *player{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
 		AudioLoader *loader{ &defaultLoader };
-		RefactoredSpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
+		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 
 		void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {

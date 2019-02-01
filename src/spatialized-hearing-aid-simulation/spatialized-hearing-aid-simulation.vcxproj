@@ -163,7 +163,7 @@
     <ClInclude Include="ISpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="PrescriptionReader.h" />
     <ClInclude Include="RefactoredModel.h" />
-    <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="SignalProcessingChain.h" />
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
@@ -172,7 +172,7 @@
   <ItemGroup>
     <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="RefactoredModel.cpp" />
-    <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactory.cpp" />
+    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
     <ClCompile Include="SignalProcessingChain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

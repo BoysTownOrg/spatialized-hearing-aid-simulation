@@ -24,14 +24,14 @@ public:
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 
-class RefactoredSpatializedHearingAidSimulationFactory :
+class SpatializedHearingAidSimulationFactory :
 	public ISpatializedHearingAidSimulationFactory
 {
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
 	HearingAidFactory *hearingAidFactory;
 public:
-	SPATIALIZED_HA_SIMULATION_API RefactoredSpatializedHearingAidSimulationFactory(
+	SPATIALIZED_HA_SIMULATION_API SpatializedHearingAidSimulationFactory(
 		ScalarFactory *scalarFactory,
 		FirFilterFactory *firFilterFactory,
 		HearingAidFactory *hearingAidFactory

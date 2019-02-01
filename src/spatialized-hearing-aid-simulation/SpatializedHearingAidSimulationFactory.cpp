@@ -1,7 +1,7 @@
 #include "SignalProcessingChain.h"
-#include "RefactoredSpatializedHearingAidSimulationFactory.h"
+#include "SpatializedHearingAidSimulationFactory.h"
 
-RefactoredSpatializedHearingAidSimulationFactory::RefactoredSpatializedHearingAidSimulationFactory(
+SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 	ScalarFactory *scalarFactory,
 	FirFilterFactory *firFilterFactory,
 	HearingAidFactory *hearingAidFactory
@@ -10,7 +10,7 @@ RefactoredSpatializedHearingAidSimulationFactory::RefactoredSpatializedHearingAi
 	firFilterFactory{ firFilterFactory },
 	hearingAidFactory{ hearingAidFactory } {}
 
-std::shared_ptr<SignalProcessor> RefactoredSpatializedHearingAidSimulationFactory::make(
+std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::make(
 	SimulationParameters p
 ) {
 	auto chain = std::make_shared<SignalProcessingChain>();
@@ -22,7 +22,7 @@ std::shared_ptr<SignalProcessor> RefactoredSpatializedHearingAidSimulationFactor
 	return chain;
 }
 
-FilterbankCompressor::Parameters RefactoredSpatializedHearingAidSimulationFactory::compression(
+FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::compression(
 	SimulationParameters p
 ) {
 	FilterbankCompressor::Parameters compression_;

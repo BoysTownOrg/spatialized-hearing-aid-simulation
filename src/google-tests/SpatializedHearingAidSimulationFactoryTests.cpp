@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "SignalProcessorStub.h"
-#include <spatialized-hearing-aid-simulation/RefactoredSpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -58,27 +58,27 @@ namespace {
 		}
 	};
 
-	class RefactoredSpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
+	class SpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 	protected:
-		RefactoredSpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
+		SpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
 		FirFilterFactoryStub firFilterFactory{};
 		HearingAidFactoryStub hearingAidFactory{};
-		RefactoredSpatializedHearingAidSimulationFactory simulationFactory{ 
+		SpatializedHearingAidSimulationFactory simulationFactory{ 
 			&scalarFactory, 
 			&firFilterFactory,
 			&hearingAidFactory 
 		};
 	};
 
-	TEST_F(RefactoredSpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
+	TEST_F(SpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
 		simulationParameters.scale = 1;
 		simulationFactory.make(simulationParameters);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makePassesPrescriptionToHearingAidFactory
 	) {
 		simulationParameters.usingHearingAidSimulation = true;
@@ -100,7 +100,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makePassesOtherCompressionParametersToHearingAidFactory
 	) {
 		simulationParameters.usingHearingAidSimulation = true;
@@ -120,7 +120,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makePassesCoefficientsToFirFilterFactory
 	) {
 		simulationParameters.usingSpatialization = true;
@@ -130,7 +130,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makeCombinesProcessorsInOrder
 	) {
 		simulationParameters.usingSpatialization = true;
@@ -145,7 +145,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makeCombinesProcessorsInOrderWithoutSpatialization
 	) {
 		simulationParameters.usingSpatialization = false;
@@ -160,7 +160,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredSpatializedHearingAidSimulationFactoryTests, 
+		SpatializedHearingAidSimulationFactoryTests, 
 		makeCombinesProcessorsInOrderWithoutHearingAidSimulation
 	) {
 		simulationParameters.usingSpatialization = true;

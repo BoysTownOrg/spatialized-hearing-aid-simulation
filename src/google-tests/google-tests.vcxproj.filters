@@ -63,10 +63,10 @@
     <ClCompile Include="RecognitionTestTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactoryTests.cpp">
+    <ClCompile Include="assert-utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assert-utility.cpp">
+    <ClCompile Include="SpatializedHearingAidSimulationFactoryTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

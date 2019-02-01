@@ -20,7 +20,7 @@
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
-#include <spatialized-hearing-aid-simulation/RefactoredSpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class HearingAidFactoryImpl : public HearingAidFactory {
@@ -67,7 +67,7 @@ int main() {
 	ChaproFactory compressorFactory{};
 	FirFilterFactoryImpl firFilterFactory{};
 	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
-	RefactoredSpatializedHearingAidSimulationFactory simulationFactory{
+	SpatializedHearingAidSimulationFactory simulationFactory{
 		&scalarFactory, 
 		&firFilterFactory, 
 		&hearingAidFactory
