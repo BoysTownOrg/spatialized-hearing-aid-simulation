@@ -39,7 +39,7 @@ class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
 public:
 	AUDIO_FILE_READING_API explicit AudioFileInMemoryFactory(
 		AudioFileReaderFactory *
-	);
+	) noexcept;
 	AUDIO_FILE_READING_API 
 		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;
 };

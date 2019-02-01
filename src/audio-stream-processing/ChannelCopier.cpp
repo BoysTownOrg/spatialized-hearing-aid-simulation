@@ -1,6 +1,6 @@
 #include "ChannelCopier.h"
 
-ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) :
+ChannelCopier::ChannelCopier(std::shared_ptr<AudioFrameReader> reader) noexcept :
 	reader{ std::move(reader) } {}
 
 void ChannelCopier::read(gsl::span<channel_type> audio) {
@@ -51,10 +51,8 @@ long long ChannelCopier::remainingFrames() {
 
 ChannelCopierFactory::ChannelCopierFactory(
 	AudioFrameReaderFactory* factory
-) :
-	factory{ factory }
-{
-}
+) noexcept :
+	factory{ factory } {}
 
 std::shared_ptr<AudioFrameReader> ChannelCopierFactory::make(std::string filePath) {
 	return std::make_shared<ChannelCopier>(factory->make(std::move(filePath)));
