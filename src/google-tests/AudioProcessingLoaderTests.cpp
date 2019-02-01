@@ -3,15 +3,14 @@
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
-#include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
-		using impulse_response_type = std::vector<float>;
-		impulse_response_type left{};
-		impulse_response_type right{};
+		using buffer_type = std::vector<AudioProcessingLoader::channel_type::element_type>;
+		buffer_type left{};
+		buffer_type right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
 			std::make_shared<AudioFrameReaderStub>();
 		std::shared_ptr<AudioFrameProcessorStub> processor =
@@ -35,16 +34,16 @@ namespace {
 			loader.reset();
 		}
 
-		void loadMonoFrames(impulse_response_type::size_type n) {
+		void loadMonoFrames(buffer_type::size_type n) {
 			left.resize(n);
-			std::vector<gsl::span<float>> mono{ left };
+			std::vector<AudioProcessingLoader::channel_type> mono{ left };
 			loader.load(mono);
 		}
 
-		void loadStereoFrames(impulse_response_type::size_type n) {
+		void loadStereoFrames(buffer_type::size_type n) {
 			left.resize(n);
 			right.resize(n);
-			std::vector<gsl::span<float>> stereo{ left, right };
+			std::vector<AudioProcessingLoader::channel_type> stereo{ left, right };
 			loader.load(stereo);
 		}
 
@@ -57,14 +56,14 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfReadInput) {
+	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfInput_Mono) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
 		loadMonoFrames(4);
 		assertEqual({ 1, 2, 3, 0 }, left);
 	}
 
-	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfStereoInput) {
+	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfInput_Stereo) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
@@ -83,13 +82,23 @@ namespace {
 		EXPECT_TRUE(loader.complete());
 	}
 
+	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
+		buffer_type tenSamples(10);
+		FakeAudioFileReader fakeReader{ tenSamples };
+		setInMemoryReader(fakeReader);
+		processor->setGroupDelay(2);
+		loadMonoFrames(10 + 1);
+		EXPECT_FALSE(loader.complete());
+		loadMonoFrames(1);
+		EXPECT_TRUE(loader.complete());
+	}
+
 	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
 		reader->setRemainingFrames(1);
 		EXPECT_FALSE(loader.complete());
 	}
 
 	TEST_F(AudioProcessingLoaderTests, resetResetsZeroPadCount) {
-		reset();
 		processor->setGroupDelay(1);
 		loadMonoFrames(1);
 		EXPECT_TRUE(loader.complete());
@@ -97,20 +106,9 @@ namespace {
 		EXPECT_FALSE(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZerosWithPartiallyPaddedLoad) {
-		std::vector<float> singleSample { 0 };
-		FakeAudioFileReader fakeReader{ singleSample };
-		setInMemoryReader(fakeReader);
-		processor->setGroupDelay(2);
-		loadMonoFrames(2);
-		EXPECT_FALSE(loader.complete());
-		loadMonoFrames(2);
-		EXPECT_TRUE(loader.complete());
-	}
-
 	class TimesTwo : public AudioFrameProcessor {
-		void process(gsl::span<gsl::span<float>> audio) override {
-			for (const auto channel : audio)
+		void process(gsl::span<channel_type> audio) override {
+			for (auto channel : audio)
 				for (auto &x : channel)
 					x *= 2;
 		}
@@ -141,6 +139,6 @@ namespace {
 		setInMemoryReader(fakeReader);
 		setProcessor(std::make_shared<AddsOne>());
 		loadMonoFrames(4);
-		assertEqual({ 2, 3, 4, 1 }, left);
+		assertEqual({ 1 + 1, 2 + 1, 3 + 1, 0 + 1 }, left);
 	}
 }
