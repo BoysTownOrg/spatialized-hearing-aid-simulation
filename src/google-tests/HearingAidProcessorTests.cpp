@@ -6,6 +6,8 @@
 namespace {
 	class HearingAidProcessorTests : public ::testing::Test {
 	protected:
+		using signal_type = HearingAidProcessor::signal_type;
+		using buffer_type = std::vector<signal_type::element_type>;
 		std::shared_ptr<FilterbankCompressorSpy> compressor =
 			compressorWithValidDefaults();
 		HearingAidProcessor processor{ compressor };
@@ -20,17 +22,17 @@ namespace {
 
 	protected:
 		void processUnequalChunk() {
-			std::vector<float> x(compressor->chunkSize() + 1);
+			buffer_type x(compressor->chunkSize() + 1);
 			process_(x);
 		}
 
 		void process() {
-			std::vector<float> x(compressor->chunkSize());
+			buffer_type x(compressor->chunkSize());
 			process_(x);
 		}
 
 	private:
-		void process_(gsl::span<float> x) {
+		void process_(signal_type x) {
 			processor.process(x);
 		}
 	};

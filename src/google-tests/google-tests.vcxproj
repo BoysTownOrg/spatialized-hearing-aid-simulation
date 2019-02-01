@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="assert-utility.cpp" />
     <ClCompile Include="assert-utility.h" />
     <ClCompile Include="AudioFileInMemoryTests.cpp" />
     <ClCompile Include="AudioPlayerTests.cpp" />
