@@ -21,9 +21,6 @@
     <ClCompile Include="HearingAidProcessorTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assert-utility.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="FirFilterTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,6 +132,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpeechPerceptionTestStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assert-utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

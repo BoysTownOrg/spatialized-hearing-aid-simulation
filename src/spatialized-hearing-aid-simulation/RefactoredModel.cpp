@@ -12,7 +12,7 @@ RefactoredModel::RefactoredModel(
 	AudioFrameReaderFactory *audioReaderFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
+	ISpatializedHearingAidSimulationFactory *simulationFactory
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
@@ -153,7 +153,7 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
-	IRefactoredSpatializedHearingAidSimulationFactory::SimulationParameters sp;
+	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
 	sp.attack_ms = testParameters.attack_ms;
 	sp.release_ms = testParameters.release_ms;
 	sp.chunkSize = testParameters.chunkSize;

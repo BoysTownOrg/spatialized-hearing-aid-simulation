@@ -2,7 +2,7 @@
 
 #include "SpeechPerceptionTest.h"
 #include "IAudioPlayer.h"
-#include "IRefactoredSpatializedHearingAidSimulationFactory.h"
+#include "ISpatializedHearingAidSimulationFactory.h"
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
@@ -21,7 +21,7 @@ class RefactoredModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
-	IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory;
+	ISpatializedHearingAidSimulationFactory *simulationFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
@@ -30,7 +30,7 @@ public:
 		AudioFrameReaderFactory *audioReaderFactory,
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
-		IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory
+		ISpatializedHearingAidSimulationFactory *simulationFactory
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;

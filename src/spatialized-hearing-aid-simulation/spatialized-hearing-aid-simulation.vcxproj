@@ -160,7 +160,7 @@
     <ClInclude Include="BrirReader.h" />
     <ClInclude Include="ChannelProcessingGroup.h" />
     <ClInclude Include="IAudioPlayer.h" />
-    <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="ISpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="PrescriptionReader.h" />
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h" />

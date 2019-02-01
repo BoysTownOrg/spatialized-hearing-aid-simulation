@@ -5,9 +5,9 @@
 #include "SignalProcessor.h"
 #include <common-includes/Interface.h>
 
-class IRefactoredSpatializedHearingAidSimulationFactory {
+class ISpatializedHearingAidSimulationFactory {
 public:
-	INTERFACE_OPERATIONS(IRefactoredSpatializedHearingAidSimulationFactory);
+	INTERFACE_OPERATIONS(ISpatializedHearingAidSimulationFactory);
 	struct SimulationParameters {
 		PrescriptionReader::Dsl prescription;
 		BrirReader::impulse_response_type filterCoefficients;

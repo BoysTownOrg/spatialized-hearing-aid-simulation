@@ -27,9 +27,6 @@
     <ClInclude Include="IAudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SignalProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ISpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

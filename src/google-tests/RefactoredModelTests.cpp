@@ -16,7 +16,7 @@
 
 namespace {
 	class RefactoredSpatializedHearingAidSimulationFactoryStub : 
-		public IRefactoredSpatializedHearingAidSimulationFactory 
+		public ISpatializedHearingAidSimulationFactory 
 	{
 		ArgumentCollection<SimulationParameters> parameters_{};
 		std::shared_ptr<SignalProcessor> processor{};
@@ -404,7 +404,7 @@ namespace {
 		AudioLoaderStub defaultLoader{};
 		AudioLoader *loader{ &defaultLoader };
 		RefactoredSpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
-		IRefactoredSpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
+		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 
 		void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 			auto model = makeModel();

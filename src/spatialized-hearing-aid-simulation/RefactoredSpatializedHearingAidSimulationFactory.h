@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRefactoredSpatializedHearingAidSimulationFactory.h"
+#include "ISpatializedHearingAidSimulationFactory.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
@@ -25,7 +25,7 @@ public:
 };
 
 class RefactoredSpatializedHearingAidSimulationFactory :
-	public IRefactoredSpatializedHearingAidSimulationFactory
+	public ISpatializedHearingAidSimulationFactory
 {
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
