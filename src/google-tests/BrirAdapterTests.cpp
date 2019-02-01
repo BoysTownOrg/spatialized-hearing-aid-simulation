@@ -11,7 +11,7 @@ namespace {
 		FakeAudioFileReaderFactory factory{ reader };
 		BrirAdapter adapter{ &factory };
 
-		BrirAdapter::BinauralRoomImpulseResponse read(std::string f = {}) {
+		auto read(std::string f = {}) {
 			return adapter.read(std::move(f));
 		}
 
@@ -26,27 +26,37 @@ namespace {
 		}
 	};
 
-	TEST_F(BrirAdapterTests, interpretsAudioFileAsBrir) {
-		reader->setContents({ 1, 2, 3, 4 });
+	TEST_F(BrirAdapterTests, readsFirstAudioChannelIntoLeftResponse) {
 		reader->setChannels(2);
-		reader->setSampleRate(5);
+		reader->setContents({ 1, 2, 3, 4 });
 		const auto brir = read();
-		EXPECT_EQ(5, brir.sampleRate);
 		assertEqual({ 1, 3 }, brir.left);
+	}
+
+	TEST_F(BrirAdapterTests, readsSecondAudioChannelIntoRightResponse) {
+		reader->setChannels(2);
+		reader->setContents({ 1, 2, 3, 4 });
+		const auto brir = read();
 		assertEqual({ 2, 4 }, brir.right);
 	}
 
+	TEST_F(BrirAdapterTests, brirSampleRateIsAudioFileSampleRate) {
+		reader->setSampleRate(1);
+		const auto brir = read();
+		EXPECT_EQ(1, brir.sampleRate);
+	}
+
 	TEST_F(BrirAdapterTests, singleChannelOnlyAppliesToLeftResponse) {
-		reader->setContents({ 1, 2, 3, 4 });
 		reader->setChannels(1);
+		reader->setContents({ 1, 2, 3, 4 });
 		const auto brir = read();
 		assertEqual({ 1, 2, 3, 4 }, brir.left);
 		EXPECT_TRUE(brir.right.empty());
 	}
 
 	TEST_F(BrirAdapterTests, threeOrMoreChannelsIgnoresBeyondTheFirstTwo) {
-		reader->setContents({ 1, 2, 3, 4, 5, 6 });
 		reader->setChannels(3);
+		reader->setContents({ 1, 2, 3, 4, 5, 6 });
 		const auto brir = read();
 		assertEqual({ 1, 4 }, brir.left);
 		assertEqual({ 2, 5 }, brir.right);
