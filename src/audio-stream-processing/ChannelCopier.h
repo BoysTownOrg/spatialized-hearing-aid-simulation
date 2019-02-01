@@ -15,7 +15,7 @@ public:
 	AUDIO_STREAM_PROCESSING_API explicit ChannelCopier(
 		std::shared_ptr<AudioFrameReader>
 	) noexcept;
-	AUDIO_STREAM_PROCESSING_API void read(gsl::span<gsl::span<float>> audio) override;
+	AUDIO_STREAM_PROCESSING_API void read(gsl::span<channel_type> audio) override;
 	AUDIO_STREAM_PROCESSING_API bool complete() override;
 	AUDIO_STREAM_PROCESSING_API int sampleRate() override;
 	AUDIO_STREAM_PROCESSING_API int channels() override;

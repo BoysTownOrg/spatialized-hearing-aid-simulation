@@ -22,15 +22,15 @@ void HearingAidProcessor::throwIfNotPowerOfTwo(int n, std::string name) {
 }
 
 void HearingAidProcessor::process(signal_type signal) {
+	if (signal.size() != compressor->chunkSize())
+		return;
 	const auto chunkSize = compressor->chunkSize();
-	if (signal.size() == chunkSize) {
-		const auto buffer_ = &buffer.front();
-		compressor->compressInput(signal.data(), signal.data(), chunkSize);
-		compressor->analyzeFilterbank(signal.data(), buffer_, chunkSize);
-		compressor->compressChannels(buffer_, buffer_, chunkSize);
-		compressor->synthesizeFilterbank(buffer_, signal.data(), chunkSize);
-		compressor->compressOutput(signal.data(), signal.data(), chunkSize);
-	}
+	const auto buffer_ = &buffer.front();
+	compressor->compressInput(signal.data(), signal.data(), chunkSize);
+	compressor->analyzeFilterbank(signal.data(), buffer_, chunkSize);
+	compressor->compressChannels(buffer_, buffer_, chunkSize);
+	compressor->synthesizeFilterbank(buffer_, signal.data(), chunkSize);
+	compressor->compressOutput(signal.data(), signal.data(), chunkSize);
 }
 
 auto HearingAidProcessor::groupDelay() -> index_type {
