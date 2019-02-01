@@ -19,11 +19,11 @@ public:
 		return prescriptions_[filePath];
 	}
 
-	ArgumentCollection<std::string> filePaths() const {
+	auto filePaths() const {
 		return filePaths_;
 	}
 
-	auto readCalled() const {
+	auto readCalled() const noexcept {
 		return readCalled_;
 	}
 };

@@ -7,7 +7,7 @@ class SignalProcessorStub : public SignalProcessor {
 	int samples_{};
 	int groupDelay_{};
 public:
-	const signal_type signal() const {
+	auto signal() const noexcept {
 		return signal_;
 	}
 
@@ -15,7 +15,7 @@ public:
 		signal_ = std::move(signal);
 	}
 
-	void setGroupDelay(int n) {
+	void setGroupDelay(int n) noexcept {
 		groupDelay_ = n;
 	}
 
@@ -27,7 +27,7 @@ public:
 class AddsSamplesBy : public SignalProcessor {
 	signal_type::element_type c;
 public:
-	explicit AddsSamplesBy(signal_type::element_type c) : c{ c } {}
+	explicit AddsSamplesBy(signal_type::element_type c) noexcept : c{ c } {}
 
 	void process(signal_type signal) override {
 		for (auto &x : signal)
@@ -40,7 +40,7 @@ public:
 class MultipliesSamplesBy : public SignalProcessor {
 	signal_type::element_type c;
 public:
-	explicit MultipliesSamplesBy(signal_type::element_type c) : c{ c } {}
+	explicit MultipliesSamplesBy(signal_type::element_type c) noexcept : c{ c } {}
 
 	void process(signal_type signal) override {
 		for (auto &x : signal)

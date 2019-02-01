@@ -1,7 +1,6 @@
 #pragma once
 
 #include <presentation/Model.h>
-#include <presentation/Presenter.h>
 
 class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
@@ -14,11 +13,11 @@ class ModelStub : public Model {
 	bool calibrationStopped_{};
 public:
 
-	const CalibrationParameters &calibrationParameters() {
+	auto calibrationParameters() noexcept {
 		return calibrationParameters_;
 	}
 
-	double calibrationLevel_dB_Spl() const {
+	auto calibrationLevel_dB_Spl() const noexcept {
 		return calibrationLevel_dB_Spl_;
 	}
 
@@ -26,7 +25,7 @@ public:
 		calibrationStopped_ = true;
 	}
 
-	bool calibrationStopped() const {
+	auto calibrationStopped() const noexcept {
 		return calibrationStopped_;
 	}
 
@@ -34,7 +33,7 @@ public:
 		calibrationParameters_ = std::move(p);
 	}
 
-	const TestParameters &testParameters() const {
+	auto testParameters() const noexcept {
 		return testParameters_;
 	}
 
@@ -46,11 +45,11 @@ public:
 		testParameters_ = std::move(p);
 	}
 
-	void setTestIncomplete() {
+	void setTestIncomplete() noexcept {
 		testComplete_ = false;
 	}
 
-	bool trialPlayed() const {
+	auto trialPlayed() const noexcept {
 		return trialPlayed_;
 	}
 
@@ -63,11 +62,11 @@ public:
 		return testComplete_;
 	}
 
-	const TrialParameters &trialParameters() const {
+	auto trialParameters() const noexcept {
 		return trialParameters_;
 	}
 
-	void setTestComplete() {
+	void setTestComplete() noexcept {
 		testComplete_ = true;
 	}
 

@@ -5,9 +5,9 @@
 class LogString {
 	std::string s;
 public:
-	LogString(std::string s = {}) : s{ std::move(s) } {}
+	LogString(std::string s = {}) noexcept : s{ std::move(s) } {}
 
-	bool isEmpty() const {
+	bool isEmpty() const noexcept {
 		return s.empty();
 	}
 
@@ -28,7 +28,7 @@ public:
 			return false;
 	}
 
-	bool contains(std::string const &s2) {
+	bool contains(std::string const &s2) noexcept {
 		return s.find(s2) != std::string::npos;
 	}
 
