@@ -6,7 +6,7 @@ class AudioFrameProcessorStub : public AudioFrameProcessor {
 	int groupDelay_{};
 	bool complete_{};
 public:
-	const gsl::span<channel_type> audioBuffer() const {
+	auto audioBuffer() const noexcept {
 		return audioBuffer_;
 	}
 
@@ -14,7 +14,7 @@ public:
 		audioBuffer_ = audio;
 	}
 
-	void setGroupDelay(int n) {
+	void setGroupDelay(int n) noexcept {
 		groupDelay_ = n;
 	}
 
@@ -22,87 +22,7 @@ public:
 		return groupDelay_;
 	}
 
-	void setComplete() {
+	void setComplete() noexcept {
 		complete_ = true;
 	}
-};
-
-class AudioFrameProcessorStubFactory : public AudioFrameProcessorFactory {
-	Parameters parameters_{};
-	std::shared_ptr<AudioFrameProcessor> processor;
-	double fullScale_dB_Spl_{};
-	int preferredBufferSize_{};
-	GlobalTestParameters *assertCanBeMadeParameters_{};
-	GlobalTestParameters *storedParameters_{};
-public:
-	explicit AudioFrameProcessorStubFactory(
-		std::shared_ptr<AudioFrameProcessor> processor =
-			std::make_shared<AudioFrameProcessorStub>()
-	) :
-		processor{ std::move(processor) } {}
-
-	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-		processor = std::move(p);
-	}
-
-	const Parameters &parameters() const {
-		return parameters_;
-	}
-
-	std::shared_ptr<AudioFrameProcessor> make(Parameters p) override {
-		parameters_ = std::move(p);
-		return processor;
-	}
-
-	void setPreferredBufferSize(int n) {
-		preferredBufferSize_ = n;
-	}
-
-	int preferredBufferSize() override {
-		return preferredBufferSize_;
-	}
-
-	void setFullScale_dB_Spl(double x) {
-		fullScale_dB_Spl_ = x;
-	}
-
-	double fullScale_dB_Spl() override { 
-		return fullScale_dB_Spl_; 
-	}
-
-	const GlobalTestParameters *assertCanBeMadeParameters() const {
-		return assertCanBeMadeParameters_;
-	}
-
-	const GlobalTestParameters *storedParameters() const {
-		return storedParameters_;
-	}
-	void assertCanBeMade(GlobalTestParameters *x) override {
-		assertCanBeMadeParameters_ = x;
-	};
-
-	void storeParameters(GlobalTestParameters *x) override {
-		storedParameters_ = x;
-	};
-};
-
-class CreatingErrorAudioFrameProcessorFactory : public AudioFrameProcessorFactory {
-	std::string errorMessage{};
-public:
-	explicit CreatingErrorAudioFrameProcessorFactory(
-		std::string errorMessage
-	) :
-		errorMessage{ std::move(errorMessage) } {}
-
-	void assertCanBeMade(GlobalTestParameters *) override {
-		throw CreateError{ errorMessage };
-	};
-
-	std::shared_ptr<AudioFrameProcessor> make(Parameters) override {
-		throw CreateError{ errorMessage };
-	}
-
-	int preferredBufferSize() override { return {}; }
-	double fullScale_dB_Spl() override { return {}; }
-	void storeParameters(GlobalTestParameters *) override {};
 };

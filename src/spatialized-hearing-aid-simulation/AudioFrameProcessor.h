@@ -14,21 +14,3 @@ public:
 	virtual void process(gsl::span<channel_type> audio) = 0;
 	virtual channel_type::index_type groupDelay() = 0;
 };
-
-struct GlobalTestParameters;
-
-class AudioFrameProcessorFactory {
-public:
-	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
-	struct Parameters {
-		std::vector<double> channelScalars;
-		int sampleRate;
-		int channels;
-	};
-	virtual std::shared_ptr<AudioFrameProcessor> make(Parameters) = 0;
-	RUNTIME_ERROR(CreateError);
-	virtual int preferredBufferSize() = 0;
-	virtual double fullScale_dB_Spl() = 0;
-	virtual void assertCanBeMade(GlobalTestParameters *) = 0;
-	virtual void storeParameters(GlobalTestParameters *) = 0;
-};
