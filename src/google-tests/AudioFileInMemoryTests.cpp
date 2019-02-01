@@ -4,88 +4,103 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioFileInMemoryFacade {
-		AudioFileInMemory inMemory;
-	public:
-		using impulse_response_type = std::vector<float>;
-		impulse_response_type left{};
-		impulse_response_type right{};
-
-		explicit AudioFileInMemoryFacade(AudioFileReader &reader) :
-			inMemory{ reader } {}
-
-		void readMonoFrames(impulse_response_type::size_type n) {
-			left.resize(n);
-			std::vector<gsl::span<float>> mono{ left };
-			inMemory.read(mono);
-		}
-
-		void readStereoFrames(impulse_response_type::size_type n) {
-			left.resize(n);
-			right.resize(n);
-			std::vector<gsl::span<float>> stereo{ left, right };
-			inMemory.read(stereo);
-		}
-
-		bool complete() {
-			return inMemory.complete();
-		}
-
-		long long remainingFrames() {
-			return inMemory.remainingFrames();
-		}
-
-		void reset() {
-			inMemory.reset();
-		}
-	};
-
 	class AudioFileInMemoryTests : public ::testing::Test {
 	protected:
 		FakeAudioFileReader reader{};
 	};
-
-	TEST_F(AudioFileInMemoryTests, readFillsEachChannelStereo) {
-		reader.setContents({ 1, 2, 3, 4, 5, 6 });
-		reader.setChannels(2);
-		AudioFileInMemoryFacade adapter{ reader };
-		adapter.readStereoFrames(3);
-		assertEqual({ 1, 3, 5 }, adapter.left);
-		assertEqual({ 2, 4, 6 }, adapter.right);
-	}
 
 	TEST_F(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
 		reader.setContents({});
 		AudioFileInMemory adapter{ reader };
 	}
 
+	class AudioFileInMemoryFacade {
+		AudioFileInMemory inMemory;
+	public:
+		using buffer_type = std::vector<AudioFileInMemory::channel_type::element_type>;
+		buffer_type left{};
+		buffer_type right{};
+
+		explicit AudioFileInMemoryFacade(AudioFileReader &reader) :
+			inMemory{ reader } {}
+
+		void readMonoFrames(buffer_type::size_type n) {
+			left.resize(n);
+			std::vector<AudioFileInMemory::channel_type> mono{ left };
+			inMemory.read(mono);
+		}
+
+		void readStereoFrames(buffer_type::size_type n) {
+			left.resize(n);
+			right.resize(n);
+			std::vector<AudioFileInMemory::channel_type> stereo{ left, right };
+			inMemory.read(stereo);
+		}
+
+		auto complete() {
+			return inMemory.complete();
+		}
+
+		auto remainingFrames() {
+			return inMemory.remainingFrames();
+		}
+
+		auto reset() {
+			return inMemory.reset();
+		}
+	};
+
+	TEST_F(AudioFileInMemoryTests, readFillsChannel_Mono) {
+		reader.setChannels(1);
+		reader.setContents({ 1, 2, 3 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(3);
+		assertEqual({ 1, 2, 3 }, facade.left);
+	}
+
+	TEST_F(AudioFileInMemoryTests, readFillsEachChannel_Stereo) {
+		reader.setChannels(2);
+		reader.setContents({ 1, 2, 3, 4, 5, 6 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readStereoFrames(3);
+		assertEqual({ 1, 3, 5 }, facade.left);
+		assertEqual({ 2, 4, 6 }, facade.right);
+	}
+
 	TEST_F(AudioFileInMemoryTests, readNothingWhenExhausted) {
-		reader.setContents({ 3, 4 });
-		AudioFileInMemoryFacade adapter{ reader };
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(3, adapter.left.front());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(4, adapter.left.front());
-		adapter.readMonoFrames(1);
-		EXPECT_EQ(4, adapter.left.front());
+		reader.setContents({ 2 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(1);
+		assertEqual({ 2 }, facade.left);
+		facade.readMonoFrames(1);
+		assertEqual({ 2 }, facade.left);
 	}
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhausted) {
-		reader.setContents({ 3, 4 });
-		AudioFileInMemoryFacade adapter{ reader };
-		adapter.readMonoFrames(1);
-		EXPECT_FALSE(adapter.complete());
-		adapter.readMonoFrames(1);
-		EXPECT_TRUE(adapter.complete());
+		reader.setContents({ 2, 3 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(1);
+		EXPECT_FALSE(facade.complete());
+		facade.readMonoFrames(1);
+		EXPECT_TRUE(facade.complete());
 	}
 
-	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingMoreThanOneSampleAtATime) {
+	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingMoreThanOneSampleAtATime) {
 		reader.setContents({ 3, 4, 5, 6 });
-		AudioFileInMemoryFacade adapter{ reader };
-		adapter.readMonoFrames(2);
-		EXPECT_FALSE(adapter.complete());
-		adapter.readMonoFrames(2);
-		EXPECT_TRUE(adapter.complete());
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(2);
+		EXPECT_FALSE(facade.complete());
+		facade.readMonoFrames(2);
+		EXPECT_TRUE(facade.complete());
+	}
+
+	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingBeyondContents) {
+		reader.setContents({ 2, 3, 4, 5 });
+		AudioFileInMemoryFacade facade{ reader };
+		facade.readMonoFrames(3);
+		EXPECT_FALSE(facade.complete());
+		facade.readMonoFrames(3);
+		EXPECT_TRUE(facade.complete());
 	}
 
 	TEST_F(AudioFileInMemoryTests, returnsFramesRemaining) {
