@@ -177,7 +177,7 @@ namespace {
 		std::shared_ptr<FakeAudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>();
 		FakeAudioFileReaderFactory factory{ reader };
-		AudioFileInMemoryFactory adapter{ &factory };
+		AudioFileInMemoryFactory inMemoryFactory{ &factory };
 
 		void assertMakeThrowsCreateError(std::string what) {
 			try {
@@ -190,7 +190,7 @@ namespace {
 		}
 
 		void make(std::string f = {}) {
-			adapter.make(std::move(f));
+			inMemoryFactory.make(std::move(f));
 		}
 	};
 
