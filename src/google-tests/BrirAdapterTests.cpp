@@ -43,7 +43,7 @@ namespace {
 	TEST_F(BrirAdapterTests, brirSampleRateIsAudioFileSampleRate) {
 		reader->setSampleRate(1);
 		const auto brir = read();
-		EXPECT_EQ(1, brir.sampleRate);
+		assertEqual(1, brir.sampleRate);
 	}
 
 	TEST_F(BrirAdapterTests, singleChannelOnlyAppliesToLeftResponse) {

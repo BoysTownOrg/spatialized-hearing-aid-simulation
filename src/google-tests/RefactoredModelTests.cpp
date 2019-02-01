@@ -222,7 +222,10 @@ namespace {
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
-		EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
+		EXPECT_EQ(
+			&audioLoader, 
+			audioPlayer.audioLoader()
+		);
 	}
 
 	TEST_F(
@@ -287,7 +290,10 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		audioPlayer.callOnPlay([&]() {
-			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
+			EXPECT_EQ(
+				audioFrameReader, 
+				audioLoader.audioFrameReader()
+			);
 		});
 		playTrial();
 	}
@@ -296,8 +302,8 @@ namespace {
 		audioFrameReader->setChannels(1);
 		audioFrameReader->setSampleRate(2);
 		playTrial();
-		EXPECT_EQ(1, audioPlayer.preparation().channels);
-		EXPECT_EQ(2, audioPlayer.preparation().sampleRate);
+		assertEqual(1, audioPlayer.preparation().channels);
+		assertEqual(2, audioPlayer.preparation().sampleRate);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
@@ -311,7 +317,7 @@ namespace {
 		testParameters.chunkSize = 1;
 		prepareNewTest();
 		playTrial();
-		EXPECT_EQ(1, audioPlayer.preparation().framesPerBuffer);
+		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
@@ -351,7 +357,7 @@ namespace {
 		assertEqual({ 3 }, actual.kneepointGains_dB);
 		assertEqual({ 4 }, actual.kneepoints_dBSpl);
 		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
-		EXPECT_EQ(6, actual.channels);
+		assertEqual(6, actual.channels);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToFactory) {
@@ -373,7 +379,7 @@ namespace {
 		assertEqual({ 3 }, actual.kneepointGains_dB);
 		assertEqual({ 4 }, actual.kneepoints_dBSpl);
 		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
-		EXPECT_EQ(6, actual.channels);
+		assertEqual(6, actual.channels);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToFactory) {
@@ -385,15 +391,15 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_EQ(1, left.attack_ms);
-		EXPECT_EQ(2, left.release_ms);
-		EXPECT_EQ(4, left.chunkSize);
-		EXPECT_EQ(8, left.windowSize);
+		assertEqual(1.0, left.attack_ms);
+		assertEqual(2.0, left.release_ms);
+		assertEqual(4, left.chunkSize);
+		assertEqual(8, left.windowSize);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_EQ(1, right.attack_ms);
-		EXPECT_EQ(2, right.release_ms);
-		EXPECT_EQ(4, right.chunkSize);
-		EXPECT_EQ(8, right.windowSize);
+		assertEqual(1.0, right.attack_ms);
+		assertEqual(2.0, right.release_ms);
+		assertEqual(4, right.chunkSize);
+		assertEqual(8, right.windowSize);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToFactory) {
@@ -402,9 +408,9 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_EQ(1, left.sampleRate);
+		assertEqual(1, left.sampleRate);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_EQ(1, right.sampleRate);
+		assertEqual(1, right.sampleRate);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
@@ -464,9 +470,9 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto left = simulationFactory.parameters().at(0);
-		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, left.fullScaleLevel_dB_Spl);
+		assertEqual(RefactoredModel::fullScaleLevel_dB_Spl, left.fullScaleLevel_dB_Spl);
 		auto right = simulationFactory.parameters().at(1);
-		EXPECT_EQ(RefactoredModel::fullScaleLevel_dB_Spl, right.fullScaleLevel_dB_Spl);
+		assertEqual(RefactoredModel::fullScaleLevel_dB_Spl, right.fullScaleLevel_dB_Spl);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBrirToFactory) {
@@ -489,8 +495,8 @@ namespace {
 		std::vector<gsl::span<float>> channels{ left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 		playTrial();
-		EXPECT_EQ(4 + 1, left.front());
-		EXPECT_EQ(5 + 1, right.front());
+		assertEqual(4 + 1.0f, left.front());
+		assertEqual(5 + 1.0f, right.front());
 	}
 
 	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {

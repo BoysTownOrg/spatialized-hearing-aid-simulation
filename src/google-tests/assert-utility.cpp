@@ -16,6 +16,12 @@ void assertFalse(bool condition)
 }
 
 template<typename T>
+void assertEqual(T expected, T actual)
+{
+	EXPECT_EQ(expected, actual);
+}
+
+template<typename T>
 void assertEqual(
 	std::vector<T> expected,
 	std::vector<T> actual
@@ -58,3 +64,10 @@ template void assertEqual(
 	std::vector<std::string> expected,
 	std::vector<std::string> actual
 );
+
+template void assertEqual(int, int);
+template void assertEqual(float, float);
+template void assertEqual(double, double);
+template void assertEqual(unsigned long, unsigned long);
+template void assertEqual(long long, long long);
+template void assertEqual(float *, float *);

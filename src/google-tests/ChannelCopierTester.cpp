@@ -24,15 +24,15 @@ namespace {
 		decorated->setFrames(2);
 		decorated->setChannels(3);
 		decorated->setRemainingFrames(4);
-		EXPECT_EQ(1, copier.sampleRate());
-		EXPECT_EQ(2, copier.frames());
-		EXPECT_EQ(3, copier.channels());
-		EXPECT_EQ(4, copier.remainingFrames());
+		assertEqual(1, copier.sampleRate());
+		assertEqual(2LL, copier.frames());
+		assertEqual(3, copier.channels());
+		assertEqual(4LL, copier.remainingFrames());
 	}
 
 	TEST_F(ChannelCopierTests, returnsTwoIfDecoratedReaderHasOnlyOneChannel) {
 		decorated->setChannels(1);
-		EXPECT_EQ(2, copier.channels());
+		assertEqual(2, copier.channels());
 	}
 
 	TEST_F(ChannelCopierTests, resetsDecoratedReaderWhenReset) {

@@ -24,7 +24,7 @@ namespace {
 
 	TEST(FirFilterTests, groupDelayReturnsHalfFilterOrder) {
 		FirFilter filter{ FirFilter::coefficients_type(256 + 1) };
-		EXPECT_EQ(128, filter.groupDelay());
+		assertEqual(128, filter.groupDelay());
 	}
 
 	TEST(FirFilterTests, zeroIRZeroOrder) {

@@ -182,7 +182,10 @@ namespace {
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
-		EXPECT_EQ(&presenter, view.listener());
+		EXPECT_EQ(
+			&presenter, 
+			view.listener()
+		);
 	}
 
 	TEST_F(PresenterTests, runRunsEventLoop) {
@@ -403,10 +406,10 @@ namespace {
 		assertEqual("e", model.testParameters().testFilePath);
 		assertEqual("f", model.testParameters().subjectId);
 		assertEqual("g", model.testParameters().testerId);
-		EXPECT_EQ(2.2, model.testParameters().attack_ms);
-		EXPECT_EQ(3.3, model.testParameters().release_ms);
-		EXPECT_EQ(4, model.testParameters().windowSize);
-		EXPECT_EQ(5, model.testParameters().chunkSize);
+		assertEqual(2.2, model.testParameters().attack_ms);
+		assertEqual(3.3, model.testParameters().release_ms);
+		assertEqual(4, model.testParameters().windowSize);
+		assertEqual(5, model.testParameters().chunkSize);
 	}
 
 	TEST_F(
@@ -598,7 +601,7 @@ namespace {
 		view.setLevel_dB_Spl("1.1");
 		view.playTrial();
 		assertEqual("e", model.trialParameters().audioDevice);
-		EXPECT_EQ(1.1, model.trialParameters().level_dB_Spl);
+		assertEqual(1.1, model.trialParameters().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, calibrateShowsCalibrationView) {
@@ -613,7 +616,7 @@ namespace {
 		view.playCalibration();
 		assertEqual("a", model.calibrationParameters().audioDevice);
 		assertEqual("b", model.calibrationParameters().audioFilePath);
-		EXPECT_EQ(1.1, model.calibrationParameters().level_dB_Spl);
+		assertEqual(1.1, model.calibrationParameters().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {

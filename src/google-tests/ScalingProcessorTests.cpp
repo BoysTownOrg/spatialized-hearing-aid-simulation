@@ -12,6 +12,6 @@ namespace {
 
 	TEST(ScalingProcessorTests, groupDelayReturnsZero) {
 		ScalingProcessor processor{ {} };
-		EXPECT_EQ(0, processor.groupDelay());
+		assertEqual(0, processor.groupDelay());
 	};
 }

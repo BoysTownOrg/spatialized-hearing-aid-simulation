@@ -1,6 +1,11 @@
 #include <string>
 #include <vector>
 
+template<typename T>
+void assertEqual(T expected, T actual);
+
+void assertEqual(char const *, char const *) = delete;
+
 void assertEqual(std::string expected, std::string actual);
 
 template<typename T>

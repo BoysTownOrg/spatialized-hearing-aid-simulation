@@ -138,6 +138,6 @@ TEST(
 		FAIL() << "Expected TestDocumenter::InitializationFailure";
 	}
 	catch (const TestDocumenter::InitializationFailure &e) {
-		assertEqual("error.", e.what());
+		assertEqual(std::string{ "error." }, e.what());
 	}
 }

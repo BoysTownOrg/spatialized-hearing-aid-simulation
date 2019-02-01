@@ -63,11 +63,11 @@ namespace {
 	TEST_F(HearingAidProcessorTests, processPassesChunkSize) {
 		compressor->setChunkSize(1);
 		process();
-		EXPECT_EQ(1, compressor->compressInputChunkSize());
-		EXPECT_EQ(1, compressor->filterbankAnalyzeChunkSize());
-		EXPECT_EQ(1, compressor->compressChannelsChunkSize());
-		EXPECT_EQ(1, compressor->filterbankSynthesizeChunkSize());
-		EXPECT_EQ(1, compressor->compressOutputChunkSize());
+		assertEqual(1, compressor->compressInputChunkSize());
+		assertEqual(1, compressor->filterbankAnalyzeChunkSize());
+		assertEqual(1, compressor->compressChannelsChunkSize());
+		assertEqual(1, compressor->filterbankSynthesizeChunkSize());
+		assertEqual(1, compressor->compressOutputChunkSize());
 	}
 
 	TEST_F(
@@ -75,7 +75,7 @@ namespace {
 		groupDelayReturnsHalfWindowSize
 	) {
 		compressor->setWindowSize(512);
-		EXPECT_EQ(256, processor.groupDelay());
+		assertEqual(256, processor.groupDelay());
 	}
 
 	class CompressorErrorTests : public ::testing::Test {
@@ -223,8 +223,8 @@ namespace {
 		processPassesComplexInputsAppropriately
 	) {
 		process();
-		EXPECT_EQ(
-			(0 + 7) * 11 * 13 * 17 * 19,
+		assertEqual(
+			(0 + 7) * 11 * 13 * 17 * 19.0f,
 			compressor->postSynthesizeFilterbankComplexResult()
 		);
 	}
@@ -237,8 +237,8 @@ namespace {
 		compressor->setChannels(5);
 		compressor->setPointerOffset(4 * 5 * 2 - 1);
 		process();
-		EXPECT_EQ(
-			(0 + 7) * 11 * 13 * 17 * 19,
+		assertEqual(
+			(0 + 7) * 11 * 13 * 17 * 19.0f,
 			compressor->postSynthesizeFilterbankComplexResult()
 		);
 	}

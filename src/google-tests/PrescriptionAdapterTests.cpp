@@ -57,7 +57,7 @@ namespace {
 			{ 7, 7 }
 		);
 		const auto dsl = adapter.read({});
-		EXPECT_EQ(2, dsl.channels);
+		assertEqual(2, dsl.channels);
 		assertEqual({ 3 }, dsl.crossFrequenciesHz);
 		assertEqual({ 4, 4 }, dsl.compressionRatios);
 		assertEqual({ 5, 5 }, dsl.kneepointGains_dB);

@@ -74,7 +74,7 @@ namespace {
 	TEST_F(RefactoredSpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
 		simulationParameters.scale = 1;
 		simulationFactory.make(simulationParameters);
-		EXPECT_EQ(1, scalarFactory.scalar());
+		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
 	TEST_F(
@@ -96,7 +96,7 @@ namespace {
 		assertEqual({ 3 }, hearingAidFactory.parameters().kneepointGains_dB);
 		assertEqual({ 4 }, hearingAidFactory.parameters().kneepoints_dBSpl);
 		assertEqual({ 5 }, hearingAidFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
-		EXPECT_EQ(6, hearingAidFactory.parameters().channels);
+		assertEqual(6, hearingAidFactory.parameters().channels);
 	}
 
 	TEST_F(
@@ -111,12 +111,12 @@ namespace {
 		simulationParameters.sampleRate = 5;
 		simulationParameters.fullScaleLevel_dB_Spl = 6;
 		simulationFactory.make(simulationParameters);
-		EXPECT_EQ(1, hearingAidFactory.parameters().attack_ms);
-		EXPECT_EQ(2, hearingAidFactory.parameters().release_ms);
-		EXPECT_EQ(3, hearingAidFactory.parameters().chunkSize);
-		EXPECT_EQ(4, hearingAidFactory.parameters().windowSize);
-		EXPECT_EQ(5, hearingAidFactory.parameters().sampleRate);
-		EXPECT_EQ(6, hearingAidFactory.parameters().max_dB_Spl);
+		assertEqual(1.0, hearingAidFactory.parameters().attack_ms);
+		assertEqual(2.0, hearingAidFactory.parameters().release_ms);
+		assertEqual(3, hearingAidFactory.parameters().chunkSize);
+		assertEqual(4, hearingAidFactory.parameters().windowSize);
+		assertEqual(5.0, hearingAidFactory.parameters().sampleRate);
+		assertEqual(6.0, hearingAidFactory.parameters().max_dB_Spl);
 	}
 
 	TEST_F(
@@ -141,7 +141,7 @@ namespace {
 		auto processor = simulationFactory.make(simulationParameters);
 		std::vector<float> x{ 4 };
 		processor->process(x);
-		EXPECT_EQ((4 + 1) * 2 + 3, x.front());
+		assertEqual((4 + 1) * 2 + 3.0f, x.front());
 	}
 
 	TEST_F(
@@ -156,7 +156,7 @@ namespace {
 		auto processor = simulationFactory.make(simulationParameters);
 		std::vector<float> x{ 4 };
 		processor->process(x);
-		EXPECT_EQ(4 + 1 + 3, x.front());
+		assertEqual(4 + 1 + 3.0f, x.front());
 	}
 
 	TEST_F(
@@ -171,6 +171,6 @@ namespace {
 		auto processor = simulationFactory.make(simulationParameters);
 		std::vector<float> x{ 4 };
 		processor->process(x);
-		EXPECT_EQ((4 + 1) * 2, x.front());
+		assertEqual((4 + 1) * 2.0f, x.front());
 	}
 }

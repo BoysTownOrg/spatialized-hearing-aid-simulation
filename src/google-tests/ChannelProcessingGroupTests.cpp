@@ -1,3 +1,4 @@
+#include "assert-utility.h"
 #include "SignalProcessorStub.h"
 #include <spatialized-hearing-aid-simulation/ChannelProcessingGroup.h>
 #include <gtest/gtest.h>
@@ -25,15 +26,15 @@ namespace {
 		buffer_type c{ 3 };
 		std::vector<channel_type> channels{ a, b, c };
 		group.process(channels);
-		EXPECT_EQ(1, processors.at(0)->signal().at(0));
-		EXPECT_EQ(2, processors.at(1)->signal().at(0));
-		EXPECT_EQ(3, processors.at(2)->signal().at(0));
+		assertEqual(1.0f, processors.at(0)->signal().at(0));
+		assertEqual(2.0f, processors.at(1)->signal().at(0));
+		assertEqual(3.0f, processors.at(2)->signal().at(0));
 	}
 
 	TEST_F(ChannelProcessingGroupTests, groupDelayReturnsMaxGroupDelay) {
 		processors.at(0)->setGroupDelay(1);
 		processors.at(1)->setGroupDelay(2);
 		processors.at(2)->setGroupDelay(3);
-		EXPECT_EQ(3, group.groupDelay());
+		assertEqual(3, group.groupDelay());
 	}
 }

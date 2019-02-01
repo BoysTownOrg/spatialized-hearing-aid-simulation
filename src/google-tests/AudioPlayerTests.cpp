@@ -35,7 +35,10 @@ namespace {
 	};
 
 	TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
-		EXPECT_EQ(&player, device.controller());
+		EXPECT_EQ(
+			&player, 
+			device.controller()
+		);
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayFirstClosesThenOpensStream) {
@@ -70,9 +73,9 @@ namespace {
 		p.channels = 3;
 		p.sampleRate = 4;
 		prepareToPlay(p);
-		EXPECT_EQ(2U, device.streamParameters().framesPerBuffer);
-		EXPECT_EQ(3, device.streamParameters().channels);
-		EXPECT_EQ(4, device.streamParameters().sampleRate);
+		assertEqual(2UL, device.streamParameters().framesPerBuffer);
+		assertEqual(3, device.streamParameters().channels);
+		assertEqual(4, device.streamParameters().sampleRate);
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayFindsDeviceIndex) {
@@ -80,7 +83,7 @@ namespace {
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		p.audioDevice = "second";
 		prepareToPlay(p);
-		EXPECT_EQ(2, device.streamParameters().deviceIndex);
+		assertEqual(2, device.streamParameters().deviceIndex);
 	}
 
 	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
@@ -99,10 +102,10 @@ namespace {
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		EXPECT_EQ(&left, loader.audioBuffer().at(0).data());
-		EXPECT_EQ(&right, loader.audioBuffer().at(1).data());
-		EXPECT_EQ(1, loader.audioBuffer().at(0).size());
-		EXPECT_EQ(1, loader.audioBuffer().at(1).size());
+		assertEqual(&left, loader.audioBuffer().at(0).data());
+		assertEqual(&right, loader.audioBuffer().at(1).data());
+		assertEqual(1, loader.audioBuffer().at(0).size());
+		assertEqual(1, loader.audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {

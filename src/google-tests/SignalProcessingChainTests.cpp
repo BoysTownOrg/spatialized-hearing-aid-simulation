@@ -31,6 +31,6 @@ namespace {
 		auto processor3 = std::make_shared<SignalProcessorStub>();
 		processor3->setGroupDelay(3);
 		chain.add(processor3);
-		EXPECT_EQ(1 + 2 + 3, chain.groupDelay());
+		assertEqual(1 + 2 + 3, chain.groupDelay());
 	}
 }
