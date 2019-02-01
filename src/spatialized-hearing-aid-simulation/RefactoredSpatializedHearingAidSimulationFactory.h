@@ -2,7 +2,6 @@
 
 #include "IRefactoredSpatializedHearingAidSimulationFactory.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
-#include <signal-processing/SignalProcessingChain.h>
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
 class FirFilterFactory {

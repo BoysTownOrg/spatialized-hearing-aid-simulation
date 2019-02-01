@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FilterbankCompressor.h"
+#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
 #include <common-includes/RuntimeError.h>
-#include <signal-processing/SignalProcessor.h>
 #include <memory>
 #include <vector>
 

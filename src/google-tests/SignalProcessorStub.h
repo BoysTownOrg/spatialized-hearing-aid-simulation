@@ -1,6 +1,6 @@
 #pragma once
 
-#include <signal-processing/SignalProcessor.h>
+#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
 
 class SignalProcessorStub : public SignalProcessor {
 	signal_type signal_{};

@@ -1,5 +1,5 @@
 #include "SignalProcessorStub.h"
-#include <signal-processing/ChannelProcessingGroup.h>
+#include <spatialized-hearing-aid-simulation/ChannelProcessingGroup.h>
 #include <gtest/gtest.h>
 
 namespace {

@@ -15,16 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SignalProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SignalProcessingChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="signal-processing-exports.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChannelProcessingGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ScalingProcessor.h">
@@ -32,12 +23,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SignalProcessingChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChannelProcessingGroup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ScalingProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

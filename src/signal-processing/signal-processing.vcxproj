@@ -143,16 +143,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ChannelProcessingGroup.h" />
     <ClInclude Include="ScalingProcessor.h" />
     <ClInclude Include="signal-processing-exports.h" />
-    <ClInclude Include="SignalProcessingChain.h" />
-    <ClInclude Include="SignalProcessor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="ScalingProcessor.cpp" />
-    <ClCompile Include="SignalProcessingChain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

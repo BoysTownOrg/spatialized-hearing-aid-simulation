@@ -1,3 +1,4 @@
+#include "SignalProcessingChain.h"
 #include "RefactoredSpatializedHearingAidSimulationFactory.h"
 
 RefactoredSpatializedHearingAidSimulationFactory::RefactoredSpatializedHearingAidSimulationFactory(

@@ -6,7 +6,7 @@
 	#define FIR_FILTERING_API __declspec(dllimport)
 #endif
 
-#include <signal-processing/SignalProcessor.h>
+#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
 #include <fftw3.h>
 #include <vector>
 #include <complex>

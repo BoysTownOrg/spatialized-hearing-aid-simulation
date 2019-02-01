@@ -158,17 +158,22 @@
     <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="AudioLoader.h" />
     <ClInclude Include="BrirReader.h" />
+    <ClInclude Include="ChannelProcessingGroup.h" />
     <ClInclude Include="IAudioPlayer.h" />
     <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="PrescriptionReader.h" />
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="SignalProcessingChain.h" />
+    <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
     <ClInclude Include="SpeechPerceptionTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="RefactoredModel.cpp" />
     <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactory.cpp" />
+    <ClCompile Include="SignalProcessingChain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include "RefactoredModel.h"
-#include <signal-processing/ChannelProcessingGroup.h>
+#include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
 // The MATLAB hearing aid simulation uses 119 dB SPL as a "max"

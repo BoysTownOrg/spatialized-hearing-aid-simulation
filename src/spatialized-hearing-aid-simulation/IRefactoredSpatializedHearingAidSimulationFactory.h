@@ -2,7 +2,7 @@
 
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
-#include <signal-processing/SignalProcessor.h>
+#include "SignalProcessor.h"
 #include <common-includes/Interface.h>
 
 class IRefactoredSpatializedHearingAidSimulationFactory {

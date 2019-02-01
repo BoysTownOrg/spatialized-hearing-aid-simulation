@@ -48,12 +48,27 @@
     <ClInclude Include="AudioFrameProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChannelProcessingGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalProcessingChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RefactoredSpatializedHearingAidSimulationFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SignalProcessingChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelProcessingGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
