@@ -5,6 +5,8 @@
 namespace {
 	class ChannelProcessingGroupTests : public ::testing::Test {
 	protected:
+		using channel_type = ChannelProcessingGroup::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
 		std::vector<std::shared_ptr<SignalProcessorStub>> processors = makeStubs(3);
 		ChannelProcessingGroup group{ { processors.begin(), processors.end() } };
 
@@ -18,10 +20,10 @@ namespace {
 	};
 
 	TEST_F(ChannelProcessingGroupTests, processesChannelsInOrder) {
-		std::vector<float> a{ 1 };
-		std::vector<float> b{ 2 };
-		std::vector<float> c{ 3 };
-		std::vector<gsl::span<float>> channels{ a, b, c };
+		buffer_type a{ 1 };
+		buffer_type b{ 2 };
+		buffer_type c{ 3 };
+		std::vector<channel_type> channels{ a, b, c };
 		group.process(channels);
 		EXPECT_EQ(1, processors.at(0)->signal().at(0));
 		EXPECT_EQ(2, processors.at(1)->signal().at(0));
