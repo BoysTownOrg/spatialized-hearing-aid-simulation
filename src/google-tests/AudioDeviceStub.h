@@ -16,7 +16,7 @@ class AudioDeviceStub : public AudioDevice {
 	bool _setCallbackResultToCompleteCalled{};
 	bool complete_{};
 public:
-	const AudioDeviceController *controller() const {
+	auto controller() const noexcept {
 		return _controller;
 	}
 
@@ -28,7 +28,7 @@ public:
 		return _streaming;
 	}
 
-	void setStreaming() {
+	void setStreaming() noexcept {
 		_streaming = true;
 	}
 
@@ -45,7 +45,7 @@ public:
 		_controller->fillStreamBuffer(x, n);
 	}
 
-	void fail() {
+	void fail() noexcept {
 		failed_ = true;
 	}
 
@@ -61,7 +61,7 @@ public:
 		return errorMessage_;
 	}
 
-	bool setCallbackResultToCompleteCalled() const {
+	auto setCallbackResultToCompleteCalled() const noexcept {
 		return _setCallbackResultToCompleteCalled;
 	}
 
@@ -70,12 +70,12 @@ public:
 		complete_ = true;
 	}
 
-	std::string streamLog() const {
+	auto streamLog() const {
 		return _streamLog;
 	}
 
 	void openStream(StreamParameters p) override {
-		_streamParameters = p;
+		_streamParameters = std::move(p);
 		_streamLog += "open ";
 	}
 
@@ -83,7 +83,7 @@ public:
 		_streamLog += "close ";
 	}
 
-	const StreamParameters &streamParameters() const {
+	auto streamParameters() const noexcept {
 		return _streamParameters;
 	}
 
@@ -104,7 +104,7 @@ public:
 		return gsl::narrow_cast<int>(_descriptions.size());
 	}
 
-	std::string callbackLog() const {
+	auto callbackLog() const {
 		return _callbackLog;
 	}
 

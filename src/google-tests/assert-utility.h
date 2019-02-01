@@ -23,7 +23,7 @@ void assertEqual(
 	T tolerance
 ) {
 	EXPECT_EQ(expected.size(), actual.size());
-	using size_type = typename decltype(expected)::size_type;
+	using size_type = typename std::vector<T>::size_type;
 	for (size_type i = 0; i < expected.size(); ++i)
 		EXPECT_NEAR(expected.at(i), actual.at(i), tolerance);
 }
