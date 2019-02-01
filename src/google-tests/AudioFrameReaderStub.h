@@ -16,11 +16,11 @@ public:
         return remainingFrames_;
     }
 
-    void setRemainingFrames(int n) {
+    void setRemainingFrames(int n) noexcept {
         remainingFrames_ = n;
     }
 
-	const gsl::span<channel_type> audioBuffer() const {
+	auto audioBuffer() const noexcept {
 		return audioBuffer_;
 	}
 
@@ -33,7 +33,7 @@ public:
 		readingLog_ += LogString{ "read " };
 	}
 
-	void setComplete() {
+	void setComplete() noexcept {
 		complete_ = true;
 	}
 
@@ -45,11 +45,11 @@ public:
 		return sampleRate_;
 	}
 
-	void setSampleRate(int r) {
+	void setSampleRate(int r) noexcept {
 		sampleRate_ = r;
 	}
 
-	void setChannels(int c) {
+	void setChannels(int c) noexcept {
 		channels_ = c;
 	}
 
@@ -57,11 +57,11 @@ public:
 		return frames_;
 	}
 
-	void setFrames(long long f) {
+	void setFrames(long long f) noexcept {
 		frames_ = f;
 	}
 
-	LogString readingLog() const {
+	auto readingLog() const {
 		return readingLog_;
 	}
 
@@ -69,7 +69,7 @@ public:
 		readingLog_ += LogString{ "reset " };
 	}
 
-	void setIncomplete() {
+	void setIncomplete() noexcept {
 		complete_ = false;
 	}
 };
@@ -81,11 +81,11 @@ public:
 	explicit AudioFrameReaderStubFactory(
 		std::shared_ptr<AudioFrameReader> reader =
 			std::make_shared<AudioFrameReaderStub>()
-	) :
+	) noexcept :
 		reader{ std::move(reader) } {}
 
-	void setReader(std::shared_ptr<AudioFrameReader> r) {
-		this->reader = std::move(r);
+	void setReader(std::shared_ptr<AudioFrameReader> r) noexcept {
+		reader = std::move(r);
 	}
 
 	std::shared_ptr<AudioFrameReader> make(std::string filePath) override {
@@ -93,7 +93,7 @@ public:
 		return reader;
 	}
 
-	std::string filePath() const {
+	auto filePath() const {
 		return filePath_;
 	}
 };
@@ -103,7 +103,7 @@ class ErrorAudioFrameReaderFactory : public AudioFrameReaderFactory {
 public:
 	explicit ErrorAudioFrameReaderFactory(
 		std::string errorMessage
-	) : 
+	) noexcept : 
 		errorMessage{ std::move(errorMessage) } {}
 
 	std::shared_ptr<AudioFrameReader> make(std::string) override {
