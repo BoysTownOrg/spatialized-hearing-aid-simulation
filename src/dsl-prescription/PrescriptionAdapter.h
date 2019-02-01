@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConfigurationFileParser.h"
-#include "PrescriptionReader.h"
+#include <spatialized-hearing-aid-simulation/PrescriptionReader.h>
 #include <string>
 
 #ifdef DSL_PRESCRIPTION_EXPORTS

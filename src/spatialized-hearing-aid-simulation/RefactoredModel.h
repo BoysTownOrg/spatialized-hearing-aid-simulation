@@ -3,11 +3,11 @@
 #include "SpeechPerceptionTest.h"
 #include "IAudioPlayer.h"
 #include "IRefactoredSpatializedHearingAidSimulationFactory.h"
+#include "PrescriptionReader.h"
+#include "BrirReader.h"
+#include "AudioFrameReader.h"
+#include "AudioLoader.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
-#include <dsl-prescription/PrescriptionReader.h>
-#include <binaural-room-impulse-response/BrirReader.h>
-#include <audio-stream-processing/AudioFrameReader.h>
-#include <playing-audio/AudioLoader.h>
 #include <presentation/Model.h>
 
 class RefactoredModel : public Model {

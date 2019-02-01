@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="ChannelCopier.h" />
   </ItemGroup>
   <ItemGroup>

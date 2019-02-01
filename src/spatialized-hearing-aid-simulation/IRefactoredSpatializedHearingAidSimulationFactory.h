@@ -1,7 +1,7 @@
 #pragma once
 
-#include <dsl-prescription/PrescriptionReader.h>
-#include <binaural-room-impulse-response/BrirReader.h>
+#include "PrescriptionReader.h"
+#include "BrirReader.h"
 #include <signal-processing/SignalProcessor.h>
 #include <common-includes/Interface.h>
 

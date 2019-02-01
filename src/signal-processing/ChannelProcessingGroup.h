@@ -2,7 +2,7 @@
 
 #include "SignalProcessor.h"
 #include "signal-processing-exports.h"
-#include <playing-audio/AudioFrameProcessor.h>
+#include <spatialized-hearing-aid-simulation/AudioFrameProcessor.h>
 #include <vector>
 #include <memory>
 

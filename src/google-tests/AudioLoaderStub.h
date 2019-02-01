@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LogString.h"
-#include <playing-audio/AudioLoader.h>
+#include <spatialized-hearing-aid-simulation/AudioLoader.h>
 
 class AudioLoaderStub : public AudioLoader {
 	gsl::span<gsl::span<float>> audioBuffer_{};

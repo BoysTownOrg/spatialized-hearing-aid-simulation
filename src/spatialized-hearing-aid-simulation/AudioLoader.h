@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AudioFrameProcessor.h"
-#include <audio-stream-processing/AudioFrameReader.h>
+#include <spatialized-hearing-aid-simulation/AudioFrameReader.h>
 #include <common-includes/Interface.h>
 #include <gsl/gsl>
 

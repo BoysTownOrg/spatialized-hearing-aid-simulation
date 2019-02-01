@@ -154,8 +154,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioFrameProcessor.h" />
+    <ClInclude Include="AudioFrameReader.h" />
+    <ClInclude Include="AudioLoader.h" />
+    <ClInclude Include="BrirReader.h" />
     <ClInclude Include="IAudioPlayer.h" />
     <ClInclude Include="IRefactoredSpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="PrescriptionReader.h" />
     <ClInclude Include="RefactoredModel.h" />
     <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />

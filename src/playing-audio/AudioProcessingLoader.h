@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioLoader.h"
+#include <spatialized-hearing-aid-simulation/AudioLoader.h>
 #include "playing-audio-exports.h"
 
 class AudioProcessingLoader : public AudioLoader {

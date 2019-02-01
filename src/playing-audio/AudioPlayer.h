@@ -1,8 +1,8 @@
 #pragma once
 
 #include "AudioDevice.h"
-#include "AudioLoader.h"
 #include "playing-audio-exports.h"
+#include <spatialized-hearing-aid-simulation/AudioLoader.h>
 #include <spatialized-hearing-aid-simulation/IAudioPlayer.h>
 
 class AudioPlayer : public AudioDeviceController, public IAudioPlayer {

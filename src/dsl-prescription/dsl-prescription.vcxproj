@@ -144,7 +144,6 @@
   <ItemGroup>
     <ClInclude Include="PrescriptionAdapter.h" />
     <ClInclude Include="ConfigurationFileParser.h" />
-    <ClInclude Include="PrescriptionReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PrescriptionAdapter.cpp" />

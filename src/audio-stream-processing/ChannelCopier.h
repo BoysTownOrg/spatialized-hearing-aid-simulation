@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioFrameReader.h"
+#include <spatialized-hearing-aid-simulation/AudioFrameReader.h>
 #include <memory>
 
 #ifdef AUDIO_STREAM_PROCESSING_EXPORTS

@@ -18,9 +18,6 @@
     <ClInclude Include="ConfigurationFileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PrescriptionReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PrescriptionAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

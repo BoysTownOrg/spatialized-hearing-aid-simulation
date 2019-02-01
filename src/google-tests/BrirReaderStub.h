@@ -1,6 +1,6 @@
 #pragma once
 
-#include <binaural-room-impulse-response/BrirReader.h>
+#include <spatialized-hearing-aid-simulation/BrirReader.h>
 
 class BrirReaderStub : public BrirReader {
 	BinauralRoomImpulseResponse brir_{};

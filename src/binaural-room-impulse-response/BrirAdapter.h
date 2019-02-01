@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BrirReader.h"
+#include <spatialized-hearing-aid-simulation/BrirReader.h>
 #include <audio-file-reading/AudioFileReader.h>
 
 #ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS

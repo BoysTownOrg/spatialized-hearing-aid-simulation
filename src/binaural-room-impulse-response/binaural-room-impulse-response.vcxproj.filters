@@ -18,9 +18,6 @@
     <ClInclude Include="BrirAdapter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BrirReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BrirAdapter.cpp">

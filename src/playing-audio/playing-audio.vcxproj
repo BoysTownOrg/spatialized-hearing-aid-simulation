@@ -159,9 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioDevice.h" />
-    <ClInclude Include="AudioLoader.h" />
     <ClInclude Include="playing-audio-exports.h" />
-    <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioProcessingLoader.h" />
   </ItemGroup>

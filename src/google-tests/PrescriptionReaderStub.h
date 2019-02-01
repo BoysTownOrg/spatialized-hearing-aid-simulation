@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ArgumentCollection.h"
-#include <dsl-prescription/PrescriptionReader.h>
+#include <spatialized-hearing-aid-simulation/PrescriptionReader.h>
 #include <map>
 
 class PrescriptionReaderStub : public PrescriptionReader {

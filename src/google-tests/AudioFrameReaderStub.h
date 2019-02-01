@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LogString.h"
-#include <audio-stream-processing/AudioFrameReader.h>
+#include <spatialized-hearing-aid-simulation/AudioFrameReader.h>
 
 class AudioFrameReaderStub : public AudioFrameReader {
 	LogString readingLog_{};

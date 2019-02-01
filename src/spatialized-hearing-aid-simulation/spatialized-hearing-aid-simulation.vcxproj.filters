@@ -33,6 +33,21 @@
     <ClInclude Include="RefactoredSpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFrameReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BrirReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrescriptionReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioFrameProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">
