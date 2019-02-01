@@ -1,37 +1,9 @@
 #include "assert-utility.h"
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
+#include "DirectoryReaderStub.h"
+#include "RandomizerStub.h"
 #include <gtest/gtest.h>
-
-class DirectoryReaderStub : public DirectoryReader {
-    std::vector<std::string> fileNames_{};
-    std::string directory_{};
-public:
-    void setFileNames(std::vector<std::string> files) {
-        fileNames_ = std::move(files);
-    }
-    
-    std::vector<std::string> filesIn(std::string directory) override {
-        directory_ = std::move(directory);
-        return fileNames_;
-    }
-    
-    std::string directory() const {
-        return directory_;
-    }
-};
-
-class RandomizerStub : public Randomizer {
-    std::vector<std::string> toShuffle_;
-public:
-    std::vector<std::string> toShuffle() const {
-        return toShuffle_;
-    }
-    
-    void shuffle(shuffle_iterator begin, shuffle_iterator end) override {
-        toShuffle_ = {begin, end};
-    }
-};
 
 namespace {
 	class RandomizedStimulusListTests : public ::testing::Test {

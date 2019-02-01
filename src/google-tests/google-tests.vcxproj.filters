@@ -125,5 +125,11 @@
     <ClInclude Include="BrirReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DirectoryReaderStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomizerStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

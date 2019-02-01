@@ -179,6 +179,7 @@
     <ClInclude Include="AudioDeviceStub.h" />
     <ClInclude Include="AudioFrameProcessorStub.h" />
     <ClInclude Include="BrirReaderStub.h" />
+    <ClInclude Include="DirectoryReaderStub.h" />
     <ClInclude Include="DocumenterStub.h" />
     <ClInclude Include="FakeAudioFileReader.h" />
     <ClInclude Include="AudioLoaderStub.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="ModelStub.h" />
     <ClInclude Include="PersistentMemoryWriterStub.h" />
     <ClInclude Include="PrescriptionReaderStub.h" />
+    <ClInclude Include="RandomizerStub.h" />
     <ClInclude Include="SignalProcessorStub.h" />
     <ClInclude Include="FakeStimulusList.h" />
     <ClInclude Include="ViewStub.h" />
