@@ -15,7 +15,7 @@ class NullReader : public AudioFrameReader {
 	long long remainingFrames() override { return 0; }
 };
 
-AudioProcessingLoader::AudioProcessingLoader() :
+AudioProcessingLoader::AudioProcessingLoader() noexcept :
 	reader{ std::make_shared<NullReader>() },
 	processor{ std::make_shared<NullProcessor>() },
 	paddedZeros{ 0 } {}
@@ -37,16 +37,19 @@ void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
 		? audio.begin()->size() - reader->remainingFrames() 
 		: 0;
 	reader->read(audio);
-	if (zerosToPad > 0) {
-		for (auto channel : audio)
-			std::fill(
-				channel.end() - gsl::narrow<channel_type::index_type>(zerosToPad), 
-				channel.end(), 
-				channel_type::element_type{ 0 }
-			);
-		paddedZeros += zerosToPad;
-	}
+	if (zerosToPad > 0)
+		padZeros(audio, zerosToPad);
 	processor->process(audio);
+}
+
+void AudioProcessingLoader::padZeros(gsl::span<channel_type> audio, long long zerosToPad) {
+	for (auto channel : audio)
+		std::fill(
+			channel.end() - gsl::narrow<channel_type::index_type>(zerosToPad),
+			channel.end(),
+			channel_type::element_type{ 0 }
+		);
+	paddedZeros += zerosToPad;
 }
 
 bool AudioProcessingLoader::complete() {
