@@ -12,7 +12,7 @@
 #endif
 
 class AudioFileInMemory : public AudioFrameReader {
-	using buffer_type = std::vector<float>;
+	using buffer_type = std::vector<channel_type::element_type>;
 	using size_type = buffer_type::size_type;
 	buffer_type buffer;
 	size_type head = 0;
@@ -31,7 +31,7 @@ public:
     AUDIO_FILE_READING_API long long remainingFrames() override;
 private:
 	bool complete_();
-	unsigned int remainingFrames_();
+	size_type remainingFrames_();
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {

@@ -54,16 +54,14 @@ long long AudioFileInMemory::remainingFrames() {
 	return remainingFrames_();
 }
 
-unsigned int AudioFileInMemory::remainingFrames_() {
+auto AudioFileInMemory::remainingFrames_() -> size_type {
 	return (buffer.size() - head) / channels_;
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
 	AudioFileReaderFactory *factory
 ) :
-	factory{ factory }
-{
-}
+	factory{ factory } {}
 
 std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(
 	std::string filePath
