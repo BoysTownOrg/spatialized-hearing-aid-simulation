@@ -11,10 +11,10 @@ class FilterbankCompressorSpy : public FilterbankCompressor {
 	int compressChannelsChunkSize_{};
 	int filterbankSynthesizeChunkSize_{};
 	int compressOutputChunkSize_{};
-	bool failed_{};
 	int windowSize_{};
+	bool failed_{};
 public:
-	std::string processingLog() const {
+	auto processingLog() const {
 		return processingLog_;
 	}
 
@@ -43,27 +43,27 @@ public:
 		processingLog_ += "compressOutput";
 	}
 
-	void setChunkSize(int s) {
+	void setChunkSize(int s) noexcept {
 		chunkSize_ = s;
 	}
 
-	int compressInputChunkSize() const {
+	auto compressInputChunkSize() const noexcept {
 		return compressInputChunkSize_;
 	}
 
-	int filterbankAnalyzeChunkSize() const {
+	auto filterbankAnalyzeChunkSize() const noexcept {
 		return filterbankAnalyzeChunkSize_;
 	}
 
-	int compressChannelsChunkSize() const {
+	auto compressChannelsChunkSize() const noexcept {
 		return compressChannelsChunkSize_;
 	}
 
-	int filterbankSynthesizeChunkSize() const {
+	auto filterbankSynthesizeChunkSize() const noexcept {
 		return filterbankSynthesizeChunkSize_;
 	}
 
-	int compressOutputChunkSize() const {
+	auto compressOutputChunkSize() const noexcept {
 		return compressOutputChunkSize_;
 	}
 
@@ -75,7 +75,7 @@ public:
 		return 1;
 	}
 
-	void fail() {
+	void fail() noexcept {
 		failed_ = true;
 	}
 
@@ -83,7 +83,7 @@ public:
 		return failed_;
 	}
 
-	void setWindowSize(int n) {
+	void setWindowSize(int n) noexcept {
 		windowSize_ = n;
 	}
 
@@ -99,10 +99,10 @@ public:
 	explicit FilterbankCompressorSpyFactory(
 		std::shared_ptr<FilterbankCompressor> compressor =
 			std::make_shared<FilterbankCompressorSpy>()
-	) :
+	) noexcept :
 		compressor{ std::move(compressor) } {}
 
-	ArgumentCollection<FilterbankCompressor::Parameters> parameters() const {
+	auto parameters() const {
 		return parameters_;
 	}
 

@@ -50,7 +50,7 @@ public:
 	explicit FakeConfigurationFileParserFactory(
 		std::shared_ptr<ConfigurationFileParser> parser =
 			std::make_shared<FakeConfigurationFileParser>()
-	) :
+	) noexcept :
 		parser{ std::move(parser) } {}
 
 	std::shared_ptr<ConfigurationFileParser> make(std::string s) override {
@@ -58,11 +58,11 @@ public:
 		return parser;
 	}
 
-	void setParser(std::shared_ptr<ConfigurationFileParser> p) {
+	void setParser(std::shared_ptr<ConfigurationFileParser> p) noexcept {
 		parser = std::move(p);
 	}
 
-	ArgumentCollection<std::string> filePaths() const {
+	auto filePaths() const {
 		return filePaths_;
 	}
 };
@@ -70,7 +70,7 @@ public:
 class ErrorParser : public ConfigurationFileParser {
 	std::string message;
 public:
-	explicit ErrorParser(std::string message) :
+	explicit ErrorParser(std::string message) noexcept :
 		message{ std::move(message) } {}
 
 	double asDouble(std::string) override {

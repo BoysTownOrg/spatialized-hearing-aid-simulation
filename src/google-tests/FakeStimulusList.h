@@ -7,11 +7,11 @@ class FakeStimulusList : public StimulusList {
 	std::vector<std::string> contents_{};
 	std::string directory_{};
 public:
-	void setContents(std::vector<std::string> v) {
+	void setContents(std::vector<std::string> v) noexcept {
 		contents_ = std::move(v);
 	}
 
-	std::string directory() const {
+	auto directory() const {
 		return directory_;
 	}
 
