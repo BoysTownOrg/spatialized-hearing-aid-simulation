@@ -8,52 +8,78 @@
 namespace {
 	class ChannelCopierTests : public ::testing::Test {
 	protected:
-		std::shared_ptr<AudioFrameReaderStub> reader =
+		std::shared_ptr<AudioFrameReaderStub> decorated =
 			std::make_shared<AudioFrameReaderStub>();
-		ChannelCopier copier{ reader };
+		ChannelCopier copier{ decorated };
 	};
 
-	TEST_F(ChannelCopierTests, returnsCompleteWhenComplete) {
+	TEST_F(ChannelCopierTests, completeWhenDecoratedReaderIsComplete) {
 		EXPECT_FALSE(copier.complete());
-		reader->setComplete();
+		decorated->setComplete();
 		EXPECT_TRUE(copier.complete());
 	}
 
-	TEST_F(ChannelCopierTests, returnsParameters) {
-		reader->setSampleRate(1);
-		reader->setFrames(2);
-		reader->setChannels(3);
-		reader->setRemainingFrames(4);
+	TEST_F(ChannelCopierTests, returnsDecoratedReaderParameters) {
+		decorated->setSampleRate(1);
+		decorated->setFrames(2);
+		decorated->setChannels(3);
+		decorated->setRemainingFrames(4);
 		EXPECT_EQ(1, copier.sampleRate());
 		EXPECT_EQ(2, copier.frames());
 		EXPECT_EQ(3, copier.channels());
 		EXPECT_EQ(4, copier.remainingFrames());
 	}
 
-	TEST_F(ChannelCopierTests, returnsTwoIfOneChannel) {
-		reader->setChannels(1);
+	TEST_F(ChannelCopierTests, returnsTwoIfDecoratedReaderHasOnlyOneChannel) {
+		decorated->setChannels(1);
 		EXPECT_EQ(2, copier.channels());
 	}
 
-	TEST_F(ChannelCopierTests, reset) {
+	TEST_F(ChannelCopierTests, resetsDecoratedReaderWhenReset) {
 		copier.reset();
-		EXPECT_TRUE(reader->readingLog().contains("reset "));
+		EXPECT_TRUE(decorated->readingLog().contains("reset "));
 	}
 
-	TEST(ChannelCopierOtherTests, copiesFirstChannelToSecondWhenOnlyOneChannel) {
+	class ChannelCopierFacade {
+		ChannelCopier copier;
+	public:
+		using channel_type = ChannelCopier::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
+		buffer_type left{};
+		buffer_type right{};
+
+		explicit ChannelCopierFacade(std::shared_ptr<AudioFrameReader> r) noexcept : 
+			copier{ std::move(r) } {}
+
+		void readStereoFrames(buffer_type::size_type n) {
+			left.resize(n);
+			right.resize(n);
+			std::vector<channel_type> stereo{ left, right };
+			copier.read(stereo);
+		}
+	};
+
+	class ChannelCopierDecorateTests : public ::testing::Test {
+	protected:
+		ChannelCopierFacade copyInMemoryReader(AudioFileReader &r) {
+			return ChannelCopierFacade{ std::make_shared<AudioFileInMemory>(r) };
+		}
+	};
+
+	TEST_F(
+		ChannelCopierDecorateTests, 
+		copiesFirstChannelToSecondWhenDecoratedReaderHasOnlyOneChannel
+	) {
 		FakeAudioFileReader reader;
 		reader.setContents({ 1, 2, 3 });
 		reader.setChannels(1);
-		ChannelCopier copier{ std::make_shared<AudioFileInMemory>(reader) };
-		std::vector<float> left(3);
-		std::vector<float> right(3);
-		std::vector<gsl::span<float>> stereo{ left, right };
-		copier.read(stereo);
-		assertEqual({ 1, 2, 3 }, left);
-		assertEqual({ 1, 2, 3 }, right);
+		auto copier = copyInMemoryReader(reader);
+		copier.readStereoFrames(3);
+		assertEqual({ 1, 2, 3 }, copier.left);
+		assertEqual({ 1, 2, 3 }, copier.right);
 	}
 
-	TEST(ChannelCopierOtherTests, factoryPassesFilePath) {
+	TEST(ChannelCopierFactoryTests, factoryPassesFilePath) {
 		AudioFrameReaderStubFactory factory;
 		ChannelCopierFactory adapter{ &factory };
 		adapter.make("a");
