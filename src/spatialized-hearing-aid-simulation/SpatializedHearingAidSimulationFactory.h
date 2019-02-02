@@ -38,16 +38,16 @@ public:
 	);
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(
 		FullSimulation p, float scale
-	);
+	) override;
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 		HearingAidSimulation p, float scale
-	);
+	) override;
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeSpatialization(
 		Spatialization p, float scale
-	);
+	) override;
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 		float scale
-	);
+	) override;
 private:
 	FilterbankCompressor::Parameters compression(HearingAidSimulation p);
 };

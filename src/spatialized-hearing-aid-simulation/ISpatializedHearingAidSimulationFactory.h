@@ -39,4 +39,24 @@ public:
 		Spatialization spatialization;
 		HearingAidSimulation hearingAidSimulation;
 	};
+	virtual std::shared_ptr<SignalProcessor> makeFullSimulation(
+		FullSimulation , float 
+	) {
+		return {};
+	}
+	virtual std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
+		HearingAidSimulation , float 
+	) {
+		return {};
+	}
+	virtual std::shared_ptr<SignalProcessor> makeSpatialization(
+		Spatialization , float 
+	) {
+		return {};
+	}
+	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
+		float 
+	) {
+		return {};
+	}
 };
