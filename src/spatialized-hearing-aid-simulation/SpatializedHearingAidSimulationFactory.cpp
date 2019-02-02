@@ -31,8 +31,9 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFul
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAidSimulation(SimulationParameters p)
 {
-	p;
-	return std::shared_ptr<SignalProcessor>();
+	p.usingHearingAidSimulation = true;
+	p.usingSpatialization = false;
+	return make(std::move(p));
 }
 
 FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::compression(
