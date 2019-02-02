@@ -10,12 +10,6 @@ SpatializedHearingAidSimulationFactory::SpatializedHearingAidSimulationFactory(
 	firFilterFactory{ firFilterFactory },
 	hearingAidFactory{ hearingAidFactory } {}
 
-std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::make(
-	SimulationParameters p
-) {
-	return {};
-}
-
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFullSimulation(
 	FullSimulation p, 
 	float scale

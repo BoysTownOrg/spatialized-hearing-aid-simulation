@@ -36,23 +36,6 @@ public:
 		FirFilterFactory *firFilterFactory,
 		HearingAidFactory *hearingAidFactory
 	);
-	std::shared_ptr<SignalProcessor> make(SimulationParameters p) override;
-	struct Spatialization {
-		BrirReader::impulse_response_type filterCoefficients;
-	};
-	struct HearingAidSimulation {
-		PrescriptionReader::Dsl prescription;
-		double attack_ms;
-		double release_ms;
-		double fullScaleLevel_dB_Spl;
-		int sampleRate;
-		int windowSize;
-		int chunkSize;
-	};
-	struct FullSimulation {
-		Spatialization spatialization;
-		HearingAidSimulation hearingAidSimulation;
-	};
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(
 		FullSimulation p, float scale
 	);
