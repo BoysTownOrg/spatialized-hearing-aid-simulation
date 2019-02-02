@@ -4,6 +4,7 @@
 
 // The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
 double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
+int const RefactoredModel::defaultFramesPerBuffer = 1024;
 
 RefactoredModel::RefactoredModel(
 	SpeechPerceptionTest *perceptionTest,
