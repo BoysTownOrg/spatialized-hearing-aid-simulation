@@ -191,7 +191,9 @@ void RefactoredModel::playTrial(TrialParameters p) {
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, std::string audioDevice) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
-	playing.framesPerBuffer = testParameters.chunkSize;
+	playing.framesPerBuffer = testParameters.usingHearingAidSimulation
+		? testParameters.chunkSize
+		: defaultFramesPerBuffer;
 	playing.sampleRate = reader.sampleRate();
 	playing.audioDevice = std::move(audioDevice);
 	try {
