@@ -199,25 +199,29 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
-		playTrial();
-		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
-	}
-
-	TEST_F(RefactoredModelTests, playTrialPassesCalibrationScalarsToFactory) {
+	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSimulation) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
 		trialParameters.level_dB_Spl = 7;
 		playTrial();
-		const auto desiredRms = std::pow(10.0, (7 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
-		const auto leftChannelRms = std::sqrt((1.0 * 1.0 + 3.0 * 3.0 + 5.0 * 5.0) / 3);
-		const auto rightChannelRms = std::sqrt((2.0 * 2.0 + 4.0 * 4.0 + 6.0 * 6.0) / 3);
+		const auto desiredRms = 
+			std::pow(10.0, (7 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
+		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
+		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
 		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.parameters().at(0).scale, 1e-6);
 		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.parameters().at(1).scale, 1e-6);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesLeftPrescriptionToFactory) {
+	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
+		playTrial();
+		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesLeftPrescriptionToFactoryWhenUsingHearingAidSimulation
+	) {
 		PrescriptionReader::Dsl prescription;
 		prescription.compressionRatios = { 1 };
 		prescription.crossFrequenciesHz = { 2 };
@@ -225,9 +229,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		prescriptionReader.addPrescription("leftFilePath", prescription);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
+		prescriptionReader.addPrescription("leftFilePath", prescription);
 		prepareNewTest();
 		playTrial();
 		auto actual = simulationFactory.parameters().at(0).prescription;
@@ -239,7 +243,10 @@ namespace {
 		assertEqual(6, actual.channels);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesRightPrescriptionToFactory) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesRightPrescriptionToFactoryWhenUsingHearingAidSimulation
+	) {
 		PrescriptionReader::Dsl prescription;
 		prescription.compressionRatios = { 1 };
 		prescription.crossFrequenciesHz = { 2 };
@@ -247,9 +254,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		prescriptionReader.addPrescription("rightFilePath", prescription);
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
+		prescriptionReader.addPrescription("rightFilePath", prescription);
 		prepareNewTest();
 		playTrial();
 		auto actual = simulationFactory.parameters().at(1).prescription;
