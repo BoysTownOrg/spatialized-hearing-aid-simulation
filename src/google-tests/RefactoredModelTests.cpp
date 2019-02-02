@@ -37,6 +37,9 @@ namespace {
 
 	class RefactoredModelTests : public ::testing::Test {
 	protected:
+		using channel_type = AudioFrameProcessor::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
+
 		RefactoredModel::TestParameters testParameters{};
 		RefactoredModel::TrialParameters trialParameters{};
 		PrescriptionReaderStub prescriptionReader{};
@@ -372,7 +375,10 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesBrirToFactory) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesBrirToFactoryWhenUsingSpatialization
+	) {
 		testParameters.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
@@ -384,26 +390,26 @@ namespace {
 		assertEqual({ 3, 4, }, simulationFactory.parameters().at(1).filterCoefficients);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialLoadsLoaderWithProcessorBeforePlayingPlayer) {
+	TEST_F(RefactoredModelTests, playTrialSetsProcessorBeforePlaying) {
 		prepareNewTest();
 		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		std::vector<float> left{ 4 };
-		std::vector<float> right{ 5 };
-		std::vector<gsl::span<float>> channels{ left, right };
+		buffer_type left{ 4 };
+		buffer_type right{ 5 };
+		std::vector<channel_type> channels{ left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
 		playTrial();
 		assertEqual(4 + 1.0f, left.front());
 		assertEqual(5 + 1.0f, right.front());
 	}
 
-	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
-		audioPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
-		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
-	}
-
-	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlayingNextTrial) {
+	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
 		audioPlayer.callOnPlay([&]() { assertTrue(audioLoader.log().contains("reset")); });
 		playTrial();
+	}
+
+	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
+		playTrial();
+		assertEqual("prepareToPlay play ", audioPlayer.log());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
@@ -412,9 +418,9 @@ namespace {
 		assertTrue(audioLoader.log().isEmpty());
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
-		playTrial();
-		assertEqual("prepareToPlay play ", audioPlayer.log());
+	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
+		audioPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
+		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 	}
 
 	TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
@@ -424,13 +430,13 @@ namespace {
 
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
-		RefactoredModel::TestParameters newTest{};
+		RefactoredModel::TestParameters testParameters{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
 		BrirReader *brirReader{ &defaultBrirReader };
-		SpeechPerceptionTestStub defaultTest{};
-		SpeechPerceptionTest *test{ &defaultTest };
+		SpeechPerceptionTestStub defaultPerceptionTest{};
+		SpeechPerceptionTest *perceptionTest{ &defaultPerceptionTest };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioPlayerStub defaultPlayer{};
@@ -443,7 +449,7 @@ namespace {
 		void assertPreparingNewTestThrowsTestInitializationFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.prepareNewTest(newTest);
+				model.prepareNewTest(testParameters);
 				FAIL() << "Expected RefactoredModel::TestInitializationFailure.";
 			}
 			catch (const RefactoredModel::TestInitializationFailure & e) {
@@ -473,10 +479,19 @@ namespace {
 			}
 		}
 
+		void prepareNewTestIgnoringFailure() {
+			try {
+				auto model = makeModel();
+				model.prepareNewTest(testParameters);
+			}
+			catch (const RefactoredModel::TestInitializationFailure &) {
+			}
+		}
+
 		RefactoredModel makeModel() {
 			return
 			{
-				test,
+				perceptionTest,
 				player,
 				loader,
 				audioReaderFactory,
@@ -492,10 +507,9 @@ namespace {
 		prepareNewTestThrowsTestInitializationFailureWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
-		failing.setErrorMessage("irrelevant");
-		newTest.usingHearingAidSimulation = true;
-		newTest.leftDslPrescriptionFilePath = "a";
 		prescriptionReader = &failing;
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.leftDslPrescriptionFilePath = "a";
 		assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 	}
 
@@ -504,25 +518,10 @@ namespace {
 		prepareNewTestDoesNotPrepareTestWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
-		newTest.usingHearingAidSimulation = true;
 		prescriptionReader = &failing;
-		auto model = makeModel();
-		try {
-			model.prepareNewTest(newTest);
-		}
-		catch (const RefactoredModel::TestInitializationFailure &) {
-		}
-		assertFalse(defaultTest.prepareNewTestCalled());
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenTestFailsToInitialize
-	) {
-		InitializationFailingSpeechPerceptionTest failing;
-		failing.setErrorMessage("error.");
-		test = &failing;
-		assertPreparingNewTestThrowsTestInitializationFailure("error.");
+		testParameters.usingHearingAidSimulation = true;
+		prepareNewTestIgnoringFailure();
+		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
 	}
 
 	TEST_F(
@@ -530,10 +529,9 @@ namespace {
 		prepareNewTestThrowsTestInitializationFailureWhenBrirReaderFails
 	) {
 		FailingBrirReader failing;
-		failing.setErrorMessage("irrelevant.");
 		brirReader = &failing;
-		newTest.usingSpatialization = true;
-		newTest.brirFilePath = "a";
+		testParameters.usingSpatialization = true;
+		testParameters.brirFilePath = "a";
 		assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 	}
 
@@ -543,14 +541,19 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		newTest.usingSpatialization = true;
-		auto model = makeModel();
-		try {
-			model.prepareNewTest(newTest);
-		}
-		catch (const RefactoredModel::TestInitializationFailure &) {
-		}
-		assertFalse(defaultTest.prepareNewTestCalled());
+		testParameters.usingSpatialization = true;
+		prepareNewTestIgnoringFailure();
+		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		prepareNewTestThrowsTestInitializationFailureWhenPerceptionTestFailsToInitialize
+	) {
+		InitializationFailingSpeechPerceptionTest failing;
+		failing.setErrorMessage("error.");
+		perceptionTest = &failing;
+		assertPreparingNewTestThrowsTestInitializationFailure("error.");
 	}
 
 	TEST_F(
@@ -572,7 +575,7 @@ namespace {
 		}
 		catch (const RefactoredModel::TrialFailure &) {
 		}
-		assertFalse(defaultTest.advanceTrialCalled());
+		assertFalse(defaultPerceptionTest.advanceTrialCalled());
 	}
 
 	TEST_F(
@@ -593,7 +596,7 @@ namespace {
 		brir.left = {};
 		brir.right = { 0 };
 		defaultBrirReader.setBrir(brir);
-		newTest.usingSpatialization = true;
+		testParameters.usingSpatialization = true;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
 		);
@@ -609,14 +612,14 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsTestInitializationFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
-		newTest.chunkSize = 0;
-		newTest.windowSize = 1;
-		newTest.usingHearingAidSimulation = true;
+		testParameters.chunkSize = 0;
+		testParameters.windowSize = 1;
+		testParameters.usingHearingAidSimulation = true;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
 		);
-		newTest.chunkSize = 2;
-		newTest.windowSize = 3;
+		testParameters.chunkSize = 2;
+		testParameters.windowSize = 3;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);
