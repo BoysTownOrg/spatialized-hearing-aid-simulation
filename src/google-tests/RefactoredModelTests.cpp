@@ -480,8 +480,8 @@ namespace {
 		}
 
 		void prepareNewTestIgnoringFailure() {
+			auto model = makeModel();
 			try {
-				auto model = makeModel();
 				model.prepareNewTest(testParameters);
 			}
 			catch (const RefactoredModel::TestInitializationFailure &) {
@@ -600,6 +600,15 @@ namespace {
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playTrialThrowsTrialFailureWhenAudioFrameReaderCannotBeCreated
+	) {
+		ErrorAudioFrameReaderFactory failing{ "error." };
+		audioReaderFactory = &failing;
+		assertPlayTrialThrowsTrialFailure("error.");
 	}
 
 	TEST_F(
