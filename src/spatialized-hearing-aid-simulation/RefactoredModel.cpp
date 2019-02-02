@@ -162,7 +162,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 	sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
 	sp.usingSpatialization = testParameters.usingSpatialization;
-	auto reader = audioReaderFactory->make(perceptionTest->nextStimulus());
+	auto reader = makeReader(perceptionTest->nextStimulus());
 	sp.sampleRate = reader->sampleRate();
 
     RmsComputer rms{ *reader };
@@ -186,6 +186,15 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	prepareAudioPlayer(*reader, p.audioDevice);
 	player->play();
 	perceptionTest->advanceTrial();
+}
+
+std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
+	try {
+		return audioReaderFactory->make(std::move(filePath));
+	}
+	catch (const AudioFrameReaderFactory::CreateError &e) {
+		throw TrialFailure{ e.what() };
+	}
 }
 
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, std::string audioDevice) {

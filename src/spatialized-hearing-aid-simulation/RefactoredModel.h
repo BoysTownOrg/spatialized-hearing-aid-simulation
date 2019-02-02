@@ -48,6 +48,7 @@ private:
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
+	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
 };
