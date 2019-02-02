@@ -64,11 +64,10 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpa
 	return chain;
 }
 
-std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeWithoutSimulation(SimulationParameters p)
-{
-	p.usingHearingAidSimulation = false;
-	p.usingSpatialization = false;
-	return make(std::move(p));
+std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeWithoutSimulation(
+	float scale
+) {
+	return scalarFactory->make(scale);
 }
 
 FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::compression(

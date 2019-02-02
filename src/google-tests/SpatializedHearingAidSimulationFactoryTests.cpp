@@ -76,8 +76,7 @@ namespace {
 	};
 
 	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeWithoutSimulationPassesScalarToFactory) {
-		simulationParameters.scale = 1;
-		simulationFactory.makeWithoutSimulation(simulationParameters);
+		simulationFactory.makeWithoutSimulation(1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
@@ -241,7 +240,7 @@ namespace {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.makeWithoutSimulation(simulationParameters);
+		auto processor = simulationFactory.makeWithoutSimulation({});
 		buffer_type x{ 4 };
 		processor->process(x);
 		assertEqual({ 4 + 1 }, x);

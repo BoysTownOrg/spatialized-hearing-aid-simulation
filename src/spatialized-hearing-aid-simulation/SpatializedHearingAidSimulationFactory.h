@@ -72,7 +72,7 @@ public:
 		Spatialization p, float scale
 	);
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeWithoutSimulation(
-		SimulationParameters p
+		float scale
 	);
 private:
 	FilterbankCompressor::Parameters compression(SimulationParameters p);
