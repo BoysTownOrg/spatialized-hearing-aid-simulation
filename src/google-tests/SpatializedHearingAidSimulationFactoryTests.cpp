@@ -63,6 +63,7 @@ namespace {
 		using buffer_type = std::vector<SignalProcessor::signal_type::element_type>;
 
 		SpatializedHearingAidSimulationFactory::HearingAidSimulation hearingAidSimulation;
+		SpatializedHearingAidSimulationFactory::Spatialization spatialization;
 		SpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
 		FirFilterFactoryStub firFilterFactory{};
@@ -81,8 +82,7 @@ namespace {
 	}
 
 	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeSpatializationPassesScalarToFactory) {
-		simulationParameters.scale = 1;
-		simulationFactory.makeSpatialization(simulationParameters);
+		simulationFactory.makeSpatialization({}, 1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
@@ -181,8 +181,8 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests, 
 		makeSpatializationPassesCoefficientsToFirFilterFactory
 	) {
-		simulationParameters.filterCoefficients = { 1 };
-		simulationFactory.makeSpatialization(simulationParameters);
+		spatialization.filterCoefficients = { 1 };
+		simulationFactory.makeSpatialization(spatialization, {});
 		assertEqual({ 1 }, firFilterFactory.coefficients());
 	}
 
@@ -228,7 +228,7 @@ namespace {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.makeSpatialization(simulationParameters);
+		auto processor = simulationFactory.makeSpatialization({}, {});
 		buffer_type x{ 4 };
 		processor->process(x);
 		assertEqual({ (4 + 1) * 2.0f }, x);

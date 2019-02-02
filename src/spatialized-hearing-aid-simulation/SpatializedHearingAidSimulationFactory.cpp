@@ -54,11 +54,14 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 	return chain;
 }
 
-std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpatialization(SimulationParameters p)
-{
-	p.usingHearingAidSimulation = false;
-	p.usingSpatialization = true;
-	return make(std::move(p));
+std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpatialization(
+	Spatialization p, 
+	float scale
+) {
+	auto chain = std::make_shared<SignalProcessingChain>();
+	chain->add(scalarFactory->make(scale));
+	chain->add(firFilterFactory->make(p.filterCoefficients));
+	return chain;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeWithoutSimulation(SimulationParameters p)

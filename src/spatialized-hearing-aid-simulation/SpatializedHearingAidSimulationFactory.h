@@ -65,8 +65,11 @@ public:
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 		HearingAidSimulation p, float scale
 	);
+	struct Spatialization {
+		BrirReader::impulse_response_type filterCoefficients;
+	};
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeSpatialization(
-		SimulationParameters p
+		Spatialization p, float scale
 	);
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 		SimulationParameters p
