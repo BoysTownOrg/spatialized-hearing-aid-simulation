@@ -29,11 +29,29 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFul
 	return make(std::move(p));
 }
 
-std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAidSimulation(SimulationParameters p)
+std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAidSimulation(
+	HearingAidSimulation p, 
+	float scale
+)
 {
-	p.usingHearingAidSimulation = true;
-	p.usingSpatialization = false;
-	return make(std::move(p));
+	FilterbankCompressor::Parameters compression_;
+	compression_.compressionRatios = p.prescription.compressionRatios;
+	compression_.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
+	compression_.kneepointGains_dB = p.prescription.kneepointGains_dB;
+	compression_.kneepoints_dBSpl = p.prescription.kneepoints_dBSpl;
+	compression_.broadbandOutputLimitingThresholds_dBSpl =
+		p.prescription.broadbandOutputLimitingThresholds_dBSpl;
+	compression_.channels = p.prescription.channels;
+	compression_.attack_ms = p.attack_ms;
+	compression_.release_ms = p.release_ms;
+	compression_.chunkSize = p.chunkSize;
+	compression_.windowSize = p.windowSize;
+	compression_.sampleRate = p.sampleRate;
+	compression_.max_dB_Spl = p.fullScaleLevel_dB_Spl;
+	auto chain = std::make_shared<SignalProcessingChain>();
+	chain->add(scalarFactory->make(scale));
+	chain->add(hearingAidFactory->make(compression_));
+	return chain;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpatialization(SimulationParameters p)
