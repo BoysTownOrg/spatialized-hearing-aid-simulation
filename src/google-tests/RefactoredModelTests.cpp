@@ -488,6 +488,15 @@ namespace {
 			}
 		}
 
+		void playTrialIgnoringFailure() {
+			try {
+				auto model = makeModel();
+				model.playTrial({});
+			}
+			catch (const RefactoredModel::TrialFailure &) {
+			}
+		}
+
 		RefactoredModel makeModel() {
 			return
 			{
@@ -558,45 +567,13 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
-	) {
-		PreparationFailingAudioPlayer failing;
-		failing.setErrorMessage("error.");
-		player = &failing;
-		assertPlayTrialThrowsTrialFailure("error.");
-	}
-
-	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvanceTrialWhenPlayerFails) {
-		PreparationFailingAudioPlayer failing;
-		player = &failing;
-		auto model = makeModel();
-		try {
-			model.playTrial({});
-		}
-		catch (const RefactoredModel::TrialFailure &) {
-		}
-		assertFalse(defaultPerceptionTest.advanceTrialCalled());
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
-		playCalibrationThrowsCalibrationFailureWhenPlayerThrowsRequestFailure
-	) {
-		PreparationFailingAudioPlayer failing;
-		failing.setErrorMessage("error.");
-		player = &failing;
-		assertPlayCalibrationThrowsCalibrationFailure("error.");
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
 		prepareNewTestThrowsTestInitializationFailureWhenCoefficientsAreEmpty
 	) {
+		testParameters.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = {};
 		brir.right = { 0 };
 		defaultBrirReader.setBrir(brir);
-		testParameters.usingSpatialization = true;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
 		);
@@ -612,9 +589,9 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsTestInitializationFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
+		testParameters.usingHearingAidSimulation = true;
 		testParameters.chunkSize = 0;
 		testParameters.windowSize = 1;
-		testParameters.usingHearingAidSimulation = true;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
 		);
@@ -623,5 +600,32 @@ namespace {
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playTrialThrowsTrialFailureWhenPlayerThrowsRequestFailure
+	) {
+		PreparationFailingAudioPlayer failing;
+		failing.setErrorMessage("error.");
+		player = &failing;
+		assertPlayTrialThrowsTrialFailure("error.");
+	}
+
+	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvancePerceptionTestTrialWhenPlayerFails) {
+		PreparationFailingAudioPlayer failing;
+		player = &failing;
+		playTrialIgnoringFailure();
+		assertFalse(defaultPerceptionTest.advanceTrialCalled());
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playCalibrationThrowsCalibrationFailureWhenPlayerThrowsPreparationFailure
+	) {
+		PreparationFailingAudioPlayer failing;
+		failing.setErrorMessage("error.");
+		player = &failing;
+		assertPlayCalibrationThrowsCalibrationFailure("error.");
 	}
 }
