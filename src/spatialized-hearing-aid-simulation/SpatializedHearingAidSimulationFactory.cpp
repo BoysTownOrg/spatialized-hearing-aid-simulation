@@ -46,7 +46,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpa
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeWithoutSimulation(SimulationParameters p)
 {
 	p.usingHearingAidSimulation = false;
-	p.usingSpatialization = true;
+	p.usingSpatialization = false;
 	return make(std::move(p));
 }
 
