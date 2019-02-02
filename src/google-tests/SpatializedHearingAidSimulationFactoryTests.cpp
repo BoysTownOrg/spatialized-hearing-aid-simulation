@@ -73,9 +73,27 @@ namespace {
 		};
 	};
 
-	TEST_F(SpatializedHearingAidSimulationFactoryTests, makePassesScalarToFactory) {
+	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeWithoutSimulationPassesScalarToFactory) {
 		simulationParameters.scale = 1;
-		simulationFactory.make(simulationParameters);
+		simulationFactory.makeWithoutSimulation(simulationParameters);
+		assertEqual(1.0f, scalarFactory.scalar());
+	}
+
+	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeSpatializationPassesScalarToFactory) {
+		simulationParameters.scale = 1;
+		simulationFactory.makeSpatialization(simulationParameters);
+		assertEqual(1.0f, scalarFactory.scalar());
+	}
+
+	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeHearingAidSimulationPassesScalarToFactory) {
+		simulationParameters.scale = 1;
+		simulationFactory.makeHearingAidSimulation(simulationParameters);
+		assertEqual(1.0f, scalarFactory.scalar());
+	}
+
+	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeFullSimulationPassesScalarToFactory) {
+		simulationParameters.scale = 1;
+		simulationFactory.makeFullSimulation(simulationParameters);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
