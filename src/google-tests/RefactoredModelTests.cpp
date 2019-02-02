@@ -268,7 +268,10 @@ namespace {
 		assertEqual(6, actual.channels);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesOtherCompressionParametersToFactory) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesCompressionParametersToFactoryWhenUsingHearingAidSimulation
+	) {
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
@@ -288,15 +291,16 @@ namespace {
 		assertEqual(8, right.windowSize);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioReaderSampleRateToFactory) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesAudioReaderSampleRateToFactoryWhenUsingHearingAidSimulation
+	) {
 		audioFrameReader->setSampleRate(1);
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();
-		auto left = simulationFactory.parameters().at(0);
-		assertEqual(1, left.sampleRate);
-		auto right = simulationFactory.parameters().at(1);
-		assertEqual(1, right.sampleRate);
+		assertEqual(1, simulationFactory.parameters().at(0).sampleRate);
+		assertEqual(1, simulationFactory.parameters().at(1).sampleRate);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
@@ -351,14 +355,21 @@ namespace {
 		assertFalse(right.usingSpatialization);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesFullScaleLevelToFactory) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesFullScaleLevelToFactoryWhenUsingHearingAidSimulation
+	) {
 		testParameters.usingHearingAidSimulation = true;
 		prepareNewTest();
 		playTrial();
-		auto left = simulationFactory.parameters().at(0);
-		assertEqual(RefactoredModel::fullScaleLevel_dB_Spl, left.fullScaleLevel_dB_Spl);
-		auto right = simulationFactory.parameters().at(1);
-		assertEqual(RefactoredModel::fullScaleLevel_dB_Spl, right.fullScaleLevel_dB_Spl);
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.parameters().at(0).fullScaleLevel_dB_Spl
+		);
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.parameters().at(1).fullScaleLevel_dB_Spl
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBrirToFactory) {
