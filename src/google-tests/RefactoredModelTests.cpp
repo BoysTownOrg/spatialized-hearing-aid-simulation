@@ -440,9 +440,9 @@ namespace {
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioPlayerStub defaultPlayer{};
-		IAudioPlayer *player{ &defaultPlayer };
+		IAudioPlayer *audioPlayer{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
-		AudioLoader *loader{ &defaultLoader };
+		AudioLoader *audioLoader{ &defaultLoader };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 
@@ -501,8 +501,8 @@ namespace {
 			return
 			{
 				perceptionTest,
-				player,
-				loader,
+				audioPlayer,
+				audioLoader,
 				audioReaderFactory,
 				prescriptionReader,
 				brirReader,
@@ -617,13 +617,13 @@ namespace {
 	) {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
-		player = &failing;
+		audioPlayer = &failing;
 		assertPlayTrialThrowsTrialFailure("error.");
 	}
 
 	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvancePerceptionTestTrialWhenPlayerFails) {
 		PreparationFailingAudioPlayer failing;
-		player = &failing;
+		audioPlayer = &failing;
 		playTrialIgnoringFailure();
 		assertFalse(defaultPerceptionTest.advanceTrialCalled());
 	}
@@ -634,7 +634,7 @@ namespace {
 	) {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
-		player = &failing;
+		audioPlayer = &failing;
 		assertPlayCalibrationThrowsCalibrationFailure("error.");
 	}
 }
