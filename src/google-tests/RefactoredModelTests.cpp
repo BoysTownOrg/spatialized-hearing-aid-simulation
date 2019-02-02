@@ -175,12 +175,28 @@ namespace {
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation) {
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
+	) {
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.chunkSize = 1;
 		prepareNewTest();
 		playTrial();
 		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
+	) {
+		testParameters.usingHearingAidSimulation = false;
+		prepareNewTest();
+		playTrial();
+		assertEqual(
+			RefactoredModel::defaultFramesPerBuffer, 
+			audioPlayer.preparation().framesPerBuffer
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
