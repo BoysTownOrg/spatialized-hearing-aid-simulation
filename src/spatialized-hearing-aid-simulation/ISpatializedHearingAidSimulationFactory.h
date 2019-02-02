@@ -37,7 +37,7 @@ public:
 	};
 	struct FullSimulation {
 		Spatialization spatialization;
-		HearingAidSimulation hearingAidSimulation;
+		HearingAidSimulation hearingAid;
 	};
 	virtual std::shared_ptr<SignalProcessor> makeFullSimulation(
 		FullSimulation , float 

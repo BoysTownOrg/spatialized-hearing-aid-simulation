@@ -99,14 +99,12 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests, 
 		makeHearingAidSimulationPassesPrescriptionToHearingAidFactory
 	) {
-		PrescriptionReader::Dsl prescription;
-		prescription.compressionRatios = { 1 };
-		prescription.crossFrequenciesHz = { 2 };
-		prescription.kneepointGains_dB = { 3 };
-		prescription.kneepoints_dBSpl = { 4 };
-		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-		prescription.channels = 6;
-		hearingAidSimulation.prescription = prescription;
+		hearingAidSimulation.prescription.compressionRatios = { 1 };
+		hearingAidSimulation.prescription.crossFrequenciesHz = { 2 };
+		hearingAidSimulation.prescription.kneepointGains_dB = { 3 };
+		hearingAidSimulation.prescription.kneepoints_dBSpl = { 4 };
+		hearingAidSimulation.prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		hearingAidSimulation.prescription.channels = 6;
 		simulationFactory.makeHearingAidSimulation(hearingAidSimulation, {});
 		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
 		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
@@ -120,14 +118,12 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests,
 		makeFullSimulationPassesPrescriptionToHearingAidFactory
 	) {
-		PrescriptionReader::Dsl prescription;
-		prescription.compressionRatios = { 1 };
-		prescription.crossFrequenciesHz = { 2 };
-		prescription.kneepointGains_dB = { 3 };
-		prescription.kneepoints_dBSpl = { 4 };
-		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-		prescription.channels = 6;
-		fullSimulation.hearingAidSimulation.prescription = prescription;
+		fullSimulation.hearingAid.prescription.compressionRatios = { 1 };
+		fullSimulation.hearingAid.prescription.crossFrequenciesHz = { 2 };
+		fullSimulation.hearingAid.prescription.kneepointGains_dB = { 3 };
+		fullSimulation.hearingAid.prescription.kneepoints_dBSpl = { 4 };
+		fullSimulation.hearingAid.prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		fullSimulation.hearingAid.prescription.channels = 6;
 		simulationFactory.makeFullSimulation(fullSimulation, {});
 		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
 		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
@@ -160,12 +156,12 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests,
 		makeFullSimulationPassesCompressionParametersToHearingAidFactory
 	) {
-		fullSimulation.hearingAidSimulation.attack_ms = 1;
-		fullSimulation.hearingAidSimulation.release_ms = 2;
-		fullSimulation.hearingAidSimulation.chunkSize = 3;
-		fullSimulation.hearingAidSimulation.windowSize = 4;
-		fullSimulation.hearingAidSimulation.sampleRate = 5;
-		fullSimulation.hearingAidSimulation.fullScaleLevel_dB_Spl = 6;
+		fullSimulation.hearingAid.attack_ms = 1;
+		fullSimulation.hearingAid.release_ms = 2;
+		fullSimulation.hearingAid.chunkSize = 3;
+		fullSimulation.hearingAid.windowSize = 4;
+		fullSimulation.hearingAid.sampleRate = 5;
+		fullSimulation.hearingAid.fullScaleLevel_dB_Spl = 6;
 		simulationFactory.makeFullSimulation(fullSimulation, {});
 		assertEqual(1.0, hearingAidFactory.parameters().attack_ms);
 		assertEqual(2.0, hearingAidFactory.parameters().release_ms);
@@ -211,12 +207,11 @@ namespace {
 		makeHearingAidSimulationCombinesProcessorsInOrder
 	) {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
+		hearingAidFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		auto processor = simulationFactory.makeHearingAidSimulation({}, {});
 		buffer_type x{ 4 };
 		processor->process(x);
-		assertEqual({ 4 + 1 + 3.0f }, x);
+		assertEqual({ (4 + 1) * 2.0f }, x);
 	}
 
 	TEST_F(
@@ -225,7 +220,6 @@ namespace {
 	) {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.makeSpatialization({}, {});
 		buffer_type x{ 4 };
 		processor->process(x);
@@ -234,14 +228,10 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests,
-		makeWithoutSimulationCombinesProcessorsInOrder
+		makeWithoutSimulationReturnsScalarProcessor
 	) {
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.makeWithoutSimulation({});
-		buffer_type x{ 4 };
-		processor->process(x);
-		assertEqual({ 4 + 1 }, x);
+		auto processor = std::make_shared<SignalProcessorStub>();
+		scalarFactory.setProcessor(processor);
+		EXPECT_EQ(processor, simulationFactory.makeWithoutSimulation({}));
 	}
 }
