@@ -141,16 +141,34 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesCompressionParametersToHearingAidFactoryWhenUsingHearingAidSimulation
+		makeHearingAidSimulationPassesCompressionParametersToHearingAidFactory
 	) {
-		simulationParameters.usingHearingAidSimulation = true;
 		simulationParameters.attack_ms = 1;
 		simulationParameters.release_ms = 2;
 		simulationParameters.chunkSize = 3;
 		simulationParameters.windowSize = 4;
 		simulationParameters.sampleRate = 5;
 		simulationParameters.fullScaleLevel_dB_Spl = 6;
-		simulationFactory.make(simulationParameters);
+		simulationFactory.makeHearingAidSimulation(simulationParameters);
+		assertEqual(1.0, hearingAidFactory.parameters().attack_ms);
+		assertEqual(2.0, hearingAidFactory.parameters().release_ms);
+		assertEqual(3, hearingAidFactory.parameters().chunkSize);
+		assertEqual(4, hearingAidFactory.parameters().windowSize);
+		assertEqual(5.0, hearingAidFactory.parameters().sampleRate);
+		assertEqual(6.0, hearingAidFactory.parameters().max_dB_Spl);
+	}
+
+	TEST_F(
+		SpatializedHearingAidSimulationFactoryTests,
+		makeFullSimulationPassesCompressionParametersToHearingAidFactory
+	) {
+		simulationParameters.attack_ms = 1;
+		simulationParameters.release_ms = 2;
+		simulationParameters.chunkSize = 3;
+		simulationParameters.windowSize = 4;
+		simulationParameters.sampleRate = 5;
+		simulationParameters.fullScaleLevel_dB_Spl = 6;
+		simulationFactory.makeFullSimulation(simulationParameters);
 		assertEqual(1.0, hearingAidFactory.parameters().attack_ms);
 		assertEqual(2.0, hearingAidFactory.parameters().release_ms);
 		assertEqual(3, hearingAidFactory.parameters().chunkSize);
