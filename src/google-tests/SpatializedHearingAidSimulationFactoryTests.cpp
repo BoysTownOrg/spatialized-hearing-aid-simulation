@@ -60,6 +60,8 @@ namespace {
 
 	class SpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
 	protected:
+		using buffer_type = std::vector<SignalProcessor::signal_type::element_type>;
+
 		SpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
 		ScalarFactoryStub scalarFactory{};
 		FirFilterFactoryStub firFilterFactory{};
@@ -79,7 +81,7 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesPrescriptionToHearingAidFactory
+		makePassesPrescriptionToHearingAidFactoryWhenUsingHearingAidSimulation
 	) {
 		simulationParameters.usingHearingAidSimulation = true;
 		PrescriptionReader::Dsl prescription;
@@ -101,7 +103,7 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesOtherCompressionParametersToHearingAidFactory
+		makePassesCompressionParametersToHearingAidFactoryWhenUsingHearingAidSimulation
 	) {
 		simulationParameters.usingHearingAidSimulation = true;
 		simulationParameters.attack_ms = 1;
@@ -121,7 +123,7 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesCoefficientsToFirFilterFactory
+		makePassesCoefficientsToFirFilterFactoryWhenUsingSpatialization
 	) {
 		simulationParameters.usingSpatialization = true;
 		simulationParameters.filterCoefficients = { 1 };
@@ -131,7 +133,7 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makeCombinesProcessorsInOrder
+		makeCombinesProcessorsInOrderFullSimulation
 	) {
 		simulationParameters.usingSpatialization = true;
 		simulationParameters.usingHearingAidSimulation = true;
@@ -139,9 +141,9 @@ namespace {
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> x{ 4 };
+		buffer_type x{ 4 };
 		processor->process(x);
-		assertEqual((4 + 1) * 2 + 3.0f, x.front());
+		assertEqual({ (4 + 1) * 2 + 3.0f }, x);
 	}
 
 	TEST_F(
@@ -154,9 +156,9 @@ namespace {
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> x{ 4 };
+		buffer_type x{ 4 };
 		processor->process(x);
-		assertEqual(4 + 1 + 3.0f, x.front());
+		assertEqual({ 4 + 1 + 3.0f }, x);
 	}
 
 	TEST_F(
@@ -169,8 +171,8 @@ namespace {
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
 		auto processor = simulationFactory.make(simulationParameters);
-		std::vector<float> x{ 4 };
+		buffer_type x{ 4 };
 		processor->process(x);
-		assertEqual((4 + 1) * 2.0f, x.front());
+		assertEqual({ (4 + 1) * 2.0f }, x);
 	}
 }
