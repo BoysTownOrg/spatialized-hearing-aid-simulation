@@ -37,7 +37,12 @@ public:
 		HearingAidFactory *hearingAidFactory
 	);
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) override;
-	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(SimulationParameters p);
+	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(
+		SimulationParameters p
+	);
+	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
+		SimulationParameters p
+	);
 private:
 	FilterbankCompressor::Parameters compression(SimulationParameters p);
 };
