@@ -99,9 +99,8 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesPrescriptionToHearingAidFactoryWhenUsingHearingAidSimulation
+		makeHearingAidSimulationPassesPrescriptionToHearingAidFactory
 	) {
-		simulationParameters.usingHearingAidSimulation = true;
 		PrescriptionReader::Dsl prescription;
 		prescription.compressionRatios = { 1 };
 		prescription.crossFrequenciesHz = { 2 };
@@ -110,7 +109,28 @@ namespace {
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
 		simulationParameters.prescription = prescription;
-		simulationFactory.make(simulationParameters);
+		simulationFactory.makeHearingAidSimulation(simulationParameters);
+		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
+		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
+		assertEqual({ 3 }, hearingAidFactory.parameters().kneepointGains_dB);
+		assertEqual({ 4 }, hearingAidFactory.parameters().kneepoints_dBSpl);
+		assertEqual({ 5 }, hearingAidFactory.parameters().broadbandOutputLimitingThresholds_dBSpl);
+		assertEqual(6, hearingAidFactory.parameters().channels);
+	}
+
+	TEST_F(
+		SpatializedHearingAidSimulationFactoryTests,
+		makeFullSimulationPassesPrescriptionToHearingAidFactory
+	) {
+		PrescriptionReader::Dsl prescription;
+		prescription.compressionRatios = { 1 };
+		prescription.crossFrequenciesHz = { 2 };
+		prescription.kneepointGains_dB = { 3 };
+		prescription.kneepoints_dBSpl = { 4 };
+		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		prescription.channels = 6;
+		simulationParameters.prescription = prescription;
+		simulationFactory.makeFullSimulation(simulationParameters);
 		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
 		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
 		assertEqual({ 3 }, hearingAidFactory.parameters().kneepointGains_dB);
