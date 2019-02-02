@@ -179,57 +179,20 @@ namespace {
 
 	TEST_F(
 		SpatializedHearingAidSimulationFactoryTests, 
-		makePassesCoefficientsToFirFilterFactoryWhenUsingSpatialization
+		makeSpatializationPassesCoefficientsToFirFilterFactory
 	) {
-		simulationParameters.usingSpatialization = true;
 		simulationParameters.filterCoefficients = { 1 };
-		simulationFactory.make(simulationParameters);
+		simulationFactory.makeSpatialization(simulationParameters);
 		assertEqual({ 1 }, firFilterFactory.coefficients());
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
-		makeCombinesProcessorsInOrderFullSimulation
+		SpatializedHearingAidSimulationFactoryTests,
+		makeFullSimulationPassesCoefficientsToFirFilterFactory
 	) {
-		simulationParameters.usingSpatialization = true;
-		simulationParameters.usingHearingAidSimulation = true;
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.make(simulationParameters);
-		buffer_type x{ 4 };
-		processor->process(x);
-		assertEqual({ (4 + 1) * 2 + 3.0f }, x);
-	}
-
-	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
-		makeCombinesProcessorsInOrderWithoutSpatialization
-	) {
-		simulationParameters.usingSpatialization = false;
-		simulationParameters.usingHearingAidSimulation = true;
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.make(simulationParameters);
-		buffer_type x{ 4 };
-		processor->process(x);
-		assertEqual({ 4 + 1 + 3.0f }, x);
-	}
-
-	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
-		makeCombinesProcessorsInOrderWithoutHearingAidSimulation
-	) {
-		simulationParameters.usingSpatialization = true;
-		simulationParameters.usingHearingAidSimulation = false;
-		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
-		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.make(simulationParameters);
-		buffer_type x{ 4 };
-		processor->process(x);
-		assertEqual({ (4 + 1) * 2.0f }, x);
+		simulationParameters.filterCoefficients = { 1 };
+		simulationFactory.makeFullSimulation(simulationParameters);
+		assertEqual({ 1 }, firFilterFactory.coefficients());
 	}
 
 	TEST_F(
