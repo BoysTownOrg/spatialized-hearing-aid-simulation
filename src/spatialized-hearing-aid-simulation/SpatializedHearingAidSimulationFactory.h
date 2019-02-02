@@ -37,21 +37,8 @@ public:
 		HearingAidFactory *hearingAidFactory
 	);
 	std::shared_ptr<SignalProcessor> make(SimulationParameters p) override;
-	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(
-		SimulationParameters p
-	);
-	struct ignroe {
-		PrescriptionReader::Dsl prescription;
+	struct Spatialization {
 		BrirReader::impulse_response_type filterCoefficients;
-		double attack_ms;
-		double release_ms;
-		double fullScaleLevel_dB_Spl;
-		float scale;
-		int sampleRate;
-		int windowSize;
-		int chunkSize;
-		bool usingHearingAidSimulation;
-		bool usingSpatialization;
 	};
 	struct HearingAidSimulation {
 		PrescriptionReader::Dsl prescription;
@@ -62,12 +49,16 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
+	struct FullSimulation {
+		Spatialization spatialization;
+		HearingAidSimulation hearingAidSimulation;
+	};
+	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeFullSimulation(
+		FullSimulation p, float scale
+	);
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 		HearingAidSimulation p, float scale
 	);
-	struct Spatialization {
-		BrirReader::impulse_response_type filterCoefficients;
-	};
 	SPATIALIZED_HA_SIMULATION_API std::shared_ptr<SignalProcessor> makeSpatialization(
 		Spatialization p, float scale
 	);
@@ -75,5 +66,5 @@ public:
 		float scale
 	);
 private:
-	FilterbankCompressor::Parameters compression(SimulationParameters p);
+	FilterbankCompressor::Parameters compression(HearingAidSimulation p);
 };

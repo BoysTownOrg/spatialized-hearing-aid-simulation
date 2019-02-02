@@ -62,9 +62,9 @@ namespace {
 	protected:
 		using buffer_type = std::vector<SignalProcessor::signal_type::element_type>;
 
-		SpatializedHearingAidSimulationFactory::HearingAidSimulation hearingAidSimulation;
 		SpatializedHearingAidSimulationFactory::Spatialization spatialization;
-		SpatializedHearingAidSimulationFactory::SimulationParameters simulationParameters;
+		SpatializedHearingAidSimulationFactory::HearingAidSimulation hearingAidSimulation;
+		SpatializedHearingAidSimulationFactory::FullSimulation fullSimulation;
 		ScalarFactoryStub scalarFactory{};
 		FirFilterFactoryStub firFilterFactory{};
 		HearingAidFactoryStub hearingAidFactory{};
@@ -91,8 +91,7 @@ namespace {
 	}
 
 	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeFullSimulationPassesScalarToFactory) {
-		simulationParameters.scale = 1;
-		simulationFactory.makeFullSimulation(simulationParameters);
+		simulationFactory.makeFullSimulation({}, 1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
@@ -128,8 +127,8 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		simulationParameters.prescription = prescription;
-		simulationFactory.makeFullSimulation(simulationParameters);
+		fullSimulation.hearingAidSimulation.prescription = prescription;
+		simulationFactory.makeFullSimulation(fullSimulation, {});
 		assertEqual({ 1 }, hearingAidFactory.parameters().compressionRatios);
 		assertEqual({ 2 }, hearingAidFactory.parameters().crossFrequenciesHz);
 		assertEqual({ 3 }, hearingAidFactory.parameters().kneepointGains_dB);
@@ -161,13 +160,13 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests,
 		makeFullSimulationPassesCompressionParametersToHearingAidFactory
 	) {
-		simulationParameters.attack_ms = 1;
-		simulationParameters.release_ms = 2;
-		simulationParameters.chunkSize = 3;
-		simulationParameters.windowSize = 4;
-		simulationParameters.sampleRate = 5;
-		simulationParameters.fullScaleLevel_dB_Spl = 6;
-		simulationFactory.makeFullSimulation(simulationParameters);
+		fullSimulation.hearingAidSimulation.attack_ms = 1;
+		fullSimulation.hearingAidSimulation.release_ms = 2;
+		fullSimulation.hearingAidSimulation.chunkSize = 3;
+		fullSimulation.hearingAidSimulation.windowSize = 4;
+		fullSimulation.hearingAidSimulation.sampleRate = 5;
+		fullSimulation.hearingAidSimulation.fullScaleLevel_dB_Spl = 6;
+		simulationFactory.makeFullSimulation(fullSimulation, {});
 		assertEqual(1.0, hearingAidFactory.parameters().attack_ms);
 		assertEqual(2.0, hearingAidFactory.parameters().release_ms);
 		assertEqual(3, hearingAidFactory.parameters().chunkSize);
@@ -189,8 +188,8 @@ namespace {
 		SpatializedHearingAidSimulationFactoryTests,
 		makeFullSimulationPassesCoefficientsToFirFilterFactory
 	) {
-		simulationParameters.filterCoefficients = { 1 };
-		simulationFactory.makeFullSimulation(simulationParameters);
+		fullSimulation.spatialization.filterCoefficients = { 1 };
+		simulationFactory.makeFullSimulation(fullSimulation, {});
 		assertEqual({ 1 }, firFilterFactory.coefficients());
 	}
 
@@ -201,7 +200,7 @@ namespace {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.makeFullSimulation(simulationParameters);
+		auto processor = simulationFactory.makeFullSimulation(fullSimulation, {});
 		buffer_type x{ 4 };
 		processor->process(x);
 		assertEqual({ (4 + 1) * 2 + 3.0f }, x);
