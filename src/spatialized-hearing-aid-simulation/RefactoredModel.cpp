@@ -155,12 +155,18 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 	if (testParameters.usingHearingAidSimulation) {
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation hs;
-		hs.prescription = leftPrescription;
-		simulationFactory->makeHearingAidSimulation(hs, 0);
-		ISpatializedHearingAidSimulationFactory::FullSimulation fs;
-		fs.hearingAid = hs;
-		simulationFactory->makeFullSimulation(fs, 0);
+		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
+		left_hs.prescription = leftPrescription;
+		simulationFactory->makeHearingAidSimulation(left_hs, 0);
+		ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
+		right_hs.prescription = rightPrescription;
+		simulationFactory->makeHearingAidSimulation(right_hs, 0);
+		ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
+		left_fs.hearingAid = left_hs;
+		simulationFactory->makeFullSimulation(left_fs, 0);
+		ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
+		right_fs.hearingAid = right_hs;
+		simulationFactory->makeFullSimulation(right_fs, 0);
 	}
 	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
 	sp.attack_ms = testParameters.attack_ms;
