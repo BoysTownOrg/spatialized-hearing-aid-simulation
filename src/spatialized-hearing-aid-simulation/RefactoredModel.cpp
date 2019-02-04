@@ -163,6 +163,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	float right_scale = reader->channels() > 1
 		? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
 		: 0;
+	simulationFactory->makeWithoutSimulation(left_scale);
+	simulationFactory->makeWithoutSimulation(right_scale);
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	if (testParameters.usingSpatialization) {
