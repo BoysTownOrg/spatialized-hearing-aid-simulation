@@ -222,6 +222,9 @@ void Presenter::playCalibration_() {
 		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
 		p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 		p.processing.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		p.processing.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+		p.processing.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+		p.processing.brirFilePath = view->brirFilePath();
 	}
 	model->playCalibration(std::move(p));
 }
