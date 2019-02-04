@@ -154,12 +154,14 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	left_spatial.filterCoefficients = brir.left;
-	simulationFactory->makeSpatialization(left_spatial, 0);
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	right_spatial.filterCoefficients = brir.right;
-	simulationFactory->makeSpatialization(right_spatial, 0);
+	if (testParameters.usingSpatialization) {
+		ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
+		left_spatial.filterCoefficients = brir.left;
+		simulationFactory->makeSpatialization(left_spatial, 0);
+		ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
+		right_spatial.filterCoefficients = brir.right;
+		simulationFactory->makeSpatialization(right_spatial, 0);
+	}
 	auto reader = makeReader(perceptionTest->nextStimulus());
 	if (testParameters.usingHearingAidSimulation) {
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
