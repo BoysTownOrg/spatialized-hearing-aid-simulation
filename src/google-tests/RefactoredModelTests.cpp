@@ -382,6 +382,18 @@ namespace {
 		);
 	}
 
+	TEST_F(
+		RefactoredModelTests,
+		playCalibrationUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = false;
+		playCalibration();
+		assertEqual(
+			RefactoredModel::defaultFramesPerBuffer, 
+			audioPlayer.preparation().framesPerBuffer
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
 		setFullSimulation();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
