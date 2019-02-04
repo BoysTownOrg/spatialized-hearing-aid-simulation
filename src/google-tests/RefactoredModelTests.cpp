@@ -628,10 +628,8 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
-		playTrial();
+		setHearingAidSimulationOnly();
+		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
 			simulationFactory.hearingAidSimulation().at(0).fullScaleLevel_dB_Spl
@@ -646,10 +644,8 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = true;
-		prepareNewTest();
-		playTrial();
+		setFullSimulation();
+		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
 			simulationFactory.fullSimulation().at(0).hearingAid.fullScaleLevel_dB_Spl
@@ -664,14 +660,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
-		testParameters.usingSpatialization = true;
-		testParameters.usingHearingAidSimulation = false;
+		setSpatializationOnly();
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.spatialization().at(0).filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.spatialization().at(1).filterCoefficients);
 	}
@@ -680,14 +674,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
-		testParameters.usingSpatialization = true;
-		testParameters.usingHearingAidSimulation = true;
+		setFullSimulation();
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.fullSimulation().at(0).spatialization.filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.fullSimulation().at(1).spatialization.filterCoefficients);
 	}
