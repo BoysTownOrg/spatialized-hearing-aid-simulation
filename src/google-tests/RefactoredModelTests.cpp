@@ -467,8 +467,8 @@ namespace {
 		calibrationComputer->addSignalScale(1, 4.4);
 		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
+		assertEqual(3.3f, simulationFactory.hearingAidSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.hearingAidSimulationScale().at(1));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
@@ -477,8 +477,8 @@ namespace {
 		calibrationComputer->addSignalScale(1, 4.4);
 		setSpatializationOnly();
 		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
+		assertEqual(3.3f, simulationFactory.spatializationScale().at(0));
+		assertEqual(4.4f, simulationFactory.spatializationScale().at(1));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
@@ -487,8 +487,8 @@ namespace {
 		calibrationComputer->addSignalScale(1, 4.4);
 		setNoSimulation();
 		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
+		assertEqual(3.3f, simulationFactory.withoutSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.withoutSimulationScale().at(1));
 	}
 
 	TEST_F(
