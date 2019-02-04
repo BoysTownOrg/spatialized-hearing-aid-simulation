@@ -205,20 +205,24 @@ void Presenter::calibrate() {
 
 void Presenter::playCalibration() {
 	try {
-		Model::CalibrationParameters p;
-		p.audioDevice = view->audioDevice();
-		p.audioFilePath = view->audioFilePath();
-		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		if (view->usingHearingAidSimulation()) {
-			p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-			p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
-			p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		}
-		model->playCalibration(std::move(p));
+		playCalibration_();
 	}
 	catch (const std::runtime_error &e) {
 		view->showErrorDialog(e.what());
 	}
+}
+
+void Presenter::playCalibration_() {
+	Model::CalibrationParameters p;
+	p.audioDevice = view->audioDevice();
+	p.audioFilePath = view->audioFilePath();
+	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	if (view->usingHearingAidSimulation()) {
+		p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
+		p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+	}
+	model->playCalibration(std::move(p));
 }
 
 void Presenter::stopCalibration() {

@@ -50,5 +50,6 @@ private:
 	int convertToPositiveInteger(std::string x, std::string identifier);
 	int convertToInteger(std::string x, std::string identifier);
 	void playTrial_();
+	void playCalibration_();
 	void switchViewIfTestComplete();
 };
