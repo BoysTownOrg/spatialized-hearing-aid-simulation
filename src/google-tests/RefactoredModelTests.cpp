@@ -203,8 +203,16 @@ namespace {
 			testParameters.usingHearingAidSimulation = false;
 		}
 
-		void processOnPlay(gsl::span<channel_type> channels) {
-			audioPlayer.callOnPlay([=]() { audioLoader.audioFrameProcessor()->process(channels); });
+		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
+			callWhenPlayerPlays([=]() { audioLoader.audioFrameProcessor()->process(channels); });
+		}
+
+		void assertAudioLoaderHasNotBeenModified() {
+			assertTrue(audioLoader.log().isEmpty());
+		}
+
+		void callWhenPlayerPlays(std::function<void(void)> f) {
+			audioPlayer.callOnPlay([=]() { f(); });
 		}
 	};
 
@@ -563,7 +571,6 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
-		setFullSimulation();
 		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -572,14 +579,14 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		processOnPlay(channels);
+		processWhenPlayerPlays(channels);
+		setFullSimulation();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
-		setHearingAidSimulationOnly();
 		std::vector<std::shared_ptr<SignalProcessor>> hearingAidSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -588,14 +595,14 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		processOnPlay(channels);
+		processWhenPlayerPlays(channels);
+		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
-		setSpatializationOnly();
 		std::vector<std::shared_ptr<SignalProcessor>> spatialization = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -604,14 +611,14 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		processOnPlay(channels);
+		processWhenPlayerPlays(channels);
+		setSpatializationOnly();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
-		setNoSimulation();
 		std::vector<std::shared_ptr<SignalProcessor>> withoutSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -620,7 +627,8 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		processOnPlay(channels);
+		processWhenPlayerPlays(channels);
+		setNoSimulation();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -662,11 +670,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
-		setSpatializationOnly();
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
+		setSpatializationOnly();
 		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.spatialization().at(0).filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.spatialization().at(1).filterCoefficients);
@@ -676,18 +684,18 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
-		setFullSimulation();
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
+		setFullSimulation();
 		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.fullSimulation().at(0).spatialization.filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.fullSimulation().at(1).spatialization.filterCoefficients);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
-		audioPlayer.callOnPlay([&]() { assertTrue(audioLoader.log().contains("reset")); });
+		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
 		playTrial();
 	}
 
@@ -699,7 +707,7 @@ namespace {
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
 		playTrial();
-		assertTrue(audioLoader.log().isEmpty());
+		assertAudioLoaderHasNotBeenModified();
 	}
 
 	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
