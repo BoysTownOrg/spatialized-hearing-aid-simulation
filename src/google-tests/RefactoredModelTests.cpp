@@ -202,6 +202,10 @@ namespace {
 			testParameters.usingSpatialization = false;
 			testParameters.usingHearingAidSimulation = false;
 		}
+
+		void processOnPlay(gsl::span<channel_type> channels) {
+			audioPlayer.callOnPlay([=]() { audioLoader.audioFrameProcessor()->process(channels); });
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -568,7 +572,7 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		processOnPlay(channels);
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -584,7 +588,7 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		processOnPlay(channels);
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -600,7 +604,7 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		processOnPlay(channels);
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -616,7 +620,7 @@ namespace {
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		processOnPlay(channels);
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
