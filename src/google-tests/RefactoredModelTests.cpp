@@ -214,6 +214,18 @@ namespace {
 		void callWhenPlayerPlays(std::function<void(void)> f) {
 			audioPlayer.callOnPlay([=]() { f(); });
 		}
+
+		void assertSimulationFactoryHasNotMadeFullSimulation() {
+			assertTrue(simulationFactory.fullSimulation().empty());
+		}
+
+		void assertSimulationFactoryHasNotMadeHearingAidSimulation() {
+			assertTrue(simulationFactory.hearingAidSimulation().empty());
+		}
+
+		void assertSimulationFactoryHasNotMadeSpatialization() {
+			assertTrue(simulationFactory.spatialization().empty());
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -490,8 +502,8 @@ namespace {
 	) {
 		testParameters.usingHearingAidSimulation = false;
 		playFirstTrialOfNewTest();
-		assertTrue(simulationFactory.fullSimulation().empty());
-		assertTrue(simulationFactory.hearingAidSimulation().empty());
+		assertSimulationFactoryHasNotMadeFullSimulation();
+		assertSimulationFactoryHasNotMadeHearingAidSimulation();
 	}
 
 	TEST_F(
@@ -500,19 +512,19 @@ namespace {
 	) {
 		testParameters.usingSpatialization = false;
 		playFirstTrialOfNewTest();
-		assertTrue(simulationFactory.fullSimulation().empty());
-		assertTrue(simulationFactory.spatialization().empty());
+		assertSimulationFactoryHasNotMadeFullSimulation();
+		assertSimulationFactoryHasNotMadeSpatialization();
 	}
 
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnly();
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.chunkSize = 4;
 		testParameters.windowSize = 8;
+		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.hearingAidSimulation().at(0);
 		assertEqual(1.0, left.attack_ms);
@@ -530,11 +542,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		setFullSimulation();
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.chunkSize = 4;
 		testParameters.windowSize = 8;
+		setFullSimulation();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.fullSimulation().at(0).hearingAid;
 		assertEqual(1.0, left.attack_ms);
