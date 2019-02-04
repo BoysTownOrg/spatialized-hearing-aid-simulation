@@ -893,6 +893,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenPrescriptionReaderFails
+	) {
+		FailingPrescriptionReader failing;
+		prescriptionReader = &failing;
+		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
+		assertPlayCalibrationThrowsRequestFailure("Unable to read 'a'.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		prepareNewTestDoesNotPrepareTestWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
