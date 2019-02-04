@@ -345,7 +345,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioDeviceToPlayer) {
-		trialParameters.audioDevice = "a";
+		calibrationParameters.audioDevice = "a";
 		playCalibration();
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
