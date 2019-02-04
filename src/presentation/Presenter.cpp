@@ -209,7 +209,8 @@ void Presenter::playCalibration() {
 		p.audioDevice = view->audioDevice();
 		p.audioFilePath = view->audioFilePath();
 		p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-		p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		if (view->usingHearingAidSimulation())
+			p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
 		model->playCalibration(std::move(p));
 	}
