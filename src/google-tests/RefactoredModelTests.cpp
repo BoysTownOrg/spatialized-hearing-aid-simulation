@@ -708,6 +708,24 @@ namespace {
 		assertEqual({ 7 * 3 }, right);
 	}
 
+	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
+		testParameters.usingHearingAidSimulation = false;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		std::vector<std::shared_ptr<SignalProcessor>> spatialization = {
+			std::make_shared<MultipliesSamplesBy>(2.0f),
+			std::make_shared<MultipliesSamplesBy>(3.0f)
+		};
+		simulationFactory.setSpatializationProcessors(spatialization);
+		buffer_type left = { 5 };
+		buffer_type right = { 7 };
+		std::vector<channel_type> channels = { left, right };
+		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		playTrial();
+		assertEqual({ 5 * 2 }, left);
+		assertEqual({ 7 * 3 }, right);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory2) {
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.usingSpatialization = false;
