@@ -685,9 +685,11 @@ namespace {
 		view.setHearingAidSimulationOn();
 		view.setAttack_ms("1.0");
 		view.setRelease_ms("2.0");
+		view.setChunkSize("3");
 		view.playCalibration();
 		assertEqual(1.0, model.calibrationParameters().processing.attack_ms);
 		assertEqual(2.0, model.calibrationParameters().processing.release_ms);
+		assertEqual(3, model.calibrationParameters().processing.chunkSize);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
