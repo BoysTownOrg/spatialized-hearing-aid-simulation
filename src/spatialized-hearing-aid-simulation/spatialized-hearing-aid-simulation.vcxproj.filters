@@ -60,6 +60,9 @@
     <ClInclude Include="CalibrationComputer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ICalibrationComputer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">
