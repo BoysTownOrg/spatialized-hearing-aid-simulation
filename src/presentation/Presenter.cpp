@@ -222,6 +222,7 @@ void Presenter::playCalibration_() {
 		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
 		p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 	}
+		p.processing.windowSize = convertToInteger(view->windowSize(), "");
 	model->playCalibration(std::move(p));
 }
 
