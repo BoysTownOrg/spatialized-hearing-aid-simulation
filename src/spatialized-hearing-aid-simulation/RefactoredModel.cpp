@@ -113,60 +113,16 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	}
 }
 
-class RmsComputer {
-	using sample_type = AudioFrameReader::channel_type::element_type;
-	using channel_type = std::vector<sample_type>;
-    std::vector<channel_type> audioFileContents;
-public:
-	explicit RmsComputer(AudioFrameReader &reader) :
-		audioFileContents(
-			reader.channels(), 
-			channel_type(gsl::narrow<channel_type::size_type>(reader.frames()))
-		)
-	{
-		read(reader);
-	}
-
-	void read(AudioFrameReader & reader) {
-		std::vector<AudioFrameReader::channel_type> adapted;
-		for (auto &channel : audioFileContents)
-			adapted.push_back({ channel });
-		reader.read(adapted);
-		reader.reset();
-	}
-
-    auto compute(int channel) {
-		return rms(audioFileContents.at(channel));
-    }
-
-private:
-	template<typename T>
-	T rms(std::vector<T> x) {
-		return std::sqrt(
-			std::accumulate(
-				x.begin(),
-				x.end(),
-				T{ 0 },
-				[](T a, T b) { return a += b * b; }
-			) / x.size()
-		);
-	}
-};
-
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 
 	auto reader = makeReader(perceptionTest->nextStimulus());
 	auto computer = calibrationFactory->make(*reader);
-    RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
-	const auto left_scale = reader->channels() > 0
-		? gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl))
-		: 0;
-	const auto right_scale = reader->channels() > 1
-		? gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl))
-		: 0;
+	const auto left_scale = 
+		gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl));
+	const auto right_scale = 
+		gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl));
 
 	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
 	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
