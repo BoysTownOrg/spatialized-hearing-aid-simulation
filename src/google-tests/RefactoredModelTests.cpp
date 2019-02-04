@@ -21,7 +21,7 @@ namespace {
 	public:
 		PoppableVector(typename std::vector<T>::size_type count) : elements(count) {}
 
-		void set(std::vector<T> v) {
+		void set(std::vector<T> v) noexcept {
 			elements = std::move(v);
 		}
 
