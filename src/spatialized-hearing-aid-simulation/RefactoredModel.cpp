@@ -165,43 +165,50 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		: 0;
 	simulationFactory->makeWithoutSimulation(left_scale);
 	simulationFactory->makeWithoutSimulation(right_scale);
+
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
+	left_spatial.filterCoefficients = brir.left;
+
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
+	right_spatial.filterCoefficients = brir.right;
+
+	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
+	left_hs.attack_ms = testParameters.attack_ms;
+	left_hs.release_ms = testParameters.release_ms;
+	left_hs.chunkSize = testParameters.chunkSize;
+	left_hs.windowSize = testParameters.windowSize;
+	left_hs.prescription = leftPrescription;
+	left_hs.sampleRate = reader->sampleRate();
+	left_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
+
+	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
+	right_hs.attack_ms = testParameters.attack_ms;
+	right_hs.release_ms = testParameters.release_ms;
+	right_hs.chunkSize = testParameters.chunkSize;
+	right_hs.windowSize = testParameters.windowSize;
+	right_hs.prescription = rightPrescription;
+	right_hs.sampleRate = reader->sampleRate();
+	right_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
+
+	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
+	left_fs.hearingAid = left_hs;
+	left_fs.spatialization = left_spatial;
+
+	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
+	right_fs.hearingAid = right_hs;
+	right_fs.spatialization = right_spatial;
+
 	ChannelProcessingGroup::channel_processing_type left_channel;
 	ChannelProcessingGroup::channel_processing_type right_channel;
 	if (testParameters.usingSpatialization) {
-		left_spatial.filterCoefficients = brir.left;
 		simulationFactory->makeSpatialization(left_spatial, left_scale);
-		right_spatial.filterCoefficients = brir.right;
 		simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
 	if (testParameters.usingHearingAidSimulation) {
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
-		left_hs.attack_ms = testParameters.attack_ms;
-		left_hs.release_ms = testParameters.release_ms;
-		left_hs.chunkSize = testParameters.chunkSize;
-		left_hs.windowSize = testParameters.windowSize;
-		left_hs.prescription = leftPrescription;
-		left_hs.sampleRate = reader->sampleRate();
-		left_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-		simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
-		right_hs.attack_ms = testParameters.attack_ms;
-		right_hs.release_ms = testParameters.release_ms;
-		right_hs.chunkSize = testParameters.chunkSize;
-		right_hs.windowSize = testParameters.windowSize;
-		right_hs.prescription = rightPrescription;
-		right_hs.sampleRate = reader->sampleRate();
-		right_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-		simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
+		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
+		right_channel = simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
 		if (testParameters.usingSpatialization) {
-			ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
-			left_fs.hearingAid = left_hs;
-			left_fs.spatialization = left_spatial;
 			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
-			ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-			right_fs.hearingAid = right_hs;
-			right_fs.spatialization = right_spatial;
 			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
