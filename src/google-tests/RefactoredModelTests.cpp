@@ -466,6 +466,29 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
+	) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.attack_ms = 1;
+		testParameters.release_ms = 2;
+		testParameters.chunkSize = 4;
+		testParameters.windowSize = 8;
+		prepareNewTest();
+		playTrial();
+		auto left = simulationFactory.hearingAidSimulation().at(0);
+		assertEqual(1.0, left.attack_ms);
+		assertEqual(2.0, left.release_ms);
+		assertEqual(4, left.chunkSize);
+		assertEqual(8, left.windowSize);
+		auto right = simulationFactory.hearingAidSimulation().at(1);
+		assertEqual(1.0, right.attack_ms);
+		assertEqual(2.0, right.release_ms);
+		assertEqual(4, right.chunkSize);
+		assertEqual(8, right.windowSize);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryWhenUsingHearingAidSimulation
 	) {
 		audioFrameReader->setSampleRate(1);
