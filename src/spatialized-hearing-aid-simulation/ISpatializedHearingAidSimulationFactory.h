@@ -8,23 +8,18 @@
 class ISpatializedHearingAidSimulationFactory {
 public:
 	INTERFACE_OPERATIONS(ISpatializedHearingAidSimulationFactory);
-	struct SimulationParameters {
-		PrescriptionReader::Dsl prescription;
-		BrirReader::impulse_response_type filterCoefficients;
-		double attack_ms;
-		double release_ms;
-		double fullScaleLevel_dB_Spl;
-		float scale;
-		int sampleRate;
-		int windowSize;
-		int chunkSize;
-		bool usingHearingAidSimulation;
-		bool usingSpatialization;
-	};
+
+	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
+		float
+	) = 0;
 
 	struct Spatialization {
 		BrirReader::impulse_response_type filterCoefficients;
 	};
+	virtual std::shared_ptr<SignalProcessor> makeSpatialization(
+		Spatialization , float 
+	) = 0;
+
 	struct HearingAidSimulation {
 		PrescriptionReader::Dsl prescription;
 		double attack_ms;
@@ -34,20 +29,15 @@ public:
 		int windowSize;
 		int chunkSize;
 	};
+	virtual std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
+		HearingAidSimulation , float 
+	) = 0;
+
 	struct FullSimulation {
 		Spatialization spatialization;
 		HearingAidSimulation hearingAid;
 	};
 	virtual std::shared_ptr<SignalProcessor> makeFullSimulation(
 		FullSimulation , float 
-	) = 0;
-	virtual std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
-		HearingAidSimulation , float 
-	) = 0;
-	virtual std::shared_ptr<SignalProcessor> makeSpatialization(
-		Spatialization , float 
-	) = 0;
-	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
-		float
 	) = 0;
 };

@@ -18,7 +18,6 @@ namespace {
 	class SpatializedHearingAidSimulationFactoryStub : 
 		public ISpatializedHearingAidSimulationFactory 
 	{
-		ArgumentCollection<SimulationParameters> parameters_{};
 		ArgumentCollection<FullSimulation> fullSimulation_{};
 		ArgumentCollection<HearingAidSimulation> hearingAidSimulation_{};
 		ArgumentCollection<Spatialization> spatialization_{};
@@ -58,10 +57,6 @@ namespace {
 			withoutSimulationProcessors = std::move(p);
 		}
 
-		auto parameters() const {
-			return parameters_;
-		}
-
 		std::shared_ptr<SignalProcessor> makeFullSimulation(
 			FullSimulation s, float x
 		) override {
@@ -71,6 +66,7 @@ namespace {
 			fullSimulationProcessors.erase(fullSimulationProcessors.begin());
 			return processor;
 		}
+
 		std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 			HearingAidSimulation s, float x
 		) override {
@@ -80,6 +76,7 @@ namespace {
 			hearingAidSimulationProcessors.erase(hearingAidSimulationProcessors.begin());
 			return processor;
 		}
+
 		std::shared_ptr<SignalProcessor> makeSpatialization(
 			Spatialization s, float x
 		) override {
@@ -89,6 +86,7 @@ namespace {
 			spatializationProcessors.erase(spatializationProcessors.begin());
 			return processor;
 		}
+
 		std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 			float x
 		) override {
@@ -101,21 +99,26 @@ namespace {
 		auto fullSimulation() const {
 			return fullSimulation_;
 		}
+
 		auto hearingAidSimulation() const {
 			return hearingAidSimulation_;
 		}
 		auto spatialization() const {
 			return spatialization_;
 		}
+
 		auto fullSimulationScale() const {
 			return fullSimulationScale_;
 		}
+
 		auto hearingAidSimulationScale() const {
 			return hearingAidSimulationScale_;
 		}
+
 		auto spatializationScale() const {
 			return spatializationScale_;
 		}
+
 		auto withoutSimulationScale() const {
 			return withoutSimulationScale_;
 		}
