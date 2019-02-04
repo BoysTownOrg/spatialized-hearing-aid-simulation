@@ -344,6 +344,12 @@ namespace {
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesAudioDeviceToPlayer) {
+		trialParameters.audioDevice = "a";
+		playCalibration();
+		assertEqual("a", audioPlayer.preparation().audioDevice);
+	}
+
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
