@@ -15,6 +15,22 @@
 #include <gtest/gtest.h>
 
 namespace {
+	template<typename T>
+	class PoppableVector {
+		std::vector<T> elements;
+	public:
+		PoppableVector(typename std::vector<T>::size_type count) : elements(count) {}
+
+		void set(std::vector<T> v) {
+			elements = std::move(v);
+		}
+
+		T pop_front() {
+			auto item = elements.front();
+			elements.erase(elements.begin());
+			return item;
+		}
+	};
 	class SpatializedHearingAidSimulationFactoryStub : 
 		public ISpatializedHearingAidSimulationFactory 
 	{
@@ -25,10 +41,10 @@ namespace {
 		ArgumentCollection<float> hearingAidSimulationScale_{};
 		ArgumentCollection<float> spatializationScale_{};
 		ArgumentCollection<float> withoutSimulationScale_{};
-		std::vector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors{};
-		std::vector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors{};
-		std::vector<std::shared_ptr<SignalProcessor>> spatializationProcessors{};
-		std::vector<std::shared_ptr<SignalProcessor>> withoutSimulationProcessors{};
+		PoppableVector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors;
+		PoppableVector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors;
+		PoppableVector<std::shared_ptr<SignalProcessor>> spatializationProcessors;
+		PoppableVector<std::shared_ptr<SignalProcessor>> withoutSimulationProcessors;
 	public:
 		SpatializedHearingAidSimulationFactoryStub() :
 			fullSimulationProcessors(2),
@@ -37,19 +53,19 @@ namespace {
 			withoutSimulationProcessors(2) {}
 
 		void setFullSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			fullSimulationProcessors = std::move(p);
+			fullSimulationProcessors.set(std::move(p));
 		}
 
 		void setHearingAidSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			hearingAidSimulationProcessors = std::move(p);
+			hearingAidSimulationProcessors.set(std::move(p));
 		}
 
 		void setSpatializationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			spatializationProcessors = std::move(p);
+			spatializationProcessors.set(std::move(p));
 		}
 
 		void setWithoutSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			withoutSimulationProcessors = std::move(p);
+			withoutSimulationProcessors.set(std::move(p));
 		}
 
 		std::shared_ptr<SignalProcessor> makeFullSimulation(
@@ -57,9 +73,7 @@ namespace {
 		) override {
 			fullSimulation_.push_back(std::move(s));
 			fullSimulationScale_.push_back(x);
-			auto processor = fullSimulationProcessors.front();
-			fullSimulationProcessors.erase(fullSimulationProcessors.begin());
-			return processor;
+			return fullSimulationProcessors.pop_front();
 		}
 
 		std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
@@ -67,9 +81,7 @@ namespace {
 		) override {
 			hearingAidSimulation_.push_back(std::move(s));
 			hearingAidSimulationScale_.push_back(x);
-			auto processor = hearingAidSimulationProcessors.front();
-			hearingAidSimulationProcessors.erase(hearingAidSimulationProcessors.begin());
-			return processor;
+			return hearingAidSimulationProcessors.pop_front();
 		}
 
 		std::shared_ptr<SignalProcessor> makeSpatialization(
@@ -77,18 +89,14 @@ namespace {
 		) override {
 			spatialization_.push_back(std::move(s));
 			spatializationScale_.push_back(x);
-			auto processor = spatializationProcessors.front();
-			spatializationProcessors.erase(spatializationProcessors.begin());
-			return processor;
+			return spatializationProcessors.pop_front();
 		}
 
 		std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 			float x
 		) override {
 			withoutSimulationScale_.push_back(x);
-			auto processor = withoutSimulationProcessors.front();
-			withoutSimulationProcessors.erase(withoutSimulationProcessors.begin());
-			return processor;
+			return withoutSimulationProcessors.pop_front();
 		}
 		
 		auto fullSimulation() const {
