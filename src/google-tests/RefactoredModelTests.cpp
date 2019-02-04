@@ -42,6 +42,22 @@ namespace {
 			processor_ = std::move(p);
 		}
 
+		void setFullSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
+			fullSimulationProcessors = std::move(p);
+		}
+
+		void setHearingAidSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
+			hearingAidSimulationProcessors = std::move(p);
+		}
+
+		void setSpatializationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
+			spatializationProcessors = std::move(p);
+		}
+
+		void setWithoutSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
+			withoutSimulationProcessors = std::move(p);
+		}
+
 		std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
 			parameters_.push_back(std::move(p));
 			return processor_;
@@ -654,6 +670,25 @@ namespace {
 		auto right = simulationFactory.parameters().at(1);
 		assertTrue(right.usingHearingAidSimulation);
 		assertTrue(right.usingSpatialization);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
+			std::make_shared<MultipliesSamplesBy>(2.0f),
+			std::make_shared<MultipliesSamplesBy>(3.0f)
+		};
+		simulationFactory.setFullSimulationProcessors(fullSimulation);
+		playTrial();
+		auto processor = audioLoader.audioFrameProcessor();
+		buffer_type left = { 5 };
+		buffer_type right = { 7 };
+		std::vector<channel_type> channels = { left, right };
+		processor->process(channels);
+		assertEqual({ 5 * 2 }, left);
+		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory2) {
