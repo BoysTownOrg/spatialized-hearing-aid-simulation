@@ -361,6 +361,16 @@ namespace {
 	}
 
 	TEST_F(
+		RefactoredModelTests, 
+		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibrationParameters.processing.chunkSize = 1;
+		playCalibration();
+		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+	}
+
+	TEST_F(
 		RefactoredModelTests,
 		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
