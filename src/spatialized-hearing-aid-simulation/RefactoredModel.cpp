@@ -201,8 +201,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	ChannelProcessingGroup::channel_processing_type left_channel;
 	ChannelProcessingGroup::channel_processing_type right_channel;
 	if (testParameters.usingSpatialization) {
-		simulationFactory->makeSpatialization(left_spatial, left_scale);
-		simulationFactory->makeSpatialization(right_spatial, right_scale);
+		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
+		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
 	if (testParameters.usingHearingAidSimulation) {
 		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
