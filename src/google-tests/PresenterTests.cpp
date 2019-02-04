@@ -666,6 +666,13 @@ namespace {
 		playCalibrationWithAttackTimeShowsErrorMessage("a");
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidAttackDoesNotPlay) {
+		view.setHearingAidSimulationOn();
+		setInvalidAttackTime();
+		view.playCalibration();
+		assertFalse(model.calibrationPlayed());
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
 		playCalibrationWithReleaseTimeShowsErrorMessage("a");
