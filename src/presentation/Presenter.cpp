@@ -118,22 +118,28 @@ void Presenter::prepareNewTest() {
 
 Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
-	test.processing.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	test.processing.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	test.processing.brirFilePath = view->brirFilePath();
-	if (view->usingHearingAidSimulation()) {
-		test.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		test.processing.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		test.processing.release_ms = convertToDouble(view->release_ms(), "release time");
-		test.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-	}
-	test.processing.usingSpatialization = view->usingSpatialization();
-	test.processing.usingHearingAidSimulation = view->usingHearingAidSimulation();
+	test.processing = processingParameters();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
 	test.subjectId = view->subjectId();
 	test.testerId = view->testerId();
 	return test;
+}
+
+Model::ProcessingParameters Presenter::processingParameters() {
+	Model::ProcessingParameters p;
+	if (view->usingHearingAidSimulation()) {
+		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		p.release_ms = convertToDouble(view->release_ms(), "release time");
+		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+		p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+	}
+	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	p.brirFilePath = view->brirFilePath();
+	p.usingHearingAidSimulation = view->usingHearingAidSimulation();
+	p.usingSpatialization = view->usingSpatialization();
+	return p;
 }
 
 static std::string badInputMessage(std::string x, std::string identifier) {
@@ -217,17 +223,7 @@ void Presenter::playCalibration_() {
 	p.audioDevice = view->audioDevice();
 	p.audioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-	if (view->usingHearingAidSimulation()) {
-		p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
-		p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		p.processing.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		p.processing.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-		p.processing.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-		p.processing.brirFilePath = view->brirFilePath();
-	}
-	p.processing.usingHearingAidSimulation = view->usingHearingAidSimulation();
-	p.processing.usingSpatialization = view->usingSpatialization();
+	p.processing = processingParameters();
 	model->playCalibration(std::move(p));
 }
 
