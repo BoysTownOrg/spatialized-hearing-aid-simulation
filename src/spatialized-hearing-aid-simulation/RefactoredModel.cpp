@@ -256,8 +256,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		IAudioPlayer::Preparation playing{};
 		playing.channels = reader->channels();
 		playing.sampleRate = reader->sampleRate();
+		playing.framesPerBuffer = p.processing.usingHearingAidSimulation
+			? p.processing.chunkSize
+			: defaultFramesPerBuffer;
 		playing.audioDevice = p.audioDevice;
-		playing.framesPerBuffer = p.processing.chunkSize;
 		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
