@@ -636,6 +636,24 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playTrialPassesFullScaleLevelToFactoryForFullSimulation
+	) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		playTrial();
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.fullSimulation().at(0).hearingAid.fullScaleLevel_dB_Spl
+		);
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.fullSimulation().at(1).hearingAid.fullScaleLevel_dB_Spl
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryWhenUsingSpatialization
 	) {
 		testParameters.usingSpatialization = true;
