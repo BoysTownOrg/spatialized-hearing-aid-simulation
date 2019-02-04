@@ -177,13 +177,35 @@ namespace {
 		void setInMemoryReader(AudioFileReader &reader_) {
 			audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
+
+		void playFirstTrialOfNewTest() {
+			prepareNewTest();
+			playTrial();
+		}
+
+		void setFullSimulation() {
+			testParameters.usingHearingAidSimulation = true;
+			testParameters.usingSpatialization = true;
+		}
+
+		void setHearingAidSimulationOnly() {
+			testParameters.usingHearingAidSimulation = true;
+			testParameters.usingSpatialization = false;
+		}
+
+		void setSpatializationOnly() {
+			testParameters.usingSpatialization = true;
+			testParameters.usingHearingAidSimulation = false;
+		}
+
+		void setNoSimulation() {
+			testParameters.usingSpatialization = false;
+			testParameters.usingHearingAidSimulation = false;
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
-		EXPECT_EQ(
-			&audioLoader, 
-			audioPlayer.audioLoader()
-		);
+		EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
 	}
 
 	TEST_F(
@@ -204,7 +226,7 @@ namespace {
 	) {
 		testParameters.usingHearingAidSimulation = false;
 		prepareNewTest();
-		assertFalse(prescriptionReader.readCalled());
+		assertTrue(prescriptionReader.filePaths().empty());
 	}
 
 	TEST_F(
@@ -248,10 +270,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		audioPlayer.callOnPlay([&]() {
-			EXPECT_EQ(
-				audioFrameReader, 
-				audioLoader.audioFrameReader()
-			);
+			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 		});
 		playTrial();
 	}
@@ -276,8 +295,7 @@ namespace {
 	) {
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.chunkSize = 1;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 	}
 
@@ -286,8 +304,7 @@ namespace {
 		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
 		testParameters.usingHearingAidSimulation = false;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::defaultFramesPerBuffer, 
 			audioPlayer.preparation().framesPerBuffer
@@ -295,14 +312,12 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = true;
-		prepareNewTest();
+		setFullSimulation();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
 		trialParameters.level_dB_Spl = 65;
-		playTrial();
+		playFirstTrialOfNewTest();
 		const auto desiredRms = 
 			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
@@ -312,14 +327,12 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
+		setHearingAidSimulationOnly();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
 		trialParameters.level_dB_Spl = 65;
-		playTrial();
+		playFirstTrialOfNewTest();
 		const auto desiredRms = 
 			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
@@ -329,14 +342,12 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
-		testParameters.usingSpatialization = true;
-		testParameters.usingHearingAidSimulation = false;
-		prepareNewTest();
+		setSpatializationOnly();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
 		trialParameters.level_dB_Spl = 65;
-		playTrial();
+		playFirstTrialOfNewTest();
 		const auto desiredRms = 
 			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
@@ -346,14 +357,12 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
-		testParameters.usingSpatialization = false;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
+		setNoSimulation();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
 		trialParameters.level_dB_Spl = 65;
-		playTrial();
+		playFirstTrialOfNewTest();
 		const auto desiredRms = 
 			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
@@ -378,12 +387,10 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
+		setHearingAidSimulationOnly();
 		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		auto actual = simulationFactory.hearingAidSimulation().at(0).prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
 		assertEqual({ 2 }, actual.crossFrequenciesHz);
