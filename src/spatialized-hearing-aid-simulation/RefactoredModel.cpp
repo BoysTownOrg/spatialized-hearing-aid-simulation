@@ -261,6 +261,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 			: defaultFramesPerBuffer;
 		playing.audioDevice = p.audioDevice;
 		player->prepareToPlay(std::move(playing));
+		reader->reset();
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw CalibrationFailure{ e.what() };
