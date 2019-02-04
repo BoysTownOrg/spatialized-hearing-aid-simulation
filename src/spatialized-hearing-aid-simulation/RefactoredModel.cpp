@@ -211,27 +211,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
-	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
-	sp.attack_ms = testParameters.attack_ms;
-	sp.release_ms = testParameters.release_ms;
-	sp.chunkSize = testParameters.chunkSize;
-	sp.windowSize = testParameters.windowSize;
-	sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-	sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
-	sp.usingSpatialization = testParameters.usingSpatialization;
-	sp.sampleRate = reader->sampleRate();
-
-	if (reader->channels() > 0)
-		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
-	sp.prescription = leftPrescription;
-	sp.filterCoefficients = brir.left;
-	simulationFactory->make(sp);
-	
-	if (reader->channels() > 1)
-		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
-	sp.prescription = rightPrescription;
-	sp.filterCoefficients = brir.right;
-	simulationFactory->make(sp);
 
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
