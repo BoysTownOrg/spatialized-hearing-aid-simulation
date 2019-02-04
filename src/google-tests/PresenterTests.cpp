@@ -634,8 +634,10 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
 		view.setHearingAidSimulationOn();
 		view.setAttack_ms("1.0");
+		view.setRelease_ms("2.0");
 		view.playCalibration();
 		assertEqual(1.0, model.calibrationParameters().processing.attack_ms);
+		assertEqual(2.0, model.calibrationParameters().processing.release_ms);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
