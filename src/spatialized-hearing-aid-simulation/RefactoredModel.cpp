@@ -13,7 +13,8 @@ RefactoredModel::RefactoredModel(
 	AudioFrameReaderFactory *audioReaderFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	ISpatializedHearingAidSimulationFactory *simulationFactory
+	ISpatializedHearingAidSimulationFactory *simulationFactory,
+	ICalibrationComputerFactory *
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },

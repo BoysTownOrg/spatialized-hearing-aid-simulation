@@ -7,6 +7,7 @@
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
 #include "AudioLoader.h"
+#include "ICalibrationComputer.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 
@@ -30,7 +31,8 @@ public:
 		AudioFrameReaderFactory *audioReaderFactory,
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
-		ISpatializedHearingAidSimulationFactory *simulationFactory
+		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		ICalibrationComputerFactory *
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;

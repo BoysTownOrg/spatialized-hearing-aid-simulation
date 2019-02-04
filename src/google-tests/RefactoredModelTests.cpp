@@ -127,6 +127,43 @@ namespace {
 		}
 	};
 
+	class CalibrationComputerStub : public ICalibrationComputer {
+		ArgumentCollection<double> levels_{};
+		double signalScale_{};
+	public:
+
+		void setSignalScale(double x) {
+			signalScale_ = x;
+		}
+
+		double signalScale(int channel, double level) override
+		{
+			channel;
+			levels_.push_back(level);
+			return signalScale_;
+		}
+
+		auto levels() const {
+			return levels_;
+		}
+	};
+
+	class CalibrationComputerStubFactory : public ICalibrationComputerFactory {
+		std::shared_ptr<ICalibrationComputer> computer;
+	public:
+		explicit CalibrationComputerStubFactory(
+			std::shared_ptr<ICalibrationComputer> computer =
+				std::make_shared<CalibrationComputerStub>()
+		) :
+			computer{ computer } {}
+
+		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader &reader) override
+		{
+			reader;
+			return computer;
+		}
+	};
+
 	class RefactoredModelTests : public ::testing::Test {
 	protected:
 		using channel_type = AudioFrameProcessor::channel_type;
@@ -144,6 +181,9 @@ namespace {
 		AudioPlayerStub audioPlayer{};
 		AudioLoaderStub audioLoader{};
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
+		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
+			std::make_shared<CalibrationComputerStub>();
+		CalibrationComputerStubFactory calibrationFactory{ calibrationComputer };
 		RefactoredModel model{
 			&perceptionTest,
 			&audioPlayer,
@@ -151,7 +191,8 @@ namespace {
 			&audioFrameReaderFactory,
 			&prescriptionReader,
 			&brirReader,
-			&simulationFactory
+			&simulationFactory,
+			&calibrationFactory
 		};
 
 		RefactoredModelTests() {
@@ -395,18 +436,22 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
+		calibrationComputer->setSignalScale(1);
 		setFullSimulation();
-		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
-		fakeReader.setChannels(2);
-		setInMemoryReader(fakeReader);
+		playFirstTrialOfNewTest();
+		assertEqual(1.0f, simulationFactory.fullSimulationScale().at(0));
+		assertEqual(1.0f, simulationFactory.fullSimulationScale().at(1));
+	}
+
+	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
 		trialParameters.level_dB_Spl = 65;
 		playFirstTrialOfNewTest();
-		const auto desiredRms = 
-			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
-		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
-		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
-		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.fullSimulationScale().at(0), 1e-6);
-		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.fullSimulationScale().at(1), 1e-6);
+		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
+		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+	}
+
+	TEST_F(RefactoredModelTests, DISABLED_playTrialPassesAudioFrameReaderToCalibrationFactory) {
+		FAIL();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
@@ -814,6 +859,8 @@ namespace {
 		AudioLoader *audioLoader{ &defaultLoader };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
+		CalibrationComputerStubFactory defaultCalibrationFactory{};
+		ICalibrationComputerFactory *calibrationFactory{ &defaultCalibrationFactory };
 
 		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
@@ -875,7 +922,8 @@ namespace {
 				audioReaderFactory,
 				prescriptionReader,
 				brirReader,
-				simulationFactory
+				simulationFactory,
+				calibrationFactory
 			};
 		}
 	};
