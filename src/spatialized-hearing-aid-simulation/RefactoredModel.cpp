@@ -249,9 +249,10 @@ bool RefactoredModel::testComplete() {
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
 	try {
-		player->play();
 		player->prepareToPlay({});
-		makeReader(p.audioFilePath);
+		auto reader = makeReader(p.audioFilePath);
+		loader->setReader(reader);
+		player->play();
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw CalibrationFailure{ e.what() };
