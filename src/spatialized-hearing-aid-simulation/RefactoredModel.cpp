@@ -167,6 +167,8 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	simulationFactory->makeWithoutSimulation(right_scale);
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
+	ChannelProcessingGroup::channel_processing_type left_channel;
+	ChannelProcessingGroup::channel_processing_type right_channel;
 	if (testParameters.usingSpatialization) {
 		left_spatial.filterCoefficients = brir.left;
 		simulationFactory->makeSpatialization(left_spatial, left_scale);
@@ -196,11 +198,11 @@ void RefactoredModel::playTrial(TrialParameters p) {
 			ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 			left_fs.hearingAid = left_hs;
 			left_fs.spatialization = left_spatial;
-			simulationFactory->makeFullSimulation(left_fs, left_scale);
+			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
 			ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 			right_fs.hearingAid = right_hs;
 			right_fs.spatialization = right_spatial;
-			simulationFactory->makeFullSimulation(right_fs, right_scale);
+			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
 	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
@@ -217,15 +219,15 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
 	sp.prescription = leftPrescription;
 	sp.filterCoefficients = brir.left;
-	auto leftChannel = simulationFactory->make(sp);
+	simulationFactory->make(sp);
 	
 	if (reader->channels() > 1)
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(1));
 	sp.prescription = rightPrescription;
 	sp.filterCoefficients = brir.right;
-	auto rightChannel = simulationFactory->make(sp);
+	simulationFactory->make(sp);
 
-	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ leftChannel, rightChannel };
+	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();

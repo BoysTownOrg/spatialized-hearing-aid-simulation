@@ -681,12 +681,11 @@ namespace {
 			std::make_shared<MultipliesSamplesBy>(3.0f)
 		};
 		simulationFactory.setFullSimulationProcessors(fullSimulation);
-		playTrial();
-		auto processor = audioLoader.audioFrameProcessor();
 		buffer_type left = { 5 };
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
-		processor->process(channels);
+		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
+		playTrial();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
@@ -826,18 +825,6 @@ namespace {
 		playTrial();
 		assertEqual({ 1, 2, }, simulationFactory.fullSimulation().at(0).spatialization.filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.fullSimulation().at(1).spatialization.filterCoefficients);
-	}
-
-	TEST_F(RefactoredModelTests, playTrialSetsProcessorBeforePlaying) {
-		prepareNewTest();
-		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
-		buffer_type left{ 4 };
-		buffer_type right{ 5 };
-		std::vector<channel_type> channels{ left, right };
-		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
-		playTrial();
-		assertEqual(4 + 1.0f, left.front());
-		assertEqual(5 + 1.0f, right.front());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
