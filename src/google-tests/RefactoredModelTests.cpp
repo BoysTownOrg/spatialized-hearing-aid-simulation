@@ -134,6 +134,7 @@ namespace {
 
 		RefactoredModel::TestParameters testParameters{};
 		RefactoredModel::TrialParameters trialParameters{};
+		RefactoredModel::CalibrationParameters calibrationParameters{};
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
 		SpeechPerceptionTestStub perceptionTest{};
@@ -172,6 +173,10 @@ namespace {
 
 		void playTrial() {
 			model.playTrial(trialParameters);
+		}
+
+		void playCalibration() {
+			model.playCalibration(calibrationParameters);
 		}
 
 		void setInMemoryReader(AudioFileReader &reader_) {
@@ -283,6 +288,11 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playTrial();
+		assertTrue(audioPlayer.played());
+	}
+
+	TEST_F(RefactoredModelTests, playCalibrationPlaysPlayer) {
+		playCalibration();
 		assertTrue(audioPlayer.played());
 	}
 
