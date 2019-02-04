@@ -256,6 +256,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		IAudioPlayer::Preparation playing{};
 		playing.channels = reader->channels();
 		playing.sampleRate = reader->sampleRate();
+		playing.audioDevice = p.audioDevice;
 		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
