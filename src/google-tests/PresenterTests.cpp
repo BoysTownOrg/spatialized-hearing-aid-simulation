@@ -742,7 +742,8 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
-		playCalibrationWithChunkSizeShowsErrorMessage("a");
+		for (auto s : { "a", "0.1", "-1" })
+			playCalibrationWithChunkSizeShowsErrorMessage(s);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeDoesNotPlay) {
