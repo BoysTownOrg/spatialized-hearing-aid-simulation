@@ -9,6 +9,18 @@ class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
 
+	struct ProcessingParameters {
+		std::string leftDslPrescriptionFilePath;
+		std::string rightDslPrescriptionFilePath;
+		std::string brirFilePath;
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+		bool usingHearingAidSimulation;
+		bool usingSpatialization;
+	};
+
 	struct TestParameters {
 		std::string subjectId;
 		std::string testerId;
@@ -37,6 +49,7 @@ public:
 	virtual bool testComplete() = 0;
 
 	struct CalibrationParameters {
+		ProcessingParameters processing;
 		std::string audioDevice;
 		std::string audioFilePath;
 		double level_dB_Spl;

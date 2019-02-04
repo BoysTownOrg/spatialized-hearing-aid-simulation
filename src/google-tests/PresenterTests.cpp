@@ -182,10 +182,7 @@ namespace {
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
-		EXPECT_EQ(
-			&presenter, 
-			view.listener()
-		);
+		EXPECT_EQ(&presenter, view.listener());
 	}
 
 	TEST_F(PresenterTests, runRunsEventLoop) {
@@ -617,6 +614,13 @@ namespace {
 		assertEqual("a", model.calibrationParameters().audioDevice);
 		assertEqual("b", model.calibrationParameters().audioFilePath);
 		assertEqual(1.1, model.calibrationParameters().level_dB_Spl);
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
+		view.setHearingAidSimulationOn();
+		view.setAttack_ms("1.0");
+		view.playCalibration();
+		assertEqual(1.0, model.calibrationParameters().processing.attack_ms);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
