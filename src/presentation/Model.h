@@ -8,6 +8,7 @@
 class Model {
 public:
 	INTERFACE_OPERATIONS(Model);
+	RUNTIME_ERROR(RequestFailure);
 
 	struct ProcessingParameters {
 		std::string leftDslPrescriptionFilePath;
@@ -29,14 +30,12 @@ public:
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
-	RUNTIME_ERROR(TestInitializationFailure);
 
 	struct TrialParameters {
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
 	virtual void playTrial(TrialParameters) = 0;
-	RUNTIME_ERROR(TrialFailure);
 
 	virtual bool testComplete() = 0;
 
@@ -47,7 +46,6 @@ public:
 		double level_dB_Spl;
 	};
 	virtual void playCalibration(CalibrationParameters) = 0;
-	RUNTIME_ERROR(CalibrationFailure);
 	virtual void stopCalibration() = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };

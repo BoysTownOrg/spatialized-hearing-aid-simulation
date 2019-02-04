@@ -48,9 +48,9 @@ static std::string coefficientErrorMessage(std::string which) {
 void RefactoredModel::checkAndStoreBrir(TestParameters p) {
 	brir = readBrir(std::move(p));
 	if (brir.left.empty())
-		throw TestInitializationFailure{ coefficientErrorMessage("left") };
+		throw RequestFailure{ coefficientErrorMessage("left") };
 	if (brir.right.empty())
-		throw TestInitializationFailure{ coefficientErrorMessage("right") };
+		throw RequestFailure{ coefficientErrorMessage("right") };
 }
 
 BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters p) {
@@ -58,7 +58,7 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters
 		return brirReader->read(p.processing.brirFilePath);
 	}
 	catch (const BrirReader::ReadFailure &) {
-		throw TestInitializationFailure{ "Unable to read '" + p.processing.brirFilePath + "'." };
+		throw RequestFailure{ "Unable to read '" + p.processing.brirFilePath + "'." };
 	}
 }
 
@@ -78,7 +78,7 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 		return prescriptionReader->read(filePath);
 	}
 	catch (const PrescriptionReader::ReadFailure &) {
-		throw TestInitializationFailure{ "Unable to read '" + filePath + "'." };
+		throw RequestFailure{ "Unable to read '" + filePath + "'." };
 	}
 }
 
@@ -94,7 +94,7 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 
 void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
 	if (!powerOfTwo(size))
-		throw TestInitializationFailure{ windowChunkSizesErrorMessage(size) };
+		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
 void RefactoredModel::prepareNewTest_(TestParameters p) {
@@ -107,7 +107,7 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 		perceptionTest->prepareNewTest(std::move(adapted));
 	}
 	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
-		throw TestInitializationFailure{ e.what() };
+		throw RequestFailure{ e.what() };
 	}
 }
 
@@ -213,7 +213,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer<TrialFailure>(*reader, testParameters.processing, p.audioDevice);
+	prepareAudioPlayer<RequestFailure>(*reader, testParameters.processing, p.audioDevice);
 	player->play();
 	perceptionTest->advanceTrial();
 }
@@ -223,7 +223,7 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 		return audioReaderFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw TrialFailure{ e.what() };
+		throw RequestFailure{ e.what() };
 	}
 }
 
@@ -256,7 +256,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
 	player->play();
-	prepareAudioPlayer<CalibrationFailure>(*reader, p.processing, p.audioDevice);
+	prepareAudioPlayer<RequestFailure>(*reader, p.processing, p.audioDevice);
 	reader->reset();
 }
 

@@ -95,7 +95,7 @@ public:
 	}
 
 	void prepareNewTest(TestParameters) override {
-		throw TestInitializationFailure{ message };
+		throw RequestFailure{ message };
 	}
 
 	void playTrial(TrialParameters) override {}
@@ -113,7 +113,7 @@ public:
 	}
 
 	void playTrial(TrialParameters) override {
-		throw TrialFailure{ message };
+		throw RequestFailure{ message };
 	}
 
 	void prepareNewTest(TestParameters) override {}
@@ -131,7 +131,7 @@ public:
 	}
 
 	void playCalibration(CalibrationParameters) override {
-		throw CalibrationFailure{ message };
+		throw RequestFailure{ message };
 	}
 	
 	void playTrial(TrialParameters) override {}
