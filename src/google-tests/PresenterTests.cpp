@@ -696,8 +696,7 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelDoesNotPlay) {
 		setInvalidLevel();
-		view.playCalibration();
-		assertFalse(model.calibrationPlayed());
+		playCalibrationDoesNotPlay();
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
