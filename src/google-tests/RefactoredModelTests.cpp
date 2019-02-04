@@ -881,7 +881,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenPrescriptionReaderFails
+		prepareNewTestThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
@@ -903,7 +903,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenBrirReaderFails
+		prepareNewTestThrowsRequestFailureWhenBrirReaderFails
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
@@ -925,7 +925,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenPerceptionTestFailsToInitialize
+		prepareNewTestThrowsRequestFailureWhenPerceptionTestFailsToInitialize
 	) {
 		InitializationFailingSpeechPerceptionTest failing;
 		failing.setErrorMessage("error.");
@@ -935,7 +935,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenCoefficientsAreEmpty
+		prepareNewTestThrowsRequestFailureWhenCoefficientsAreEmpty
 	) {
 		testParameters.processing.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
@@ -955,7 +955,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsTestInitializationFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
+		prepareNewTestThrowsRequestFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
 		testParameters.processing.usingHearingAidSimulation = true;
 		testParameters.processing.chunkSize = 0;
@@ -972,7 +972,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		playTrialThrowsTrialFailureWhenAudioFrameReaderCannotBeCreated
+		playTrialThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
 		audioReaderFactory = &failing;
@@ -981,7 +981,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		playTrialThrowsTrialFailureWhenPlayerThrowsPreparationFailure
+		playTrialThrowsRequestFailureWhenPlayerThrowsPreparationFailure
 	) {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
@@ -998,7 +998,7 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		playCalibrationThrowsCalibrationFailureWhenPlayerThrowsPreparationFailure
+		playCalibrationThrowsRequestFailureWhenPlayerThrowsPreparationFailure
 	) {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
