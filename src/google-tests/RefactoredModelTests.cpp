@@ -129,18 +129,16 @@ namespace {
 
 	class CalibrationComputerStub : public ICalibrationComputer {
 		ArgumentCollection<double> levels_{};
-		double signalScale_{};
+		std::map<int, double> signalScales;
 	public:
-
-		void setSignalScale(double x) {
-			signalScale_ = x;
-		}
-
 		double signalScale(int channel, double level) override
 		{
-			channel;
 			levels_.push_back(level);
-			return signalScale_;
+			return signalScales[channel];
+		}
+
+		void addSignalScale(int channel, double scale) {
+			signalScales[channel] = scale;
 		}
 
 		auto levels() const {
@@ -440,13 +438,9 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->setSignalScale(1);
-		setFullSimulation();
-		playFirstTrialOfNewTest();
-		assertEqual(1.0f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(1.0f, simulationFactory.fullSimulationScale().at(1));
+	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
+		playTrial();
+		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
@@ -457,36 +451,44 @@ namespace {
 		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
-		playTrial();
-		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
+		audioFrameReader->setChannels(2);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
+		setFullSimulation();
+		playFirstTrialOfNewTest();
+		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
 		audioFrameReader->setChannels(2);
-		calibrationComputer->setSignalScale(1);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
 		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
-		assertEqual(1.0f, simulationFactory.hearingAidSimulationScale().at(0));
-		assertEqual(1.0f, simulationFactory.hearingAidSimulationScale().at(1));
+		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
 		audioFrameReader->setChannels(2);
-		calibrationComputer->setSignalScale(1);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
 		setSpatializationOnly();
 		playFirstTrialOfNewTest();
-		assertEqual(1.0f, simulationFactory.spatializationScale().at(0));
-		assertEqual(1.0f, simulationFactory.spatializationScale().at(1));
+		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
 		audioFrameReader->setChannels(2);
-		calibrationComputer->setSignalScale(1);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
 		setNoSimulation();
 		playFirstTrialOfNewTest();
-		assertEqual(1.0f, simulationFactory.withoutSimulationScale().at(0));
-		assertEqual(1.0f, simulationFactory.withoutSimulationScale().at(1));
+		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
 	}
 
 	TEST_F(
