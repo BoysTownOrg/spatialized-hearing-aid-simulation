@@ -789,6 +789,42 @@ namespace {
 		playCalibrationPlays();
 	}
 
+	TEST_F(
+		PresenterTests,
+		playCalibrationUsingSpatialization
+	) {
+		view.setSpatializationOn();
+		view.playCalibration();
+		assertTrue(model.calibrationParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationNotUsingSpatialization
+	) {
+		view.setSpatializationOff();
+		view.playCalibration();
+		assertFalse(model.calibrationParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOn();
+		view.playCalibration();
+		assertTrue(model.calibrationParameters().processing.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationNotUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOff();
+		view.playCalibration();
+		assertFalse(model.calibrationParameters().processing.usingHearingAidSimulation);
+	}
+
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
 		assertTrue(model.calibrationStopped());
