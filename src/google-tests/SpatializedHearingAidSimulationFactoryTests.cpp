@@ -196,7 +196,7 @@ namespace {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
 		firFilterFactory.setProcessor(std::make_shared<MultipliesSamplesBy>(2.0f));
 		hearingAidFactory.setProcessor(std::make_shared<AddsSamplesBy>(3.0f));
-		auto processor = simulationFactory.makeFullSimulation(fullSimulation, {});
+		auto processor = simulationFactory.makeFullSimulation({}, {});
 		buffer_type x{ 4 };
 		processor->process(x);
 		assertEqual({ (4 + 1) * 2 + 3.0f }, x);
