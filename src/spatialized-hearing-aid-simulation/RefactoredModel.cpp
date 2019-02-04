@@ -154,6 +154,7 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
+	auto reader = makeReader(perceptionTest->nextStimulus());
 	if (testParameters.usingHearingAidSimulation) {
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
 		left_hs.attack_ms = testParameters.attack_ms;
@@ -161,6 +162,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		left_hs.chunkSize = testParameters.chunkSize;
 		left_hs.windowSize = testParameters.windowSize;
 		left_hs.prescription = leftPrescription;
+		left_hs.sampleRate = reader->sampleRate();
 		simulationFactory->makeHearingAidSimulation(left_hs, 0);
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
 		right_hs.attack_ms = testParameters.attack_ms;
@@ -168,6 +170,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		right_hs.chunkSize = testParameters.chunkSize;
 		right_hs.windowSize = testParameters.windowSize;
 		right_hs.prescription = rightPrescription;
+		right_hs.sampleRate = reader->sampleRate();
 		simulationFactory->makeHearingAidSimulation(right_hs, 0);
 		ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 		left_fs.hearingAid = left_hs;
@@ -184,7 +187,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	sp.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 	sp.usingHearingAidSimulation = testParameters.usingHearingAidSimulation;
 	sp.usingSpatialization = testParameters.usingSpatialization;
-	auto reader = makeReader(perceptionTest->nextStimulus());
 	sp.sampleRate = reader->sampleRate();
 
     RmsComputer rms{ *reader };
