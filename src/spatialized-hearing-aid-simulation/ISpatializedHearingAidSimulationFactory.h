@@ -41,22 +41,14 @@ public:
 	};
 	virtual std::shared_ptr<SignalProcessor> makeFullSimulation(
 		FullSimulation , float 
-	) {
-		return {};
-	}
+	) = 0;
 	virtual std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 		HearingAidSimulation , float 
-	) {
-		return {};
-	}
+	) = 0;
 	virtual std::shared_ptr<SignalProcessor> makeSpatialization(
 		Spatialization , float 
-	) {
-		return {};
-	}
+	) = 0;
 	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
-		float 
-	) {
-		return {};
-	}
+		float
+	) = 0;
 };
