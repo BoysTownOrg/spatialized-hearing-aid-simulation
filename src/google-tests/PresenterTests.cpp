@@ -61,6 +61,11 @@ namespace {
 			assertTrue(view.testerViewShown());
 		}
 
+		void confirmTestSetupDoesNotPrepareTest() {
+			view.confirmTestSetup();
+			assertFalse(model.testPrepared());
+		}
+
 		void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
 			view.setChunkSize(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid chunk size.");
@@ -275,8 +280,7 @@ namespace {
 	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeDoesNotPrepareTest) {
 		view.setHearingAidSimulationOn();
 		setInvalidChunkSize();
-		view.confirmTestSetup();
-		assertFalse(model.testPrepared());
+		confirmTestSetupDoesNotPrepareTest();
 	}
 
 	TEST_F(
@@ -294,6 +298,12 @@ namespace {
 		confirmTestSetupDoesNotHideSetupView();
 	}
 
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeDoesNotPrepareTest) {
+		view.setHearingAidSimulationOn();
+		setInvalidWindowSize();
+		confirmTestSetupDoesNotPrepareTest();
+	}
+
 	TEST_F(
 		PresenterTests, 
 		confirmTestSetupWithInvalidReleaseTimeButNoHearingAidSimulationStillHidesSetupView
@@ -309,6 +319,12 @@ namespace {
 		confirmTestSetupDoesNotHideSetupView();
 	}
 
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeDoesNotPrepareTest) {
+		view.setHearingAidSimulationOn();
+		setInvalidReleaseTime();
+		confirmTestSetupDoesNotPrepareTest();
+	}
+
 	TEST_F(
 		PresenterTests, 
 		confirmTestSetupWithInvalidAttackTimeButNoHearingAidSimulationStillHidesSetupView
@@ -322,6 +338,12 @@ namespace {
 		view.setHearingAidSimulationOn();
 		setInvalidAttackTime();
 		confirmTestSetupDoesNotHideSetupView();
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeDoesNotPrepareTest) {
+		view.setHearingAidSimulationOn();
+		setInvalidAttackTime();
+		confirmTestSetupDoesNotPrepareTest();
 	}
 
 	TEST_F(
