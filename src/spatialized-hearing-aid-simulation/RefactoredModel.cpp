@@ -213,7 +213,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer<RequestFailure>(*reader, testParameters.processing, p.audioDevice);
+	prepareAudioPlayer(*reader, testParameters.processing, p.audioDevice);
 	player->play();
 	perceptionTest->advanceTrial();
 }
@@ -227,7 +227,6 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 	}
 }
 
-template<typename exception>
 void RefactoredModel::prepareAudioPlayer(
 	AudioFrameReader &reader, 
 	ProcessingParameters processing, 
@@ -244,7 +243,7 @@ void RefactoredModel::prepareAudioPlayer(
 		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
-		throw exception{ e.what() };
+		throw RequestFailure{ e.what() };
 	}
 }
 
@@ -256,7 +255,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
 	player->play();
-	prepareAudioPlayer<RequestFailure>(*reader, p.processing, p.audioDevice);
+	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	reader->reset();
 }
 
