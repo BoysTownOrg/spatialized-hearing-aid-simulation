@@ -157,6 +157,9 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation hs;
 	hs.prescription = leftPrescription;
 	simulationFactory->makeHearingAidSimulation(hs, 0);
+	ISpatializedHearingAidSimulationFactory::FullSimulation fs;
+	fs.hearingAid = hs;
+	simulationFactory->makeFullSimulation(fs, 0);
 	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
 	sp.attack_ms = testParameters.attack_ms;
 	sp.release_ms = testParameters.release_ms;
