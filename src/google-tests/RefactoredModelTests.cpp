@@ -162,8 +162,8 @@ namespace {
 			brir.left = { 0 };
 			brir.right = { 0 };
 			brirReader.setBrir(brir);
-			testParameters.chunkSize = 1;
-			testParameters.windowSize = 1;
+			testParameters.processing.chunkSize = 1;
+			testParameters.processing.windowSize = 1;
 		}
 
 		void prepareNewTest() {
@@ -184,23 +184,23 @@ namespace {
 		}
 
 		void setFullSimulation() noexcept {
-			testParameters.usingHearingAidSimulation = true;
-			testParameters.usingSpatialization = true;
+			testParameters.processing.usingHearingAidSimulation = true;
+			testParameters.processing.usingSpatialization = true;
 		}
 
 		void setHearingAidSimulationOnly() noexcept {
-			testParameters.usingHearingAidSimulation = true;
-			testParameters.usingSpatialization = false;
+			testParameters.processing.usingHearingAidSimulation = true;
+			testParameters.processing.usingSpatialization = false;
 		}
 
 		void setSpatializationOnly() noexcept {
-			testParameters.usingSpatialization = true;
-			testParameters.usingHearingAidSimulation = false;
+			testParameters.processing.usingSpatialization = true;
+			testParameters.processing.usingHearingAidSimulation = false;
 		}
 
 		void setNoSimulation() noexcept {
-			testParameters.usingSpatialization = false;
-			testParameters.usingHearingAidSimulation = false;
+			testParameters.processing.usingSpatialization = false;
+			testParameters.processing.usingHearingAidSimulation = false;
 		}
 
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
@@ -236,9 +236,9 @@ namespace {
 		RefactoredModelTests,
 		prepareNewTestPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.leftDslPrescriptionFilePath = "a";
-		testParameters.rightDslPrescriptionFilePath = "b";
+		testParameters.processing.usingHearingAidSimulation = true;
+		testParameters.processing.leftDslPrescriptionFilePath = "a";
+		testParameters.processing.rightDslPrescriptionFilePath = "b";
 		prepareNewTest();
 		assertTrue(prescriptionReader.filePaths().contains("a"));
 		assertTrue(prescriptionReader.filePaths().contains("b"));
@@ -248,7 +248,7 @@ namespace {
 		RefactoredModelTests,
 		prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = false;
+		testParameters.processing.usingHearingAidSimulation = false;
 		prepareNewTest();
 		assertTrue(prescriptionReader.filePaths().empty());
 	}
@@ -257,14 +257,14 @@ namespace {
 		RefactoredModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		testParameters.usingSpatialization = true;
-		testParameters.brirFilePath = "a";
+		testParameters.processing.usingSpatialization = true;
+		testParameters.processing.brirFilePath = "a";
 		prepareNewTest();
 		assertEqual("a", brirReader.filePath());
 	}
 
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-		testParameters.usingSpatialization = false;
+		testParameters.processing.usingSpatialization = false;
 		prepareNewTest();
 		assertFalse(brirReader.readCalled());
 	}
@@ -317,8 +317,8 @@ namespace {
 		RefactoredModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.chunkSize = 1;
+		testParameters.processing.usingHearingAidSimulation = true;
+		testParameters.processing.chunkSize = 1;
 		playFirstTrialOfNewTest();
 		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 	}
@@ -327,7 +327,7 @@ namespace {
 		RefactoredModelTests,
 		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = false;
+		testParameters.processing.usingHearingAidSimulation = false;
 		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::defaultFramesPerBuffer, 
@@ -411,7 +411,7 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
+		testParameters.processing.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
 		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
@@ -435,7 +435,7 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
+		testParameters.processing.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
@@ -459,7 +459,7 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
+		testParameters.processing.rightDslPrescriptionFilePath = "rightFilePath";
 		prescriptionReader.addPrescription("rightFilePath", prescription);
 		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
@@ -483,7 +483,7 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
+		testParameters.processing.rightDslPrescriptionFilePath = "rightFilePath";
 		prescriptionReader.addPrescription("rightFilePath", prescription);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
@@ -500,7 +500,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = false;
+		testParameters.processing.usingHearingAidSimulation = false;
 		playFirstTrialOfNewTest();
 		assertSimulationFactoryHasNotMadeFullSimulation();
 		assertSimulationFactoryHasNotMadeHearingAidSimulation();
@@ -510,7 +510,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		testParameters.usingSpatialization = false;
+		testParameters.processing.usingSpatialization = false;
 		playFirstTrialOfNewTest();
 		assertSimulationFactoryHasNotMadeFullSimulation();
 		assertSimulationFactoryHasNotMadeSpatialization();
@@ -520,10 +520,10 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		testParameters.attack_ms = 1;
-		testParameters.release_ms = 2;
-		testParameters.chunkSize = 4;
-		testParameters.windowSize = 8;
+		testParameters.processing.attack_ms = 1;
+		testParameters.processing.release_ms = 2;
+		testParameters.processing.chunkSize = 4;
+		testParameters.processing.windowSize = 8;
 		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.hearingAidSimulation().at(0);
@@ -542,10 +542,10 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		testParameters.attack_ms = 1;
-		testParameters.release_ms = 2;
-		testParameters.chunkSize = 4;
-		testParameters.windowSize = 8;
+		testParameters.processing.attack_ms = 1;
+		testParameters.processing.release_ms = 2;
+		testParameters.processing.chunkSize = 4;
+		testParameters.processing.windowSize = 8;
 		setFullSimulation();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.fullSimulation().at(0).hearingAid;
@@ -821,8 +821,8 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.leftDslPrescriptionFilePath = "a";
+		testParameters.processing.usingHearingAidSimulation = true;
+		testParameters.processing.leftDslPrescriptionFilePath = "a";
 		assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 	}
 
@@ -832,7 +832,7 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		testParameters.usingHearingAidSimulation = true;
+		testParameters.processing.usingHearingAidSimulation = true;
 		prepareNewTestIgnoringFailure();
 		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
 	}
@@ -843,8 +843,8 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		testParameters.usingSpatialization = true;
-		testParameters.brirFilePath = "a";
+		testParameters.processing.usingSpatialization = true;
+		testParameters.processing.brirFilePath = "a";
 		assertPreparingNewTestThrowsTestInitializationFailure("Unable to read 'a'.");
 	}
 
@@ -854,7 +854,7 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		testParameters.usingSpatialization = true;
+		testParameters.processing.usingSpatialization = true;
 		prepareNewTestIgnoringFailure();
 		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
 	}
@@ -873,7 +873,7 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsTestInitializationFailureWhenCoefficientsAreEmpty
 	) {
-		testParameters.usingSpatialization = true;
+		testParameters.processing.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = {};
 		brir.right = { 0 };
@@ -893,14 +893,14 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsTestInitializationFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.chunkSize = 0;
-		testParameters.windowSize = 1;
+		testParameters.processing.usingHearingAidSimulation = true;
+		testParameters.processing.chunkSize = 0;
+		testParameters.processing.windowSize = 1;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
 		);
-		testParameters.chunkSize = 2;
-		testParameters.windowSize = 3;
+		testParameters.processing.chunkSize = 2;
+		testParameters.processing.windowSize = 3;
 		assertPreparingNewTestThrowsTestInitializationFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);

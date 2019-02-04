@@ -465,17 +465,17 @@ namespace {
 		view.setWindowSize("4");
 		view.setChunkSize("5");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().leftDslPrescriptionFilePath);
-		assertEqual("b", model.testParameters().rightDslPrescriptionFilePath);
+		assertEqual("a", model.testParameters().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().audioDirectory);
-		assertEqual("d", model.testParameters().brirFilePath);
+		assertEqual("d", model.testParameters().processing.brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
 		assertEqual("f", model.testParameters().subjectId);
 		assertEqual("g", model.testParameters().testerId);
-		assertEqual(2.2, model.testParameters().attack_ms);
-		assertEqual(3.3, model.testParameters().release_ms);
-		assertEqual(4, model.testParameters().windowSize);
-		assertEqual(5, model.testParameters().chunkSize);
+		assertEqual(2.2, model.testParameters().processing.attack_ms);
+		assertEqual(3.3, model.testParameters().processing.release_ms);
+		assertEqual(4, model.testParameters().processing.windowSize);
+		assertEqual(5, model.testParameters().processing.chunkSize);
 	}
 
 	TEST_F(
@@ -484,7 +484,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		assertTrue(model.testParameters().usingSpatialization);
+		assertTrue(model.testParameters().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -493,7 +493,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		assertFalse(model.testParameters().usingSpatialization);
+		assertFalse(model.testParameters().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -502,7 +502,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.confirmTestSetup();
-		assertTrue(model.testParameters().usingHearingAidSimulation);
+		assertTrue(model.testParameters().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -511,7 +511,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.confirmTestSetup();
-		assertFalse(model.testParameters().usingHearingAidSimulation);
+		assertFalse(model.testParameters().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(

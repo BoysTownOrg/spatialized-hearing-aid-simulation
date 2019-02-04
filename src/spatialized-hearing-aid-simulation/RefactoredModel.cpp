@@ -32,9 +32,9 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 }
 
 void RefactoredModel::checkAndStore(TestParameters p) {
-	if (p.usingSpatialization)
+	if (p.processing.usingSpatialization)
 		checkAndStoreBrir(p);
-	if (p.usingHearingAidSimulation)
+	if (p.processing.usingHearingAidSimulation)
 		checkAndStorePrescriptions(p);
 	testParameters = std::move(p);
 }
@@ -55,22 +55,22 @@ void RefactoredModel::checkAndStoreBrir(TestParameters p) {
 
 BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters p) {
 	try {
-		return brirReader->read(p.brirFilePath);
+		return brirReader->read(p.processing.brirFilePath);
 	}
 	catch (const BrirReader::ReadFailure &) {
-		throw TestInitializationFailure{ "Unable to read '" + p.brirFilePath + "'." };
+		throw TestInitializationFailure{ "Unable to read '" + p.processing.brirFilePath + "'." };
 	}
 }
 
 void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
 	readPrescriptions(p);
-	checkSizeIsPowerOfTwo(p.chunkSize);
-	checkSizeIsPowerOfTwo(p.windowSize);
+	checkSizeIsPowerOfTwo(p.processing.chunkSize);
+	checkSizeIsPowerOfTwo(p.processing.windowSize);
 }
 
 void RefactoredModel::readPrescriptions(TestParameters p) {
-	leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
-	rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	leftPrescription = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
+	rightPrescription = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
 }
 
 PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
@@ -175,10 +175,10 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	right_spatial.filterCoefficients = brir.right;
 
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
-	both_hs.attack_ms = testParameters.attack_ms;
-	both_hs.release_ms = testParameters.release_ms;
-	both_hs.chunkSize = testParameters.chunkSize;
-	both_hs.windowSize = testParameters.windowSize;
+	both_hs.attack_ms = testParameters.processing.attack_ms;
+	both_hs.release_ms = testParameters.processing.release_ms;
+	both_hs.chunkSize = testParameters.processing.chunkSize;
+	both_hs.windowSize = testParameters.processing.windowSize;
 	both_hs.sampleRate = reader->sampleRate();
 	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
@@ -196,14 +196,14 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	right_fs.hearingAid = right_hs;
 	right_fs.spatialization = right_spatial;
 
-	if (testParameters.usingSpatialization) {
+	if (testParameters.processing.usingSpatialization) {
 		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
 		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
-	if (testParameters.usingHearingAidSimulation) {
+	if (testParameters.processing.usingHearingAidSimulation) {
 		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
 		right_channel = simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
-		if (testParameters.usingSpatialization) {
+		if (testParameters.processing.usingSpatialization) {
 			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
 			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
@@ -230,8 +230,8 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 void RefactoredModel::prepareAudioPlayer(AudioFrameReader &reader, std::string audioDevice) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
-	playing.framesPerBuffer = testParameters.usingHearingAidSimulation
-		? testParameters.chunkSize
+	playing.framesPerBuffer = testParameters.processing.usingHearingAidSimulation
+		? testParameters.processing.chunkSize
 		: defaultFramesPerBuffer;
 	playing.sampleRate = reader.sampleRate();
 	playing.audioDevice = std::move(audioDevice);

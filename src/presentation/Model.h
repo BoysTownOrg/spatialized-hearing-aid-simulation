@@ -22,19 +22,11 @@ public:
 	};
 
 	struct TestParameters {
+		ProcessingParameters processing;
 		std::string subjectId;
 		std::string testerId;
 		std::string audioDirectory;
 		std::string testFilePath;
-		std::string leftDslPrescriptionFilePath;
-		std::string rightDslPrescriptionFilePath;
-		std::string brirFilePath;
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
-		bool usingHearingAidSimulation;
-		bool usingSpatialization;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);

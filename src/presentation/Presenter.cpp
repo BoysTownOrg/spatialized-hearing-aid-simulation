@@ -118,17 +118,17 @@ void Presenter::prepareNewTest() {
 
 Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
-	test.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	test.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	test.brirFilePath = view->brirFilePath();
+	test.processing.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
+	test.processing.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
+	test.processing.brirFilePath = view->brirFilePath();
 	if (view->usingHearingAidSimulation()) {
-		test.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		test.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
-		test.release_ms = convertToDouble(view->release_ms(), "release time");
-		test.attack_ms = convertToDouble(view->attack_ms(), "attack time");
+		test.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+		test.processing.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		test.processing.release_ms = convertToDouble(view->release_ms(), "release time");
+		test.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 	}
-	test.usingSpatialization = view->usingSpatialization();
-	test.usingHearingAidSimulation = view->usingHearingAidSimulation();
+	test.processing.usingSpatialization = view->usingSpatialization();
+	test.processing.usingHearingAidSimulation = view->usingHearingAidSimulation();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->audioDirectory();
 	test.subjectId = view->subjectId();
