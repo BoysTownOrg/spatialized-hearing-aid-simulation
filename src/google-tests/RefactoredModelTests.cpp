@@ -498,14 +498,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
+		setHearingAidSimulationOnly();
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.chunkSize = 4;
 		testParameters.windowSize = 8;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		auto left = simulationFactory.hearingAidSimulation().at(0);
 		assertEqual(1.0, left.attack_ms);
 		assertEqual(2.0, left.release_ms);
@@ -522,14 +520,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = true;
+		setFullSimulation();
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.chunkSize = 4;
 		testParameters.windowSize = 8;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		auto left = simulationFactory.fullSimulation().at(0).hearingAid;
 		assertEqual(1.0, left.attack_ms);
 		assertEqual(2.0, left.release_ms);
@@ -547,10 +543,8 @@ namespace {
 		playTrialPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
 		audioFrameReader->setSampleRate(1);
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
-		playTrial();
+		setHearingAidSimulationOnly();
+		playFirstTrialOfNewTest();
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(0).sampleRate);
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(1).sampleRate);
 	}
@@ -560,18 +554,14 @@ namespace {
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		audioFrameReader->setSampleRate(1);
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = true;
-		prepareNewTest();
-		playTrial();
+		setFullSimulation();
+		playFirstTrialOfNewTest();
 		assertEqual(1, simulationFactory.fullSimulation().at(0).hearingAid.sampleRate);
 		assertEqual(1, simulationFactory.fullSimulation().at(1).hearingAid.sampleRate);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = true;
-		prepareNewTest();
+		setFullSimulation();
 		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -581,15 +571,13 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
-		testParameters.usingHearingAidSimulation = true;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
+		setHearingAidSimulationOnly();
 		std::vector<std::shared_ptr<SignalProcessor>> hearingAidSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -599,15 +587,13 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
-		testParameters.usingHearingAidSimulation = false;
-		testParameters.usingSpatialization = true;
-		prepareNewTest();
+		setSpatializationOnly();
 		std::vector<std::shared_ptr<SignalProcessor>> spatialization = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -617,15 +603,13 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
-		testParameters.usingHearingAidSimulation = false;
-		testParameters.usingSpatialization = false;
-		prepareNewTest();
+		setNoSimulation();
 		std::vector<std::shared_ptr<SignalProcessor>> withoutSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
 			std::make_shared<MultipliesSamplesBy>(3.0f)
@@ -635,7 +619,7 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		audioPlayer.callOnPlay([&]() { audioLoader.audioFrameProcessor()->process(channels); });
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
 	}
