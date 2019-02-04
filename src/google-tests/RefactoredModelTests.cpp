@@ -356,6 +356,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
+	) {
+		testParameters.usingHearingAidSimulation = false;
+		prepareNewTest();
+		playTrial();
+		assertTrue(simulationFactory.fullSimulation().empty());
+		assertTrue(simulationFactory.hearingAidSimulation().empty());
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesRightPrescriptionToFactoryWhenUsingHearingAidSimulation
 	) {
 		PrescriptionReader::Dsl prescription;
