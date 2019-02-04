@@ -600,6 +600,12 @@ namespace {
 		assertTrue(model.trialPlayed());
 	}
 
+	TEST_F(PresenterTests, playingTrialWithInvalidLevelDoesNotPlayTrial) {
+		setInvalidLevel();
+		view.playTrial();
+		assertFalse(model.trialPlayed());
+	}
+
 	TEST_F(PresenterTests, playingTrialDoesNotHideTesterViewWhileTestInProgress) {
 		model.setTestIncomplete();
 		view.playTrial();
