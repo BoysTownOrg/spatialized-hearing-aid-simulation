@@ -356,6 +356,57 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playTrialPassesRightPrescriptionToFactoryForHearingAidSimulation
+	) {
+		PrescriptionReader::Dsl prescription;
+		prescription.compressionRatios = { 1 };
+		prescription.crossFrequenciesHz = { 2 };
+		prescription.kneepointGains_dB = { 3 };
+		prescription.kneepoints_dBSpl = { 4 };
+		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		prescription.channels = 6;
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
+		prescriptionReader.addPrescription("rightFilePath", prescription);
+		prepareNewTest();
+		playTrial();
+		auto actual = simulationFactory.hearingAidSimulation().at(1).prescription;
+		assertEqual({ 1 }, actual.compressionRatios);
+		assertEqual({ 2 }, actual.crossFrequenciesHz);
+		assertEqual({ 3 }, actual.kneepointGains_dB);
+		assertEqual({ 4 }, actual.kneepoints_dBSpl);
+		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
+		assertEqual(6, actual.channels);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesRightPrescriptionToFactoryForFullSimulation
+	) {
+		PrescriptionReader::Dsl prescription;
+		prescription.compressionRatios = { 1 };
+		prescription.crossFrequenciesHz = { 2 };
+		prescription.kneepointGains_dB = { 3 };
+		prescription.kneepoints_dBSpl = { 4 };
+		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		prescription.channels = 6;
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
+		prescriptionReader.addPrescription("rightFilePath", prescription);
+		prepareNewTest();
+		playTrial();
+		auto actual = simulationFactory.fullSimulation().at(1).hearingAid.prescription;
+		assertEqual({ 1 }, actual.compressionRatios);
+		assertEqual({ 2 }, actual.crossFrequenciesHz);
+		assertEqual({ 3 }, actual.kneepointGains_dB);
+		assertEqual({ 4 }, actual.kneepoints_dBSpl);
+		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
+		assertEqual(6, actual.channels);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
 		testParameters.usingHearingAidSimulation = false;
