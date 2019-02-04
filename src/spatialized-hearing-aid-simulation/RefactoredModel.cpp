@@ -46,19 +46,19 @@ static std::string coefficientErrorMessage(std::string which) {
 }
 
 void RefactoredModel::checkAndStoreBrir(TestParameters p) {
-	brir = readBrir(std::move(p));
+	brir = readBrir(std::move(p.processing.brirFilePath));
 	if (brir.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
 	if (brir.right.empty())
 		throw RequestFailure{ coefficientErrorMessage("right") };
 }
 
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(TestParameters p) {
+BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string filePath) {
 	try {
-		return brirReader->read(p.processing.brirFilePath);
+		return brirReader->read(filePath);
 	}
 	catch (const BrirReader::ReadFailure &) {
-		throw RequestFailure{ "Unable to read '" + p.processing.brirFilePath + "'." };
+		throw RequestFailure{ "Unable to read '" + filePath + "'." };
 	}
 }
 
@@ -252,6 +252,7 @@ bool RefactoredModel::testComplete() {
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
+	readBrir(p.processing.brirFilePath);
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
 	player->play();

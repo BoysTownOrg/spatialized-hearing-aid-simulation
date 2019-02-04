@@ -47,7 +47,7 @@ private:
 	void checkAndStoreBrir(TestParameters);
 	void readPrescriptions(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
-	BrirReader::BinauralRoomImpulseResponse readBrir(TestParameters);
+	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
