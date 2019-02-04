@@ -678,6 +678,13 @@ namespace {
 		playCalibrationWithReleaseTimeShowsErrorMessage("a");
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseDoesNotPlay) {
+		view.setHearingAidSimulationOn();
+		setInvalidReleaseTime();
+		view.playCalibration();
+		assertFalse(model.calibrationPlayed());
+	}
+
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
 		assertTrue(model.calibrationStopped());
