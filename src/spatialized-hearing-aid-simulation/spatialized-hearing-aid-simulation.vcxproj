@@ -171,6 +171,7 @@
     <ClInclude Include="SpeechPerceptionTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CalibrationComputer.cpp" />
     <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="RefactoredModel.cpp" />
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
