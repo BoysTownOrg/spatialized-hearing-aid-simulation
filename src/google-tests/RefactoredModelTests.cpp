@@ -183,22 +183,22 @@ namespace {
 			playTrial();
 		}
 
-		void setFullSimulation() {
+		void setFullSimulation() noexcept {
 			testParameters.usingHearingAidSimulation = true;
 			testParameters.usingSpatialization = true;
 		}
 
-		void setHearingAidSimulationOnly() {
+		void setHearingAidSimulationOnly() noexcept {
 			testParameters.usingHearingAidSimulation = true;
 			testParameters.usingSpatialization = false;
 		}
 
-		void setSpatializationOnly() {
+		void setSpatializationOnly() noexcept {
 			testParameters.usingSpatialization = true;
 			testParameters.usingHearingAidSimulation = false;
 		}
 
-		void setNoSimulation() {
+		void setNoSimulation() noexcept {
 			testParameters.usingSpatialization = false;
 			testParameters.usingHearingAidSimulation = false;
 		}
