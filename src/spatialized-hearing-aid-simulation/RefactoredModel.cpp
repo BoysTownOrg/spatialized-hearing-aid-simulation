@@ -258,6 +258,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	player->play();
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	reader->reset();
+	readPrescription(p.processing.leftDslPrescriptionFilePath);
 }
 
 void RefactoredModel::stopCalibration() {
