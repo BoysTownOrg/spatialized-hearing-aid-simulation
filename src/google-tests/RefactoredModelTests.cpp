@@ -981,6 +981,15 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
+	) {
+		ErrorAudioFrameReaderFactory failing{ "error." };
+		audioReaderFactory = &failing;
+		assertPlayCalibrationThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenPlayerThrowsPreparationFailure
 	) {
 		PreparationFailingAudioPlayer failing;
