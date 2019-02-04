@@ -692,6 +692,13 @@ namespace {
 		assertFalse(model.calibrationPlayed());
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseButNoHearingAidSimulationStillPlays) {
+		view.setHearingAidSimulationOff();
+		setInvalidReleaseTime();
+		view.playCalibration();
+		assertTrue(model.calibrationPlayed());
+	}
+
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
 		assertTrue(model.calibrationStopped());
