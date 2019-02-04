@@ -25,7 +25,6 @@ namespace {
 		ArgumentCollection<float> hearingAidSimulationScale_{};
 		ArgumentCollection<float> spatializationScale_{};
 		ArgumentCollection<float> withoutSimulationScale_{};
-		std::shared_ptr<SignalProcessor> processor_{};
 		std::vector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors{};
 		std::vector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors{};
 		std::vector<std::shared_ptr<SignalProcessor>> spatializationProcessors{};
@@ -36,10 +35,6 @@ namespace {
 			hearingAidSimulationProcessors(2),
 			spatializationProcessors(2),
 			withoutSimulationProcessors(2) {}
-
-		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
-			processor_ = std::move(p);
-		}
 
 		void setFullSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
 			fullSimulationProcessors = std::move(p);
@@ -310,6 +305,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		prepareNewTest();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
@@ -326,6 +322,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
 		testParameters.usingSpatialization = true;
+		testParameters.usingHearingAidSimulation = false;
 		prepareNewTest();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
@@ -374,6 +371,7 @@ namespace {
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
 		prepareNewTest();
@@ -425,6 +423,7 @@ namespace {
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
 		prescriptionReader.addPrescription("rightFilePath", prescription);
 		prepareNewTest();
@@ -491,6 +490,7 @@ namespace {
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		testParameters.attack_ms = 1;
 		testParameters.release_ms = 2;
 		testParameters.chunkSize = 4;
@@ -539,6 +539,7 @@ namespace {
 	) {
 		audioFrameReader->setSampleRate(1);
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		prepareNewTest();
 		playTrial();
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(0).sampleRate);
@@ -635,6 +636,7 @@ namespace {
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
 		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = false;
 		prepareNewTest();
 		playTrial();
 		assertEqual(
@@ -670,6 +672,7 @@ namespace {
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
 		testParameters.usingSpatialization = true;
+		testParameters.usingHearingAidSimulation = false;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
