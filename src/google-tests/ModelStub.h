@@ -12,6 +12,7 @@ class ModelStub : public Model {
 	bool trialPlayed_{};
 	bool calibrationStopped_{};
 	bool calibrationPlayed_{};
+	bool testPrepared_{};
 public:
 
 	auto calibrationParameters() noexcept {
@@ -49,6 +50,11 @@ public:
 
 	void prepareNewTest(TestParameters p) override {
 		testParameters_ = std::move(p);
+		testPrepared_ = true;
+	}
+
+	auto testPrepared() const {
+		return testPrepared_;
 	}
 
 	void setTestIncomplete() noexcept {
