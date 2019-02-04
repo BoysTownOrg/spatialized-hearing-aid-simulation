@@ -535,6 +535,19 @@ namespace {
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(1).sampleRate);
 	}
 
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
+	) {
+		audioFrameReader->setSampleRate(1);
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		playTrial();
+		assertEqual(1, simulationFactory.fullSimulation().at(0).hearingAid.sampleRate);
+		assertEqual(1, simulationFactory.fullSimulation().at(1).hearingAid.sampleRate);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesBoolsToFactory) {
 		testParameters.usingHearingAidSimulation = true;
 		testParameters.usingSpatialization = true;
