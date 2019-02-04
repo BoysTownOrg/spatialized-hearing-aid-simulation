@@ -16,8 +16,8 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFul
 ) {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(scalarFactory->make(scale));
-	chain->add(firFilterFactory->make(p.spatialization.filterCoefficients));
-	chain->add(hearingAidFactory->make(compression(p.hearingAid)));
+	chain->add(firFilterFactory->make(std::move(p.spatialization.filterCoefficients)));
+	chain->add(hearingAidFactory->make(compression(std::move(p.hearingAid))));
 	return chain;
 }
 
@@ -28,7 +28,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(scalarFactory->make(scale));
-	chain->add(hearingAidFactory->make(compression(p)));
+	chain->add(hearingAidFactory->make(compression(std::move(p))));
 	return chain;
 }
 
@@ -38,7 +38,7 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpa
 ) {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(scalarFactory->make(scale));
-	chain->add(firFilterFactory->make(p.filterCoefficients));
+	chain->add(firFilterFactory->make(std::move(p.filterCoefficients)));
 	return chain;
 }
 
@@ -52,12 +52,12 @@ FilterbankCompressor::Parameters SpatializedHearingAidSimulationFactory::compres
 	HearingAidSimulation p
 ) {
 	FilterbankCompressor::Parameters compression_;
-	compression_.compressionRatios = p.prescription.compressionRatios;
-	compression_.crossFrequenciesHz = p.prescription.crossFrequenciesHz;
-	compression_.kneepointGains_dB = p.prescription.kneepointGains_dB;
-	compression_.kneepoints_dBSpl = p.prescription.kneepoints_dBSpl;
+	compression_.compressionRatios = std::move(p.prescription.compressionRatios);
+	compression_.crossFrequenciesHz = std::move(p.prescription.crossFrequenciesHz);
+	compression_.kneepointGains_dB = std::move(p.prescription.kneepointGains_dB);
+	compression_.kneepoints_dBSpl = std::move(p.prescription.kneepoints_dBSpl);
 	compression_.broadbandOutputLimitingThresholds_dBSpl =
-		p.prescription.broadbandOutputLimitingThresholds_dBSpl;
+		std::move(p.prescription.broadbandOutputLimitingThresholds_dBSpl);
 	compression_.channels = p.prescription.channels;
 	compression_.attack_ms = p.attack_ms;
 	compression_.release_ms = p.release_ms;
