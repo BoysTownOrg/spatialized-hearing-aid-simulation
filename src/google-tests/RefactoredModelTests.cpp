@@ -157,7 +157,7 @@ namespace {
 		) :
 			computer{ computer } {}
 
-		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader &reader) override
+		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *reader) override
 		{
 			reader;
 			return computer;

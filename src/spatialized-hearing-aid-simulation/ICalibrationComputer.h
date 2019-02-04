@@ -13,5 +13,5 @@ public:
 class ICalibrationComputerFactory {
 public:
 	INTERFACE_OPERATIONS(ICalibrationComputerFactory);
-	virtual std::shared_ptr<ICalibrationComputer> make(AudioFrameReader &) = 0;
+	virtual std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *) = 0;
 };
