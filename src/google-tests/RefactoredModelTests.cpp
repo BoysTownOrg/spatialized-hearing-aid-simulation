@@ -436,6 +436,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
+		audioFrameReader->setChannels(2);
 		calibrationComputer->setSignalScale(1);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
@@ -444,6 +445,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
+		audioFrameReader->setChannels(2);
 		trialParameters.level_dB_Spl = 65;
 		playFirstTrialOfNewTest();
 		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));

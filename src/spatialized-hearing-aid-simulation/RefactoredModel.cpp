@@ -14,7 +14,7 @@ RefactoredModel::RefactoredModel(
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	ISpatializedHearingAidSimulationFactory *simulationFactory,
-	ICalibrationComputerFactory *
+	ICalibrationComputerFactory *calibrationComputer
 ) :
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
@@ -22,7 +22,8 @@ RefactoredModel::RefactoredModel(
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
-	simulationFactory{ simulationFactory }
+	simulationFactory{ simulationFactory },
+	calibrationFactory{ calibrationComputer }
 {
 	player->setAudioLoader(loader);
 }
@@ -157,13 +158,14 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		return;
 
 	auto reader = makeReader(perceptionTest->nextStimulus());
+	auto computer = calibrationFactory->make(*reader);
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	const auto left_scale = reader->channels() > 0
-		? gsl::narrow_cast<float>(desiredRms / rms.compute(0))
+		? gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl))
 		: 0;
 	const auto right_scale = reader->channels() > 1
-		? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
+		? gsl::narrow_cast<float>(computer->signalScale(-1, p.level_dB_Spl - fullScaleLevel_dB_Spl))
 		: 0;
 
 	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);

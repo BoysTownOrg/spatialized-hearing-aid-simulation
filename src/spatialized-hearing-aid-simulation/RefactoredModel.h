@@ -23,6 +23,7 @@ class RefactoredModel : public Model {
 	IAudioPlayer *player;
 	AudioLoader *loader;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	ICalibrationComputerFactory *calibrationFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
@@ -32,7 +33,7 @@ public:
 		PrescriptionReader *prescriptionReader,
 		BrirReader *brirReader,
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *
+		ICalibrationComputerFactory *calibrationFactory
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters) override;
 	SPATIALIZED_HA_SIMULATION_API void playTrial(TrialParameters) override;
