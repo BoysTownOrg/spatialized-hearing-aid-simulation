@@ -489,16 +489,6 @@ namespace {
 		assertEqual(1.0f, simulationFactory.withoutSimulationScale().at(1));
 	}
 
-	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
-		playTrial();
-		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
-	}
-
-	TEST_F(RefactoredModelTests, playCalibrationResetsReaderAfterComputingRms) {
-		playCalibration();
-		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
-	}
-
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialPassesLeftPrescriptionToFactoryForHearingAidSimulation
