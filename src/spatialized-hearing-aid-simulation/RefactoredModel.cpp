@@ -119,10 +119,11 @@ void RefactoredModel::playTrial(TrialParameters p) {
 
 	auto reader = makeReader(perceptionTest->nextStimulus());
 	auto computer = calibrationFactory->make(reader.get());
+	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
 	const auto left_scale = 
-		gsl::narrow_cast<float>(computer->signalScale(0, p.level_dB_Spl - fullScaleLevel_dB_Spl));
+		gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
 	const auto right_scale = 
-		gsl::narrow_cast<float>(computer->signalScale(1, p.level_dB_Spl - fullScaleLevel_dB_Spl));
+		gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
 
 	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
 	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
