@@ -693,6 +693,22 @@ namespace {
 		assertEqual({ 3, 4, }, simulationFactory.spatialization().at(1).filterCoefficients);
 	}
 
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesBrirToFactoryForFullSimulation
+	) {
+		testParameters.usingSpatialization = true;
+		testParameters.usingHearingAidSimulation = true;
+		BrirReader::BinauralRoomImpulseResponse brir;
+		brir.left = { 1, 2 };
+		brir.right = { 3, 4 };
+		brirReader.setBrir(brir);
+		prepareNewTest();
+		playTrial();
+		assertEqual({ 1, 2, }, simulationFactory.fullSimulation().at(0).spatialization.filterCoefficients);
+		assertEqual({ 3, 4, }, simulationFactory.fullSimulation().at(1).spatialization.filterCoefficients);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialSetsProcessorBeforePlaying) {
 		prepareNewTest();
 		simulationFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
