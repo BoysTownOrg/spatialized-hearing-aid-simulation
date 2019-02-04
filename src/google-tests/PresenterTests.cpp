@@ -116,6 +116,11 @@ namespace {
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid chunk size.");
 		}
 
+		void playCalibrationWithWindowSizeShowsErrorMessage(std::string s) {
+			view.setWindowSize(s);
+			playCalibrationShowsErrorMessage("'" + s + "' is not a valid window size.");
+		}
+
 		void playCalibrationWithLevelShowsErrorMessage(std::string s) {
 			view.setLevel_dB_Spl(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
@@ -757,6 +762,24 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeButNoHearingAidSimulationStillPlays) {
 		view.setHearingAidSimulationOff();
 		setInvalidChunkSize();
+		playCalibrationPlays();
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		for (auto s : { "a", "0.1", "-1" })
+			playCalibrationWithWindowSizeShowsErrorMessage(s);
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeDoesNotPlay) {
+		view.setHearingAidSimulationOn();
+		setInvalidWindowSize();
+		playCalibrationDoesNotPlay();
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeButNoHearingAidSimulationStillPlays) {
+		view.setHearingAidSimulationOff();
+		setInvalidWindowSize();
 		playCalibrationPlays();
 	}
 
