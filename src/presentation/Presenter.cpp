@@ -221,8 +221,8 @@ void Presenter::playCalibration_() {
 		p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 		p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
 		p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
+		p.processing.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
 	}
-		p.processing.windowSize = convertToInteger(view->windowSize(), "");
 	model->playCalibration(std::move(p));
 }
 
