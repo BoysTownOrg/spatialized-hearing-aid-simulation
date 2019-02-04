@@ -315,6 +315,13 @@ namespace {
 		playTrial();
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
+		audioPlayer.callOnPlay([&]() {
+			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
+		});
+		playCalibration();
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
 		audioFrameReader->setChannels(1);
 		audioFrameReader->setSampleRate(2);
