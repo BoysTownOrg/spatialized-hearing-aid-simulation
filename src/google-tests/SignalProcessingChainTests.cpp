@@ -6,6 +6,9 @@
 namespace {
 	class SignalProcessingChainTests : public ::testing::Test {
 	protected:
+		using signal_type = SignalProcessingChain::signal_type;
+		using buffer_type = std::vector<signal_type::element_type>;
+
 		SignalProcessingChain chain{};
 		std::shared_ptr<SignalProcessorStub> processor =
 			std::make_shared<SignalProcessorStub>();
@@ -18,7 +21,7 @@ namespace {
 	TEST_F(SignalProcessingChainTests, chainCallsProcessorsInOrder) {
 		chain.add(std::make_shared<AddsSamplesBy>(1.0f));
 		chain.add(std::make_shared<MultipliesSamplesBy>(2.0f));
-		std::vector<float> x = { 1, 2, 3 };
+		buffer_type x = { 1, 2, 3 };
 		chain.process(x);
 		assertEqual({ 4, 6, 8 }, x);
 	}
