@@ -91,6 +91,16 @@ namespace {
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
 
+		void playCalibrationDoesNotPlay() {
+			view.playCalibration();
+			assertFalse(model.calibrationPlayed());
+		}
+
+		void playCalibrationPlays() {
+			view.playCalibration();
+			assertTrue(model.calibrationPlayed());
+		}
+
 		void playCalibrationWithAttackTimeShowsErrorMessage(std::string s) {
 			view.setAttack_ms(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid attack time.");
@@ -698,15 +708,13 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackDoesNotPlay) {
 		view.setHearingAidSimulationOn();
 		setInvalidAttackTime();
-		view.playCalibration();
-		assertFalse(model.calibrationPlayed());
+		playCalibrationDoesNotPlay();
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackButNoHearingAidSimulationStillPlays) {
 		view.setHearingAidSimulationOff();
 		setInvalidAttackTime();
-		view.playCalibration();
-		assertTrue(model.calibrationPlayed());
+		playCalibrationPlays();
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
@@ -717,15 +725,13 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseDoesNotPlay) {
 		view.setHearingAidSimulationOn();
 		setInvalidReleaseTime();
-		view.playCalibration();
-		assertFalse(model.calibrationPlayed());
+		playCalibrationDoesNotPlay();
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseButNoHearingAidSimulationStillPlays) {
 		view.setHearingAidSimulationOff();
 		setInvalidReleaseTime();
-		view.playCalibration();
-		assertTrue(model.calibrationPlayed());
+		playCalibrationPlays();
 	}
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
