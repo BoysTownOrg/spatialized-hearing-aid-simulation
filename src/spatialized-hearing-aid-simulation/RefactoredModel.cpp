@@ -163,8 +163,9 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	float right_scale = reader->channels() > 1
 		? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
 		: 0;
-	simulationFactory->makeWithoutSimulation(left_scale);
-	simulationFactory->makeWithoutSimulation(right_scale);
+
+	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
+	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
 
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	left_spatial.filterCoefficients = brir.left;
@@ -198,8 +199,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	right_fs.hearingAid = right_hs;
 	right_fs.spatialization = right_spatial;
 
-	ChannelProcessingGroup::channel_processing_type left_channel;
-	ChannelProcessingGroup::channel_processing_type right_channel;
 	if (testParameters.usingSpatialization) {
 		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
 		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
