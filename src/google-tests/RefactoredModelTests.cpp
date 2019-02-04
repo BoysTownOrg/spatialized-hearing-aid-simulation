@@ -330,6 +330,14 @@ namespace {
 		assertEqual(2, audioPlayer.preparation().sampleRate);
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
+		audioFrameReader->setChannels(1);
+		audioFrameReader->setSampleRate(2);
+		playCalibration();
+		assertEqual(1, audioPlayer.preparation().channels);
+		assertEqual(2, audioPlayer.preparation().sampleRate);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
 		trialParameters.audioDevice = "a";
 		playTrial();
