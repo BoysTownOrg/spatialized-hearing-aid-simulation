@@ -697,11 +697,17 @@ namespace {
 		view.setRelease_ms("2.0");
 		view.setChunkSize("3");
 		view.setWindowSize("4");
+		view.setLeftDslPrescriptionFilePath("a");
+		view.setRightDslPrescriptionFilePath("b");
+		view.setBrirFilePath("c");
 		view.playCalibration();
 		assertEqual(1.0, model.calibrationParameters().processing.attack_ms);
 		assertEqual(2.0, model.calibrationParameters().processing.release_ms);
 		assertEqual(3, model.calibrationParameters().processing.chunkSize);
 		assertEqual(4, model.calibrationParameters().processing.windowSize);
+		assertEqual("a", model.calibrationParameters().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.calibrationParameters().processing.rightDslPrescriptionFilePath);
+		assertEqual("c", model.calibrationParameters().processing.brirFilePath);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
