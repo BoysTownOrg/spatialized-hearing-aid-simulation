@@ -459,6 +459,11 @@ namespace {
 		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationResetsReaderAfterComputingRms) {
+		playCalibration();
+		assertTrue(audioFrameReader->readingLog().endsWith("reset "));
+	}
+
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialPassesLeftPrescriptionToFactoryForHearingAidSimulation
