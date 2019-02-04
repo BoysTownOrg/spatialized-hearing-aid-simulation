@@ -26,15 +26,25 @@ namespace {
 		ArgumentCollection<float> hearingAidSimulationScale_{};
 		ArgumentCollection<float> spatializationScale_{};
 		ArgumentCollection<float> withoutSimulationScale_{};
-		std::shared_ptr<SignalProcessor> processor{};
+		std::shared_ptr<SignalProcessor> processor_{};
+		std::vector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors{};
+		std::vector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors{};
+		std::vector<std::shared_ptr<SignalProcessor>> spatializationProcessors{};
+		std::vector<std::shared_ptr<SignalProcessor>> withoutSimulationProcessors{};
 	public:
+		SpatializedHearingAidSimulationFactoryStub() :
+			fullSimulationProcessors(2),
+			hearingAidSimulationProcessors(2),
+			spatializationProcessors(2),
+			withoutSimulationProcessors(2) {}
+
 		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
-			processor = std::move(p);
+			processor_ = std::move(p);
 		}
 
 		std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
 			parameters_.push_back(std::move(p));
-			return processor;
+			return processor_;
 		}
 
 		auto parameters() const {
@@ -46,27 +56,35 @@ namespace {
 		) override {
 			fullSimulation_.push_back(std::move(s));
 			fullSimulationScale_.push_back(x);
-			return {};
+			auto processor = fullSimulationProcessors.front();
+			fullSimulationProcessors.erase(fullSimulationProcessors.begin());
+			return processor;
 		}
 		std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
 			HearingAidSimulation s, float x
 		) override {
 			hearingAidSimulation_.push_back(std::move(s));
 			hearingAidSimulationScale_.push_back(x);
-			return {};
+			auto processor = hearingAidSimulationProcessors.front();
+			hearingAidSimulationProcessors.erase(hearingAidSimulationProcessors.begin());
+			return processor;
 		}
 		std::shared_ptr<SignalProcessor> makeSpatialization(
 			Spatialization s, float x
 		) override {
 			spatialization_.push_back(std::move(s));
 			spatializationScale_.push_back(x);
-			return {};
+			auto processor = spatializationProcessors.front();
+			spatializationProcessors.erase(spatializationProcessors.begin());
+			return processor;
 		}
 		std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 			float x
 		) override {
 			withoutSimulationScale_.push_back(x);
-			return {};
+			auto processor = withoutSimulationProcessors.front();
+			withoutSimulationProcessors.erase(withoutSimulationProcessors.begin());
+			return processor;
 		}
 		
 		auto fullSimulation() const {
@@ -320,6 +338,23 @@ namespace {
 		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
 		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.spatializationScale().at(0), 1e-6);
 		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.spatializationScale().at(1), 1e-6);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
+		testParameters.usingSpatialization = false;
+		testParameters.usingSpatialization = false;
+		prepareNewTest();
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+		fakeReader.setChannels(2);
+		setInMemoryReader(fakeReader);
+		trialParameters.level_dB_Spl = 65;
+		playTrial();
+		const auto desiredRms = 
+			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
+		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
+		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
+		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.withoutSimulationScale().at(0), 1e-6);
+		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.withoutSimulationScale().at(1), 1e-6);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {
