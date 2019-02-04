@@ -19,6 +19,13 @@ namespace {
 		public ISpatializedHearingAidSimulationFactory 
 	{
 		ArgumentCollection<SimulationParameters> parameters_{};
+		ArgumentCollection<FullSimulation> fullSimulation_{};
+		ArgumentCollection<HearingAidSimulation> hearingAidSimulation_{};
+		ArgumentCollection<Spatialization> spatialization_{};
+		ArgumentCollection<float> fullSimulationScale_{};
+		ArgumentCollection<float> hearingAidSimulationScale_{};
+		ArgumentCollection<float> spatializationScale_{};
+		ArgumentCollection<float> withoutSimulationScale_{};
 		std::shared_ptr<SignalProcessor> processor{};
 	public:
 		void setProcessor(std::shared_ptr<SignalProcessor> p) noexcept {
@@ -32,6 +39,56 @@ namespace {
 
 		auto parameters() const {
 			return parameters_;
+		}
+
+		std::shared_ptr<SignalProcessor> makeFullSimulation(
+			FullSimulation s, float x
+		) override {
+			fullSimulation_.push_back(std::move(s));
+			fullSimulationScale_.push_back(x);
+			return {};
+		}
+		std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
+			HearingAidSimulation s, float x
+		) override {
+			hearingAidSimulation_.push_back(std::move(s));
+			hearingAidSimulationScale_.push_back(x);
+			return {};
+		}
+		std::shared_ptr<SignalProcessor> makeSpatialization(
+			Spatialization s, float x
+		) override {
+			spatialization_.push_back(std::move(s));
+			spatializationScale_.push_back(x);
+			return {};
+		}
+		std::shared_ptr<SignalProcessor> makeWithoutSimulation(
+			float x
+		) override {
+			withoutSimulationScale_.push_back(x);
+			return {};
+		}
+		
+		auto fullSimulation() const {
+			return fullSimulation_;
+		}
+		auto hearingAidSimulation() const {
+			return hearingAidSimulation_;
+		}
+		auto spatialization() const {
+			return spatialization_;
+		}
+		auto fullSimulationScale() const {
+			return fullSimulationScale_;
+		}
+		auto hearingAidSimulationScale() const {
+			return hearingAidSimulationScale_;
+		}
+		auto spatializationScale() const {
+			return spatializationScale_;
+		}
+		auto withoutSimulationScale() const {
+			return withoutSimulationScale_;
 		}
 	};
 
@@ -238,6 +295,31 @@ namespace {
 		prepareNewTest();
 		playTrial();
 		auto actual = simulationFactory.parameters().at(0).prescription;
+		assertEqual({ 1 }, actual.compressionRatios);
+		assertEqual({ 2 }, actual.crossFrequenciesHz);
+		assertEqual({ 3 }, actual.kneepointGains_dB);
+		assertEqual({ 4 }, actual.kneepoints_dBSpl);
+		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
+		assertEqual(6, actual.channels);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesLeftPrescriptionToFactoryForHearingAidSimulation
+	) {
+		PrescriptionReader::Dsl prescription;
+		prescription.compressionRatios = { 1 };
+		prescription.crossFrequenciesHz = { 2 };
+		prescription.kneepointGains_dB = { 3 };
+		prescription.kneepoints_dBSpl = { 4 };
+		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+		prescription.channels = 6;
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
+		prescriptionReader.addPrescription("leftFilePath", prescription);
+		prepareNewTest();
+		playTrial();
+		auto actual = simulationFactory.hearingAidSimulation().at(0).prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
 		assertEqual({ 2 }, actual.crossFrequenciesHz);
 		assertEqual({ 3 }, actual.kneepointGains_dB);
