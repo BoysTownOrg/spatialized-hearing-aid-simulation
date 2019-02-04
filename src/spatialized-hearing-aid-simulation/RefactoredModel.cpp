@@ -213,7 +213,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, p.audioDevice);
+	prepareAudioPlayer<TrialFailure>(*reader, testParameters.processing, p.audioDevice);
 	player->play();
 	perceptionTest->advanceTrial();
 }
@@ -227,11 +227,16 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 	}
 }
 
-void RefactoredModel::prepareAudioPlayer(AudioFrameReader &reader, std::string audioDevice) {
+template<typename exception>
+void RefactoredModel::prepareAudioPlayer(
+	AudioFrameReader &reader, 
+	ProcessingParameters processing, 
+	std::string audioDevice
+) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
-	playing.framesPerBuffer = testParameters.processing.usingHearingAidSimulation
-		? testParameters.processing.chunkSize
+	playing.framesPerBuffer = processing.usingHearingAidSimulation
+		? processing.chunkSize
 		: defaultFramesPerBuffer;
 	playing.sampleRate = reader.sampleRate();
 	playing.audioDevice = std::move(audioDevice);
@@ -239,7 +244,7 @@ void RefactoredModel::prepareAudioPlayer(AudioFrameReader &reader, std::string a
 		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
-		throw TrialFailure{ e.what() };
+		throw exception{ e.what() };
 	}
 }
 
@@ -248,24 +253,11 @@ bool RefactoredModel::testComplete() {
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
-	try {
-		player->prepareToPlay({});
-		auto reader = makeReader(p.audioFilePath);
-		loader->setReader(reader);
-		player->play();
-		IAudioPlayer::Preparation playing{};
-		playing.channels = reader->channels();
-		playing.sampleRate = reader->sampleRate();
-		playing.framesPerBuffer = p.processing.usingHearingAidSimulation
-			? p.processing.chunkSize
-			: defaultFramesPerBuffer;
-		playing.audioDevice = p.audioDevice;
-		player->prepareToPlay(std::move(playing));
-		reader->reset();
-	}
-	catch (const IAudioPlayer::PreparationFailure &e) {
-		throw CalibrationFailure{ e.what() };
-	}
+	auto reader = makeReader(p.audioFilePath);
+	loader->setReader(reader);
+	player->play();
+	prepareAudioPlayer<CalibrationFailure>(*reader, p.processing, p.audioDevice);
+	reader->reset();
 }
 
 void RefactoredModel::stopCalibration() {
