@@ -302,6 +302,12 @@ namespace {
 		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFileToFactory) {
+		calibrationParameters.audioFilePath = "a";
+		playCalibration();
+		assertEqual("a", audioFrameReaderFactory.filePath());
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		audioPlayer.callOnPlay([&]() {
 			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
