@@ -693,15 +693,15 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
 		view.setHearingAidSimulationOn();
-		view.setAttack_ms("1.0");
-		view.setRelease_ms("2.0");
+		view.setAttack_ms("1.1");
+		view.setRelease_ms("2.2");
 		view.setChunkSize("3");
 		view.setWindowSize("4");
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
 		view.playCalibration();
-		assertEqual(1.0, model.calibrationParameters().processing.attack_ms);
-		assertEqual(2.0, model.calibrationParameters().processing.release_ms);
+		assertEqual(1.1, model.calibrationParameters().processing.attack_ms);
+		assertEqual(2.2, model.calibrationParameters().processing.release_ms);
 		assertEqual(3, model.calibrationParameters().processing.chunkSize);
 		assertEqual(4, model.calibrationParameters().processing.windowSize);
 		assertEqual("a", model.calibrationParameters().processing.leftDslPrescriptionFilePath);
