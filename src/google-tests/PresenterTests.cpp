@@ -111,6 +111,11 @@ namespace {
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
 
+		void playCalibrationWithChunkSizeShowsErrorMessage(std::string s) {
+			view.setChunkSize(s);
+			playCalibrationShowsErrorMessage("'" + s + "' is not a valid chunk size.");
+		}
+
 		void playCalibrationWithLevelShowsErrorMessage(std::string s) {
 			view.setLevel_dB_Spl(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
@@ -732,6 +737,23 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseButNoHearingAidSimulationStillPlays) {
 		view.setHearingAidSimulationOff();
 		setInvalidReleaseTime();
+		playCalibrationPlays();
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		playCalibrationWithChunkSizeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeDoesNotPlay) {
+		view.setHearingAidSimulationOn();
+		setInvalidChunkSize();
+		playCalibrationDoesNotPlay();
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeButNoHearingAidSimulationStillPlays) {
+		view.setHearingAidSimulationOff();
+		setInvalidChunkSize();
 		playCalibrationPlays();
 	}
 
