@@ -91,6 +91,11 @@ namespace {
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid attack time.");
 		}
 
+		void playCalibrationWithLevelShowsErrorMessage(std::string s) {
+			view.setLevel_dB_Spl(s);
+			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
+		}
+
 		void playCalibrationShowsErrorMessage(std::string s) {
 			view.playCalibration();
 			assertEqual(std::move(s), view.errorMessage());
@@ -634,9 +639,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
-		view.setLevel_dB_Spl("a");
-		view.playCalibration();
-		assertEqual("'a' is not a valid level.", view.errorMessage());
+		playCalibrationWithLevelShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
