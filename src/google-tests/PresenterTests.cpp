@@ -629,6 +629,13 @@ namespace {
 		assertEqual("'a' is not a valid level.", view.errorMessage());
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		view.setAttack_ms("a");
+		view.playCalibration();
+		assertEqual("'a' is not a valid attack time.", view.errorMessage());
+	}
+
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
 		view.stopCalibration();
 		assertTrue(model.calibrationStopped());
