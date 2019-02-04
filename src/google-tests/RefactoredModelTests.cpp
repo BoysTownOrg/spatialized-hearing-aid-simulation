@@ -418,6 +418,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
+	) {
+		testParameters.usingSpatialization = false;
+		prepareNewTest();
+		playTrial();
+		assertTrue(simulationFactory.fullSimulation().empty());
+		assertTrue(simulationFactory.spatialization().empty());
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesRightPrescriptionToFactoryWhenUsingHearingAidSimulation
 	) {
 		PrescriptionReader::Dsl prescription;
