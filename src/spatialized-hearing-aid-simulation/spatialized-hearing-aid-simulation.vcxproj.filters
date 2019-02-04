@@ -57,6 +57,9 @@
     <ClInclude Include="SpatializedHearingAidSimulationFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CalibrationComputer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RefactoredModel.cpp">
