@@ -280,14 +280,46 @@ namespace {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
-		trialParameters.level_dB_Spl = 7;
+		trialParameters.level_dB_Spl = 65;
 		playTrial();
 		const auto desiredRms = 
-			std::pow(10.0, (7 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
+			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
 		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
 		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
 		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.fullSimulationScale().at(0), 1e-6);
 		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.fullSimulationScale().at(1), 1e-6);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
+		testParameters.usingHearingAidSimulation = true;
+		prepareNewTest();
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+		fakeReader.setChannels(2);
+		setInMemoryReader(fakeReader);
+		trialParameters.level_dB_Spl = 65;
+		playTrial();
+		const auto desiredRms = 
+			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
+		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
+		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
+		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.hearingAidSimulationScale().at(0), 1e-6);
+		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.hearingAidSimulationScale().at(1), 1e-6);
+	}
+
+	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
+		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+		fakeReader.setChannels(2);
+		setInMemoryReader(fakeReader);
+		trialParameters.level_dB_Spl = 65;
+		playTrial();
+		const auto desiredRms = 
+			std::pow(10.0, (65 - RefactoredModel::fullScaleLevel_dB_Spl) / 20.0);
+		const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
+		const auto rightChannelRms = std::sqrt((2 * 2 + 4 * 4 + 6 * 6.0) / 3);
+		EXPECT_NEAR(desiredRms / leftChannelRms, simulationFactory.spatializationScale().at(0), 1e-6);
+		EXPECT_NEAR(desiredRms / rightChannelRms, simulationFactory.spatializationScale().at(1), 1e-6);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsReaderAfterComputingRms) {

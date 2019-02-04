@@ -157,13 +157,19 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	auto reader = makeReader(perceptionTest->nextStimulus());
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
+	float left_scale = reader->channels() > 0
+		? gsl::narrow_cast<float>(desiredRms / rms.compute(0))
+		: 0;
+	float right_scale = reader->channels() > 1
+		? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
+		: 0;
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	if (testParameters.usingSpatialization) {
 		left_spatial.filterCoefficients = brir.left;
-		simulationFactory->makeSpatialization(left_spatial, 0);
+		simulationFactory->makeSpatialization(left_spatial, left_scale);
 		right_spatial.filterCoefficients = brir.right;
-		simulationFactory->makeSpatialization(right_spatial, 0);
+		simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
 	if (testParameters.usingHearingAidSimulation) {
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
@@ -175,7 +181,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		left_hs.prescription = leftPrescription;
 		left_hs.sampleRate = reader->sampleRate();
 		left_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-		simulationFactory->makeHearingAidSimulation(left_hs, 0);
+		simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
 		right_hs.attack_ms = testParameters.attack_ms;
 		right_hs.release_ms = testParameters.release_ms;
 		right_hs.chunkSize = testParameters.chunkSize;
@@ -183,21 +189,15 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		right_hs.prescription = rightPrescription;
 		right_hs.sampleRate = reader->sampleRate();
 		right_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-		simulationFactory->makeHearingAidSimulation(right_hs, 0);
+		simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
 		if (testParameters.usingSpatialization) {
 			ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 			left_fs.hearingAid = left_hs;
 			left_fs.spatialization = left_spatial;
-			float left_scale = reader->channels() > 0
-				? gsl::narrow_cast<float>(desiredRms / rms.compute(0))
-				: 0;
 			simulationFactory->makeFullSimulation(left_fs, left_scale);
 			ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 			right_fs.hearingAid = right_hs;
 			right_fs.spatialization = right_spatial;
-			float right_scale = reader->channels() > 1
-				? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
-				: 0;
 			simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
