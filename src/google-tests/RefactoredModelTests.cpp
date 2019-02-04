@@ -150,6 +150,7 @@ namespace {
 
 	class CalibrationComputerStubFactory : public ICalibrationComputerFactory {
 		std::shared_ptr<ICalibrationComputer> computer;
+		AudioFrameReader *reader_;
 	public:
 		explicit CalibrationComputerStubFactory(
 			std::shared_ptr<ICalibrationComputer> computer =
@@ -157,10 +158,14 @@ namespace {
 		) :
 			computer{ computer } {}
 
-		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *reader) override
+		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override
 		{
-			reader;
+			reader_ = r;
 			return computer;
+		}
+
+		auto reader() const {
+			return reader_;
 		}
 	};
 
@@ -452,8 +457,9 @@ namespace {
 		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 	}
 
-	TEST_F(RefactoredModelTests, DISABLED_playTrialPassesAudioFrameReaderToCalibrationFactory) {
-		FAIL();
+	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
+		playTrial();
+		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
