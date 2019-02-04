@@ -212,7 +212,7 @@ void Presenter::playCalibration() {
 		if (view->usingHearingAidSimulation()) {
 			p.processing.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 			p.processing.release_ms = convertToDouble(view->release_ms(), "release time");
-			p.processing.chunkSize = convertToInteger(view->chunkSize(), "chunk size");
+			p.processing.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
 		}
 		model->playCalibration(std::move(p));
 	}
