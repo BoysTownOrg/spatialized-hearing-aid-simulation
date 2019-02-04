@@ -655,6 +655,12 @@ namespace {
 		playCalibrationWithLevelShowsErrorMessage("a");
 	}
 
+	TEST_F(PresenterTests, playCalibrationWithInvalidLevelDoesNotPlay) {
+		setInvalidLevel();
+		view.playCalibration();
+		assertFalse(model.calibrationPlayed());
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
 		playCalibrationWithAttackTimeShowsErrorMessage("a");
