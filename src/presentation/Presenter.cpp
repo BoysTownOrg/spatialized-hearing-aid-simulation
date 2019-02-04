@@ -226,6 +226,8 @@ void Presenter::playCalibration_() {
 		p.processing.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
 		p.processing.brirFilePath = view->brirFilePath();
 	}
+	p.processing.usingHearingAidSimulation = view->usingHearingAidSimulation();
+	p.processing.usingSpatialization = view->usingSpatialization();
 	model->playCalibration(std::move(p));
 }
 
