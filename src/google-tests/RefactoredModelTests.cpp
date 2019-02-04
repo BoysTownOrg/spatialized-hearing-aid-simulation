@@ -799,6 +799,7 @@ namespace {
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		RefactoredModel::TestParameters testParameters{};
+		RefactoredModel::CalibrationParameters calibrationParameters{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
@@ -839,7 +840,7 @@ namespace {
 		void assertPlayCalibrationThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.playCalibration({});
+				model.playCalibration(calibrationParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
 			}
 			catch (const RefactoredModel::RequestFailure &e) {
@@ -910,6 +911,17 @@ namespace {
 		testParameters.processing.usingSpatialization = true;
 		testParameters.processing.brirFilePath = "a";
 		assertPreparingNewTestThrowsRequestFailure("Unable to read 'a'.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenBrirReaderFails
+	) {
+		FailingBrirReader failing;
+		brirReader = &failing;
+		calibrationParameters.processing.usingSpatialization = true;
+		calibrationParameters.processing.brirFilePath = "a";
+		assertPlayCalibrationThrowsRequestFailure("Unable to read 'a'.");
 	}
 
 	TEST_F(
