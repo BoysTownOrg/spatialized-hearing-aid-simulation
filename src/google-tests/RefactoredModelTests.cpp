@@ -387,9 +387,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		setHearingAidSimulationOnly();
 		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
+		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
 		auto actual = simulationFactory.hearingAidSimulation().at(0).prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
@@ -411,9 +411,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		setFullSimulation();
 		testParameters.leftDslPrescriptionFilePath = "leftFilePath";
 		prescriptionReader.addPrescription("leftFilePath", prescription);
+		setFullSimulation();
 		playFirstTrialOfNewTest();
 		auto actual = simulationFactory.fullSimulation().at(0).hearingAid.prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
@@ -435,9 +435,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		setHearingAidSimulationOnly();
 		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
 		prescriptionReader.addPrescription("rightFilePath", prescription);
+		setHearingAidSimulationOnly();
 		playFirstTrialOfNewTest();
 		auto actual = simulationFactory.hearingAidSimulation().at(1).prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
@@ -459,9 +459,9 @@ namespace {
 		prescription.kneepoints_dBSpl = { 4 };
 		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 		prescription.channels = 6;
-		setFullSimulation();
 		testParameters.rightDslPrescriptionFilePath = "rightFilePath";
 		prescriptionReader.addPrescription("rightFilePath", prescription);
+		setFullSimulation();
 		playFirstTrialOfNewTest();
 		auto actual = simulationFactory.fullSimulation().at(1).hearingAid.prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
@@ -477,8 +477,7 @@ namespace {
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
 		testParameters.usingHearingAidSimulation = false;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertTrue(simulationFactory.fullSimulation().empty());
 		assertTrue(simulationFactory.hearingAidSimulation().empty());
 	}
@@ -488,8 +487,7 @@ namespace {
 		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
 		testParameters.usingSpatialization = false;
-		prepareNewTest();
-		playTrial();
+		playFirstTrialOfNewTest();
 		assertTrue(simulationFactory.fullSimulation().empty());
 		assertTrue(simulationFactory.spatialization().empty());
 	}
