@@ -154,6 +154,9 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
+	auto reader = makeReader(perceptionTest->nextStimulus());
+    RmsComputer rms{ *reader };
+    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	if (testParameters.usingSpatialization) {
@@ -162,7 +165,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		right_spatial.filterCoefficients = brir.right;
 		simulationFactory->makeSpatialization(right_spatial, 0);
 	}
-	auto reader = makeReader(perceptionTest->nextStimulus());
 	if (testParameters.usingHearingAidSimulation) {
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
@@ -186,11 +188,17 @@ void RefactoredModel::playTrial(TrialParameters p) {
 			ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 			left_fs.hearingAid = left_hs;
 			left_fs.spatialization = left_spatial;
-			simulationFactory->makeFullSimulation(left_fs, 0);
+			float left_scale = reader->channels() > 0
+				? gsl::narrow_cast<float>(desiredRms / rms.compute(0))
+				: 0;
+			simulationFactory->makeFullSimulation(left_fs, left_scale);
 			ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 			right_fs.hearingAid = right_hs;
 			right_fs.spatialization = right_spatial;
-			simulationFactory->makeFullSimulation(right_fs, 0);
+			float right_scale = reader->channels() > 1
+				? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
+				: 0;
+			simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
 	ISpatializedHearingAidSimulationFactory::SimulationParameters sp;
@@ -203,8 +211,6 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	sp.usingSpatialization = testParameters.usingSpatialization;
 	sp.sampleRate = reader->sampleRate();
 
-    RmsComputer rms{ *reader };
-    const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
 	if (reader->channels() > 0)
 		sp.scale = gsl::narrow_cast<float>(desiredRms / rms.compute(0));
 	sp.prescription = leftPrescription;

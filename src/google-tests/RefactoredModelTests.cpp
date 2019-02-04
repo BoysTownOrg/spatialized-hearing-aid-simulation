@@ -274,6 +274,9 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
+		testParameters.usingHearingAidSimulation = true;
+		testParameters.usingSpatialization = true;
+		prepareNewTest();
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
