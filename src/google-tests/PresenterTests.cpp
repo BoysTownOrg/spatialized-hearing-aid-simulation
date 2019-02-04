@@ -91,6 +91,11 @@ namespace {
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid attack time.");
 		}
 
+		void playCalibrationWithReleaseTimeShowsErrorMessage(std::string s) {
+			view.setRelease_ms(s);
+			playCalibrationShowsErrorMessage("'" + s + "' is not a valid release time.");
+		}
+
 		void playCalibrationWithLevelShowsErrorMessage(std::string s) {
 			view.setLevel_dB_Spl(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
@@ -647,6 +652,11 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
 		playCalibrationWithAttackTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		playCalibrationWithReleaseTimeShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
