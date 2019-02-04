@@ -247,10 +247,11 @@ bool RefactoredModel::testComplete() {
 	return perceptionTest->testComplete();
 }
 
-void RefactoredModel::playCalibration(CalibrationParameters) {
+void RefactoredModel::playCalibration(CalibrationParameters p) {
 	try {
 		player->play();
 		player->prepareToPlay({});
+		makeReader(p.audioFilePath);
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw CalibrationFailure{ e.what() };
