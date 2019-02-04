@@ -253,6 +253,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		auto reader = makeReader(p.audioFilePath);
 		loader->setReader(reader);
 		player->play();
+		IAudioPlayer::Preparation playing{};
+		playing.channels = reader->channels();
+		playing.sampleRate = reader->sampleRate();
+		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw CalibrationFailure{ e.what() };
