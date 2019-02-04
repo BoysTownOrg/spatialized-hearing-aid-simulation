@@ -69,8 +69,8 @@ void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
 }
 
 void RefactoredModel::readPrescriptions(TestParameters p) {
-	leftPrescription = readPrescription(p.leftDslPrescriptionFilePath);
-	rightPrescription = readPrescription(p.rightDslPrescriptionFilePath);
+	leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
+	rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
 }
 
 PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
@@ -99,12 +99,12 @@ void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
 
 void RefactoredModel::prepareNewTest_(TestParameters p) {
 	SpeechPerceptionTest::TestParameters adapted;
-	adapted.audioDirectory = p.audioDirectory;
-	adapted.testFilePath = p.testFilePath;
-	adapted.subjectId = p.subjectId;
-	adapted.testerId = p.testerId;
+	adapted.audioDirectory = std::move(p.audioDirectory);
+	adapted.testFilePath = std::move(p.testFilePath);
+	adapted.subjectId = std::move(p.subjectId);
+	adapted.testerId = std::move(p.testerId);
 	try {
-		perceptionTest->prepareNewTest(adapted);
+		perceptionTest->prepareNewTest(std::move(adapted));
 	}
 	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
 		throw TestInitializationFailure{ e.what() };
@@ -154,13 +154,14 @@ private:
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
+
 	auto reader = makeReader(perceptionTest->nextStimulus());
     RmsComputer rms{ *reader };
     const auto desiredRms = std::pow(10.0, (p.level_dB_Spl - fullScaleLevel_dB_Spl) / 20.0);
-	float left_scale = reader->channels() > 0
+	const auto left_scale = reader->channels() > 0
 		? gsl::narrow_cast<float>(desiredRms / rms.compute(0))
 		: 0;
-	float right_scale = reader->channels() > 1
+	const auto right_scale = reader->channels() > 1
 		? gsl::narrow_cast<float>(desiredRms / rms.compute(1))
 		: 0;
 
@@ -226,7 +227,7 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 	}
 }
 
-void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, std::string audioDevice) {
+void RefactoredModel::prepareAudioPlayer(AudioFrameReader &reader, std::string audioDevice) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
 	playing.framesPerBuffer = testParameters.usingHearingAidSimulation
@@ -235,7 +236,7 @@ void RefactoredModel::prepareAudioPlayer(AudioFrameReader & reader, std::string 
 	playing.sampleRate = reader.sampleRate();
 	playing.audioDevice = std::move(audioDevice);
 	try {
-		player->prepareToPlay(playing);
+		player->prepareToPlay(std::move(playing));
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
 		throw TrialFailure{ e.what() };
