@@ -173,23 +173,19 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	right_spatial.filterCoefficients = brir.right;
 
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
-	left_hs.attack_ms = testParameters.attack_ms;
-	left_hs.release_ms = testParameters.release_ms;
-	left_hs.chunkSize = testParameters.chunkSize;
-	left_hs.windowSize = testParameters.windowSize;
-	left_hs.prescription = leftPrescription;
-	left_hs.sampleRate = reader->sampleRate();
-	left_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
+	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+	both_hs.attack_ms = testParameters.attack_ms;
+	both_hs.release_ms = testParameters.release_ms;
+	both_hs.chunkSize = testParameters.chunkSize;
+	both_hs.windowSize = testParameters.windowSize;
+	both_hs.sampleRate = reader->sampleRate();
+	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
-	right_hs.attack_ms = testParameters.attack_ms;
-	right_hs.release_ms = testParameters.release_ms;
-	right_hs.chunkSize = testParameters.chunkSize;
-	right_hs.windowSize = testParameters.windowSize;
+	auto left_hs = both_hs;
+	left_hs.prescription = leftPrescription;
+
+	auto right_hs = both_hs;
 	right_hs.prescription = rightPrescription;
-	right_hs.sampleRate = reader->sampleRate();
-	right_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
