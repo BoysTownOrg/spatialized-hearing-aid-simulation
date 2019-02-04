@@ -58,11 +58,6 @@ namespace {
 			withoutSimulationProcessors = std::move(p);
 		}
 
-		std::shared_ptr<SignalProcessor> make(SimulationParameters p) override {
-			parameters_.push_back(std::move(p));
-			return processor_;
-		}
-
 		auto parameters() const {
 			return parameters_;
 		}

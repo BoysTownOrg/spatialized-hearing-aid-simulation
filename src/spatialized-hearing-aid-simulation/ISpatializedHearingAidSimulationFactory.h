@@ -21,7 +21,6 @@ public:
 		bool usingHearingAidSimulation;
 		bool usingSpatialization;
 	};
-	virtual std::shared_ptr<SignalProcessor> make(SimulationParameters) { return {}; };
 
 	struct Spatialization {
 		BrirReader::impulse_response_type filterCoefficients;
