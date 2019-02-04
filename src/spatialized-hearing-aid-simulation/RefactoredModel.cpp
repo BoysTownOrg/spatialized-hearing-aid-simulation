@@ -249,6 +249,7 @@ bool RefactoredModel::testComplete() {
 
 void RefactoredModel::playCalibration(CalibrationParameters) {
 	try {
+		player->play();
 		player->prepareToPlay({});
 	}
 	catch (const IAudioPlayer::PreparationFailure &e) {
