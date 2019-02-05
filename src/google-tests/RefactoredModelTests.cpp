@@ -717,6 +717,16 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playCalibrationDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
+	) {
+		calibrationParameters.processing.usingSpatialization = false;
+		playCalibration();
+		assertSimulationFactoryHasNotMadeFullSimulation();
+		assertSimulationFactoryHasNotMadeSpatialization();
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		testParameters.processing.attack_ms = 1;
