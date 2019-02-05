@@ -424,6 +424,17 @@ namespace {
 			assertEqual(4, right.chunkSize);
 			assertEqual(8, right.windowSize);
 		}
+
+		void assertHearingAidSimulationSampleRateMatchesAudioReaderAfterCall(
+			const ArgumentCollection<
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
+			std::function<void(void)> f
+		) {
+			audioFrameReader->setSampleRate(1);
+			f();
+			assertEqual(1, hearingAid.at(0).sampleRate);
+			assertEqual(1, hearingAid.at(1).sampleRate);
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -803,11 +814,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
-		audioFrameReader->setSampleRate(1);
 		setHearingAidSimulationOnlyForTest();
-		playFirstTrialOfNewTest();
-		assertEqual(1, simulationFactory.hearingAidSimulation().at(0).sampleRate);
-		assertEqual(1, simulationFactory.hearingAidSimulation().at(1).sampleRate);
+		assertHearingAidSimulationSampleRateMatchesAudioReaderAfterCall(
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
