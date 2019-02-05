@@ -458,17 +458,17 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
 
-	auto notSure = makeAudioFrameProcessorFactory(
+	auto processorFactory = makeAudioFrameProcessorFactory(
 		std::move(brir_),
 		std::move(leftPrescription_),
 		std::move(rightPrescription_),
 		p.processing
 	);
-	auto reader = makeReader(p.audioFilePath);
-	loader->setProcessor(notSure->make(reader.get(), p.level_dB_Spl));
+	auto reader = makeReader(std::move(p.audioFilePath));
+	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
+	prepareAudioPlayer(*reader, std::move(p.processing), std::move(p.audioDevice));
 	player->play();
 }
 
