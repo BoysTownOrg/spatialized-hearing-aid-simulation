@@ -225,6 +225,8 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
 	simulationFactory->makeFullSimulation({}, left_scale);
 	simulationFactory->makeFullSimulation({}, right_scale);
+	simulationFactory->makeHearingAidSimulation({}, left_scale);
+	simulationFactory->makeHearingAidSimulation({}, right_scale);
 }
 
 void RefactoredModel::stopCalibration() {
