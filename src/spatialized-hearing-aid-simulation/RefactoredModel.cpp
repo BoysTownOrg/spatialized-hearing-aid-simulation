@@ -123,6 +123,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		p.level_dB_Spl,
 		p.audioDevice
 	);
+	perceptionTest->advanceTrial();
 }
 
 void RefactoredModel::play_(
