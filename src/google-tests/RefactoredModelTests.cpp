@@ -398,6 +398,32 @@ namespace {
 			assertEqual({ 11 }, actualRight.broadbandOutputLimitingThresholds_dBSpl);
 			assertEqual(12, actualRight.channels);
 		}
+
+		void assertHearingAidCompressionParametersMatchAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			const ArgumentCollection<
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
+			std::function<void(void)> f
+		) {
+			processing.attack_ms = 1;
+			processing.release_ms = 2;
+			processing.chunkSize = 4;
+			processing.windowSize = 8;
+			
+			f();
+
+			auto left = hearingAid.at(0);
+			assertEqual(1.0, left.attack_ms);
+			assertEqual(2.0, left.release_ms);
+			assertEqual(4, left.chunkSize);
+			assertEqual(8, left.windowSize);
+
+			auto right = hearingAid.at(1);
+			assertEqual(1.0, right.attack_ms);
+			assertEqual(2.0, right.release_ms);
+			assertEqual(4, right.chunkSize);
+			assertEqual(8, right.windowSize);
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -729,22 +755,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		testParameters.processing.attack_ms = 1;
-		testParameters.processing.release_ms = 2;
-		testParameters.processing.chunkSize = 4;
-		testParameters.processing.windowSize = 8;
 		setHearingAidSimulationOnlyForTest();
-		playFirstTrialOfNewTest();
-		auto left = simulationFactory.hearingAidSimulation().at(0);
-		assertEqual(1.0, left.attack_ms);
-		assertEqual(2.0, left.release_ms);
-		assertEqual(4, left.chunkSize);
-		assertEqual(8, left.windowSize);
-		auto right = simulationFactory.hearingAidSimulation().at(1);
-		assertEqual(1.0, right.attack_ms);
-		assertEqual(2.0, right.release_ms);
-		assertEqual(4, right.chunkSize);
-		assertEqual(8, right.windowSize);
+		assertHearingAidCompressionParametersMatchAfterCall(
+			testParameters.processing,
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
