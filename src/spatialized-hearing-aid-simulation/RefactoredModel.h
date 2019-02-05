@@ -54,4 +54,13 @@ private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
+	void play_(
+		BrirReader::BinauralRoomImpulseResponse brir_,
+		PrescriptionReader::Dsl leftPrescription_,
+		PrescriptionReader::Dsl rightPrescription_,
+		std::string audioFilePath,
+		ProcessingParameters processing,
+		double level_dB_Spl_,
+		std::string audioDevice_
+	);
 };

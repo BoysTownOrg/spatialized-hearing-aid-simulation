@@ -114,39 +114,49 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 }
 
 void RefactoredModel::playTrial(TrialParameters p) {
+	play_(
+		brir,
+		leftPrescription,
+		rightPrescription,
+		perceptionTest->nextStimulus(),
+		testParameters.processing,
+		p.level_dB_Spl,
+		p.audioDevice
+	);
+}
+
+void RefactoredModel::play_(
+	BrirReader::BinauralRoomImpulseResponse brir_,
+	PrescriptionReader::Dsl leftPrescription_,
+	PrescriptionReader::Dsl rightPrescription_,
+	std::string audioFilePath,
+	ProcessingParameters processing,
+	double level_dB_Spl_,
+	std::string audioDevice_
+) {
 	if (player->isPlaying())
 		return;
 
-	auto reader = makeReader(perceptionTest->nextStimulus());
-	auto computer = calibrationFactory->make(reader.get());
-	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
-	const auto left_scale = 
-		gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
-	const auto right_scale = 
-		gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-
-	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
-	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
-
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	left_spatial.filterCoefficients = brir.left;
+	left_spatial.filterCoefficients = brir_.left;
 
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	right_spatial.filterCoefficients = brir.right;
+	right_spatial.filterCoefficients = brir_.right;
+
+	auto reader = makeReader(audioFilePath);
 
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
-	both_hs.attack_ms = testParameters.processing.attack_ms;
-	both_hs.release_ms = testParameters.processing.release_ms;
-	both_hs.chunkSize = testParameters.processing.chunkSize;
-	both_hs.windowSize = testParameters.processing.windowSize;
+	both_hs.attack_ms = processing.attack_ms;
+	both_hs.release_ms = processing.release_ms;
+	both_hs.chunkSize = processing.chunkSize;
+	both_hs.windowSize = processing.windowSize;
 	both_hs.sampleRate = reader->sampleRate();
 	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
 	auto left_hs = both_hs;
-	left_hs.prescription = leftPrescription;
-
 	auto right_hs = both_hs;
-	right_hs.prescription = rightPrescription;
+	left_hs.prescription = leftPrescription_;
+	right_hs.prescription = rightPrescription_;
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
@@ -156,26 +166,32 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	right_fs.hearingAid = right_hs;
 	right_fs.spatialization = right_spatial;
 
-	if (testParameters.processing.usingSpatialization) {
+	auto computer = calibrationFactory->make(reader.get());
+	const auto digitalLevel = level_dB_Spl_ - fullScaleLevel_dB_Spl;
+	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
+	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
+
+	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
+	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
+
+	if (processing.usingSpatialization) {
 		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
 		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
-	if (testParameters.processing.usingHearingAidSimulation) {
+	if (processing.usingHearingAidSimulation) {
 		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
 		right_channel = simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
-		if (testParameters.processing.usingSpatialization) {
+		if (processing.usingSpatialization) {
 			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
 			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
-
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, testParameters.processing, p.audioDevice);
+	prepareAudioPlayer(*reader, processing, audioDevice_);
 	player->play();
-	perceptionTest->advanceTrial();
 }
 
 std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
@@ -212,69 +228,24 @@ bool RefactoredModel::testComplete() {
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
-	if (player->isPlaying())
-		return;
-
 	BrirReader::BinauralRoomImpulseResponse brir_;
 	if (p.processing.usingSpatialization)
 		brir_ = readBrir(p.processing.brirFilePath);
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	left_spatial.filterCoefficients = brir_.left;
-
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	right_spatial.filterCoefficients = brir_.right;
-
-	auto reader = makeReader(p.audioFilePath);
-
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
-	both_hs.attack_ms = p.processing.attack_ms;
-	both_hs.release_ms = p.processing.release_ms;
-	both_hs.chunkSize = p.processing.chunkSize;
-	both_hs.windowSize = p.processing.windowSize;
-	both_hs.sampleRate = reader->sampleRate();
-	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
-
-	auto left_hs = both_hs;
-	auto right_hs = both_hs;
+	PrescriptionReader::Dsl leftPrescription_;
+	PrescriptionReader::Dsl rightPrescription_;
 	if (p.processing.usingHearingAidSimulation) {
-		left_hs.prescription = readPrescription(p.processing.leftDslPrescriptionFilePath);
-		right_hs.prescription = readPrescription(p.processing.rightDslPrescriptionFilePath);
+		leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
+		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
-
-	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
-	left_fs.hearingAid = left_hs;
-	left_fs.spatialization = left_spatial;
-
-	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-	right_fs.hearingAid = right_hs;
-	right_fs.spatialization = right_spatial;
-
-	auto computer = calibrationFactory->make(reader.get());
-	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
-	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
-	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-
-	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
-	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
-
-	if (p.processing.usingSpatialization) {
-		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
-		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
-	}
-	if (p.processing.usingHearingAidSimulation) {
-		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
-		right_channel = simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
-		if (p.processing.usingSpatialization) {
-			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
-			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
-		}
-	}
-	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
-	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
-	loader->setReader(reader);
-	loader->reset();
-	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
-	player->play();
+	play_(
+		brir_,
+		leftPrescription_,
+		rightPrescription_,
+		p.audioFilePath,
+		p.processing,
+		p.level_dB_Spl,
+		p.audioDevice
+	);
 }
 
 void RefactoredModel::stopCalibration() {
