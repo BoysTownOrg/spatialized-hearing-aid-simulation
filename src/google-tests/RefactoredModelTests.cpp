@@ -275,6 +275,18 @@ namespace {
 		void assertSimulationFactoryHasNotMadeSpatialization() {
 			assertTrue(simulationFactory.spatialization().empty());
 		}
+
+		void assertAudioPlayerHasBeenPlayed() {
+			assertTrue(audioPlayer.played());
+		}
+
+		void assertAudioPlayerParametersMatchAudioFrameReaderAfterCall(std::function<void(void)> f) {
+			audioFrameReader->setChannels(1);
+			audioFrameReader->setSampleRate(2);
+			f();
+			assertEqual(1, audioPlayer.preparation().channels);
+			assertEqual(2, audioPlayer.preparation().sampleRate);
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -332,12 +344,12 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playTrial();
-		assertTrue(audioPlayer.played());
+		assertAudioPlayerHasBeenPlayed();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPlaysPlayer) {
 		playCalibration();
-		assertTrue(audioPlayer.played());
+		assertAudioPlayerHasBeenPlayed();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
@@ -353,33 +365,25 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		audioPlayer.callOnPlay([&]() {
+		callWhenPlayerPlays([=]() {
 			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 		});
 		playTrial();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		audioPlayer.callOnPlay([&]() {
+		callWhenPlayerPlays([=]() {
 			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 		});
 		playCalibration();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
-		audioFrameReader->setChannels(1);
-		audioFrameReader->setSampleRate(2);
-		playTrial();
-		assertEqual(1, audioPlayer.preparation().channels);
-		assertEqual(2, audioPlayer.preparation().sampleRate);
+		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playTrial(); });
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
-		audioFrameReader->setChannels(1);
-		audioFrameReader->setSampleRate(2);
-		playCalibration();
-		assertEqual(1, audioPlayer.preparation().channels);
-		assertEqual(2, audioPlayer.preparation().sampleRate);
+		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playCalibration(); });
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
