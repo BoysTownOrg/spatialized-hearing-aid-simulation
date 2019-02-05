@@ -233,10 +233,11 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
 	auto left_hs = both_hs;
-	left_hs.prescription = readPrescription(p.processing.leftDslPrescriptionFilePath);
-
 	auto right_hs = both_hs;
-	right_hs.prescription = readPrescription(p.processing.rightDslPrescriptionFilePath);
+	if (p.processing.usingHearingAidSimulation) {
+		left_hs.prescription = readPrescription(p.processing.leftDslPrescriptionFilePath);
+		right_hs.prescription = readPrescription(p.processing.rightDslPrescriptionFilePath);
+	}
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
