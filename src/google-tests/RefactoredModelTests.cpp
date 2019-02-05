@@ -961,19 +961,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
-		std::vector<std::shared_ptr<SignalProcessor>> withoutSimulation = {
-			std::make_shared<MultipliesSamplesBy>(2.0f),
-			std::make_shared<MultipliesSamplesBy>(3.0f)
-		};
-		simulationFactory.setWithoutSimulationProcessors(withoutSimulation);
-		buffer_type left = { 5 };
-		buffer_type right = { 7 };
-		std::vector<channel_type> channels = { left, right };
-		processWhenPlayerPlays(channels);
 		setNoSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual({ 5 * 2 }, left);
-		assertEqual({ 7 * 3 }, right);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.withoutSimulationProcessors,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
