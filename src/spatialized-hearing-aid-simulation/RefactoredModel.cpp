@@ -219,7 +219,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	reader->reset();
 	readPrescription(p.processing.leftDslPrescriptionFilePath);
-	calibrationFactory->make(reader.get());
+	auto computer = calibrationFactory->make(reader.get());
+	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
+	computer->signalScale(-1, digitalLevel);
+	computer->signalScale(-1, digitalLevel);
 }
 
 void RefactoredModel::stopCalibration() {
