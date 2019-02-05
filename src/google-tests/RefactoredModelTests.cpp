@@ -944,6 +944,14 @@ namespace {
 		);
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationAssignsFullSimulationProcessorsToAudioLoader) {
+		setFullSimulationForCalibration();
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.fullSimulationProcessors,
+			[=]() { playCalibration(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
 		setHearingAidSimulationOnlyForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
