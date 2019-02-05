@@ -42,11 +42,12 @@ namespace {
 		ArgumentCollection<float> hearingAidSimulationScale_{};
 		ArgumentCollection<float> spatializationScale_{};
 		ArgumentCollection<float> withoutSimulationScale_{};
+	public:
 		PoppableVector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors;
 		PoppableVector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors;
 		PoppableVector<std::shared_ptr<SignalProcessor>> spatializationProcessors;
 		PoppableVector<std::shared_ptr<SignalProcessor>> withoutSimulationProcessors;
-	public:
+
 		SpatializedHearingAidSimulationFactoryStub() :
 			fullSimulationProcessors(2),
 			hearingAidSimulationProcessors(2),
@@ -450,6 +451,27 @@ namespace {
 				RefactoredModel::fullScaleLevel_dB_Spl, 
 				hearingAid.at(1).fullScaleLevel_dB_Spl
 			);
+		}
+
+		void assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			PoppableVector<std::shared_ptr<SignalProcessor>> &processors,
+			std::function<void(void)> f
+		) {
+			std::vector<std::shared_ptr<SignalProcessor>> simulation = {
+				std::make_shared<MultipliesSamplesBy>(2.0f),
+				std::make_shared<MultipliesSamplesBy>(3.0f)
+			};
+			processors.set(simulation);
+
+			buffer_type left = { 5 };
+			buffer_type right = { 7 };
+			std::vector<channel_type> channels = { left, right };
+			processWhenPlayerPlays(channels);
+
+			f();
+			
+			assertEqual({ 5 * 2 }, left);
+			assertEqual({ 7 * 3 }, right);
 		}
 	};
 
@@ -915,19 +937,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
-		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
-			std::make_shared<MultipliesSamplesBy>(2.0f),
-			std::make_shared<MultipliesSamplesBy>(3.0f)
-		};
-		simulationFactory.setFullSimulationProcessors(fullSimulation);
-		buffer_type left = { 5 };
-		buffer_type right = { 7 };
-		std::vector<channel_type> channels = { left, right };
-		processWhenPlayerPlays(channels);
 		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual({ 5 * 2 }, left);
-		assertEqual({ 7 * 3 }, right);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.fullSimulationProcessors,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
