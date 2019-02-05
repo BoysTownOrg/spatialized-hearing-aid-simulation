@@ -215,7 +215,6 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	readBrir(p.processing.brirFilePath);
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
-	player->play();
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	reader->reset();
 	auto leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
@@ -246,6 +245,9 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
 	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
 
+	auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
+	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
+
 	if (p.processing.usingSpatialization) {
 		simulationFactory->makeSpatialization({}, left_scale);
 		simulationFactory->makeSpatialization({}, right_scale);
@@ -254,12 +256,13 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
 		simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
 		if (p.processing.usingSpatialization) {
-			simulationFactory->makeFullSimulation(left_fs, left_scale);
-			simulationFactory->makeFullSimulation(right_fs, right_scale);
+			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
+			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
 		}
 	}
-	simulationFactory->makeWithoutSimulation(left_scale);
-	simulationFactory->makeWithoutSimulation(right_scale);
+	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
+	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
+	player->play();
 }
 
 void RefactoredModel::stopCalibration() {
