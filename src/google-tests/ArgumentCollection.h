@@ -18,7 +18,7 @@ public:
 		return collection.push_back(item);
 	}
 
-	auto empty() {
+	auto empty() const {
 		return collection.empty();
 	}
 

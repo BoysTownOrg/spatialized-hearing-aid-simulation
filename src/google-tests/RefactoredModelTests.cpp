@@ -103,7 +103,7 @@ namespace {
 			return fullSimulation_;
 		}
 
-		auto hearingAidSimulation() const {
+		auto &hearingAidSimulation() const {
 			return hearingAidSimulation_;
 		}
 		auto spatialization() const {
@@ -326,6 +326,51 @@ namespace {
 			f();
 			assertEqual(3.3f, scalars.at(0));
 			assertEqual(4.4f, scalars.at(1));
+		}
+
+		void assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			const ArgumentCollection<
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
+			std::function<void(void)> f
+		) {
+			PrescriptionReader::Dsl left;
+			left.compressionRatios = { 1 };
+			left.crossFrequenciesHz = { 2 };
+			left.kneepointGains_dB = { 3 };
+			left.kneepoints_dBSpl = { 4 };
+			left.broadbandOutputLimitingThresholds_dBSpl = { 5 };
+			left.channels = 6;
+			processing.leftDslPrescriptionFilePath = "leftFilePath";
+			prescriptionReader.addPrescription("leftFilePath", left);
+
+			PrescriptionReader::Dsl right;
+			right.compressionRatios = { 7 };
+			right.crossFrequenciesHz = { 8 };
+			right.kneepointGains_dB = { 9 };
+			right.kneepoints_dBSpl = { 10 };
+			right.broadbandOutputLimitingThresholds_dBSpl = { 11 };
+			right.channels = 12;
+			processing.rightDslPrescriptionFilePath = "rightFilePath";
+			prescriptionReader.addPrescription("rightFilePath", right);
+
+			f();
+
+			auto actualLeft = hearingAid.at(0).prescription;
+			assertEqual({ 1 }, actualLeft.compressionRatios);
+			assertEqual({ 2 }, actualLeft.crossFrequenciesHz);
+			assertEqual({ 3 }, actualLeft.kneepointGains_dB);
+			assertEqual({ 4 }, actualLeft.kneepoints_dBSpl);
+			assertEqual({ 5 }, actualLeft.broadbandOutputLimitingThresholds_dBSpl);
+			assertEqual(6, actualLeft.channels);
+
+			auto actualRight = hearingAid.at(1).prescription;
+			assertEqual({ 7 }, actualRight.compressionRatios);
+			assertEqual({ 8 }, actualRight.crossFrequenciesHz);
+			assertEqual({ 9 }, actualRight.kneepointGains_dB);
+			assertEqual({ 10 }, actualRight.kneepoints_dBSpl);
+			assertEqual({ 11 }, actualRight.broadbandOutputLimitingThresholds_dBSpl);
+			assertEqual(12, actualRight.channels);
 		}
 	};
 
@@ -568,26 +613,14 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
-		playTrialPassesLeftPrescriptionToFactoryForHearingAidSimulation
+		playTrialPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
-		PrescriptionReader::Dsl prescription;
-		prescription.compressionRatios = { 1 };
-		prescription.crossFrequenciesHz = { 2 };
-		prescription.kneepointGains_dB = { 3 };
-		prescription.kneepoints_dBSpl = { 4 };
-		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-		prescription.channels = 6;
-		testParameters.processing.leftDslPrescriptionFilePath = "leftFilePath";
-		prescriptionReader.addPrescription("leftFilePath", prescription);
 		setHearingAidSimulationOnly();
-		playFirstTrialOfNewTest();
-		auto actual = simulationFactory.hearingAidSimulation().at(0).prescription;
-		assertEqual({ 1 }, actual.compressionRatios);
-		assertEqual({ 2 }, actual.crossFrequenciesHz);
-		assertEqual({ 3 }, actual.kneepointGains_dB);
-		assertEqual({ 4 }, actual.kneepoints_dBSpl);
-		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
-		assertEqual(6, actual.channels);
+		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
+			testParameters.processing, 
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
