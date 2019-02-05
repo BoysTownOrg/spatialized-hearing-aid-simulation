@@ -214,13 +214,15 @@ bool RefactoredModel::testComplete() {
 void RefactoredModel::playCalibration(CalibrationParameters p) {
 	if (player->isPlaying())
 		return;
+
 	auto brir_ = readBrir(p.processing.brirFilePath);
+	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
+	left_spatial.filterCoefficients = brir_.left;
+
+	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
+	right_spatial.filterCoefficients = brir_.right;
+
 	auto reader = makeReader(p.audioFilePath);
-	loader->setReader(reader);
-	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
-	reader->reset();
-	auto leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
-	auto rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
 	both_hs.attack_ms = p.processing.attack_ms;
@@ -231,16 +233,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	both_hs.fullScaleLevel_dB_Spl = fullScaleLevel_dB_Spl;
 
 	auto left_hs = both_hs;
-	left_hs.prescription = leftPrescription_;
+	left_hs.prescription = readPrescription(p.processing.leftDslPrescriptionFilePath);
 
 	auto right_hs = both_hs;
-	right_hs.prescription = rightPrescription_;
-
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	left_spatial.filterCoefficients = brir_.left;
-
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	right_spatial.filterCoefficients = brir_.right;
+	right_hs.prescription = readPrescription(p.processing.rightDslPrescriptionFilePath);
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
@@ -272,7 +268,9 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	}
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
+	loader->setReader(reader);
 	loader->reset();
+	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	player->play();
 }
 
