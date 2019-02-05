@@ -767,22 +767,12 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		testParameters.processing.attack_ms = 1;
-		testParameters.processing.release_ms = 2;
-		testParameters.processing.chunkSize = 4;
-		testParameters.processing.windowSize = 8;
 		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		auto left = simulationFactory.fullSimulationHearingAid().at(0);
-		assertEqual(1.0, left.attack_ms);
-		assertEqual(2.0, left.release_ms);
-		assertEqual(4, left.chunkSize);
-		assertEqual(8, left.windowSize);
-		auto right = simulationFactory.fullSimulationHearingAid().at(1);
-		assertEqual(1.0, right.attack_ms);
-		assertEqual(2.0, right.release_ms);
-		assertEqual(4, right.chunkSize);
-		assertEqual(8, right.windowSize);
+		assertHearingAidCompressionParametersMatchAfterCall(
+			testParameters.processing,
+			simulationFactory.fullSimulationHearingAid(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
