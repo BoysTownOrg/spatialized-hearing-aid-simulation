@@ -883,6 +883,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playCalibrationPassesFullScaleLevelToFactoryForHearingAidSimulation
+	) {
+		setHearingAidSimulationOnlyForCalibration();
+		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
