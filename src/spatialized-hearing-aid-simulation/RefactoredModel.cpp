@@ -326,15 +326,23 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
 		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
-	play_(
+	if (player->isPlaying())
+		return;
+
+	NotSureYet notSure{
 		brir_,
 		leftPrescription_,
 		rightPrescription_,
-		p.audioFilePath,
 		p.processing,
-		p.level_dB_Spl,
-		p.audioDevice
-	);
+		simulationFactory,
+		calibrationFactory
+	};
+	auto reader = makeReader(p.audioFilePath);
+	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));
+	loader->setReader(reader);
+	loader->reset();
+	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
+	player->play();
 }
 
 void RefactoredModel::stopCalibration() {
