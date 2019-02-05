@@ -287,6 +287,22 @@ namespace {
 			assertEqual(1, audioPlayer.preparation().channels);
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
+
+		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
+			RefactoredModel::ProcessingParameters &processing, 
+			std::function<void(void)> f
+		) {
+			processing.chunkSize = 1;
+			f();
+			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+		}
+
+		void assertAudioPlayerFramesPerBufferMatchesDefault() {
+			assertEqual(
+				RefactoredModel::defaultFramesPerBuffer, 
+				audioPlayer.preparation().framesPerBuffer
+			);
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -403,9 +419,10 @@ namespace {
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
 		testParameters.processing.usingHearingAidSimulation = true;
-		testParameters.processing.chunkSize = 1;
-		playFirstTrialOfNewTest();
-		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
+			testParameters.processing,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
@@ -413,9 +430,10 @@ namespace {
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
 		calibrationParameters.processing.usingHearingAidSimulation = true;
-		calibrationParameters.processing.chunkSize = 1;
-		playCalibration();
-		assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
+			calibrationParameters.processing,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(
@@ -424,10 +442,7 @@ namespace {
 	) {
 		testParameters.processing.usingHearingAidSimulation = false;
 		playFirstTrialOfNewTest();
-		assertEqual(
-			RefactoredModel::defaultFramesPerBuffer, 
-			audioPlayer.preparation().framesPerBuffer
-		);
+		assertAudioPlayerFramesPerBufferMatchesDefault();
 	}
 
 	TEST_F(
@@ -436,10 +451,7 @@ namespace {
 	) {
 		calibrationParameters.processing.usingHearingAidSimulation = false;
 		playCalibration();
-		assertEqual(
-			RefactoredModel::defaultFramesPerBuffer, 
-			audioPlayer.preparation().framesPerBuffer
-		);
+		assertAudioPlayerFramesPerBufferMatchesDefault();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
