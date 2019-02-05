@@ -16,13 +16,17 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFul
 ) {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(makeScalingProcessor(scale));
-	chain->add(firFilterFactory->make(std::move(p.spatialization.filterCoefficients)));
+	chain->add(makeFirFilter(std::move(p.spatialization)));
 	chain->add(hearingAidFactory->make(compression(std::move(p.hearingAid))));
 	return chain;
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeScalingProcessor(float scale) {
 	return scalarFactory->make(scale);
+}
+
+std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeFirFilter(Spatialization s) {
+	return firFilterFactory->make(std::move(s.filterCoefficients));
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHearingAidSimulation(
@@ -37,12 +41,12 @@ std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeHea
 }
 
 std::shared_ptr<SignalProcessor> SpatializedHearingAidSimulationFactory::makeSpatialization(
-	Spatialization p, 
+	Spatialization s, 
 	float scale
 ) {
 	auto chain = std::make_shared<SignalProcessingChain>();
 	chain->add(makeScalingProcessor(scale));
-	chain->add(firFilterFactory->make(std::move(p.filterCoefficients)));
+	chain->add(makeFirFilter(std::move(s)));
 	return chain;
 }
 
