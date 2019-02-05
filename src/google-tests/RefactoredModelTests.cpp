@@ -1073,6 +1073,11 @@ namespace {
 		assertEqual("prepareToPlay play ", audioPlayer.log());
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPreparesPlayerBeforePlaying) {
+		playCalibration();
+		assertEqual("prepareToPlay play ", audioPlayer.log());
+	}
+
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
 		playTrial();
