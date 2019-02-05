@@ -49,5 +49,6 @@ public:
 		float scale
 	) override;
 private:
+	std::shared_ptr<SignalProcessor> makeScalingProcessor(float scale);
 	FilterbankCompressor::Parameters compression(HearingAidSimulation p);
 };
