@@ -215,7 +215,9 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	if (player->isPlaying())
 		return;
 
-	auto brir_ = readBrir(p.processing.brirFilePath);
+	BrirReader::BinauralRoomImpulseResponse brir_;
+	if (p.processing.usingSpatialization)
+		brir_ = readBrir(p.processing.brirFilePath);
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	left_spatial.filterCoefficients = brir_.left;
 
