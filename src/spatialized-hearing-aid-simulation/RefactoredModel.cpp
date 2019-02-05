@@ -226,6 +226,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	both_hs.release_ms = p.processing.release_ms;
 	both_hs.chunkSize = p.processing.chunkSize;
 	both_hs.windowSize = p.processing.windowSize;
+	both_hs.sampleRate = reader->sampleRate();
 
 	auto left_hs = both_hs;
 	left_hs.prescription = leftPrescription_;
