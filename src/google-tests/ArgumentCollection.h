@@ -22,7 +22,7 @@ public:
 		return collection.empty();
 	}
 
-	auto at(typename std::vector<T>::size_type position) {
+	auto at(typename std::vector<T>::size_type position) const {
 		return collection.at(position);
 	}
 };

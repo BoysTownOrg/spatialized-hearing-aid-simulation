@@ -110,7 +110,7 @@ namespace {
 			return spatialization_;
 		}
 
-		auto fullSimulationScale() const {
+		auto &fullSimulationScale() const {
 			return fullSimulationScale_;
 		}
 
@@ -315,6 +315,18 @@ namespace {
 			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
 			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 		}
+
+		void assertScalarsMatchCalibrationAfterCall(
+			const ArgumentCollection<float> &scalars, 
+			std::function<void(void)> f
+		) {
+			audioFrameReader->setChannels(2);
+			calibrationComputer->addSignalScale(0, 3.3);
+			calibrationComputer->addSignalScale(1, 4.4);
+			f();
+			assertEqual(3.3f, scalars.at(0));
+			assertEqual(4.4f, scalars.at(1));
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -491,13 +503,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->addSignalScale(0, 3.3);
-		calibrationComputer->addSignalScale(1, 4.4);
 		setFullSimulation();
-		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.fullSimulationScale(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForFullSimulation) {
