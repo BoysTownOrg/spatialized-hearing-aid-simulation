@@ -1027,6 +1027,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playCalibrationPassesBrirToFactoryForSpatialization
+	) {
+		setSpatializationOnlyForCalibration();
+		assertSpatializationFilterCoefficientsMatchBrirAfterCall(
+			simulationFactory.spatialization(),
+			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
