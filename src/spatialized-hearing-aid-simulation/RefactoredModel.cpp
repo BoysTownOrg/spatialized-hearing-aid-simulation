@@ -100,11 +100,9 @@ public:
 	}
 };
 
-class nsyFullSimulation : public INotSureYet {
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
+class nsyFullSimulation : public INotSureYet {	
+	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;	
+	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
@@ -119,8 +117,8 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } 
 	{
-		left_spatial.filterCoefficients = std::move(brir_.left);
-		right_spatial.filterCoefficients = std::move(brir_.right);
+		left_fs.spatialization.filterCoefficients = std::move(brir_.left);
+		right_fs.spatialization.filterCoefficients = std::move(brir_.right);
 
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
 		both_hs.attack_ms = processing.attack_ms;
@@ -129,10 +127,10 @@ public:
 		both_hs.windowSize = processing.windowSize;
 		both_hs.fullScaleLevel_dB_Spl = RefactoredModel::fullScaleLevel_dB_Spl;
 
-		left_hs = both_hs;
-		right_hs = both_hs;
-		left_hs.prescription = std::move(leftPrescription_);
-		right_hs.prescription = std::move(rightPrescription_);
+		left_fs.hearingAid = both_hs;
+		right_fs.hearingAid = both_hs;
+		left_fs.hearingAid.prescription = std::move(leftPrescription_);
+		right_fs.hearingAid.prescription = std::move(rightPrescription_);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -143,19 +141,11 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		left_hs.sampleRate = reader->sampleRate();
-		right_hs.sampleRate = reader->sampleRate();
+		left_fs.hearingAid.sampleRate = reader->sampleRate();
+		right_fs.hearingAid.sampleRate = reader->sampleRate();
 
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
-		
-		ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
-		left_fs.hearingAid = left_hs;
-		left_fs.spatialization = left_spatial;
-
-		ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-		right_fs.hearingAid = right_hs;
-		right_fs.spatialization = right_spatial;
 
 		return { 
 			simulationFactory->makeFullSimulation(
