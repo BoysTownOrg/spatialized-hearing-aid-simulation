@@ -115,13 +115,14 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 
 class INotSureYet {
 public:
+	INTERFACE_OPERATIONS(INotSureYet);
+
 	struct CommonHearingAidSimulation {
 		double attack_ms;
 		double release_ms;
 		int windowSize;
 		int chunkSize;
 	};
-	INTERFACE_OPERATIONS(INotSureYet);
 	virtual std::shared_ptr<AudioFrameProcessor> make(
 		AudioFrameReader *reader,
 		double level_dB_Spl
@@ -133,15 +134,18 @@ public:
 	INTERFACE_OPERATIONS(INotSureYetFactory);
 	virtual std::shared_ptr<INotSureYet> makeSpatialization(
 		BrirReader::BinauralRoomImpulseResponse) = 0;
+
 	virtual std::shared_ptr<INotSureYet> makeHearingAid(
 		INotSureYet::CommonHearingAidSimulation,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_) = 0;
+
 	virtual std::shared_ptr<INotSureYet> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse,
 		INotSureYet::CommonHearingAidSimulation,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_) = 0;
+
 	virtual std::shared_ptr<INotSureYet> makeNoSimulation() = 0;
 };
 
@@ -163,16 +167,20 @@ public:
 		right_spatial.filterCoefficients = std::move(brir_.right);
 	}
 
-	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader * reader, double level_dB_Spl) override
-	{
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
-		auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
-		auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-		auto left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
-		auto right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
+		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+			simulationFactory->makeSpatialization(
+				left_spatial, 
+				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+			), 
+			simulationFactory->makeSpatialization(
+				right_spatial, 
+				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+			) 
+		};
 		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
@@ -206,8 +214,7 @@ public:
 		right_hs.prescription = std::move(rightPrescription_);
 	}
 
-	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader * reader, double level_dB_Spl) override
-	{
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
