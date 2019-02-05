@@ -511,13 +511,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForFullSimulation) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->addSignalScale(0, 3.3);
-		calibrationComputer->addSignalScale(1, 4.4);
 		setFullSimulation();
-		playCalibration();
-		assertEqual(3.3f, simulationFactory.fullSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.fullSimulationScale().at(1));
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.fullSimulationScale(),
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
