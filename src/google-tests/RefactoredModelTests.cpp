@@ -34,8 +34,9 @@ namespace {
 	class SpatializedHearingAidSimulationFactoryStub : 
 		public ISpatializedHearingAidSimulationFactory 
 	{
-		ArgumentCollection<FullSimulation> fullSimulation_{};
+		ArgumentCollection<HearingAidSimulation> fullSimulationHearingAid_{};
 		ArgumentCollection<HearingAidSimulation> hearingAidSimulation_{};
+		ArgumentCollection<Spatialization> fullSimulationSpatialization_{};
 		ArgumentCollection<Spatialization> spatialization_{};
 		ArgumentCollection<float> fullSimulationScale_{};
 		ArgumentCollection<float> hearingAidSimulationScale_{};
@@ -71,7 +72,8 @@ namespace {
 		std::shared_ptr<SignalProcessor> makeFullSimulation(
 			FullSimulation s, float x
 		) override {
-			fullSimulation_.push_back(std::move(s));
+			fullSimulationHearingAid_.push_back(std::move(s.hearingAid));
+			fullSimulationSpatialization_.push_back(std::move(s.spatialization));
 			fullSimulationScale_.push_back(x);
 			return fullSimulationProcessors.pop_front();
 		}
@@ -98,9 +100,13 @@ namespace {
 			withoutSimulationScale_.push_back(x);
 			return withoutSimulationProcessors.pop_front();
 		}
+
+		auto fullSimulationSpatialization() const {
+			return fullSimulationSpatialization_;
+		}
 		
-		auto fullSimulation() const {
-			return fullSimulation_;
+		auto &fullSimulationHearingAid() const {
+			return fullSimulationHearingAid_;
 		}
 
 		auto &hearingAidSimulation() const {
@@ -265,7 +271,7 @@ namespace {
 		}
 
 		void assertSimulationFactoryHasNotMadeFullSimulation() {
-			assertTrue(simulationFactory.fullSimulation().empty());
+			assertTrue(simulationFactory.fullSimulationHearingAid().empty());
 		}
 
 		void assertSimulationFactoryHasNotMadeHearingAidSimulation() {
@@ -625,26 +631,14 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
-		playTrialPassesLeftPrescriptionToFactoryForFullSimulation
+		playTrialPassesPrescriptionsToFactoryForFullSimulation
 	) {
-		PrescriptionReader::Dsl prescription;
-		prescription.compressionRatios = { 1 };
-		prescription.crossFrequenciesHz = { 2 };
-		prescription.kneepointGains_dB = { 3 };
-		prescription.kneepoints_dBSpl = { 4 };
-		prescription.broadbandOutputLimitingThresholds_dBSpl = { 5 };
-		prescription.channels = 6;
-		testParameters.processing.leftDslPrescriptionFilePath = "leftFilePath";
-		prescriptionReader.addPrescription("leftFilePath", prescription);
 		setFullSimulation();
-		playFirstTrialOfNewTest();
-		auto actual = simulationFactory.fullSimulation().at(0).hearingAid.prescription;
-		assertEqual({ 1 }, actual.compressionRatios);
-		assertEqual({ 2 }, actual.crossFrequenciesHz);
-		assertEqual({ 3 }, actual.kneepointGains_dB);
-		assertEqual({ 4 }, actual.kneepoints_dBSpl);
-		assertEqual({ 5 }, actual.broadbandOutputLimitingThresholds_dBSpl);
-		assertEqual(6, actual.channels);
+		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
+			testParameters.processing, 
+			simulationFactory.fullSimulationHearingAid(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
@@ -686,7 +680,7 @@ namespace {
 		prescriptionReader.addPrescription("rightFilePath", prescription);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
-		auto actual = simulationFactory.fullSimulation().at(1).hearingAid.prescription;
+		auto actual = simulationFactory.fullSimulationHearingAid().at(1).prescription;
 		assertEqual({ 1 }, actual.compressionRatios);
 		assertEqual({ 2 }, actual.crossFrequenciesHz);
 		assertEqual({ 3 }, actual.kneepointGains_dB);
@@ -747,12 +741,12 @@ namespace {
 		testParameters.processing.windowSize = 8;
 		setFullSimulation();
 		playFirstTrialOfNewTest();
-		auto left = simulationFactory.fullSimulation().at(0).hearingAid;
+		auto left = simulationFactory.fullSimulationHearingAid().at(0);
 		assertEqual(1.0, left.attack_ms);
 		assertEqual(2.0, left.release_ms);
 		assertEqual(4, left.chunkSize);
 		assertEqual(8, left.windowSize);
-		auto right = simulationFactory.fullSimulation().at(1).hearingAid;
+		auto right = simulationFactory.fullSimulationHearingAid().at(1);
 		assertEqual(1.0, right.attack_ms);
 		assertEqual(2.0, right.release_ms);
 		assertEqual(4, right.chunkSize);
@@ -777,8 +771,8 @@ namespace {
 		audioFrameReader->setSampleRate(1);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
-		assertEqual(1, simulationFactory.fullSimulation().at(0).hearingAid.sampleRate);
-		assertEqual(1, simulationFactory.fullSimulation().at(1).hearingAid.sampleRate);
+		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(0).sampleRate);
+		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(1).sampleRate);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
@@ -869,11 +863,11 @@ namespace {
 		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulation().at(0).hearingAid.fullScaleLevel_dB_Spl
+			simulationFactory.fullSimulationHearingAid().at(0).fullScaleLevel_dB_Spl
 		);
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulation().at(1).hearingAid.fullScaleLevel_dB_Spl
+			simulationFactory.fullSimulationHearingAid().at(1).fullScaleLevel_dB_Spl
 		);
 	}
 
@@ -901,8 +895,8 @@ namespace {
 		brirReader.setBrir(brir);
 		setFullSimulation();
 		playFirstTrialOfNewTest();
-		assertEqual({ 1, 2, }, simulationFactory.fullSimulation().at(0).spatialization.filterCoefficients);
-		assertEqual({ 3, 4, }, simulationFactory.fullSimulation().at(1).spatialization.filterCoefficients);
+		assertEqual({ 1, 2, }, simulationFactory.fullSimulationSpatialization().at(0).filterCoefficients);
+		assertEqual({ 3, 4, }, simulationFactory.fullSimulationSpatialization().at(1).filterCoefficients);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
