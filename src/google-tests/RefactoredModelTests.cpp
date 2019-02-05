@@ -561,6 +561,12 @@ namespace {
 		assertFalse(brirReader.readCalled());
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
+		calibrationParameters.processing.usingSpatialization = false;
+		playCalibration();
+		assertFalse(brirReader.readCalled());
+	}
+
 	TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
 		testParameters.audioDirectory = "a";
 		testParameters.testFilePath = "b";
