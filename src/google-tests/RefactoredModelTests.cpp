@@ -992,6 +992,14 @@ namespace {
 		);
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationAssignsWithoutSimulationProcessorsToAudioLoader) {
+		setNoSimulationForCalibration();
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.withoutSimulationProcessors,
+			[=]() { playCalibration(); }
+		);
+	}
+
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
