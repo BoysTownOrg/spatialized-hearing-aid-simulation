@@ -203,7 +203,9 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(BrirReader::BinauralRoomImpulseResponse brir) override {
+	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
+		BrirReader::BinauralRoomImpulseResponse brir
+	) override {
 		return std::make_shared<nsySpatialization>(
 			std::move(brir), 
 			simulationFactory, 
