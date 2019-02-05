@@ -350,7 +350,7 @@ public:
 };
 
 class NotSureYet {
-	std::unique_ptr<INotSureYet> nsy{};
+	std::shared_ptr<INotSureYet> nsy{};
 public:
 	NotSureYet(
 		BrirReader::BinauralRoomImpulseResponse brir_,
@@ -361,24 +361,22 @@ public:
 		ICalibrationComputerFactory *calibrationFactory
 	)
 	{
+		NotSureYetFactory factory{simulationFactory, calibrationFactory};
+
 		INotSureYet::CommonHearingAidSimulation common;
 		common.attack_ms = processing.attack_ms;
 		common.release_ms = processing.release_ms;
 		common.chunkSize = processing.chunkSize;
 		common.windowSize = processing.windowSize;
 
-		if (processing.usingHearingAidSimulation && processing.usingSpatialization) {
-			nsy = std::make_unique<nsyFullSimulation>(brir_, common, leftPrescription_, rightPrescription_, simulationFactory, calibrationFactory);
-		}
-		else if (processing.usingSpatialization) {
-			nsy = std::make_unique<nsySpatialization>(brir_, simulationFactory, calibrationFactory);
-		}
-		else if (processing.usingHearingAidSimulation) {
-			nsy = std::make_unique<nsyHearingAid>(common, leftPrescription_, rightPrescription_, simulationFactory, calibrationFactory);
-		}
-		else {
-			nsy = std::make_unique<nsyNoSimulation>(simulationFactory, calibrationFactory);
-		}
+		if (processing.usingHearingAidSimulation && processing.usingSpatialization)
+			nsy = factory.makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
+		else if (processing.usingSpatialization)
+			nsy = factory.makeSpatialization(brir_);
+		else if (processing.usingHearingAidSimulation)
+			nsy = factory.makeHearingAid(common, leftPrescription_, rightPrescription_);
+		else
+			nsy = factory.makeNoSimulation();
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(
