@@ -51,5 +51,6 @@ public:
 private:
 	std::shared_ptr<SignalProcessor> makeScalingProcessor(float scale);
 	std::shared_ptr<SignalProcessor> makeFirFilter(Spatialization);
+	std::shared_ptr<SignalProcessor> makeHearingAid(HearingAidSimulation);
 	FilterbankCompressor::Parameters compression(HearingAidSimulation p);
 };
