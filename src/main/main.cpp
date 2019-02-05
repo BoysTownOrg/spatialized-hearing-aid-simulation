@@ -21,6 +21,7 @@
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
 #include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 
 class HearingAidFactoryImpl : public HearingAidFactory {
@@ -43,6 +44,12 @@ class FirFilterFactoryImpl : public FirFilterFactory {
 class ScalarFactoryImpl : public ScalarFactory {
 	std::shared_ptr<SignalProcessor> make(float x) override {
 		return std::make_shared<ScalingProcessor>(x);
+	}
+};
+
+class CalibrationComputerFactoryImpl : public ICalibrationComputerFactory {
+	std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override {
+		return std::make_shared<CalibrationComputer>(*r);
 	}
 };
 
@@ -72,6 +79,7 @@ int main() {
 		&firFilterFactory, 
 		&hearingAidFactory
 	};
+	CalibrationComputerFactoryImpl calibrationFactory{};
 	RefactoredModel model{
 		&perceptionTest,
 		&player,
@@ -79,7 +87,8 @@ int main() {
 		&audioFrameReaderFactory,
 		&prescriptionReader, 
 		&brirReader, 
-		&simulationFactory
+		&simulationFactory,
+		&calibrationFactory
 	};
 	FltkView view{};
 	Presenter presenter{ &model, &view };
