@@ -122,7 +122,7 @@ namespace {
 			return spatializationScale_;
 		}
 
-		auto withoutSimulationScale() const {
+		auto &withoutSimulationScale() const {
 			return withoutSimulationScale_;
 		}
 	};
@@ -551,13 +551,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->addSignalScale(0, 3.3);
-		calibrationComputer->addSignalScale(1, 4.4);
 		setNoSimulation();
-		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.withoutSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.withoutSimulationScale().at(1));
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.withoutSimulationScale(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForNoSimulation) {
