@@ -227,6 +227,8 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	simulationFactory->makeFullSimulation({}, right_scale);
 	simulationFactory->makeHearingAidSimulation({}, left_scale);
 	simulationFactory->makeHearingAidSimulation({}, right_scale);
+	simulationFactory->makeSpatialization({},left_scale);
+	simulationFactory->makeSpatialization({}, right_scale);
 }
 
 void RefactoredModel::stopCalibration() {
