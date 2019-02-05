@@ -886,14 +886,9 @@ namespace {
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulationHearingAid().at(0).fullScaleLevel_dB_Spl
-		);
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulationHearingAid().at(1).fullScaleLevel_dB_Spl
+		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+			simulationFactory.fullSimulationHearingAid(),
+			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
