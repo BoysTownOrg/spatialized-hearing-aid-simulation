@@ -2,8 +2,6 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-
-
 class nsySpatialization : public INotSureYet {
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
@@ -125,7 +123,14 @@ public:
 		right_hs.prescription = std::move(rightPrescription_);
 	}
 
-	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader * reader, double level_dB_Spl) override {
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
+		return std::make_shared<ChannelProcessingGroup>(makeChannels(reader, level_dB_Spl));
+	}
+
+	std::vector<ChannelProcessingGroup::channel_processing_type> makeChannels(
+		AudioFrameReader *reader, 
+		double level_dB_Spl
+	) {
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
@@ -140,7 +145,7 @@ public:
 		right_fs.hearingAid = right_hs;
 		right_fs.spatialization = right_spatial;
 
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+		return { 
 			simulationFactory->makeFullSimulation(
 				left_fs, 
 				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
@@ -150,7 +155,6 @@ public:
 				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
 			) 
 		};
-		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
 
@@ -161,22 +165,28 @@ public:
 	nsyNoSimulation(
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationFactory
-	) :
+	) noexcept :
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
+		return std::make_shared<ChannelProcessingGroup>(makeChannels(reader, level_dB_Spl));
+	}
+
+	std::vector<ChannelProcessingGroup::channel_processing_type> makeChannels(
+		AudioFrameReader *reader, 
+		double level_dB_Spl
+	) {
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+		return { 
 			simulationFactory->makeWithoutSimulation(
 				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
 			), 
 			simulationFactory->makeWithoutSimulation(
 				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
-			) 
+			)
 		};
-		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
 
@@ -187,7 +197,7 @@ public:
 	NotSureYetFactory(
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationFactory
-	) :
+	) noexcept :
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
@@ -381,11 +391,20 @@ std::shared_ptr<INotSureYet> RefactoredModel::makeNsy(
 	common.windowSize = processing.windowSize;
 
 	if (processing.usingHearingAidSimulation && processing.usingSpatialization)
-		return nsyFactory->makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
+		return nsyFactory->makeFullSimulation(
+			std::move(brir_), 
+			std::move(common), 
+			std::move(leftPrescription_), 
+			std::move(rightPrescription_)
+		);
 	else if (processing.usingSpatialization)
-		return nsyFactory->makeSpatialization(brir_);
+		return nsyFactory->makeSpatialization(std::move(brir_));
 	else if (processing.usingHearingAidSimulation)
-		return nsyFactory->makeHearingAid(common, leftPrescription_, rightPrescription_);
+		return nsyFactory->makeHearingAid(
+			std::move(common), 
+			std::move(leftPrescription_), 
+			std::move(rightPrescription_)
+		);
 	else
 		return nsyFactory->makeNoSimulation();
 }
