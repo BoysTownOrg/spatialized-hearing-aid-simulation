@@ -114,7 +114,7 @@ namespace {
 			return fullSimulationScale_;
 		}
 
-		auto hearingAidSimulationScale() const {
+		auto &hearingAidSimulationScale() const {
 			return hearingAidSimulationScale_;
 		}
 
@@ -519,13 +519,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->addSignalScale(0, 3.3);
-		calibrationComputer->addSignalScale(1, 4.4);
 		setHearingAidSimulationOnly();
-		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.hearingAidSimulationScale().at(0));
-		assertEqual(4.4f, simulationFactory.hearingAidSimulationScale().at(1));
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.hearingAidSimulationScale(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForHearingAidSimulation) {
