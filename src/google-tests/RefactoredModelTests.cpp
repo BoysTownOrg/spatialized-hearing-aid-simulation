@@ -113,7 +113,7 @@ namespace {
 		auto &hearingAidSimulation() const {
 			return hearingAidSimulation_;
 		}
-		auto spatialization() const {
+		auto &spatialization() const {
 			return spatialization_;
 		}
 
@@ -472,6 +472,20 @@ namespace {
 			
 			assertEqual({ 5 * 2 }, left);
 			assertEqual({ 7 * 3 }, right);
+		}
+
+		void assertSpatializationFilterCoefficientsMatchBrirAfterCall(
+			const ArgumentCollection<
+				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization,
+			std::function<void(void)> f
+		) {
+			BrirReader::BinauralRoomImpulseResponse brir;
+			brir.left = { 1, 2 };
+			brir.right = { 3, 4 };
+			brirReader.setBrir(brir);
+			f();
+			assertEqual({ 1, 2, }, spatialization.at(0).filterCoefficients);
+			assertEqual({ 3, 4, }, spatialization.at(1).filterCoefficients);
 		}
 	};
 
@@ -1004,14 +1018,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
-		BrirReader::BinauralRoomImpulseResponse brir;
-		brir.left = { 1, 2 };
-		brir.right = { 3, 4 };
-		brirReader.setBrir(brir);
 		setSpatializationOnlyForTest();
-		playFirstTrialOfNewTest();
-		assertEqual({ 1, 2, }, simulationFactory.spatialization().at(0).filterCoefficients);
-		assertEqual({ 3, 4, }, simulationFactory.spatialization().at(1).filterCoefficients);
+		assertSpatializationFilterCoefficientsMatchBrirAfterCall(
+			simulationFactory.spatialization(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
