@@ -903,6 +903,17 @@ namespace {
 		);
 	}
 
+	TEST_F(
+		RefactoredModelTests, 
+		playCalibrationPassesFullScaleLevelToFactoryForFullSimulation
+	) {
+		setFullSimulationForCalibration();
+		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+			simulationFactory.fullSimulationHearingAid(),
+			[=]() { playCalibration(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
 		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
