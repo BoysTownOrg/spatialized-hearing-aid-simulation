@@ -825,11 +825,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
-		audioFrameReader->setSampleRate(1);
 		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(0).sampleRate);
-		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(1).sampleRate);
+		assertHearingAidSimulationSampleRateMatchesAudioReaderAfterCall(
+			simulationFactory.fullSimulationHearingAid(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
