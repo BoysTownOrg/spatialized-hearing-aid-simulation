@@ -435,6 +435,22 @@ namespace {
 			assertEqual(1, hearingAid.at(0).sampleRate);
 			assertEqual(1, hearingAid.at(1).sampleRate);
 		}
+
+		void assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+			const ArgumentCollection<
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
+			std::function<void(void)> f
+		) {
+			f();
+			assertEqual(
+				RefactoredModel::fullScaleLevel_dB_Spl, 
+				hearingAid.at(0).fullScaleLevel_dB_Spl
+			);
+			assertEqual(
+				RefactoredModel::fullScaleLevel_dB_Spl, 
+				hearingAid.at(1).fullScaleLevel_dB_Spl
+			);
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -854,6 +870,33 @@ namespace {
 		);
 	}
 
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
+	) {
+		setHearingAidSimulationOnlyForTest();
+		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
+		playTrialPassesFullScaleLevelToFactoryForFullSimulation
+	) {
+		setFullSimulationForTest();
+		playFirstTrialOfNewTest();
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.fullSimulationHearingAid().at(0).fullScaleLevel_dB_Spl
+		);
+		assertEqual(
+			RefactoredModel::fullScaleLevel_dB_Spl, 
+			simulationFactory.fullSimulationHearingAid().at(1).fullScaleLevel_dB_Spl
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
 		std::vector<std::shared_ptr<SignalProcessor>> fullSimulation = {
 			std::make_shared<MultipliesSamplesBy>(2.0f),
@@ -916,38 +959,6 @@ namespace {
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
-	}
-
-	TEST_F(
-		RefactoredModelTests, 
-		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
-	) {
-		setHearingAidSimulationOnlyForTest();
-		playFirstTrialOfNewTest();
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.hearingAidSimulation().at(0).fullScaleLevel_dB_Spl
-		);
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.hearingAidSimulation().at(1).fullScaleLevel_dB_Spl
-		);
-	}
-
-	TEST_F(
-		RefactoredModelTests, 
-		playTrialPassesFullScaleLevelToFactoryForFullSimulation
-	) {
-		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulationHearingAid().at(0).fullScaleLevel_dB_Spl
-		);
-		assertEqual(
-			RefactoredModel::fullScaleLevel_dB_Spl, 
-			simulationFactory.fullSimulationHearingAid().at(1).fullScaleLevel_dB_Spl
-		);
 	}
 
 	TEST_F(
