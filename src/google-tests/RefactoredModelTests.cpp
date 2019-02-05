@@ -307,6 +307,14 @@ namespace {
 		void assertCalibrationFactoryReceivesAudioFrameReader() {
 			EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
 		}
+
+		void assertCalibrationDigitalLevelsAfterCall(double &level, std::function<void(void)> f) {
+			audioFrameReader->setChannels(2);
+			level = 65;
+			f();
+			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
+			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -469,19 +477,17 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
-		audioFrameReader->setChannels(2);
-		trialParameters.level_dB_Spl = 65;
-		playFirstTrialOfNewTest();
-		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
-		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+		assertCalibrationDigitalLevelsAfterCall(
+			trialParameters.level_dB_Spl,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesDigitalLevelToCalibrationComputer) {
-		audioFrameReader->setChannels(2);
-		calibrationParameters.level_dB_Spl = 65;
-		playCalibration();
-		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
-		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+		assertCalibrationDigitalLevelsAfterCall(
+			calibrationParameters.level_dB_Spl,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
