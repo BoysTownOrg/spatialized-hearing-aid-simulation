@@ -507,6 +507,18 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests,
+		playCalibrationPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
+		calibrationParameters.processing.rightDslPrescriptionFilePath = "b";
+		playCalibration();
+		assertTrue(prescriptionReader.filePaths().contains("a"));
+		assertTrue(prescriptionReader.filePaths().contains("b"));
+	}
+
+	TEST_F(
+		RefactoredModelTests,
 		prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
 		testParameters.processing.usingHearingAidSimulation = false;
