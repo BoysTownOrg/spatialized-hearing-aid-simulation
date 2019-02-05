@@ -1084,6 +1084,12 @@ namespace {
 		assertAudioLoaderHasNotBeenModified();
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationDoesNotAlterLoaderWhenPlayerPlaying) {
+		audioPlayer.setPlaying();
+		playCalibration();
+		assertAudioLoaderHasNotBeenModified();
+	}
+
 	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
 		audioPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
 		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
