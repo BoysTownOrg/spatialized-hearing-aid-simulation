@@ -456,6 +456,14 @@ namespace {
 		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesDigitalLevelToCalibrationComputer) {
+		audioFrameReader->setChannels(2);
+		calibrationParameters.level_dB_Spl = 65;
+		playCalibration();
+		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
+		assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+	}
+
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
 		audioFrameReader->setChannels(2);
 		calibrationComputer->addSignalScale(0, 3.3);
