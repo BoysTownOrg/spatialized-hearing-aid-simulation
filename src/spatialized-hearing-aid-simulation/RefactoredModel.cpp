@@ -207,7 +207,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, testParameters.processing, p.audioDevice);
+	prepareAudioPlayer(*reader, testParameters.processing, std::move(p.audioDevice));
 	player->play();
 	perceptionTest->advanceTrial();
 }
@@ -260,9 +260,9 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	}
 
 	NotSureYet notSure{
-		brir_,
-		leftPrescription_,
-		rightPrescription_,
+		std::move(brir_),
+		std::move(leftPrescription_),
+		std::move(rightPrescription_),
 		p.processing,
 		simulationFactory,
 		calibrationFactory
