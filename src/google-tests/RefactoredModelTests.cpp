@@ -102,7 +102,7 @@ namespace {
 			return withoutSimulationProcessors.pop_front();
 		}
 
-		auto fullSimulationSpatialization() const {
+		auto &fullSimulationSpatialization() const {
 			return fullSimulationSpatialization_;
 		}
 		
@@ -1029,14 +1029,11 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
-		BrirReader::BinauralRoomImpulseResponse brir;
-		brir.left = { 1, 2 };
-		brir.right = { 3, 4 };
-		brirReader.setBrir(brir);
 		setFullSimulationForTest();
-		playFirstTrialOfNewTest();
-		assertEqual({ 1, 2, }, simulationFactory.fullSimulationSpatialization().at(0).filterCoefficients);
-		assertEqual({ 3, 4, }, simulationFactory.fullSimulationSpatialization().at(1).filterCoefficients);
+		assertSpatializationFilterCoefficientsMatchBrirAfterCall(
+			simulationFactory.fullSimulationSpatialization(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
