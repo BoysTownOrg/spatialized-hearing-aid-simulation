@@ -218,15 +218,25 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	player->play();
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
 	reader->reset();
-	readPrescription(p.processing.leftDslPrescriptionFilePath);
+	auto leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
+	auto rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
+
+	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+
+	auto left_hs = both_hs;
+	left_hs.prescription = leftPrescription_;
+
+	auto right_hs = both_hs;
+	right_hs.prescription = rightPrescription_;
+
 	auto computer = calibrationFactory->make(reader.get());
 	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
 	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
 	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
 	simulationFactory->makeFullSimulation({}, left_scale);
 	simulationFactory->makeFullSimulation({}, right_scale);
-	simulationFactory->makeHearingAidSimulation({}, left_scale);
-	simulationFactory->makeHearingAidSimulation({}, right_scale);
+	simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
+	simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
 	simulationFactory->makeSpatialization({},left_scale);
 	simulationFactory->makeSpatialization({}, right_scale);
 	simulationFactory->makeWithoutSimulation(left_scale);
