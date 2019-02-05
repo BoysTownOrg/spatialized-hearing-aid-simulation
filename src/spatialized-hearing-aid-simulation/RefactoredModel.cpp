@@ -249,8 +249,8 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
 
 	if (p.processing.usingSpatialization) {
-		simulationFactory->makeSpatialization({}, left_scale);
-		simulationFactory->makeSpatialization({}, right_scale);
+		left_channel = simulationFactory->makeSpatialization({}, left_scale);
+		right_channel = simulationFactory->makeSpatialization({}, right_scale);
 	}
 	if (p.processing.usingHearingAidSimulation) {
 		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
