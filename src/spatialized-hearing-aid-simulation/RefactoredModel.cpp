@@ -221,8 +221,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	readPrescription(p.processing.leftDslPrescriptionFilePath);
 	auto computer = calibrationFactory->make(reader.get());
 	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
-	computer->signalScale(-1, digitalLevel);
-	computer->signalScale(-1, digitalLevel);
+	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
+	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
+	simulationFactory->makeFullSimulation({}, left_scale);
+	simulationFactory->makeFullSimulation({}, right_scale);
 }
 
 void RefactoredModel::stopCalibration() {
