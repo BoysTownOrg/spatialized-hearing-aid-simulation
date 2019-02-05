@@ -265,8 +265,6 @@ public:
 
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
-		auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
-		auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
 		
 		ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 		left_fs.hearingAid = left_hs;
@@ -276,10 +274,16 @@ public:
 		right_fs.hearingAid = right_hs;
 		right_fs.spatialization = right_spatial;
 
-		auto left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
-		auto right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
-
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
+		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+			simulationFactory->makeFullSimulation(
+				left_fs, 
+				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+			), 
+			simulationFactory->makeFullSimulation(
+				right_fs, 
+				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+			) 
+		};
 		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
@@ -295,15 +299,17 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
-	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader * reader, double level_dB_Spl) override
-	{
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
-		auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
-		auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-		auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
-		auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
+		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+			simulationFactory->makeWithoutSimulation(
+				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+			), 
+			simulationFactory->makeWithoutSimulation(
+				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+			) 
+		};
 		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
@@ -319,9 +325,12 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
-	std::shared_ptr<INotSureYet> makeSpatialization(BrirReader::BinauralRoomImpulseResponse brir) override
-	{
-		return std::make_shared<nsySpatialization>(brir, simulationFactory, calibrationFactory);
+	std::shared_ptr<INotSureYet> makeSpatialization(BrirReader::BinauralRoomImpulseResponse brir) override {
+		return std::make_shared<nsySpatialization>(
+			std::move(brir), 
+			simulationFactory, 
+			calibrationFactory
+		);
 	}
 	
 	std::shared_ptr<INotSureYet> makeHearingAid(
@@ -330,7 +339,13 @@ public:
 		PrescriptionReader::Dsl rightPrescription_
 	) override
 	{
-		return std::make_shared<nsyHearingAid>(common, leftPrescription_, rightPrescription_, simulationFactory, calibrationFactory);
+		return std::make_shared<nsyHearingAid>(
+			std::move(common), 
+			std::move(leftPrescription_), 
+			std::move(rightPrescription_), 
+			simulationFactory, 
+			calibrationFactory
+		);
 	}
 
 	std::shared_ptr<INotSureYet> makeFullSimulation(
@@ -340,12 +355,21 @@ public:
 		PrescriptionReader::Dsl rightPrescription_
 	) override
 	{
-		return std::make_shared<nsyFullSimulation>(brir, common, leftPrescription_, rightPrescription_, simulationFactory, calibrationFactory);
+		return std::make_shared<nsyFullSimulation>(
+			std::move(brir), 
+			std::move(common), 
+			std::move(leftPrescription_), 
+			std::move(rightPrescription_), 
+			simulationFactory, 
+			calibrationFactory
+		);
 	}
 
-	std::shared_ptr<INotSureYet> makeNoSimulation() override
-	{
-		return std::make_shared<nsyNoSimulation>(simulationFactory, calibrationFactory);
+	std::shared_ptr<INotSureYet> makeNoSimulation() override {
+		return std::make_shared<nsyNoSimulation>(
+			simulationFactory, 
+			calibrationFactory
+		);
 	}
 };
 
