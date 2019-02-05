@@ -89,4 +89,10 @@ private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
+	std::shared_ptr<INotSureYet> makeNsy(
+		BrirReader::BinauralRoomImpulseResponse brir_,
+		PrescriptionReader::Dsl leftPrescription_,
+		PrescriptionReader::Dsl rightPrescription_,
+		ProcessingParameters processing
+	);
 };

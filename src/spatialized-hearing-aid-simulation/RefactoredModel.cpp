@@ -388,20 +388,41 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 
-	NotSureYet notSure{
+	auto notSure = makeNsy(
 		brir,
 		leftPrescription,
 		rightPrescription,
-		testParameters.processing,
-		nsyFactory.get()
-	};
+		testParameters.processing
+	);
 	auto reader = makeReader(perceptionTest->nextStimulus());
-	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));
+	loader->setProcessor(notSure->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
 	prepareAudioPlayer(*reader, testParameters.processing, std::move(p.audioDevice));
 	player->play();
 	perceptionTest->advanceTrial();
+}
+
+std::shared_ptr<INotSureYet> RefactoredModel::makeNsy(
+	BrirReader::BinauralRoomImpulseResponse brir_,
+	PrescriptionReader::Dsl leftPrescription_,
+	PrescriptionReader::Dsl rightPrescription_,
+	ProcessingParameters processing
+) {
+	INotSureYet::CommonHearingAidSimulation common;
+	common.attack_ms = processing.attack_ms;
+	common.release_ms = processing.release_ms;
+	common.chunkSize = processing.chunkSize;
+	common.windowSize = processing.windowSize;
+
+	if (processing.usingHearingAidSimulation && processing.usingSpatialization)
+		return nsyFactory->makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
+	else if (processing.usingSpatialization)
+		return nsyFactory->makeSpatialization(brir_);
+	else if (processing.usingHearingAidSimulation)
+		return nsyFactory->makeHearingAid(common, leftPrescription_, rightPrescription_);
+	else
+		return nsyFactory->makeNoSimulation();
 }
 
 std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
@@ -451,15 +472,14 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
 
-	NotSureYet notSure{
-		std::move(brir_),
-		std::move(leftPrescription_),
-		std::move(rightPrescription_),
-		p.processing,
-		nsyFactory.get()
-	};
+	auto notSure = makeNsy(
+		brir_,
+		leftPrescription_,
+		rightPrescription_,
+		p.processing
+	);
 	auto reader = makeReader(p.audioFilePath);
-	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));
+	loader->setProcessor(notSure->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
