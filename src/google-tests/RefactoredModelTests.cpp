@@ -238,24 +238,44 @@ namespace {
 			playTrial();
 		}
 
-		void setFullSimulation() noexcept {
+		void setFullSimulationForTest() noexcept {
 			testParameters.processing.usingHearingAidSimulation = true;
 			testParameters.processing.usingSpatialization = true;
 		}
 
-		void setHearingAidSimulationOnly() noexcept {
+		void setHearingAidSimulationOnlyForTest() noexcept {
 			testParameters.processing.usingHearingAidSimulation = true;
 			testParameters.processing.usingSpatialization = false;
 		}
 
-		void setSpatializationOnly() noexcept {
+		void setSpatializationOnlyForTest() noexcept {
 			testParameters.processing.usingSpatialization = true;
 			testParameters.processing.usingHearingAidSimulation = false;
 		}
 
-		void setNoSimulation() noexcept {
+		void setNoSimulationForTest() noexcept {
 			testParameters.processing.usingSpatialization = false;
 			testParameters.processing.usingHearingAidSimulation = false;
+		}
+
+		void setFullSimulationForCalibration() noexcept {
+			calibrationParameters.processing.usingHearingAidSimulation = true;
+			calibrationParameters.processing.usingSpatialization = true;
+		}
+
+		void setHearingAidSimulationOnlyForCalibration() noexcept {
+			calibrationParameters.processing.usingHearingAidSimulation = true;
+			calibrationParameters.processing.usingSpatialization = false;
+		}
+
+		void setSpatializationOnlyForCalibration() noexcept {
+			calibrationParameters.processing.usingSpatialization = true;
+			calibrationParameters.processing.usingHearingAidSimulation = false;
+		}
+
+		void setNoSimulationForCalibration() noexcept {
+			calibrationParameters.processing.usingSpatialization = false;
+			calibrationParameters.processing.usingHearingAidSimulation = false;
 		}
 
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
@@ -554,7 +574,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
-		setFullSimulation();
+		setFullSimulationForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
 			[=]() { playFirstTrialOfNewTest(); }
@@ -562,7 +582,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForFullSimulation) {
-		setFullSimulation();
+		setFullSimulationForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
 			[=]() { playCalibration(); }
@@ -570,7 +590,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
 			[=]() { playFirstTrialOfNewTest(); }
@@ -578,7 +598,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForHearingAidSimulation) {
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
 			[=]() { playCalibration(); }
@@ -586,7 +606,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
-		setSpatializationOnly();
+		setSpatializationOnlyForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
 			[=]() { playFirstTrialOfNewTest(); }
@@ -594,7 +614,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForSpatialization) {
-		setSpatializationOnly();
+		setSpatializationOnlyForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
 			[=]() { playCalibration(); }
@@ -602,7 +622,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
-		setNoSimulation();
+		setNoSimulationForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
 			[=]() { playFirstTrialOfNewTest(); }
@@ -610,7 +630,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForNoSimulation) {
-		setNoSimulation();
+		setNoSimulationForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
 			[=]() { playCalibration(); }
@@ -621,7 +641,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
 			testParameters.processing, 
 			simulationFactory.hearingAidSimulation(),
@@ -633,7 +653,7 @@ namespace {
 		RefactoredModelTests, 
 		playCalibrationPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
 			calibrationParameters.processing, 
 			simulationFactory.hearingAidSimulation(),
@@ -645,7 +665,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesPrescriptionsToFactoryForFullSimulation
 	) {
-		setFullSimulation();
+		setFullSimulationForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
 			testParameters.processing, 
 			simulationFactory.fullSimulationHearingAid(),
@@ -657,7 +677,7 @@ namespace {
 		RefactoredModelTests, 
 		playCalibrationPassesPrescriptionsToFactoryForFullSimulation
 	) {
-		setFullSimulation();
+		setFullSimulationForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
 			calibrationParameters.processing, 
 			simulationFactory.fullSimulationHearingAid(),
@@ -703,7 +723,7 @@ namespace {
 		testParameters.processing.release_ms = 2;
 		testParameters.processing.chunkSize = 4;
 		testParameters.processing.windowSize = 8;
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.hearingAidSimulation().at(0);
 		assertEqual(1.0, left.attack_ms);
@@ -725,7 +745,7 @@ namespace {
 		testParameters.processing.release_ms = 2;
 		testParameters.processing.chunkSize = 4;
 		testParameters.processing.windowSize = 8;
-		setFullSimulation();
+		setFullSimulationForTest();
 		playFirstTrialOfNewTest();
 		auto left = simulationFactory.fullSimulationHearingAid().at(0);
 		assertEqual(1.0, left.attack_ms);
@@ -744,7 +764,7 @@ namespace {
 		playTrialPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
 		audioFrameReader->setSampleRate(1);
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		playFirstTrialOfNewTest();
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(0).sampleRate);
 		assertEqual(1, simulationFactory.hearingAidSimulation().at(1).sampleRate);
@@ -755,7 +775,7 @@ namespace {
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		audioFrameReader->setSampleRate(1);
-		setFullSimulation();
+		setFullSimulationForTest();
 		playFirstTrialOfNewTest();
 		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(0).sampleRate);
 		assertEqual(1, simulationFactory.fullSimulationHearingAid().at(1).sampleRate);
@@ -771,7 +791,7 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		processWhenPlayerPlays(channels);
-		setFullSimulation();
+		setFullSimulationForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -787,7 +807,7 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		processWhenPlayerPlays(channels);
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -803,7 +823,7 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		processWhenPlayerPlays(channels);
-		setSpatializationOnly();
+		setSpatializationOnlyForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -819,7 +839,7 @@ namespace {
 		buffer_type right = { 7 };
 		std::vector<channel_type> channels = { left, right };
 		processWhenPlayerPlays(channels);
-		setNoSimulation();
+		setNoSimulationForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 5 * 2 }, left);
 		assertEqual({ 7 * 3 }, right);
@@ -829,7 +849,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnly();
+		setHearingAidSimulationOnlyForTest();
 		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
@@ -845,7 +865,7 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
-		setFullSimulation();
+		setFullSimulationForTest();
 		playFirstTrialOfNewTest();
 		assertEqual(
 			RefactoredModel::fullScaleLevel_dB_Spl, 
@@ -865,7 +885,7 @@ namespace {
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
-		setSpatializationOnly();
+		setSpatializationOnlyForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.spatialization().at(0).filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.spatialization().at(1).filterCoefficients);
@@ -879,7 +899,7 @@ namespace {
 		brir.left = { 1, 2 };
 		brir.right = { 3, 4 };
 		brirReader.setBrir(brir);
-		setFullSimulation();
+		setFullSimulationForTest();
 		playFirstTrialOfNewTest();
 		assertEqual({ 1, 2, }, simulationFactory.fullSimulationSpatialization().at(0).filterCoefficients);
 		assertEqual({ 3, 4, }, simulationFactory.fullSimulationSpatialization().at(1).filterCoefficients);
