@@ -534,6 +534,16 @@ namespace {
 		assertEqual(4.4f, simulationFactory.withoutSimulationScale().at(1));
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForNoSimulation) {
+		audioFrameReader->setChannels(2);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
+		setNoSimulation();
+		playCalibration();
+		assertEqual(3.3f, simulationFactory.withoutSimulationScale().at(0));
+		assertEqual(4.4f, simulationFactory.withoutSimulationScale().at(1));
+	}
+
 	TEST_F(
 		RefactoredModelTests, 
 		playTrialPassesLeftPrescriptionToFactoryForHearingAidSimulation
