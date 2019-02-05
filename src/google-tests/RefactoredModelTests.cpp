@@ -545,6 +545,16 @@ namespace {
 		assertEqual("a", brirReader.filePath());
 	}
 
+	TEST_F(
+		RefactoredModelTests,
+		playCalibrationPassesBrirFilePathToReaderWhenUsingSpatialization
+	) {
+		calibrationParameters.processing.usingSpatialization = true;
+		calibrationParameters.processing.brirFilePath = "a";
+		playCalibration();
+		assertEqual("a", brirReader.filePath());
+	}
+
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
 		testParameters.processing.usingSpatialization = false;
 		prepareNewTest();
