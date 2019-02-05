@@ -960,6 +960,14 @@ namespace {
 		);
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationAssignsHearingAidSimulationProcessorsToAudioLoader) {
+		setHearingAidSimulationOnlyForCalibration();
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.hearingAidSimulationProcessors,
+			[=]() { playCalibration(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
 		setSpatializationOnlyForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
