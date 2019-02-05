@@ -212,7 +212,7 @@ bool RefactoredModel::testComplete() {
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
-	readBrir(p.processing.brirFilePath);
+	auto brir_ = readBrir(p.processing.brirFilePath);
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
 	prepareAudioPlayer(*reader, p.processing, p.audioDevice);
@@ -234,6 +234,12 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto right_hs = both_hs;
 	right_hs.prescription = rightPrescription_;
 
+	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
+	left_spatial.filterCoefficients = brir_.left;
+
+	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
+	right_spatial.filterCoefficients = brir_.right;
+
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
 
@@ -249,8 +255,8 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
 
 	if (p.processing.usingSpatialization) {
-		left_channel = simulationFactory->makeSpatialization({}, left_scale);
-		right_channel = simulationFactory->makeSpatialization({}, right_scale);
+		left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
+		right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 	}
 	if (p.processing.usingHearingAidSimulation) {
 		left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
