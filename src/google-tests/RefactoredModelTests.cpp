@@ -514,6 +514,16 @@ namespace {
 		assertEqual(4.4f, simulationFactory.spatializationScale().at(1));
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForSpatialization) {
+		audioFrameReader->setChannels(2);
+		calibrationComputer->addSignalScale(0, 3.3);
+		calibrationComputer->addSignalScale(1, 4.4);
+		setSpatializationOnly();
+		playCalibration();
+		assertEqual(3.3f, simulationFactory.spatializationScale().at(0));
+		assertEqual(4.4f, simulationFactory.spatializationScale().at(1));
+	}
+
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
 		audioFrameReader->setChannels(2);
 		calibrationComputer->addSignalScale(0, 3.3);
