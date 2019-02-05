@@ -823,6 +823,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playCalibrationPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
+	) {
+		setHearingAidSimulationOnlyForCalibration();
+		assertHearingAidSimulationSampleRateMatchesAudioReaderAfterCall(
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
