@@ -239,10 +239,12 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
 	auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
 	auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-	simulationFactory->makeFullSimulation(left_fs, left_scale);
-	simulationFactory->makeFullSimulation(right_fs, right_scale);
-	simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
-	simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
+	if (p.processing.usingHearingAidSimulation) {
+		simulationFactory->makeFullSimulation(left_fs, left_scale);
+		simulationFactory->makeFullSimulation(right_fs, right_scale);
+		simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
+		simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
+	}
 	simulationFactory->makeSpatialization({},left_scale);
 	simulationFactory->makeSpatialization({}, right_scale);
 	simulationFactory->makeWithoutSimulation(left_scale);
