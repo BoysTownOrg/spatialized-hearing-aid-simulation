@@ -68,13 +68,20 @@ public:
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
+		return std::make_shared<ChannelProcessingGroup>(makeChannels(reader, level_dB_Spl));
+	}
+
+	std::vector<ChannelProcessingGroup::channel_processing_type> makeChannels(
+		AudioFrameReader *reader, 
+		double level_dB_Spl
+	) {
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
 		auto computer = calibrationFactory->make(reader);
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
 
-		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ 
+		return { 
 			simulationFactory->makeHearingAidSimulation(
 				left_hs, 
 				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
@@ -84,7 +91,6 @@ public:
 				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
 			) 
 		};
-		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
 };
 
