@@ -118,7 +118,7 @@ namespace {
 			return hearingAidSimulationScale_;
 		}
 
-		auto spatializationScale() const {
+		auto &spatializationScale() const {
 			return spatializationScale_;
 		}
 
@@ -535,13 +535,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
-		audioFrameReader->setChannels(2);
-		calibrationComputer->addSignalScale(0, 3.3);
-		calibrationComputer->addSignalScale(1, 4.4);
 		setSpatializationOnly();
-		playFirstTrialOfNewTest();
-		assertEqual(3.3f, simulationFactory.spatializationScale().at(0));
-		assertEqual(4.4f, simulationFactory.spatializationScale().at(1));
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.spatializationScale(),
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForSpatialization) {
