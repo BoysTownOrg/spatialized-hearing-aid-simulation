@@ -2,152 +2,7 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-// The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
-double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
-int const RefactoredModel::defaultFramesPerBuffer = 1024;
 
-RefactoredModel::RefactoredModel(
-	SpeechPerceptionTest *perceptionTest,
-	IAudioPlayer *player,
-	AudioLoader *loader,
-	AudioFrameReaderFactory *audioReaderFactory,
-	PrescriptionReader *prescriptionReader,
-	BrirReader *brirReader,
-	ISpatializedHearingAidSimulationFactory *simulationFactory,
-	ICalibrationComputerFactory *calibrationComputer
-) :
-	prescriptionReader{ prescriptionReader },
-	brirReader{ brirReader },
-	perceptionTest{ perceptionTest },
-	audioReaderFactory{ audioReaderFactory },
-	player{ player },
-	loader{ loader },
-	simulationFactory{ simulationFactory },
-	calibrationFactory{ calibrationComputer }
-{
-	player->setAudioLoader(loader);
-}
-
-void RefactoredModel::prepareNewTest(TestParameters p) {
-	checkAndStore(p);
-	prepareNewTest_(std::move(p));
-}
-
-void RefactoredModel::checkAndStore(TestParameters p) {
-	if (p.processing.usingSpatialization)
-		checkAndStoreBrir(p);
-	if (p.processing.usingHearingAidSimulation)
-		checkAndStorePrescriptions(p);
-	testParameters = std::move(p);
-}
-
-static std::string coefficientErrorMessage(std::string which) {
-	return 
-		"The " + which + " BRIR coefficients are empty, "
-		"therefore a filter operation cannot be defined.";
-}
-
-void RefactoredModel::checkAndStoreBrir(TestParameters p) {
-	brir = readBrir(std::move(p.processing.brirFilePath));
-	if (brir.left.empty())
-		throw RequestFailure{ coefficientErrorMessage("left") };
-	if (brir.right.empty())
-		throw RequestFailure{ coefficientErrorMessage("right") };
-}
-
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string filePath) {
-	try {
-		return brirReader->read(filePath);
-	}
-	catch (const BrirReader::ReadFailure &) {
-		throw RequestFailure{ "Unable to read '" + filePath + "'." };
-	}
-}
-
-void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
-	readPrescriptions(p);
-	checkSizeIsPowerOfTwo(p.processing.chunkSize);
-	checkSizeIsPowerOfTwo(p.processing.windowSize);
-}
-
-void RefactoredModel::readPrescriptions(TestParameters p) {
-	leftPrescription = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
-	rightPrescription = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
-}
-
-PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
-	try {
-		return prescriptionReader->read(filePath);
-	}
-	catch (const PrescriptionReader::ReadFailure &) {
-		throw RequestFailure{ "Unable to read '" + filePath + "'." };
-	}
-}
-
-static constexpr bool powerOfTwo(int n) noexcept {
-	return n > 0 && (n & (n - 1)) == 0;
-}
-
-static std::string windowChunkSizesErrorMessage(int offender) {
-	return
-		"Both the chunk size and window size must be powers of two; " +
-		std::to_string(offender) + " is not a power of two.";
-}
-
-void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
-	if (!powerOfTwo(size))
-		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
-}
-
-void RefactoredModel::prepareNewTest_(TestParameters p) {
-	SpeechPerceptionTest::TestParameters adapted;
-	adapted.audioDirectory = std::move(p.audioDirectory);
-	adapted.testFilePath = std::move(p.testFilePath);
-	adapted.subjectId = std::move(p.subjectId);
-	adapted.testerId = std::move(p.testerId);
-	try {
-		perceptionTest->prepareNewTest(std::move(adapted));
-	}
-	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
-		throw RequestFailure{ e.what() };
-	}
-}
-
-class INotSureYet {
-public:
-	INTERFACE_OPERATIONS(INotSureYet);
-
-	struct CommonHearingAidSimulation {
-		double attack_ms;
-		double release_ms;
-		int windowSize;
-		int chunkSize;
-	};
-	virtual std::shared_ptr<AudioFrameProcessor> make(
-		AudioFrameReader *reader,
-		double level_dB_Spl
-	) = 0;
-};
-
-class INotSureYetFactory {
-public:
-	INTERFACE_OPERATIONS(INotSureYetFactory);
-	virtual std::shared_ptr<INotSureYet> makeSpatialization(
-		BrirReader::BinauralRoomImpulseResponse) = 0;
-
-	virtual std::shared_ptr<INotSureYet> makeHearingAid(
-		INotSureYet::CommonHearingAidSimulation,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_) = 0;
-
-	virtual std::shared_ptr<INotSureYet> makeFullSimulation(
-		BrirReader::BinauralRoomImpulseResponse,
-		INotSureYet::CommonHearingAidSimulation,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_) = 0;
-
-	virtual std::shared_ptr<INotSureYet> makeNoSimulation() = 0;
-};
 
 class nsySpatialization : public INotSureYet {
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
@@ -392,12 +247,9 @@ public:
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
 		RefactoredModel::ProcessingParameters processing,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationFactory
+		INotSureYetFactory *factory
 	)
 	{
-		NotSureYetFactory factory{simulationFactory, calibrationFactory};
-
 		INotSureYet::CommonHearingAidSimulation common;
 		common.attack_ms = processing.attack_ms;
 		common.release_ms = processing.release_ms;
@@ -405,13 +257,13 @@ public:
 		common.windowSize = processing.windowSize;
 
 		if (processing.usingHearingAidSimulation && processing.usingSpatialization)
-			nsy = factory.makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
+			nsy = factory->makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
 		else if (processing.usingSpatialization)
-			nsy = factory.makeSpatialization(brir_);
+			nsy = factory->makeSpatialization(brir_);
 		else if (processing.usingHearingAidSimulation)
-			nsy = factory.makeHearingAid(common, leftPrescription_, rightPrescription_);
+			nsy = factory->makeHearingAid(common, leftPrescription_, rightPrescription_);
 		else
-			nsy = factory.makeNoSimulation();
+			nsy = factory->makeNoSimulation();
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(
@@ -422,6 +274,116 @@ public:
 	}
 };
 
+// The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
+double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
+int const RefactoredModel::defaultFramesPerBuffer = 1024;
+
+RefactoredModel::RefactoredModel(
+	SpeechPerceptionTest *perceptionTest,
+	IAudioPlayer *player,
+	AudioLoader *loader,
+	AudioFrameReaderFactory *audioReaderFactory,
+	PrescriptionReader *prescriptionReader,
+	BrirReader *brirReader,
+	ISpatializedHearingAidSimulationFactory *simulationFactory,
+	ICalibrationComputerFactory *calibrationFactory
+) :
+	prescriptionReader{ prescriptionReader },
+	brirReader{ brirReader },
+	perceptionTest{ perceptionTest },
+	audioReaderFactory{ audioReaderFactory },
+	player{ player },
+	loader{ loader },
+	nsyFactory{std::make_shared<NotSureYetFactory>(simulationFactory, calibrationFactory)}
+{
+	player->setAudioLoader(loader);
+}
+
+void RefactoredModel::prepareNewTest(TestParameters p) {
+	checkAndStore(p);
+	prepareNewTest_(std::move(p));
+}
+
+void RefactoredModel::checkAndStore(TestParameters p) {
+	if (p.processing.usingSpatialization)
+		checkAndStoreBrir(p);
+	if (p.processing.usingHearingAidSimulation)
+		checkAndStorePrescriptions(p);
+	testParameters = std::move(p);
+}
+
+static std::string coefficientErrorMessage(std::string which) {
+	return 
+		"The " + which + " BRIR coefficients are empty, "
+		"therefore a filter operation cannot be defined.";
+}
+
+void RefactoredModel::checkAndStoreBrir(TestParameters p) {
+	brir = readBrir(std::move(p.processing.brirFilePath));
+	if (brir.left.empty())
+		throw RequestFailure{ coefficientErrorMessage("left") };
+	if (brir.right.empty())
+		throw RequestFailure{ coefficientErrorMessage("right") };
+}
+
+BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string filePath) {
+	try {
+		return brirReader->read(filePath);
+	}
+	catch (const BrirReader::ReadFailure &) {
+		throw RequestFailure{ "Unable to read '" + filePath + "'." };
+	}
+}
+
+void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
+	readPrescriptions(p);
+	checkSizeIsPowerOfTwo(p.processing.chunkSize);
+	checkSizeIsPowerOfTwo(p.processing.windowSize);
+}
+
+void RefactoredModel::readPrescriptions(TestParameters p) {
+	leftPrescription = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
+	rightPrescription = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
+}
+
+PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
+	try {
+		return prescriptionReader->read(filePath);
+	}
+	catch (const PrescriptionReader::ReadFailure &) {
+		throw RequestFailure{ "Unable to read '" + filePath + "'." };
+	}
+}
+
+static constexpr bool powerOfTwo(int n) noexcept {
+	return n > 0 && (n & (n - 1)) == 0;
+}
+
+static std::string windowChunkSizesErrorMessage(int offender) {
+	return
+		"Both the chunk size and window size must be powers of two; " +
+		std::to_string(offender) + " is not a power of two.";
+}
+
+void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
+	if (!powerOfTwo(size))
+		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
+}
+
+void RefactoredModel::prepareNewTest_(TestParameters p) {
+	SpeechPerceptionTest::TestParameters adapted;
+	adapted.audioDirectory = std::move(p.audioDirectory);
+	adapted.testFilePath = std::move(p.testFilePath);
+	adapted.subjectId = std::move(p.subjectId);
+	adapted.testerId = std::move(p.testerId);
+	try {
+		perceptionTest->prepareNewTest(std::move(adapted));
+	}
+	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
+		throw RequestFailure{ e.what() };
+	}
+}
+
 void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
@@ -431,8 +393,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 		leftPrescription,
 		rightPrescription,
 		testParameters.processing,
-		simulationFactory,
-		calibrationFactory
+		nsyFactory.get()
 	};
 	auto reader = makeReader(perceptionTest->nextStimulus());
 	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));
@@ -495,8 +456,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		std::move(leftPrescription_),
 		std::move(rightPrescription_),
 		p.processing,
-		simulationFactory,
-		calibrationFactory
+		nsyFactory.get()
 	};
 	auto reader = makeReader(p.audioFilePath);
 	loader->setProcessor(notSure.make(reader.get(), p.level_dB_Spl));

@@ -11,6 +11,42 @@
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 
+class INotSureYet {
+public:
+	INTERFACE_OPERATIONS(INotSureYet);
+
+	struct CommonHearingAidSimulation {
+		double attack_ms;
+		double release_ms;
+		int windowSize;
+		int chunkSize;
+	};
+	virtual std::shared_ptr<AudioFrameProcessor> make(
+		AudioFrameReader *reader,
+		double level_dB_Spl
+	) = 0;
+};
+
+class INotSureYetFactory {
+public:
+	INTERFACE_OPERATIONS(INotSureYetFactory);
+	virtual std::shared_ptr<INotSureYet> makeSpatialization(
+		BrirReader::BinauralRoomImpulseResponse) = 0;
+
+	virtual std::shared_ptr<INotSureYet> makeHearingAid(
+		INotSureYet::CommonHearingAidSimulation,
+		PrescriptionReader::Dsl leftPrescription_,
+		PrescriptionReader::Dsl rightPrescription_) = 0;
+
+	virtual std::shared_ptr<INotSureYet> makeFullSimulation(
+		BrirReader::BinauralRoomImpulseResponse,
+		INotSureYet::CommonHearingAidSimulation,
+		PrescriptionReader::Dsl leftPrescription_,
+		PrescriptionReader::Dsl rightPrescription_) = 0;
+
+	virtual std::shared_ptr<INotSureYet> makeNoSimulation() = 0;
+};
+
 class RefactoredModel : public Model {
 	PrescriptionReader::Dsl leftPrescription{};
 	PrescriptionReader::Dsl rightPrescription{};
@@ -22,8 +58,7 @@ class RefactoredModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationFactory;
+	std::shared_ptr<INotSureYetFactory> nsyFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
