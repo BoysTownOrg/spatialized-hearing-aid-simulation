@@ -303,6 +303,10 @@ namespace {
 				audioPlayer.preparation().framesPerBuffer
 			);
 		}
+
+		void assertCalibrationFactoryReceivesAudioFrameReader() {
+			EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+		}
 	};
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
@@ -456,12 +460,12 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
 		playTrial();
-		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToCalibrationFactory) {
 		playCalibration();
-		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
