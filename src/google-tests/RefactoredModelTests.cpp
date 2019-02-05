@@ -765,6 +765,18 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		playCalibrationPassesCompressionParametersToFactoryForHearingAidSimulation
+	) {
+		setHearingAidSimulationOnlyForCalibration();
+		assertHearingAidCompressionParametersMatchAfterCall(
+			calibrationParameters.processing,
+			simulationFactory.hearingAidSimulation(),
+			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
