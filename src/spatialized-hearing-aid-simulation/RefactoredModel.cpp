@@ -242,9 +242,11 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
 	left_fs.hearingAid = left_hs;
+	left_fs.spatialization = left_spatial;
 
 	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 	right_fs.hearingAid = right_hs;
+	right_fs.spatialization = right_spatial;
 
 	auto computer = calibrationFactory->make(reader.get());
 	const auto digitalLevel = p.level_dB_Spl - fullScaleLevel_dB_Spl;
