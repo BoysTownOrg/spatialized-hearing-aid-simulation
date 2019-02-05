@@ -239,41 +239,6 @@ public:
 	}
 };
 
-class NotSureYet {
-	std::shared_ptr<INotSureYet> nsy{};
-public:
-	NotSureYet(
-		BrirReader::BinauralRoomImpulseResponse brir_,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_,
-		RefactoredModel::ProcessingParameters processing,
-		INotSureYetFactory *factory
-	)
-	{
-		INotSureYet::CommonHearingAidSimulation common;
-		common.attack_ms = processing.attack_ms;
-		common.release_ms = processing.release_ms;
-		common.chunkSize = processing.chunkSize;
-		common.windowSize = processing.windowSize;
-
-		if (processing.usingHearingAidSimulation && processing.usingSpatialization)
-			nsy = factory->makeFullSimulation(brir_, common, leftPrescription_, rightPrescription_);
-		else if (processing.usingSpatialization)
-			nsy = factory->makeSpatialization(brir_);
-		else if (processing.usingHearingAidSimulation)
-			nsy = factory->makeHearingAid(common, leftPrescription_, rightPrescription_);
-		else
-			nsy = factory->makeNoSimulation();
-	}
-
-	std::shared_ptr<AudioFrameProcessor> make(
-		AudioFrameReader *reader,
-		double level_dB_Spl
-	) {
-		return nsy->make(reader, level_dB_Spl);
-	}
-};
-
 // The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
 double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
 int const RefactoredModel::defaultFramesPerBuffer = 1024;
@@ -473,9 +438,9 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	}
 
 	auto notSure = makeNsy(
-		brir_,
-		leftPrescription_,
-		rightPrescription_,
+		std::move(brir_),
+		std::move(leftPrescription_),
+		std::move(rightPrescription_),
 		p.processing
 	);
 	auto reader = makeReader(p.audioFilePath);
