@@ -579,6 +579,11 @@ namespace {
 		assertEqual("d", perceptionTest.testParameters().testerId);
 	}
 
+	TEST_F(RefactoredModelTests, playTrialAdvancesTrial) {
+		playTrial();
+		assertTrue(perceptionTest.advanceTrialCalled());
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playTrial();
 		assertAudioPlayerHasBeenPlayed();
