@@ -1047,6 +1047,17 @@ namespace {
 		);
 	}
 
+	TEST_F(
+		RefactoredModelTests, 
+		playCalibrationPassesBrirToFactoryForFullSimulation
+	) {
+		setFullSimulationForCalibration();
+		assertSpatializationFilterCoefficientsMatchBrirAfterCall(
+			simulationFactory.fullSimulationSpatialization(),
+			[=]() { playCalibration(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
 		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
 		playTrial();
