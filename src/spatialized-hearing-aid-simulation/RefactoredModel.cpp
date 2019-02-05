@@ -212,6 +212,8 @@ bool RefactoredModel::testComplete() {
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {
+	if (player->isPlaying())
+		return;
 	auto brir_ = readBrir(p.processing.brirFilePath);
 	auto reader = makeReader(p.audioFilePath);
 	loader->setReader(reader);
