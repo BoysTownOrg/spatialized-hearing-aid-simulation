@@ -2,7 +2,7 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-class nsySpatialization : public INotSureYet {
+class nsySpatialization : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
@@ -44,7 +44,7 @@ public:
 	}
 };
 
-class nsyHearingAid : public INotSureYet {
+class nsyHearingAid : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
@@ -100,7 +100,7 @@ public:
 	}
 };
 
-class nsyFullSimulation : public INotSureYet {	
+class nsyFullSimulation : public AudioFrameProcessorFactory {	
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;	
 	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
@@ -108,7 +108,7 @@ class nsyFullSimulation : public INotSureYet {
 public:
 	nsyFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		INotSureYet::CommonHearingAidSimulation processing,
+		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
@@ -160,7 +160,7 @@ public:
 	}
 };
 
-class nsyNoSimulation : public INotSureYet {
+class nsyNoSimulation : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
@@ -192,7 +192,7 @@ public:
 	}
 };
 
-class NotSureYetFactory : public INotSureYetFactory {
+class NotSureYetFactory : public AudioFrameProcessorFactoryFactory {
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
@@ -203,7 +203,7 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } {}
 
-	std::shared_ptr<INotSureYet> makeSpatialization(BrirReader::BinauralRoomImpulseResponse brir) override {
+	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(BrirReader::BinauralRoomImpulseResponse brir) override {
 		return std::make_shared<nsySpatialization>(
 			std::move(brir), 
 			simulationFactory, 
@@ -211,8 +211,8 @@ public:
 		);
 	}
 	
-	std::shared_ptr<INotSureYet> makeHearingAid(
-		INotSureYet::CommonHearingAidSimulation common, 
+	std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
+		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
 		PrescriptionReader::Dsl leftPrescription_, 
 		PrescriptionReader::Dsl rightPrescription_
 	) override
@@ -226,9 +226,9 @@ public:
 		);
 	}
 
-	std::shared_ptr<INotSureYet> makeFullSimulation(
+	std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		INotSureYet::CommonHearingAidSimulation common, 
+		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
 		PrescriptionReader::Dsl leftPrescription_, 
 		PrescriptionReader::Dsl rightPrescription_
 	) override
@@ -243,7 +243,7 @@ public:
 		);
 	}
 
-	std::shared_ptr<INotSureYet> makeNoSimulation() override {
+	std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() override {
 		return std::make_shared<nsyNoSimulation>(
 			simulationFactory, 
 			calibrationFactory
@@ -380,13 +380,13 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	perceptionTest->advanceTrial();
 }
 
-std::shared_ptr<INotSureYet> RefactoredModel::makeNsy(
+std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeNsy(
 	BrirReader::BinauralRoomImpulseResponse brir_,
 	PrescriptionReader::Dsl leftPrescription_,
 	PrescriptionReader::Dsl rightPrescription_,
 	ProcessingParameters processing
 ) {
-	INotSureYet::CommonHearingAidSimulation common;
+	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
 	common.attack_ms = processing.attack_ms;
 	common.release_ms = processing.release_ms;
 	common.chunkSize = processing.chunkSize;

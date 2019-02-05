@@ -11,9 +11,9 @@
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 
-class INotSureYet {
+class AudioFrameProcessorFactory {
 public:
-	INTERFACE_OPERATIONS(INotSureYet);
+	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
 
 	struct CommonHearingAidSimulation {
 		double attack_ms;
@@ -27,24 +27,24 @@ public:
 	) = 0;
 };
 
-class INotSureYetFactory {
+class AudioFrameProcessorFactoryFactory {
 public:
-	INTERFACE_OPERATIONS(INotSureYetFactory);
-	virtual std::shared_ptr<INotSureYet> makeSpatialization(
+	INTERFACE_OPERATIONS(AudioFrameProcessorFactoryFactory);
+	virtual std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
 		BrirReader::BinauralRoomImpulseResponse) = 0;
 
-	virtual std::shared_ptr<INotSureYet> makeHearingAid(
-		INotSureYet::CommonHearingAidSimulation,
+	virtual std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
+		AudioFrameProcessorFactory::CommonHearingAidSimulation,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_) = 0;
 
-	virtual std::shared_ptr<INotSureYet> makeFullSimulation(
+	virtual std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse,
-		INotSureYet::CommonHearingAidSimulation,
+		AudioFrameProcessorFactory::CommonHearingAidSimulation,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_) = 0;
 
-	virtual std::shared_ptr<INotSureYet> makeNoSimulation() = 0;
+	virtual std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() = 0;
 };
 
 class RefactoredModel : public Model {
@@ -58,7 +58,7 @@ class RefactoredModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
-	std::shared_ptr<INotSureYetFactory> nsyFactory;
+	std::shared_ptr<AudioFrameProcessorFactoryFactory> nsyFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
@@ -89,7 +89,7 @@ private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
-	std::shared_ptr<INotSureYet> makeNsy(
+	std::shared_ptr<AudioFrameProcessorFactory> makeNsy(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
