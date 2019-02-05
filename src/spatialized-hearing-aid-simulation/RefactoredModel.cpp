@@ -134,20 +134,20 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationFactory{ calibrationFactory } 
 	{
-		left_spatial.filterCoefficients = brir_.left;
-		right_spatial.filterCoefficients = brir_.right;
+		left_spatial.filterCoefficients = std::move(brir_.left);
+		right_spatial.filterCoefficients = std::move(brir_.right);
 
 		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
-		both_hs.attack_ms = processing.attack_ms;
-		both_hs.release_ms = processing.release_ms;
-		both_hs.chunkSize = processing.chunkSize;
-		both_hs.windowSize = processing.windowSize;
+		both_hs.attack_ms = this->processing.attack_ms;
+		both_hs.release_ms = this->processing.release_ms;
+		both_hs.chunkSize = this->processing.chunkSize;
+		both_hs.windowSize = this->processing.windowSize;
 		both_hs.fullScaleLevel_dB_Spl = RefactoredModel::fullScaleLevel_dB_Spl;
 
 		left_hs = both_hs;
 		right_hs = both_hs;
-		left_hs.prescription = leftPrescription_;
-		right_hs.prescription = rightPrescription_;
+		left_hs.prescription = std::move(leftPrescription_);
+		right_hs.prescription = std::move(rightPrescription_);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(
@@ -161,30 +161,31 @@ public:
 		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
 		auto left_scale = gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
 		auto right_scale = gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
-
+		
 		auto left_channel = simulationFactory->makeWithoutSimulation(left_scale);
 		auto right_channel = simulationFactory->makeWithoutSimulation(right_scale);
 
-		if (processing.usingSpatialization) {
+		if (processing.usingHearingAidSimulation && processing.usingSpatialization) {
+			ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
+			left_fs.hearingAid = left_hs;
+			left_fs.spatialization = left_spatial;
+
+			ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
+			right_fs.hearingAid = right_hs;
+			right_fs.spatialization = right_spatial;
+
+			left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
+			right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
+		}
+		else if (processing.usingSpatialization) {
 			left_channel = simulationFactory->makeSpatialization(left_spatial, left_scale);
 			right_channel = simulationFactory->makeSpatialization(right_spatial, right_scale);
 		}
-		if (processing.usingHearingAidSimulation) {
+		else if (processing.usingHearingAidSimulation) {
 			left_channel = simulationFactory->makeHearingAidSimulation(left_hs, left_scale);
 			right_channel = simulationFactory->makeHearingAidSimulation(right_hs, right_scale);
-			if (processing.usingSpatialization) {
-				ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;
-				left_fs.hearingAid = left_hs;
-				left_fs.spatialization = left_spatial;
-
-				ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-				right_fs.hearingAid = right_hs;
-				right_fs.spatialization = right_spatial;
-
-				left_channel = simulationFactory->makeFullSimulation(left_fs, left_scale);
-				right_channel = simulationFactory->makeFullSimulation(right_fs, right_scale);
-			}
 		}
+
 		std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 		return std::make_shared<ChannelProcessingGroup>(channels);
 	}
