@@ -443,6 +443,11 @@ namespace {
 		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
 	}
 
+	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToCalibrationFactory) {
+		playCalibration();
+		EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
 		audioFrameReader->setChannels(2);
 		trialParameters.level_dB_Spl = 65;
