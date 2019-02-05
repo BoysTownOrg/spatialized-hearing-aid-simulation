@@ -270,6 +270,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	}
 	std::vector<ChannelProcessingGroup::channel_processing_type> channels{ left_channel, right_channel };
 	loader->setProcessor(std::make_shared<ChannelProcessingGroup>(channels));
+	loader->reset();
 	player->play();
 }
 
