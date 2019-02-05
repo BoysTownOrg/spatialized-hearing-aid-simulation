@@ -271,7 +271,7 @@ RefactoredModel::RefactoredModel(
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
-	nsyFactory{std::make_shared<NotSureYetFactory>(simulationFactory, calibrationFactory)}
+	processorFactoryFactory{std::make_shared<NotSureYetFactory>(simulationFactory, calibrationFactory)}
 {
 	player->setAudioLoader(loader);
 }
@@ -296,10 +296,10 @@ static std::string coefficientErrorMessage(std::string which) {
 }
 
 void RefactoredModel::checkAndStoreBrir(TestParameters p) {
-	brir = readBrir(std::move(p.processing.brirFilePath));
-	if (brir.left.empty())
+	brirForTest = readBrir(std::move(p.processing.brirFilePath));
+	if (brirForTest.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
-	if (brir.right.empty())
+	if (brirForTest.right.empty())
 		throw RequestFailure{ coefficientErrorMessage("right") };
 }
 
@@ -313,14 +313,14 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string fi
 }
 
 void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
-	readPrescriptions(p);
+	readPrescriptionsForTest(p);
 	checkSizeIsPowerOfTwo(p.processing.chunkSize);
 	checkSizeIsPowerOfTwo(p.processing.windowSize);
 }
 
-void RefactoredModel::readPrescriptions(TestParameters p) {
-	leftPrescription = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
-	rightPrescription = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
+void RefactoredModel::readPrescriptionsForTest(TestParameters p) {
+	leftPrescriptionForTest = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
+	rightPrescriptionForTest = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
 }
 
 PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
@@ -365,14 +365,14 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 
-	auto notSure = makeNsy(
-		brir,
-		leftPrescription,
-		rightPrescription,
+	auto processorFactory = makeAudioFrameProcessorFactory(
+		brirForTest,
+		leftPrescriptionForTest,
+		rightPrescriptionForTest,
 		testParameters.processing
 	);
 	auto reader = makeReader(perceptionTest->nextStimulus());
-	loader->setProcessor(notSure->make(reader.get(), p.level_dB_Spl));
+	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
 	prepareAudioPlayer(*reader, testParameters.processing, std::move(p.audioDevice));
@@ -380,7 +380,7 @@ void RefactoredModel::playTrial(TrialParameters p) {
 	perceptionTest->advanceTrial();
 }
 
-std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeNsy(
+std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeAudioFrameProcessorFactory(
 	BrirReader::BinauralRoomImpulseResponse brir_,
 	PrescriptionReader::Dsl leftPrescription_,
 	PrescriptionReader::Dsl rightPrescription_,
@@ -393,22 +393,22 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeNsy(
 	common.windowSize = processing.windowSize;
 
 	if (processing.usingHearingAidSimulation && processing.usingSpatialization)
-		return nsyFactory->makeFullSimulation(
+		return processorFactoryFactory->makeFullSimulation(
 			std::move(brir_), 
 			std::move(common), 
 			std::move(leftPrescription_), 
 			std::move(rightPrescription_)
 		);
 	else if (processing.usingSpatialization)
-		return nsyFactory->makeSpatialization(std::move(brir_));
+		return processorFactoryFactory->makeSpatialization(std::move(brir_));
 	else if (processing.usingHearingAidSimulation)
-		return nsyFactory->makeHearingAid(
+		return processorFactoryFactory->makeHearingAid(
 			std::move(common), 
 			std::move(leftPrescription_), 
 			std::move(rightPrescription_)
 		);
 	else
-		return nsyFactory->makeNoSimulation();
+		return processorFactoryFactory->makeNoSimulation();
 }
 
 std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
@@ -458,7 +458,7 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
 
-	auto notSure = makeNsy(
+	auto notSure = makeAudioFrameProcessorFactory(
 		std::move(brir_),
 		std::move(leftPrescription_),
 		std::move(rightPrescription_),

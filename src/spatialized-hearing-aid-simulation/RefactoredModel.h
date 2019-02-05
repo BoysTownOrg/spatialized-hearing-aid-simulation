@@ -48,9 +48,9 @@ public:
 };
 
 class RefactoredModel : public Model {
-	PrescriptionReader::Dsl leftPrescription{};
-	PrescriptionReader::Dsl rightPrescription{};
-	BrirReader::BinauralRoomImpulseResponse brir{};
+	PrescriptionReader::Dsl leftPrescriptionForTest{};
+	PrescriptionReader::Dsl rightPrescriptionForTest{};
+	BrirReader::BinauralRoomImpulseResponse brirForTest{};
 	TestParameters testParameters{};
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
@@ -58,7 +58,7 @@ class RefactoredModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
-	std::shared_ptr<AudioFrameProcessorFactoryFactory> nsyFactory;
+	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,
@@ -83,13 +83,13 @@ private:
 	void checkAndStorePrescriptions(TestParameters);
 	void checkSizeIsPowerOfTwo(int);
 	void checkAndStoreBrir(TestParameters);
-	void readPrescriptions(TestParameters);
+	void readPrescriptionsForTest(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
-	std::shared_ptr<AudioFrameProcessorFactory> makeNsy(
+	std::shared_ptr<AudioFrameProcessorFactory> makeAudioFrameProcessorFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
