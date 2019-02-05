@@ -953,19 +953,11 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
-		std::vector<std::shared_ptr<SignalProcessor>> spatialization = {
-			std::make_shared<MultipliesSamplesBy>(2.0f),
-			std::make_shared<MultipliesSamplesBy>(3.0f)
-		};
-		simulationFactory.setSpatializationProcessors(spatialization);
-		buffer_type left = { 5 };
-		buffer_type right = { 7 };
-		std::vector<channel_type> channels = { left, right };
-		processWhenPlayerPlays(channels);
 		setSpatializationOnlyForTest();
-		playFirstTrialOfNewTest();
-		assertEqual({ 5 * 2 }, left);
-		assertEqual({ 7 * 3 }, right);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
+			simulationFactory.spatializationProcessors,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
