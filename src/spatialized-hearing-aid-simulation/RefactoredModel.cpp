@@ -222,6 +222,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	auto rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+	both_hs.attack_ms = p.processing.attack_ms;
+	both_hs.release_ms = p.processing.release_ms;
+	both_hs.chunkSize = p.processing.chunkSize;
+	both_hs.windowSize = p.processing.windowSize;
 
 	auto left_hs = both_hs;
 	left_hs.prescription = leftPrescription_;
