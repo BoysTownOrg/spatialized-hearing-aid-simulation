@@ -528,6 +528,15 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests,
+		playCalibrationDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = false;
+		playCalibration();
+		assertTrue(prescriptionReader.filePaths().empty());
+	}
+
+	TEST_F(
+		RefactoredModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
 		testParameters.processing.usingSpatialization = true;
