@@ -37,9 +37,9 @@ struct FltkWindow : public Fl_Double_Window {
 	Fl_Button browseTestFilePath;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
-	Fl_Button browseStimulusList;
+	Fl_Button browseForStimulusList;
 	Fl_Button browseBrir;
-	Fl_Button browseAudio;
+	Fl_Button browseForAudioFile;
 	Fl_Button confirm;
 	Fl_Button play;
 	Fl_Button stop;
@@ -150,6 +150,10 @@ public:
 	void setAudioFilePath(std::string) override;
 	void hidePlayNextTrialButton() override;
 	void showPlayNextTrialButton() override;
+	void hideBrowseForAudioFileButton() override;
+	void hideBrowseForStimulusListButton() override;
+	void showBrowseForAudioFileButton() override;
+	void showBrowseForStimulusListButton() override;
 
 private:
 	void registerCallbacks();

@@ -64,7 +64,7 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	subjectId_{ 100, 10, 200, 45, "subject ID" },
 	testerId_{ 100, 60, 200, 45, "tester ID" },
 	stimulusList_{ 100, 110, 200, 45, "stimulus list" },
-	browseStimulusList{310, 110, 60, 45, "browse" },
+	browseForStimulusList{310, 110, 60, 45, "browse" },
 	usingSpatialization_{ 50, 200, 60, 45 },
 	brirFilePath_{100, 200, 200, 45, "BRIR file path" },
 	browseBrir{310, 200, 60, 45, "browse" },
@@ -78,7 +78,7 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	windowSize_{700, 400, 200, 45, "window size (samples)" },
 	chunkSize_{700, 450, 200, 45, "chunk size (samples)" },
 	audioFilePath_{100, 300, 200, 45, "audio file path"},
-	browseAudio{310, 300, 60, 45, "browse" },
+	browseForAudioFile{310, 300, 60, 45, "browse" },
 	level_dB_Spl_{100, 350, 200, 45, "level (dB SPL)" },
 	play{ 50, 400, 60, 45, "play" },
 	stop{ 150, 400, 60, 45, "stop" },
@@ -111,8 +111,8 @@ void FltkView::registerCallbacks() {
 	window.browseTestFilePath.callback(onBrowseTestFile, this);
 	window.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.browseRightPrescription.callback(onBrowseRightPrescription, this);
-	window.browseStimulusList.callback(onBrowseStimulusList, this);
-	window.browseAudio.callback(onBrowseAudio, this);
+	window.browseForStimulusList.callback(onBrowseStimulusList, this);
+	window.browseForAudioFile.callback(onBrowseAudio, this);
 	window.browseBrir.callback(onBrowseBrir, this);
 	window.confirm.callback(onConfirmTestSetup, this);
 	window.usingSpatialization_.callback(onToggleSpatialization, this);
@@ -238,6 +238,26 @@ void FltkView::hideLevel_dB_Spl()
 void FltkView::hidePlayNextTrialButton()
 {
 	window.playNextTrial.hide();
+}
+
+void FltkView::hideBrowseForAudioFileButton()
+{
+	window.browseForAudioFile.hide();
+}
+
+void FltkView::hideBrowseForStimulusListButton()
+{
+	window.browseForStimulusList.hide();
+}
+
+void FltkView::showBrowseForAudioFileButton()
+{
+	window.browseForAudioFile.show();
+}
+
+void FltkView::showBrowseForStimulusListButton()
+{
+	window.browseForStimulusList.show();
 }
 
 void FltkView::showSubjectId()
