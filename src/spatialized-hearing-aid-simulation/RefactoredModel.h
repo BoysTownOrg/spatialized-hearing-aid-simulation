@@ -52,13 +52,14 @@ class RefactoredModel : public Model {
 	PrescriptionReader::Dsl rightPrescriptionForTest{};
 	BrirReader::BinauralRoomImpulseResponse brirForTest{};
 	TestParameters testParameters{};
+	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	SpeechPerceptionTest *perceptionTest;
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
-	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
 		SpeechPerceptionTest *perceptionTest,

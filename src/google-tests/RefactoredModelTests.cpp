@@ -681,7 +681,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
-		playNextTrial();
+		playFirstTrialOfNewTest();
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 

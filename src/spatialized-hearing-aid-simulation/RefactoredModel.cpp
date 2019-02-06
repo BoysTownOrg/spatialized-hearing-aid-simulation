@@ -2,6 +2,13 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
+class NullProcessorFactory : public AudioFrameProcessorFactory {
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override
+	{
+		return {};
+	}
+};
+
 class StereoSpatializationFactory : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
@@ -278,6 +285,9 @@ RefactoredModel::RefactoredModel(
 			simulationFactory, 
 			calibrationFactory
 		)
+	},
+	processorFactory{
+		std::make_shared<NullProcessorFactory>()
 	}
 {
 	player->setAudioLoader(loader);
@@ -294,6 +304,13 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 	if (p.processing.usingHearingAidSimulation)
 		checkAndStorePrescriptions(p);
 	testParameters = std::move(p);
+	
+	processorFactory = makeAudioFrameProcessorFactory(
+		brirForTest,
+		leftPrescriptionForTest,
+		rightPrescriptionForTest,
+		testParameters.processing
+	);
 }
 
 static std::string coefficientErrorMessage(std::string which) {
@@ -372,12 +389,6 @@ void RefactoredModel::playNextTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 
-	auto processorFactory = makeAudioFrameProcessorFactory(
-		brirForTest,
-		leftPrescriptionForTest,
-		rightPrescriptionForTest,
-		testParameters.processing
-	);
 	auto reader = makeReader(perceptionTest->nextStimulus());
 	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
@@ -465,14 +476,14 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
 	}
 
-	auto processorFactory = makeAudioFrameProcessorFactory(
+	auto processorFactory_ = makeAudioFrameProcessorFactory(
 		std::move(brir_),
 		std::move(leftPrescription_),
 		std::move(rightPrescription_),
 		p.processing
 	);
 	auto reader = makeReader(std::move(p.audioFilePath));
-	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
+	loader->setProcessor(processorFactory_->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
 	prepareAudioPlayer(*reader, std::move(p.processing), std::move(p.audioDevice));
