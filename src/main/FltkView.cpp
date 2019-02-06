@@ -23,8 +23,12 @@ void FltkView::onBrowseRightPrescription(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->browseForRightDslPrescription();
 }
 
-void FltkView::onBrowseAudio(Fl_Widget *, void *self) {
+void FltkView::onBrowseStimulusList(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->browseForStimulusList();
+}
+
+void FltkView::onBrowseAudio(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->browseForAudioFile();
 }
 
 void FltkView::onBrowseBrir(Fl_Widget *, void *self) {
@@ -59,8 +63,8 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
 	subjectId_{ 100, 10, 200, 45, "subject ID" },
 	testerId_{ 100, 60, 200, 45, "tester ID" },
-	stimulusList_{ 100, 110, 200, 45, "audio directory" },
-	browseAudio{310, 110, 60, 45, "browse" },
+	stimulusList_{ 100, 110, 200, 45, "stimulus list" },
+	browseStimulusList{310, 110, 60, 45, "browse" },
 	usingSpatialization_{ 50, 200, 60, 45 },
 	brirFilePath_{100, 200, 200, 45, "BRIR file path" },
 	browseBrir{310, 200, 60, 45, "browse" },
@@ -74,6 +78,7 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	windowSize_{700, 400, 200, 45, "window size (samples)" },
 	chunkSize_{700, 450, 200, 45, "chunk size (samples)" },
 	audioFilePath_{100, 300, 200, 45, "audio file path"},
+	browseAudio{310, 300, 60, 45, "browse" },
 	level_dB_Spl_{100, 350, 200, 45, "level (dB SPL)" },
 	play{ 50, 400, 60, 45, "play" },
 	stop{ 150, 400, 60, 45, "stop" },
@@ -106,6 +111,7 @@ void FltkView::registerCallbacks() {
 	window.browseTestFilePath.callback(onBrowseTestFile, this);
 	window.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.browseRightPrescription.callback(onBrowseRightPrescription, this);
+	window.browseStimulusList.callback(onBrowseStimulusList, this);
 	window.browseAudio.callback(onBrowseAudio, this);
 	window.browseBrir.callback(onBrowseBrir, this);
 	window.confirm.callback(onConfirmTestSetup, this);
@@ -229,6 +235,11 @@ void FltkView::hideLevel_dB_Spl()
 	window.level_dB_Spl_.hide();
 }
 
+void FltkView::hidePlayNextTrialButton()
+{
+	window.playNextTrial.hide();
+}
+
 void FltkView::showSubjectId()
 {
 	window.subjectId_.show();
@@ -334,10 +345,9 @@ void FltkView::showLevel_dB_Spl()
 	window.level_dB_Spl_.show();
 }
 
-void FltkView::showTesterView() {
-}
-
-void FltkView::hideTesterView() {
+void FltkView::showPlayNextTrialButton()
+{
+	window.playNextTrial.show();
 }
 
 void FltkView::deactivateBrowseForBrirButton() {
@@ -526,6 +536,11 @@ void FltkView::setRightDslPrescriptionFilePath(std::string p) {
 
 void FltkView::setBrirFilePath(std::string p) {
 	window.brirFilePath_.value(p.c_str());
+}
+
+void FltkView::setAudioFilePath(std::string p)
+{
+	window.audioFilePath_.value(p.c_str());
 }
 
 std::string FltkView::subjectId() {

@@ -37,8 +37,9 @@ struct FltkWindow : public Fl_Double_Window {
 	Fl_Button browseTestFilePath;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
-	Fl_Button browseAudio;
+	Fl_Button browseStimulusList;
 	Fl_Button browseBrir;
+	Fl_Button browseAudio;
 	Fl_Button confirm;
 	Fl_Button play;
 	Fl_Button stop;
@@ -83,8 +84,6 @@ public:
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
 	void populateChunkSizeMenu(std::vector<std::string> items) override;
 	void populateWindowSizeMenu(std::vector<std::string> items) override;
-	void showTesterView() override;
-	void hideTesterView() override;
 	void deactivateBrowseForBrirButton() override;
 	void deactivateBrirFilePath() override;
 	void activateBrowseForBrirButton() override;
@@ -148,6 +147,9 @@ public:
 	void showPlayButton() override;
 	void showStopButton() override;
 	void showLevel_dB_Spl() override;
+	void setAudioFilePath(std::string) override;
+	void hidePlayNextTrialButton() override;
+	void showPlayNextTrialButton() override;
 
 private:
 	void registerCallbacks();
@@ -156,6 +158,7 @@ private:
 	static void onBrowseTestFile(Fl_Widget *, void *);
 	static void onBrowseLeftPrescription(Fl_Widget *, void *);
 	static void onBrowseRightPrescription(Fl_Widget *, void *);
+	static void onBrowseStimulusList(Fl_Widget *, void *);
 	static void onBrowseAudio(Fl_Widget *, void *);
 	static void onBrowseBrir(Fl_Widget *, void *);
 	static void onConfirmTestSetup(Fl_Widget *, void *);
