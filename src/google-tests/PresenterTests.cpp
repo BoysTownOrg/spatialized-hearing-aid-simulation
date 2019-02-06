@@ -236,7 +236,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, constructorShowsTestSetupView) {
-		assertTrue(view.testSetupShown());
+		assertTrue(view.everyItemInTestSetupShown());
 	}
 
 	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {

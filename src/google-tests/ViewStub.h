@@ -77,6 +77,52 @@ public:
 	bool playButtonHidden_{};
 	bool stopButtonHidden_{};
 	bool level_dB_SplHidden_{};
+	bool subjectIdShown_{};
+	bool testerIdShown_{};
+	bool simulusListShown_{};
+	bool outputFilePathShown_{};
+	bool confirmButtonShown_{};
+	bool brirFilePathShown_{};
+	bool browseForBrirButtonShown_{};
+	bool usingSpatializationCheckBoxShown_{};
+	bool leftDslPrescriptionFilePathShown_{};
+	bool browseForLeftDslPrescriptionButtonShown_{};
+	bool rightDslPrescriptionFilePathShown_{};
+	bool browseForRightDslPrescriptionButtonShown_{};
+	bool attack_msShown_{};
+	bool release_msShown_{};
+	bool chunkSizeShown_{};
+	bool windowSizeShown_{};
+	bool usingHearingAidSimulationCheckBoxShown_{};
+	bool audioFilePathShown_{};
+	bool playButtonShown_{};
+	bool stopButtonShown_{};
+	bool level_dB_SplShown_{};
+
+	bool everyItemInTestSetupShown() {
+		return
+			subjectIdShown_ &&
+			testerIdShown_ &&
+			simulusListShown_ &&
+			outputFilePathShown_ &&
+			confirmButtonShown_ &&
+			brirFilePathShown_ &&
+			browseForBrirButtonShown_ &&
+			usingSpatializationCheckBoxShown_ &&
+			leftDslPrescriptionFilePathShown_ &&
+			browseForLeftDslPrescriptionButtonShown_ &&
+			rightDslPrescriptionFilePathShown_ &&
+			browseForRightDslPrescriptionButtonShown_ &&
+			attack_msShown_ &&
+			release_msShown_ &&
+			chunkSizeShown_ &&
+			windowSizeShown_ &&
+			usingHearingAidSimulationCheckBoxShown_ &&
+			audioFilePathShown_ &&
+			playButtonShown_ &&
+			stopButtonShown_ &&
+			level_dB_SplShown_;
+	}
 
 	bool everyItemInTestSetupHidden() {
 		return
