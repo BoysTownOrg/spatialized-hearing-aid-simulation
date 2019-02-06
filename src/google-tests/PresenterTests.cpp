@@ -41,6 +41,10 @@ namespace {
 			view.setLevel_dB_Spl("d");
 		}
 
+		void assertTesterViewHidden() {
+			assertTrue(view.everyItemInTesterViewHidden());
+		}
+
 		void confirmTestSetupDoesNotHideSetupView() {
 			view.confirmTestSetup();
 			assertTrue(view.notASingleElementInTestSetupHidden());
@@ -663,7 +667,7 @@ namespace {
 	TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
 		model.setTestComplete();
 		view.playNextTrial();
-		assertTrue(view.everyItemInTesterViewHidden());
+		assertTesterViewHidden();
 		assertTrue(view.everyItemInTestSetupShown());
 	}
 
