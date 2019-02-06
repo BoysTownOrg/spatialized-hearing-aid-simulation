@@ -25,7 +25,7 @@ namespace {
 		RecognitionTestTests,
 		prepareNewTestInitializesStimulusList
 	) {
-		newTest.audioDirectory = "a";
+		newTest.stimulusList = "a";
 		prepareNewTest();
 		assertEqual("a", list.directory());
 	}

@@ -67,7 +67,7 @@ public:
 	std::string subjectId() override;
 	std::string testerId() override;
 	std::string testFilePath() override;
-	std::string audioDirectory() override;
+	std::string stimulusList() override;
 	std::string audioFilePath() override;
 	std::string leftDslPrescriptionFilePath() override;
 	std::string rightDslPrescriptionFilePath() override;

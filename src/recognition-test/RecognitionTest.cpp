@@ -25,7 +25,7 @@ void RecognitionTest::prepareNewTest(TestParameters p) {
 }
 
 void RecognitionTest::prepareNewTest_(TestParameters p) {
-	initializeStimulusList(p.audioDirectory);
+	initializeStimulusList(p.stimulusList);
 	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
 	nextStimulus_ = list->next();

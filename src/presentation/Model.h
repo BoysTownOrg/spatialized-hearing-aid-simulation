@@ -26,7 +26,7 @@ public:
 		ProcessingParameters processing;
 		std::string subjectId;
 		std::string testerId;
-		std::string audioDirectory;
+		std::string stimulusList;
 		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;

@@ -688,7 +688,7 @@ public:
 		browseDirectory_ = std::move(d);
 	}
 
-	std::string audioDirectory() override {
+	std::string stimulusList() override {
 		return audioDirectory_;
 	}
 

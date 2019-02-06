@@ -544,7 +544,7 @@ std::string FltkView::audioFilePath() {
 	return window.audioFilePath_.value();
 }
 
-std::string FltkView::audioDirectory() {
+std::string FltkView::stimulusList() {
 	return window.audioDirectory_.value();
 }
 

@@ -467,7 +467,7 @@ namespace {
 		view.confirmTestSetup();
 		assertEqual("a", model.testParameters().processing.leftDslPrescriptionFilePath);
 		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
-		assertEqual("c", model.testParameters().audioDirectory);
+		assertEqual("c", model.testParameters().stimulusList);
 		assertEqual("d", model.testParameters().processing.brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
 		assertEqual("f", model.testParameters().subjectId);
@@ -600,7 +600,7 @@ namespace {
 	) {
 		view.setBrowseDirectory("a");
 		view.browseForStimulusList();
-		assertEqual("a", view.audioDirectory());
+		assertEqual("a", view.stimulusList());
 	}
 
 	TEST_F(
