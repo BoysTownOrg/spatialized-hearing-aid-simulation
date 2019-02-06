@@ -1351,6 +1351,30 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenChunkSizeIsNotPowerOfTwo
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibrationParameters.processing.chunkSize = 0;
+		calibrationParameters.processing.windowSize = 1;
+		assertPlayCalibrationThrowsRequestFailure(
+			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
+		);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenWindowSizeIsNotPowerOfTwo
+	) {
+		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibrationParameters.processing.chunkSize = 2;
+		calibrationParameters.processing.windowSize = 3;
+		assertPlayCalibrationThrowsRequestFailure(
+			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
+		);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
