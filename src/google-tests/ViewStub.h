@@ -3,7 +3,8 @@
 #include <presentation/View.h>
 
 class ViewStub : public View {
-	std::vector<std::string> browseFilters_{};
+	std::vector<std::string> browseFiltersForOpeningFile_{};
+	std::vector<std::string> browseFiltersForSavingFile_{};
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
@@ -16,7 +17,8 @@ class ViewStub : public View {
 	std::string windowSize_{ "0" };
 	std::string chunkSize_{ "0" };
 	std::string errorMessage_{};
-	std::string browseFilePath_{};
+	std::string browseForOpeningFileResult_{};
+	std::string browseForSavingFileResult_{};
 	std::string browseDirectory_{};
 	EventListener *listener_{};
 	bool runningEventLoop_{};
@@ -571,12 +573,12 @@ public:
 	std::string browseForOpeningFile(
 		std::vector<std::string> filters
 	) override {
-		browseFilters_ = std::move(filters);
-		return browseFilePath_;
+		browseFiltersForOpeningFile_ = std::move(filters);
+		return browseForOpeningFileResult_;
 	}
 
-	void setBrowseFilePath(std::string p) {
-		browseFilePath_ = std::move(p);
+	void setBrowseForOpeningFileResult(std::string p) {
+		browseForOpeningFileResult_ = std::move(p);
 	}
 
 	bool browseCancelled() override {
@@ -598,8 +600,16 @@ public:
 	std::string browseForSavingFile(
 		std::vector<std::string> filters
 	) override {
-		browseFilters_ = std::move(filters);
-		return browseFilePath_;
+		browseFiltersForSavingFile_ = std::move(filters);
+		return browseForSavingFileResult_;
+	}
+
+	auto browseFiltersForSavingFile() const {
+		return browseFiltersForSavingFile_;
+	}
+
+	void setBrowseForSavingFileResult(std::string p) {
+		browseForSavingFileResult_ = std::move(p);
 	}
 
 	void setTestFilePath(std::string p) override {
@@ -646,8 +656,8 @@ public:
 		return brirFilePath_;
 	}
 
-	auto browseFilters() const {
-		return browseFilters_;
+	auto browseForOpeningFileFilters() const {
+		return browseFiltersForOpeningFile_;
 	}
 
 	void setLevel_dB_Spl(std::string level) {

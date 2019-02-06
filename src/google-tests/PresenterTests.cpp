@@ -593,7 +593,7 @@ namespace {
 		browseForTestFileFiltersTextFiles
 	) {
 		view.browseForTestFile();
-		assertEqual({ "*.txt" }, view.browseFilters());
+		assertEqual({ "*.txt" }, view.browseFiltersForSavingFile());
 	}
 
 	TEST_F(
@@ -601,7 +601,7 @@ namespace {
 		browseForAudioFileFiltersAudioFiles
 	) {
 		view.browseForAudioFile();
-		assertEqual({ "*.wav" }, view.browseFilters());
+		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
 	}
 
 	TEST_F(
@@ -609,14 +609,14 @@ namespace {
 		browseForBrirFiltersWavFiles
 	) {
 		view.browseForBrir();
-		assertEqual({ "*.wav" }, view.browseFilters());
+		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
 	}
 
 	TEST_F(
 		PresenterTests,
 		browseForTestFileUpdatesTestFilePath
 	) {
-		view.setBrowseFilePath("a");
+		view.setBrowseForSavingFileResult("a");
 		view.browseForTestFile();
 		assertEqual("a", view.testFilePath());
 	}
@@ -625,7 +625,7 @@ namespace {
 		PresenterTests,
 		browseForAudioFileUpdatesAudioFilePath
 	) {
-		view.setBrowseFilePath("a");
+		view.setBrowseForOpeningFileResult("a");
 		view.browseForAudioFile();
 		assertEqual("a", view.audioFilePath());
 	}
@@ -634,10 +634,10 @@ namespace {
 		PresenterTests,
 		browseForDslPrescriptionUpdatesDslPrescriptionFilePath
 	) {
-		view.setBrowseFilePath("a");
+		view.setBrowseForOpeningFileResult("a");
 		view.browseForLeftDslPrescription();
 		assertEqual("a", view.leftDslPrescriptionFilePath());
-		view.setBrowseFilePath("b");
+		view.setBrowseForOpeningFileResult("b");
 		view.browseForRightDslPrescription();
 		assertEqual("b", view.rightDslPrescriptionFilePath());
 	}
@@ -655,7 +655,7 @@ namespace {
 		PresenterTests,
 		browseForBrirUpdatesBrirFilePath
 	) {
-		view.setBrowseFilePath("a");
+		view.setBrowseForOpeningFileResult("a");
 		view.browseForBrir();
 		assertEqual("a", view.brirFilePath());
 	}
