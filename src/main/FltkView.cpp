@@ -12,7 +12,7 @@ void Fl_ChoiceFacade::populate(std::vector<std::string> items) {
 }
 
 void FltkView::onBrowseTestFile(Fl_Widget *, void *self) {
-	static_cast<FltkView *>(self)->listener->browseForOutputFile();
+	static_cast<FltkView *>(self)->listener->browseForTestFile();
 }
 
 void FltkView::onBrowseLeftPrescription(Fl_Widget *, void *self) {
@@ -139,7 +139,7 @@ void FltkView::hideStimulusList()
 	window.audioDirectory_.hide();
 }
 
-void FltkView::hideOutputFilePath()
+void FltkView::hideTestFilePath()
 {
 	window.testFilePath_.hide();
 }
@@ -244,7 +244,7 @@ void FltkView::showStimulusList()
 	window.audioDirectory_.show();
 }
 
-void FltkView::showOutputFilePath()
+void FltkView::showTestFilePath()
 {
 	window.testFilePath_.show();
 }
@@ -536,7 +536,7 @@ std::string FltkView::testerId() {
 	return window.testerId_.value();
 }
 
-std::string FltkView::outputFilePath() {
+std::string FltkView::testFilePath() {
 	return window.testFilePath_.value();
 }
 

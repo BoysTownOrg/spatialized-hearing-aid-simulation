@@ -183,7 +183,7 @@ public:
 		simulusListHidden_ = true;
 	}
 	
-	void hideOutputFilePath() override {
+	void hideTestFilePath() override {
 		outputFilePathHidden_ = true;
 	}
 	
@@ -267,7 +267,7 @@ public:
 		simulusListShown_ = true;
 	}
 	
-	void showOutputFilePath() override {
+	void showTestFilePath() override {
 		outputFilePathShown_ = true;
 	}
 	
@@ -557,8 +557,8 @@ public:
 		browseCancelled_ = true;
 	}
 
-	void browseForOutputFile() {
-		listener_->browseForOutputFile();
+	void browseForTestFile() {
+		listener_->browseForTestFile();
 	}
 
 	void browseForLeftDslPrescription() {
@@ -576,7 +576,7 @@ public:
 		testFilePath_ = std::move(p);
 	}
 
-	std::string outputFilePath() override {
+	std::string testFilePath() override {
 		return testFilePath_;
 	}
 

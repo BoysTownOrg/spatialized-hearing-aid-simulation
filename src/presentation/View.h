@@ -7,7 +7,7 @@
 class EventListener {
 public:
 	INTERFACE_OPERATIONS(EventListener);
-	virtual void browseForOutputFile() = 0;
+	virtual void browseForTestFile() = 0;
 	virtual void browseForLeftDslPrescription() = 0;
 	virtual void browseForRightDslPrescription() = 0;
 	virtual void browseForStimulusList() = 0;
@@ -36,7 +36,7 @@ public:
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string subjectId() = 0;
 	virtual std::string testerId() = 0;
-	virtual std::string outputFilePath() = 0;
+	virtual std::string testFilePath() = 0;
 	virtual std::string leftDslPrescriptionFilePath() = 0;
 	virtual std::string rightDslPrescriptionFilePath() = 0;
 	virtual std::string stimulusList() = 0;
@@ -79,7 +79,7 @@ public:
 	virtual void hideSubjectId() = 0;
 	virtual void hideTesterId() = 0;
 	virtual void hideStimulusList() = 0;
-	virtual void hideOutputFilePath() = 0;
+	virtual void hideTestFilePath() = 0;
 	virtual void hideConfirmButton() = 0;
 	virtual void hideBrirFilePath() = 0;
 	virtual void hideBrowseForBrirButton() = 0;
@@ -100,7 +100,7 @@ public:
 	virtual void showSubjectId() = 0;
 	virtual void showTesterId() = 0;
 	virtual void showStimulusList() = 0;
-	virtual void showOutputFilePath() = 0;
+	virtual void showTestFilePath() = 0;
 	virtual void showConfirmButton() = 0;
 	virtual void showBrirFilePath() = 0;
 	virtual void showBrowseForBrirButton() = 0;

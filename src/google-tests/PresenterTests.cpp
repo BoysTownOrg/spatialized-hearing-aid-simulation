@@ -469,7 +469,7 @@ namespace {
 		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().stimulusList);
 		assertEqual("d", model.testParameters().processing.brirFilePath);
-		assertEqual("e", model.testParameters().outputFilePath);
+		assertEqual("e", model.testParameters().testFilePath);
 		assertEqual("f", model.testParameters().subjectId);
 		assertEqual("g", model.testParameters().testerId);
 		assertEqual(2.2, model.testParameters().processing.attack_ms);
@@ -519,7 +519,7 @@ namespace {
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.testFilePath_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForOutputFile);
+		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForTestFile);
 	}
 
 	TEST_F(
@@ -561,7 +561,7 @@ namespace {
 		PresenterTests,
 		browseForTestFileFiltersTextFiles
 	) {
-		view.browseForOutputFile();
+		view.browseForTestFile();
 		assertEqual({ "*.txt" }, view.browseFilters());
 	}
 
@@ -578,8 +578,8 @@ namespace {
 		browseForTestFileUpdatesTestFilePath
 	) {
 		view.setBrowseFilePath("a");
-		view.browseForOutputFile();
-		assertEqual("a", view.outputFilePath());
+		view.browseForTestFile();
+		assertEqual("a", view.testFilePath());
 	}
 
 	TEST_F(

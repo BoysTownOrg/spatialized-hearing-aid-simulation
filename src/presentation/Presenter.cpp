@@ -15,7 +15,7 @@ void Presenter::showTestSetupView() {
 	view->showSubjectId();
 	view->showTesterId();
 	view->showStimulusList();
-	view->showOutputFilePath();
+	view->showTestFilePath();
 	view->showConfirmButton();
 	view->showBrirFilePath();
 	view->showBrowseForBrirButton();
@@ -85,7 +85,7 @@ void Presenter::run() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForOutputFile() {
+void Presenter::browseForTestFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForSavingFile({ "*.txt" }), 
 		[=](std::string p) { this->view->setTestFilePath(std::move(p)); }
@@ -144,7 +144,7 @@ void Presenter::hideTestSetupView() {
 	view->hideSubjectId();
 	view->hideTesterId();
 	view->hideStimulusList();
-	view->hideOutputFilePath();
+	view->hideTestFilePath();
 	view->hideConfirmButton();
 	view->hideBrirFilePath();
 	view->hideBrowseForBrirButton();
@@ -167,7 +167,7 @@ void Presenter::hideTestSetupView() {
 Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
 	test.processing = processingParameters();
-	test.outputFilePath = view->outputFilePath();
+	test.testFilePath = view->testFilePath();
 	test.stimulusList = view->stimulusList();
 	test.subjectId = view->subjectId();
 	test.testerId = view->testerId();

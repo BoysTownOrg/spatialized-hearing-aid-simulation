@@ -27,7 +27,7 @@ public:
 		std::string subjectId;
 		std::string testerId;
 		std::string stimulusList;
-		std::string outputFilePath;
+		std::string testFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
 

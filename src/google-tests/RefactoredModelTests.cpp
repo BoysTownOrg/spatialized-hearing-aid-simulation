@@ -569,12 +569,12 @@ namespace {
 
 	TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
 		testParameters.stimulusList = "a";
-		testParameters.outputFilePath = "b";
+		testParameters.testFilePath = "b";
 		testParameters.subjectId = "c";
 		testParameters.testerId = "d";
 		prepareNewTest();
 		assertEqual("a", perceptionTest.testParameters().stimulusList);
-		assertEqual("b", perceptionTest.testParameters().outputFilePath);
+		assertEqual("b", perceptionTest.testParameters().testFilePath);
 		assertEqual("c", perceptionTest.testParameters().subjectId);
 		assertEqual("d", perceptionTest.testParameters().testerId);
 	}

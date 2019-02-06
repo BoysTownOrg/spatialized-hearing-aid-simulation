@@ -66,7 +66,7 @@ public:
 	void setTestFilePath(std::string) override;
 	std::string subjectId() override;
 	std::string testerId() override;
-	std::string outputFilePath() override;
+	std::string testFilePath() override;
 	std::string stimulusList() override;
 	std::string audioFilePath() override;
 	std::string leftDslPrescriptionFilePath() override;
@@ -109,7 +109,7 @@ public:
 	void hideSubjectId() override;
 	void hideTesterId() override;
 	void hideStimulusList() override;
-	void hideOutputFilePath() override;
+	void hideTestFilePath() override;
 	void hideConfirmButton() override;
 	void hideBrirFilePath() override;
 	void hideBrowseForBrirButton() override;
@@ -130,7 +130,7 @@ public:
 	void showSubjectId() override;
 	void showTesterId() override;
 	void showStimulusList() override;
-	void showOutputFilePath() override;
+	void showTestFilePath() override;
 	void showConfirmButton() override;
 	void showBrirFilePath() override;
 	void showBrowseForBrirButton() override;

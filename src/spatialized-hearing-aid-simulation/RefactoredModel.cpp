@@ -352,7 +352,7 @@ void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
 void RefactoredModel::prepareNewTest_(TestParameters p) {
 	SpeechPerceptionTest::TestParameters adapted;
 	adapted.stimulusList = std::move(p.stimulusList);
-	adapted.outputFilePath = std::move(p.outputFilePath);
+	adapted.testFilePath = std::move(p.testFilePath);
 	adapted.subjectId = std::move(p.subjectId);
 	adapted.testerId = std::move(p.testerId);
 	try {

@@ -26,7 +26,7 @@ void RecognitionTest::prepareNewTest(TestParameters p) {
 
 void RecognitionTest::prepareNewTest_(TestParameters p) {
 	initializeStimulusList(p.stimulusList);
-	initializeDocumenter(p.outputFilePath);
+	initializeDocumenter(p.testFilePath);
 	documentTestParameters(p);
 	nextStimulus_ = list->next();
 }
@@ -35,8 +35,8 @@ void RecognitionTest::initializeStimulusList(std::string directory) {
 	list->initialize(std::move(directory));
 }
 
-void RecognitionTest::initializeDocumenter(std::string outputFilePath) {
-	documenter->initialize(std::move(outputFilePath));
+void RecognitionTest::initializeDocumenter(std::string testFilePath) {
+	documenter->initialize(std::move(testFilePath));
 }
 
 void RecognitionTest::documentTestParameters(TestParameters p) {
