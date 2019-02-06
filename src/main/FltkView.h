@@ -59,7 +59,7 @@ public:
 	std::string browseForSavingFile(std::vector<std::string> filters) override;
 	std::string browseForDirectory() override;
 	bool browseCancelled() override;
-	void setAudioDirectory(std::string) override;
+	void setStimulusList(std::string) override;
 	void setLeftDslPrescriptionFilePath(std::string) override;
 	void setRightDslPrescriptionFilePath(std::string) override;
 	void setBrirFilePath(std::string) override;

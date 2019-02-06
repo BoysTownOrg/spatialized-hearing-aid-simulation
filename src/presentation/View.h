@@ -32,7 +32,7 @@ public:
 	virtual void setTestFilePath(std::string) = 0;
 	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
-	virtual void setAudioDirectory(std::string) = 0;
+	virtual void setStimulusList(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string subjectId() = 0;
 	virtual std::string testerId() = 0;

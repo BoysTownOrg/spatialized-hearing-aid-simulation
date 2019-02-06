@@ -512,7 +512,7 @@ void FltkView::setTestFilePath(std::string p) {
 	window.testFilePath_.value(p.c_str());
 }
 
-void FltkView::setAudioDirectory(std::string d) {
+void FltkView::setStimulusList(std::string d) {
 	window.audioDirectory_.value(d.c_str());
 }
 

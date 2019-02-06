@@ -455,7 +455,7 @@ namespace {
 		view.setHearingAidSimulationOn();
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
-		view.setAudioDirectory("c");
+		view.setStimulusList("c");
 		view.setBrirFilePath("d");
 		view.setTestFilePath("e");
 		view.setSubjectId("f");

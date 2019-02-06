@@ -114,7 +114,7 @@ void Presenter::browseForRightDslPrescription() {
 void Presenter::browseForStimulusList() {
 	applyIfBrowseNotCancelled(
 		view->browseForDirectory(), 
-		[=](std::string p) { this->view->setAudioDirectory(std::move(p)); }
+		[=](std::string p) { this->view->setStimulusList(std::move(p)); }
 	);
 }
 
