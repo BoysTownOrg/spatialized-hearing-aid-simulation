@@ -124,6 +124,32 @@ public:
 			level_dB_SplShown_;
 	}
 
+	bool notASingleElementInTestSetupShown() {
+		return !(
+			subjectIdShown_ ||
+			testerIdShown_ ||
+			simulusListShown_ ||
+			outputFilePathShown_ ||
+			confirmButtonShown_ ||
+			brirFilePathShown_ ||
+			browseForBrirButtonShown_ ||
+			usingSpatializationCheckBoxShown_ ||
+			leftDslPrescriptionFilePathShown_ ||
+			browseForLeftDslPrescriptionButtonShown_ ||
+			rightDslPrescriptionFilePathShown_ ||
+			browseForRightDslPrescriptionButtonShown_ ||
+			attack_msShown_ ||
+			release_msShown_ ||
+			chunkSizeShown_ ||
+			windowSizeShown_ ||
+			usingHearingAidSimulationCheckBoxShown_ ||
+			audioFilePathShown_ ||
+			playButtonShown_ ||
+			stopButtonShown_ ||
+			level_dB_SplShown_
+		);
+	}
+
 	bool everyItemInTestSetupHidden() {
 		return
 			subjectIdHidden_ &&
