@@ -44,6 +44,7 @@ private:
 	);
 	void prepareNewTest();
 	void hideTestSetupView();
+	void showTestSetupView();
 	Model::TestParameters testParameters();
 	Model::TrialParameters trialParameters();
 	Model::ProcessingParameters processingParameters();
