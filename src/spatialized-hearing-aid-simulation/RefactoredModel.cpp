@@ -299,10 +299,17 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 }
 
 void RefactoredModel::checkAndStore(TestParameters p) {
+	BrirReader::BinauralRoomImpulseResponse brirForTest;
 	if (p.processing.usingSpatialization)
-		checkAndStoreBrir(p);
-	if (p.processing.usingHearingAidSimulation)
-		checkAndStorePrescriptions(p);
+		brirForTest = readAndCheckBrir(p);
+	PrescriptionReader::Dsl leftPrescriptionForTest;
+	PrescriptionReader::Dsl rightPrescriptionForTest;
+	if (p.processing.usingHearingAidSimulation) {
+		leftPrescriptionForTest = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
+		rightPrescriptionForTest = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
+		checkSizeIsPowerOfTwo(p.processing.chunkSize);
+		checkSizeIsPowerOfTwo(p.processing.windowSize);
+	}
 	testParameters = std::move(p);
 	
 	processorFactory = makeAudioFrameProcessorFactory(
@@ -319,12 +326,13 @@ static std::string coefficientErrorMessage(std::string which) {
 		"therefore a filter operation cannot be defined.";
 }
 
-void RefactoredModel::checkAndStoreBrir(TestParameters p) {
-	brirForTest = readBrir(std::move(p.processing.brirFilePath));
-	if (brirForTest.left.empty())
+BrirReader::BinauralRoomImpulseResponse RefactoredModel::readAndCheckBrir(TestParameters p) {
+	auto brir = readBrir(std::move(p.processing.brirFilePath));
+	if (brir.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
-	if (brirForTest.right.empty())
+	if (brir.right.empty())
 		throw RequestFailure{ coefficientErrorMessage("right") };
+	return brir;
 }
 
 BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string filePath) {
@@ -334,17 +342,6 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string fi
 	catch (const BrirReader::ReadFailure &) {
 		throw RequestFailure{ "BRIR '" + filePath + "' cannot be read." };
 	}
-}
-
-void RefactoredModel::checkAndStorePrescriptions(TestParameters p) {
-	readPrescriptionsForTest(p);
-	checkSizeIsPowerOfTwo(p.processing.chunkSize);
-	checkSizeIsPowerOfTwo(p.processing.windowSize);
-}
-
-void RefactoredModel::readPrescriptionsForTest(TestParameters p) {
-	leftPrescriptionForTest = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
-	rightPrescriptionForTest = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
 }
 
 PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {

@@ -48,9 +48,6 @@ public:
 };
 
 class RefactoredModel : public Model {
-	PrescriptionReader::Dsl leftPrescriptionForTest{};
-	PrescriptionReader::Dsl rightPrescriptionForTest{};
-	BrirReader::BinauralRoomImpulseResponse brirForTest{};
 	TestParameters testParameters{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;
@@ -83,8 +80,7 @@ private:
 	void checkAndStore(TestParameters);
 	void checkAndStorePrescriptions(TestParameters);
 	void checkSizeIsPowerOfTwo(int);
-	void checkAndStoreBrir(TestParameters);
-	void readPrescriptionsForTest(TestParameters);
+	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
