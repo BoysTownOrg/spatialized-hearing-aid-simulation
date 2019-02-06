@@ -286,7 +286,7 @@ RefactoredModel::RefactoredModel(
 			calibrationFactory
 		)
 	},
-	processorFactory{
+	processorFactoryForTest{
 		std::make_shared<NullProcessorFactory>()
 	}
 {
@@ -298,36 +298,12 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
-	
-	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
-	common.attack_ms = p.processing.attack_ms;
-	common.release_ms = p.processing.release_ms;
-	common.chunkSize = p.processing.chunkSize;
-	common.windowSize = p.processing.windowSize;
-
-	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
-		processorFactory = processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.processing.brirFilePath)), 
-			std::move(common), 
-			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
-		);
-	else if (p.processing.usingSpatialization)
-		processorFactory = processorFactoryFactory->makeSpatialization(
-			readAndCheckBrir(std::move(p.processing.brirFilePath))
-		);
-	else if (p.processing.usingHearingAidSimulation)
-		processorFactory = processorFactoryFactory->makeHearingAid(
-			std::move(common), 
-			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
-		);
-	else
-		processorFactory = processorFactoryFactory->makeNoSimulation();
 
 	framesPerBufferForTest = p.processing.usingHearingAidSimulation
 		? p.processing.chunkSize
 		: defaultFramesPerBuffer;
+	
+	processorFactoryForTest = makeProcessorFactory(std::move(p.processing));
 
 	prepareNewTest_(std::move(p));
 }
@@ -394,23 +370,7 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	}
 }
 
-void RefactoredModel::playNextTrial(TrialParameters p) {
-	if (player->isPlaying())
-		return;
-
-	auto reader = makeReader(perceptionTest->nextStimulus());
-	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
-	loader->setReader(reader);
-	loader->reset();
-	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
-	player->play();
-	perceptionTest->advanceTrial();
-}
-
-std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeAudioFrameProcessorFactory(
-	BrirReader::BinauralRoomImpulseResponse brir_,
-	PrescriptionReader::Dsl leftPrescription_,
-	PrescriptionReader::Dsl rightPrescription_,
+std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
 	ProcessingParameters processing
 ) {
 	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
@@ -419,23 +379,40 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeAudioFrameProce
 	common.chunkSize = processing.chunkSize;
 	common.windowSize = processing.windowSize;
 
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
+
 	if (processing.usingHearingAidSimulation && processing.usingSpatialization)
 		return processorFactoryFactory->makeFullSimulation(
-			std::move(brir_), 
+			readAndCheckBrir(std::move(processing.brirFilePath)), 
 			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_)
+			readPrescription(std::move(processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(processing.rightDslPrescriptionFilePath))
 		);
 	else if (processing.usingSpatialization)
-		return processorFactoryFactory->makeSpatialization(std::move(brir_));
+		return processorFactoryFactory->makeSpatialization(
+			readAndCheckBrir(std::move(processing.brirFilePath))
+		);
 	else if (processing.usingHearingAidSimulation)
 		return processorFactoryFactory->makeHearingAid(
 			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_)
+			readPrescription(std::move(processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(processing.rightDslPrescriptionFilePath))
 		);
 	else
 		return processorFactoryFactory->makeNoSimulation();
+}
+
+void RefactoredModel::playNextTrial(TrialParameters p) {
+	if (player->isPlaying())
+		return;
+
+	auto reader = makeReader(perceptionTest->nextStimulus());
+	loader->setProcessor(processorFactoryForTest->make(reader.get(), p.level_dB_Spl));
+	loader->setReader(reader);
+	loader->reset();
+	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
+	player->play();
+	perceptionTest->advanceTrial();
 }
 
 std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
@@ -477,42 +454,16 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
+	auto framesPerBuffer = p.processing.usingHearingAidSimulation
+		? p.processing.chunkSize
+		: defaultFramesPerBuffer;
 	
-	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
-	common.attack_ms = p.processing.attack_ms;
-	common.release_ms = p.processing.release_ms;
-	common.chunkSize = p.processing.chunkSize;
-	common.windowSize = p.processing.windowSize;
-
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
-
-	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
-		processorFactory_ = processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.processing.brirFilePath)), 
-			std::move(common), 
-			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
-		);
-	else if (p.processing.usingSpatialization)
-		processorFactory_ = processorFactoryFactory->makeSpatialization(
-			readAndCheckBrir(std::move(p.processing.brirFilePath))
-		);
-	else if (p.processing.usingHearingAidSimulation)
-		processorFactory_ = processorFactoryFactory->makeHearingAid(
-			std::move(common), 
-			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
-		);
-	else
-		processorFactory_ = processorFactoryFactory->makeNoSimulation();
+	auto processorFactory_ = makeProcessorFactory(std::move(p.processing));
 
 	auto reader = makeReader(std::move(p.audioFilePath));
 	loader->setProcessor(processorFactory_->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	auto framesPerBuffer = p.processing.usingHearingAidSimulation
-		? p.processing.chunkSize
-		: defaultFramesPerBuffer;
 	prepareAudioPlayer(*reader, framesPerBuffer, std::move(p.audioDevice));
 	player->play();
 }
