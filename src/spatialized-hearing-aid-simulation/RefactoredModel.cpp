@@ -475,6 +475,10 @@ bool RefactoredModel::testComplete() {
 void RefactoredModel::playCalibration(CalibrationParameters p) {
 	if (player->isPlaying())
 		return;
+	if (p.processing.usingHearingAidSimulation) {
+		checkSizeIsPowerOfTwo(p.processing.chunkSize);
+		checkSizeIsPowerOfTwo(p.processing.windowSize);
+	}
 
 	BrirReader::BinauralRoomImpulseResponse brir_;
 	if (p.processing.usingSpatialization)
