@@ -222,8 +222,8 @@ namespace {
 			model.prepareNewTest(testParameters);
 		}
 
-		void playTrial() {
-			model.playTrial(trialParameters);
+		void playNextTrial() {
+			model.playNextTrial(trialParameters);
 		}
 
 		void playCalibration() {
@@ -236,7 +236,7 @@ namespace {
 
 		void playFirstTrialOfNewTest() {
 			prepareNewTest();
-			playTrial();
+			playNextTrial();
 		}
 
 		void setFullSimulationForTest() noexcept {
@@ -580,12 +580,12 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialAdvancesTrial) {
-		playTrial();
+		playNextTrial();
 		assertTrue(perceptionTest.advanceTrialCalled());
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
-		playTrial();
+		playNextTrial();
 		assertAudioPlayerHasBeenPlayed();
 	}
 
@@ -596,7 +596,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 		perceptionTest.setNextStimulus("a");
-		playTrial();
+		playNextTrial();
 		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
 
@@ -610,7 +610,7 @@ namespace {
 		callWhenPlayerPlays([=]() {
 			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 		});
-		playTrial();
+		playNextTrial();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
@@ -621,7 +621,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
-		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playTrial(); });
+		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playNextTrial(); });
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
@@ -630,7 +630,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
 		trialParameters.audioDevice = "a";
-		playTrial();
+		playNextTrial();
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
 
@@ -681,7 +681,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
-		playTrial();
+		playNextTrial();
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
@@ -1102,7 +1102,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
 		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
-		playTrial();
+		playNextTrial();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationResetsAudioLoaderBeforePlaying) {
@@ -1111,7 +1111,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
-		playTrial();
+		playNextTrial();
 		assertEqual("prepareToPlay play ", audioPlayer.log());
 	}
 
@@ -1122,7 +1122,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
-		playTrial();
+		playNextTrial();
 		assertAudioLoaderHasNotBeenModified();
 	}
 
@@ -1177,7 +1177,7 @@ namespace {
 		void assertPlayTrialThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.playTrial({});
+				model.playNextTrial({});
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
 			}
 			catch (const RefactoredModel::RequestFailure &e) {
@@ -1208,7 +1208,7 @@ namespace {
 		void playTrialIgnoringFailure() {
 			try {
 				auto model = makeModel();
-				model.playTrial({});
+				model.playNextTrial({});
 			}
 			catch (const RefactoredModel::RequestFailure &) {
 			}

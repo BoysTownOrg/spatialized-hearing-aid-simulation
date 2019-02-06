@@ -36,7 +36,7 @@ void FltkView::onConfirmTestSetup(Fl_Widget *, void *self) {
 }
 
 void FltkView::onPlayTrial(Fl_Widget *, void *self) {
-	static_cast<FltkView *>(self)->listener->playTrial();
+	static_cast<FltkView *>(self)->listener->playNextTrial();
 }
 
 void FltkView::onToggleSpatialization(Fl_Widget *, void *self) {

@@ -712,8 +712,8 @@ public:
 		testerViewShown_ = true;
 	}
 
-	void playTrial() {
-		listener_->playTrial();
+	void playNextTrial() {
+		listener_->playNextTrial();
 	}
 
 	auto testerViewHidden() const noexcept {

@@ -225,7 +225,7 @@ int Presenter::convertToInteger(std::string x, std::string identifier) {
 	}
 }
 
-void Presenter::playTrial() {
+void Presenter::playNextTrial() {
 	try {
 		playTrial_();
 	}
@@ -235,7 +235,7 @@ void Presenter::playTrial() {
 }
 
 void Presenter::playTrial_() {
-	model->playTrial(trialParameters());
+	model->playNextTrial(trialParameters());
 	switchViewIfTestComplete();
 }
 

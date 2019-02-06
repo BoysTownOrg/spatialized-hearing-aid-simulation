@@ -24,7 +24,7 @@ public:
 	void browseForStimulusList() override;
 	void browseForBrir() override;
 	void confirmTestSetup() override;
-	void playTrial() override;
+	void playNextTrial() override;
 	void toggleUsingSpatialization() override;
 	void toggleUsingHearingAidSimulation() override;
 	void playCalibration() override;

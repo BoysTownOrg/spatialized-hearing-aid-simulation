@@ -363,7 +363,7 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	}
 }
 
-void RefactoredModel::playTrial(TrialParameters p) {
+void RefactoredModel::playNextTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 

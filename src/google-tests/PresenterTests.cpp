@@ -137,7 +137,7 @@ namespace {
 		}
 
 		void playTrialShowsErrorMessage(std::string s) {
-			view.playTrial();
+			view.playNextTrial();
 			assertEqual(std::move(s), view.errorMessage());
 		}
 
@@ -645,25 +645,25 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, playingTrialPlaysTrial) {
-		view.playTrial();
+		view.playNextTrial();
 		assertTrue(model.trialPlayed());
 	}
 
 	TEST_F(PresenterTests, playingTrialWithInvalidLevelDoesNotPlayTrial) {
 		setInvalidLevel();
-		view.playTrial();
+		view.playNextTrial();
 		assertFalse(model.trialPlayed());
 	}
 
 	TEST_F(PresenterTests, playingTrialDoesNotHideTesterViewWhileTestInProgress) {
 		model.setTestIncomplete();
-		view.playTrial();
+		view.playNextTrial();
 		assertFalse(view.testerViewHidden());
 	}
 
 	TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
 		model.setTestComplete();
-		view.playTrial();
+		view.playNextTrial();
 		assertTrue(view.testerViewHidden());
 		assertTrue(view.everyItemInTestSetupShown());
 	}
@@ -671,7 +671,7 @@ namespace {
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
 		view.setAudioDevice("e");
 		view.setLevel_dB_Spl("1.1");
-		view.playTrial();
+		view.playNextTrial();
 		assertEqual("e", model.trialParameters().audioDevice);
 		assertEqual(1.1, model.trialParameters().level_dB_Spl);
 	}
@@ -862,7 +862,7 @@ namespace {
 
 	TEST_F(PresenterWithTrialFailingModel, playTrialShowsErrorMessage) {
 		model.setErrorMessage("error.");
-		view.playTrial();
+		view.playNextTrial();
 		assertEqual("error.", view.errorMessage());
 	}
 

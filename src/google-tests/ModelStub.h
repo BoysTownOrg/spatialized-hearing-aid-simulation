@@ -65,7 +65,7 @@ public:
 		return trialPlayed_;
 	}
 
-	void playTrial(TrialParameters p) override {
+	void playNextTrial(TrialParameters p) override {
 		trialParameters_ = std::move(p);
 		trialPlayed_ = true;
 	}
@@ -98,7 +98,7 @@ public:
 		throw RequestFailure{ message };
 	}
 
-	void playTrial(TrialParameters) override {}
+	void playNextTrial(TrialParameters) override {}
 	bool testComplete() override { return {}; }
 	void playCalibration(CalibrationParameters) override {}
 	void stopCalibration() override {}
@@ -112,7 +112,7 @@ public:
 		message = std::move(s);
 	}
 
-	void playTrial(TrialParameters) override {
+	void playNextTrial(TrialParameters) override {
 		throw RequestFailure{ message };
 	}
 
@@ -134,7 +134,7 @@ public:
 		throw RequestFailure{ message };
 	}
 	
-	void playTrial(TrialParameters) override {}
+	void playNextTrial(TrialParameters) override {}
 	void prepareNewTest(TestParameters) override {}
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
