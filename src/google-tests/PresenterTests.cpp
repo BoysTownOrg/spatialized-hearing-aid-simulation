@@ -53,12 +53,12 @@ namespace {
 
 		void confirmTestSetupDoesNotShowTesterView() {
 			view.confirmTestSetup();
-			assertTrue(view.notASingleElementInTestSetupShown());
+			assertFalse(view.testerViewShown());
 		}
 
 		void confirmTestSetupShowsTesterView() {
 			view.confirmTestSetup();
-			assertTrue(view.everyItemInTestSetupShown());
+			assertTrue(view.testerViewShown());
 		}
 
 		void confirmTestSetupDoesNotPrepareTest() {
