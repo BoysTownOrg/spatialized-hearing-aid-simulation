@@ -1270,7 +1270,7 @@ namespace {
 		brirReader = &failing;
 		testParameters.processing.usingSpatialization = true;
 		testParameters.processing.brirFilePath = "a";
-		assertPreparingNewTestThrowsRequestFailure("Unable to read 'a'.");
+		assertPreparingNewTestThrowsRequestFailure("BRIR 'a' cannot be read.");
 	}
 
 	TEST_F(
@@ -1281,7 +1281,7 @@ namespace {
 		brirReader = &failing;
 		calibrationParameters.processing.usingSpatialization = true;
 		calibrationParameters.processing.brirFilePath = "a";
-		assertPlayCalibrationThrowsRequestFailure("Unable to read 'a'.");
+		assertPlayCalibrationThrowsRequestFailure("BRIR 'a' cannot be read.");
 	}
 
 	TEST_F(

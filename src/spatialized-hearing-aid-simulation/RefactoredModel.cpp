@@ -192,11 +192,11 @@ public:
 	}
 };
 
-class NotSureYetFactory : public AudioFrameProcessorFactoryFactory {
+class StereoProcessorFactoryFactory : public AudioFrameProcessorFactoryFactory {
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
-	NotSureYetFactory(
+	StereoProcessorFactoryFactory(
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationFactory
 	) noexcept :
@@ -273,7 +273,7 @@ RefactoredModel::RefactoredModel(
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
-	processorFactoryFactory{std::make_shared<NotSureYetFactory>(simulationFactory, calibrationFactory)}
+	processorFactoryFactory{std::make_shared<StereoProcessorFactoryFactory>(simulationFactory, calibrationFactory)}
 {
 	player->setAudioLoader(loader);
 }
@@ -310,7 +310,7 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string fi
 		return brirReader->read(filePath);
 	}
 	catch (const BrirReader::ReadFailure &) {
-		throw RequestFailure{ "Unable to read '" + filePath + "'." };
+		throw RequestFailure{ "BRIR '" + filePath + "' cannot be read." };
 	}
 }
 
