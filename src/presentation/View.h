@@ -98,6 +98,8 @@ public:
 	virtual void hideStopButton() = 0;
 	virtual void hideLevel_dB_Spl() = 0;
 	virtual void hidePlayNextTrialButton() = 0;
+	virtual void hideBrowseForAudioFileButton() = 0;
+	virtual void hideBrowseForStimulusListButton() = 0;
 	virtual void showSubjectId() = 0;
 	virtual void showTesterId() = 0;
 	virtual void showStimulusList() = 0;
@@ -120,4 +122,6 @@ public:
 	virtual void showStopButton() = 0;
 	virtual void showLevel_dB_Spl() = 0;
 	virtual void showPlayNextTrialButton() = 0;
+	virtual void showBrowseForAudioFileButton() = 0;
+	virtual void showBrowseForStimulusListButton() = 0;
 };

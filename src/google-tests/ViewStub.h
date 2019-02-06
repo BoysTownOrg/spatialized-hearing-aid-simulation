@@ -103,6 +103,22 @@ public:
 	bool browseForAudioFileButtonShown_{};
 	bool browseForStimulusListButtonShown_{};
 
+	void showBrowseForAudioFileButton() override {
+		browseForAudioFileButtonShown_ = true;
+	}
+
+	void showBrowseForStimulusListButton() override {
+		browseForStimulusListButtonShown_ = true;
+	}
+
+	void hideBrowseForStimulusListButton() override {
+		browseForStimulusListButtonHidden_ = true;
+	}
+
+	void hideBrowseForAudioFileButton() override {
+		browseForAudioFileButtonHidden_ = true;
+	}
+
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
 	}

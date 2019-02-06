@@ -33,6 +33,8 @@ void Presenter::showTestSetupView() {
 	view->showPlayButton();
 	view->showStopButton();
 	view->showLevel_dB_Spl();
+	view->showBrowseForAudioFileButton();
+	view->showBrowseForStimulusListButton();
 }
 
 void Presenter::toggleSpatializationActivation() {
@@ -173,6 +175,8 @@ void Presenter::hideTestSetupView() {
 	view->hidePlayButton();
 	view->hideStopButton();
 	view->hideLevel_dB_Spl();
+	view->hideBrowseForAudioFileButton();
+	view->hideBrowseForStimulusListButton();
 }
 
 Model::TestParameters Presenter::testParameters() {
