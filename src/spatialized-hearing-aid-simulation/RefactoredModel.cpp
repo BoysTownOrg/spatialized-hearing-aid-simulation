@@ -301,6 +301,43 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 	prepareNewTest_(std::move(p));
 }
 
+std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
+	ProcessingParameters p
+) {
+	if (p.usingHearingAidSimulation) {
+		assertSizeIsPowerOfTwo(p.chunkSize);
+		assertSizeIsPowerOfTwo(p.windowSize);
+	}
+
+	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
+	common.attack_ms = p.attack_ms;
+	common.release_ms = p.release_ms;
+	common.chunkSize = p.chunkSize;
+	common.windowSize = p.windowSize;
+
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
+
+	if (p.usingHearingAidSimulation && p.usingSpatialization)
+		return processorFactoryFactory->makeFullSimulation(
+			readAndCheckBrir(std::move(p.brirFilePath)), 
+			common, 
+			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.rightDslPrescriptionFilePath))
+		);
+	else if (p.usingSpatialization)
+		return processorFactoryFactory->makeSpatialization(
+			readAndCheckBrir(std::move(p.brirFilePath))
+		);
+	else if (p.usingHearingAidSimulation)
+		return processorFactoryFactory->makeHearingAid(
+			common, 
+			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.rightDslPrescriptionFilePath))
+		);
+	else
+		return processorFactoryFactory->makeNoSimulation();
+}
+
 static std::string coefficientErrorMessage(std::string which) {
 	return 
 		"The " + which + " BRIR coefficients are empty, "
@@ -344,7 +381,7 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 		std::to_string(offender) + " is not a power of two.";
 }
 
-void RefactoredModel::checkSizeIsPowerOfTwo(int size) {
+void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
 	if (!powerOfTwo(size))
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
@@ -361,43 +398,6 @@ void RefactoredModel::prepareNewTest_(TestParameters p) {
 	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
-}
-
-std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
-	ProcessingParameters p
-) {
-	if (p.usingHearingAidSimulation) {
-		checkSizeIsPowerOfTwo(p.chunkSize);
-		checkSizeIsPowerOfTwo(p.windowSize);
-	}
-
-	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
-	common.attack_ms = p.attack_ms;
-	common.release_ms = p.release_ms;
-	common.chunkSize = p.chunkSize;
-	common.windowSize = p.windowSize;
-
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
-
-	if (p.usingHearingAidSimulation && p.usingSpatialization)
-		return processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.brirFilePath)), 
-			std::move(common), 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
-		);
-	else if (p.usingSpatialization)
-		return processorFactoryFactory->makeSpatialization(
-			readAndCheckBrir(std::move(p.brirFilePath))
-		);
-	else if (p.usingHearingAidSimulation)
-		return processorFactoryFactory->makeHearingAid(
-			std::move(common), 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
-		);
-	else
-		return processorFactoryFactory->makeNoSimulation();
 }
 
 void RefactoredModel::playNextTrial(TrialParameters p) {

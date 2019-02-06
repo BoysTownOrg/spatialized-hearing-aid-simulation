@@ -78,7 +78,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API static const double fullScaleLevel_dB_Spl;
 	SPATIALIZED_HA_SIMULATION_API static const int defaultFramesPerBuffer;
 private:
-	void checkSizeIsPowerOfTwo(int);
+	void assertSizeIsPowerOfTwo(int);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
