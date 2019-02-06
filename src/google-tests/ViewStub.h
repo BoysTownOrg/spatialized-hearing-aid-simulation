@@ -600,8 +600,8 @@ public:
 		rightDslPrescriptionFilePath_ = std::move(p);
 	}
 
-	void browseForAudio() {
-		listener_->browseForAudio();
+	void browseForStimulusList() {
+		listener_->browseForStimulusList();
 	}
 
 	void browseForBrir() {

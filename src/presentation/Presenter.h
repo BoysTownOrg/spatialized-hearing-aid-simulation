@@ -21,7 +21,7 @@ public:
 	void browseForTestFile() override;
 	void browseForLeftDslPrescription() override;
 	void browseForRightDslPrescription() override;
-	void browseForAudio() override;
+	void browseForStimulusList() override;
 	void browseForBrir() override;
 	void confirmTestSetup() override;
 	void playTrial() override;

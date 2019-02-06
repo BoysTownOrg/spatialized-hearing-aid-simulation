@@ -545,7 +545,7 @@ namespace {
 		cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
 	) {
 		view.audioDirectory_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.audioDirectory_, &ViewStub::browseForAudio);
+		assertCancellingBrowseDoesNotChangePath("a", view.audioDirectory_, &ViewStub::browseForStimulusList);
 	}
 
 
@@ -599,7 +599,7 @@ namespace {
 		browseForAudioDirectoryUpdatesAudioDirectory
 	) {
 		view.setBrowseDirectory("a");
-		view.browseForAudio();
+		view.browseForStimulusList();
 		assertEqual("a", view.audioDirectory());
 	}
 

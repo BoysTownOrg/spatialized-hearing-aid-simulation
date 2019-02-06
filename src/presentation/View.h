@@ -10,7 +10,7 @@ public:
 	virtual void browseForTestFile() = 0;
 	virtual void browseForLeftDslPrescription() = 0;
 	virtual void browseForRightDslPrescription() = 0;
-	virtual void browseForAudio() = 0;
+	virtual void browseForStimulusList() = 0;
 	virtual void browseForBrir() = 0;
 	virtual void toggleUsingSpatialization() = 0;
 	virtual void toggleUsingHearingAidSimulation() = 0;

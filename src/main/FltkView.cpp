@@ -24,7 +24,7 @@ void FltkView::onBrowseRightPrescription(Fl_Widget *, void *self) {
 }
 
 void FltkView::onBrowseAudio(Fl_Widget *, void *self) {
-	static_cast<FltkView *>(self)->listener->browseForAudio();
+	static_cast<FltkView *>(self)->listener->browseForStimulusList();
 }
 
 void FltkView::onBrowseBrir(Fl_Widget *, void *self) {
