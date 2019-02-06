@@ -310,13 +310,31 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
+
 	
-	processorFactory = makeAudioFrameProcessorFactory(
-		brirForTest,
-		leftPrescriptionForTest,
-		rightPrescriptionForTest,
-		p.processing
-	);
+	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
+	common.attack_ms = p.processing.attack_ms;
+	common.release_ms = p.processing.release_ms;
+	common.chunkSize = p.processing.chunkSize;
+	common.windowSize = p.processing.windowSize;
+
+	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
+		processorFactory = processorFactoryFactory->makeFullSimulation(
+			std::move(brirForTest), 
+			std::move(common), 
+			std::move(leftPrescriptionForTest), 
+			std::move(rightPrescriptionForTest)
+		);
+	else if (p.processing.usingSpatialization)
+		processorFactory = processorFactoryFactory->makeSpatialization(std::move(brirForTest));
+	else if (p.processing.usingHearingAidSimulation)
+		processorFactory = processorFactoryFactory->makeHearingAid(
+			std::move(common), 
+			std::move(leftPrescriptionForTest), 
+			std::move(rightPrescriptionForTest)
+		);
+	else
+		processorFactory = processorFactoryFactory->makeNoSimulation();
 
 	framesPerBufferForTest = p.processing.usingHearingAidSimulation
 		? p.processing.chunkSize
