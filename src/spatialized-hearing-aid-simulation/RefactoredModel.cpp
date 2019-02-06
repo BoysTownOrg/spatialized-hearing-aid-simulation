@@ -310,14 +310,17 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
-	testParameters = std::move(p);
 	
 	processorFactory = makeAudioFrameProcessorFactory(
 		brirForTest,
 		leftPrescriptionForTest,
 		rightPrescriptionForTest,
-		testParameters.processing
+		p.processing
 	);
+
+	framesPerBufferForTest = p.processing.usingHearingAidSimulation
+		? p.processing.chunkSize
+		: defaultFramesPerBuffer;
 }
 
 static std::string coefficientErrorMessage(std::string which) {
@@ -390,7 +393,7 @@ void RefactoredModel::playNextTrial(TrialParameters p) {
 	loader->setProcessor(processorFactory->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, testParameters.processing, std::move(p.audioDevice));
+	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
 	player->play();
 	perceptionTest->advanceTrial();
 }
@@ -437,14 +440,12 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 
 void RefactoredModel::prepareAudioPlayer(
 	AudioFrameReader &reader, 
-	ProcessingParameters processing, 
+	int framesPerBuffer, 
 	std::string audioDevice
 ) {
 	IAudioPlayer::Preparation playing{};
 	playing.channels = reader.channels();
-	playing.framesPerBuffer = processing.usingHearingAidSimulation
-		? processing.chunkSize
-		: defaultFramesPerBuffer;
+	playing.framesPerBuffer = framesPerBuffer;
 	playing.sampleRate = reader.sampleRate();
 	playing.audioDevice = std::move(audioDevice);
 	try {
@@ -483,7 +484,10 @@ void RefactoredModel::playCalibration(CalibrationParameters p) {
 	loader->setProcessor(processorFactory_->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, std::move(p.processing), std::move(p.audioDevice));
+	auto framesPerBuffer = p.processing.usingHearingAidSimulation
+		? p.processing.chunkSize
+		: defaultFramesPerBuffer;
+	prepareAudioPlayer(*reader, framesPerBuffer, std::move(p.audioDevice));
 	player->play();
 }
 

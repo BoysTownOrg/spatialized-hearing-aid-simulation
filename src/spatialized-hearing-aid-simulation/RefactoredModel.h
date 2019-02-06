@@ -49,6 +49,7 @@ public:
 
 class RefactoredModel : public Model {
 	TestParameters testParameters{};
+	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactory;
 	PrescriptionReader* prescriptionReader;
@@ -78,13 +79,12 @@ public:
 	SPATIALIZED_HA_SIMULATION_API static const int defaultFramesPerBuffer;
 private:
 	void checkAndStore(TestParameters);
-	void checkAndStorePrescriptions(TestParameters);
 	void checkSizeIsPowerOfTwo(int);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(TestParameters);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
-	void prepareAudioPlayer(AudioFrameReader &, ProcessingParameters, std::string audioDevice);
+	void prepareAudioPlayer(AudioFrameReader &, int framesPerBuffer, std::string audioDevice);
 	void prepareNewTest_(TestParameters);
 	std::shared_ptr<AudioFrameProcessorFactory> makeAudioFrameProcessorFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
