@@ -676,11 +676,6 @@ namespace {
 		assertEqual(1.1, model.trialParameters().level_dB_Spl);
 	}
 
-	TEST_F(PresenterTests, calibrateShowsCalibrationView) {
-		view.calibrate();
-		assertTrue(view.calibrationShown());
-	}
-
 	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
 		view.setAudioDevice("a");
 		view.setAudioFilePath("b");

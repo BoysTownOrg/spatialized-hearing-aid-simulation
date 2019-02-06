@@ -382,10 +382,6 @@ public:
 	auto calibrationShown() const noexcept {
 		return calibrationShown_;
 	}
-
-	void calibrate() {
-		listener_->calibrate();
-	}
 	
 	void activateReleaseTime_ms() override {
 		release_msActivated_ = true;

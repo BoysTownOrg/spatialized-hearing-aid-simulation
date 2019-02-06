@@ -14,11 +14,10 @@ public:
 	virtual void browseForBrir() = 0;
 	virtual void toggleUsingSpatialization() = 0;
 	virtual void toggleUsingHearingAidSimulation() = 0;
-	virtual void confirmTestSetup() = 0;
-	virtual void playTrial() = 0;
-	virtual void calibrate() = 0;
 	virtual void playCalibration() = 0;
 	virtual void stopCalibration() = 0;
+	virtual void confirmTestSetup() = 0;
+	virtual void playTrial() = 0;
 };
 
 class View {

@@ -253,10 +253,6 @@ void Presenter::switchViewIfTestComplete() {
 	}
 }
 
-void Presenter::calibrate() {
-	view->showCalibration();
-}
-
 void Presenter::playCalibration() {
 	try {
 		playCalibration_();
