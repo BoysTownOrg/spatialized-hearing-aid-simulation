@@ -80,7 +80,7 @@ public:
 private:
 	void checkAndStore(TestParameters);
 	void checkSizeIsPowerOfTwo(int);
-	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(TestParameters);
+	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);

@@ -312,13 +312,15 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 
 	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
 		processorFactory = processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(p), 
+			readAndCheckBrir(std::move(p.processing.brirFilePath)), 
 			std::move(common), 
 			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
 			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
 		);
 	else if (p.processing.usingSpatialization)
-		processorFactory = processorFactoryFactory->makeSpatialization(readAndCheckBrir(p));
+		processorFactory = processorFactoryFactory->makeSpatialization(
+			readAndCheckBrir(std::move(p.processing.brirFilePath))
+		);
 	else if (p.processing.usingHearingAidSimulation)
 		processorFactory = processorFactoryFactory->makeHearingAid(
 			std::move(common), 
@@ -339,8 +341,8 @@ static std::string coefficientErrorMessage(std::string which) {
 		"therefore a filter operation cannot be defined.";
 }
 
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readAndCheckBrir(TestParameters p) {
-	auto brir = readBrir(std::move(p.processing.brirFilePath));
+BrirReader::BinauralRoomImpulseResponse RefactoredModel::readAndCheckBrir(std::string filePath) {
+	auto brir = readBrir(std::move(filePath));
 	if (brir.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
 	if (brir.right.empty())
