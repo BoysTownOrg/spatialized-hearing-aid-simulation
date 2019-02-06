@@ -48,7 +48,6 @@ public:
 	virtual std::string release_ms() = 0;
 	virtual std::string windowSize() = 0;
 	virtual std::string chunkSize() = 0;
-	virtual std::string calibrationLevel_dB_Spl() = 0;
 	virtual bool usingSpatialization() = 0;
 	virtual bool usingHearingAidSimulation() = 0;
 	virtual void showErrorDialog(std::string message) = 0;

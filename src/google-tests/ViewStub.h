@@ -16,7 +16,6 @@ class ViewStub : public View {
 	std::string release_ms_{ "0" };
 	std::string windowSize_{ "0" };
 	std::string chunkSize_{ "0" };
-	std::string calibrationLevel_dB_Spl_{ "0" };
 	std::string errorMessage_{};
 	std::string browseFilePath_{};
 	std::string browseDirectory_{};
@@ -346,14 +345,6 @@ public:
 
 	void setAudioFilePath(std::string s) {
 		audioFilePath_ = std::move(s);
-	}
-
-	std::string calibrationLevel_dB_Spl() override {
-		return calibrationLevel_dB_Spl_;
-	}
-
-	void setCalibrationLevel_dB_Spl(std::string s) {
-		calibrationLevel_dB_Spl_ = std::move(s);
 	}
 
 	void stopCalibration() {
