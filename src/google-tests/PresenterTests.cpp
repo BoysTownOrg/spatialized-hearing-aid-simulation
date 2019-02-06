@@ -45,24 +45,44 @@ namespace {
 			assertTrue(view.everyItemInTesterViewHidden());
 		}
 
+		void assertTestSetupViewShown() {
+			assertTrue(view.everyItemInTestSetupShown());
+		}
+
+		void assertTestSetupViewNotHidden() {
+			assertTrue(view.notASingleElementInTestSetupHidden());
+		}
+
+		void assertTestSetupViewHidden() {
+			assertTrue(view.everyItemInTestSetupHidden());
+		}
+
+		void assertTestSetupViewNotShown() {
+			assertTrue(view.notASingleElementInTesterViewShown());
+		}
+
+		void assertTesterViewShown() {
+			assertTrue(view.everyItemInTesterViewShown());
+		}
+
 		void confirmTestSetupDoesNotHideSetupView() {
 			view.confirmTestSetup();
-			assertTrue(view.notASingleElementInTestSetupHidden());
+			assertTestSetupViewNotHidden();
 		}
 
 		void confirmTestSetupHidesSetupView() {
 			view.confirmTestSetup();
-			assertTrue(view.everyItemInTestSetupHidden());
+			assertTestSetupViewHidden();
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
 			view.confirmTestSetup();
-			assertTrue(view.notASingleElementInTesterViewShown());
+			assertTestSetupViewNotShown();
 		}
 
 		void confirmTestSetupShowsTesterView() {
 			view.confirmTestSetup();
-			assertTrue(view.everyItemInTesterViewShown());
+			assertTesterViewShown();
 		}
 
 		void confirmTestSetupDoesNotPrepareTest() {
@@ -240,7 +260,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, constructorShowsTestSetupView) {
-		assertTrue(view.everyItemInTestSetupShown());
+		assertTestSetupViewShown();
 	}
 
 	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {
@@ -668,7 +688,7 @@ namespace {
 		model.setTestComplete();
 		view.playNextTrial();
 		assertTesterViewHidden();
-		assertTrue(view.everyItemInTestSetupShown());
+		assertTestSetupViewShown();
 	}
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
