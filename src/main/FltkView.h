@@ -18,15 +18,11 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 	void populate(std::vector<std::string> items);
 };
 
-struct FltkCalibrationView : public Fl_Group {
-	FltkCalibrationView(int, int, int, int, const char * = {});
-	Fl_Input audioFilePath_;
-	Fl_Button play;
-	Fl_Button stop;
-};
-
-struct FltkSetupView : public Fl_Group {
-	FltkSetupView(int, int, int, int, const char * = {});
+struct FltkWindow : public Fl_Double_Window {
+	FltkWindow(int, int, int, int, const char * = {});
+	Fl_Float_Input attack_ms_;
+	Fl_Float_Input release_ms_;
+	Fl_Float_Input level_dB_Spl_;
 	Fl_Input subjectId_;
 	Fl_Input testerId_;
 	Fl_Input testFilePath_;
@@ -34,32 +30,21 @@ struct FltkSetupView : public Fl_Group {
 	Fl_Input rightPrescriptionFilePath_;
 	Fl_Input audioDirectory_;
 	Fl_Input brirFilePath_;
-	Fl_Float_Input attack_ms_;
-	Fl_Float_Input release_ms_;
+	Fl_Input audioFilePath_;
 	Fl_ChoiceFacade windowSize_;
 	Fl_ChoiceFacade chunkSize_;
+	Fl_ChoiceFacade audioDevice_;
 	Fl_Button browseTestFilePath;
 	Fl_Button browseLeftPrescription;
 	Fl_Button browseRightPrescription;
 	Fl_Button browseAudio;
 	Fl_Button browseBrir;
 	Fl_Button confirm;
+	Fl_Button play;
+	Fl_Button stop;
+	Fl_Button playNextTrial;
 	Fl_Check_Button usingSpatialization_;
 	Fl_Check_Button usingHearingAidSimulation_;
-};
-
-struct FltkTesterView : public Fl_Group {
-	FltkTesterView(int, int, int, int, const char * = {});
-	Fl_Float_Input level_dB_Spl_;
-	Fl_ChoiceFacade audioDevice_;
-	Fl_Button play;
-};
-
-struct FltkWindow : public Fl_Double_Window {
-	FltkWindow(int, int, int, int, const char * = {});
-	FltkSetupView setupView;
-	FltkTesterView testerView;
-	FltkCalibrationView calibrationView;
 };
 
 class FltkView : public View {
