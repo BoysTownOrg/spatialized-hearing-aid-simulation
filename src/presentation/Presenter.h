@@ -18,7 +18,7 @@ class Presenter : public EventListener {
 public:
 	PRESENTATION_API Presenter(Model *model, View *view);
 	PRESENTATION_API void run();
-	void browseForTestFile() override;
+	void browseForOutputFile() override;
 	void browseForLeftDslPrescription() override;
 	void browseForRightDslPrescription() override;
 	void browseForStimulusList() override;

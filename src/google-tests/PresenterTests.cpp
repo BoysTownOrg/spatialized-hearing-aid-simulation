@@ -519,7 +519,7 @@ namespace {
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.testFilePath_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForTestFile);
+		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForOutputFile);
 	}
 
 	TEST_F(
@@ -561,7 +561,7 @@ namespace {
 		PresenterTests,
 		browseForTestFileFiltersTextFiles
 	) {
-		view.browseForTestFile();
+		view.browseForOutputFile();
 		assertEqual({ "*.txt" }, view.browseFilters());
 	}
 
@@ -578,7 +578,7 @@ namespace {
 		browseForTestFileUpdatesTestFilePath
 	) {
 		view.setBrowseFilePath("a");
-		view.browseForTestFile();
+		view.browseForOutputFile();
 		assertEqual("a", view.outputFilePath());
 	}
 

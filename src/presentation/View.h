@@ -7,7 +7,7 @@
 class EventListener {
 public:
 	INTERFACE_OPERATIONS(EventListener);
-	virtual void browseForTestFile() = 0;
+	virtual void browseForOutputFile() = 0;
 	virtual void browseForLeftDslPrescription() = 0;
 	virtual void browseForRightDslPrescription() = 0;
 	virtual void browseForStimulusList() = 0;

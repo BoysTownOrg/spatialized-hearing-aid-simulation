@@ -557,8 +557,8 @@ public:
 		browseCancelled_ = true;
 	}
 
-	void browseForTestFile() {
-		listener_->browseForTestFile();
+	void browseForOutputFile() {
+		listener_->browseForOutputFile();
 	}
 
 	void browseForLeftDslPrescription() {

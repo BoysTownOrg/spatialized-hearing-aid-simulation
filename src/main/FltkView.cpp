@@ -12,7 +12,7 @@ void Fl_ChoiceFacade::populate(std::vector<std::string> items) {
 }
 
 void FltkView::onBrowseTestFile(Fl_Widget *, void *self) {
-	static_cast<FltkView *>(self)->listener->browseForTestFile();
+	static_cast<FltkView *>(self)->listener->browseForOutputFile();
 }
 
 void FltkView::onBrowseLeftPrescription(Fl_Widget *, void *self) {

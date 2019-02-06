@@ -85,7 +85,7 @@ void Presenter::run() {
 	view->runEventLoop();
 }
 
-void Presenter::browseForTestFile() {
+void Presenter::browseForOutputFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForSavingFile({ "*.txt" }), 
 		[=](std::string p) { this->view->setTestFilePath(std::move(p)); }
