@@ -299,18 +299,10 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 }
 
 void RefactoredModel::checkAndStore(TestParameters p) {
-	BrirReader::BinauralRoomImpulseResponse brirForTest;
-	if (p.processing.usingSpatialization)
-		brirForTest = readAndCheckBrir(p);
-	PrescriptionReader::Dsl leftPrescriptionForTest;
-	PrescriptionReader::Dsl rightPrescriptionForTest;
 	if (p.processing.usingHearingAidSimulation) {
-		leftPrescriptionForTest = readPrescription(std::move(p.processing.leftDslPrescriptionFilePath));
-		rightPrescriptionForTest = readPrescription(std::move(p.processing.rightDslPrescriptionFilePath));
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
-
 	
 	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
 	common.attack_ms = p.processing.attack_ms;
@@ -320,18 +312,18 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 
 	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
 		processorFactory = processorFactoryFactory->makeFullSimulation(
-			std::move(brirForTest), 
+			readAndCheckBrir(p), 
 			std::move(common), 
-			std::move(leftPrescriptionForTest), 
-			std::move(rightPrescriptionForTest)
+			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
 		);
 	else if (p.processing.usingSpatialization)
-		processorFactory = processorFactoryFactory->makeSpatialization(std::move(brirForTest));
+		processorFactory = processorFactoryFactory->makeSpatialization(readAndCheckBrir(p));
 	else if (p.processing.usingHearingAidSimulation)
 		processorFactory = processorFactoryFactory->makeHearingAid(
 			std::move(common), 
-			std::move(leftPrescriptionForTest), 
-			std::move(rightPrescriptionForTest)
+			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
 		);
 	else
 		processorFactory = processorFactoryFactory->makeNoSimulation();

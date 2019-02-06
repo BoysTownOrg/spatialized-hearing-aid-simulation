@@ -1227,6 +1227,11 @@ namespace {
 				calibrationFactory
 			};
 		}
+
+		void setValidSizesForTest() {
+			testParameters.processing.chunkSize = 1;
+			testParameters.processing.windowSize = 1;
+		}
 	};
 
 	TEST_F(
@@ -1236,7 +1241,9 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		testParameters.processing.usingHearingAidSimulation = true;
+		setValidSizesForTest();
 		testParameters.processing.leftDslPrescriptionFilePath = "a";
+		testParameters.processing.rightDslPrescriptionFilePath = "a";
 		assertPreparingNewTestThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 
