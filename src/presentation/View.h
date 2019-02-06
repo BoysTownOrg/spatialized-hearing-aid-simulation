@@ -54,8 +54,6 @@ public:
 	virtual void populateAudioDeviceMenu(std::vector<std::string> items) = 0;
 	virtual void populateChunkSizeMenu(std::vector<std::string> items) = 0;
 	virtual void populateWindowSizeMenu(std::vector<std::string> items) = 0;
-	virtual void showTesterView() = 0;
-	virtual void hideTesterView() = 0;
 	virtual void deactivateBrowseForBrirButton() = 0;
 	virtual void deactivateBrirFilePath() = 0;
 	virtual void activateBrowseForBrirButton() = 0;

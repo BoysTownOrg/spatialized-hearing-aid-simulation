@@ -734,10 +734,6 @@ public:
 		return testerViewShown_;
 	}
 
-	void showTesterView() override {
-		testerViewShown_ = true;
-	}
-
 	void playNextTrial() {
 		listener_->playNextTrial();
 	}
@@ -760,9 +756,5 @@ public:
 
 	void populateWindowSizeMenu(std::vector<std::string> v) override {
 		windowSizeItems_ = std::move(v);
-	}
-
-	void hideTesterView() override {
-		testerViewHidden_ = true;
 	}
 };
