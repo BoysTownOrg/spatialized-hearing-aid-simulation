@@ -43,6 +43,7 @@ private:
 		std::function<void(std::string)>
 	);
 	void prepareNewTest();
+	void hideTestSetupView();
 	Model::TestParameters testParameters();
 	Model::TrialParameters trialParameters();
 	Model::ProcessingParameters processingParameters();

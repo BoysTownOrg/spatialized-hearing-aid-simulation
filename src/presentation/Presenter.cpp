@@ -112,8 +112,32 @@ void Presenter::confirmTestSetup() {
 
 void Presenter::prepareNewTest() {
 	model->prepareNewTest(testParameters());
-	view->hideTestSetup();
+	hideTestSetupView();
 	view->showTesterView();
+}
+
+void Presenter::hideTestSetupView() {
+	view->hideSubjectId();
+	view->hideTesterId();
+	view->hideStimulusList();
+	view->hideOutputFilePath();
+	view->hideConfirmButton();
+	view->hideBrirFilePath();
+	view->hideBrowseForBrirButton();
+	view->hideUsingSpatializationCheckBox();
+	view->hideLeftDslPrescriptionFilePath();
+	view->hideBrowseForLeftDslPrescriptionButton();
+	view->hideRightDslPrescriptionFilePath();
+	view->hideBrowseForRightDslPrescriptionButton();
+	view->hideAttack_ms();
+	view->hideRelease_ms();
+	view->hideChunkSize();
+	view->hideWindowSize();
+	view->hideUsingHearingAidSimulationCheckBox();
+	view->hideAudioFilePath();
+	view->hidePlayButton();
+	view->hideStopButton();
+	view->hideLevel_dB_Spl();
 }
 
 Model::TestParameters Presenter::testParameters() {

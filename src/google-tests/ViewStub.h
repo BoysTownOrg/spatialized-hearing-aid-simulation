@@ -79,6 +79,90 @@ public:
 	bool stopButtonHidden_{};
 	bool level_dB_SplHidden_{};
 
+	void hideSubjectId() override {
+		subjectIdHidden_ = true;
+	}
+
+	void hideTesterId() override {
+		testerIdHidden_ = true;
+	}
+	
+	void hideStimulusList() override {
+		simulusListHidden_ = true;
+	}
+	
+	void hideOutputFilePath() override {
+		outputFilePathHidden_ = true;
+	}
+	
+	void hideConfirmButton() override {
+		confirmButtonHidden_ = true;
+	}
+	
+	void hideBrirFilePath() override {
+		brirFilePathHidden_ = true;
+	}
+	
+	void hideBrowseForBrirButton() override {
+		browseForBrirButtonHidden_ = true;
+	}
+	
+	void hideUsingSpatializationCheckBox() override {
+		usingSpatializationCheckBoxHidden_ = true;
+	}
+	
+	void hideLeftDslPrescriptionFilePath() override {
+		leftDslPrescriptionFilePathHidden_ = true;
+	}
+	
+	void hideBrowseForLeftDslPrescriptionButton() override {
+		browseForLeftDslPrescriptionButtonHidden_ = true;
+	}
+	
+	void hideRightDslPrescriptionFilePath() override {
+		rightDslPrescriptionFilePathHidden_ = true;
+	}
+	
+	void hideBrowseForRightDslPrescriptionButton() override {
+		browseForRightDslPrescriptionButtonHidden_ = true;
+	}
+	
+	void hideAttack_ms() override {
+		attack_msHidden_ = true;
+	}
+	
+	void hideRelease_ms() override {
+		release_msHidden_ = true;
+	}
+	
+	void hideChunkSize() override {
+		chunkSizeHidden_ = true;
+	}
+	
+	void hideWindowSize() override {
+		windowSizeHidden_ = true;
+	}
+	
+	void hideUsingHearingAidSimulationCheckBox() override {
+		usingHearingAidSimulationCheckBoxHidden_ = true;
+	}
+	
+	void hideAudioFilePath() override {
+		audioFilePathHidden_ = true;
+	}
+	
+	void hidePlayButton() override {
+		playButtonHidden_ = true;
+	}
+	
+	void hideStopButton() override {
+		stopButtonHidden_ = true;
+	}
+	
+	void hideLevel_dB_Spl() override {
+		level_dB_SplHidden_ = true;
+	}
+
 	std::string audioFilePath() override {
 		return audioFilePath_;
 	}
