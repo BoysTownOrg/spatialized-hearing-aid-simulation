@@ -41,6 +41,16 @@ namespace {
 			view.setLevel_dB_Spl("d");
 		}
 
+		void confirmTestSetupDoesNotHideSetupView() {
+			view.confirmTestSetup();
+			assertFalse(view.testSetupHidden());
+		}
+
+		void confirmTestSetupHidesSetupView() {
+			view.confirmTestSetup();
+			assertTestSetupHidden();
+		}
+
 		void assertTestSetupHidden() {
 			assertTrue(view.subjectIdHidden_);
 			assertTrue(view.testerIdHidden_);
@@ -75,16 +85,6 @@ namespace {
 			assertTrue(view.playButtonHidden_);
 			assertTrue(view.stopButtonHidden_);
 			assertTrue(view.level_dB_SplHidden_);
-		}
-
-		void confirmTestSetupDoesNotHideSetupView() {
-			view.confirmTestSetup();
-			assertFalse(view.testSetupHidden());
-		}
-
-		void confirmTestSetupHidesSetupView() {
-			view.confirmTestSetup();
-			assertTrue(view.testSetupHidden());
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
