@@ -283,6 +283,10 @@ void Presenter::stopCalibration() {
 	model->stopCalibration();
 }
 
+void Presenter::browseForAudioFile()
+{
+}
+
 void Presenter::toggleUsingSpatialization() {
 	toggleSpatializationActivation();
 }

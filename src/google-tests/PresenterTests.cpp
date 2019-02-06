@@ -539,6 +539,14 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		cancellingBrowseForAudioFileDoesNotChangeAudioFilePath
+	) {
+		view.audioFilePath_ = "a";
+		assertCancellingBrowseDoesNotChangePath("a", view.audioFilePath_, &ViewStub::browseForAudioFile);
+	}
+
+	TEST_F(
+		PresenterTests,
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
 		view.testFilePath_ = "a";

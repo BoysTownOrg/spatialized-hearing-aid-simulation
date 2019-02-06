@@ -29,6 +29,7 @@ public:
 	void toggleUsingHearingAidSimulation() override;
 	void playCalibration() override;
 	void stopCalibration() override;
+	void browseForAudioFile() override;
 
 private:
 	void toggleSpatializationActivation();

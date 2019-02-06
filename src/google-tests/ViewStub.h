@@ -10,7 +10,6 @@ class ViewStub : public View {
 	std::string subjectId_{};
 	std::string testerId_{};
 	std::string audioDevice_{};
-	std::string audioFilePath_{};
 	std::string level_dB_Spl_{ "0" };
 	std::string attack_ms_{ "0" };
 	std::string release_ms_{ "0" };
@@ -36,6 +35,7 @@ public:
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
+	std::string audioFilePath_{};
 	bool browseForLeftDslPrescriptionButtonActivated_{};
 	bool browseForRightDslPrescriptionButtonActivated_{};
 	bool leftDslPrescriptionFilePathActivated_{};
@@ -96,6 +96,10 @@ public:
 	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
 	bool playNextTrialButtonHidden_{};
+
+	void browseForAudioFile() {
+		listener_->browseForAudioFile();
+	}
 
 	void hidePlayNextTrialButton() override {
 		playNextTrialButtonHidden_ = true;
