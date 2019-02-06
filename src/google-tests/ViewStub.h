@@ -94,6 +94,13 @@ public:
 	bool playButtonShown_{};
 	bool stopButtonShown_{};
 	bool level_dB_SplShown_{};
+	bool playNextTrialButtonShown_{};
+
+	bool notASingleElementInTesterViewShown() {
+		return !(
+			playNextTrialButtonShown_
+		);
+	}
 
 	bool everyItemInTestSetupShown() {
 		return
