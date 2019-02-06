@@ -273,7 +273,12 @@ RefactoredModel::RefactoredModel(
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
-	processorFactoryFactory{std::make_shared<StereoProcessorFactoryFactory>(simulationFactory, calibrationFactory)}
+	processorFactoryFactory{
+		std::make_shared<StereoProcessorFactoryFactory>(
+			simulationFactory, 
+			calibrationFactory
+		)
+	}
 {
 	player->setAudioLoader(loader);
 }
@@ -330,7 +335,7 @@ PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) 
 		return prescriptionReader->read(filePath);
 	}
 	catch (const PrescriptionReader::ReadFailure &) {
-		throw RequestFailure{ "Unable to read '" + filePath + "'." };
+		throw RequestFailure{ "Prescription '" + filePath + "' cannot be read." };
 	}
 }
 

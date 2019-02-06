@@ -1237,7 +1237,7 @@ namespace {
 		prescriptionReader = &failing;
 		testParameters.processing.usingHearingAidSimulation = true;
 		testParameters.processing.leftDslPrescriptionFilePath = "a";
-		assertPreparingNewTestThrowsRequestFailure("Unable to read 'a'.");
+		assertPreparingNewTestThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 
 	TEST_F(
@@ -1248,7 +1248,7 @@ namespace {
 		prescriptionReader = &failing;
 		calibrationParameters.processing.usingHearingAidSimulation = true;
 		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
-		assertPlayCalibrationThrowsRequestFailure("Unable to read 'a'.");
+		assertPlayCalibrationThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 
 	TEST_F(
