@@ -598,6 +598,14 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		browseForAudioFileFiltersAudioFiles
+	) {
+		view.browseForAudioFile();
+		assertEqual({ "*.wav" }, view.browseFilters());
+	}
+
+	TEST_F(
+		PresenterTests,
 		browseForBrirFiltersWavFiles
 	) {
 		view.browseForBrir();
