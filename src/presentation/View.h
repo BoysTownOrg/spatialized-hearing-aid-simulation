@@ -36,7 +36,7 @@ public:
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual std::string subjectId() = 0;
 	virtual std::string testerId() = 0;
-	virtual std::string testFilePath() = 0;
+	virtual std::string outputFilePath() = 0;
 	virtual std::string leftDslPrescriptionFilePath() = 0;
 	virtual std::string rightDslPrescriptionFilePath() = 0;
 	virtual std::string stimulusList() = 0;
@@ -97,7 +97,6 @@ public:
 	virtual void hidePlayButton() = 0;
 	virtual void hideStopButton() = 0;
 	virtual void hideLevel_dB_Spl() = 0;
-	
 	virtual void showSubjectId() = 0;
 	virtual void showTesterId() = 0;
 	virtual void showStimulusList() = 0;

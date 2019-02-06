@@ -576,7 +576,7 @@ public:
 		testFilePath_ = std::move(p);
 	}
 
-	std::string testFilePath() override {
+	std::string outputFilePath() override {
 		return testFilePath_;
 	}
 

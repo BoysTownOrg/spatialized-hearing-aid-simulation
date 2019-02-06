@@ -11,7 +11,7 @@ public:
 		std::string subjectId;
 		std::string testerId;
 		std::string stimulusList;
-		std::string testFilePath;
+		std::string outputFilePath;
 	};
 	virtual void prepareNewTest(TestParameters) = 0;
 	RUNTIME_ERROR(TestInitializationFailure);

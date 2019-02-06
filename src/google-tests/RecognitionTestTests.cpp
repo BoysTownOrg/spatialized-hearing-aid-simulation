@@ -34,7 +34,7 @@ namespace {
 		RecognitionTestTests,
 		prepareNewTestInitializesDocumenter
 	) {
-		newTest.testFilePath = "a";
+		newTest.outputFilePath = "a";
 		prepareNewTest();
 		assertEqual("a", documenter.filePath());
 	}

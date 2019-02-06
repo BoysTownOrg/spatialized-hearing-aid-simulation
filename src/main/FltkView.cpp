@@ -536,7 +536,7 @@ std::string FltkView::testerId() {
 	return window.testerId_.value();
 }
 
-std::string FltkView::testFilePath() {
+std::string FltkView::outputFilePath() {
 	return window.testFilePath_.value();
 }
 

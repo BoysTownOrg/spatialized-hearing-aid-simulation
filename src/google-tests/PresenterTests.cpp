@@ -469,7 +469,7 @@ namespace {
 		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
 		assertEqual("c", model.testParameters().stimulusList);
 		assertEqual("d", model.testParameters().processing.brirFilePath);
-		assertEqual("e", model.testParameters().testFilePath);
+		assertEqual("e", model.testParameters().outputFilePath);
 		assertEqual("f", model.testParameters().subjectId);
 		assertEqual("g", model.testParameters().testerId);
 		assertEqual(2.2, model.testParameters().processing.attack_ms);
@@ -579,7 +579,7 @@ namespace {
 	) {
 		view.setBrowseFilePath("a");
 		view.browseForTestFile();
-		assertEqual("a", view.testFilePath());
+		assertEqual("a", view.outputFilePath());
 	}
 
 	TEST_F(

@@ -27,6 +27,6 @@ public:
 private:
 	void prepareNewTest_(TestParameters);
 	void initializeStimulusList(std::string directory);
-	void initializeDocumenter(std::string testFilePath);
+	void initializeDocumenter(std::string outputFilePath);
 	void documentTestParameters(TestParameters);
 };

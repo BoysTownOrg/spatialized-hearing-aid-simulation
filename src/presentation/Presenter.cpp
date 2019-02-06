@@ -167,7 +167,7 @@ void Presenter::hideTestSetupView() {
 Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
 	test.processing = processingParameters();
-	test.testFilePath = view->testFilePath();
+	test.outputFilePath = view->outputFilePath();
 	test.stimulusList = view->stimulusList();
 	test.subjectId = view->subjectId();
 	test.testerId = view->testerId();

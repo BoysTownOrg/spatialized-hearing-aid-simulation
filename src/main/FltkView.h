@@ -66,7 +66,7 @@ public:
 	void setTestFilePath(std::string) override;
 	std::string subjectId() override;
 	std::string testerId() override;
-	std::string testFilePath() override;
+	std::string outputFilePath() override;
 	std::string stimulusList() override;
 	std::string audioFilePath() override;
 	std::string leftDslPrescriptionFilePath() override;
