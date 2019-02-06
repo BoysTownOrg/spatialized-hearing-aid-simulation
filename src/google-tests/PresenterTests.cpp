@@ -663,7 +663,7 @@ namespace {
 	TEST_F(PresenterTests, playingLastTrialHidesTesterViewAndShowsSetupView) {
 		model.setTestComplete();
 		view.playNextTrial();
-		assertTrue(view.testerViewHidden());
+		assertTrue(view.everyItemInTesterViewHidden());
 		assertTrue(view.everyItemInTestSetupShown());
 	}
 
