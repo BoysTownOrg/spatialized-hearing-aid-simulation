@@ -137,7 +137,11 @@ void Presenter::confirmTestSetup() {
 void Presenter::prepareNewTest() {
 	model->prepareNewTest(testParameters());
 	hideTestSetupView();
-	view->showTesterView();
+	showTesterView();
+}
+
+void Presenter::showTesterView() {
+	view->showPlayNextTrialButton();
 }
 
 void Presenter::hideTestSetupView() {

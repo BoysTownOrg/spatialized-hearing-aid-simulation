@@ -96,6 +96,10 @@ public:
 	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
 
+	void showPlayNextTrialButton() override {
+		playNextTrialButtonShown_ = true;
+	}
+
 	bool everyItemInTesterViewShown() {
 		return
 			playNextTrialButtonShown_;

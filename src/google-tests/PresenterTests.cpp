@@ -274,8 +274,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
-		view.confirmTestSetup();
-		assertTrue(view.testerViewShown());
+		confirmTestSetupShowsTesterView();
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupHidesTestSetupView) {

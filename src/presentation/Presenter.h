@@ -42,6 +42,7 @@ private:
 		std::function<void(std::string)>
 	);
 	void prepareNewTest();
+	void showTesterView();
 	void hideTestSetupView();
 	void showTestSetupView();
 	Model::TestParameters testParameters();

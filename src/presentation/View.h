@@ -118,4 +118,5 @@ public:
 	virtual void showPlayButton() = 0;
 	virtual void showStopButton() = 0;
 	virtual void showLevel_dB_Spl() = 0;
+	virtual void showPlayNextTrialButton() = 0;
 };
