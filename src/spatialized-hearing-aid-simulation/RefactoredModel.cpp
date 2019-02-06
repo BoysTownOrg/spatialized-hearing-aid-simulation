@@ -2,13 +2,13 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-class nsySpatialization : public AudioFrameProcessorFactory {
+class StereoSpatializationFactory : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
 	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
-	nsySpatialization(
+	StereoSpatializationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationFactory
@@ -44,13 +44,13 @@ public:
 	}
 };
 
-class nsyHearingAid : public AudioFrameProcessorFactory {
+class StereoHearingAidFactory : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
 	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
-	nsyHearingAid(
+	StereoHearingAidFactory(
 		CommonHearingAidSimulation processing,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
@@ -100,13 +100,13 @@ public:
 	}
 };
 
-class nsyFullSimulation : public AudioFrameProcessorFactory {	
+class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {	
 	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;	
 	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
-	nsyFullSimulation(
+	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
 		PrescriptionReader::Dsl leftPrescription_,
@@ -160,11 +160,11 @@ public:
 	}
 };
 
-class nsyNoSimulation : public AudioFrameProcessorFactory {
+class StereoNoSimulation : public AudioFrameProcessorFactory {
 	ISpatializedHearingAidSimulationFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationFactory;
 public:
-	nsyNoSimulation(
+	StereoNoSimulation(
 		ISpatializedHearingAidSimulationFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationFactory
 	) noexcept :
@@ -206,7 +206,7 @@ public:
 	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
 		BrirReader::BinauralRoomImpulseResponse brir
 	) override {
-		return std::make_shared<nsySpatialization>(
+		return std::make_shared<StereoSpatializationFactory>(
 			std::move(brir), 
 			simulationFactory, 
 			calibrationFactory
@@ -219,7 +219,7 @@ public:
 		PrescriptionReader::Dsl rightPrescription_
 	) override
 	{
-		return std::make_shared<nsyHearingAid>(
+		return std::make_shared<StereoHearingAidFactory>(
 			std::move(common), 
 			std::move(leftPrescription_), 
 			std::move(rightPrescription_), 
@@ -235,7 +235,7 @@ public:
 		PrescriptionReader::Dsl rightPrescription_
 	) override
 	{
-		return std::make_shared<nsyFullSimulation>(
+		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
 			std::move(common), 
 			std::move(leftPrescription_), 
@@ -246,7 +246,7 @@ public:
 	}
 
 	std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() override {
-		return std::make_shared<nsyNoSimulation>(
+		return std::make_shared<StereoNoSimulation>(
 			simulationFactory, 
 			calibrationFactory
 		);
