@@ -92,6 +92,11 @@ void Presenter::browseForTestFile() {
 	);
 }
 
+void Presenter::browseForAudioFile()
+{
+	view->browseForSavingFile({ "*.wav" });
+}
+
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.json" }), 
@@ -281,10 +286,6 @@ void Presenter::playCalibration_() {
 
 void Presenter::stopCalibration() {
 	model->stopCalibration();
-}
-
-void Presenter::browseForAudioFile()
-{
 }
 
 void Presenter::toggleUsingSpatialization() {
