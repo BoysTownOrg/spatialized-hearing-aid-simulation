@@ -98,6 +98,10 @@ public:
 	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
 	bool playNextTrialButtonHidden_{};
+	bool browseForAudioFileButtonHidden_{};
+	bool browseForStimulusListButtonHidden_{};
+	bool browseForAudioFileButtonShown_{};
+	bool browseForStimulusListButtonShown_{};
 
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
@@ -149,7 +153,9 @@ public:
 			audioFilePathShown_ &&
 			playButtonShown_ &&
 			stopButtonShown_ &&
-			level_dB_SplShown_;
+			level_dB_SplShown_ &&
+			browseForAudioFileButtonShown_ &&
+			browseForStimulusListButtonShown_;
 	}
 
 	bool everyItemInTestSetupHidden() {
@@ -199,7 +205,9 @@ public:
 			audioFilePathHidden_ ||
 			playButtonHidden_ ||
 			stopButtonHidden_ ||
-			level_dB_SplHidden_
+			level_dB_SplHidden_ ||
+			browseForAudioFileButtonHidden_ ||
+			browseForStimulusListButtonHidden_
 		);
 	}
 
