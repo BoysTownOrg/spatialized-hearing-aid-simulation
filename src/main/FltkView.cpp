@@ -59,7 +59,7 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
 	subjectId_{ 100, 10, 200, 45, "subject ID" },
 	testerId_{ 100, 60, 200, 45, "tester ID" },
-	audioDirectory_{ 100, 110, 200, 45, "audio directory" },
+	stimulusList_{ 100, 110, 200, 45, "audio directory" },
 	browseAudio{310, 110, 60, 45, "browse" },
 	usingSpatialization_{ 50, 200, 60, 45 },
 	brirFilePath_{100, 200, 200, 45, "BRIR file path" },
@@ -136,7 +136,7 @@ void FltkView::hideTesterId()
 
 void FltkView::hideStimulusList()
 {
-	window.audioDirectory_.hide();
+	window.stimulusList_.hide();
 }
 
 void FltkView::hideTestFilePath()
@@ -241,7 +241,7 @@ void FltkView::showTesterId()
 
 void FltkView::showStimulusList()
 {
-	window.audioDirectory_.show();
+	window.stimulusList_.show();
 }
 
 void FltkView::showTestFilePath()
@@ -513,7 +513,7 @@ void FltkView::setTestFilePath(std::string p) {
 }
 
 void FltkView::setStimulusList(std::string d) {
-	window.audioDirectory_.value(d.c_str());
+	window.stimulusList_.value(d.c_str());
 }
 
 void FltkView::setLeftDslPrescriptionFilePath(std::string p) {
@@ -545,7 +545,7 @@ std::string FltkView::audioFilePath() {
 }
 
 std::string FltkView::stimulusList() {
-	return window.audioDirectory_.value();
+	return window.stimulusList_.value();
 }
 
 std::string FltkView::leftDslPrescriptionFilePath() {

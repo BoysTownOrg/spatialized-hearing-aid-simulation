@@ -565,10 +565,10 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		cancellingBrowseForAudioDirectoryNotChangeAudioDirectory
+		cancellingBrowseForStimulusListNotChangeStimulusList
 	) {
-		view.audioDirectory_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.audioDirectory_, &ViewStub::browseForStimulusList);
+		view.stimulusList_ = "a";
+		assertCancellingBrowseDoesNotChangePath("a", view.stimulusList_, &ViewStub::browseForStimulusList);
 	}
 
 
@@ -619,7 +619,7 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		browseForAudioDirectoryUpdatesAudioDirectory
+		browseForStimulusListUpdatesStimulusList
 	) {
 		view.setBrowseDirectory("a");
 		view.browseForStimulusList();

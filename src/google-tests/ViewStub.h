@@ -32,7 +32,7 @@ class ViewStub : public View {
 	bool usingHearingAidSimulation_{};
 public:
 	std::string testFilePath_{};
-	std::string audioDirectory_{};
+	std::string stimulusList_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
@@ -715,7 +715,7 @@ public:
 	}
 
 	std::string stimulusList() override {
-		return audioDirectory_;
+		return stimulusList_;
 	}
 
 	std::string browseForDirectory() override {
@@ -723,7 +723,7 @@ public:
 	}
 
 	void setStimulusList(std::string d) override {
-		audioDirectory_ = std::move(d);
+		stimulusList_ = std::move(d);
 	}
 
 	void confirmTestSetup() {

@@ -28,7 +28,7 @@ struct FltkWindow : public Fl_Double_Window {
 	Fl_Input testFilePath_;
 	Fl_Input leftPrescriptionFilePath_;
 	Fl_Input rightPrescriptionFilePath_;
-	Fl_Input audioDirectory_;
+	Fl_Input stimulusList_;
 	Fl_Input brirFilePath_;
 	Fl_Input audioFilePath_;
 	Fl_ChoiceFacade windowSize_;
