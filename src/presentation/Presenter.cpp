@@ -88,21 +88,21 @@ void Presenter::run() {
 void Presenter::browseForTestFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForSavingFile({ "*.txt" }), 
-		[=](std::string p) { this->view->setTestFilePath(std::move(p)); }
+		[=](std::string p) { view->setTestFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForAudioFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.wav" }), 
-		[=](std::string p) { this->view->setAudioFilePath(std::move(p)); }
+		[=](std::string p) { view->setAudioFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.json" }), 
-		[=](std::string p) { this->view->setLeftDslPrescriptionFilePath(std::move(p)); }
+		[=](std::string p) { view->setLeftDslPrescriptionFilePath(std::move(p)); }
 	);
 }
 
@@ -114,21 +114,21 @@ void Presenter::applyIfBrowseNotCancelled(std::string s, std::function<void(std:
 void Presenter::browseForRightDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.json" }), 
-		[=](std::string p) { this->view->setRightDslPrescriptionFilePath(std::move(p)); }
+		[=](std::string p) { view->setRightDslPrescriptionFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForStimulusList() {
 	applyIfBrowseNotCancelled(
 		view->browseForDirectory(), 
-		[=](std::string p) { this->view->setStimulusList(std::move(p)); }
+		[=](std::string p) { view->setStimulusList(std::move(p)); }
 	);
 }
 
 void Presenter::browseForBrir() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.wav" }), 
-		[=](std::string p) { this->view->setBrirFilePath(std::move(p)); }
+		[=](std::string p) { view->setBrirFilePath(std::move(p)); }
 	);
 }
 
