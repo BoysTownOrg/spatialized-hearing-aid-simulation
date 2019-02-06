@@ -57,7 +57,6 @@ public:
 	virtual void populateChunkSizeMenu(std::vector<std::string> items) = 0;
 	virtual void populateWindowSizeMenu(std::vector<std::string> items) = 0;
 	virtual void showTestSetup() = 0;
-	virtual void hideTestSetup() = 0;
 	virtual void showTesterView() = 0;
 	virtual void hideTesterView() = 0;
 	virtual void showCalibration() = 0;

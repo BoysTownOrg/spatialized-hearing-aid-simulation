@@ -24,7 +24,6 @@ class ViewStub : public View {
 	bool runningEventLoop_{};
 	bool browseCancelled_{};
 	bool testSetupShown_{};
-	bool testSetupHidden_{};
 	bool testerViewShown_{};
 	bool testerViewHidden_{};
 	bool usingSpatialization_{};
@@ -78,6 +77,31 @@ public:
 	bool playButtonHidden_{};
 	bool stopButtonHidden_{};
 	bool level_dB_SplHidden_{};
+
+	bool testSetupHidden() {
+		return
+			subjectIdHidden_ &&
+			testerIdHidden_ &&
+			simulusListHidden_ &&
+			outputFilePathHidden_ &&
+			confirmButtonHidden_ &&
+			brirFilePathHidden_ &&
+			browseForBrirButtonHidden_ &&
+			usingSpatializationCheckBoxHidden_ &&
+			leftDslPrescriptionFilePathHidden_ &&
+			browseForLeftDslPrescriptionButtonHidden_ &&
+			rightDslPrescriptionFilePathHidden_ &&
+			browseForRightDslPrescriptionButtonHidden_ &&
+			attack_msHidden_ &&
+			release_msHidden_ &&
+			chunkSizeHidden_ &&
+			windowSizeHidden_ &&
+			usingHearingAidSimulationCheckBoxHidden_ &&
+			audioFilePathHidden_ &&
+			playButtonHidden_ &&
+			stopButtonHidden_ &&
+			level_dB_SplHidden_;
+	}
 
 	void hideSubjectId() override {
 		subjectIdHidden_ = true;
@@ -562,14 +586,6 @@ public:
 
 	void confirmTestSetup() {
 		listener_->confirmTestSetup();
-	}
-
-	auto testSetupHidden() const noexcept {
-		return testSetupHidden_;
-	}
-
-	void hideTestSetup() override {
-		testSetupHidden_ = true;
 	}
 
 	auto testerViewShown() const noexcept {
