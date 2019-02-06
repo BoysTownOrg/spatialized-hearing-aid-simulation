@@ -216,6 +216,8 @@ namespace {
 			brirReader.setBrir(brir);
 			testParameters.processing.chunkSize = 1;
 			testParameters.processing.windowSize = 1;
+			calibrationParameters.processing.chunkSize = 1;
+			calibrationParameters.processing.windowSize = 1;
 		}
 
 		void prepareNewTest() {
@@ -1232,6 +1234,11 @@ namespace {
 			testParameters.processing.chunkSize = 1;
 			testParameters.processing.windowSize = 1;
 		}
+
+		void setValidSizesForCalibration() {
+			calibrationParameters.processing.chunkSize = 1;
+			calibrationParameters.processing.windowSize = 1;
+		}
 	};
 
 	TEST_F(
@@ -1254,6 +1261,7 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		calibrationParameters.processing.usingHearingAidSimulation = true;
+		setValidSizesForCalibration();
 		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
 		assertPlayCalibrationThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
