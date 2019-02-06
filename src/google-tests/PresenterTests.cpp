@@ -46,81 +46,9 @@ namespace {
 			assertTrue(view.notASingleElementInTestSetupHidden());
 		}
 
-		void assertTestSetupHasNotBeenHidden() {
-			assertFalse(view.subjectIdHidden_);
-			assertFalse(view.testerIdHidden_);
-			assertFalse(view.simulusListHidden_);
-			assertFalse(view.outputFilePathHidden_);
-			assertFalse(view.confirmButtonHidden_);
-			assertSpatializationSettingsHaveNotBeenHidden();
-			assertHearingAidSimulationSettingsHaveNotBeenHidden();
-			assertCalibrationCheckHasNotBeenHidden();
-		}
-
-		void assertSpatializationSettingsHaveNotBeenHidden() {
-			assertFalse(view.brirFilePathHidden_);
-			assertFalse(view.browseForBrirButtonHidden_);
-			assertFalse(view.usingSpatializationCheckBoxHidden_);
-		}
-
-		void assertHearingAidSimulationSettingsHaveNotBeenHidden() {
-			assertFalse(view.leftDslPrescriptionFilePathHidden_);
-			assertFalse(view.browseForLeftDslPrescriptionButtonHidden_);
-			assertFalse(view.rightDslPrescriptionFilePathHidden_);
-			assertFalse(view.browseForRightDslPrescriptionButtonHidden_);
-			assertFalse(view.attack_msHidden_);
-			assertFalse(view.release_msHidden_);
-			assertFalse(view.chunkSizeHidden_);
-			assertFalse(view.windowSizeHidden_);
-			assertFalse(view.usingHearingAidSimulationCheckBoxHidden_);
-		}
-
-		void assertCalibrationCheckHasNotBeenHidden() {
-			assertFalse(view.audioFilePathHidden_);
-			assertFalse(view.playButtonHidden_);
-			assertFalse(view.stopButtonHidden_);
-			assertFalse(view.level_dB_SplHidden_);
-		}
-
 		void confirmTestSetupHidesSetupView() {
 			view.confirmTestSetup();
 			assertTrue(view.everyItemInTestSetupHidden());
-		}
-
-		void assertTestSetupHidden() {
-			assertTrue(view.subjectIdHidden_);
-			assertTrue(view.testerIdHidden_);
-			assertTrue(view.simulusListHidden_);
-			assertTrue(view.outputFilePathHidden_);
-			assertTrue(view.confirmButtonHidden_);
-			assertSpatializationSettingsHidden();
-			assertHearingAidSimulationSettingsHidden();
-			assertCalibrationCheckHidden();
-		}
-
-		void assertSpatializationSettingsHidden() {
-			assertTrue(view.brirFilePathHidden_);
-			assertTrue(view.browseForBrirButtonHidden_);
-			assertTrue(view.usingSpatializationCheckBoxHidden_);
-		}
-
-		void assertHearingAidSimulationSettingsHidden() {
-			assertTrue(view.leftDslPrescriptionFilePathHidden_);
-			assertTrue(view.browseForLeftDslPrescriptionButtonHidden_);
-			assertTrue(view.rightDslPrescriptionFilePathHidden_);
-			assertTrue(view.browseForRightDslPrescriptionButtonHidden_);
-			assertTrue(view.attack_msHidden_);
-			assertTrue(view.release_msHidden_);
-			assertTrue(view.chunkSizeHidden_);
-			assertTrue(view.windowSizeHidden_);
-			assertTrue(view.usingHearingAidSimulationCheckBoxHidden_);
-		}
-
-		void assertCalibrationCheckHidden() {
-			assertTrue(view.audioFilePathHidden_);
-			assertTrue(view.playButtonHidden_);
-			assertTrue(view.stopButtonHidden_);
-			assertTrue(view.level_dB_SplHidden_);
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
