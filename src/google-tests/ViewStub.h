@@ -57,6 +57,27 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
+	bool subjectIdHidden_{};
+	bool testerIdHidden_{};
+	bool simulusListHidden_{};
+	bool outputFilePathHidden_{};
+	bool confirmButtonHidden_{};
+	bool brirFilePathHidden_{};
+	bool browseForBrirButtonHidden_{};
+	bool usingSpatializationCheckBoxHidden_{};
+	bool leftDslPrescriptionFilePathHidden_{};
+	bool browseForLeftDslPrescriptionButtonHidden_{};
+	bool rightDslPrescriptionFilePathHidden_{};
+	bool browseForRightDslPrescriptionButtonHidden_{};
+	bool attack_msHidden_{};
+	bool release_msHidden_{};
+	bool chunkSizeHidden_{};
+	bool windowSizeHidden_{};
+	bool usingHearingAidSimulationCheckBoxHidden_{};
+	bool audioFilePathHidden_{};
+	bool playButtonHidden_{};
+	bool stopButtonHidden_{};
+	bool level_dB_SplHidden_{};
 
 	std::string audioFilePath() override {
 		return audioFilePath_;
