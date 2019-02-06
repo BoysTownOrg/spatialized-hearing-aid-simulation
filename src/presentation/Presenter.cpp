@@ -94,7 +94,7 @@ void Presenter::browseForTestFile() {
 
 void Presenter::browseForAudioFile() {
 	applyIfBrowseNotCancelled(
-		view->browseForSavingFile({ "*.wav" }), 
+		view->browseForOpeningFile({ "*.wav" }), 
 		[=](std::string p) { this->view->setAudioFilePath(std::move(p)); }
 	);
 }
