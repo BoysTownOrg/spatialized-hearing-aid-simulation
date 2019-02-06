@@ -351,10 +351,6 @@ public:
 		audioFilePath_ = std::move(s);
 	}
 
-	void hideCalibration() override {
-		calibrationHidden_ = true;
-	}
-
 	auto calibrationHidden() const noexcept {
 		return calibrationHidden_;
 	}
@@ -373,10 +369,6 @@ public:
 
 	void playCalibration() {
 		listener_->playCalibration();
-	}
-
-	void showCalibration() override {
-		calibrationShown_ = true;
 	}
 
 	auto calibrationShown() const noexcept {
@@ -730,10 +722,6 @@ public:
 
 	auto testSetupShown() const noexcept {
 		return testSetupShown_;
-	}
-
-	void showTestSetup() override {
-		testSetupShown_ = true;
 	}
 
 	void confirmTestSetup() {

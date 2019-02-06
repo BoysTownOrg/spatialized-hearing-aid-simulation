@@ -665,7 +665,7 @@ namespace {
 		model.setTestComplete();
 		view.playTrial();
 		assertTrue(view.testerViewHidden());
-		assertTrue(view.testSetupShown());
+		assertTrue(view.everyItemInTestSetupShown());
 	}
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {

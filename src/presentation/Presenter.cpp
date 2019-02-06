@@ -249,7 +249,7 @@ Model::TrialParameters Presenter::trialParameters() {
 void Presenter::switchViewIfTestComplete() {
 	if (model->testComplete()) {
 		view->hideTesterView();
-		view->showTestSetup();
+		showTestSetupView();
 	}
 }
 
