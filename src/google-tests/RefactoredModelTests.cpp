@@ -1263,6 +1263,7 @@ namespace {
 		calibrationParameters.processing.usingHearingAidSimulation = true;
 		setValidSizesForCalibration();
 		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
+		calibrationParameters.processing.rightDslPrescriptionFilePath = "a";
 		assertPlayCalibrationThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 

@@ -294,11 +294,6 @@ RefactoredModel::RefactoredModel(
 }
 
 void RefactoredModel::prepareNewTest(TestParameters p) {
-	checkAndStore(p);
-	prepareNewTest_(std::move(p));
-}
-
-void RefactoredModel::checkAndStore(TestParameters p) {
 	if (p.processing.usingHearingAidSimulation) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
@@ -333,6 +328,8 @@ void RefactoredModel::checkAndStore(TestParameters p) {
 	framesPerBufferForTest = p.processing.usingHearingAidSimulation
 		? p.processing.chunkSize
 		: defaultFramesPerBuffer;
+
+	prepareNewTest_(std::move(p));
 }
 
 static std::string coefficientErrorMessage(std::string which) {
@@ -475,27 +472,40 @@ bool RefactoredModel::testComplete() {
 void RefactoredModel::playCalibration(CalibrationParameters p) {
 	if (player->isPlaying())
 		return;
+
 	if (p.processing.usingHearingAidSimulation) {
 		checkSizeIsPowerOfTwo(p.processing.chunkSize);
 		checkSizeIsPowerOfTwo(p.processing.windowSize);
 	}
+	
+	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
+	common.attack_ms = p.processing.attack_ms;
+	common.release_ms = p.processing.release_ms;
+	common.chunkSize = p.processing.chunkSize;
+	common.windowSize = p.processing.windowSize;
 
-	BrirReader::BinauralRoomImpulseResponse brir_;
-	if (p.processing.usingSpatialization)
-		brir_ = readBrir(p.processing.brirFilePath);
-	PrescriptionReader::Dsl leftPrescription_;
-	PrescriptionReader::Dsl rightPrescription_;
-	if (p.processing.usingHearingAidSimulation) {
-		leftPrescription_ = readPrescription(p.processing.leftDslPrescriptionFilePath);
-		rightPrescription_ = readPrescription(p.processing.rightDslPrescriptionFilePath);
-	}
+	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
 
-	auto processorFactory_ = makeAudioFrameProcessorFactory(
-		std::move(brir_),
-		std::move(leftPrescription_),
-		std::move(rightPrescription_),
-		p.processing
-	);
+	if (p.processing.usingHearingAidSimulation && p.processing.usingSpatialization)
+		processorFactory_ = processorFactoryFactory->makeFullSimulation(
+			readAndCheckBrir(std::move(p.processing.brirFilePath)), 
+			std::move(common), 
+			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
+		);
+	else if (p.processing.usingSpatialization)
+		processorFactory_ = processorFactoryFactory->makeSpatialization(
+			readAndCheckBrir(std::move(p.processing.brirFilePath))
+		);
+	else if (p.processing.usingHearingAidSimulation)
+		processorFactory_ = processorFactoryFactory->makeHearingAid(
+			std::move(common), 
+			readPrescription(std::move(p.processing.leftDslPrescriptionFilePath)), 
+			readPrescription(std::move(p.processing.rightDslPrescriptionFilePath))
+		);
+	else
+		processorFactory_ = processorFactoryFactory->makeNoSimulation();
+
 	auto reader = makeReader(std::move(p.audioFilePath));
 	loader->setProcessor(processorFactory_->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
