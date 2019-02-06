@@ -43,7 +43,43 @@ namespace {
 
 		void confirmTestSetupDoesNotHideSetupView() {
 			view.confirmTestSetup();
-			assertFalse(view.testSetupHidden());
+			assertTestSetupHasNotBeenHidden();
+		}
+
+		void assertTestSetupHasNotBeenHidden() {
+			assertFalse(view.subjectIdHidden_);
+			assertFalse(view.testerIdHidden_);
+			assertFalse(view.simulusListHidden_);
+			assertFalse(view.outputFilePathHidden_);
+			assertFalse(view.confirmButtonHidden_);
+			assertSpatializationSettingsHaveNotBeenHidden();
+			assertHearingAidSimulationSettingsHaveNotBeenHidden();
+			assertCalibrationCheckHasNotBeenHidden();
+		}
+
+		void assertSpatializationSettingsHaveNotBeenHidden() {
+			assertFalse(view.brirFilePathHidden_);
+			assertFalse(view.browseForBrirButtonHidden_);
+			assertFalse(view.usingSpatializationCheckBoxHidden_);
+		}
+
+		void assertHearingAidSimulationSettingsHaveNotBeenHidden() {
+			assertFalse(view.leftDslPrescriptionFilePathHidden_);
+			assertFalse(view.browseForLeftDslPrescriptionButtonHidden_);
+			assertFalse(view.rightDslPrescriptionFilePathHidden_);
+			assertFalse(view.browseForRightDslPrescriptionButtonHidden_);
+			assertFalse(view.attack_msHidden_);
+			assertFalse(view.release_msHidden_);
+			assertFalse(view.chunkSizeHidden_);
+			assertFalse(view.windowSizeHidden_);
+			assertFalse(view.usingHearingAidSimulationCheckBoxHidden_);
+		}
+
+		void assertCalibrationCheckHasNotBeenHidden() {
+			assertFalse(view.audioFilePathHidden_);
+			assertFalse(view.playButtonHidden_);
+			assertFalse(view.stopButtonHidden_);
+			assertFalse(view.level_dB_SplHidden_);
 		}
 
 		void confirmTestSetupHidesSetupView() {
