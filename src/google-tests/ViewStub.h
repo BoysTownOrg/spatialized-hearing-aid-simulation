@@ -23,7 +23,6 @@ class ViewStub : public View {
 	EventListener *listener_{};
 	bool runningEventLoop_{};
 	bool browseCancelled_{};
-	bool testSetupShown_{};
 	bool testerViewShown_{};
 	bool testerViewHidden_{};
 	bool usingSpatialization_{};
@@ -32,8 +31,6 @@ class ViewStub : public View {
 	bool brirFilePathActivated_{};
 	bool browseForBrirButtonActivated_{};
 	bool usingHearingAidSimulation_{};
-	bool calibrationShown_{};
-	bool calibrationHidden_{};
 public:
 	std::string testFilePath_{};
 	std::string audioDirectory_{};
@@ -351,10 +348,6 @@ public:
 		audioFilePath_ = std::move(s);
 	}
 
-	auto calibrationHidden() const noexcept {
-		return calibrationHidden_;
-	}
-
 	std::string calibrationLevel_dB_Spl() override {
 		return calibrationLevel_dB_Spl_;
 	}
@@ -369,10 +362,6 @@ public:
 
 	void playCalibration() {
 		listener_->playCalibration();
-	}
-
-	auto calibrationShown() const noexcept {
-		return calibrationShown_;
 	}
 	
 	void activateReleaseTime_ms() override {
@@ -718,10 +707,6 @@ public:
 
 	void setAudioDirectory(std::string d) override {
 		audioDirectory_ = std::move(d);
-	}
-
-	auto testSetupShown() const noexcept {
-		return testSetupShown_;
 	}
 
 	void confirmTestSetup() {
