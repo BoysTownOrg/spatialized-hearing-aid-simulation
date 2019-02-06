@@ -78,7 +78,7 @@ public:
 	bool stopButtonHidden_{};
 	bool level_dB_SplHidden_{};
 
-	bool testSetupHidden() {
+	bool everyItemInTestSetupHidden() {
 		return
 			subjectIdHidden_ &&
 			testerIdHidden_ &&
@@ -101,6 +101,32 @@ public:
 			playButtonHidden_ &&
 			stopButtonHidden_ &&
 			level_dB_SplHidden_;
+	}
+
+	bool notASingleElementInTestSetupHidden() {
+		return !(
+			subjectIdHidden_ ||
+			testerIdHidden_ ||
+			simulusListHidden_ ||
+			outputFilePathHidden_ ||
+			confirmButtonHidden_ ||
+			brirFilePathHidden_ ||
+			browseForBrirButtonHidden_ ||
+			usingSpatializationCheckBoxHidden_ ||
+			leftDslPrescriptionFilePathHidden_ ||
+			browseForLeftDslPrescriptionButtonHidden_ ||
+			rightDslPrescriptionFilePathHidden_ ||
+			browseForRightDslPrescriptionButtonHidden_ ||
+			attack_msHidden_ ||
+			release_msHidden_ ||
+			chunkSizeHidden_ ||
+			windowSizeHidden_ ||
+			usingHearingAidSimulationCheckBoxHidden_ ||
+			audioFilePathHidden_ ||
+			playButtonHidden_ ||
+			stopButtonHidden_ ||
+			level_dB_SplHidden_
+		);
 	}
 
 	void hideSubjectId() override {

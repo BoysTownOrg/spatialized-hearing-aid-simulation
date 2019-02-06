@@ -43,7 +43,7 @@ namespace {
 
 		void confirmTestSetupDoesNotHideSetupView() {
 			view.confirmTestSetup();
-			assertTestSetupHasNotBeenHidden();
+			assertTrue(view.notASingleElementInTestSetupHidden());
 		}
 
 		void assertTestSetupHasNotBeenHidden() {
@@ -84,7 +84,7 @@ namespace {
 
 		void confirmTestSetupHidesSetupView() {
 			view.confirmTestSetup();
-			assertTestSetupHidden();
+			assertTrue(view.everyItemInTestSetupHidden());
 		}
 
 		void assertTestSetupHidden() {
@@ -927,7 +927,7 @@ namespace {
 
 	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetupView) {
 		view.confirmTestSetup();
-		assertFalse(view.testSetupHidden());
+		assertFalse(view.everyItemInTestSetupHidden());
 	}
 
 	class PresenterWithTrialFailingModel : public ::testing::Test {
