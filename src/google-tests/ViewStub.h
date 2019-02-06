@@ -96,6 +96,11 @@ public:
 	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
 
+	bool everyItemInTesterViewShown() {
+		return
+			playNextTrialButtonShown_;
+	}
+
 	bool notASingleElementInTesterViewShown() {
 		return !(
 			playNextTrialButtonShown_

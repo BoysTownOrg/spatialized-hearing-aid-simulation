@@ -58,7 +58,7 @@ namespace {
 
 		void confirmTestSetupShowsTesterView() {
 			view.confirmTestSetup();
-			assertTrue(view.testerViewShown());
+			assertTrue(view.everyItemInTesterViewShown());
 		}
 
 		void confirmTestSetupDoesNotPrepareTest() {
