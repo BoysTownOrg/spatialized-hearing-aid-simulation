@@ -467,7 +467,7 @@ namespace {
 		view.confirmTestSetup();
 		assertEqual("a", model.testParameters().processing.leftDslPrescriptionFilePath);
 		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
-		assertEqual("c", model.testParameters().stimulusList);
+		assertEqual("c", model.testParameters().audioDirectory);
 		assertEqual("d", model.testParameters().processing.brirFilePath);
 		assertEqual("e", model.testParameters().testFilePath);
 		assertEqual("f", model.testParameters().subjectId);

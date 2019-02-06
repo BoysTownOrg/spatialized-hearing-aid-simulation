@@ -568,7 +568,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
-		testParameters.stimulusList = "a";
+		testParameters.audioDirectory = "a";
 		testParameters.testFilePath = "b";
 		testParameters.subjectId = "c";
 		testParameters.testerId = "d";

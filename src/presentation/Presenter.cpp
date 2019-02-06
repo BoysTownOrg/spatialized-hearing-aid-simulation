@@ -168,7 +168,7 @@ Model::TestParameters Presenter::testParameters() {
 	Model::TestParameters test;
 	test.processing = processingParameters();
 	test.testFilePath = view->testFilePath();
-	test.stimulusList = view->stimulusList();
+	test.audioDirectory = view->stimulusList();
 	test.subjectId = view->subjectId();
 	test.testerId = view->testerId();
 	return test;
