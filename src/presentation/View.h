@@ -97,6 +97,7 @@ public:
 	virtual void hidePlayButton() = 0;
 	virtual void hideStopButton() = 0;
 	virtual void hideLevel_dB_Spl() = 0;
+	virtual void hidePlayNextTrialButton() = 0;
 	virtual void showSubjectId() = 0;
 	virtual void showTesterId() = 0;
 	virtual void showStimulusList() = 0;

@@ -55,4 +55,5 @@ private:
 	void playTrial_();
 	void playCalibration_();
 	void switchViewIfTestComplete();
+	void hideTesterView();
 };

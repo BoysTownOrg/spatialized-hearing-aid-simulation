@@ -252,9 +252,13 @@ Model::TrialParameters Presenter::trialParameters() {
 
 void Presenter::switchViewIfTestComplete() {
 	if (model->testComplete()) {
-		view->hideTesterView();
+		hideTesterView();
 		showTestSetupView();
 	}
+}
+
+void Presenter::hideTesterView() {
+	view->hidePlayNextTrialButton();
 }
 
 void Presenter::playCalibration() {

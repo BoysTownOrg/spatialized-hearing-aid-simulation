@@ -97,6 +97,10 @@ public:
 	bool playNextTrialButtonShown_{};
 	bool playNextTrialButtonHidden_{};
 
+	void hidePlayNextTrialButton() override {
+		playNextTrialButtonHidden_ = true;
+	}
+
 	void showPlayNextTrialButton() override {
 		playNextTrialButtonShown_ = true;
 	}
