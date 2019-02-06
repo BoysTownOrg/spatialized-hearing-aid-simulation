@@ -623,6 +623,15 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		browseForAudioFileUpdatesAudioFilePath
+	) {
+		view.setBrowseFilePath("a");
+		view.browseForAudioFile();
+		assertEqual("a", view.audioFilePath());
+	}
+
+	TEST_F(
+		PresenterTests,
 		browseForDslPrescriptionUpdatesDslPrescriptionFilePath
 	) {
 		view.setBrowseFilePath("a");
