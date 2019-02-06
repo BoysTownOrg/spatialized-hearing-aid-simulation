@@ -180,7 +180,9 @@ public:
 			audioFilePathHidden_ &&
 			playButtonHidden_ &&
 			stopButtonHidden_ &&
-			level_dB_SplHidden_;
+			level_dB_SplHidden_ &&
+			browseForAudioFileButtonHidden_ &&
+			browseForStimulusListButtonHidden_;
 	}
 
 	bool notASingleElementInTestSetupHidden() {
