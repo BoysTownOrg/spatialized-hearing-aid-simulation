@@ -373,7 +373,7 @@ public:
 		return audioFilePath_;
 	}
 
-	void setAudioFilePath(std::string s) {
+	void setAudioFilePath(std::string s) override {
 		audioFilePath_ = std::move(s);
 	}
 

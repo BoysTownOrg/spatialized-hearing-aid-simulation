@@ -92,9 +92,11 @@ void Presenter::browseForTestFile() {
 	);
 }
 
-void Presenter::browseForAudioFile()
-{
-	view->browseForSavingFile({ "*.wav" });
+void Presenter::browseForAudioFile() {
+	applyIfBrowseNotCancelled(
+		view->browseForSavingFile({ "*.wav" }), 
+		[=](std::string p) { this->view->setAudioFilePath(std::move(p)); }
+	);
 }
 
 void Presenter::browseForLeftDslPrescription() {

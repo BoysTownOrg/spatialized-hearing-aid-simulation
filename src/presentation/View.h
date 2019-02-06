@@ -35,6 +35,7 @@ public:
 	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	virtual void setStimulusList(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
+	virtual void setAudioFilePath(std::string) = 0;
 	virtual std::string subjectId() = 0;
 	virtual std::string testerId() = 0;
 	virtual std::string testFilePath() = 0;
