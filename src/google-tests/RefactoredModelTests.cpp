@@ -590,11 +590,10 @@ namespace {
 		playCalibrationPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
 		calibrationParameters.processing.usingHearingAidSimulation = true;
-		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
-		calibrationParameters.processing.rightDslPrescriptionFilePath = "b";
-		playCalibration();
-		assertTrue(prescriptionReader.filePaths().contains("a"));
-		assertTrue(prescriptionReader.filePaths().contains("b"));
+		assertPrescriptionReaderContainsFilePathsAfterCall(
+			calibrationParameters.processing,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(
