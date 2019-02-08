@@ -663,7 +663,7 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
 		list.setContents({ "a", "b", "c" });
-		playNextTrial();
+		playFirstTrialOfNewTest();
 		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
 
