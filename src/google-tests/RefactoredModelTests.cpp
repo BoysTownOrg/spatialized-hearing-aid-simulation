@@ -505,6 +505,10 @@ namespace {
 			assertTrue(prescriptionReader.filePaths().contains("a"));
 			assertTrue(prescriptionReader.filePaths().contains("b"));
 		}
+
+		void assertPrescriptionReaderDidNotReadAnything() {
+			assertTrue(prescriptionReader.filePaths().empty());
+		}
 	};
 
 	TEST_F(
@@ -602,7 +606,7 @@ namespace {
 	) {
 		testParameters.processing.usingHearingAidSimulation = false;
 		prepareNewTest();
-		assertTrue(prescriptionReader.filePaths().empty());
+		assertPrescriptionReaderDidNotReadAnything();
 	}
 
 	TEST_F(
@@ -611,7 +615,7 @@ namespace {
 	) {
 		calibrationParameters.processing.usingHearingAidSimulation = false;
 		playCalibration();
-		assertTrue(prescriptionReader.filePaths().empty());
+		assertPrescriptionReaderDidNotReadAnything();
 	}
 
 	TEST_F(
