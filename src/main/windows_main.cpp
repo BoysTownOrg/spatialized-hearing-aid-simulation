@@ -16,7 +16,6 @@
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
 #include <playing-audio/AudioProcessingLoader.h>
-#include <recognition-test/RecognitionTest.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
@@ -60,7 +59,6 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	RandomizedStimulusList stimulusList{&fileDecorator, &randomizer};
 	FileSystemWriter persistentWriter;
 	TestDocumenter testDocumenter{ &persistentWriter };
-	RecognitionTest perceptionTest{ &stimulusList, &testDocumenter };
 	PortAudioDevice audioDevice{};
 	AudioPlayer player{&audioDevice};
 	AudioProcessingLoader audioLoader{};
@@ -81,7 +79,8 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	};
 	CalibrationComputerFactoryImpl calibrationFactory{};
 	RefactoredModel model{
-		&perceptionTest,
+		&stimulusList,
+		&testDocumenter,
 		&player,
 		&audioLoader,
 		&audioFrameReaderFactory,
