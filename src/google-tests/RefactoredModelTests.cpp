@@ -494,6 +494,17 @@ namespace {
 			assertEqual({ 1, 2, }, spatialization.at(0).filterCoefficients);
 			assertEqual({ 3, 4, }, spatialization.at(1).filterCoefficients);
 		}
+
+		void assertPrescriptionReaderContainsFilePathsAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			std::function<void(void)> f
+		) {
+			processing.leftDslPrescriptionFilePath = "a";
+			processing.rightDslPrescriptionFilePath = "b";
+			f();
+			assertTrue(prescriptionReader.filePaths().contains("a"));
+			assertTrue(prescriptionReader.filePaths().contains("b"));
+		}
 	};
 
 	TEST_F(
@@ -567,16 +578,16 @@ namespace {
 		prepareNewTestPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
 		testParameters.processing.usingHearingAidSimulation = true;
-		testParameters.processing.leftDslPrescriptionFilePath = "a";
-		testParameters.processing.rightDslPrescriptionFilePath = "b";
-		prepareNewTest();
-		assertTrue(prescriptionReader.filePaths().contains("a"));
-		assertTrue(prescriptionReader.filePaths().contains("b"));
+		assertPrescriptionReaderContainsFilePathsAfterCall(
+			testParameters.processing,
+			[=]() { prepareNewTest(); }
+		);
+
 	}
 
 	TEST_F(
 		RefactoredModelTests,
-		playCalibrationPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
+		playCalibrationPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
 		calibrationParameters.processing.usingHearingAidSimulation = true;
 		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
