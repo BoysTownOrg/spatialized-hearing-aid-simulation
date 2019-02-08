@@ -30,7 +30,7 @@ public:
 		audioDeviceDescriptions_ = std::move(v);
 	}
 
-	auto played() const {
+	auto played() const noexcept {
 		return played_;
 	}
 
@@ -40,7 +40,7 @@ public:
 		log_.insert("play ");
 	}
 
-	void setPlaying() {
+	void setPlaying() noexcept {
 		isPlaying_ = true;
 	}
 
@@ -52,7 +52,7 @@ public:
 		stopped_ = true;
 	}
 
-	auto stopped() const {
+	auto stopped() const noexcept {
 		return stopped_;
 	}
 
@@ -68,7 +68,7 @@ public:
 		callOnPlay_ = f;
 	}
 
-	auto &log() const {
+	auto &log() const noexcept {
 		return log_;
 	}
 };

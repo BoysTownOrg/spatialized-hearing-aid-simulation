@@ -40,7 +40,7 @@ public:
 		log_.insert("reset ");
 	}
 
-	auto &log() const {
+	auto &log() const noexcept {
 		return log_;
 	}
 
