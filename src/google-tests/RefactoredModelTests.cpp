@@ -509,6 +509,15 @@ namespace {
 		void assertPrescriptionReaderDidNotReadAnything() {
 			assertTrue(prescriptionReader.filePaths().empty());
 		}
+
+		void assertBrirReaderReceivesFilePathAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			std::function<void(void)> f
+		) {
+			processing.brirFilePath = "a";
+			f();
+			assertEqual("a", brirReader.filePath());
+		}
 	};
 
 	TEST_F(
@@ -623,9 +632,10 @@ namespace {
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
 		testParameters.processing.usingSpatialization = true;
-		testParameters.processing.brirFilePath = "a";
-		prepareNewTest();
-		assertEqual("a", brirReader.filePath());
+		assertBrirReaderReceivesFilePathAfterCall(
+			testParameters.processing,
+			[=]() { prepareNewTest(); }
+		);
 	}
 
 	TEST_F(
@@ -633,9 +643,10 @@ namespace {
 		playCalibrationPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
 		calibrationParameters.processing.usingSpatialization = true;
-		calibrationParameters.processing.brirFilePath = "a";
-		playCalibration();
-		assertEqual("a", brirReader.filePath());
+		assertBrirReaderReceivesFilePathAfterCall(
+			calibrationParameters.processing,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
