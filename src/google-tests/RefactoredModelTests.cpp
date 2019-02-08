@@ -549,10 +549,13 @@ namespace {
 	) {
 		list.setContents({ "a", "b", "c" });
 		trialParameters.level_dB_Spl = 1.1;
-		prepareNewTest();
-		playNextTrial();
+		playFirstTrialOfNewTest();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
 		assertEqual(1.1, documenter.documentedTrialParameters().level_dB_Spl);
+		trialParameters.level_dB_Spl = 2.2;
+		playNextTrial();
+		assertEqual("b", documenter.documentedTrialParameters().stimulus);
+		assertEqual(2.2, documenter.documentedTrialParameters().level_dB_Spl);
 	}
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
