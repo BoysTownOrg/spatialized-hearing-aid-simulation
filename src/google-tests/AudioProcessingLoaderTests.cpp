@@ -3,6 +3,7 @@
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading/AudioFileInMemory.h>
+#include <playing-audio/AudioProcessingLoader.h>
 #include <gtest/gtest.h>
 
 namespace {

@@ -1,5 +1,6 @@
 #pragma once
-#include <playing-audio/AudioProcessingLoader.h>
+
+#include <spatialized-hearing-aid-simulation/AudioFrameProcessor.h>
 
 class AudioFrameProcessorStub : public AudioFrameProcessor {
 	gsl::span<channel_type> audioBuffer_{};

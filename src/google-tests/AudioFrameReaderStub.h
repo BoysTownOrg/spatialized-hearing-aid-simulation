@@ -12,6 +12,7 @@ class AudioFrameReaderStub : public AudioFrameReader {
     int remainingFrames_{};
 	bool complete_{};
 public:
+
     long long remainingFrames() override {
         return remainingFrames_;
     }
@@ -30,7 +31,8 @@ public:
 
 	void read(gsl::span<channel_type> audio) override {
 		audioBuffer_ = audio;
-		readingLog_ += LogString{ "read " };
+		using namespace std::string_literals;
+		readingLog_ += "read "s;
 	}
 
 	void setComplete() noexcept {
@@ -66,7 +68,8 @@ public:
 	}
 
 	void reset() override {
-		readingLog_ += LogString{ "reset " };
+		using namespace std::string_literals;
+		readingLog_ += "reset "s;
 	}
 
 	void setIncomplete() noexcept {
