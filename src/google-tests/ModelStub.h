@@ -36,7 +36,7 @@ public:
 		calibrationPlayed_ = true;
 	}
 
-	auto calibrationPlayed() const {
+	auto calibrationPlayed() const noexcept {
 		return calibrationPlayed_;
 	}
 
@@ -53,7 +53,7 @@ public:
 		testPrepared_ = true;
 	}
 
-	auto testPrepared() const {
+	auto testPrepared() const noexcept {
 		return testPrepared_;
 	}
 

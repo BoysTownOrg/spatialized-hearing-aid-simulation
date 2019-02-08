@@ -10,13 +10,13 @@ class PrescriptionReaderStub : public PrescriptionReader {
 	bool readCalled_{};
 public:
 	void addPrescription(std::string filePath, Dsl dsl) {
-		prescriptions_[filePath] = dsl;
+		prescriptions_[std::move(filePath)] = std::move(dsl);
 	}
 
 	Dsl read(std::string filePath) override {
 		readCalled_ = true;
 		filePaths_.push_back(filePath);
-		return prescriptions_[filePath];
+		return prescriptions_[std::move(filePath)];
 	}
 
 	auto filePaths() const {
