@@ -532,11 +532,10 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests,
-		nextStimulusReturnsThatOfList
+		playTrialPassesNextStimulusToFactory
 	) {
 		list.setContents({ "a", "b", "c" });
-		prepareNewTest();
-		playNextTrial();
+		playFirstTrialOfNewTest();
 		assertEqual("a", audioFrameReaderFactory.filePath());
 		playNextTrial();
 		assertEqual("b", audioFrameReaderFactory.filePath());
@@ -642,12 +641,6 @@ namespace {
 	TEST_F(RefactoredModelTests, playCalibrationPlaysPlayer) {
 		playCalibration();
 		assertAudioPlayerHasBeenPlayed();
-	}
-
-	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
-		list.setContents({ "a", "b", "c" });
-		playFirstTrialOfNewTest();
-		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFileToFactory) {
