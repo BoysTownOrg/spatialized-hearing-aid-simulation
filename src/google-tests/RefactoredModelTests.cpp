@@ -566,9 +566,11 @@ namespace {
 		playNextTrialDocumentsTrial
 	) {
 		list.setContents({ "a", "b", "c" });
+		trialParameters.level_dB_Spl = 1.1;
 		prepareNewTest();
 		playNextTrial();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
+		assertEqual(1.1, documenter.documentedTrialParameters().level_dB_Spl);
 	}
 
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {

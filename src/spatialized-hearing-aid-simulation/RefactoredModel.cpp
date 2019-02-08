@@ -410,7 +410,10 @@ void RefactoredModel::playNextTrial(TrialParameters p) {
 	loader->reset();
 	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
 	player->play();
-	documenter->documentTrialParameters({});
+	Documenter::TrialParameters documenting;
+	documenting.level_dB_Spl = p.level_dB_Spl;
+	documenting.stimulus = nextStimulus_;
+	documenter->documentTrialParameters(std::move(documenting));
 	nextStimulus_ = list->next();
 }
 
