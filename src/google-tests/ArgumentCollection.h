@@ -18,7 +18,7 @@ public:
 		return collection.push_back(item);
 	}
 
-	auto empty() const {
+	auto empty() const noexcept {
 		return collection.empty();
 	}
 
