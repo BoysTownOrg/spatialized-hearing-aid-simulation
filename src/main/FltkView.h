@@ -18,25 +18,30 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 	void populate(std::vector<std::string> items);
 };
 
-struct FltkWindow : public Fl_Double_Window {
-	FltkWindow(int, int, int, int, const char * = {});
+struct FltkHearingAidSimulationGroup : public Fl_Group {
+	FltkHearingAidSimulationGroup(int, int, int, int, const char * = {});
 	Fl_Float_Input attack_ms_;
 	Fl_Float_Input release_ms_;
+	Fl_Input leftPrescriptionFilePath_;
+	Fl_Input rightPrescriptionFilePath_;
+	Fl_Button browseLeftPrescription;
+	Fl_Button browseRightPrescription;
+	Fl_ChoiceFacade windowSize_;
+	Fl_ChoiceFacade chunkSize_;
+};
+
+struct FltkWindow : public Fl_Double_Window {
+	FltkWindow(int, int, int, int, const char * = {});
+	FltkHearingAidSimulationGroup hearingAidSimulation;
 	Fl_Float_Input level_dB_Spl_;
 	Fl_Input subjectId_;
 	Fl_Input testerId_;
 	Fl_Input testFilePath_;
-	Fl_Input leftPrescriptionFilePath_;
-	Fl_Input rightPrescriptionFilePath_;
 	Fl_Input stimulusList_;
 	Fl_Input brirFilePath_;
 	Fl_Input audioFilePath_;
-	Fl_ChoiceFacade windowSize_;
-	Fl_ChoiceFacade chunkSize_;
 	Fl_ChoiceFacade audioDevice_;
 	Fl_Button browseTestFilePath;
-	Fl_Button browseLeftPrescription;
-	Fl_Button browseRightPrescription;
 	Fl_Button browseForStimulusList;
 	Fl_Button browseBrir;
 	Fl_Button browseForAudioFile;
