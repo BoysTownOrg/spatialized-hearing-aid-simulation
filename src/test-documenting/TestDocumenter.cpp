@@ -87,7 +87,7 @@ void TestDocumenter::documentTestParameters(Model::TestParameters p) {
 void TestDocumenter::documentTrialParameters(TrialParameters p) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("stimulus", p.stimulus);
-	//stream.insertLabeledParameterLine("level (dB SPL)", global->level_dB_Spl);
+	stream.insertLabeledParameterLine("level (dB SPL)", p.level_dB_Spl);
 	stream.insertLine();
 	writer->write(stream.str());
 }
