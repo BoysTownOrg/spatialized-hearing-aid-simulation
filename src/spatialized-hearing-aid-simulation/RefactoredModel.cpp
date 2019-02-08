@@ -299,7 +299,7 @@ void RefactoredModel::prepareNewTest(TestParameters p) {
 	framesPerBufferForTest = p.processing.usingHearingAidSimulation
 		? p.processing.chunkSize
 		: defaultFramesPerBuffer;
-	processorFactoryForTest = makeProcessorFactory(std::move(p.processing));
+	processorFactoryForTest = makeProcessorFactory(p.processing);
 	prepareNewTest_(std::move(p));
 }
 
@@ -390,9 +390,9 @@ void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
 
 void RefactoredModel::prepareNewTest_(TestParameters p) {
 	try {
-		list->initialize(std::move(p.audioDirectory));
+		list->initialize(p.audioDirectory);
 		documenter->initialize(std::move(p.testFilePath));
-		documenter->documentTestParameters({});
+		documenter->documentTestParameters(std::move(p));
 		nextStimulus_ = list->next();
 	}
 	catch (const std::runtime_error &e) {
