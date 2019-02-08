@@ -9,7 +9,8 @@
 #include "FakeAudioFileReader.h"
 #include "SignalProcessorStub.h"
 #include "AudioPlayerStub.h"
-#include "SpeechPerceptionTestStub.h"
+#include "FakeStimulusList.h"
+#include "DocumenterStub.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 #include <gtest/gtest.h>
@@ -26,6 +27,8 @@ namespace {
 		}
 
 		T pop_front() {
+			if (elements.empty())
+				return {};
 			auto item = elements.front();
 			elements.erase(elements.begin());
 			return item;
@@ -184,7 +187,8 @@ namespace {
 		RefactoredModel::CalibrationParameters calibrationParameters{};
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
-		SpeechPerceptionTestStub perceptionTest{};
+		FakeStimulusList list{};
+		DocumenterStub documenter{};
 		std::shared_ptr<AudioFrameReaderStub> audioFrameReader
 			= std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory audioFrameReaderFactory{ audioFrameReader };
@@ -195,7 +199,8 @@ namespace {
 			std::make_shared<CalibrationComputerStub>();
 		CalibrationComputerStubFactory calibrationFactory{ calibrationComputer };
 		RefactoredModel model{
-			&perceptionTest,
+			&list,
+			&documenter,
 			&audioPlayer,
 			&audioLoader,
 			&audioFrameReaderFactory,
@@ -491,6 +496,67 @@ namespace {
 		}
 	};
 
+	TEST_F(
+		RefactoredModelTests,
+		prepareNewTestInitializesStimulusList
+	) {
+		testParameters.audioDirectory = "a";
+		prepareNewTest();
+		assertEqual("a", list.directory());
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		prepareNewTestInitializesDocumenter
+	) {
+		testParameters.testFilePath = "a";
+		prepareNewTest();
+		assertEqual("a", documenter.filePath());
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		prepareNewTestDocumentsTestParameters
+	) {
+		testParameters.subjectId = "a";
+		testParameters.testerId = "b";
+		prepareNewTest();
+		assertEqual("a", documenter.documentedTestParameters().subjectId);
+		assertEqual("b", documenter.documentedTestParameters().testerId);
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		prepareNewTestDocumentsTestParametersAfterInitializing
+	) {
+		prepareNewTest();
+		assertTrue(documenter.log().beginsWith("initialize"));
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		nextStimulusReturnsThatOfList
+	) {
+		list.setContents({ "a", "b", "c" });
+		prepareNewTest();
+		playNextTrial();
+		assertEqual("a", audioFrameReaderFactory.filePath());
+		playNextTrial();
+		assertEqual("b", audioFrameReaderFactory.filePath());
+		playNextTrial();
+		assertEqual("c", audioFrameReaderFactory.filePath());
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		playNextTrialDocumentsTrial
+	) {
+		list.setContents({ "a", "b", "c" });
+		prepareNewTest();
+		playNextTrial();
+		assertEqual("a", documenter.documentedTrialParameters().stimulus);
+	}
+
 	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
 		EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
 	}
@@ -569,23 +635,6 @@ namespace {
 		assertFalse(brirReader.readCalled());
 	}
 
-	TEST_F(RefactoredModelTests, prepareNewTestPassesParametersToSpeechPerceptionTest) {
-		testParameters.audioDirectory = "a";
-		testParameters.testFilePath = "b";
-		testParameters.subjectId = "c";
-		testParameters.testerId = "d";
-		prepareNewTest();
-		assertEqual("a", perceptionTest.testParameters().stimulusList);
-		assertEqual("b", perceptionTest.testParameters().testFilePath);
-		assertEqual("c", perceptionTest.testParameters().subjectId);
-		assertEqual("d", perceptionTest.testParameters().testerId);
-	}
-
-	TEST_F(RefactoredModelTests, playTrialAdvancesTrial) {
-		playNextTrial();
-		assertTrue(perceptionTest.advanceTrialCalled());
-	}
-
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playNextTrial();
 		assertAudioPlayerHasBeenPlayed();
@@ -597,7 +646,7 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesNextStimulusToFactory) {
-		perceptionTest.setNextStimulus("a");
+		list.setContents({ "a", "b", "c" });
 		playNextTrial();
 		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
@@ -1139,8 +1188,8 @@ namespace {
 		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 	}
 
-	TEST_F(RefactoredModelTests, testCompleteWhenTestComplete) {
-		perceptionTest.setComplete();
+	TEST_F(RefactoredModelTests, testCompleteWhenListEmpty) {
+		list.setContents({});
 		assertTrue(model.testComplete());
 	}
 
@@ -1152,8 +1201,10 @@ namespace {
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
 		BrirReader *brirReader{ &defaultBrirReader };
-		SpeechPerceptionTestStub defaultPerceptionTest{};
-		SpeechPerceptionTest *perceptionTest{ &defaultPerceptionTest };
+		FakeStimulusList defaultStimulusList{};
+		StimulusList *stimulusList{ &defaultStimulusList };
+		DocumenterStub defaultDocumenter{};
+		Documenter *documenter{ &defaultDocumenter };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioPlayerStub defaultPlayer{};
@@ -1219,7 +1270,8 @@ namespace {
 		RefactoredModel makeModel() {
 			return
 			{
-				perceptionTest,
+				stimulusList,
+				documenter,
 				audioPlayer,
 				audioLoader,
 				audioReaderFactory,
@@ -1240,6 +1292,16 @@ namespace {
 			calibrationParameters.processing.windowSize = 1;
 		}
 	};
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		prepareNewTestThrowsInitializationFailureWhenDocumenterFailsToInitialize
+	) {
+		InitializationFailingDocumenter failing;
+		documenter = &failing;
+		failing.setErrorMessage("error.");
+		assertPreparingNewTestThrowsRequestFailure("error.");
+	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
@@ -1269,13 +1331,13 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestDoesNotPrepareTestWhenPrescriptionReaderFails
+		prepareNewTestDoesNotDocumentWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		testParameters.processing.usingHearingAidSimulation = true;
 		prepareNewTestIgnoringFailure();
-		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
+		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
 	TEST_F(
@@ -1302,23 +1364,13 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestDoesNotPrepareTestWhenBrirReaderFails
+		prepareNewTestDoesNotDocumentWhenBrirReaderFails
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
 		testParameters.processing.usingSpatialization = true;
 		prepareNewTestIgnoringFailure();
-		assertFalse(defaultPerceptionTest.prepareNewTestCalled());
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
-		prepareNewTestThrowsRequestFailureWhenPerceptionTestFailsToInitialize
-	) {
-		InitializationFailingSpeechPerceptionTest failing;
-		failing.setErrorMessage("error.");
-		perceptionTest = &failing;
-		assertPreparingNewTestThrowsRequestFailure("error.");
+		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
 	TEST_F(
@@ -1410,11 +1462,12 @@ namespace {
 		assertPlayTrialThrowsRequestFailure("error.");
 	}
 
-	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvancePerceptionTestTrialWhenPlayerFails) {
+	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvanceStimulusWhenPlayerFails) {
 		PreparationFailingAudioPlayer failing;
 		audioPlayer = &failing;
+		defaultStimulusList.setContents({ "a", "b", "c" });
 		playTrialIgnoringFailure();
-		assertFalse(defaultPerceptionTest.advanceTrialCalled());
+		assertEqual("a", defaultStimulusList.next());
 	}
 
 	TEST_F(

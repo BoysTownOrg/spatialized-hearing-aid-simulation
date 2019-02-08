@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SpeechPerceptionTest.h"
 #include "IAudioPlayer.h"
 #include "ISpatializedHearingAidSimulationFactory.h"
 #include "PrescriptionReader.h"
@@ -8,6 +7,8 @@
 #include "AudioFrameReader.h"
 #include "AudioLoader.h"
 #include "ICalibrationComputer.h"
+#include "StimulusList.h"
+#include "Documenter.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 
@@ -49,18 +50,21 @@ public:
 
 class RefactoredModel : public Model {
 	TestParameters testParameters{};
+	std::string nextStimulus_{};
 	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactoryForTest;
+	StimulusList *list;
+	Documenter *documenter;
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
-	SpeechPerceptionTest *perceptionTest;
 	AudioFrameReaderFactory *audioReaderFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
-		SpeechPerceptionTest *perceptionTest,
+		StimulusList *list,
+		Documenter *documenter,
 		IAudioPlayer *player,
 		AudioLoader *loader,
 		AudioFrameReaderFactory *audioReaderFactory,

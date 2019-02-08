@@ -161,7 +161,6 @@
     <ClCompile Include="BrirAdapterTests.cpp" />
     <ClCompile Include="CalibrationComputerTests.cpp" />
     <ClCompile Include="RandomizedStimulusListTests.cpp" />
-    <ClCompile Include="RecognitionTestTests.cpp" />
     <ClCompile Include="ChannelCopierTester.cpp" />
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />
     <ClCompile Include="PrescriptionAdapterTests.cpp" />

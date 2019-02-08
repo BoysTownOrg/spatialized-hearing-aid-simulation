@@ -2,7 +2,7 @@
 
 #include "PersistentMemoryWriter.h"
 #include <presentation/Presenter.h>
-#include <recognition-test/RecognitionTest.h>
+#include <spatialized-hearing-aid-simulation/Documenter.h>
 #include <common-includes/RuntimeError.h>
 
 #ifdef TEST_DOCUMENTING_EXPORTS

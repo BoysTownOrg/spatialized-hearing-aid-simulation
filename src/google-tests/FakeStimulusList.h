@@ -1,6 +1,6 @@
 #pragma once
 
-#include <recognition-test/StimulusList.h>
+#include <spatialized-hearing-aid-simulation/StimulusList.h>
 #include <vector>
 
 class FakeStimulusList : public StimulusList {

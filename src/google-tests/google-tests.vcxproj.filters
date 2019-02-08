@@ -60,9 +60,6 @@
     <ClCompile Include="RefactoredModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecognitionTestTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assert-utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

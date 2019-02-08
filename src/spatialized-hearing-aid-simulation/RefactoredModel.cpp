@@ -265,7 +265,8 @@ double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
 int const RefactoredModel::defaultFramesPerBuffer = 1024;
 
 RefactoredModel::RefactoredModel(
-	SpeechPerceptionTest *perceptionTest,
+	StimulusList *list,
+	Documenter *documenter,
 	IAudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
@@ -274,9 +275,10 @@ RefactoredModel::RefactoredModel(
 	ISpatializedHearingAidSimulationFactory *simulationFactory,
 	ICalibrationComputerFactory *calibrationFactory
 ) :
+	list{ list },
+	documenter{ documenter },
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
-	perceptionTest{ perceptionTest },
 	audioReaderFactory{ audioReaderFactory },
 	player{ player },
 	loader{ loader },
@@ -387,15 +389,13 @@ void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
 }
 
 void RefactoredModel::prepareNewTest_(TestParameters p) {
-	SpeechPerceptionTest::TestParameters adapted;
-	adapted.stimulusList = std::move(p.audioDirectory);
-	adapted.testFilePath = std::move(p.testFilePath);
-	adapted.subjectId = std::move(p.subjectId);
-	adapted.testerId = std::move(p.testerId);
 	try {
-		perceptionTest->prepareNewTest(std::move(adapted));
+		list->initialize(std::move(p.audioDirectory));
+		documenter->initialize(std::move(p.testFilePath));
+		documenter->documentTestParameters({});
+		nextStimulus_ = list->next();
 	}
-	catch (const SpeechPerceptionTest::TestInitializationFailure &e) {
+	catch (const std::runtime_error &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
@@ -404,13 +404,14 @@ void RefactoredModel::playNextTrial(TrialParameters p) {
 	if (player->isPlaying())
 		return;
 
-	auto reader = makeReader(perceptionTest->nextStimulus());
+	auto reader = makeReader(nextStimulus_);
 	loader->setProcessor(processorFactoryForTest->make(reader.get(), p.level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
 	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
 	player->play();
-	perceptionTest->advanceTrial();
+	documenter->documentTrialParameters({});
+	nextStimulus_ = list->next();
 }
 
 std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
@@ -441,7 +442,7 @@ void RefactoredModel::prepareAudioPlayer(
 }
 
 bool RefactoredModel::testComplete() {
-	return perceptionTest->testComplete();
+	return list->empty();
 }
 
 void RefactoredModel::playCalibration(CalibrationParameters p) {

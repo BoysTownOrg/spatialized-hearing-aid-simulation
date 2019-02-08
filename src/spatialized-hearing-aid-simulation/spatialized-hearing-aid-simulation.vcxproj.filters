@@ -21,9 +21,6 @@
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpeechPerceptionTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IAudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,6 +58,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ICalibrationComputer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Documenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StimulusList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

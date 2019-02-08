@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LogString.h"
-#include <recognition-test/Documenter.h>
+#include <spatialized-hearing-aid-simulation/Documenter.h>
 #include <sstream>
 
 class DocumenterStub : public Documenter {
