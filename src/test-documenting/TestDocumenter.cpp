@@ -6,11 +6,11 @@ class FormattedStream {
 	std::stringstream stream{};
 	int indents{};
 public:
-	void indent() {
+	void indent() noexcept {
 		++indents;
 	}
 
-	void deindent() {
+	void deindent() noexcept {
 		--indents;
 	}
 

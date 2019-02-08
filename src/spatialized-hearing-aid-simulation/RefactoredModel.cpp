@@ -317,8 +317,6 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactor
 	common.chunkSize = p.chunkSize;
 	common.windowSize = p.windowSize;
 
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactory_{};
-
 	if (p.usingHearingAidSimulation && p.usingSpatialization)
 		return processorFactoryFactory->makeFullSimulation(
 			readAndCheckBrir(std::move(p.brirFilePath)), 
