@@ -4,8 +4,8 @@
 #include <spatialized-hearing-aid-simulation/AudioLoader.h>
 
 class AudioLoaderStub : public AudioLoader {
-	gsl::span<channel_type> audioBuffer_{};
 	LogString log_{};
+	gsl::span<channel_type> audioBuffer_{};
 	std::shared_ptr<AudioFrameReader> audioFrameReader_{};
 	std::shared_ptr<AudioFrameProcessor> audioFrameProcessor_{};
 	int sampleRate_{};
@@ -37,10 +37,10 @@ public:
 	}
 
 	void reset() override {
-		log_ += std::string{ "reset " };
+		log_.insert("reset ");
 	}
 
-	auto log() const {
+	auto &log() const {
 		return log_;
 	}
 
@@ -54,11 +54,11 @@ public:
 
 	void setReader(std::shared_ptr<AudioFrameReader> r) override {
 		audioFrameReader_ = std::move(r);
-		log_ += std::string{ "setReader " };
+		log_.insert("setReader ");
 	}
 
 	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) override {
 		audioFrameProcessor_ = std::move(p);
-		log_ += std::string{ "setProcessor " };
+		log_.insert("setProcessor ");
 	}
 };

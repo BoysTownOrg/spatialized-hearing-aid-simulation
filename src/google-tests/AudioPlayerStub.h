@@ -15,7 +15,7 @@ class AudioPlayerStub : public IAudioPlayer {
 public:
 	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
-		log_ += LogString{ "prepareToPlay " };
+		log_.insert("prepareToPlay ");
 	}
 
 	const auto &preparation() const noexcept {
@@ -37,7 +37,7 @@ public:
 	void play() override {
 		played_ = true;
 		callOnPlay_();
-		log_ += LogString{ "play " };
+		log_.insert("play ");
 	}
 
 	void setPlaying() {
@@ -68,7 +68,7 @@ public:
 		callOnPlay_ = f;
 	}
 
-	auto log() const {
+	auto &log() const {
 		return log_;
 	}
 };

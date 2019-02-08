@@ -7,13 +7,13 @@
 class DocumenterStub : public Documenter {
 	Model::TestParameters *testParameters_{};
 	TrialParameters trialParameters_{};
-	std::string filePath_{};
-	std::stringstream content_{};
 	LogString log_{};
+	std::stringstream content_{};
+	std::string filePath_{};
 public:
 	void documentTrialParameters(TrialParameters p) override {
 		trialParameters_ = std::move(p);
-		log_ += LogString{ "documentTrialParameters " };
+		log_.insert("documentTrialParameters ");
 	}
 
 	auto documentedTrialParameters() {
@@ -22,7 +22,7 @@ public:
 
 	void documentTestParameters(Model::TestParameters *p) override {
 		testParameters_ = std::move(p);
-		log_ += LogString{ "documentTestParameters " };
+		log_.insert("documentTestParameters ");
 	}
 
 	auto documentedTestParameters() {
@@ -35,14 +35,14 @@ public:
 
 	void initialize(std::string filePath) override {
 		filePath_ = std::move(filePath);
-		log_ += LogString{ "initialize " };
+		log_.insert("initialize ");
 	}
 
 	auto content() const {
 		return content_.str();
 	}
 
-	auto log() const {
+	auto &log() const {
 		return log_;
 	}
 };

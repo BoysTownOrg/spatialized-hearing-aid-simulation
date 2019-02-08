@@ -1,41 +1,40 @@
 #pragma once
 
-#include <string>
+#include <sstream>
 
 class LogString {
-	std::string s;
+	std::stringstream s;
 public:
-	LogString(std::string s = {}) noexcept : s{ std::move(s) } {}
+	LogString(std::string s = {}) : s{ std::move(s) } {}
 
-	bool isEmpty() const noexcept {
-		return s.empty();
+	void insert(std::string s_) {
+		s << std::move(s_);
+	}
+
+	bool isEmpty() const {
+		return s.str().empty();
 	}
 
 	bool beginsWith(std::string const &beginning) const {
-		if (s.length() >= beginning.length())
-			return 0 == s.compare(0, beginning.length(), beginning);
+		if (s.str().length() >= beginning.length())
+			return 0 == s.str().compare(0, beginning.length(), beginning);
 		else
 			return false;
 	}
 
-	bool endsWith(std::string const &ending) {
-		if (s.length() >= ending.length())
-			return 0 == s.compare(
-				s.length() - ending.length(),
+	bool endsWith(std::string const &ending) const {
+		if (s.str().length() >= ending.length())
+			return 0 == s.str().compare(
+				s.str().length() - ending.length(),
 				ending.length(),
 				ending);
 		else
 			return false;
 	}
 
-	bool contains(std::string const &s2) noexcept {
-		return s.find(s2) != std::string::npos;
+	bool contains(std::string s2) const {
+		return s.str().find(std::move(s2)) != std::string::npos;
 	}
-
-	LogString &operator+=(const LogString &appended) {
-		s += appended.s;
-		return *this;
-	}
-
-	operator std::string() const { return s; }
+	
+	operator std::string() const { return s.str(); }
 };

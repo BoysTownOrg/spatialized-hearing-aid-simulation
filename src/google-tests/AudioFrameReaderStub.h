@@ -31,8 +31,7 @@ public:
 
 	void read(gsl::span<channel_type> audio) override {
 		audioBuffer_ = audio;
-		using namespace std::string_literals;
-		readingLog_ += "read "s;
+		readingLog_.insert("read ");
 	}
 
 	void setComplete() noexcept {
@@ -63,13 +62,12 @@ public:
 		frames_ = f;
 	}
 
-	auto readingLog() const {
+	auto &readingLog() const {
 		return readingLog_;
 	}
 
 	void reset() override {
-		using namespace std::string_literals;
-		readingLog_ += "reset "s;
+		readingLog_.insert("reset ");
 	}
 
 	void setIncomplete() noexcept {
