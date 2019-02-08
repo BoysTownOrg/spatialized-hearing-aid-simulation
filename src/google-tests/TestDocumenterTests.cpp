@@ -26,7 +26,7 @@ TEST_F(
 	test.processing.release_ms = 2.2;
 	test.processing.windowSize = 3;
 	test.processing.chunkSize = 4;
-	documenter.documentTestParameters(test);
+	documenter.documentTestParameters(&test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -58,7 +58,7 @@ TEST_F(
 	test.processing.usingSpatialization = true;
 	test.processing.brirFilePath = "d";
 	test.processing.usingHearingAidSimulation = false;
-	documenter.documentTestParameters(test);
+	documenter.documentTestParameters(&test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -86,7 +86,7 @@ TEST_F(
 	test.processing.release_ms = 2.2;
 	test.processing.windowSize = 3;
 	test.processing.chunkSize = 4;
-	documenter.documentTestParameters(test);
+	documenter.documentTestParameters(&test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"

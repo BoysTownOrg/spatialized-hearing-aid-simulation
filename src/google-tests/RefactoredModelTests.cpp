@@ -518,25 +518,8 @@ namespace {
 		RefactoredModelTests,
 		prepareNewTestDocumentsTestParameters
 	) {
-		testParameters.subjectId = "a";
-		testParameters.testerId = "b";
-		testParameters.audioDirectory = "c";
-		testParameters.processing.attack_ms = 1.1;
-		testParameters.processing.release_ms = 2.2;
-		testParameters.processing.chunkSize = 3;
-		testParameters.processing.windowSize = 4;
-		testParameters.processing.leftDslPrescriptionFilePath = "d";
-		testParameters.processing.rightDslPrescriptionFilePath = "e";
 		prepareNewTest();
-		assertEqual("a", documenter.documentedTestParameters().subjectId);
-		assertEqual("b", documenter.documentedTestParameters().testerId);
-		assertEqual("c", documenter.documentedTestParameters().audioDirectory);
-		assertEqual(1.1, documenter.documentedTestParameters().processing.attack_ms);
-		assertEqual(2.2, documenter.documentedTestParameters().processing.release_ms);
-		assertEqual(3, documenter.documentedTestParameters().processing.chunkSize);
-		assertEqual(4, documenter.documentedTestParameters().processing.windowSize);
-		assertEqual("d", documenter.documentedTestParameters().processing.leftDslPrescriptionFilePath);
-		assertEqual("e", documenter.documentedTestParameters().processing.rightDslPrescriptionFilePath);
+		EXPECT_EQ(&testParameters, documenter.documentedTestParameters());
 	}
 
 	TEST_F(

@@ -300,7 +300,7 @@ void RefactoredModel::prepareNewTest(TestParameters *p) {
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
 	processorFactoryForTest = makeProcessorFactory(p->processing);
-	prepareNewTest_(*p);
+	prepareNewTest_(p);
 }
 
 std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
@@ -388,11 +388,11 @@ void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
-void RefactoredModel::prepareNewTest_(TestParameters p) {
+void RefactoredModel::prepareNewTest_(TestParameters *p) {
 	try {
-		list->initialize(p.audioDirectory);
-		documenter->initialize(std::move(p.testFilePath));
-		documenter->documentTestParameters(std::move(p));
+		list->initialize(p->audioDirectory);
+		documenter->initialize(p->testFilePath);
+		documenter->documentTestParameters(p);
 		nextStimulus_ = list->next();
 	}
 	catch (const std::runtime_error &e) {

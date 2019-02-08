@@ -5,7 +5,7 @@
 #include <sstream>
 
 class DocumenterStub : public Documenter {
-	Model::TestParameters testParameters_{};
+	Model::TestParameters *testParameters_{};
 	TrialParameters trialParameters_{};
 	std::string filePath_{};
 	std::stringstream content_{};
@@ -20,7 +20,7 @@ public:
 		return trialParameters_;
 	}
 
-	void documentTestParameters(Model::TestParameters p) override {
+	void documentTestParameters(Model::TestParameters *p) override {
 		testParameters_ = std::move(p);
 		log_ += LogString{ "documentTestParameters " };
 	}
@@ -58,6 +58,6 @@ public:
 		throw InitializationFailure{ errorMessage_ };
 	}
 
-	void documentTestParameters(Model::TestParameters) override {}
+	void documentTestParameters(Model::TestParameters *) override {}
 	void documentTrialParameters(TrialParameters) override {}
 };

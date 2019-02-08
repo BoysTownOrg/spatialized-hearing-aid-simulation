@@ -17,7 +17,7 @@ public:
 	TEST_DOCUMENTING_API explicit 
 		TestDocumenter(PersistentMemoryWriter *);
 	TEST_DOCUMENTING_API 
-		void documentTestParameters(Model::TestParameters) override;
+		void documentTestParameters(Model::TestParameters *) override;
 	TEST_DOCUMENTING_API 
 		void documentTrialParameters(TrialParameters) override;
 	TEST_DOCUMENTING_API 
