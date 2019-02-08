@@ -194,7 +194,6 @@
     <ClInclude Include="RandomizerStub.h" />
     <ClInclude Include="SignalProcessorStub.h" />
     <ClInclude Include="FakeStimulusList.h" />
-    <ClInclude Include="SpeechPerceptionTestStub.h" />
     <ClInclude Include="ViewStub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -131,9 +131,6 @@
     <ClInclude Include="AudioPlayerStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpeechPerceptionTestStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="assert-utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -3,11 +3,18 @@
 #include <presentation/View.h>
 
 class ViewStub : public View {
+public:
 	std::vector<std::string> browseFiltersForOpeningFile_{};
 	std::vector<std::string> browseFiltersForSavingFile_{};
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
+	std::string testFilePath_{};
+	std::string stimulusList_{};
+	std::string leftDslPrescriptionFilePath_{};
+	std::string rightDslPrescriptionFilePath_{};
+	std::string brirFilePath_{};
+	std::string audioFilePath_{};
 	std::string subjectId_{};
 	std::string testerId_{};
 	std::string audioDevice_{};
@@ -31,13 +38,6 @@ class ViewStub : public View {
 	bool brirFilePathActivated_{};
 	bool browseForBrirButtonActivated_{};
 	bool usingHearingAidSimulation_{};
-public:
-	std::string testFilePath_{};
-	std::string stimulusList_{};
-	std::string leftDslPrescriptionFilePath_{};
-	std::string rightDslPrescriptionFilePath_{};
-	std::string brirFilePath_{};
-	std::string audioFilePath_{};
 	bool browseForLeftDslPrescriptionButtonActivated_{};
 	bool browseForRightDslPrescriptionButtonActivated_{};
 	bool leftDslPrescriptionFilePathActivated_{};
@@ -103,6 +103,10 @@ public:
 	bool browseForAudioFileButtonShown_{};
 	bool browseForStimulusListButtonShown_{};
 
+	void browseForAudioFile() {
+		listener_->browseForAudioFile();
+	}
+
 	void showBrowseForAudioFileButton() override {
 		browseForAudioFileButtonShown_ = true;
 	}
@@ -119,10 +123,6 @@ public:
 		browseForAudioFileButtonHidden_ = true;
 	}
 
-	void browseForAudioFile() {
-		listener_->browseForAudioFile();
-	}
-
 	void hidePlayNextTrialButton() override {
 		playNextTrialButtonHidden_ = true;
 	}
@@ -131,23 +131,23 @@ public:
 		playNextTrialButtonShown_ = true;
 	}
 
-	bool everyItemInTesterViewHidden() {
+	bool everyItemInTesterViewHidden() noexcept {
 		return
 			playNextTrialButtonHidden_;
 	}
 
-	bool everyItemInTesterViewShown() {
+	bool everyItemInTesterViewShown() noexcept {
 		return
 			playNextTrialButtonShown_;
 	}
 
-	bool notASingleElementInTesterViewShown() {
+	bool notASingleElementInTesterViewShown() noexcept {
 		return !(
 			playNextTrialButtonShown_
 		);
 	}
 
-	bool everyItemInTestSetupShown() {
+	bool everyItemInTestSetupShown() noexcept {
 		return
 			subjectIdShown_ &&
 			testerIdShown_ &&
@@ -174,7 +174,7 @@ public:
 			browseForStimulusListButtonShown_;
 	}
 
-	bool everyItemInTestSetupHidden() {
+	bool everyItemInTestSetupHidden() noexcept {
 		return
 			subjectIdHidden_ &&
 			testerIdHidden_ &&
@@ -201,7 +201,7 @@ public:
 			browseForStimulusListButtonHidden_;
 	}
 
-	bool notASingleElementInTestSetupHidden() {
+	bool notASingleElementInTestSetupHidden() noexcept {
 		return !(
 			subjectIdHidden_ ||
 			testerIdHidden_ ||
