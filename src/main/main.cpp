@@ -53,7 +53,7 @@ class CalibrationComputerFactoryImpl : public ICalibrationComputerFactory {
 	}
 };
 
-int main() {
+int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	WindowsDirectoryReader directoryReader{};
 	FileFilterDecorator fileDecorator{&directoryReader, ".wav"};
 	MersenneTwisterRandomizer randomizer{};
