@@ -49,7 +49,6 @@ public:
 };
 
 class RefactoredModel : public Model {
-	TestParameters testParameters{};
 	std::string nextStimulus_{};
 	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
@@ -63,15 +62,15 @@ class RefactoredModel : public Model {
 	AudioLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
-		StimulusList *list,
-		Documenter *documenter,
-		IAudioPlayer *player,
-		AudioLoader *loader,
-		AudioFrameReaderFactory *audioReaderFactory,
-		PrescriptionReader *prescriptionReader,
-		BrirReader *brirReader,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationFactory
+		StimulusList *,
+		Documenter *,
+		IAudioPlayer *,
+		AudioLoader *,
+		AudioFrameReaderFactory *,
+		PrescriptionReader *,
+		BrirReader *,
+		ISpatializedHearingAidSimulationFactory *,
+		ICalibrationComputerFactory *
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters *) override;
 	SPATIALIZED_HA_SIMULATION_API void playNextTrial(TrialParameters *) override;
