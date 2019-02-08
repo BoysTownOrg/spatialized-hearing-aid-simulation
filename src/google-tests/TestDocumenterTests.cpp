@@ -106,11 +106,11 @@ TEST_F(
 
 TEST_F(
 	TestDocumenterTests,
-	DISABLED_playTrialDocumentsTrial
+	playTrialDocumentsTrial
 ) {
 	TestDocumenter::TrialParameters trial;
-	//trial.level_dB_Spl = 1;
 	trial.stimulus = "a";
+	trial.level_dB_Spl = 1;
 	documenter.documentTrialParameters(trial);
 	assertEqual(
 		"stimulus: a\n"

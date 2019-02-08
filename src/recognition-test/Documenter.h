@@ -15,6 +15,7 @@ public:
 	
 	struct TrialParameters{
 		std::string stimulus;
+		double level_dB_Spl;
 	};
 	virtual void documentTrialParameters(TrialParameters) = 0;
 };
