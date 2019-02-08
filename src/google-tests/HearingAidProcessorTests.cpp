@@ -213,7 +213,7 @@ namespace {
 
 		void process() {
 			HearingAidProcessor processor{ compressor };
-			std::vector<float> x(compressor->chunkSize());
+			std::vector<HearingAidProcessor::signal_type::element_type> x(compressor->chunkSize());
 			processor.process(x);
 		}
 	};
