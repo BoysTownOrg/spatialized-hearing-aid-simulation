@@ -49,29 +49,23 @@ TEST_F(
 
 TEST_F(
 	TestDocumenterTests,
-	DISABLED_ignoresPrescriptionsIfNotUsingHearingAidSimulation
+	ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	Model::TestParameters test;
-	//perceptionTest.subjectId = "a";
-	//perceptionTest.testerId = "b";
-	//perceptionTest.usingHearingAidSimulation = false;
-	//perceptionTest.leftDslPrescriptionFilePath = "c";
-	//perceptionTest.rightDslPrescriptionFilePath = "d";
-	//perceptionTest.usingSpatialization = true;
-	//perceptionTest.brirFilePath = "e";
-	//perceptionTest.attack_ms = 1;
-	//perceptionTest.release_ms = 2;
-	//perceptionTest.windowSize = 3;
-	//perceptionTest.chunkSize = 4;
+	test.subjectId = "a";
+	test.testerId = "b";
+	test.audioDirectory = "c";
+	test.processing.usingSpatialization = true;
+	test.processing.brirFilePath = "d";
+	test.processing.usingHearingAidSimulation = false;
 	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
-		"BRIR: e\n"
-		"attack (ms): 1.0\n"
-		"release (ms): 2.0\n"
-		"window size (samples): 3\n"
-		"chunk size (samples): 4\n\n", 
+		"stimulus list: c\n"
+		"\n"
+		"spatialization\n"
+		"    BRIR: d\n\n",
 		writer.content()
 	);
 }
