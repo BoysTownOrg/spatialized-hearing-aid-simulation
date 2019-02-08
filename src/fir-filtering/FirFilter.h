@@ -1,15 +1,15 @@
 #pragma once
 
+#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
+#include <fftw3.h>
+#include <vector>
+#include <complex>
+
 #ifdef FIR_FILTERING_EXPORTS
 	#define FIR_FILTERING_API __declspec(dllexport)
 #else
 	#define FIR_FILTERING_API __declspec(dllimport)
 #endif
-
-#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
-#include <fftw3.h>
-#include <vector>
-#include <complex>
 
 class FirFilter : public SignalProcessor {
 public:

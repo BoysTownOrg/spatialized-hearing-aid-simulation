@@ -56,7 +56,11 @@ void FirFilter::filterRemaining(signal_type signal) {
 }
 
 void FirFilter::filter(signal_type signal) {
-	std::fill(std::copy(signal.begin(), signal.end(), dftReal.begin()), dftReal.end(), sample_type{ 0 });
+	std::fill(
+		std::copy(signal.begin(), signal.end(), dftReal.begin()), 
+		dftReal.end(), 
+		sample_type{ 0 }
+	);
 	overlapAdd();
 	for (index_type i = 0; i < signal.size(); ++i)
 		signal[i] = overlap.at(i) / N;
