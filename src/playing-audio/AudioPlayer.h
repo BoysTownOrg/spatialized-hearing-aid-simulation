@@ -16,7 +16,7 @@ public:
 	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *) override;
 	PLAYING_AUDIO_API void fillStreamBuffer(void * channels, int frames) override;
 	PLAYING_AUDIO_API bool isPlaying() override;
-	PLAYING_AUDIO_API void stop();
+	PLAYING_AUDIO_API void stop() override;
 	PLAYING_AUDIO_API void play() override;
 private:
 	void prepareToPlay_(Preparation);
