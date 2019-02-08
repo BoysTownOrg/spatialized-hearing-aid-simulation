@@ -48,6 +48,10 @@ public:
 		return isPlaying_;
 	}
 
+	void stop() override {
+		stopped_ = true;
+	}
+
 	auto stopped() const {
 		return stopped_;
 	}
@@ -82,6 +86,7 @@ public:
 
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void play() override {}
+	void stop() override {}
 	bool isPlaying() override { return {}; }
 	void setAudioLoader(AudioLoader *) override {}
 };

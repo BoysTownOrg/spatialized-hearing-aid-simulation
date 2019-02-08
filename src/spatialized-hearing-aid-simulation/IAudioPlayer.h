@@ -22,5 +22,6 @@ public:
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual void setAudioLoader(AudioLoader *) = 0;
 	virtual void play() = 0;
+	virtual void stop() = 0;
 	virtual bool isPlaying() = 0;
 };

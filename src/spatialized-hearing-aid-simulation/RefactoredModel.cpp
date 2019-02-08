@@ -467,6 +467,7 @@ void RefactoredModel::playCalibration(CalibrationParameters *p) {
 }
 
 void RefactoredModel::stopCalibration() {
+	player->stop();
 }
 
 std::vector<std::string> RefactoredModel::audioDeviceDescriptions() {
