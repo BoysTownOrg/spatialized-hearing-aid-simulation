@@ -36,23 +36,28 @@ struct FltkHearingAidSimulationGroup : public Fl_Group {
 	Fl_ChoiceFacade chunkSize_;
 };
 
+struct FltkCalibration : public Fl_Group {
+	FltkCalibration(int, int, int, int, const char * = {});
+	Fl_Input audioFilePath_;
+	Fl_Float_Input level_dB_Spl_;
+	Fl_Button browseForAudioFile;
+	Fl_Button play;
+	Fl_Button stop;
+};
+
 struct FltkWindow : public Fl_Double_Window {
 	FltkWindow(int, int, int, int, const char * = {});
 	FltkHearingAidSimulationGroup hearingAidSimulation;
+	FltkCalibration calibration;
 	FltkSpatialization spatialization;
-	Fl_Float_Input level_dB_Spl_;
 	Fl_Input subjectId_;
 	Fl_Input testerId_;
 	Fl_Input testFilePath_;
 	Fl_Input stimulusList_;
-	Fl_Input audioFilePath_;
 	Fl_ChoiceFacade audioDevice_;
 	Fl_Button browseTestFilePath;
 	Fl_Button browseForStimulusList;
-	Fl_Button browseForAudioFile;
 	Fl_Button confirm;
-	Fl_Button play;
-	Fl_Button stop;
 	Fl_Button playNextTrial;
 	Fl_Check_Button usingSpatialization_;
 	Fl_Check_Button usingHearingAidSimulation_;

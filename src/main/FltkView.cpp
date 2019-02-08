@@ -62,7 +62,7 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	brirFilePath_{x + 100, y + 10, 200, 25, "BRIR file path" },
-	browseBrir{x + 310, y + 10, 60, 25, "browse..." }
+	browseBrir{x + 310, y + 10, 80, 25, "browse..." }
 {
 	end();
 }
@@ -70,13 +70,24 @@ FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *)
 FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	leftPrescriptionFilePath_{x + 200, y + 10, 200, 25, "left DSL prescription file path" },
-	browseLeftPrescription{x + 410, y + 10, 60, 25, "browse..." },
+	browseLeftPrescription{x + 410, y + 10, 80, 25, "browse..." },
 	rightPrescriptionFilePath_{x + 200, y + 35, 200, 25, "right DSL prescription file path" },
-	browseRightPrescription{x + 410, y + 35, 60, 25, "browse..." },
+	browseRightPrescription{x + 410, y + 35, 80, 25, "browse..." },
 	attack_ms_{x + 200, y + 60, 200, 25, "attack (ms)" },
 	release_ms_{x + 200, y + 85, 200, 25, "release (ms)" },
 	windowSize_{x + 200, y + 110, 200, 25, "window size (samples)" },
 	chunkSize_{x + 200, y + 135, 200, 25, "chunk size (samples)" }
+{
+	end();
+}
+
+FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
+	Fl_Group{ x, y, w, h },
+	audioFilePath_{x + 100, y + 10, 200, 25, "audio file path"},
+	browseForAudioFile{x + 310, y + 10, 80, 25, "browse..." },
+	level_dB_Spl_{x + 100, y + 35, 200, 25, "level (dB SPL)" },
+	play{ x + 75, y + 60, 60, 25, "play" },
+	stop{ x + 175, y + 60, 60, 25, "stop" }
 {
 	end();
 }
@@ -86,20 +97,16 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	subjectId_{ 100, 10, 200, 25, "subject ID" },
 	testerId_{ 100, 35, 200, 25, "tester ID" },
 	stimulusList_{ 100, 60, 200, 25, "stimulus list" },
-	browseForStimulusList{310, 60, 60, 25, "browse..." },
+	browseForStimulusList{310, 60, 80, 25, "browse..." },
 	usingSpatialization_{ 20, 100, 18, 25, "spatialization" },
 	spatialization{20, 125, 400, 45},
-	usingHearingAidSimulation_{ 450, 100, 18, 25, "hearing aid simulation" },
-	hearingAidSimulation{ 450, 125, 475, 170 },
-	audioFilePath_{100, 300, 200, 25, "audio file path"},
-	browseForAudioFile{310, 300, 60, 25, "browse..." },
-	level_dB_Spl_{100, 325, 200, 25, "level (dB SPL)" },
-	play{ 50, 375, 60, 25, "play" },
-	stop{ 150, 375, 60, 25, "stop" },
-	testFilePath_{500, 550, 200, 25, "test file path" },
-	browseTestFilePath{710, 550, 60, 25, "browse..." },
+	usingHearingAidSimulation_{ 425, 100, 18, 25, "hearing aid simulation" },
+	hearingAidSimulation{ 425, 125, 500, 170 },
+	calibration{ 20, 200, 400, 95 },
+	testFilePath_{100, 310, 200, 25, "test file path" },
+	browseTestFilePath{310, 310, 80, 25, "browse..." },
 	audioDevice_{100, 550, 200, 25, "audio device" },
-	playNextTrial{350, 550, 60, 25, "play next trial" },
+	playNextTrial{350, 550, 100, 25, "play next trial" },
 	confirm{850, 550, 60, 25, "confirm" }
 {
 	end();
@@ -109,8 +116,13 @@ FltkView::FltkView() :
 	window{ 425, 300, 950, 600 }
 {
 	Fl::set_font(0, "Segoe UI");
+	window.color(FL_LIGHT2);
 	window.hearingAidSimulation.box(FL_ENGRAVED_BOX);
+	window.hearingAidSimulation.color(FL_LIGHT2);
 	window.spatialization.box(FL_ENGRAVED_BOX);
+	window.spatialization.color(FL_LIGHT2);
+	window.calibration.box(FL_ENGRAVED_BOX);
+	window.calibration.color(FL_LIGHT2);
 	registerCallbacks();
 	turnOnSpatialization();
 	turnOnHearingAidSimulation();
@@ -120,7 +132,7 @@ FltkView::FltkView() :
 	window.hearingAidSimulation.windowSize_.value(2);
 	window.hearingAidSimulation.attack_ms_.value("5");
 	window.hearingAidSimulation.release_ms_.value("50");
-	window.level_dB_Spl_.value("65");
+	window.calibration.level_dB_Spl_.value("65");
 	window.show();
 }
 
@@ -129,14 +141,14 @@ void FltkView::registerCallbacks() {
 	window.hearingAidSimulation.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
 	window.hearingAidSimulation.browseRightPrescription.callback(onBrowseRightPrescription, this);
 	window.browseForStimulusList.callback(onBrowseStimulusList, this);
-	window.browseForAudioFile.callback(onBrowseAudio, this);
+	window.calibration.browseForAudioFile.callback(onBrowseAudio, this);
 	window.spatialization.browseBrir.callback(onBrowseBrir, this);
 	window.confirm.callback(onConfirmTestSetup, this);
 	window.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
 	window.playNextTrial.callback(onPlayTrial, this);
-	window.play.callback(onPlayCalibration, this);
-	window.stop.callback(onStopCalibration, this);
+	window.calibration.play.callback(onPlayCalibration, this);
+	window.calibration.stop.callback(onStopCalibration, this);
 }
 
 void FltkView::turnOnHearingAidSimulation() {
@@ -234,22 +246,22 @@ void FltkView::hideUsingHearingAidSimulationCheckBox()
 
 void FltkView::hideAudioFilePath()
 {
-	window.audioFilePath_.hide();
+	window.calibration.audioFilePath_.hide();
 }
 
 void FltkView::hidePlayButton()
 {
-	window.play.hide();
+	window.calibration.play.hide();
 }
 
 void FltkView::hideStopButton()
 {
-	window.stop.hide();
+	window.calibration.stop.hide();
 }
 
 void FltkView::hideLevel_dB_Spl()
 {
-	window.level_dB_Spl_.hide();
+	window.calibration.level_dB_Spl_.hide();
 }
 
 void FltkView::hidePlayNextTrialButton()
@@ -259,7 +271,7 @@ void FltkView::hidePlayNextTrialButton()
 
 void FltkView::hideBrowseForAudioFileButton()
 {
-	window.browseForAudioFile.hide();
+	window.calibration.browseForAudioFile.hide();
 }
 
 void FltkView::hideBrowseForStimulusListButton()
@@ -269,7 +281,7 @@ void FltkView::hideBrowseForStimulusListButton()
 
 void FltkView::showBrowseForAudioFileButton()
 {
-	window.browseForAudioFile.show();
+	window.calibration.browseForAudioFile.show();
 }
 
 void FltkView::showBrowseForStimulusListButton()
@@ -364,22 +376,22 @@ void FltkView::showUsingHearingAidSimulationCheckBox()
 
 void FltkView::showAudioFilePath()
 {
-	window.audioFilePath_.show();
+	window.calibration.audioFilePath_.show();
 }
 
 void FltkView::showPlayButton()
 {
-	window.play.show();
+	window.calibration.play.show();
 }
 
 void FltkView::showStopButton()
 {
-	window.stop.show();
+	window.calibration.stop.show();
 }
 
 void FltkView::showLevel_dB_Spl()
 {
-	window.level_dB_Spl_.show();
+	window.calibration.level_dB_Spl_.show();
 }
 
 void FltkView::showPlayNextTrialButton()
@@ -577,7 +589,7 @@ void FltkView::setBrirFilePath(std::string p) {
 
 void FltkView::setAudioFilePath(std::string p)
 {
-	window.audioFilePath_.value(p.c_str());
+	window.calibration.audioFilePath_.value(p.c_str());
 }
 
 std::string FltkView::subjectId() {
@@ -593,7 +605,7 @@ std::string FltkView::testFilePath() {
 }
 
 std::string FltkView::audioFilePath() {
-	return window.audioFilePath_.value();
+	return window.calibration.audioFilePath_.value();
 }
 
 std::string FltkView::stimulusList() {
@@ -613,7 +625,7 @@ std::string FltkView::brirFilePath() {
 }
 
 std::string FltkView::level_dB_Spl() {
-	return window.level_dB_Spl_.value();
+	return window.calibration.level_dB_Spl_.value();
 }
 
 std::string FltkView::attack_ms() {
