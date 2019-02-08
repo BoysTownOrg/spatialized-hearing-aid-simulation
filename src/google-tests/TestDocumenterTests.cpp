@@ -11,20 +11,20 @@ protected:
 
 TEST_F(
 	TestDocumenterTests,
-	DISABLED_formatsTestParameters
+	formatsTestParameters
 ) {
-	TestDocumenter::TestParameters test;
-	//perceptionTest.subjectId = "a";
-	//perceptionTest.testerId = "b";
-	//perceptionTest.usingHearingAidSimulation = true;
-	//perceptionTest.leftDslPrescriptionFilePath = "c";
-	//perceptionTest.rightDslPrescriptionFilePath = "d";
-	//perceptionTest.usingSpatialization = true;
-	//perceptionTest.brirFilePath = "e";
-	//perceptionTest.attack_ms = 1;
-	//perceptionTest.release_ms = 2;
-	//perceptionTest.windowSize = 3;
-	//perceptionTest.chunkSize = 4;
+	Model::TestParameters test;
+	test.subjectId = "a";
+	test.testerId = "b";
+	test.processing.usingHearingAidSimulation = true;
+	test.processing.leftDslPrescriptionFilePath = "c";
+	test.processing.rightDslPrescriptionFilePath = "d";
+	test.processing.usingSpatialization = true;
+	test.processing.brirFilePath = "e";
+	test.processing.attack_ms = 1;
+	test.processing.release_ms = 2;
+	test.processing.windowSize = 3;
+	test.processing.chunkSize = 4;
 	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
@@ -45,7 +45,7 @@ TEST_F(
 	TestDocumenterTests,
 	DISABLED_ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
-	TestDocumenter::TestParameters test;
+	Model::TestParameters test;
 	//perceptionTest.subjectId = "a";
 	//perceptionTest.testerId = "b";
 	//perceptionTest.usingHearingAidSimulation = false;
@@ -57,8 +57,7 @@ TEST_F(
 	//perceptionTest.release_ms = 2;
 	//perceptionTest.windowSize = 3;
 	//perceptionTest.chunkSize = 4;
-	TestDocumenter::TestParameters p;
-	documenter.documentTestParameters(p);
+	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -75,7 +74,7 @@ TEST_F(
 	TestDocumenterTests,
 	DISABLED_ignoresBrirIfNotUsingSpatialization
 ) {
-	TestDocumenter::TestParameters test;
+	Model::TestParameters test;
 	//perceptionTest.subjectId = "a";
 	//perceptionTest.testerId = "b";
 	//perceptionTest.usingHearingAidSimulation = true;
@@ -87,8 +86,7 @@ TEST_F(
 	//perceptionTest.release_ms = 2;
 	//perceptionTest.windowSize = 3;
 	//perceptionTest.chunkSize = 4;
-	TestDocumenter::TestParameters p;
-	documenter.documentTestParameters(p);
+	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"

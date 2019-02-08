@@ -44,7 +44,7 @@ void TestDocumenter::initialize(std::string filePath) {
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void TestDocumenter::documentTestParameters(TestParameters) {
+void TestDocumenter::documentTestParameters(Model::TestParameters) {
 	FormattedStream stream;
 	stream.insertFixed();
 	stream.insertPrecision(1);
