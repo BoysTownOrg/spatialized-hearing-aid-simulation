@@ -9,7 +9,9 @@
 namespace {
 	class AudioProcessingLoaderTests : public ::testing::Test {
 	protected:
-		using buffer_type = std::vector<AudioProcessingLoader::channel_type::element_type>;
+		using channel_type = AudioProcessingLoader::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
+		using size_type = buffer_type::size_type;
 		buffer_type left{};
 		buffer_type right{};
 		std::shared_ptr<AudioFrameReaderStub> reader =
@@ -35,21 +37,29 @@ namespace {
 			loader.reset();
 		}
 
-		void loadMonoFrames(buffer_type::size_type n) {
+		void loadMonoFrames(size_type n) {
 			left.resize(n);
-			std::vector<AudioProcessingLoader::channel_type> mono{ left };
+			std::vector<channel_type> mono{ left };
 			loader.load(mono);
 		}
 
-		void loadStereoFrames(buffer_type::size_type n) {
+		void loadStereoFrames(size_type n) {
 			left.resize(n);
 			right.resize(n);
-			std::vector<AudioProcessingLoader::channel_type> stereo{ left, right };
+			std::vector<channel_type> stereo{ left, right };
 			loader.load(stereo);
 		}
 
 		void setInMemoryReader(AudioFileReader &reader_) {
 			setReader(std::make_shared<AudioFileInMemory>(reader_));
+		}
+
+		void assertComplete() {
+			assertTrue(loader.complete());
+		}
+
+		void assertIncomplete() {
+			assertFalse(loader.complete());
 		}
 	};
 
@@ -76,11 +86,11 @@ namespace {
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		processor->setGroupDelay(3);
 		loadMonoFrames(1);
-		assertFalse(loader.complete());
+		assertIncomplete();
 		loadMonoFrames(1);
-		assertFalse(loader.complete());
+		assertIncomplete();
 		loadMonoFrames(1);
-		assertTrue(loader.complete());
+		assertComplete();
 	}
 
 	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
@@ -89,22 +99,22 @@ namespace {
 		setInMemoryReader(fakeReader);
 		processor->setGroupDelay(2);
 		loadMonoFrames(10 + 1);
-		assertFalse(loader.complete());
+		assertIncomplete();
 		loadMonoFrames(1);
-		assertTrue(loader.complete());
+		assertComplete();
 	}
 
 	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
 		reader->setRemainingFrames(1);
-		assertFalse(loader.complete());
+		assertIncomplete();
 	}
 
 	TEST_F(AudioProcessingLoaderTests, resetResetsZeroPadCount) {
 		processor->setGroupDelay(1);
 		loadMonoFrames(1);
-		assertTrue(loader.complete());
+		assertComplete();
 		reset();
-		assertFalse(loader.complete());
+		assertIncomplete();
 	}
 
 	class TimesTwo : public AudioFrameProcessor {
@@ -126,7 +136,7 @@ namespace {
 	}
 
 	class AddsOne : public AudioFrameProcessor {
-		void process(gsl::span<gsl::span<float>> audio) override {
+		void process(gsl::span<channel_type> audio) override {
 			for (const auto channel : audio)
 				for (auto &x : channel)
 					x += 1;
