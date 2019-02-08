@@ -1228,6 +1228,11 @@ namespace {
 		assertTrue(model.testComplete());
 	}
 
+	TEST_F(RefactoredModelTests, stopCalibrationStopsPlayer) {
+		model.stopCalibration();
+		assertTrue(audioPlayer.stopped());
+	}
+
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		RefactoredModel::TestParameters testParameters{};

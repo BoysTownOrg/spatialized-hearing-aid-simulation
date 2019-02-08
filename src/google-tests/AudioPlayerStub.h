@@ -11,6 +11,7 @@ class AudioPlayerStub : public IAudioPlayer {
 	AudioLoader *audioLoader_{};
 	bool isPlaying_{};
 	bool played_{};
+	bool stopped_{};
 public:
 	void prepareToPlay(Preparation p) override {
 		preparation_ = std::move(p);
@@ -45,6 +46,10 @@ public:
 
 	bool isPlaying() override {
 		return isPlaying_;
+	}
+
+	auto stopped() const {
+		return stopped_;
 	}
 
 	void setAudioLoader(AudioLoader *a) override {
