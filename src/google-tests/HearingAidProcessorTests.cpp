@@ -57,7 +57,7 @@ namespace {
 		processDoesNotCallCompressorWhenFrameCountDoesNotEqualChunkSize
 	) {
 		processUnequalChunk();
-		assertTrue(compressor->processingLog().empty());
+		assertTrue(compressor->processingLog().isEmpty());
 	}
 
 	TEST_F(HearingAidProcessorTests, processPassesChunkSize) {

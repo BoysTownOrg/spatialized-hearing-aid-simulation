@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ArgumentCollection.h"
+#include "LogString.h"
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
 class FilterbankCompressorSpy : public FilterbankCompressor {
-	std::string processingLog_{};
+	LogString processingLog_{};
 	int chunkSize_ = 1;
 	int compressInputChunkSize_{};
 	int filterbankAnalyzeChunkSize_{};
@@ -14,33 +15,33 @@ class FilterbankCompressorSpy : public FilterbankCompressor {
 	int windowSize_{};
 	bool failed_{};
 public:
-	auto processingLog() const {
+	auto &processingLog() const {
 		return processingLog_;
 	}
 
 	void compressInput(real_type *, real_type *, int chunkSize) override {
 		compressInputChunkSize_ = chunkSize;
-		processingLog_ += "compressInput";
+		processingLog_.insert("compressInput");
 	}
 
 	void analyzeFilterbank(real_type *, complex_type *, int chunkSize) override {
 		filterbankAnalyzeChunkSize_ = chunkSize;
-		processingLog_ += "analyzeFilterbank";
+		processingLog_.insert("analyzeFilterbank");
 	}
 
 	void compressChannels(complex_type *, complex_type *, int chunkSize) override {
 		compressChannelsChunkSize_ = chunkSize;
-		processingLog_ += "compressChannels";
+		processingLog_.insert("compressChannels");
 	}
 
 	void synthesizeFilterbank(complex_type *, real_type *, int chunkSize) override {
 		filterbankSynthesizeChunkSize_ = chunkSize;
-		processingLog_ += "synthesizeFilterbank";
+		processingLog_.insert("synthesizeFilterbank");
 	}
 
 	void compressOutput(real_type *, real_type *, int chunkSize) override {
 		compressOutputChunkSize_ = chunkSize;
-		processingLog_ += "compressOutput";
+		processingLog_.insert("compressOutput");
 	}
 
 	void setChunkSize(int s) noexcept {

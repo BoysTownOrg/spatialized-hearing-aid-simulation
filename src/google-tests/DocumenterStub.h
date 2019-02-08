@@ -5,11 +5,11 @@
 #include <sstream>
 
 class DocumenterStub : public Documenter {
-	Model::TestParameters *testParameters_{};
 	TrialParameters trialParameters_{};
 	LogString log_{};
 	std::stringstream content_{};
 	std::string filePath_{};
+	Model::TestParameters *testParameters_{};
 public:
 	void documentTrialParameters(TrialParameters p) override {
 		trialParameters_ = std::move(p);
@@ -25,7 +25,7 @@ public:
 		log_.insert("documentTestParameters ");
 	}
 
-	auto documentedTestParameters() {
+	auto documentedTestParameters() noexcept {
 		return testParameters_;
 	}
 
@@ -42,7 +42,7 @@ public:
 		return content_.str();
 	}
 
-	auto &log() const {
+	auto &log() const noexcept {
 		return log_;
 	}
 };
