@@ -3,17 +3,18 @@
 
 class BrirAdapter::ChannelReader {
 	impulse_response_type contents;
+	using size_type = impulse_response_type::size_type;
 	int channels;
 public:
 	explicit ChannelReader(AudioFileReader &reader) :
-		contents(gsl::narrow<impulse_response_type::size_type>(reader.frames() * reader.channels())),
+		contents(gsl::narrow<size_type>(reader.frames() * reader.channels())),
 		channels{ reader.channels() } 
 	{
 		if (contents.size())
 			reader.readFrames(&contents.front(), reader.frames());
 	}
 
-	impulse_response_type read(impulse_response_type::size_type channel) {
+	impulse_response_type read(size_type channel) {
 		impulse_response_type result{};
 		auto i{ channel };
 		while (i < contents.size()) {
@@ -46,9 +47,12 @@ auto BrirAdapter::makeBrir(AudioFileReader &reader) -> BinauralRoomImpulseRespon
 	BinauralRoomImpulseResponse brir{};
 	ChannelReader channelReader{ reader };
 	if (!channelReader.empty()) {
-		brir.left = channelReader.read(0);
-		if (reader.channels() > 1)
-			brir.right = channelReader.read(1);
+		const auto leftChannel = 0;
+		brir.left = channelReader.read(leftChannel);
+		if (reader.channels() > 1) {
+			const auto rightChannel = 1;
+			brir.right = channelReader.read(rightChannel);
+		}
 	}
 	brir.sampleRate = reader.sampleRate();
 	return brir;
