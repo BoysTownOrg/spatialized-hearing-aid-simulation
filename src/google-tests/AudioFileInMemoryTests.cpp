@@ -17,23 +17,25 @@ namespace {
 	class AudioFileInMemoryFacade {
 		AudioFileInMemory inMemory;
 	public:
-		using buffer_type = std::vector<AudioFileInMemory::channel_type::element_type>;
+		using channel_type = AudioFileInMemory::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
+		using size_type = buffer_type::size_type;
 		buffer_type left{};
 		buffer_type right{};
 
 		explicit AudioFileInMemoryFacade(AudioFileReader &reader) :
 			inMemory{ reader } {}
 
-		void readMonoFrames(buffer_type::size_type n) {
+		void readMonoFrames(size_type n) {
 			left.resize(n);
-			std::vector<AudioFileInMemory::channel_type> mono{ left };
+			std::vector<channel_type> mono{ left };
 			inMemory.read(mono);
 		}
 
-		void readStereoFrames(buffer_type::size_type n) {
+		void readStereoFrames(size_type n) {
 			left.resize(n);
 			right.resize(n);
-			std::vector<AudioFileInMemory::channel_type> stereo{ left, right };
+			std::vector<channel_type> stereo{ left, right };
 			inMemory.read(stereo);
 		}
 

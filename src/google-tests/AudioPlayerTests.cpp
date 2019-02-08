@@ -35,10 +35,7 @@ namespace {
 	};
 
 	TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
-		EXPECT_EQ(
-			&player, 
-			device.controller()
-		);
+		EXPECT_EQ(&player, device.controller());
 	}
 
 	TEST_F(AudioPlayerTests, prepareToPlayFirstClosesThenOpensStream) {
