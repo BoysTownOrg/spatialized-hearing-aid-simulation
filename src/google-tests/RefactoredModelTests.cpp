@@ -531,6 +531,10 @@ namespace {
 			});
 			f();
 		}
+
+		void assertPlayerPreparedPriorToPlaying() {
+			assertEqual("prepareToPlay play ", audioPlayer.log());
+		}
 	};
 
 	TEST_F(
@@ -1194,12 +1198,12 @@ namespace {
 
 	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
 		playNextTrial();
-		assertEqual("prepareToPlay play ", audioPlayer.log());
+		assertPlayerPreparedPriorToPlaying();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPreparesPlayerBeforePlaying) {
 		playCalibration();
-		assertEqual("prepareToPlay play ", audioPlayer.log());
+		assertPlayerPreparedPriorToPlaying();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
@@ -1249,7 +1253,7 @@ namespace {
 		ICalibrationComputerFactory *calibrationFactory{ &defaultCalibrationFactory };
 
 		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
-			auto model = makeModel();
+			auto model = constructModel();
 			try {
 				model.prepareNewTest(&testParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
@@ -1260,7 +1264,7 @@ namespace {
 		}
 
 		void assertPlayTrialThrowsRequestFailure(std::string what) {
-			auto model = makeModel();
+			auto model = constructModel();
 			try {
 				model.playNextTrial(&trialParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
@@ -1271,7 +1275,7 @@ namespace {
 		}
 
 		void assertPlayCalibrationThrowsRequestFailure(std::string what) {
-			auto model = makeModel();
+			auto model = constructModel();
 			try {
 				model.playCalibration(&calibrationParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
@@ -1282,7 +1286,7 @@ namespace {
 		}
 
 		void prepareNewTestIgnoringFailure() {
-			auto model = makeModel();
+			auto model = constructModel();
 			try {
 				model.prepareNewTest(&testParameters);
 			}
@@ -1291,15 +1295,15 @@ namespace {
 		}
 
 		void playTrialIgnoringFailure() {
+			auto model = constructModel();
 			try {
-				auto model = makeModel();
 				model.playNextTrial(&trialParameters);
 			}
 			catch (const RefactoredModel::RequestFailure &) {
 			}
 		}
 
-		RefactoredModel makeModel() {
+		RefactoredModel constructModel() {
 			return
 			{
 				stimulusList,
