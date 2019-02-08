@@ -1,23 +1,20 @@
-#include <gtest/gtest.h>
 #include "assert-utility.h"
+#include <gtest/gtest.h>
 
 void assertEqual(std::string expected, std::string actual) {
 	EXPECT_EQ(expected, actual);
 }
 
-void assertTrue(bool condition)
-{
+void assertTrue(bool condition) {
 	EXPECT_TRUE(condition);
 }
 
-void assertFalse(bool condition)
-{
+void assertFalse(bool condition) {
 	EXPECT_FALSE(condition);
 }
 
 template<typename T>
-void assertEqual(T expected, T actual)
-{
+void assertEqual(T expected, T actual) {
 	EXPECT_EQ(expected, actual);
 }
 
@@ -27,8 +24,7 @@ void assertEqual(
 	std::vector<T> actual
 ) {
 	EXPECT_EQ(expected.size(), actual.size());
-	using size_type = typename decltype(expected)::size_type;
-	for (size_type i = 0; i < expected.size(); ++i)
+	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
 		EXPECT_EQ(expected.at(i), actual.at(i));
 }
 
@@ -39,8 +35,7 @@ void assertEqual(
 	T tolerance
 ) {
 	EXPECT_EQ(expected.size(), actual.size());
-	using size_type = typename std::vector<T>::size_type;
-	for (size_type i = 0; i < expected.size(); ++i)
+	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
 		EXPECT_NEAR(expected.at(i), actual.at(i), tolerance);
 }
 
