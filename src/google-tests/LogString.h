@@ -3,10 +3,8 @@
 #include <sstream>
 
 class LogString {
-	std::stringstream s;
+	std::stringstream s{};
 public:
-	LogString(std::string s = {}) : s{ std::move(s) } {}
-
 	void insert(std::string s_) {
 		s << std::move(s_);
 	}
