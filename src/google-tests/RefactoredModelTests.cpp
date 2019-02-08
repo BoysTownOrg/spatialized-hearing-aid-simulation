@@ -522,6 +522,15 @@ namespace {
 		void assertBrirReaderDidNotReadAnything() {
 			assertFalse(brirReader.readCalled());
 		}
+
+		void assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
+			std::function<void(void)> f
+		) {
+			callWhenPlayerPlays([=]() {
+				EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
+			});
+			f();
+		}
 	};
 
 	TEST_F(
@@ -682,17 +691,15 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		callWhenPlayerPlays([=]() {
-			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
-		});
-		playNextTrial();
+		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
+			[=]() { playNextTrial(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		callWhenPlayerPlays([=]() {
-			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
-		});
-		playCalibration();
+		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
