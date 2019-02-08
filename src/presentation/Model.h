@@ -35,7 +35,7 @@ public:
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void playNextTrial(TrialParameters) = 0;
+	virtual void playNextTrial(TrialParameters *) = 0;
 
 	virtual bool testComplete() = 0;
 

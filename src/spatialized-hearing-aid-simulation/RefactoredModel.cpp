@@ -400,18 +400,18 @@ void RefactoredModel::prepareNewTest_(TestParameters *p) {
 	}
 }
 
-void RefactoredModel::playNextTrial(TrialParameters p) {
+void RefactoredModel::playNextTrial(TrialParameters *p) {
 	if (player->isPlaying())
 		return;
 
 	auto reader = makeReader(nextStimulus_);
-	loader->setProcessor(processorFactoryForTest->make(reader.get(), p.level_dB_Spl));
+	loader->setProcessor(processorFactoryForTest->make(reader.get(), p->level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, framesPerBufferForTest, std::move(p.audioDevice));
+	prepareAudioPlayer(*reader, framesPerBufferForTest, p->audioDevice);
 	player->play();
 	Documenter::TrialParameters documenting;
-	documenting.level_dB_Spl = p.level_dB_Spl;
+	documenting.level_dB_Spl = p->level_dB_Spl;
 	documenting.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(documenting));
 	nextStimulus_ = list->next();

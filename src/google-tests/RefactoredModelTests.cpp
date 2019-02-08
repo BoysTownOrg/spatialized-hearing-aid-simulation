@@ -230,7 +230,7 @@ namespace {
 		}
 
 		void playNextTrial() {
-			model.playNextTrial(trialParameters);
+			model.playNextTrial(&trialParameters);
 		}
 
 		void playCalibration() {
@@ -1195,6 +1195,7 @@ namespace {
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		RefactoredModel::TestParameters testParameters{};
+		RefactoredModel::TrialParameters trialParameters{};
 		RefactoredModel::CalibrationParameters calibrationParameters{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
@@ -1229,7 +1230,7 @@ namespace {
 		void assertPlayTrialThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.playNextTrial({});
+				model.playNextTrial(&trialParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
 			}
 			catch (const RefactoredModel::RequestFailure &e) {
@@ -1260,7 +1261,7 @@ namespace {
 		void playTrialIgnoringFailure() {
 			try {
 				auto model = makeModel();
-				model.playNextTrial({});
+				model.playNextTrial(&trialParameters);
 			}
 			catch (const RefactoredModel::RequestFailure &) {
 			}

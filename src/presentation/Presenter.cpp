@@ -251,7 +251,8 @@ void Presenter::playNextTrial() {
 }
 
 void Presenter::playTrial_() {
-	model->playNextTrial(trialParameters());
+	auto p = trialParameters();
+	model->playNextTrial(&p);
 	switchViewIfTestComplete();
 }
 
