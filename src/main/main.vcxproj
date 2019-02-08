@@ -154,7 +154,7 @@
     <ClCompile Include="FileSystemWriter.cpp" />
     <ClCompile Include="FltkView.cpp" />
     <ClCompile Include="LibsndfileReader.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="windows_main.cpp" />
     <ClCompile Include="MersenneTwisterRandomizer.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
     <ClCompile Include="PortAudioDevice.cpp" />

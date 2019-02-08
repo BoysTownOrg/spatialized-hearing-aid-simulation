@@ -61,32 +61,32 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 
 FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
-	subjectId_{ 100, 10, 200, 45, "subject ID" },
-	testerId_{ 100, 60, 200, 45, "tester ID" },
-	stimulusList_{ 100, 110, 200, 45, "stimulus list" },
-	browseForStimulusList{310, 110, 60, 45, "browse" },
-	usingSpatialization_{ 50, 200, 60, 45 },
-	brirFilePath_{100, 200, 200, 45, "BRIR file path" },
-	browseBrir{310, 200, 60, 45, "browse" },
-	usingHearingAidSimulation_{ 450, 200, 60, 45 },
-	leftPrescriptionFilePath_{700, 200, 200, 45, "left DSL prescription file path" },
-	browseLeftPrescription{910, 200, 60, 45, "browse" },
-	rightPrescriptionFilePath_{700, 250, 200, 45, "right DSL prescription file path" },
-	browseRightPrescription{910, 250, 60, 45, "browse" },
-	attack_ms_{700, 300, 200, 45, "attack (ms)" },
-	release_ms_{700, 350, 200, 45, "release (ms)" },
-	windowSize_{700, 400, 200, 45, "window size (samples)" },
-	chunkSize_{700, 450, 200, 45, "chunk size (samples)" },
-	audioFilePath_{100, 300, 200, 45, "audio file path"},
-	browseForAudioFile{310, 300, 60, 45, "browse" },
-	level_dB_Spl_{100, 350, 200, 45, "level (dB SPL)" },
-	play{ 50, 400, 60, 45, "play" },
-	stop{ 150, 400, 60, 45, "stop" },
-	testFilePath_{500, 550, 200, 45, "test file path" },
-	browseTestFilePath{710, 550, 60, 45, "browse" },
-	audioDevice_{100, 550, 200, 45, "audio device" },
-	playNextTrial{350, 550, 60, 45, "play next trial" },
-	confirm{850, 550, 60, 45, "confirm" }
+	subjectId_{ 100, 10, 200, 25, "subject ID" },
+	testerId_{ 100, 35, 200, 25, "tester ID" },
+	stimulusList_{ 100, 60, 200, 25, "stimulus list" },
+	browseForStimulusList{310, 60, 60, 25, "browse..." },
+	usingSpatialization_{ 50, 100, 60, 25 },
+	brirFilePath_{100, 125, 200, 25, "BRIR file path" },
+	browseBrir{310, 125, 60, 25, "browse..." },
+	usingHearingAidSimulation_{ 450, 100, 60, 25 },
+	leftPrescriptionFilePath_{600, 125, 200, 25, "left DSL prescription file path" },
+	browseLeftPrescription{810, 125, 60, 25, "browse..." },
+	rightPrescriptionFilePath_{600, 150, 200, 25, "right DSL prescription file path" },
+	browseRightPrescription{810, 150, 60, 25, "browse..." },
+	attack_ms_{600, 175, 200, 25, "attack (ms)" },
+	release_ms_{600, 200, 200, 25, "release (ms)" },
+	windowSize_{600, 225, 200, 25, "window size (samples)" },
+	chunkSize_{600, 250, 200, 25, "chunk size (samples)" },
+	audioFilePath_{100, 300, 200, 25, "audio file path"},
+	browseForAudioFile{310, 300, 60, 25, "browse..." },
+	level_dB_Spl_{100, 350, 200, 25, "level (dB SPL)" },
+	play{ 50, 400, 60, 25, "play" },
+	stop{ 150, 400, 60, 25, "stop" },
+	testFilePath_{500, 550, 200, 25, "test file path" },
+	browseTestFilePath{710, 550, 60, 25, "browse..." },
+	audioDevice_{100, 550, 200, 25, "audio device" },
+	playNextTrial{350, 550, 60, 25, "play next trial" },
+	confirm{850, 550, 60, 25, "confirm" }
 {
 	end();
 }
@@ -94,6 +94,7 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 FltkView::FltkView() :
 	window{ 425, 300, 950, 600 }
 {
+	Fl::set_font(0, "Segoe UI");
 	window.show();
 	registerCallbacks();
 	turnOnSpatialization();
