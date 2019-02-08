@@ -59,6 +59,14 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->stopCalibration();
 }
 
+FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *) :
+	Fl_Group{ x, y, w, h },
+	brirFilePath_{x + 100, y + 10, 200, 25, "BRIR file path" },
+	browseBrir{x + 310, y + 10, 60, 25, "browse..." }
+{
+	end();
+}
+
 FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	leftPrescriptionFilePath_{x + 200, y + 10, 200, 25, "left DSL prescription file path" },
@@ -79,9 +87,8 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	testerId_{ 100, 35, 200, 25, "tester ID" },
 	stimulusList_{ 100, 60, 200, 25, "stimulus list" },
 	browseForStimulusList{310, 60, 60, 25, "browse..." },
-	usingSpatialization_{ 50, 100, 18, 25, "spatialization" },
-	brirFilePath_{100, 125, 200, 25, "BRIR file path" },
-	browseBrir{310, 125, 60, 25, "browse..." },
+	usingSpatialization_{ 20, 100, 18, 25, "spatialization" },
+	spatialization{20, 125, 400, 45},
 	usingHearingAidSimulation_{ 450, 100, 18, 25, "hearing aid simulation" },
 	hearingAidSimulation{ 450, 125, 475, 170 },
 	audioFilePath_{100, 300, 200, 25, "audio file path"},
@@ -103,6 +110,7 @@ FltkView::FltkView() :
 {
 	Fl::set_font(0, "Segoe UI");
 	window.hearingAidSimulation.box(FL_ENGRAVED_BOX);
+	window.spatialization.box(FL_ENGRAVED_BOX);
 	registerCallbacks();
 	turnOnSpatialization();
 	turnOnHearingAidSimulation();
@@ -122,7 +130,7 @@ void FltkView::registerCallbacks() {
 	window.hearingAidSimulation.browseRightPrescription.callback(onBrowseRightPrescription, this);
 	window.browseForStimulusList.callback(onBrowseStimulusList, this);
 	window.browseForAudioFile.callback(onBrowseAudio, this);
-	window.browseBrir.callback(onBrowseBrir, this);
+	window.spatialization.browseBrir.callback(onBrowseBrir, this);
 	window.confirm.callback(onConfirmTestSetup, this);
 	window.usingSpatialization_.callback(onToggleSpatialization, this);
 	window.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
@@ -166,12 +174,12 @@ void FltkView::hideConfirmButton()
 
 void FltkView::hideBrirFilePath()
 {
-	window.brirFilePath_.hide();
+	window.spatialization.brirFilePath_.hide();
 }
 
 void FltkView::hideBrowseForBrirButton()
 {
-	window.browseBrir.hide();
+	window.spatialization.browseBrir.hide();
 }
 
 void FltkView::hideUsingSpatializationCheckBox()
@@ -296,12 +304,12 @@ void FltkView::showConfirmButton()
 
 void FltkView::showBrirFilePath()
 {
-	window.brirFilePath_.show();
+	window.spatialization.brirFilePath_.show();
 }
 
 void FltkView::showBrowseForBrirButton()
 {
-	window.browseBrir.show();
+	window.spatialization.browseBrir.show();
 }
 
 void FltkView::showUsingSpatializationCheckBox()
@@ -380,19 +388,19 @@ void FltkView::showPlayNextTrialButton()
 }
 
 void FltkView::deactivateBrowseForBrirButton() {
-	window.browseBrir.deactivate();
+	window.spatialization.browseBrir.deactivate();
 }
 
 void FltkView::deactivateBrirFilePath() {
-	window.brirFilePath_.deactivate();
+	window.spatialization.brirFilePath_.deactivate();
 }
 
 void FltkView::activateBrowseForBrirButton() {
-	window.browseBrir.activate();
+	window.spatialization.browseBrir.activate();
 }
 
 void FltkView::activateBrirFilePath() {
-	window.brirFilePath_.activate();
+	window.spatialization.brirFilePath_.activate();
 }
 
 void FltkView::activateLeftDslPrescriptionFilePath() {
@@ -564,7 +572,7 @@ void FltkView::setRightDslPrescriptionFilePath(std::string p) {
 }
 
 void FltkView::setBrirFilePath(std::string p) {
-	window.brirFilePath_.value(p.c_str());
+	window.spatialization.brirFilePath_.value(p.c_str());
 }
 
 void FltkView::setAudioFilePath(std::string p)
@@ -601,7 +609,7 @@ std::string FltkView::rightDslPrescriptionFilePath() {
 }
 
 std::string FltkView::brirFilePath() {
-	return window.brirFilePath_.value();
+	return window.spatialization.brirFilePath_.value();
 }
 
 std::string FltkView::level_dB_Spl() {

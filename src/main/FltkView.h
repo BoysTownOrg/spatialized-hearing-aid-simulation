@@ -18,6 +18,12 @@ struct Fl_ChoiceFacade : public Fl_Choice {
 	void populate(std::vector<std::string> items);
 };
 
+struct FltkSpatialization : public Fl_Group {
+	FltkSpatialization(int, int, int, int, const char * = {});
+	Fl_Input brirFilePath_;
+	Fl_Button browseBrir;
+};
+
 struct FltkHearingAidSimulationGroup : public Fl_Group {
 	FltkHearingAidSimulationGroup(int, int, int, int, const char * = {});
 	Fl_Float_Input attack_ms_;
@@ -33,17 +39,16 @@ struct FltkHearingAidSimulationGroup : public Fl_Group {
 struct FltkWindow : public Fl_Double_Window {
 	FltkWindow(int, int, int, int, const char * = {});
 	FltkHearingAidSimulationGroup hearingAidSimulation;
+	FltkSpatialization spatialization;
 	Fl_Float_Input level_dB_Spl_;
 	Fl_Input subjectId_;
 	Fl_Input testerId_;
 	Fl_Input testFilePath_;
 	Fl_Input stimulusList_;
-	Fl_Input brirFilePath_;
 	Fl_Input audioFilePath_;
 	Fl_ChoiceFacade audioDevice_;
 	Fl_Button browseTestFilePath;
 	Fl_Button browseForStimulusList;
-	Fl_Button browseBrir;
 	Fl_Button browseForAudioFile;
 	Fl_Button confirm;
 	Fl_Button play;
