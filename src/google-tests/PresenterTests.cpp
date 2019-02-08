@@ -475,14 +475,24 @@ namespace {
 		PresenterTests,
 		confirmTestSetupPassesParametersToModel
 	) {
+		view.setStimulusList("a");
+		view.setTestFilePath("b");
+		view.setSubjectId("c");
+		view.setTesterId("d");
+		view.confirmTestSetup();
+		assertEqual("a", model.testParameters().audioDirectory);
+		assertEqual("b", model.testParameters().testFilePath);
+		assertEqual("c", model.testParameters().subjectId);
+		assertEqual("d", model.testParameters().testerId);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupPassesHearingAidParametersToModel
+	) {
 		view.setHearingAidSimulationOn();
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
-		view.setStimulusList("c");
-		view.setBrirFilePath("d");
-		view.setTestFilePath("e");
-		view.setSubjectId("f");
-		view.setTesterId("g");
 		view.setAttack_ms("2.2");
 		view.setRelease_ms("3.3");
 		view.setWindowSize("4");
@@ -490,15 +500,20 @@ namespace {
 		view.confirmTestSetup();
 		assertEqual("a", model.testParameters().processing.leftDslPrescriptionFilePath);
 		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
-		assertEqual("c", model.testParameters().audioDirectory);
-		assertEqual("d", model.testParameters().processing.brirFilePath);
-		assertEqual("e", model.testParameters().testFilePath);
-		assertEqual("f", model.testParameters().subjectId);
-		assertEqual("g", model.testParameters().testerId);
 		assertEqual(2.2, model.testParameters().processing.attack_ms);
 		assertEqual(3.3, model.testParameters().processing.release_ms);
 		assertEqual(4, model.testParameters().processing.windowSize);
 		assertEqual(5, model.testParameters().processing.chunkSize);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupPassesSpatializationParametersToModel
+	) {
+		view.setSpatializationOn();
+		view.setBrirFilePath("a");
+		view.confirmTestSetup();
+		assertEqual("a", model.testParameters().processing.brirFilePath);
 	}
 
 	TEST_F(
@@ -758,6 +773,42 @@ namespace {
 		assertEqual("a", model.calibrationParameters().processing.brirFilePath);
 	}
 
+	TEST_F(
+		PresenterTests,
+		playCalibrationUsingSpatialization
+	) {
+		view.setSpatializationOn();
+		view.playCalibration();
+		assertTrue(model.calibrationParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationNotUsingSpatialization
+	) {
+		view.setSpatializationOff();
+		view.playCalibration();
+		assertFalse(model.calibrationParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOn();
+		view.playCalibration();
+		assertTrue(model.calibrationParameters().processing.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationNotUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOff();
+		view.playCalibration();
+		assertFalse(model.calibrationParameters().processing.usingHearingAidSimulation);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
 		playCalibrationWithLevelShowsErrorMessage("a");
 	}
@@ -835,42 +886,6 @@ namespace {
 		view.setHearingAidSimulationOff();
 		setInvalidWindowSize();
 		playCalibrationPlays();
-	}
-
-	TEST_F(
-		PresenterTests,
-		playCalibrationUsingSpatialization
-	) {
-		view.setSpatializationOn();
-		view.playCalibration();
-		assertTrue(model.calibrationParameters().processing.usingSpatialization);
-	}
-
-	TEST_F(
-		PresenterTests,
-		playCalibrationNotUsingSpatialization
-	) {
-		view.setSpatializationOff();
-		view.playCalibration();
-		assertFalse(model.calibrationParameters().processing.usingSpatialization);
-	}
-
-	TEST_F(
-		PresenterTests,
-		playCalibrationUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOn();
-		view.playCalibration();
-		assertTrue(model.calibrationParameters().processing.usingHearingAidSimulation);
-	}
-
-	TEST_F(
-		PresenterTests,
-		playCalibrationNotUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOff();
-		view.playCalibration();
-		assertFalse(model.calibrationParameters().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(PresenterTests, stopCalibrationStopsCalibration) {
