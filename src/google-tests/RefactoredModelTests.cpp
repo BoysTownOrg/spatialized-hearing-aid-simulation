@@ -518,6 +518,10 @@ namespace {
 			f();
 			assertEqual("a", brirReader.filePath());
 		}
+
+		void assertBrirReaderDidNotReadAnything() {
+			assertFalse(brirReader.readCalled());
+		}
 	};
 
 	TEST_F(
@@ -652,13 +656,13 @@ namespace {
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
 		testParameters.processing.usingSpatialization = false;
 		prepareNewTest();
-		assertFalse(brirReader.readCalled());
+		assertBrirReaderDidNotReadAnything();
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
 		calibrationParameters.processing.usingSpatialization = false;
 		playCalibration();
-		assertFalse(brirReader.readCalled());
+		assertBrirReaderDidNotReadAnything();
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
