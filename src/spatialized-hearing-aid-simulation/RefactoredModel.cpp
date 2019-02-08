@@ -295,12 +295,12 @@ RefactoredModel::RefactoredModel(
 	player->setAudioLoader(loader);
 }
 
-void RefactoredModel::prepareNewTest(TestParameters p) {
-	framesPerBufferForTest = p.processing.usingHearingAidSimulation
-		? p.processing.chunkSize
+void RefactoredModel::prepareNewTest(TestParameters *p) {
+	framesPerBufferForTest = p->processing.usingHearingAidSimulation
+		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
-	processorFactoryForTest = makeProcessorFactory(p.processing);
-	prepareNewTest_(std::move(p));
+	processorFactoryForTest = makeProcessorFactory(p->processing);
+	prepareNewTest_(*p);
 }
 
 std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(

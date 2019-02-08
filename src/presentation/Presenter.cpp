@@ -144,7 +144,8 @@ void Presenter::confirmTestSetup() {
 }
 
 void Presenter::prepareNewTest() {
-	model->prepareNewTest(testParameters());
+	auto p = testParameters();
+	model->prepareNewTest(&p);
 	hideTestSetupView();
 	showTesterView();
 }

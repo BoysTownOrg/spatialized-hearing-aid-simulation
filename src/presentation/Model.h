@@ -29,7 +29,7 @@ public:
 		std::string audioDirectory;
 		std::string testFilePath;
 	};
-	virtual void prepareNewTest(TestParameters) = 0;
+	virtual void prepareNewTest(TestParameters *) = 0;
 
 	struct TrialParameters {
 		std::string audioDevice;

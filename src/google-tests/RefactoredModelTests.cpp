@@ -226,7 +226,7 @@ namespace {
 		}
 
 		void prepareNewTest() {
-			model.prepareNewTest(testParameters);
+			model.prepareNewTest(&testParameters);
 		}
 
 		void playNextTrial() {
@@ -1235,7 +1235,7 @@ namespace {
 		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.prepareNewTest(testParameters);
+				model.prepareNewTest(&testParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
 			}
 			catch (const RefactoredModel::RequestFailure & e) {
@@ -1268,7 +1268,7 @@ namespace {
 		void prepareNewTestIgnoringFailure() {
 			auto model = makeModel();
 			try {
-				model.prepareNewTest(testParameters);
+				model.prepareNewTest(&testParameters);
 			}
 			catch (const RefactoredModel::RequestFailure &) {
 			}
