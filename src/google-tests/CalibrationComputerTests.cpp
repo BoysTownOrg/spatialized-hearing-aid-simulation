@@ -8,7 +8,15 @@
 class CalibrationComputerTests : public ::testing::Test {
 };
 
-TEST_F(CalibrationComputerTests, computesSignalScaleForTwoChannels) {
+TEST_F(CalibrationComputerTests, computesSignalScaleMono) {
+	FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
+	fakeReader.setChannels(1);
+	const auto channelRms = std::sqrt((1 * 1 + 2 * 2 + 3 * 3 + 4 * 4 + 5 * 5 + 6 * 6.0) / 6);
+	CalibrationComputer computer{ *std::make_shared<AudioFileInMemory>(fakeReader) };
+	EXPECT_NEAR(std::pow(10.0, 7 / 20.0) / channelRms, computer.signalScale(0, 7), 1e-6);
+}
+
+TEST_F(CalibrationComputerTests, computesSignalScaleStereo) {
 	FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 	fakeReader.setChannels(2);
 	const auto leftChannelRms = std::sqrt((1 * 1 + 3 * 3 + 5 * 5.0) / 3);
