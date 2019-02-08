@@ -16,27 +16,33 @@ TEST_F(
 	Model::TestParameters test;
 	test.subjectId = "a";
 	test.testerId = "b";
-	test.processing.usingHearingAidSimulation = true;
-	test.processing.leftDslPrescriptionFilePath = "c";
-	test.processing.rightDslPrescriptionFilePath = "d";
+	test.audioDirectory = "c";
 	test.processing.usingSpatialization = true;
-	test.processing.brirFilePath = "e";
-	test.processing.attack_ms = 1;
-	test.processing.release_ms = 2;
+	test.processing.brirFilePath = "d";
+	test.processing.usingHearingAidSimulation = true;
+	test.processing.leftDslPrescriptionFilePath = "e";
+	test.processing.rightDslPrescriptionFilePath = "f";
+	test.processing.attack_ms = 1.1;
+	test.processing.release_ms = 2.2;
 	test.processing.windowSize = 3;
 	test.processing.chunkSize = 4;
 	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
-		"DSL prescription\n"
-		"    left: c\n"
-		"    right: d\n"
-		"BRIR: e\n"
-		"attack (ms): 1.0\n"
-		"release (ms): 2.0\n"
-		"window size (samples): 3\n"
-		"chunk size (samples): 4\n\n", 
+		"stimulus list: c\n"
+		"\n"
+		"spatialization\n"
+		"    BRIR: d\n"
+		"\n"
+		"hearing aid simulation\n"
+		"    DSL prescription\n"
+		"        left: e\n"
+		"        right: f\n"
+		"    attack (ms): 1.1\n"
+		"    release (ms): 2.2\n"
+		"    window size (samples): 3\n"
+		"    chunk size (samples): 4\n\n", 
 		writer.content()
 	);
 }

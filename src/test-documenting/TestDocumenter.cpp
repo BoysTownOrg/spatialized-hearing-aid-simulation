@@ -4,7 +4,16 @@
 
 class FormattedStream {
 	std::stringstream stream{};
+	int indents{};
 public:
+	void indent() {
+		++indents;
+	}
+
+	void deindent() {
+		--indents;
+	}
+
 	void insertFixed() {
 		stream << std::fixed;
 	}
@@ -15,16 +24,14 @@ public:
 
 	template<typename T>
 	void insertLabeledParameterLine(std::string label, T p) {
-		stream << std::move(label) << ": " << std::move(p) << '\n';
-	}
-
-	template<typename T>
-	void insertIndentedLabeledParameterLine(std::string label, T p) {
-		stream << "    ";
-		insertLabeledParameterLine(std::move(label), std::move(p));
+		std::stringstream line{};
+		line << std::move(label) << ": " << std::move(p);
+		insertLine(line.str());
 	}
 
 	void insertLine(std::string s = {}) {
+		for (int i = 0; i < indents; ++i)
+			stream << "    ";
 		stream << std::move(s) << '\n';
 	}
 
@@ -44,10 +51,35 @@ void TestDocumenter::initialize(std::string filePath) {
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void TestDocumenter::documentTestParameters(Model::TestParameters) {
+void TestDocumenter::documentTestParameters(Model::TestParameters p) {
 	FormattedStream stream;
-	stream.insertFixed();
-	stream.insertPrecision(1);
+	stream.insertLabeledParameterLine("subject", p.subjectId);
+	stream.insertLabeledParameterLine("tester", p.testerId);
+	stream.insertLabeledParameterLine("stimulus list", p.audioDirectory);
+	if (p.processing.usingSpatialization) {
+		stream.insertLine();
+		stream.insertLine("spatialization");
+		stream.indent();
+		stream.insertLabeledParameterLine("BRIR", p.processing.brirFilePath);
+		stream.deindent();
+	}
+	if (p.processing.usingHearingAidSimulation) {
+		stream.insertLine();
+		stream.insertLine("hearing aid simulation");
+		stream.indent();
+		stream.insertLine("DSL prescription");
+		stream.indent();
+		stream.insertLabeledParameterLine("left", p.processing.leftDslPrescriptionFilePath);
+		stream.insertLabeledParameterLine("right", p.processing.rightDslPrescriptionFilePath);
+		stream.deindent();
+		stream.insertFixed();
+		stream.insertPrecision(1);
+		stream.insertLabeledParameterLine("attack (ms)", p.processing.attack_ms);
+		stream.insertLabeledParameterLine("release (ms)", p.processing.release_ms);
+		stream.insertLabeledParameterLine("window size (samples)", p.processing.windowSize);
+		stream.insertLabeledParameterLine("chunk size (samples)", p.processing.chunkSize);
+		stream.deindent();
+	}
 	stream.insertLine();
 	writer->write(stream.str());
 }
