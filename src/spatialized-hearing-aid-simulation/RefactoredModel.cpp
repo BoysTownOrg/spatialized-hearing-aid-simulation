@@ -448,21 +448,21 @@ bool RefactoredModel::testComplete() {
 	return list->empty();
 }
 
-void RefactoredModel::playCalibration(CalibrationParameters p) {
+void RefactoredModel::playCalibration(CalibrationParameters *p) {
 	if (player->isPlaying())
 		return;
 
-	const auto framesPerBuffer = p.processing.usingHearingAidSimulation
-		? p.processing.chunkSize
+	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
+		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
 	
-	auto processorFactory_ = makeProcessorFactory(std::move(p.processing));
+	auto processorFactory_ = makeProcessorFactory(p->processing);
 
-	auto reader = makeReader(std::move(p.audioFilePath));
-	loader->setProcessor(processorFactory_->make(reader.get(), p.level_dB_Spl));
+	auto reader = makeReader(p->audioFilePath);
+	loader->setProcessor(processorFactory_->make(reader.get(), p->level_dB_Spl));
 	loader->setReader(reader);
 	loader->reset();
-	prepareAudioPlayer(*reader, framesPerBuffer, std::move(p.audioDevice));
+	prepareAudioPlayer(*reader, framesPerBuffer, p->audioDevice);
 	player->play();
 }
 

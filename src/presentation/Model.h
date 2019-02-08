@@ -45,7 +45,7 @@ public:
 		std::string audioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void playCalibration(CalibrationParameters) = 0;
+	virtual void playCalibration(CalibrationParameters *) = 0;
 	virtual void stopCalibration() = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 };

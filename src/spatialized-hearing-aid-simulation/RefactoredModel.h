@@ -76,7 +76,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(TestParameters *) override;
 	SPATIALIZED_HA_SIMULATION_API void playNextTrial(TrialParameters *) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
-	SPATIALIZED_HA_SIMULATION_API void playCalibration(CalibrationParameters) override;
+	SPATIALIZED_HA_SIMULATION_API void playCalibration(CalibrationParameters *) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
 	SPATIALIZED_HA_SIMULATION_API static const double fullScaleLevel_dB_Spl;

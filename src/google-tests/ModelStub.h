@@ -31,8 +31,8 @@ public:
 		return calibrationStopped_;
 	}
 
-	void playCalibration(CalibrationParameters p) override {
-		calibrationParameters_ = std::move(p);
+	void playCalibration(CalibrationParameters *p) override {
+		calibrationParameters_ = *p;
 		calibrationPlayed_ = true;
 	}
 
@@ -100,7 +100,7 @@ public:
 
 	void playNextTrial(TrialParameters *) override {}
 	bool testComplete() override { return {}; }
-	void playCalibration(CalibrationParameters) override {}
+	void playCalibration(CalibrationParameters *) override {}
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };
@@ -118,7 +118,7 @@ public:
 
 	void prepareNewTest(TestParameters *) override {}
 	bool testComplete() override { return {}; }
-	void playCalibration(CalibrationParameters) override {}
+	void playCalibration(CalibrationParameters *) override {}
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 };
@@ -130,7 +130,7 @@ public:
 		message = std::move(s);
 	}
 
-	void playCalibration(CalibrationParameters) override {
+	void playCalibration(CalibrationParameters *) override {
 		throw RequestFailure{ message };
 	}
 	

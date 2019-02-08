@@ -234,7 +234,7 @@ namespace {
 		}
 
 		void playCalibration() {
-			model.playCalibration(calibrationParameters);
+			model.playCalibration(&calibrationParameters);
 		}
 
 		void setInMemoryReader(AudioFileReader &reader_) {
@@ -1241,7 +1241,7 @@ namespace {
 		void assertPlayCalibrationThrowsRequestFailure(std::string what) {
 			auto model = makeModel();
 			try {
-				model.playCalibration(calibrationParameters);
+				model.playCalibration(&calibrationParameters);
 				FAIL() << "Expected RefactoredModel::RequestFailure.";
 			}
 			catch (const RefactoredModel::RequestFailure &e) {

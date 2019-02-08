@@ -289,7 +289,7 @@ void Presenter::playCalibration_() {
 	p.audioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
-	model->playCalibration(std::move(p));
+	model->playCalibration(&p);
 }
 
 void Presenter::stopCalibration() {
