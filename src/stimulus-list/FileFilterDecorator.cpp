@@ -29,7 +29,7 @@ FileFilterDecoratorFactory::FileFilterDecoratorFactory(
 {
 }
 
-std::shared_ptr<DirectoryReader> FileFilterDecoratorFactory::make(std::string)
+std::shared_ptr<DirectoryReader> FileFilterDecoratorFactory::make(std::string directory)
 {
-	return std::make_shared<FileFilterDecorator>(decorated->make({}), filter);
+	return std::make_shared<FileFilterDecorator>(decorated->make(std::move(directory)), filter);
 }
