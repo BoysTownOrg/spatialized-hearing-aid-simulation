@@ -33,3 +33,19 @@ public:
 		return contents_.empty();
 	}
 };
+
+class FailsToInitializeStimulusList : public StimulusList {
+	std::string errorMessage{};
+public:
+	void setErrorMessage(std::string s) {
+		errorMessage = std::move(s);
+	}
+
+	void initialize(std::string) override {
+		throw InitializationFailure{ errorMessage };
+	}
+
+	std::string next() override { return {}; }
+
+	bool empty() override { return {}; }
+};

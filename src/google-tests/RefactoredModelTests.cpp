@@ -1477,6 +1477,16 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		prepareNewTestThrowsRequestFailureWhenStimulusListFails
+	) {
+		FailsToInitializeStimulusList failing;
+		failing.setErrorMessage("error.");
+		stimulusList = &failing;
+		assertPreparingNewTestThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
