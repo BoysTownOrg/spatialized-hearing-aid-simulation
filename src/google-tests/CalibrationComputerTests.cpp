@@ -31,3 +31,10 @@ TEST_F(CalibrationComputerTests, constructorResetsReader) {
 	CalibrationComputer computer{ reader };
 	assertTrue(reader.readingLog().endsWith("reset "));
 }
+
+TEST_F(CalibrationComputerTests, outOfRangeChannelReturnsZero) {
+	FakeAudioFileReader fakeReader{};
+	fakeReader.setChannels(1);
+	CalibrationComputer computer{ *std::make_shared<AudioFileInMemory>(fakeReader) };
+	assertEqual(0.0, computer.signalScale(1, {}));
+}
