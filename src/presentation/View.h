@@ -80,6 +80,7 @@ public:
 	virtual void hideTesterId() = 0;
 	virtual void hideStimulusList() = 0;
 	virtual void hideTestFilePath() = 0;
+	virtual void hideBrowseForTestFileButton() = 0;
 	virtual void hideConfirmButton() = 0;
 	virtual void hideBrirFilePath() = 0;
 	virtual void hideBrowseForBrirButton() = 0;
@@ -104,6 +105,7 @@ public:
 	virtual void showTesterId() = 0;
 	virtual void showStimulusList() = 0;
 	virtual void showTestFilePath() = 0;
+	virtual void showBrowseForTestFileButton() = 0;
 	virtual void showConfirmButton() = 0;
 	virtual void showBrirFilePath() = 0;
 	virtual void showBrowseForBrirButton() = 0;

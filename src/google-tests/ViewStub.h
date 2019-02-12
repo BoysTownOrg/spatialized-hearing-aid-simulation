@@ -105,6 +105,15 @@ public:
 	bool browseForTestFileButtonHidden_{};
 	bool browseForTestFileButtonShown_{};
 
+	
+	void showBrowseForTestFileButton() override {
+		browseForTestFileButtonShown_ = true;
+	}
+
+	void hideBrowseForTestFileButton() override {
+		browseForTestFileButtonHidden_ = true;
+	}
+
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
 	}

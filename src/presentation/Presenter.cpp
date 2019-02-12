@@ -16,6 +16,7 @@ void Presenter::showTestSetupView() {
 	view->showTesterId();
 	view->showStimulusList();
 	view->showTestFilePath();
+	view->showBrowseForTestFileButton();
 	view->showConfirmButton();
 	view->showBrirFilePath();
 	view->showBrowseForBrirButton();
@@ -159,6 +160,7 @@ void Presenter::hideTestSetupView() {
 	view->hideTesterId();
 	view->hideStimulusList();
 	view->hideTestFilePath();
+	view->hideBrowseForTestFileButton();
 	view->hideConfirmButton();
 	view->hideBrirFilePath();
 	view->hideBrowseForBrirButton();
