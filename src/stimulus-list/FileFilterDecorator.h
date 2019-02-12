@@ -13,7 +13,7 @@ private:
     std::vector<std::string> filtered(std::vector<std::string>);
 };
 
-class FileFilterDecoratorFactory : DirectoryReaderFactory {
+class FileFilterDecoratorFactory : public DirectoryReaderFactory {
 	std::string filter;
 	DirectoryReaderFactory *decorated;
 public:

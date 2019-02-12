@@ -54,9 +54,9 @@ class CalibrationComputerFactoryImpl : public ICalibrationComputerFactory {
 
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	WindowsDirectoryReaderFactory directoryReaderFactory{};
-	FileFilterDecorator fileDecorator{&directoryReader, ".wav"};
+	FileFilterDecoratorFactory fileDecorator{&directoryReaderFactory, ".wav"};
 	MersenneTwisterRandomizer randomizer{};
-	RandomizedStimulusList stimulusList{&directoryReaderFactory, &randomizer};
+	RandomizedStimulusList stimulusList{&fileDecorator, &randomizer};
 	FileSystemWriter persistentWriter;
 	TestDocumenter testDocumenter{ &persistentWriter };
 	PortAudioDevice audioDevice{};
