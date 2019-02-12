@@ -4,6 +4,8 @@
 WindowsDirectoryReader::WindowsDirectoryReader(std::string directory) :
 	hFind{::FindFirstFileA((directory += "\\*").c_str(), &lpFindFileData)}
 {
+	if (failed())
+		return;
 	do {
 		if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			continue;
