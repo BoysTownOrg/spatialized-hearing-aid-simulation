@@ -36,5 +36,6 @@ TEST_F(CalibrationComputerTests, outOfRangeChannelReturnsZero) {
 	FakeAudioFileReader fakeReader{};
 	fakeReader.setChannels(1);
 	CalibrationComputer computer{ *std::make_shared<AudioFileInMemory>(fakeReader) };
-	assertEqual(0.0, computer.signalScale(1, {}));
+	auto channel1 = 0;
+	assertEqual(0.0, computer.signalScale(channel1 + 1, {}));
 }
