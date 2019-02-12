@@ -22,6 +22,7 @@ struct FltkSpatialization : public Fl_Group {
 	FltkSpatialization(int, int, int, int, const char * = {});
 	Fl_Input brirFilePath_;
 	Fl_Button browseBrir;
+	void hide() override;
 };
 
 struct FltkHearingAidSimulationGroup : public Fl_Group {
@@ -34,6 +35,7 @@ struct FltkHearingAidSimulationGroup : public Fl_Group {
 	Fl_Button browseRightPrescription;
 	Fl_ChoiceFacade windowSize_;
 	Fl_ChoiceFacade chunkSize_;
+	void hide() override;
 };
 
 struct FltkCalibration : public Fl_Group {
@@ -43,6 +45,7 @@ struct FltkCalibration : public Fl_Group {
 	Fl_Button browseForAudioFile;
 	Fl_Button play;
 	Fl_Button stop;
+	void hide() override;
 };
 
 struct FltkWindow : public Fl_Double_Window {

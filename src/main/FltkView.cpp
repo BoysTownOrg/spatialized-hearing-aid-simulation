@@ -59,12 +59,24 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->stopCalibration();
 }
 
+static void hideAllChildren(Fl_Group *parent)
+{
+	auto children = parent->children();
+	for (auto i{ 0 }; i < children; ++i)
+		parent->child(i)->hide();
+}
+
 FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	brirFilePath_{x + 100, y + 10, 200, 25, "BRIR file path" },
 	browseBrir{x + 310, y + 10, 80, 25, "browse..." }
 {
 	end();
+}
+
+void FltkSpatialization::hide()
+{
+	hideAllChildren(this);
 }
 
 FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w, int h, const char *) :
@@ -81,6 +93,11 @@ FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w
 	end();
 }
 
+void FltkHearingAidSimulationGroup::hide()
+{
+	hideAllChildren(this);
+}
+
 FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	audioFilePath_{x + 100, y + 10, 200, 25, "audio file path"},
@@ -90,6 +107,11 @@ FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	stop{ x + 175, y + 60, 60, 25, "stop" }
 {
 	end();
+}
+
+void FltkCalibration::hide()
+{
+	hideAllChildren(this);
 }
 
 FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
@@ -133,7 +155,8 @@ FltkView::FltkView() :
 	window.hearingAidSimulation.attack_ms_.value("5");
 	window.hearingAidSimulation.release_ms_.value("50");
 	window.calibration.level_dB_Spl_.value("65");
-	window.show();
+	hideAllChildren(&window);
+	window.audioDevice_.show();
 }
 
 void FltkView::registerCallbacks() {
@@ -506,6 +529,7 @@ std::string FltkView::audioDevice() {
 }
 
 void FltkView::runEventLoop() {
+	window.show();
 	Fl::run();
 }
 
