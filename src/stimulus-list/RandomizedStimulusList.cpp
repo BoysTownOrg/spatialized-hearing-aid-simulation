@@ -9,7 +9,7 @@ RandomizedStimulusList::RandomizedStimulusList(
 
 void RandomizedStimulusList::initialize(std::string directory) {
 	auto reader = factory->make(directory);
-    files = reader->filesIn(directory_);
+    files = reader->files();
     randomizer->shuffle(files.begin(), files.end());
     directory_ = std::move(directory);
 }

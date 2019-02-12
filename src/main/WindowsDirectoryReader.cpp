@@ -24,7 +24,7 @@ public:
 };
 
 // https://docs.microsoft.com/en-us/windows/desktop/fileio/listing-the-files-in-a-directory
-std::vector<std::string> WindowsDirectoryReader::filesIn(std::string directory) {
+std::vector<std::string> WindowsDirectoryReader::files(std::string directory) {
 	directory += "\\*";
 	WIN32_FIND_DATA ffd;
 	WindowsFileSearch search{ directory.c_str(), &ffd };

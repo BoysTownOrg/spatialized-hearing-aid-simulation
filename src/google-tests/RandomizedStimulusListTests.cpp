@@ -83,15 +83,9 @@ namespace {
 		}
 	};
 
-	TEST_F(FileFilterDecoratorTests, passesDirectoryToDecorated) {
-		auto decorator = makeDecorator();
-		decorator.filesIn({ "a" });
-		assertEqual("a", reader.directory());
-	}
-
 	TEST_F(FileFilterDecoratorTests, returnsFilteredFiles) {
 		auto decorator = makeDecorator(".c");
 		reader.setFileNames({ "a", "b.c", "d.e", "f.c", "g.h" });
-		assertEqual({ "b.c", "f.c" }, decorator.filesIn({}));
+		assertEqual({ "b.c", "f.c" }, decorator.files());
 	}
 }

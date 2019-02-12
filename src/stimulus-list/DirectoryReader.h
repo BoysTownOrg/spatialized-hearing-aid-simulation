@@ -8,7 +8,7 @@
 class DirectoryReader {
 public:
     INTERFACE_OPERATIONS(DirectoryReader);
-    virtual std::vector<std::string> filesIn(std::string directory) = 0;
+    virtual std::vector<std::string> files() = 0;
 };
 
 class DirectoryReaderFactory {
