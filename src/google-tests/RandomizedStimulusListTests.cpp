@@ -87,6 +87,11 @@ namespace {
 		}
 	};
 
+	TEST_F(FileFilterDecoratorTests, passesDirectoryToDecorated) {
+		auto decorator = makeDecorator("a");
+		assertEqual("a", factory.directory());
+	}
+
 	TEST_F(FileFilterDecoratorTests, returnsFilteredFiles) {
 		filter = ".c";
 		auto decorator = makeDecorator();
