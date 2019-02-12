@@ -76,16 +76,21 @@ namespace {
 
 	class FileFilterDecoratorTests : public ::testing::Test {
 	protected:
-		DirectoryReaderStub reader{};
+		std::shared_ptr<DirectoryReaderStub> reader 
+			= std::make_shared<DirectoryReaderStub>();
+		DirectoryReaderStubFactory factory{reader};
+		std::string filter{};
 
-		FileFilterDecorator makeDecorator(std::string f = {}) {
-			return FileFilterDecorator{ &reader, f };
+		std::shared_ptr<DirectoryReader> makeDecorator(std::string f = {}) {
+			FileFilterDecoratorFactory decorator{ &factory, filter };
+			return decorator.make(f);
 		}
 	};
 
 	TEST_F(FileFilterDecoratorTests, returnsFilteredFiles) {
-		auto decorator = makeDecorator(".c");
-		reader.setFileNames({ "a", "b.c", "d.e", "f.c", "g.h" });
-		assertEqual({ "b.c", "f.c" }, decorator.files());
+		filter = ".c";
+		auto decorator = makeDecorator();
+		reader->setFileNames({ "a", "b.c", "d.e", "f.c", "g.h" });
+		assertEqual({ "b.c", "f.c" }, decorator->files());
 	}
 }

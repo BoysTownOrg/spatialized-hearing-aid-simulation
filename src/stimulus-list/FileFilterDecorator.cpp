@@ -1,11 +1,11 @@
 #include "FileFilterDecorator.h"
 
 FileFilterDecorator::FileFilterDecorator(
-    DirectoryReader *reader,
+	std::shared_ptr<DirectoryReader> reader,
     std::string filter
 ) :
     filter{ std::move(filter) },
-    reader{ reader } {}
+    reader{ std::move(reader) } {}
 
 std::vector<std::string> FileFilterDecorator::files() {
     return filtered(reader->files());
@@ -18,4 +18,18 @@ std::vector<std::string> FileFilterDecorator::filtered(std::vector<std::string> 
             if (0 == file.compare(file.length() - filter.length(), filter.length(), filter))
                 filtered_.push_back(file);
     return filtered_;
+}
+
+FileFilterDecoratorFactory::FileFilterDecoratorFactory(
+	DirectoryReaderFactory * decorated, 
+	std::string filter
+) :
+	decorated{ decorated },
+	filter{ std::move(filter) }
+{
+}
+
+std::shared_ptr<DirectoryReader> FileFilterDecoratorFactory::make(std::string)
+{
+	return std::make_shared<FileFilterDecorator>(decorated->make({}), filter);
 }
