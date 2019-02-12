@@ -57,7 +57,7 @@ public:
 	bool subjectIdHidden_{};
 	bool testerIdHidden_{};
 	bool simulusListHidden_{};
-	bool outputFilePathHidden_{};
+	bool testFilePathHidden_{};
 	bool confirmButtonHidden_{};
 	bool brirFilePathHidden_{};
 	bool browseForBrirButtonHidden_{};
@@ -78,7 +78,7 @@ public:
 	bool subjectIdShown_{};
 	bool testerIdShown_{};
 	bool simulusListShown_{};
-	bool outputFilePathShown_{};
+	bool testFilePathShown_{};
 	bool confirmButtonShown_{};
 	bool brirFilePathShown_{};
 	bool browseForBrirButtonShown_{};
@@ -102,6 +102,8 @@ public:
 	bool browseForStimulusListButtonHidden_{};
 	bool browseForAudioFileButtonShown_{};
 	bool browseForStimulusListButtonShown_{};
+	bool browseForTestFileButtonHidden_{};
+	bool browseForTestFileButtonShown_{};
 
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
@@ -152,7 +154,8 @@ public:
 			subjectIdShown_ &&
 			testerIdShown_ &&
 			simulusListShown_ &&
-			outputFilePathShown_ &&
+			testFilePathShown_ &&
+			browseForTestFileButtonShown_ &&
 			confirmButtonShown_ &&
 			brirFilePathShown_ &&
 			browseForBrirButtonShown_ &&
@@ -179,7 +182,8 @@ public:
 			subjectIdHidden_ &&
 			testerIdHidden_ &&
 			simulusListHidden_ &&
-			outputFilePathHidden_ &&
+			testFilePathHidden_ &&
+			browseForTestFileButtonHidden_ &&
 			confirmButtonHidden_ &&
 			brirFilePathHidden_ &&
 			browseForBrirButtonHidden_ &&
@@ -206,7 +210,8 @@ public:
 			subjectIdHidden_ ||
 			testerIdHidden_ ||
 			simulusListHidden_ ||
-			outputFilePathHidden_ ||
+			testFilePathHidden_ ||
+			browseForTestFileButtonHidden_ ||
 			confirmButtonHidden_ ||
 			brirFilePathHidden_ ||
 			browseForBrirButtonHidden_ ||
@@ -242,7 +247,7 @@ public:
 	}
 	
 	void hideTestFilePath() override {
-		outputFilePathHidden_ = true;
+		testFilePathHidden_ = true;
 	}
 	
 	void hideConfirmButton() override {
@@ -326,7 +331,7 @@ public:
 	}
 	
 	void showTestFilePath() override {
-		outputFilePathShown_ = true;
+		testFilePathShown_ = true;
 	}
 	
 	void showConfirmButton() override {
