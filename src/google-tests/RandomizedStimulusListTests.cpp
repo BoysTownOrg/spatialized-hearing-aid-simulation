@@ -125,4 +125,13 @@ namespace {
 		reader->setFileNames({ "a", "b.c", "d.e", "f.c", "g.h" });
 		assertEqual({ "b.c", "f.c" }, decorator->files());
 	}
+
+	TEST_F(FileFilterDecoratorTests, returnsDecoratedQueries) {
+		auto decorator = makeDecorator();
+		assertFalse(decorator->failed());
+		reader->fail();
+		reader->setErrorMessage("a");
+		assertTrue(decorator->failed());
+		assertEqual("a", decorator->errorMessage());
+	}
 }
