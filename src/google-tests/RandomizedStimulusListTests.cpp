@@ -8,9 +8,11 @@
 namespace {
 	class RandomizedStimulusListTests : public ::testing::Test {
 	protected:
-		DirectoryReaderStub reader{};
+		std::shared_ptr<DirectoryReaderStub> reader 
+			= std::make_shared<DirectoryReaderStub>();
+		DirectoryReaderStubFactory factory{reader};
 		RandomizerStub randomizer{};
-		RandomizedStimulusList list{ &reader, &randomizer };
+		RandomizedStimulusList list{ &factory, &randomizer };
 
 		auto initialize(std::string d = {}) {
 			return list.initialize(std::move(d));
@@ -23,17 +25,17 @@ namespace {
 
 	TEST_F(
 		RandomizedStimulusListTests,
-		initializePassesDirectoryToDirectoryReader
+		initializePassesDirectoryToFactory
 	) {
 		initialize("a");
-		assertEqual("a", reader.directory());
+		assertEqual("a", factory.directory());
 	}
 
 	TEST_F(
 		RandomizedStimulusListTests,
 		emptyWhenExhausted
 	) {
-		reader.setFileNames({ "a", "b" });
+		reader->setFileNames({ "a", "b" });
 		initialize();
 		assertFalse(list.empty());
 		next();
@@ -46,7 +48,7 @@ namespace {
 		RandomizedStimulusListTests,
 		nextReturnsFullPathToFileAtFront
 	) {
-		reader.setFileNames({ "a", "b", "c" });
+		reader->setFileNames({ "a", "b", "c" });
 		initialize({ "C:" });
 		assertEqual("C:/a", next());
 		assertEqual("C:/b", next());
@@ -57,7 +59,7 @@ namespace {
 		RandomizedStimulusListTests,
 		nextReturnsFullPathToLastFileWhenExhausted
 	) {
-		reader.setFileNames({ "a" });
+		reader->setFileNames({ "a" });
 		initialize({ "C:" });
 		assertEqual("C:/a", next());
 		assertEqual("C:/a", next());
@@ -67,7 +69,7 @@ namespace {
 		RandomizedStimulusListTests,
 		initializeShufflesFileNames
 	) {
-		reader.setFileNames({ "a", "b", "c" });
+		reader->setFileNames({ "a", "b", "c" });
 		initialize();
 		assertEqual({ "a", "b", "c" }, randomizer.toShuffle());
 	}

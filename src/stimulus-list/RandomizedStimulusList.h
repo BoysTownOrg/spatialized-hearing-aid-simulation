@@ -9,10 +9,10 @@ class RandomizedStimulusList : public StimulusList {
     std::vector<std::string> files{};
     std::string current_{};
     std::string directory_{};
-    DirectoryReader *reader;
+	DirectoryReaderFactory *factory;
     Randomizer *randomizer;
 public:
-    STIMULUS_LIST_API RandomizedStimulusList(DirectoryReader *reader, Randomizer *randomizer);
+    STIMULUS_LIST_API RandomizedStimulusList(DirectoryReaderFactory *factory, Randomizer *randomizer);
     void initialize(std::string directory) override;
     bool empty() override;
     std::string next() override;

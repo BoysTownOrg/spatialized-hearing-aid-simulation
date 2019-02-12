@@ -19,3 +19,20 @@ public:
         return directory_;
     }
 };
+
+class DirectoryReaderStubFactory : public DirectoryReaderFactory {
+	std::string directory_{};
+	std::shared_ptr<DirectoryReader> reader;
+public:
+	explicit DirectoryReaderStubFactory(std::shared_ptr<DirectoryReader> reader) : 
+		reader{ std::move(reader) } {}
+
+	std::shared_ptr<DirectoryReader> make(std::string d) {
+		directory_ = std::move(d);
+		return reader;
+	}
+
+	auto directory() const {
+		return directory_;
+	}
+};
