@@ -279,6 +279,16 @@ void FltkView::hideBrowseForStimulusListButton()
 	window.browseForStimulusList.hide();
 }
 
+void FltkView::hideBrowseForTestFileButton()
+{
+	window.browseTestFilePath.hide();
+}
+
+void FltkView::showBrowseForTestFileButton()
+{
+	window.browseTestFilePath.show();
+}
+
 void FltkView::showBrowseForAudioFileButton()
 {
 	window.calibration.browseForAudioFile.show();

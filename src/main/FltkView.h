@@ -169,6 +169,8 @@ public:
 	void hideBrowseForStimulusListButton() override;
 	void showBrowseForAudioFileButton() override;
 	void showBrowseForStimulusListButton() override;
+	void hideBrowseForTestFileButton() override;
+	void showBrowseForTestFileButton() override;
 
 private:
 	void registerCallbacks();
