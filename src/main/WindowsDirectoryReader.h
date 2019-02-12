@@ -15,6 +15,8 @@ public:
 	WindowsDirectoryReader(const WindowsDirectoryReader &) = delete;
 	WindowsDirectoryReader &operator=(const WindowsDirectoryReader &) = delete;
 	std::vector<std::string> files() override;
+	bool failed() override;
+	std::string errorMessage() override;
 };
 
 class WindowsDirectoryReaderFactory : public DirectoryReaderFactory {
