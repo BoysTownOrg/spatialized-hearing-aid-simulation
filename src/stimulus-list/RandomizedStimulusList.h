@@ -15,7 +15,6 @@ class RandomizedStimulusList : public StimulusList {
 public:
     STIMULUS_LIST_API RandomizedStimulusList(DirectoryReaderFactory *factory, Randomizer *randomizer);
     void initialize(std::string directory) override;
-	RUNTIME_ERROR(InitializationFailure);
     bool empty() override;
     std::string next() override;
 private:
