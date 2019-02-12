@@ -20,14 +20,12 @@ std::vector<std::string> FileFilterDecorator::filtered(std::vector<std::string> 
     return filtered_;
 }
 
-bool FileFilterDecorator::failed()
-{
-	return false;
+bool FileFilterDecorator::failed() {
+	return reader->failed();
 }
 
-std::string FileFilterDecorator::errorMessage()
-{
-	return std::string();
+std::string FileFilterDecorator::errorMessage() {
+	return reader->errorMessage();
 }
 
 FileFilterDecoratorFactory::FileFilterDecoratorFactory(
