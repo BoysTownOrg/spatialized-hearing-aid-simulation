@@ -4,6 +4,7 @@
 #include "Randomizer.h"
 #include "stimulus-list-exports.h"
 #include <spatialized-hearing-aid-simulation/StimulusList.h>
+#include <common-includes/RuntimeError.h>
 
 class RandomizedStimulusList : public StimulusList {
     std::vector<std::string> files{};
@@ -14,6 +15,7 @@ class RandomizedStimulusList : public StimulusList {
 public:
     STIMULUS_LIST_API RandomizedStimulusList(DirectoryReaderFactory *factory, Randomizer *randomizer);
     void initialize(std::string directory) override;
+	RUNTIME_ERROR(InitializationFailure);
     bool empty() override;
     std::string next() override;
 };

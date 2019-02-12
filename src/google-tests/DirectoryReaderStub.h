@@ -4,7 +4,17 @@
 
 class DirectoryReaderStub : public DirectoryReader {
     std::vector<std::string> fileNames_{};
+	std::string errorMessage_{};
+	bool failed_{};
 public:
+	void fail() noexcept {
+		failed_ = true;
+	}
+
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
     void setFileNames(std::vector<std::string> files) noexcept {
         fileNames_ = std::move(files);
     }

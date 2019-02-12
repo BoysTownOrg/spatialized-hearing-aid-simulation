@@ -21,6 +21,16 @@ namespace {
 		auto next() {
 			return list.next();
 		}
+
+		void assertInitializeThrowsInitializationFailure(std::string what) {
+			try {
+				list.initialize({});
+				FAIL() << "Expected RandomizedStimulusList::InitializationFailure";
+			}
+			catch (const RandomizedStimulusList::InitializationFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
 	};
 
 	TEST_F(
@@ -73,6 +83,23 @@ namespace {
 		initialize();
 		assertEqual({ "a", "b", "c" }, randomizer.toShuffle());
 	}
+
+	TEST_F(
+		RandomizedStimulusListTests,
+		initializeThrowsInitializationFailureWhenDirectoryReaderFails
+	) {
+		reader->fail();
+		reader->setErrorMessage("error.");
+		assertInitializeThrowsInitializationFailure("error.");
+	}
+
+	class RandomizedStimulusListFailureTests : public ::testing::Test {
+	protected:
+		std::shared_ptr<DirectoryReaderStub> reader 
+			= std::make_shared<DirectoryReaderStub>();
+		DirectoryReaderStubFactory factory{reader};
+		RandomizerStub randomizer{};
+	};
 
 	class FileFilterDecoratorTests : public ::testing::Test {
 	protected:
