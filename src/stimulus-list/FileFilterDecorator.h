@@ -9,6 +9,8 @@ class FileFilterDecorator : public DirectoryReader {
 public:
     STIMULUS_LIST_API FileFilterDecorator(std::shared_ptr<DirectoryReader> reader, std::string filter);
     STIMULUS_LIST_API std::vector<std::string> files() override;
+	bool failed() override;
+	std::string errorMessage() override;
 private:
     std::vector<std::string> filtered(std::vector<std::string>);
 };

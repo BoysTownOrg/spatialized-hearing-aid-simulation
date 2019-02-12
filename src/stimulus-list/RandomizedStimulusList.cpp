@@ -9,6 +9,8 @@ RandomizedStimulusList::RandomizedStimulusList(
 
 void RandomizedStimulusList::initialize(std::string directory) {
 	auto reader = factory->make(directory);
+	if (reader->failed())
+		throw InitializationFailure{ reader->errorMessage() };
     files = reader->files();
     randomizer->shuffle(files.begin(), files.end());
     directory_ = std::move(directory);

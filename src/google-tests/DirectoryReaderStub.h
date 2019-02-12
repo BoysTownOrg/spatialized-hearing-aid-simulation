@@ -15,6 +15,14 @@ public:
 		errorMessage_ = std::move(s);
 	}
 
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+
     void setFileNames(std::vector<std::string> files) noexcept {
         fileNames_ = std::move(files);
     }

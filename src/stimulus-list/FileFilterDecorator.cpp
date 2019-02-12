@@ -20,6 +20,16 @@ std::vector<std::string> FileFilterDecorator::filtered(std::vector<std::string> 
     return filtered_;
 }
 
+bool FileFilterDecorator::failed()
+{
+	return false;
+}
+
+std::string FileFilterDecorator::errorMessage()
+{
+	return std::string();
+}
+
 FileFilterDecoratorFactory::FileFilterDecoratorFactory(
 	DirectoryReaderFactory * decorated, 
 	std::string filter

@@ -8,6 +8,8 @@
 class DirectoryReader {
 public:
     INTERFACE_OPERATIONS(DirectoryReader);
+	virtual bool failed() = 0;
+	virtual std::string errorMessage() = 0;
     virtual std::vector<std::string> files() = 0;
 };
 
