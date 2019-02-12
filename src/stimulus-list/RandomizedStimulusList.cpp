@@ -8,9 +8,7 @@ RandomizedStimulusList::RandomizedStimulusList(
     randomizer{ randomizer } {}
 
 void RandomizedStimulusList::initialize(std::string directory) {
-	auto reader = factory->make(directory);
-	if (reader->failed())
-		throw InitializationFailure{ reader->errorMessage() };
+	auto reader = makeReader(directory);
     files = reader->files();
     randomizer->shuffle(files.begin(), files.end());
     directory_ = std::move(directory);
@@ -26,4 +24,11 @@ std::string RandomizedStimulusList::next() {
 		files.erase(files.begin());
 	}
     return directory_ + "/" + current_;
+}
+
+std::shared_ptr<DirectoryReader> RandomizedStimulusList::makeReader(std::string directory) {	
+	auto reader = factory->make(std::move(directory));
+	if (reader->failed())
+		throw InitializationFailure{ reader->errorMessage() };
+	return reader;
 }

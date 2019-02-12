@@ -18,4 +18,6 @@ public:
 	RUNTIME_ERROR(InitializationFailure);
     bool empty() override;
     std::string next() override;
+private:
+	std::shared_ptr<DirectoryReader> makeReader(std::string directory);
 };
