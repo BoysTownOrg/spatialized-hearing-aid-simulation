@@ -22,9 +22,13 @@ CalibrationComputer::CalibrationComputer(AudioFrameReader & reader) :
 }
 
 double CalibrationComputer::signalScale(int channel, double level) {
-	if (gsl::narrow<channel_type::size_type>(channel) < audioFileContents.size())
-		return std::pow(10.0, level / 20.0) / rms(audioFileContents.at(channel));
-	return 0;
+	return validChannel(channel)
+		? std::pow(10.0, level / 20.0) / rms(audioFileContents.at(channel))
+		: 0;
+}
+
+bool CalibrationComputer::validChannel(int channel) {
+	return gsl::narrow<channel_type::size_type>(channel) < audioFileContents.size();
 }
 
 void CalibrationComputer::read(AudioFrameReader & reader) {

@@ -12,6 +12,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API double signalScale(int channel, double level) override;
 
 private:
+	bool validChannel(int channel);
 	void read(AudioFrameReader & reader);
 };
 
