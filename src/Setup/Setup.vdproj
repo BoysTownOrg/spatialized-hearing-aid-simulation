@@ -27,7 +27,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0E17CF38139C4E4F9EEF5B079DA1DA61"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_18159923672046E88E836B9EE31C0C28"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2C2EC096AC7B462694317CF4CFE064AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4586C9F17C114E0B93150E9E6CCD3EE6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -40,6 +58,12 @@
         "Entry"
         {
         "MsmKey" = "8:_520E28696359434C85EB5C4651466EF1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_537B88D537A042F8B8CAE8FF332B68E8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -69,6 +93,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_99E4A984A9964764A5E6A23BC79DEB54"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9BEE8A4B158246A18D60169DC897887A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,6 +112,30 @@
         "Entry"
         {
         "MsmKey" = "8:_CCBC662E13134BFD8ACF4CFE0A3DFE1A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D55372B75EE5462995694C4E8D8977BE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D8D7AC268E3547A298613F71588BA872"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E81A289054B44491A15054C7AD550A72"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FA340B3C6DBA411393F1A1A80C1C4F10"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -146,6 +200,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E17CF38139C4E4F9EEF5B079DA1DA61"
+            {
+            "SourcePath" = "8:..\\Release\\fftw3f.dll"
+            "TargetName" = "8:fftw3f.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_176BEEE020EFB5E9C0B15EE0213A3025"
             {
             "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
@@ -164,6 +238,166 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18159923672046E88E836B9EE31C0C28"
+            {
+            "SourcePath" = "8:..\\Release\\ogg.dll"
+            "TargetName" = "8:ogg.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4586C9F17C114E0B93150E9E6CCD3EE6"
+            {
+            "SourcePath" = "8:..\\Release\\FLAC.dll"
+            "TargetName" = "8:FLAC.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_537B88D537A042F8B8CAE8FF332B68E8"
+            {
+            "SourcePath" = "8:..\\Release\\vorbis.dll"
+            "TargetName" = "8:vorbis.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_99E4A984A9964764A5E6A23BC79DEB54"
+            {
+            "SourcePath" = "8:..\\Release\\libfltk_SHARED.dll"
+            "TargetName" = "8:libfltk_SHARED.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D55372B75EE5462995694C4E8D8977BE"
+            {
+            "SourcePath" = "8:..\\Release\\vorbisenc.dll"
+            "TargetName" = "8:vorbisenc.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8D7AC268E3547A298613F71588BA872"
+            {
+            "SourcePath" = "8:..\\Release\\libsndfile-1.dll"
+            "TargetName" = "8:libsndfile-1.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E81A289054B44491A15054C7AD550A72"
+            {
+            "SourcePath" = "8:..\\Release\\portaudio_x86.dll"
+            "TargetName" = "8:portaudio_x86.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA340B3C6DBA411393F1A1A80C1C4F10"
+            {
+            "SourcePath" = "8:..\\Release\\chapro.dll"
+            "TargetName" = "8:chapro.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -221,7 +455,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:Spatialized Hearing Aid Simulation"
         "ProductCode" = "8:{D06B66FC-8AB0-44B3-A880-B9E1815534B3}"
         "PackageCode" = "8:{51DE9DFB-6BEB-46CF-8543-0095A06CF762}"
         "UpgradeCode" = "8:{5B894583-B787-4C98-A903-928921C0CC8C}"
@@ -231,10 +465,10 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:BTNRH Technology Core"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Setup"
+        "Title" = "8:[ProductName] Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Default Company Name"
         "Keywords" = "8:"
