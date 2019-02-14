@@ -60,6 +60,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test-documenting", "test-do
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spatialized-hearing-aid-simulation", "spatialized-hearing-aid-simulation\spatialized-hearing-aid-simulation.vcxproj", "{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{62FDF4BC-9528-41CD-A263-1AF54E5710C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -180,6 +182,10 @@ Global
 		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x64.Build.0 = Release|x64
 		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x86.ActiveCfg = Release|Win32
 		{DD96FE1D-97C0-41D4-8E17-0DF40D3E669C}.Release|x86.Build.0 = Release|Win32
+		{62FDF4BC-9528-41CD-A263-1AF54E5710C2}.Debug|x64.ActiveCfg = Debug
+		{62FDF4BC-9528-41CD-A263-1AF54E5710C2}.Debug|x86.ActiveCfg = Debug
+		{62FDF4BC-9528-41CD-A263-1AF54E5710C2}.Release|x64.ActiveCfg = Release
+		{62FDF4BC-9528-41CD-A263-1AF54E5710C2}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
