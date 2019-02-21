@@ -55,4 +55,5 @@ public:
 		double level_dB_Spl;
 	};
 	virtual void processAudioForSaving(SaveAudioParameters *) = 0;
+	virtual void saveAudio(std::string filePath) = 0;
 };

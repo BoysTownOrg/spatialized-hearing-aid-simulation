@@ -286,6 +286,7 @@ void Presenter::processAudioForSaving() {
 }
 
 void Presenter::saveAudio_() {
+	model->saveAudio({});
 	Model::SaveAudioParameters p;
 	p.inputAudioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");

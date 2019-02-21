@@ -4,6 +4,7 @@
 
 class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
+	std::string savedAudioFilePath_{};
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
 	CalibrationParameters calibrationParameters_{};
@@ -26,11 +27,19 @@ public:
 
 	void processAudioForSaving(SaveAudioParameters *p) override {
 		saveAudioParameters_ = *p;
+	}
+
+	void saveAudio(std::string filePath) override {
+		savedAudioFilePath_ = std::move(filePath);
 		audioSaved_ = true;
 	}
 
 	auto audioSaved() noexcept {
 		return audioSaved_;
+	}
+
+	auto savedAudioFilePath() {
+		return savedAudioFilePath_;
 	}
 
 	auto calibrationLevel_dB_Spl() const noexcept {
@@ -124,4 +133,5 @@ public:
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
 	void processAudioForSaving(SaveAudioParameters *) override {}
+	void saveAudio(std::string) override {}
 };
