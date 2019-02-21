@@ -825,6 +825,24 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		saveAudioUsingSpatialization
+	) {
+		view.setSpatializationOn();
+		view.saveAudio();
+		assertTrue(model.saveAudioParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		saveAudioNotUsingSpatialization
+	) {
+		view.setSpatializationOff();
+		view.saveAudio();
+		assertFalse(model.saveAudioParameters().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
 		playCalibrationUsingHearingAidSimulation
 	) {
 		view.setHearingAidSimulationOn();
