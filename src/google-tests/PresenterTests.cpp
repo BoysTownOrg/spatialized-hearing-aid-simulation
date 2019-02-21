@@ -814,6 +814,15 @@ namespace {
 		assertEqual("a", model.savedAudioFilePath());
 	}
 
+	TEST_F(
+		PresenterTests,
+		cancellingSaveAudioDoesNotSaveAudio
+	) {
+		view.setBrowseCancelled();
+		view.saveAudio();
+		assertFalse(model.audioSaved());
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
 		view.setHearingAidSimulationOn();
 		view.setAttack_ms("1.1");
