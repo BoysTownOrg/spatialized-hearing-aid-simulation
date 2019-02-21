@@ -291,7 +291,7 @@ void Presenter::saveAudio_() {
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
 	model->processAudioForSaving(&p);
-	auto save = view->browseForSavingFile({});
+	auto save = view->browseForSavingFile({ "*.wav" });
 	if (!view->browseCancelled())
 		model->saveAudio(save);
 }

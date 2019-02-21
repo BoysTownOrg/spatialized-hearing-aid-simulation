@@ -104,6 +104,8 @@ public:
 	bool browseForStimulusListButtonShown_{};
 	bool browseForTestFileButtonHidden_{};
 	bool browseForTestFileButtonShown_{};
+	bool cancelBrowsingForSavingFile_{};
+	bool cancelOpeningForSavingFile_{};
 
 	
 	void showBrowseForTestFileButton() override {
@@ -617,6 +619,8 @@ public:
 	std::string browseForOpeningFile(
 		std::vector<std::string> filters
 	) override {
+		if (cancelOpeningForSavingFile_)
+			browseCancelled_ = true;
 		browseFiltersForOpeningFile_ = std::move(filters);
 		return browseForOpeningFileResult_;
 	}
@@ -641,9 +645,19 @@ public:
 		listener_->browseForLeftDslPrescription();
 	}
 
+	void cancelWhenBrowsingForOpeningFile() {
+		cancelOpeningForSavingFile_ = true;
+	}
+
+	void cancelWhenBrowsingForSavingFile() {
+		cancelBrowsingForSavingFile_ = true;
+	}
+
 	std::string browseForSavingFile(
 		std::vector<std::string> filters
 	) override {
+		if (cancelBrowsingForSavingFile_)
+			browseCancelled_ = true;
 		browseFiltersForSavingFile_ = std::move(filters);
 		return browseForSavingFileResult_;
 	}

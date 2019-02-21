@@ -816,9 +816,17 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		saveAudioFiltersWavFiles
+	) {
+		view.saveAudio();
+		assertEqual({ "*.wav" }, view.browseFiltersForSavingFile());
+	}
+
+	TEST_F(
+		PresenterTests,
 		cancellingSaveAudioDoesNotSaveAudio
 	) {
-		view.setBrowseCancelled();
+		view.cancelWhenBrowsingForSavingFile();
 		view.saveAudio();
 		assertFalse(model.audioSaved());
 	}
