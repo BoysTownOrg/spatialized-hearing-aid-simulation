@@ -411,8 +411,8 @@ public:
 		level_dB_SplShown_ = true;
 	}
 
-	void processAudioForSaving() {
-		listener_->processAudioForSaving();
+	void saveAudio() {
+		listener_->saveAudio();
 	}
 
 	std::string audioFilePath() override {

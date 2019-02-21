@@ -276,7 +276,7 @@ void Presenter::hideTesterView() {
 	view->hidePlayNextTrialButton();
 }
 
-void Presenter::processAudioForSaving() {
+void Presenter::saveAudio() {
 	try {
 		saveAudio_();
 	}
@@ -286,12 +286,12 @@ void Presenter::processAudioForSaving() {
 }
 
 void Presenter::saveAudio_() {
-	model->saveAudio({});
 	Model::SaveAudioParameters p;
 	p.inputAudioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
 	model->processAudioForSaving(&p);
+	model->saveAudio({});
 }
 
 void Presenter::playCalibration() {

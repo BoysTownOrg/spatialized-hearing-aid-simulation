@@ -1,10 +1,12 @@
 #pragma once
 
+#include "LogString.h"
 #include <presentation/Model.h>
 
 class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	std::string savedAudioFilePath_{};
+	LogString saveAudioLog_{};
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
 	CalibrationParameters calibrationParameters_{};
@@ -17,6 +19,10 @@ class ModelStub : public Model {
 	bool testPrepared_{};
 	bool audioSaved_{};
 public:
+	auto &saveAudioLog() const {
+		return saveAudioLog_;
+	}
+
 	auto saveAudioParameters() noexcept {
 		return saveAudioParameters_;
 	}
@@ -27,11 +33,13 @@ public:
 
 	void processAudioForSaving(SaveAudioParameters *p) override {
 		saveAudioParameters_ = *p;
+		saveAudioLog_.insert("processAudioForSaving ");
 	}
 
 	void saveAudio(std::string filePath) override {
 		savedAudioFilePath_ = std::move(filePath);
 		audioSaved_ = true;
+		saveAudioLog_.insert("saveAudio ");
 	}
 
 	auto audioSaved() noexcept {
