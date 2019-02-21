@@ -859,6 +859,24 @@ namespace {
 		assertFalse(model.calibrationParameters().processing.usingHearingAidSimulation);
 	}
 
+	TEST_F(
+		PresenterTests,
+		saveAudioUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOn();
+		view.saveAudio();
+		assertTrue(model.saveAudioParameters().processing.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
+		saveAudioNotUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOff();
+		view.saveAudio();
+		assertFalse(model.saveAudioParameters().processing.usingHearingAidSimulation);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
 		playCalibrationWithLevelShowsErrorMessage("a");
 	}
