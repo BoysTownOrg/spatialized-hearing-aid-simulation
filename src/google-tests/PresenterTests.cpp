@@ -798,6 +798,13 @@ namespace {
 		assertEqual("a", model.calibrationParameters().processing.brirFilePath);
 	}
 
+	TEST_F(PresenterTests, saveAudioWithSpatializationPassesParametersToModel) {
+		view.setSpatializationOn();
+		view.setBrirFilePath("a");
+		view.saveAudio();
+		assertEqual("a", model.saveAudioParameters().processing.brirFilePath);
+	}
+
 	TEST_F(
 		PresenterTests,
 		playCalibrationUsingSpatialization
