@@ -66,27 +66,40 @@ namespace {
 		}
 
 		void confirmTestSetupDoesNotHideSetupView() {
+			auto assertTestSetupViewNotHidden = &PresenterTests::assertTestSetupViewNotHidden;
+			confirmTestSetupThen(assertTestSetupViewNotHidden);
+		}
+
+		void confirmTestSetupThen(void(PresenterTests::*f)()) {
+			confirmTestSetup();
+			(this->*f)();
+		}
+
+		void confirmTestSetup() {
 			view.confirmTestSetup();
-			assertTestSetupViewNotHidden();
 		}
 
 		void confirmTestSetupHidesSetupView() {
-			view.confirmTestSetup();
-			assertTestSetupViewHidden();
+			auto assertTestSetupViewHidden = &PresenterTests::assertTestSetupViewHidden;
+			confirmTestSetupThen(assertTestSetupViewHidden);
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
-			view.confirmTestSetup();
-			assertTestSetupViewNotShown();
+			auto assertTestSetupViewNotShown = &PresenterTests::assertTestSetupViewNotShown;
+			confirmTestSetupThen(assertTestSetupViewNotShown);
 		}
 
 		void confirmTestSetupShowsTesterView() {
-			view.confirmTestSetup();
-			assertTesterViewShown();
+			auto assertTesterViewShown = &PresenterTests::assertTesterViewShown;
+			confirmTestSetupThen(assertTesterViewShown);
 		}
 
 		void confirmTestSetupDoesNotPrepareTest() {
-			view.confirmTestSetup();
+			auto assertTestHasNotBeenPrepared = &PresenterTests::assertTestHasNotBeenPrepared;
+			confirmTestSetupThen(assertTestHasNotBeenPrepared);
+		}
+
+		void assertTestHasNotBeenPrepared() {
 			assertFalse(model.testPrepared());
 		}
 
@@ -96,7 +109,7 @@ namespace {
 		}
 
 		void confirmTestSetupShowsErrorMessage(std::string s) {
-			view.confirmTestSetup();
+			confirmTestSetup();
 			assertEqual(std::move(s), view.errorMessage());
 		}
 
