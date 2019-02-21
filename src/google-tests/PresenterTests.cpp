@@ -774,6 +774,23 @@ namespace {
 		assertEqual("b", model.calibrationParameters().processing.rightDslPrescriptionFilePath);
 	}
 
+	TEST_F(PresenterTests, saveAudioWithHearingAidSimulationPassesParametersToModel) {
+		view.setHearingAidSimulationOn();
+		view.setAttack_ms("1.1");
+		view.setRelease_ms("2.2");
+		view.setChunkSize("3");
+		view.setWindowSize("4");
+		view.setLeftDslPrescriptionFilePath("a");
+		view.setRightDslPrescriptionFilePath("b");
+		view.saveAudio();
+		assertEqual(1.1, model.saveAudioParameters().processing.attack_ms);
+		assertEqual(2.2, model.saveAudioParameters().processing.release_ms);
+		assertEqual(3, model.saveAudioParameters().processing.chunkSize);
+		assertEqual(4, model.saveAudioParameters().processing.windowSize);
+		assertEqual("a", model.saveAudioParameters().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.saveAudioParameters().processing.rightDslPrescriptionFilePath);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithSpatializationPassesParametersToModel) {
 		view.setSpatializationOn();
 		view.setBrirFilePath("a");

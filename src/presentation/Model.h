@@ -50,6 +50,7 @@ public:
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 
 	struct SaveAudioParameters {
+		ProcessingParameters processing;
 		std::string inputAudioFilePath;
 		double level_dB_Spl;
 	};
