@@ -22,7 +22,7 @@ namespace {
 		}
 
 		void setInvalidChunkSize() {
-			view.setChunkSize("?");
+			view.setChunkSize("a");
 		}
 
 		void setInvalidWindowSize() {
@@ -30,15 +30,15 @@ namespace {
 		}
 
 		void setInvalidReleaseTime() {
-			view.setRelease_ms("b");
+			view.setRelease_ms("a");
 		}
 
 		void setInvalidAttackTime() {
-			view.setAttack_ms("c");
+			view.setAttack_ms("a");
 		}
 
 		void setInvalidLevel() {
-			view.setLevel_dB_Spl("d");
+			view.setLevel_dB_Spl("a");
 		}
 
 		void assertTesterViewHidden() {
@@ -175,12 +175,12 @@ namespace {
 
 		void playCalibrationShowsErrorMessage(std::string s) {
 			view.playCalibration();
-			assertEqual(std::move(s), view.errorMessage());
+			assertErrorMessageEquals(std::move(s));
 		}
 
 		void saveAudioShowsErrorMessage(std::string s) {
 			view.saveAudio();
-			assertEqual(std::move(s), view.errorMessage());
+			assertErrorMessageEquals(std::move(s));
 		}
 		
 		void playTrialWithLevelShowsErrorMessage(std::string s) {
@@ -190,7 +190,7 @@ namespace {
 
 		void playTrialShowsErrorMessage(std::string s) {
 			view.playNextTrial();
-			assertEqual(std::move(s), view.errorMessage());
+			assertErrorMessageEquals(std::move(s));
 		}
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
