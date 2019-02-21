@@ -280,6 +280,7 @@ void Presenter::saveAudio() {
 	Model::SaveAudioParameters p;
 	p.inputAudioFilePath = view->audioFilePath();
 	p.level_dB_Spl = std::stod(view->level_dB_Spl());
+	p.processing = processingParameters();
 	model->saveAudio(&p);
 }
 
