@@ -150,11 +150,21 @@ namespace {
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
 		}
 
+		void saveAudioWithLevelShowsErrorMessage(std::string s) {
+			view.setLevel_dB_Spl(s);
+			saveAudioShowsErrorMessage("'" + s + "' is not a valid level.");
+		}
+
 		void playCalibrationShowsErrorMessage(std::string s) {
 			view.playCalibration();
 			assertEqual(std::move(s), view.errorMessage());
 		}
 
+		void saveAudioShowsErrorMessage(std::string s) {
+			view.saveAudio();
+			assertEqual(std::move(s), view.errorMessage());
+		}
+		
 		void playTrialWithLevelShowsErrorMessage(std::string s) {
 			view.setLevel_dB_Spl(s);
 			playTrialShowsErrorMessage("'" + s + "' is not a valid level.");
@@ -879,6 +889,10 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
 		playCalibrationWithLevelShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidLevelShowsErrorMessage) {
+		saveAudioWithLevelShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelDoesNotPlay) {
