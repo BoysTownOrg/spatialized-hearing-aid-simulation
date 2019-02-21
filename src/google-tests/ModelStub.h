@@ -95,7 +95,7 @@ public:
 	}
 };
 
-class InitializationFailingModel : public Model {
+class FailingModel : public Model {
 	std::string message{};
 public:
 	void setErrorMessage(std::string s) {
@@ -106,46 +106,14 @@ public:
 		throw RequestFailure{ message };
 	}
 
-	void playNextTrial(TrialParameters *) override {}
-	bool testComplete() override { return {}; }
-	void playCalibration(CalibrationParameters *) override {}
-	void stopCalibration() override {}
-	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void saveAudio(SaveAudioParameters *) override {}
-};
-
-class TrialFailingModel : public Model {
-	std::string message{};
-public:
-	void setErrorMessage(std::string s) {
-		message = std::move(s);
-	}
-
 	void playNextTrial(TrialParameters *) override {
 		throw RequestFailure{ message };
-	}
-
-	void prepareNewTest(TestParameters *) override {}
-	bool testComplete() override { return {}; }
-	void playCalibration(CalibrationParameters *) override {}
-	void stopCalibration() override {}
-	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void saveAudio(SaveAudioParameters *) override {}
-};
-
-class CalibrationFailingModel : public Model {
-	std::string message{};
-public:
-	void setErrorMessage(std::string s) {
-		message = std::move(s);
 	}
 
 	void playCalibration(CalibrationParameters *) override {
 		throw RequestFailure{ message };
 	}
-	
-	void playNextTrial(TrialParameters *) override {}
-	void prepareNewTest(TestParameters *) override {}
+
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }

@@ -901,50 +901,36 @@ namespace {
 		assertTrue(model.calibrationStopped());
 	}
 
-	class PresenterWithInitializationFailingModel : public ::testing::Test {
+	class PresenterWithFailingModel : public ::testing::Test {
 	protected:
-		InitializationFailingModel model;
+		FailingModel model;
 		ViewStub view;
 		Presenter presenter{ &model, &view };
 	};
 
-	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupShowsErrorMessage) {
+	TEST_F(PresenterWithFailingModel, confirmTestSetupShowsErrorMessage) {
 		model.setErrorMessage("error.");
 		view.confirmTestSetup();
 		assertEqual("error.", view.errorMessage());
 	}
 
-	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotShowTesterView) {
+	TEST_F(PresenterWithFailingModel, confirmTestSetupDoesNotShowTesterView) {
 		view.confirmTestSetup();
 		assertFalse(view.testerViewShown());
 	}
 
-	TEST_F(PresenterWithInitializationFailingModel, confirmTestSetupDoesNotHideSetupView) {
+	TEST_F(PresenterWithFailingModel, confirmTestSetupDoesNotHideSetupView) {
 		view.confirmTestSetup();
 		assertFalse(view.everyItemInTestSetupHidden());
 	}
 
-	class PresenterWithTrialFailingModel : public ::testing::Test {
-	protected:
-		TrialFailingModel model;
-		ViewStub view;
-		Presenter presenter{ &model, &view };
-	};
-
-	TEST_F(PresenterWithTrialFailingModel, playTrialShowsErrorMessage) {
+	TEST_F(PresenterWithFailingModel, playTrialShowsErrorMessage) {
 		model.setErrorMessage("error.");
 		view.playNextTrial();
 		assertEqual("error.", view.errorMessage());
 	}
 
-	class PresenterWithCalibrationFailingModel : public ::testing::Test {
-	protected:
-		CalibrationFailingModel model;
-		ViewStub view;
-		Presenter presenter{ &model, &view };
-	};
-
-	TEST_F(PresenterWithCalibrationFailingModel, playCalibrationShowsErrorMessage) {
+	TEST_F(PresenterWithFailingModel, playCalibrationShowsErrorMessage) {
 		model.setErrorMessage("error.");
 		view.playCalibration();
 		assertEqual("error.", view.errorMessage());
