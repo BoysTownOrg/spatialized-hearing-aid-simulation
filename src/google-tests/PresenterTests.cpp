@@ -143,6 +143,11 @@ namespace {
 			assertTrue(model.calibrationPlayed());
 		}
 
+		void saveAudioSaves() {
+			view.saveAudio();
+			assertTrue(model.audioSaved());
+		}
+		
 		void playCalibrationWithAttackTimeShowsErrorMessage(std::string s) {
 			view.setAttack_ms(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid attack time.");
@@ -943,6 +948,12 @@ namespace {
 		view.setHearingAidSimulationOff();
 		setInvalidAttackTime();
 		playCalibrationPlays();
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidAttackButNoHearingAidSimulationStillSaves) {
+		view.setHearingAidSimulationOff();
+		setInvalidAttackTime();
+		saveAudioSaves();
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {

@@ -14,6 +14,7 @@ class ModelStub : public Model {
 	bool calibrationStopped_{};
 	bool calibrationPlayed_{};
 	bool testPrepared_{};
+	bool audioSaved_{};
 public:
 	auto saveAudioParameters() noexcept {
 		return saveAudioParameters_;
@@ -25,6 +26,11 @@ public:
 
 	void saveAudio(SaveAudioParameters *p) override {
 		saveAudioParameters_ = *p;
+		audioSaved_ = true;
+	}
+
+	auto audioSaved() noexcept {
+		return audioSaved_;
 	}
 
 	auto calibrationLevel_dB_Spl() const noexcept {
