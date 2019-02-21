@@ -7,6 +7,7 @@ class ModelStub : public Model {
 	TestParameters testParameters_{};
 	TrialParameters trialParameters_{};
 	CalibrationParameters calibrationParameters_{};
+	SaveAudioParameters saveAudioParameters_{};
 	double calibrationLevel_dB_Spl_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
@@ -14,9 +15,16 @@ class ModelStub : public Model {
 	bool calibrationPlayed_{};
 	bool testPrepared_{};
 public:
+	auto saveAudioParameters() noexcept {
+		return saveAudioParameters_;
+	}
 
 	auto calibrationParameters() noexcept {
 		return calibrationParameters_;
+	}
+
+	void saveAudio(SaveAudioParameters *p) override {
+		saveAudioParameters_ = *p;
 	}
 
 	auto calibrationLevel_dB_Spl() const noexcept {
@@ -103,6 +111,7 @@ public:
 	void playCalibration(CalibrationParameters *) override {}
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	void saveAudio(SaveAudioParameters *) override {}
 };
 
 class TrialFailingModel : public Model {
@@ -121,6 +130,7 @@ public:
 	void playCalibration(CalibrationParameters *) override {}
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	void saveAudio(SaveAudioParameters *) override {}
 };
 
 class CalibrationFailingModel : public Model {
@@ -139,4 +149,5 @@ public:
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
+	void saveAudio(SaveAudioParameters *) override {}
 };

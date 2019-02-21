@@ -749,6 +749,14 @@ namespace {
 		assertEqual(1.1, model.calibrationParameters().level_dB_Spl);
 	}
 
+	TEST_F(PresenterTests, saveAudioPassesParametersToModel) {
+		view.setAudioFilePath("a");
+		view.setLevel_dB_Spl("1.1");
+		view.saveAudio();
+		assertEqual("a", model.saveAudioParameters().inputAudioFilePath);
+		assertEqual(1.1, model.saveAudioParameters().level_dB_Spl);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
 		view.setHearingAidSimulationOn();
 		view.setAttack_ms("1.1");

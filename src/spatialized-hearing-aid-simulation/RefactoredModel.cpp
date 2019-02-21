@@ -338,6 +338,10 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactor
 		return processorFactoryFactory->makeNoSimulation();
 }
 
+void RefactoredModel::saveAudio(SaveAudioParameters *)
+{
+}
+
 static std::string coefficientErrorMessage(std::string which) {
 	return 
 		"The " + which + " BRIR coefficients are empty, "

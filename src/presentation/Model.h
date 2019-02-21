@@ -48,4 +48,10 @@ public:
 	virtual void playCalibration(CalibrationParameters *) = 0;
 	virtual void stopCalibration() = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
+
+	struct SaveAudioParameters {
+		std::string inputAudioFilePath;
+		double level_dB_Spl;
+	};
+	virtual void saveAudio(SaveAudioParameters *) = 0;
 };

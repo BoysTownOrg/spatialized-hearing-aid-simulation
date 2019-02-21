@@ -30,6 +30,7 @@ public:
 	void playCalibration() override;
 	void stopCalibration() override;
 	void browseForAudioFile() override;
+	void saveAudio() override;
 
 private:
 	void toggleSpatializationActivation();

@@ -411,6 +411,10 @@ public:
 		level_dB_SplShown_ = true;
 	}
 
+	void saveAudio() {
+		listener_->saveAudio();
+	}
+
 	std::string audioFilePath() override {
 		return audioFilePath_;
 	}

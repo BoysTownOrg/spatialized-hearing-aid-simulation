@@ -276,6 +276,13 @@ void Presenter::hideTesterView() {
 	view->hidePlayNextTrialButton();
 }
 
+void Presenter::saveAudio() {
+	Model::SaveAudioParameters p;
+	p.inputAudioFilePath = view->audioFilePath();
+	p.level_dB_Spl = std::stod(view->level_dB_Spl());
+	model->saveAudio(&p);
+}
+
 void Presenter::playCalibration() {
 	try {
 		playCalibration_();
