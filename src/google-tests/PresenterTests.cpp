@@ -71,9 +71,9 @@ namespace {
 		}
 
 		template<typename... Targs>
-		void confirmTestSetupThen(void(PresenterTests::*f)(Targs...), Targs... args) {
+		void confirmTestSetupThen(void(PresenterTests::*f)(Targs...), Targs&&... args) {
 			confirmTestSetup();
-			(this->*f)(args...);
+			(this->*f)(std::forward<Targs>(args)...);
 		}
 
 		void confirmTestSetup() {
@@ -111,7 +111,7 @@ namespace {
 
 		void confirmTestSetupShowsErrorMessage(std::string s) {
 			auto assertErrorMessageEquals = &PresenterTests::assertErrorMessageEquals;
-			confirmTestSetupThen(assertErrorMessageEquals, s);
+			confirmTestSetupThen(assertErrorMessageEquals, std::move(s));
 		}
 
 		void assertErrorMessageEquals(std::string s) {
