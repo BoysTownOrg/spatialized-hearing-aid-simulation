@@ -277,9 +277,18 @@ void Presenter::hideTesterView() {
 }
 
 void Presenter::saveAudio() {
+	try {
+		saveAudio_();
+	}
+	catch (const std::runtime_error &e) {
+		view->showErrorDialog(e.what());
+	}
+}
+
+void Presenter::saveAudio_() {
 	Model::SaveAudioParameters p;
 	p.inputAudioFilePath = view->audioFilePath();
-	p.level_dB_Spl = std::stod(view->level_dB_Spl());
+	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
 	model->saveAudio(&p);
 }

@@ -56,6 +56,7 @@ private:
 	int convertToInteger(std::string x, std::string identifier);
 	void playTrial_();
 	void playCalibration_();
+	void saveAudio_();
 	void switchViewIfTestComplete();
 	void hideTesterView();
 };
