@@ -19,7 +19,7 @@ public:
 	virtual void stopCalibration() = 0;
 	virtual void confirmTestSetup() = 0;
 	virtual void playNextTrial() = 0;
-	virtual void saveAudio() = 0;
+	virtual void processAudioForSaving() = 0;
 };
 
 class View {

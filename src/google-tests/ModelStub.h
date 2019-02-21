@@ -24,7 +24,7 @@ public:
 		return calibrationParameters_;
 	}
 
-	void saveAudio(SaveAudioParameters *p) override {
+	void processAudioForSaving(SaveAudioParameters *p) override {
 		saveAudioParameters_ = *p;
 		audioSaved_ = true;
 	}
@@ -123,5 +123,5 @@ public:
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void saveAudio(SaveAudioParameters *) override {}
+	void processAudioForSaving(SaveAudioParameters *) override {}
 };

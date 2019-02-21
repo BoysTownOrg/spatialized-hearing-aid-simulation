@@ -338,7 +338,7 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactor
 		return processorFactoryFactory->makeNoSimulation();
 }
 
-void RefactoredModel::saveAudio(SaveAudioParameters *)
+void RefactoredModel::processAudioForSaving(SaveAudioParameters *)
 {
 }
 

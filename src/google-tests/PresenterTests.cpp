@@ -144,7 +144,7 @@ namespace {
 		}
 
 		void saveAudioSaves() {
-			view.saveAudio();
+			view.processAudioForSaving();
 			assertTrue(model.audioSaved());
 		}
 		
@@ -194,7 +194,7 @@ namespace {
 		}
 
 		void saveAudioShowsErrorMessage(std::string s) {
-			view.saveAudio();
+			view.processAudioForSaving();
 			assertErrorMessageEquals(std::move(s));
 		}
 		
@@ -795,7 +795,7 @@ namespace {
 	TEST_F(PresenterTests, saveAudioPassesParametersToModel) {
 		view.setAudioFilePath("a");
 		view.setLevel_dB_Spl("1.1");
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertEqual("a", model.saveAudioParameters().inputAudioFilePath);
 		assertEqual(1.1, model.saveAudioParameters().level_dB_Spl);
 	}
@@ -825,7 +825,7 @@ namespace {
 		view.setWindowSize("4");
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertEqual(1.1, model.saveAudioParameters().processing.attack_ms);
 		assertEqual(2.2, model.saveAudioParameters().processing.release_ms);
 		assertEqual(3, model.saveAudioParameters().processing.chunkSize);
@@ -844,7 +844,7 @@ namespace {
 	TEST_F(PresenterTests, saveAudioWithSpatializationPassesParametersToModel) {
 		view.setSpatializationOn();
 		view.setBrirFilePath("a");
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertEqual("a", model.saveAudioParameters().processing.brirFilePath);
 	}
 
@@ -871,7 +871,7 @@ namespace {
 		saveAudioUsingSpatialization
 	) {
 		view.setSpatializationOn();
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertTrue(model.saveAudioParameters().processing.usingSpatialization);
 	}
 
@@ -880,7 +880,7 @@ namespace {
 		saveAudioNotUsingSpatialization
 	) {
 		view.setSpatializationOff();
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertFalse(model.saveAudioParameters().processing.usingSpatialization);
 	}
 
@@ -907,7 +907,7 @@ namespace {
 		saveAudioUsingHearingAidSimulation
 	) {
 		view.setHearingAidSimulationOn();
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertTrue(model.saveAudioParameters().processing.usingHearingAidSimulation);
 	}
 
@@ -916,7 +916,7 @@ namespace {
 		saveAudioNotUsingHearingAidSimulation
 	) {
 		view.setHearingAidSimulationOff();
-		view.saveAudio();
+		view.processAudioForSaving();
 		assertFalse(model.saveAudioParameters().processing.usingHearingAidSimulation);
 	}
 
