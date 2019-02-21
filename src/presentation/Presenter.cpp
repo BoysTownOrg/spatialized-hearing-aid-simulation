@@ -291,7 +291,7 @@ void Presenter::saveAudio_() {
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
 	model->processAudioForSaving(&p);
-	model->saveAudio({});
+	model->saveAudio(view->browseForSavingFile({}));
 }
 
 void Presenter::playCalibration() {
