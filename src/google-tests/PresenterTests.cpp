@@ -162,7 +162,12 @@ namespace {
 			view.setRelease_ms(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
-
+		
+		void saveAudioWithReleaseTimeShowsErrorMessage(std::string s) {
+			view.setRelease_ms(s);
+			saveAudioShowsErrorMessage("'" + s + "' is not a valid release time.");
+		}
+		
 		void playCalibrationWithChunkSizeShowsErrorMessage(std::string s) {
 			view.setChunkSize(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid chunk size.");
@@ -959,6 +964,11 @@ namespace {
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
 		playCalibrationWithReleaseTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidReleaseShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		saveAudioWithReleaseTimeShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseDoesNotPlay) {
