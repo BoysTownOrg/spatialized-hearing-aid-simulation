@@ -70,9 +70,10 @@ namespace {
 			confirmTestSetupThen(assertTestSetupViewNotHidden);
 		}
 
-		void confirmTestSetupThen(void(PresenterTests::*f)()) {
+		template<typename... Targs>
+		void confirmTestSetupThen(void(PresenterTests::*f)(Targs...), Targs... args) {
 			confirmTestSetup();
-			(this->*f)();
+			(this->*f)(args...);
 		}
 
 		void confirmTestSetup() {
@@ -109,7 +110,11 @@ namespace {
 		}
 
 		void confirmTestSetupShowsErrorMessage(std::string s) {
-			confirmTestSetup();
+			auto assertErrorMessageEquals = &PresenterTests::assertErrorMessageEquals;
+			confirmTestSetupThen(assertErrorMessageEquals, s);
+		}
+
+		void assertErrorMessageEquals(std::string s) {
 			assertEqual(std::move(s), view.errorMessage());
 		}
 
