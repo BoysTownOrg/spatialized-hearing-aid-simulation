@@ -581,6 +581,16 @@ namespace {
 		void assertPlayerPreparedPriorToPlaying() {
 			assertEqual("prepareToPlay play ", audioPlayer.log());
 		}
+
+		void assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
+			RefactoredModel::ProcessingParameters &p,
+			std::function<void(void)> f
+		) {
+			p.usingHearingAidSimulation = false;
+			f();
+			assertSimulationFactoryHasNotMadeFullSimulation();
+			assertSimulationFactoryHasNotMadeHearingAidSimulation();
+		}
 	};
 
 	TEST_F(
@@ -1065,30 +1075,30 @@ namespace {
 		RefactoredModelTests, 
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.processing.usingHearingAidSimulation = false;
-		playFirstTrialOfNewTest();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeHearingAidSimulation();
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
+			testParameters.processing,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
 		RefactoredModelTests, 
 		playCalibrationDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = false;
-		playCalibration();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeHearingAidSimulation();
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
+			calibrationParameters.processing,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(
 		RefactoredModelTests, 
 		processAudioForSavingDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		saveAudioParameters.processing.usingHearingAidSimulation = false;
-		processAudioForSaving();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeHearingAidSimulation();
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
+		);
 	}
 
 	TEST_F(
