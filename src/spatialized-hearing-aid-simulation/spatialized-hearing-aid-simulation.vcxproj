@@ -157,6 +157,7 @@
     <ClInclude Include="AudioFrameProcessor.h" />
     <ClInclude Include="AudioFrameReader.h" />
     <ClInclude Include="AudioLoader.h" />
+    <ClInclude Include="AudioProcessingLoader.h" />
     <ClInclude Include="BrirReader.h" />
     <ClInclude Include="CalibrationComputer.h" />
     <ClInclude Include="ChannelProcessingGroup.h" />

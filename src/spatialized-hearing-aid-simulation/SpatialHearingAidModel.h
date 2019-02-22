@@ -5,7 +5,7 @@
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
-#include "AudioLoader.h"
+#include "AudioProcessingLoader.h"
 #include "ICalibrationComputer.h"
 #include "StimulusList.h"
 #include "Documenter.h"
@@ -75,13 +75,13 @@ class SpatialHearingAidModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioFrameWriterFactory *audioWriterFactory;
 	AudioPlayer *player;
-	AudioLoader *loader;
+	AudioProcessingLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
 		Documenter *,
 		AudioPlayer *,
-		AudioLoader *,
+		AudioProcessingLoader *,
 		AudioFrameReaderFactory *,
 		AudioFrameWriterFactory *,
 		PrescriptionReader *,

@@ -268,7 +268,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	StimulusList *stimulusList,
 	Documenter *documenter,
 	AudioPlayer *player,
-	AudioLoader *loader,
+	AudioProcessingLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,

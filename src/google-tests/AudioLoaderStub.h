@@ -1,9 +1,9 @@
 #pragma once
 
 #include "LogString.h"
-#include <spatialized-hearing-aid-simulation/AudioLoader.h>
+#include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class AudioLoaderStub : public AudioLoader {
+class AudioLoaderStub : public AudioProcessingLoader {
 	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
 	std::shared_ptr<AudioFrameReader> audioFrameReader_{};

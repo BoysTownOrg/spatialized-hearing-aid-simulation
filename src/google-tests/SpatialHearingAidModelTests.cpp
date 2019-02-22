@@ -1437,7 +1437,7 @@ namespace {
 		AudioPlayerStub defaultPlayer{};
 		AudioPlayer *audioPlayer{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
-		AudioLoader *audioLoader{ &defaultLoader };
+		AudioProcessingLoader *audioLoader{ &defaultLoader };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
