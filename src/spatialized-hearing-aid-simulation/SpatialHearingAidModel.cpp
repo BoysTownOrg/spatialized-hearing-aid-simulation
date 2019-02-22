@@ -270,6 +270,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	IAudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
+	AudioFrameWriterFactory *,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	ISpatializedHearingAidSimulationFactory *simulationFactory,

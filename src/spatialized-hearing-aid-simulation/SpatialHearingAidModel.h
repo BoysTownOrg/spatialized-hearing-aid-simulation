@@ -12,6 +12,16 @@
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 
+class AudioFrameWriter {
+public:
+	INTERFACE_OPERATIONS(AudioFrameWriter);
+};
+
+class AudioFrameWriterFactory {
+public:
+	INTERFACE_OPERATIONS(AudioFrameWriterFactory);
+};
+
 class AudioFrameProcessorFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
@@ -67,6 +77,7 @@ public:
 		IAudioPlayer *,
 		AudioLoader *,
 		AudioFrameReaderFactory *,
+		AudioFrameWriterFactory *,
 		PrescriptionReader *,
 		BrirReader *,
 		ISpatializedHearingAidSimulationFactory *,

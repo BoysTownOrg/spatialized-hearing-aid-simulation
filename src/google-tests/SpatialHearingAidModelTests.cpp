@@ -15,20 +15,17 @@
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 #include <gtest/gtest.h>
 
-class AudioFrameWriter {
-
-};
-
 class AudioFrameWriterStub : public AudioFrameWriter {
 
 };
 
-class AudioFrameWriterStubFactory {
+class AudioFrameWriterStubFactory : public AudioFrameWriterFactory {
 	std::string filePath_{};
 	std::shared_ptr<AudioFrameWriter> writer;
 public:
 	explicit AudioFrameWriterStubFactory(
-		std::shared_ptr<AudioFrameWriter> writer
+		std::shared_ptr<AudioFrameWriter> writer =
+			std::make_shared<AudioFrameWriterStub>()
 	) noexcept :
 		writer{ std::move(writer) } {}
 
@@ -74,6 +71,7 @@ namespace {
 			&audioPlayer,
 			&audioLoader,
 			&audioFrameReaderFactory,
+			&audioFrameWriterFactory,
 			&prescriptionReader,
 			&brirReader,
 			&simulationFactory,
@@ -1415,6 +1413,8 @@ namespace {
 		Documenter *documenter{ &defaultDocumenter };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
+		AudioFrameWriterStubFactory defaultAudioWriterFactory{};
+		AudioFrameWriterFactory *audioWriterFactory{ &defaultAudioWriterFactory };
 		AudioPlayerStub defaultPlayer{};
 		IAudioPlayer *audioPlayer{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
@@ -1483,6 +1483,7 @@ namespace {
 				audioPlayer,
 				audioLoader,
 				audioReaderFactory,
+				audioWriterFactory,
 				prescriptionReader,
 				brirReader,
 				simulationFactory,
