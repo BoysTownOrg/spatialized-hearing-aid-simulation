@@ -21,10 +21,10 @@ namespace {
 		using channel_type = AudioFrameProcessor::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
 
-		RefactoredModel::TestParameters testParameters{};
-		RefactoredModel::TrialParameters trialParameters{};
-		RefactoredModel::CalibrationParameters calibrationParameters{};
-		RefactoredModel::SaveAudioParameters saveAudioParameters{};
+		RefactoredModel::Testing testParameters{};
+		RefactoredModel::Trial trialParameters{};
+		RefactoredModel::Calibration calibrationParameters{};
+		RefactoredModel::SavingAudio saveAudioParameters{};
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
 		FakeStimulusList list{};
@@ -64,7 +64,7 @@ namespace {
 			setValidProcessingSizes(saveAudioParameters.processing);
 		}
 
-		void setValidProcessingSizes(RefactoredModel::ProcessingParameters &p) noexcept {
+		void setValidProcessingSizes(RefactoredModel::Processing &p) noexcept {
 			p.chunkSize = 1;
 			p.windowSize = 1;
 		}
@@ -98,7 +98,7 @@ namespace {
 			setFullSimulation(testParameters.processing);
 		}
 
-		void setFullSimulation(RefactoredModel::ProcessingParameters &p) noexcept {
+		void setFullSimulation(RefactoredModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = true;
 		}
@@ -107,7 +107,7 @@ namespace {
 			setHearingAidSimulationOnly(testParameters.processing);
 		}
 		
-		void setHearingAidSimulationOnly(RefactoredModel::ProcessingParameters &p) noexcept {
+		void setHearingAidSimulationOnly(RefactoredModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = false;
 		}
@@ -116,7 +116,7 @@ namespace {
 			setSpatializationOnly(testParameters.processing);
 		}
 		
-		void setSpatializationOnly(RefactoredModel::ProcessingParameters &p) noexcept {
+		void setSpatializationOnly(RefactoredModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = true;
 		}
@@ -125,7 +125,7 @@ namespace {
 			setNoSimulation(testParameters.processing);
 		}
 		
-		void setNoSimulation(RefactoredModel::ProcessingParameters &p) noexcept {
+		void setNoSimulation(RefactoredModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = false;
 		}
@@ -203,7 +203,7 @@ namespace {
 		}
 
 		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			RefactoredModel::ProcessingParameters &processing, 
+			RefactoredModel::Processing &processing, 
 			std::function<void(void)> f
 		) {
 			processing.chunkSize = 1;
@@ -243,7 +243,7 @@ namespace {
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -288,7 +288,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -300,7 +300,7 @@ namespace {
 		}
 
 		void assertHearingAidCompressionParametersMatchAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -326,7 +326,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -338,7 +338,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -360,7 +360,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -371,7 +371,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -433,7 +433,7 @@ namespace {
 		}
 
 		void assertPrescriptionReaderContainsFilePathsAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			processing.leftDslPrescriptionFilePath = "a";
@@ -448,7 +448,7 @@ namespace {
 		}
 
 		void assertBrirReaderReceivesFilePathAfterCall(
-			RefactoredModel::ProcessingParameters &processing,
+			RefactoredModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			processing.brirFilePath = "a";
@@ -485,7 +485,7 @@ namespace {
 		}
 
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			RefactoredModel::ProcessingParameters &p,
+			RefactoredModel::Processing &p,
 			std::function<void(void)> f
 		) {
 			p.usingHearingAidSimulation = false;
@@ -495,7 +495,7 @@ namespace {
 		}
 
 		void assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			RefactoredModel::ProcessingParameters &p,
+			RefactoredModel::Processing &p,
 			std::function<void(void)> f
 		) {
 			p.usingSpatialization = false;
@@ -1372,9 +1372,9 @@ namespace {
 
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
-		RefactoredModel::TestParameters testParameters{};
-		RefactoredModel::TrialParameters trialParameters{};
-		RefactoredModel::CalibrationParameters calibrationParameters{};
+		RefactoredModel::Testing testParameters{};
+		RefactoredModel::Trial trialParameters{};
+		RefactoredModel::Calibration calibrationParameters{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};

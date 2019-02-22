@@ -51,7 +51,7 @@ void TestDocumenter::initialize(std::string filePath) {
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void TestDocumenter::documentTestParameters(Model::TestParameters *p) {
+void TestDocumenter::documentTestParameters(Model::Testing *p) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("subject", p->subjectId);
 	stream.insertLabeledParameterLine("tester", p->testerId);

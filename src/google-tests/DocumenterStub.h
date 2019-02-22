@@ -9,7 +9,7 @@ class DocumenterStub : public Documenter {
 	LogString log_{};
 	std::stringstream content_{};
 	std::string filePath_{};
-	Model::TestParameters *testParameters_{};
+	Model::Testing *testParameters_{};
 public:
 	void documentTrialParameters(TrialParameters p) override {
 		trialParameters_ = std::move(p);
@@ -20,7 +20,7 @@ public:
 		return trialParameters_;
 	}
 
-	void documentTestParameters(Model::TestParameters *p) override {
+	void documentTestParameters(Model::Testing *p) override {
 		testParameters_ = std::move(p);
 		log_.insert("documentTestParameters ");
 	}
@@ -58,6 +58,6 @@ public:
 		throw InitializationFailure{ errorMessage_ };
 	}
 
-	void documentTestParameters(Model::TestParameters *) override {}
+	void documentTestParameters(Model::Testing *) override {}
 	void documentTrialParameters(TrialParameters) override {}
 };

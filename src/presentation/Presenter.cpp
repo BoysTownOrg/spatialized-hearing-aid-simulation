@@ -182,8 +182,8 @@ void Presenter::hideTestSetupView() {
 	view->hideBrowseForStimulusListButton();
 }
 
-Model::TestParameters Presenter::testParameters() {
-	Model::TestParameters test;
+Model::Testing Presenter::testParameters() {
+	Model::Testing test;
 	test.processing = processingParameters();
 	test.testFilePath = view->testFilePath();
 	test.audioDirectory = view->stimulusList();
@@ -192,8 +192,8 @@ Model::TestParameters Presenter::testParameters() {
 	return test;
 }
 
-Model::ProcessingParameters Presenter::processingParameters() {
-	Model::ProcessingParameters p;
+Model::Processing Presenter::processingParameters() {
+	Model::Processing p;
 	if (view->usingHearingAidSimulation()) {
 		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 		p.release_ms = convertToDouble(view->release_ms(), "release time");
@@ -258,8 +258,8 @@ void Presenter::playTrial_() {
 	switchViewIfTestComplete();
 }
 
-Model::TrialParameters Presenter::trialParameters() {
-	Model::TrialParameters trial;
+Model::Trial Presenter::trialParameters() {
+	Model::Trial trial;
 	trial.audioDevice = view->audioDevice();
 	trial.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	return trial;
@@ -286,7 +286,7 @@ void Presenter::saveAudio() {
 }
 
 void Presenter::saveAudio_() {
-	Model::SaveAudioParameters p;
+	Model::SavingAudio p;
 	p.inputAudioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
 	p.processing = processingParameters();
@@ -306,7 +306,7 @@ void Presenter::playCalibration() {
 }
 
 void Presenter::playCalibration_() {
-	Model::CalibrationParameters p;
+	Model::Calibration p;
 	p.audioDevice = view->audioDevice();
 	p.audioFilePath = view->audioFilePath();
 	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");

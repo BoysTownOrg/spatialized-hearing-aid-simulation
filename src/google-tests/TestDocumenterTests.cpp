@@ -13,7 +13,7 @@ TEST_F(
 	TestDocumenterTests,
 	formatsTestParameters
 ) {
-	Model::TestParameters test;
+	Model::Testing test;
 	test.subjectId = "a";
 	test.testerId = "b";
 	test.audioDirectory = "c";
@@ -51,7 +51,7 @@ TEST_F(
 	TestDocumenterTests,
 	ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
-	Model::TestParameters test;
+	Model::Testing test;
 	test.subjectId = "a";
 	test.testerId = "b";
 	test.audioDirectory = "c";
@@ -74,7 +74,7 @@ TEST_F(
 	TestDocumenterTests,
 	ignoresBrirIfNotUsingSpatialization
 ) {
-	Model::TestParameters test;
+	Model::Testing test;
 	test.subjectId = "a";
 	test.testerId = "b";
 	test.audioDirectory = "c";

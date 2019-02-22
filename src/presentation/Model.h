@@ -10,7 +10,7 @@ public:
 	INTERFACE_OPERATIONS(Model);
 	RUNTIME_ERROR(RequestFailure);
 
-	struct ProcessingParameters {
+	struct Processing {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
@@ -22,38 +22,38 @@ public:
 		bool usingSpatialization;
 	};
 
-	struct TestParameters {
-		ProcessingParameters processing;
+	struct Testing {
+		Processing processing;
 		std::string subjectId;
 		std::string testerId;
 		std::string audioDirectory;
 		std::string testFilePath;
 	};
-	virtual void prepareNewTest(TestParameters *) = 0;
+	virtual void prepareNewTest(Testing *) = 0;
 
-	struct TrialParameters {
+	struct Trial {
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void playNextTrial(TrialParameters *) = 0;
+	virtual void playNextTrial(Trial *) = 0;
 
 	virtual bool testComplete() = 0;
 
-	struct CalibrationParameters {
-		ProcessingParameters processing;
+	struct Calibration {
+		Processing processing;
 		std::string audioDevice;
 		std::string audioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void playCalibration(CalibrationParameters *) = 0;
+	virtual void playCalibration(Calibration *) = 0;
 	virtual void stopCalibration() = 0;
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 
-	struct SaveAudioParameters {
-		ProcessingParameters processing;
+	struct SavingAudio {
+		Processing processing;
 		std::string inputAudioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void processAudioForSaving(SaveAudioParameters *) = 0;
+	virtual void processAudioForSaving(SavingAudio *) = 0;
 	virtual void saveAudio(std::string filePath) = 0;
 };

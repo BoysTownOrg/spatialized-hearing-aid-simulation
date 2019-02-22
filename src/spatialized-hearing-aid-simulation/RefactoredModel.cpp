@@ -295,7 +295,7 @@ RefactoredModel::RefactoredModel(
 	player->setAudioLoader(loader);
 }
 
-void RefactoredModel::prepareNewTest(TestParameters *p) {
+void RefactoredModel::prepareNewTest(Testing *p) {
 	framesPerBufferForTest = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
@@ -304,7 +304,7 @@ void RefactoredModel::prepareNewTest(TestParameters *p) {
 }
 
 std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
-	ProcessingParameters p
+	Processing p
 ) {
 	if (p.usingHearingAidSimulation) {
 		assertSizeIsPowerOfTwo(p.chunkSize);
@@ -390,14 +390,14 @@ void RefactoredModel::saveAudio(std::string)
 {
 }
 
-void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
+void RefactoredModel::processAudioForSaving(SavingAudio *p_)
 {
 	auto reader = makeReader(p_->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p_->processing);
 	processorFactory_->make(reader.get(), p_->level_dB_Spl);
 }
 
-void RefactoredModel::prepareNewTest_(TestParameters *p) {
+void RefactoredModel::prepareNewTest_(Testing *p) {
 	try {
 		list->initialize(p->audioDirectory);
 		documenter->initialize(p->testFilePath);
@@ -409,7 +409,7 @@ void RefactoredModel::prepareNewTest_(TestParameters *p) {
 	}
 }
 
-void RefactoredModel::playNextTrial(TrialParameters *p) {
+void RefactoredModel::playNextTrial(Trial *p) {
 	if (player->isPlaying())
 		return;
 
@@ -457,7 +457,7 @@ bool RefactoredModel::testComplete() {
 	return list->empty();
 }
 
-void RefactoredModel::playCalibration(CalibrationParameters *p) {
+void RefactoredModel::playCalibration(Calibration *p) {
 	if (player->isPlaying())
 		return;
 

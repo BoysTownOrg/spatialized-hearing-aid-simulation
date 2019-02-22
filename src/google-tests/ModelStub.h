@@ -7,10 +7,10 @@ class ModelStub : public Model {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	std::string savedAudioFilePath_{};
 	LogString saveAudioLog_{};
-	TestParameters testParameters_{};
-	TrialParameters trialParameters_{};
-	CalibrationParameters calibrationParameters_{};
-	SaveAudioParameters saveAudioParameters_{};
+	Testing testParameters_{};
+	Trial trialParameters_{};
+	Calibration calibrationParameters_{};
+	SavingAudio saveAudioParameters_{};
 	double calibrationLevel_dB_Spl_{};
 	bool testComplete_{};
 	bool trialPlayed_{};
@@ -31,7 +31,7 @@ public:
 		return calibrationParameters_;
 	}
 
-	void processAudioForSaving(SaveAudioParameters *p) override {
+	void processAudioForSaving(SavingAudio *p) override {
 		saveAudioParameters_ = *p;
 		saveAudioLog_.insert("processAudioForSaving ");
 	}
@@ -62,7 +62,7 @@ public:
 		return calibrationStopped_;
 	}
 
-	void playCalibration(CalibrationParameters *p) override {
+	void playCalibration(Calibration *p) override {
 		calibrationParameters_ = *p;
 		calibrationPlayed_ = true;
 	}
@@ -79,7 +79,7 @@ public:
 		audioDeviceDescriptions_ = std::move(d);
 	}
 
-	void prepareNewTest(TestParameters *p) override {
+	void prepareNewTest(Testing *p) override {
 		testParameters_ = *p;
 		testPrepared_ = true;
 	}
@@ -96,7 +96,7 @@ public:
 		return trialPlayed_;
 	}
 
-	void playNextTrial(TrialParameters *p) override {
+	void playNextTrial(Trial *p) override {
 		trialParameters_ = *p;
 		trialPlayed_ = true;
 	}
@@ -125,21 +125,21 @@ public:
 		message = std::move(s);
 	}
 
-	void prepareNewTest(TestParameters *) override {
+	void prepareNewTest(Testing *) override {
 		throw RequestFailure{ message };
 	}
 
-	void playNextTrial(TrialParameters *) override {
+	void playNextTrial(Trial *) override {
 		throw RequestFailure{ message };
 	}
 
-	void playCalibration(CalibrationParameters *) override {
+	void playCalibration(Calibration *) override {
 		throw RequestFailure{ message };
 	}
 
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void processAudioForSaving(SaveAudioParameters *) override {}
+	void processAudioForSaving(SavingAudio *) override {}
 	void saveAudio(std::string) override {}
 };
