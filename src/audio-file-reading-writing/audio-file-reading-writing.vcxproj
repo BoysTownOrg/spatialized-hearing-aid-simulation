@@ -145,10 +145,12 @@
     <ClInclude Include="audio-file-reading-writing-exports.h" />
     <ClInclude Include="AudioFileInMemory.h" />
     <ClInclude Include="AudioFileReader.h" />
+    <ClInclude Include="AudioFileWriterAdapter.h" />
     <ClInclude Include="ChannelCopier.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFileInMemory.cpp" />
+    <ClCompile Include="AudioFileWriterAdapter.cpp" />
     <ClCompile Include="ChannelCopier.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

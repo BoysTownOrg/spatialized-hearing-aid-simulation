@@ -27,12 +27,18 @@
     <ClInclude Include="audio-file-reading-writing-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFileWriterAdapter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFileInMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChannelCopier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioFileWriterAdapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
