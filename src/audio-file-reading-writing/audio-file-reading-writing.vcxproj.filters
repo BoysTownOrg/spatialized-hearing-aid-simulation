@@ -24,6 +24,9 @@
     <ClInclude Include="ChannelCopier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="audio-file-reading-writing-exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioFileInMemory.cpp">
@@ -31,9 +34,6 @@
     </ClCompile>
     <ClCompile Include="ChannelCopier.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="audio-file-reading-exports.h">
-      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

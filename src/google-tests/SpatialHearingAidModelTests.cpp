@@ -11,7 +11,7 @@
 #include "CalibrationComputerStub.h"
 #include "SpatializedHearingAidSimulationFactoryStub.h"
 #include "assert-utility.h"
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 #include <gtest/gtest.h>
 

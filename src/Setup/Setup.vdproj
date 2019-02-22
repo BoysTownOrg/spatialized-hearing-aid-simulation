@@ -99,12 +99,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9BEE8A4B158246A18D60169DC897887A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B2BC2F7472454D52A0EDF551F4522E44"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -163,6 +157,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -179,6 +181,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -978,7 +988,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_048B23FC07DC4F4CADE9D867D39C2875"
             {
-            "SourcePath" = "8:..\\Release\\fir-filtering.dll"
+            "SourcePath" = "8:..\\Debug\\fir-filtering.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1006,7 +1016,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0C42664366864896BAECDDDDD0E7F51D"
             {
-            "SourcePath" = "8:..\\Release\\dsl-prescription.dll"
+            "SourcePath" = "8:..\\Debug\\dsl-prescription.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1034,7 +1044,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2C2EC096AC7B462694317CF4CFE064AD"
             {
-            "SourcePath" = "8:..\\Release\\signal-processing.dll"
+            "SourcePath" = "8:..\\Debug\\signal-processing.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1062,7 +1072,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4AF7C7E829F049739B482F2BCDC415BC"
             {
-            "SourcePath" = "8:..\\Release\\playing-audio.dll"
+            "SourcePath" = "8:..\\Debug\\playing-audio.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1090,7 +1100,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_520E28696359434C85EB5C4651466EF1"
             {
-            "SourcePath" = "8:..\\Release\\binaural-room-impulse-response.dll"
+            "SourcePath" = "8:..\\Debug\\binaural-room-impulse-response.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1118,7 +1128,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6FFBE8CCD8C54D00AEA8B58AD37F4929"
             {
-            "SourcePath" = "8:..\\Release\\main.exe"
+            "SourcePath" = "8:..\\Debug\\main.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1146,7 +1156,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_75A5519EDCA94F91A67D4775F98BE642"
             {
-            "SourcePath" = "8:..\\Release\\hearing-aid-processing.dll"
+            "SourcePath" = "8:..\\Debug\\hearing-aid-processing.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1174,7 +1184,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_79ABC8E4C60E441D937D5D0570CE75BD"
             {
-            "SourcePath" = "8:..\\Release\\presentation.dll"
+            "SourcePath" = "8:..\\Debug\\presentation.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1202,7 +1212,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_89D097B34E3B4B4A89BE60853C292FCC"
             {
-            "SourcePath" = "8:..\\Release\\test-documenting.dll"
+            "SourcePath" = "8:..\\Debug\\test-documenting.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1228,37 +1238,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9BEE8A4B158246A18D60169DC897887A"
-            {
-            "SourcePath" = "8:..\\Release\\audio-file-reading.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{49E34B8E-1578-4405-A9D4-3A01039A0543}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B2BC2F7472454D52A0EDF551F4522E44"
             {
-            "SourcePath" = "8:..\\Release\\stimulus-list.dll"
+            "SourcePath" = "8:..\\Debug\\stimulus-list.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1286,7 +1268,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CCBC662E13134BFD8ACF4CFE0A3DFE1A"
             {
-            "SourcePath" = "8:..\\Release\\spatialized-hearing-aid-simulation.dll"
+            "SourcePath" = "8:..\\Debug\\spatialized-hearing-aid-simulation.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"

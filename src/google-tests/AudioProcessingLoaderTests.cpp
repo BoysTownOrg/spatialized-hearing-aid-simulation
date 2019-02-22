@@ -2,7 +2,7 @@
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <playing-audio/AudioProcessingLoader.h>
 #include <gtest/gtest.h>
 

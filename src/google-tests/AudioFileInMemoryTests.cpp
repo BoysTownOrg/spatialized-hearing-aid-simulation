@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "FakeAudioFileReader.h"
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
 namespace {

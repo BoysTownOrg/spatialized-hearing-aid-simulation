@@ -1,7 +1,7 @@
 #pragma once
 
 #include <spatialized-hearing-aid-simulation/BrirReader.h>
-#include <audio-file-reading/AudioFileReader.h>
+#include <audio-file-reading-writing/AudioFileReader.h>
 
 #ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
 	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
