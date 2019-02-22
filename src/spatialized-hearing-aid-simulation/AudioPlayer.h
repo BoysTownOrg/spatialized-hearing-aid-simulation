@@ -6,9 +6,9 @@
 #include <vector>
 #include <string>
 
-class IAudioPlayer {
+class AudioPlayer {
 public:
-	INTERFACE_OPERATIONS(IAudioPlayer);
+	INTERFACE_OPERATIONS(AudioPlayer);
 	RUNTIME_ERROR(DeviceFailure);
 
 	struct Preparation {

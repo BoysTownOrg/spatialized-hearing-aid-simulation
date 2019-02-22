@@ -3,9 +3,9 @@
 #include "AudioDevice.h"
 #include "playing-audio-exports.h"
 #include <spatialized-hearing-aid-simulation/AudioLoader.h>
-#include <spatialized-hearing-aid-simulation/IAudioPlayer.h>
+#include <spatialized-hearing-aid-simulation/AudioPlayer.h>
 
-class AudioDevicePlayer : public AudioDeviceController, public IAudioPlayer {
+class AudioDevicePlayer : public AudioDeviceController, public AudioPlayer {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioLoader *loader{};

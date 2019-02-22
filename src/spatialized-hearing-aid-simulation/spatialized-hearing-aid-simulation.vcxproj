@@ -161,7 +161,7 @@
     <ClInclude Include="CalibrationComputer.h" />
     <ClInclude Include="ChannelProcessingGroup.h" />
     <ClInclude Include="Documenter.h" />
-    <ClInclude Include="IAudioPlayer.h" />
+    <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="ICalibrationComputer.h" />
     <ClInclude Include="ISpatializedHearingAidSimulationFactory.h" />
     <ClInclude Include="PrescriptionReader.h" />

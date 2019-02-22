@@ -1435,7 +1435,7 @@ namespace {
 		AudioFrameWriterStubFactory defaultAudioWriterFactory{};
 		AudioFrameWriterFactory *audioWriterFactory{ &defaultAudioWriterFactory };
 		AudioPlayerStub defaultPlayer{};
-		IAudioPlayer *audioPlayer{ &defaultPlayer };
+		AudioPlayer *audioPlayer{ &defaultPlayer };
 		AudioLoaderStub defaultLoader{};
 		AudioLoader *audioLoader{ &defaultLoader };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};

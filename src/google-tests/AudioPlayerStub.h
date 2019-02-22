@@ -1,9 +1,9 @@
 #pragma once
 
 #include "LogString.h"
-#include <spatialized-hearing-aid-simulation/IAudioPlayer.h>
+#include <spatialized-hearing-aid-simulation/AudioPlayer.h>
 
-class AudioPlayerStub : public IAudioPlayer {
+class AudioPlayerStub : public AudioPlayer {
 	std::vector<std::string> audioDeviceDescriptions_{};
 	Preparation preparation_{};
 	LogString log_{};
@@ -73,7 +73,7 @@ public:
 	}
 };
 
-class PreparationFailingAudioPlayer : public IAudioPlayer {
+class PreparationFailingAudioPlayer : public AudioPlayer {
 	std::string errorMessage{};
 public:
 	void setErrorMessage(std::string s) {

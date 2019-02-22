@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IAudioPlayer.h"
+#include "AudioPlayer.h"
 #include "ISpatializedHearingAidSimulationFactory.h"
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
@@ -74,13 +74,13 @@ class SpatialHearingAidModel : public Model {
 	BrirReader *brirReader;
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioFrameWriterFactory *audioWriterFactory;
-	IAudioPlayer *player;
+	AudioPlayer *player;
 	AudioLoader *loader;
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
 		Documenter *,
-		IAudioPlayer *,
+		AudioPlayer *,
 		AudioLoader *,
 		AudioFrameReaderFactory *,
 		AudioFrameWriterFactory *,

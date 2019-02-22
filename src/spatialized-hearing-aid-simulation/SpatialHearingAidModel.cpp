@@ -267,7 +267,7 @@ int const SpatialHearingAidModel::defaultFramesPerBuffer = 1024;
 SpatialHearingAidModel::SpatialHearingAidModel(
 	StimulusList *stimulusList,
 	Documenter *documenter,
-	IAudioPlayer *player,
+	AudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioFrameWriterFactory *audioWriterFactory,
@@ -431,7 +431,7 @@ void SpatialHearingAidModel::prepareAudioPlayer(
 	int framesPerBuffer, 
 	std::string audioDevice
 ) {
-	IAudioPlayer::Preparation playing;
+	AudioPlayer::Preparation playing;
 	playing.channels = reader.channels();
 	playing.sampleRate = reader.sampleRate();
 	playing.framesPerBuffer = framesPerBuffer;
@@ -439,7 +439,7 @@ void SpatialHearingAidModel::prepareAudioPlayer(
 	try {
 		player->prepareToPlay(std::move(playing));
 	}
-	catch (const IAudioPlayer::PreparationFailure &e) {
+	catch (const AudioPlayer::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
