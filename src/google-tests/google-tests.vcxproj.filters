@@ -69,6 +69,9 @@
     <ClCompile Include="SpatialHearingAidModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AudioFileWriterAdapterTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FakeConfigurationFileParser.h">
