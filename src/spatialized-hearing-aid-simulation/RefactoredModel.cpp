@@ -345,8 +345,10 @@ void RefactoredModel::saveAudio(std::string)
 void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
 {
 	auto p = p_->processing;
-	readPrescription(std::move(p.leftDslPrescriptionFilePath));
-	readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	if (p.usingHearingAidSimulation) {
+		readPrescription(std::move(p.leftDslPrescriptionFilePath));
+		readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	}
 }
 
 static std::string coefficientErrorMessage(std::string which) {

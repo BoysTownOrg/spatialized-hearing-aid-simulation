@@ -662,6 +662,15 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests,
+		processAudioForSavingDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
+	) {
+		saveAudioParameters.processing.usingHearingAidSimulation = false;
+		processAudioForSaving();
+		assertPrescriptionReaderDidNotReadAnything();
+	}
+
+	TEST_F(
+		RefactoredModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
 		testParameters.processing.usingSpatialization = true;
