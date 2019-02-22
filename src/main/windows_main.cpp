@@ -6,8 +6,8 @@
 #include "WindowsDirectoryReader.h"
 #include "FileSystemWriter.h"
 #include "MersenneTwisterRandomizer.h"
-#include <audio-file-reading/ChannelCopier.h>
-#include <audio-file-reading/AudioFileInMemory.h>
+#include <audio-file-reading-writing/ChannelCopier.h>
+#include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <hearing-aid-processing/HearingAidProcessor.h>
@@ -61,7 +61,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	TestDocumenter testDocumenter{ &persistentWriter };
 	PortAudioDevice audioDevice{};
 	AudioDevicePlayer player{&audioDevice};
-	ZeroPaddedLoader audioLoader{};
+	ZeroPaddedLoaderFactory audioLoaderFactory{};
 	LibsndfileReaderFactory audioFileReaderFactory{};
 	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
@@ -82,7 +82,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 		&stimulusList,
 		&testDocumenter,
 		&player,
-		&audioLoader,
+		&audioLoaderFactory,
 		&audioFrameReaderFactory,
 		&prescriptionReader, 
 		&brirReader, 
