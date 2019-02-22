@@ -283,8 +283,12 @@ namespace {
 		}
 
 		void setNoSimulationForTest() noexcept {
-			testParameters.processing.usingSpatialization = false;
-			testParameters.processing.usingHearingAidSimulation = false;
+			setNoSimulation(testParameters.processing);
+		}
+		
+		void setNoSimulation(RefactoredModel::ProcessingParameters &p) noexcept {
+			p.usingHearingAidSimulation = false;
+			p.usingSpatialization = false;
 		}
 
 		void setFullSimulationForCalibration() noexcept {
@@ -304,8 +308,7 @@ namespace {
 		}
 
 		void setNoSimulationForCalibration() noexcept {
-			calibrationParameters.processing.usingSpatialization = false;
-			calibrationParameters.processing.usingHearingAidSimulation = false;
+			setNoSimulation(calibrationParameters.processing);
 		}
 
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
