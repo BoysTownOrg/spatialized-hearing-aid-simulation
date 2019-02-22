@@ -736,6 +736,12 @@ namespace {
 		assertEqual("a", audioFrameReaderFactory.filePath());
 	}
 
+	TEST_F(RefactoredModelTests, processAudioForSavingPassesAudioFileToFactory) {
+		saveAudioParameters.inputAudioFilePath = "a";
+		processAudioForSaving();
+		assertEqual("a", audioFrameReaderFactory.filePath());
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
 			[=]() { playNextTrial(); }
