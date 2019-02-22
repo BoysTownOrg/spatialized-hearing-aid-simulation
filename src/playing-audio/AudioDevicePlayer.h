@@ -5,12 +5,12 @@
 #include <spatialized-hearing-aid-simulation/AudioLoader.h>
 #include <spatialized-hearing-aid-simulation/IAudioPlayer.h>
 
-class AudioPlayer : public AudioDeviceController, public IAudioPlayer {
+class AudioDevicePlayer : public AudioDeviceController, public IAudioPlayer {
 	std::vector<gsl::span<float>> audio;
 	AudioDevice *device;
 	AudioLoader *loader{};
 public:
-	explicit PLAYING_AUDIO_API AudioPlayer(AudioDevice *);
+	explicit PLAYING_AUDIO_API AudioDevicePlayer(AudioDevice *);
 	PLAYING_AUDIO_API void prepareToPlay(Preparation) override;
 	PLAYING_AUDIO_API std::vector<std::string> audioDeviceDescriptions() override;
 	PLAYING_AUDIO_API void setAudioLoader(AudioLoader *) override;

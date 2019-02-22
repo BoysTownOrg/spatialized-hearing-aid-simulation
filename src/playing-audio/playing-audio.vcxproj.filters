@@ -18,21 +18,21 @@
     <ClInclude Include="AudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="playing-audio-exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZeroPaddedLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioDevicePlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioPlayer.cpp">
+    <ClCompile Include="ZeroPaddedLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZeroPaddedLoader.cpp">
+    <ClCompile Include="AudioDevicePlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

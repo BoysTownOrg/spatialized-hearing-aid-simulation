@@ -1,21 +1,21 @@
 #include "AudioDeviceStub.h"
 #include "AudioLoaderStub.h"
 #include "assert-utility.h"
-#include <playing-audio/AudioPlayer.h>
+#include <playing-audio/AudioDevicePlayer.h>
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioPlayerTests : public ::testing::Test {
+	class AudioDevicePlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
 		AudioLoaderStub loader{};
-		AudioPlayer player{ &device };
+		AudioDevicePlayer player{ &device };
 
-		AudioPlayerTests() {
+		AudioDevicePlayerTests() {
 			player.setAudioLoader(&loader);
 		}
 
-		auto prepareToPlay(AudioPlayer::Preparation r = {}) {
+		auto prepareToPlay(AudioDevicePlayer::Preparation r = {}) {
 			return player.prepareToPlay(std::move(r));
 		}
 
@@ -26,46 +26,46 @@ namespace {
 		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
 			try {
 				prepareToPlay();
-				FAIL() << "Expected AudioPlayer::PreparationFailure";
+				FAIL() << "Expected AudioDevicePlayer::PreparationFailure";
 			}
-			catch (const AudioPlayer::PreparationFailure &e) {
+			catch (const AudioDevicePlayer::PreparationFailure &e) {
 				assertEqual(std::move(errorMessage), e.what());
 			}
 		}
 	};
 
-	TEST_F(AudioPlayerTests, constructorSetsItselfAsDeviceController) {
+	TEST_F(AudioDevicePlayerTests, constructorSetsItselfAsDeviceController) {
 		EXPECT_EQ(&player, device.controller());
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayFirstClosesThenOpensStream) {
+	TEST_F(AudioDevicePlayerTests, prepareToPlayFirstClosesThenOpensStream) {
 		prepareToPlay();
 		assertEqual("close open ", device.streamLog());
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlaySetsCallbackResultToContinue) {
+	TEST_F(AudioDevicePlayerTests, prepareToPlaySetsCallbackResultToContinue) {
 		prepareToPlay();
 		assertEqual("setCallbackResultToContinue ", device.callbackLog());
 	}
 
-	TEST_F(AudioPlayerTests, playStartsStream) {
+	TEST_F(AudioDevicePlayerTests, playStartsStream) {
 		player.play();
 		assertEqual("start ", device.streamLog());
 	}
 
-	TEST_F(AudioPlayerTests, stopStopsStream) {
+	TEST_F(AudioDevicePlayerTests, stopStopsStream) {
 		player.stop();
 		assertEqual("stop ", device.streamLog());
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayWhileStreamingDoesNotAlterStream) {
+	TEST_F(AudioDevicePlayerTests, prepareToPlayWhileStreamingDoesNotAlterStream) {
 		device.setStreaming();
 		prepareToPlay();
 		assertTrue(device.streamLog().empty());
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayPassesStreamParametersToDevice) {
-		AudioPlayer::Preparation p;
+	TEST_F(AudioDevicePlayerTests, prepareToPlayPassesStreamParametersToDevice) {
+		AudioDevicePlayer::Preparation p;
 		p.framesPerBuffer = 2;
 		p.channels = 3;
 		p.sampleRate = 4;
@@ -75,15 +75,15 @@ namespace {
 		assertEqual(4, device.streamParameters().sampleRate);
 	}
 
-	TEST_F(AudioPlayerTests, prepareToPlayFindsDeviceIndex) {
-		AudioPlayer::Preparation p;
+	TEST_F(AudioDevicePlayerTests, prepareToPlayFindsDeviceIndex) {
+		AudioDevicePlayer::Preparation p;
 		device.setDescriptions({ "zeroth", "first", "second", "third" });
 		p.audioDevice = "second";
 		prepareToPlay(p);
 		assertEqual(2, device.streamParameters().deviceIndex);
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
+	TEST_F(AudioDevicePlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
 		fillStreamBuffer();
 		assertFalse(device.complete());
 		loader.setComplete();
@@ -91,8 +91,8 @@ namespace {
 		assertTrue(device.complete());
 	}
 
-	TEST_F(AudioPlayerTests, fillStreamBufferLoadsEachAudioChannel) {
-		AudioPlayer::Preparation p;
+	TEST_F(AudioDevicePlayerTests, fillStreamBufferLoadsEachAudioChannel) {
+		AudioDevicePlayer::Preparation p;
 		p.channels = 2;
 		prepareToPlay(p);
 		float left{};
@@ -105,13 +105,13 @@ namespace {
 		assertEqual(1, loader.audioBuffer().at(1).size());
 	}
 
-	TEST_F(AudioPlayerTests, isPlayingWhenDeviceIsStreaming) {
+	TEST_F(AudioDevicePlayerTests, isPlayingWhenDeviceIsStreaming) {
 		assertFalse(player.isPlaying());
 		device.setStreaming();
 		assertTrue(player.isPlaying());
 	}
 
-	TEST_F(AudioPlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
+	TEST_F(AudioDevicePlayerTests, audioDeviceDescriptionsReturnsDescriptions) {
 		device.setDescriptions({ "a", "b", "c" });
 		assertEqual({ "a", "b", "c" }, player.audioDeviceDescriptions());
 	}
@@ -126,15 +126,15 @@ namespace {
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {
 				auto player = makePlayer();
-				FAIL() << "Expected AudioPlayer::DeviceFailure";
+				FAIL() << "Expected AudioDevicePlayer::DeviceFailure";
 			}
-			catch (const AudioPlayer::DeviceFailure &e) {
+			catch (const AudioDevicePlayer::DeviceFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
 
-		AudioPlayer makePlayer() {
-			AudioPlayer player{ device };
+		AudioDevicePlayer makePlayer() {
+			AudioDevicePlayer player{ device };
 			player.setAudioLoader(loader);
 			return player;
 		}
@@ -143,9 +143,9 @@ namespace {
 			auto player = makePlayer();
 			try {
 				player.prepareToPlay({});
-				FAIL() << "Expected AudioPlayer::PreparationFailure";
+				FAIL() << "Expected AudioDevicePlayer::PreparationFailure";
 			}
-			catch (const AudioPlayer::PreparationFailure &e) {
+			catch (const AudioDevicePlayer::PreparationFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
