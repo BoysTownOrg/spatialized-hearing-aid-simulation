@@ -265,8 +265,12 @@ namespace {
 		}
 
 		void setHearingAidSimulationOnlyForTest() noexcept {
-			testParameters.processing.usingHearingAidSimulation = true;
-			testParameters.processing.usingSpatialization = false;
+			setHearingAidSimulationOnly(testParameters.processing);
+		}
+		
+		void setHearingAidSimulationOnly(RefactoredModel::ProcessingParameters &p) {
+			p.usingHearingAidSimulation = true;
+			p.usingSpatialization = false;
 		}
 
 		void setSpatializationOnlyForTest() noexcept {
@@ -288,8 +292,7 @@ namespace {
 		}
 		
 		void setHearingAidSimulationOnlyForCalibration() noexcept {
-			calibrationParameters.processing.usingHearingAidSimulation = true;
-			calibrationParameters.processing.usingSpatialization = false;
+			setHearingAidSimulationOnly(calibrationParameters.processing);
 		}
 
 		void setSpatializationOnlyForCalibration() noexcept {
