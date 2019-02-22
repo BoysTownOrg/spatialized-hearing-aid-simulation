@@ -401,7 +401,7 @@ void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
 		readAndCheckBrir(std::move(p.brirFilePath));
 	auto reader = makeReader(p_->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory({});
-	processorFactory_->make(reader.get(), {});
+	processorFactory_->make(reader.get(), p_->level_dB_Spl);
 }
 
 void RefactoredModel::prepareNewTest_(TestParameters *p) {

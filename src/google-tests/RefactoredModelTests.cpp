@@ -854,6 +854,13 @@ namespace {
 		);
 	}
 
+	TEST_F(RefactoredModelTests, processAudioForSavingPassesDigitalLevelToCalibrationComputer) {
+		assertCalibrationDigitalLevelsAfterCall(
+			saveAudioParameters.level_dB_Spl,
+			[=]() { processAudioForSaving(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
 		setFullSimulationForTest();
 		assertScalarsMatchCalibrationAfterCall(
