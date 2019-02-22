@@ -310,7 +310,11 @@ namespace {
 		void setSpatializationOnlyForCalibration() noexcept {
 			setSpatializationOnly(calibrationParameters.processing);
 		}
-
+		
+		void setSpatializationOnlyForSaving() noexcept {
+			setSpatializationOnly(saveAudioParameters.processing);
+		}
+		
 		void setNoSimulationForCalibration() noexcept {
 			setNoSimulation(calibrationParameters.processing);
 		}
@@ -946,6 +950,14 @@ namespace {
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForSpatialization) {
+		setSpatializationOnlyForSaving();
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.spatializationScale(),
+			[=]() { processAudioForSaving(); }
 		);
 	}
 
