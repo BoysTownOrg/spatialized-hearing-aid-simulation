@@ -39,8 +39,8 @@ public:
 	}
 
 	void writeFrames(float *x, long long n) override {
-		for (int i = 0; i < n; ++i)
-			written_.push_back(x[i]);
+		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n) };
+		std::copy(audio.begin(), audio.end(), std::back_inserter(written_));
 	}
 };
 
