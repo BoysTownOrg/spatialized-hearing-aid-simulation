@@ -49,7 +49,7 @@ private:
 	void showTestSetupView();
 	Model::Testing testing();
 	Model::Trial trial();
-	Model::Processing processingParameters();
+	Model::SignalProcessing signalProcessing();
 	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);

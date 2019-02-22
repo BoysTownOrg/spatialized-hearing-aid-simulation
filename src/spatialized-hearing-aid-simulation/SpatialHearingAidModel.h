@@ -90,5 +90,5 @@ private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, int framesPerBuffer, std::string audioDevice);
 	void prepareNewTest_(Testing *);
-	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(Processing);
+	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);
 };

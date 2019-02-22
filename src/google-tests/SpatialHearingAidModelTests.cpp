@@ -64,7 +64,7 @@ namespace {
 			setValidProcessingSizes(savingAudio.processing);
 		}
 
-		void setValidProcessingSizes(SpatialHearingAidModel::Processing &p) noexcept {
+		void setValidProcessingSizes(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.chunkSize = 1;
 			p.windowSize = 1;
 		}
@@ -98,7 +98,7 @@ namespace {
 			setFullSimulation(testing.processing);
 		}
 
-		void setFullSimulation(SpatialHearingAidModel::Processing &p) noexcept {
+		void setFullSimulation(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = true;
 		}
@@ -107,7 +107,7 @@ namespace {
 			setHearingAidSimulationOnly(testing.processing);
 		}
 		
-		void setHearingAidSimulationOnly(SpatialHearingAidModel::Processing &p) noexcept {
+		void setHearingAidSimulationOnly(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = false;
 		}
@@ -116,7 +116,7 @@ namespace {
 			setSpatializationOnly(testing.processing);
 		}
 		
-		void setSpatializationOnly(SpatialHearingAidModel::Processing &p) noexcept {
+		void setSpatializationOnly(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = true;
 		}
@@ -125,7 +125,7 @@ namespace {
 			setNoSimulation(testing.processing);
 		}
 		
-		void setNoSimulation(SpatialHearingAidModel::Processing &p) noexcept {
+		void setNoSimulation(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = false;
 		}
@@ -203,7 +203,7 @@ namespace {
 		}
 
 		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			SpatialHearingAidModel::Processing &processing, 
+			SpatialHearingAidModel::SignalProcessing &processing, 
 			std::function<void(void)> f
 		) {
 			processing.chunkSize = 1;
@@ -243,7 +243,7 @@ namespace {
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -288,7 +288,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -300,7 +300,7 @@ namespace {
 		}
 
 		void assertHearingAidCompressionParametersMatchAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -326,7 +326,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -338,7 +338,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -360,7 +360,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -371,7 +371,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -433,7 +433,7 @@ namespace {
 		}
 
 		void assertPrescriptionReaderContainsFilePathsAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			processing.leftDslPrescriptionFilePath = "a";
@@ -448,7 +448,7 @@ namespace {
 		}
 
 		void assertBrirReaderReceivesFilePathAfterCall(
-			SpatialHearingAidModel::Processing &processing,
+			SpatialHearingAidModel::SignalProcessing &processing,
 			std::function<void(void)> f
 		) {
 			processing.brirFilePath = "a";
@@ -485,7 +485,7 @@ namespace {
 		}
 
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			SpatialHearingAidModel::Processing &p,
+			SpatialHearingAidModel::SignalProcessing &p,
 			std::function<void(void)> f
 		) {
 			p.usingHearingAidSimulation = false;
@@ -495,7 +495,7 @@ namespace {
 		}
 
 		void assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			SpatialHearingAidModel::Processing &p,
+			SpatialHearingAidModel::SignalProcessing &p,
 			std::function<void(void)> f
 		) {
 			p.usingSpatialization = false;

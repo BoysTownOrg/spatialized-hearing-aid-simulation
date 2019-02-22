@@ -183,17 +183,17 @@ void Presenter::hideTestSetupView() {
 }
 
 Model::Testing Presenter::testing() {
-	Model::Testing test;
-	test.processing = processingParameters();
-	test.testFilePath = view->testFilePath();
-	test.audioDirectory = view->stimulusList();
-	test.subjectId = view->subjectId();
-	test.testerId = view->testerId();
-	return test;
+	Model::Testing testing_;
+	testing_.processing = signalProcessing();
+	testing_.testFilePath = view->testFilePath();
+	testing_.audioDirectory = view->stimulusList();
+	testing_.subjectId = view->subjectId();
+	testing_.testerId = view->testerId();
+	return testing_;
 }
 
-Model::Processing Presenter::processingParameters() {
-	Model::Processing p;
+Model::SignalProcessing Presenter::signalProcessing() {
+	Model::SignalProcessing p;
 	if (view->usingHearingAidSimulation()) {
 		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
 		p.release_ms = convertToDouble(view->release_ms(), "release time");
@@ -259,10 +259,10 @@ void Presenter::playTrial_() {
 }
 
 Model::Trial Presenter::trial() {
-	Model::Trial trial;
-	trial.audioDevice = view->audioDevice();
-	trial.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-	return trial;
+	Model::Trial trial_;
+	trial_.audioDevice = view->audioDevice();
+	trial_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	return trial_;
 }
 
 void Presenter::switchViewIfTestComplete() {
@@ -286,11 +286,11 @@ void Presenter::saveAudio() {
 }
 
 void Presenter::saveAudio_() {
-	Model::SavingAudio p;
-	p.inputAudioFilePath = view->audioFilePath();
-	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-	p.processing = processingParameters();
-	model->processAudioForSaving(&p);
+	Model::SavingAudio saving_;
+	saving_.inputAudioFilePath = view->audioFilePath();
+	saving_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	saving_.processing = signalProcessing();
+	model->processAudioForSaving(&saving_);
 	auto save = view->browseForSavingFile({ "*.wav" });
 	if (!view->browseCancelled())
 		model->saveAudio(save);
@@ -306,12 +306,12 @@ void Presenter::playCalibration() {
 }
 
 void Presenter::playCalibration_() {
-	Model::Calibration p;
-	p.audioDevice = view->audioDevice();
-	p.audioFilePath = view->audioFilePath();
-	p.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
-	p.processing = processingParameters();
-	model->playCalibration(&p);
+	Model::Calibration calibration_;
+	calibration_.audioDevice = view->audioDevice();
+	calibration_.audioFilePath = view->audioFilePath();
+	calibration_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	calibration_.processing = signalProcessing();
+	model->playCalibration(&calibration_);
 }
 
 void Presenter::stopCalibration() {

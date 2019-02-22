@@ -304,7 +304,7 @@ void SpatialHearingAidModel::prepareNewTest(Testing *p) {
 }
 
 std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcessorFactory(
-	Processing p
+	SignalProcessing p
 ) {
 	if (p.usingHearingAidSimulation) {
 		assertSizeIsPowerOfTwo(p.chunkSize);

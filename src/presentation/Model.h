@@ -10,7 +10,7 @@ public:
 	INTERFACE_OPERATIONS(Model);
 	RUNTIME_ERROR(RequestFailure);
 
-	struct Processing {
+	struct SignalProcessing {
 		std::string leftDslPrescriptionFilePath;
 		std::string rightDslPrescriptionFilePath;
 		std::string brirFilePath;
@@ -23,7 +23,7 @@ public:
 	};
 
 	struct Testing {
-		Processing processing;
+		SignalProcessing processing;
 		std::string subjectId;
 		std::string testerId;
 		std::string audioDirectory;
@@ -37,23 +37,23 @@ public:
 	};
 	virtual void playNextTrial(Trial *) = 0;
 
-	virtual bool testComplete() = 0;
-
 	struct Calibration {
-		Processing processing;
+		SignalProcessing processing;
 		std::string audioDevice;
 		std::string audioFilePath;
 		double level_dB_Spl;
 	};
 	virtual void playCalibration(Calibration *) = 0;
 	virtual void stopCalibration() = 0;
-	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 
 	struct SavingAudio {
-		Processing processing;
+		SignalProcessing processing;
 		std::string inputAudioFilePath;
 		double level_dB_Spl;
 	};
 	virtual void processAudioForSaving(SavingAudio *) = 0;
 	virtual void saveAudio(std::string filePath) = 0;
+
+	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
+	virtual bool testComplete() = 0;
 };
