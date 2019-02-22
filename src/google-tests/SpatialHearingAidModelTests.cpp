@@ -1403,6 +1403,7 @@ namespace {
 		SpatialHearingAidModel::Testing testing{};
 		SpatialHearingAidModel::Trial trial{};
 		SpatialHearingAidModel::Calibration calibration{};
+		SpatialHearingAidModel::SavingAudio savingAudio{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
@@ -1457,6 +1458,17 @@ namespace {
 			}
 		}
 
+		void assertProcessAudioForSavingThrowsRequestFailure(std::string what) {
+			auto model = constructModel();
+			try {
+				model.processAudioForSaving(&savingAudio);
+				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
+			}
+			catch (const SpatialHearingAidModel::RequestFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
+		
 		void prepareNewTestIgnoringFailure() {
 			auto model = constructModel();
 			try {
@@ -1669,6 +1681,15 @@ namespace {
 		ErrorAudioFrameReaderFactory failing{ "error." };
 		audioReaderFactory = &failing;
 		assertPlayCalibrationThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		processAudioForSavingThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
+	) {
+		ErrorAudioFrameReaderFactory failing{ "error." };
+		audioReaderFactory = &failing;
+		assertProcessAudioForSavingThrowsRequestFailure("error.");
 	}
 
 	TEST_F(

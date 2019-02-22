@@ -87,7 +87,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API void playNextTrial(Trial *) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
 	SPATIALIZED_HA_SIMULATION_API void playCalibration(Calibration *) override;
-	void processAudioForSaving(SavingAudio *) override;
+	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(SavingAudio *) override;
 	void saveAudio(std::string) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
