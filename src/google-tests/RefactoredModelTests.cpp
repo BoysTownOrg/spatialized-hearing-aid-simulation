@@ -220,12 +220,14 @@ namespace {
 			brir.left = { 0 };
 			brir.right = { 0 };
 			brirReader.setBrir(brir);
-			testParameters.processing.chunkSize = 1;
-			testParameters.processing.windowSize = 1;
-			calibrationParameters.processing.chunkSize = 1;
-			calibrationParameters.processing.windowSize = 1;
-			saveAudioParameters.processing.chunkSize = 1;
-			saveAudioParameters.processing.windowSize = 1;
+			setValidProcessingSizes(testParameters.processing);
+			setValidProcessingSizes(calibrationParameters.processing);
+			setValidProcessingSizes(saveAudioParameters.processing);
+		}
+
+		void setValidProcessingSizes(RefactoredModel::ProcessingParameters &p) {
+			p.chunkSize = 1;
+			p.windowSize = 1;
 		}
 
 		void prepareNewTest() {
