@@ -835,6 +835,11 @@ namespace {
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
+	TEST_F(RefactoredModelTests, processAudioForSavingPassesAudioFrameReaderToCalibrationFactory) {
+		processAudioForSaving();
+		assertCalibrationFactoryReceivesAudioFrameReader();
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
 		assertCalibrationDigitalLevelsAfterCall(
 			trialParameters.level_dB_Spl,

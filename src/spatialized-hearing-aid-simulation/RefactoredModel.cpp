@@ -399,7 +399,9 @@ void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
 	}
 	if (p.usingSpatialization)
 		readAndCheckBrir(std::move(p.brirFilePath));
-	makeReader(p_->inputAudioFilePath);
+	auto reader = makeReader(p_->inputAudioFilePath);
+	auto processorFactory_ = makeProcessorFactory({});
+	processorFactory_->make(reader.get(), {});
 }
 
 void RefactoredModel::prepareNewTest_(TestParameters *p) {
