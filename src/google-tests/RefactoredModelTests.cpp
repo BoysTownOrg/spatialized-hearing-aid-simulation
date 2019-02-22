@@ -524,6 +524,15 @@ namespace {
 			assertEqual("a", brirReader.filePath());
 		}
 
+		void assertAudioReaderFactoryReceivesFilePathAfterCall(
+			std::string &filePath,
+			std::function<void(void)> f
+		) {
+			filePath = "a";
+			f();
+			assertEqual("a", audioFrameReaderFactory.filePath());
+		}
+		
 		void assertBrirReaderDidNotReadAnything() {
 			assertFalse(brirReader.readCalled());
 		}
@@ -731,15 +740,17 @@ namespace {
 	}
 
 	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFileToFactory) {
-		calibrationParameters.audioFilePath = "a";
-		playCalibration();
-		assertEqual("a", audioFrameReaderFactory.filePath());
+		assertAudioReaderFactoryReceivesFilePathAfterCall(
+			calibrationParameters.audioFilePath,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, processAudioForSavingPassesAudioFileToFactory) {
-		saveAudioParameters.inputAudioFilePath = "a";
-		processAudioForSaving();
-		assertEqual("a", audioFrameReaderFactory.filePath());
+		assertAudioReaderFactoryReceivesFilePathAfterCall(
+			saveAudioParameters.inputAudioFilePath,
+			[=]() { processAudioForSaving(); }
+		);
 	}
 
 	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
