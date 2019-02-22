@@ -185,6 +185,7 @@ namespace {
 		RefactoredModel::TestParameters testParameters{};
 		RefactoredModel::TrialParameters trialParameters{};
 		RefactoredModel::CalibrationParameters calibrationParameters{};
+		RefactoredModel::SaveAudioParameters saveAudioParameters{};
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
 		FakeStimulusList list{};
@@ -237,6 +238,10 @@ namespace {
 			model.playCalibration(&calibrationParameters);
 		}
 
+		void processAudioForSaving() {
+			model.processAudioForSaving(&saveAudioParameters);
+		}
+		
 		void setInMemoryReader(AudioFileReader &reader_) {
 			audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
@@ -623,6 +628,17 @@ namespace {
 		assertPrescriptionReaderContainsFilePathsAfterCall(
 			calibrationParameters.processing,
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests,
+		processAudioForSavingPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
+	) {
+		saveAudioParameters.processing.usingHearingAidSimulation = true;
+		assertPrescriptionReaderContainsFilePathsAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
 		);
 	}
 

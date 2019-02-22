@@ -1,6 +1,6 @@
-#include "assert-utility.h"
 #include "ModelStub.h"
 #include "ViewStub.h"
+#include "assert-utility.h"
 #include <presentation/Presenter.h>
 #include <gtest/gtest.h>
 
@@ -18,7 +18,7 @@ namespace {
 		) {
 			view.setBrowseCancelled();
 			(view.*browse)();
-			assertEqual(expected, path);
+			assertEqual(std::move(expected), path);
 		}
 
 		void setInvalidChunkSize() {
