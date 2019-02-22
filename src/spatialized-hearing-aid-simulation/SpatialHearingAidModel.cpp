@@ -386,17 +386,6 @@ void SpatialHearingAidModel::assertSizeIsPowerOfTwo(int size) {
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
-void SpatialHearingAidModel::saveAudio(std::string)
-{
-}
-
-void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
-{
-	auto reader = makeReader(p_->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory(p_->processing);
-	processorFactory_->make(reader.get(), p_->level_dB_Spl);
-}
-
 void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
 	try {
 		stimulusList->initialize(p->audioDirectory);
@@ -453,10 +442,6 @@ void SpatialHearingAidModel::prepareAudioPlayer(
 	}
 }
 
-bool SpatialHearingAidModel::testComplete() {
-	return stimulusList->empty();
-}
-
 void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	if (player->isPlaying())
 		return;
@@ -477,6 +462,21 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 
 void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
+}
+
+void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
+{
+	auto reader = makeReader(p_->inputAudioFilePath);
+	auto processorFactory_ = makeProcessorFactory(p_->processing);
+	processorFactory_->make(reader.get(), p_->level_dB_Spl);
+}
+
+void SpatialHearingAidModel::saveAudio(std::string)
+{
+}
+
+bool SpatialHearingAidModel::testComplete() {
+	return stimulusList->empty();
 }
 
 std::vector<std::string> SpatialHearingAidModel::audioDeviceDescriptions() {
