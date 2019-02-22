@@ -349,6 +349,7 @@ void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
 		readPrescription(std::move(p.leftDslPrescriptionFilePath));
 		readPrescription(std::move(p.rightDslPrescriptionFilePath));
 	}
+	readAndCheckBrir(std::move(p.brirFilePath));
 }
 
 static std::string coefficientErrorMessage(std::string which) {

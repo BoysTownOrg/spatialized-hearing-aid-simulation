@@ -691,6 +691,17 @@ namespace {
 		);
 	}
 
+	TEST_F(
+		RefactoredModelTests,
+		processAudioForSavingPassesBrirFilePathToReaderWhenUsingSpatialization
+	) {
+		saveAudioParameters.processing.usingSpatialization = true;
+		assertBrirReaderReceivesFilePathAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
+		);
+	}
+
 	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
 		testParameters.processing.usingSpatialization = false;
 		prepareNewTest();
