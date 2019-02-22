@@ -3,13 +3,13 @@
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFileReader.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
-#include <playing-audio/AudioProcessingLoader.h>
+#include <playing-audio/ZeroPaddedLoader.h>
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioProcessingLoaderTests : public ::testing::Test {
+	class ZeroPaddedLoaderTests : public ::testing::Test {
 	protected:
-		using channel_type = AudioProcessingLoader::channel_type;
+		using channel_type = ZeroPaddedLoader::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
 		using size_type = buffer_type::size_type;
 		buffer_type left{};
@@ -18,9 +18,9 @@ namespace {
 			std::make_shared<AudioFrameReaderStub>();
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
-		AudioProcessingLoader loader{};
+		ZeroPaddedLoader loader{};
 
-		AudioProcessingLoaderTests() {
+		ZeroPaddedLoaderTests() {
 			setReader(reader);
 			setProcessor(processor);
 		}
@@ -63,18 +63,18 @@ namespace {
 		}
 	};
 
-	TEST_F(AudioProcessingLoaderTests, queriesDoNotThrow) {
+	TEST_F(ZeroPaddedLoaderTests, queriesDoNotThrow) {
 		assertTrue(loader.complete());
 	}
 
-	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfInput_Mono) {
+	TEST_F(ZeroPaddedLoaderTests, loadPadsZeroToEndOfInput_Mono) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
 		loadMonoFrames(4);
 		assertEqual({ 1, 2, 3, 0 }, left);
 	}
 
-	TEST_F(AudioProcessingLoaderTests, loadPadsZeroToEndOfInput_Stereo) {
+	TEST_F(ZeroPaddedLoaderTests, loadPadsZeroToEndOfInput_Stereo) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
 		setInMemoryReader(fakeReader);
@@ -83,7 +83,7 @@ namespace {
 		assertEqual({ 2, 4, 6, 0 }, right);
 	}
 
-	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
+	TEST_F(ZeroPaddedLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		processor->setGroupDelay(3);
 		loadMonoFrames(1);
 		assertIncomplete();
@@ -93,7 +93,7 @@ namespace {
 		assertComplete();
 	}
 
-	TEST_F(AudioProcessingLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
+	TEST_F(ZeroPaddedLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
 		buffer_type tenSamples(10);
 		FakeAudioFileReader fakeReader{ tenSamples };
 		setInMemoryReader(fakeReader);
@@ -104,12 +104,12 @@ namespace {
 		assertComplete();
 	}
 
-	TEST_F(AudioProcessingLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
+	TEST_F(ZeroPaddedLoaderTests, notCompleteIfReaderStillHasFramesRemaining) {
 		reader->setRemainingFrames(1);
 		assertIncomplete();
 	}
 
-	TEST_F(AudioProcessingLoaderTests, resetResetsZeroPadCount) {
+	TEST_F(ZeroPaddedLoaderTests, resetResetsZeroPadCount) {
 		processor->setGroupDelay(1);
 		loadMonoFrames(1);
 		assertComplete();
@@ -127,7 +127,7 @@ namespace {
 		channel_type::index_type groupDelay() override { return {}; }
 	};
 
-	TEST_F(AudioProcessingLoaderTests, loadReadsThenProcesses) {
+	TEST_F(ZeroPaddedLoaderTests, loadReadsThenProcesses) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
 		setProcessor(std::make_shared<TimesTwo>());
@@ -145,7 +145,7 @@ namespace {
 		channel_type::index_type groupDelay() override { return {}; }
 	};
 
-	TEST_F(AudioProcessingLoaderTests, loadPadsZerosBeforeProcessing) {
+	TEST_F(ZeroPaddedLoaderTests, loadPadsZerosBeforeProcessing) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
 		setInMemoryReader(fakeReader);
 		setProcessor(std::make_shared<AddsOne>());

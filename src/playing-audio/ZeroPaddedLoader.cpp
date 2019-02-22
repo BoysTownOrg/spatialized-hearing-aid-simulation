@@ -1,4 +1,4 @@
-#include "AudioProcessingLoader.h"
+#include "ZeroPaddedLoader.h"
 
 class NullProcessor : public AudioFrameProcessor {
 	void process(gsl::span<channel_type>) override {}
@@ -15,24 +15,24 @@ class NullReader : public AudioFrameReader {
 	long long remainingFrames() override { return 0; }
 };
 
-AudioProcessingLoader::AudioProcessingLoader() noexcept :
+ZeroPaddedLoader::ZeroPaddedLoader() noexcept :
 	reader{ std::make_shared<NullReader>() },
 	processor{ std::make_shared<NullProcessor>() },
 	paddedZeros{ 0 } {}
 
-void AudioProcessingLoader::reset() {
+void ZeroPaddedLoader::reset() {
 	paddedZeros = 0;
 }
 
-void AudioProcessingLoader::setReader(std::shared_ptr<AudioFrameReader> r) {
+void ZeroPaddedLoader::setReader(std::shared_ptr<AudioFrameReader> r) {
 	reader = std::move(r);
 }
 
-void AudioProcessingLoader::setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
+void ZeroPaddedLoader::setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
 	processor = std::move(p);
 }
 
-void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
+void ZeroPaddedLoader::load(gsl::span<channel_type> audio) {
 	const auto zerosToPad = audio.size() 
 		? audio.begin()->size() - reader->remainingFrames() 
 		: 0;
@@ -42,7 +42,7 @@ void AudioProcessingLoader::load(gsl::span<channel_type> audio) {
 	processor->process(audio);
 }
 
-void AudioProcessingLoader::padZeros(gsl::span<channel_type> audio, long long zerosToPad) {
+void ZeroPaddedLoader::padZeros(gsl::span<channel_type> audio, long long zerosToPad) {
 	for (auto channel : audio)
 		std::fill(
 			channel.end() - gsl::narrow<channel_type::index_type>(zerosToPad),
@@ -52,6 +52,6 @@ void AudioProcessingLoader::padZeros(gsl::span<channel_type> audio, long long ze
 	paddedZeros += zerosToPad;
 }
 
-bool AudioProcessingLoader::complete() {
+bool ZeroPaddedLoader::complete() {
 	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
 }

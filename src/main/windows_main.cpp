@@ -15,7 +15,7 @@
 #include <signal-processing/ScalingProcessor.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioPlayer.h>
-#include <playing-audio/AudioProcessingLoader.h>
+#include <playing-audio/ZeroPaddedLoader.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
@@ -61,7 +61,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	TestDocumenter testDocumenter{ &persistentWriter };
 	PortAudioDevice audioDevice{};
 	AudioPlayer player{&audioDevice};
-	AudioProcessingLoader audioLoader{};
+	ZeroPaddedLoader audioLoader{};
 	LibsndfileReaderFactory audioFileReaderFactory{};
 	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
