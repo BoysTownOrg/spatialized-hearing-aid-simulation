@@ -1015,6 +1015,18 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		processAudioForSavingPassesPrescriptionsToFactoryForHearingAidSimulation
+	) {
+		setHearingAidSimulationOnlyForSaving();
+		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
+			saveAudioParameters.processing, 
+			simulationFactory.hearingAidSimulation(),
+			[=]() { processAudioForSaving(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesPrescriptionsToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
