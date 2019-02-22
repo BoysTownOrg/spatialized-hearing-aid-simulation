@@ -256,8 +256,12 @@ namespace {
 		}
 
 		void setFullSimulationForTest() noexcept {
-			testParameters.processing.usingHearingAidSimulation = true;
-			testParameters.processing.usingSpatialization = true;
+			setFullSimulation(testParameters.processing);
+		}
+
+		void setFullSimulation(RefactoredModel::ProcessingParameters &p) {
+			p.usingHearingAidSimulation = true;
+			p.usingSpatialization = true;
 		}
 
 		void setHearingAidSimulationOnlyForTest() noexcept {
@@ -276,13 +280,11 @@ namespace {
 		}
 
 		void setFullSimulationForCalibration() noexcept {
-			calibrationParameters.processing.usingHearingAidSimulation = true;
-			calibrationParameters.processing.usingSpatialization = true;
+			setFullSimulation(calibrationParameters.processing);
 		}
 
 		void setFullSimulationForSaving() noexcept {
-			saveAudioParameters.processing.usingHearingAidSimulation = true;
-			saveAudioParameters.processing.usingSpatialization = true;
+			setFullSimulation(saveAudioParameters.processing);
 		}
 		
 		void setHearingAidSimulationOnlyForCalibration() noexcept {
