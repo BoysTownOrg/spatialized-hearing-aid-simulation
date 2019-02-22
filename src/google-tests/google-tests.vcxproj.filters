@@ -134,5 +134,11 @@
     <ClInclude Include="assert-utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpatializedHearingAidSimulationFactoryStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibrationComputerStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

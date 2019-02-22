@@ -1,6 +1,3 @@
-#include "assert-utility.h"
-#include "ArgumentCollection.h"
-#include "LogString.h"
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioLoaderStub.h"
@@ -11,172 +8,14 @@
 #include "AudioPlayerStub.h"
 #include "FakeStimulusList.h"
 #include "DocumenterStub.h"
+#include "CalibrationComputerStub.h"
+#include "SpatializedHearingAidSimulationFactoryStub.h"
+#include "assert-utility.h"
 #include <audio-file-reading/AudioFileInMemory.h>
 #include <spatialized-hearing-aid-simulation/RefactoredModel.h>
 #include <gtest/gtest.h>
 
 namespace {
-	template<typename T>
-	class PoppableVector {
-		std::vector<T> elements;
-	public:
-		PoppableVector(typename std::vector<T>::size_type count) : elements(count) {}
-
-		void set(std::vector<T> v) noexcept {
-			elements = std::move(v);
-		}
-
-		T pop_front() {
-			if (elements.empty())
-				return {};
-			auto item = elements.front();
-			elements.erase(elements.begin());
-			return item;
-		}
-	};
-	class SpatializedHearingAidSimulationFactoryStub : 
-		public ISpatializedHearingAidSimulationFactory 
-	{
-		ArgumentCollection<HearingAidSimulation> fullSimulationHearingAid_{};
-		ArgumentCollection<HearingAidSimulation> hearingAidSimulation_{};
-		ArgumentCollection<Spatialization> fullSimulationSpatialization_{};
-		ArgumentCollection<Spatialization> spatialization_{};
-		ArgumentCollection<float> fullSimulationScale_{};
-		ArgumentCollection<float> hearingAidSimulationScale_{};
-		ArgumentCollection<float> spatializationScale_{};
-		ArgumentCollection<float> withoutSimulationScale_{};
-	public:
-		PoppableVector<std::shared_ptr<SignalProcessor>> fullSimulationProcessors;
-		PoppableVector<std::shared_ptr<SignalProcessor>> hearingAidSimulationProcessors;
-		PoppableVector<std::shared_ptr<SignalProcessor>> spatializationProcessors;
-		PoppableVector<std::shared_ptr<SignalProcessor>> withoutSimulationProcessors;
-
-		SpatializedHearingAidSimulationFactoryStub() :
-			fullSimulationProcessors(2),
-			hearingAidSimulationProcessors(2),
-			spatializationProcessors(2),
-			withoutSimulationProcessors(2) {}
-
-		void setFullSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			fullSimulationProcessors.set(std::move(p));
-		}
-
-		void setHearingAidSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			hearingAidSimulationProcessors.set(std::move(p));
-		}
-
-		void setSpatializationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			spatializationProcessors.set(std::move(p));
-		}
-
-		void setWithoutSimulationProcessors(std::vector<std::shared_ptr<SignalProcessor>> p) noexcept {
-			withoutSimulationProcessors.set(std::move(p));
-		}
-
-		std::shared_ptr<SignalProcessor> makeFullSimulation(
-			FullSimulation s, float x
-		) override {
-			fullSimulationHearingAid_.push_back(std::move(s.hearingAid));
-			fullSimulationSpatialization_.push_back(std::move(s.spatialization));
-			fullSimulationScale_.push_back(x);
-			return fullSimulationProcessors.pop_front();
-		}
-
-		std::shared_ptr<SignalProcessor> makeHearingAidSimulation(
-			HearingAidSimulation s, float x
-		) override {
-			hearingAidSimulation_.push_back(std::move(s));
-			hearingAidSimulationScale_.push_back(x);
-			return hearingAidSimulationProcessors.pop_front();
-		}
-
-		std::shared_ptr<SignalProcessor> makeSpatialization(
-			Spatialization s, float x
-		) override {
-			spatialization_.push_back(std::move(s));
-			spatializationScale_.push_back(x);
-			return spatializationProcessors.pop_front();
-		}
-
-		std::shared_ptr<SignalProcessor> makeWithoutSimulation(
-			float x
-		) override {
-			withoutSimulationScale_.push_back(x);
-			return withoutSimulationProcessors.pop_front();
-		}
-
-		auto &fullSimulationSpatialization() const {
-			return fullSimulationSpatialization_;
-		}
-		
-		auto &fullSimulationHearingAid() const {
-			return fullSimulationHearingAid_;
-		}
-
-		auto &hearingAidSimulation() const {
-			return hearingAidSimulation_;
-		}
-		auto &spatialization() const {
-			return spatialization_;
-		}
-
-		auto &fullSimulationScale() const {
-			return fullSimulationScale_;
-		}
-
-		auto &hearingAidSimulationScale() const {
-			return hearingAidSimulationScale_;
-		}
-
-		auto &spatializationScale() const {
-			return spatializationScale_;
-		}
-
-		auto &withoutSimulationScale() const {
-			return withoutSimulationScale_;
-		}
-	};
-
-	class CalibrationComputerStub : public ICalibrationComputer {
-		ArgumentCollection<double> levels_{};
-		std::map<int, double> signalScales;
-	public:
-		double signalScale(int channel, double level) override
-		{
-			levels_.push_back(level);
-			return signalScales[channel];
-		}
-
-		void addSignalScale(int channel, double scale) {
-			signalScales[channel] = scale;
-		}
-
-		auto levels() const {
-			return levels_;
-		}
-	};
-
-	class CalibrationComputerStubFactory : public ICalibrationComputerFactory {
-		std::shared_ptr<ICalibrationComputer> computer;
-		AudioFrameReader *reader_;
-	public:
-		explicit CalibrationComputerStubFactory(
-			std::shared_ptr<ICalibrationComputer> computer =
-				std::make_shared<CalibrationComputerStub>()
-		) :
-			computer{ computer } {}
-
-		std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override
-		{
-			reader_ = r;
-			return computer;
-		}
-
-		auto reader() const {
-			return reader_;
-		}
-	};
-
 	class RefactoredModelTests : public ::testing::Test {
 	protected:
 		using channel_type = AudioFrameProcessor::channel_type;
@@ -225,7 +64,7 @@ namespace {
 			setValidProcessingSizes(saveAudioParameters.processing);
 		}
 
-		void setValidProcessingSizes(RefactoredModel::ProcessingParameters &p) {
+		void setValidProcessingSizes(RefactoredModel::ProcessingParameters &p) noexcept {
 			p.chunkSize = 1;
 			p.windowSize = 1;
 		}
@@ -375,7 +214,7 @@ namespace {
 			);
 		}
 
-		void assertCalibrationFactoryReceivesAudioFrameReader() {
+		void assertCalibrationFactoryReceivesAudioFrameReader() noexcept {
 			EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
 		}
 
@@ -607,10 +446,12 @@ namespace {
 		void assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
 			std::function<void(void)> f
 		) {
-			callWhenPlayerPlays([=]() {
-				EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
-			});
+			callWhenPlayerPlays([=]() { assertAudioFrameReaderPassedToLoader(); });
 			f();
+		}
+
+		void assertAudioFrameReaderPassedToLoader() noexcept {
+			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
 		}
 
 		void assertPlayerPreparedPriorToPlaying() {
