@@ -302,7 +302,11 @@ namespace {
 		void setHearingAidSimulationOnlyForCalibration() noexcept {
 			setHearingAidSimulationOnly(calibrationParameters.processing);
 		}
-
+		
+		void setHearingAidSimulationOnlyForSaving() noexcept {
+			setHearingAidSimulationOnly(saveAudioParameters.processing);
+		}
+		
 		void setSpatializationOnlyForCalibration() noexcept {
 			setSpatializationOnly(calibrationParameters.processing);
 		}
@@ -918,6 +922,14 @@ namespace {
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForHearingAidSimulation) {
+		setHearingAidSimulationOnlyForSaving();
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.hearingAidSimulationScale(),
+			[=]() { processAudioForSaving(); }
 		);
 	}
 
