@@ -714,6 +714,12 @@ namespace {
 		assertBrirReaderDidNotReadAnything();
 	}
 
+	TEST_F(RefactoredModelTests, processAudioForSavingDoesNotReadBrirWhenNotUsingSpatialization) {
+		saveAudioParameters.processing.usingSpatialization = false;
+		processAudioForSaving();
+		assertBrirReaderDidNotReadAnything();
+	}
+
 	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
 		playNextTrial();
 		assertAudioPlayerHasBeenPlayed();

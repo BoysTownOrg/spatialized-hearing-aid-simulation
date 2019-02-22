@@ -338,20 +338,6 @@ std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactor
 		return processorFactoryFactory->makeNoSimulation();
 }
 
-void RefactoredModel::saveAudio(std::string)
-{
-}
-
-void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
-{
-	auto p = p_->processing;
-	if (p.usingHearingAidSimulation) {
-		readPrescription(std::move(p.leftDslPrescriptionFilePath));
-		readPrescription(std::move(p.rightDslPrescriptionFilePath));
-	}
-	readAndCheckBrir(std::move(p.brirFilePath));
-}
-
 static std::string coefficientErrorMessage(std::string which) {
 	return 
 		"The " + which + " BRIR coefficients are empty, "
@@ -398,6 +384,21 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
 	if (!powerOfTwo(size))
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
+}
+
+void RefactoredModel::saveAudio(std::string)
+{
+}
+
+void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
+{
+	auto p = p_->processing;
+	if (p.usingHearingAidSimulation) {
+		readPrescription(std::move(p.leftDslPrescriptionFilePath));
+		readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	}
+	if (p.usingSpatialization)
+		readAndCheckBrir(std::move(p.brirFilePath));
 }
 
 void RefactoredModel::prepareNewTest_(TestParameters *p) {
