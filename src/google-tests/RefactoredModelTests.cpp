@@ -318,7 +318,11 @@ namespace {
 		void setNoSimulationForCalibration() noexcept {
 			setNoSimulation(calibrationParameters.processing);
 		}
-
+		
+		void setNoSimulationForSaving() noexcept {
+			setNoSimulation(saveAudioParameters.processing);
+		}
+		
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
 			callWhenPlayerPlays([=]() { audioLoader.audioFrameProcessor()->process(channels); });
 		}
@@ -974,6 +978,14 @@ namespace {
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForNoSimulation) {
+		setNoSimulationForSaving();
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.withoutSimulationScale(),
+			[=]() { processAudioForSaving(); }
 		);
 	}
 
