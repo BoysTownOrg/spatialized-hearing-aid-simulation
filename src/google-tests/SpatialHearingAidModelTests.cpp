@@ -15,6 +15,33 @@
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 #include <gtest/gtest.h>
 
+class AudioFrameWriter {
+
+};
+
+class AudioFrameWriterStub : public AudioFrameWriter {
+
+};
+
+class AudioFrameWriterStubFactory {
+	std::string filePath_{};
+	std::shared_ptr<AudioFrameWriter> writer;
+public:
+	explicit AudioFrameWriterStubFactory(
+		std::shared_ptr<AudioFrameWriter> writer
+	) noexcept :
+		writer{ std::move(writer) } {}
+
+	std::shared_ptr<AudioFrameWriter> make(std::string filePath) {
+		filePath_ = std::move(filePath);
+		return writer;
+	}
+
+	auto filePath() const {
+		return filePath_;
+	}
+};
+
 namespace {
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
@@ -32,6 +59,9 @@ namespace {
 		std::shared_ptr<AudioFrameReaderStub> audioFrameReader
 			= std::make_shared<AudioFrameReaderStub>();
 		AudioFrameReaderStubFactory audioFrameReaderFactory{ audioFrameReader };
+		std::shared_ptr<AudioFrameWriterStub> audioFrameWriter
+			= std::make_shared<AudioFrameWriterStub>();
+		AudioFrameWriterStubFactory audioFrameWriterFactory{ audioFrameWriter };
 		AudioPlayerStub audioPlayer{};
 		AudioLoaderStub audioLoader{};
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
