@@ -73,7 +73,9 @@ namespace {
 			= std::make_shared<AudioFrameWriterStub>();
 		AudioFrameWriterStubFactory audioFrameWriterFactory{ audioFrameWriter };
 		AudioPlayerStub audioPlayer{};
-		AudioProcessingLoaderStub audioLoader{};
+		std::shared_ptr<AudioProcessingLoaderStub> audioLoader =
+			std::make_shared<AudioProcessingLoaderStub>();
+		AudioProcessingLoaderStubFactory audioLoaderFactory{ audioLoader };
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
 			std::make_shared<CalibrationComputerStub>();
@@ -82,7 +84,7 @@ namespace {
 			&stimulusList,
 			&documenter,
 			&audioPlayer,
-			&audioLoader,
+			&audioLoaderFactory,
 			&audioFrameReaderFactory,
 			&audioFrameWriterFactory,
 			&prescriptionReader,
@@ -212,11 +214,11 @@ namespace {
 		}
 
 		void processAudioLoaderProcessor(gsl::span<channel_type> channels) {
-			audioLoader.audioFrameProcessor()->process(channels);
+			audioLoaderFactory.audioFrameProcessor()->process(channels);
 		}
 
 		void assertAudioLoaderHasNotBeenModified() {
-			assertTrue(audioLoader.log().isEmpty());
+			assertTrue(audioLoader->log().isEmpty());
 		}
 
 		void assertFullSimulationNotMade() {
@@ -518,7 +520,7 @@ namespace {
 		}
 
 		void assertAudioFrameReaderPassedToLoader() noexcept {
-			EXPECT_EQ(audioFrameReader, audioLoader.audioFrameReader());
+			EXPECT_EQ(audioFrameReader, audioLoaderFactory.audioFrameReader());
 		}
 
 		void assertPlayerPreparedPriorToPlaying() {
@@ -606,10 +608,6 @@ namespace {
 		playNextTrial();
 		assertEqual("b", documenter.documentedTrialParameters().stimulus);
 		assertEqual(2.2, documenter.documentedTrialParameters().level_dB_Spl);
-	}
-
-	TEST_F(SpatialHearingAidModelTests, constructorAssignsAudioLoaderToPlayer) {
-		EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
 	}
 
 	TEST_F(
@@ -1364,16 +1362,6 @@ namespace {
 		);
 	}
 
-	TEST_F(SpatialHearingAidModelTests, playTrialResetsAudioLoaderBeforePlaying) {
-		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
-		playNextTrial();
-	}
-
-	TEST_F(SpatialHearingAidModelTests, playCalibrationResetsAudioLoaderBeforePlaying) {
-		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
-		playCalibration();
-	}
-
 	TEST_F(SpatialHearingAidModelTests, playTrialPreparesPlayerBeforePlaying) {
 		playNextTrial();
 		assertPlayerPreparedPriorToPlaying();
@@ -1436,8 +1424,8 @@ namespace {
 		AudioFrameWriterFactory *audioWriterFactory{ &defaultAudioWriterFactory };
 		AudioPlayerStub defaultPlayer{};
 		AudioPlayer *audioPlayer{ &defaultPlayer };
-		AudioProcessingLoaderStub defaultLoader{};
-		AudioProcessingLoader *audioLoader{ &defaultLoader };
+		AudioProcessingLoaderStubFactory defaultAudioLoaderFactory{};
+		AudioProcessingLoaderFactory *audioLoaderFactory{ &defaultAudioLoaderFactory };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
@@ -1522,7 +1510,7 @@ namespace {
 				stimulusList,
 				documenter,
 				audioPlayer,
-				audioLoader,
+				audioLoaderFactory,
 				audioReaderFactory,
 				audioWriterFactory,
 				prescriptionReader,

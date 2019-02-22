@@ -6,8 +6,6 @@
 class AudioProcessingLoaderStub : public AudioProcessingLoader {
 	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
-	std::shared_ptr<AudioFrameReader> audioFrameReader_{};
-	std::shared_ptr<AudioFrameProcessor> audioFrameProcessor_{};
 	int sampleRate_{};
 	int channels_{};
 	bool complete_{};
@@ -44,21 +42,11 @@ public:
 		return log_;
 	}
 
-	auto audioFrameReader() const noexcept {
-		return audioFrameReader_;
-	}
-
-	auto audioFrameProcessor() const noexcept {
-		return audioFrameProcessor_;
-	}
-
-	void setReader(std::shared_ptr<AudioFrameReader> r) override {
-		audioFrameReader_ = std::move(r);
+	void setReader(std::shared_ptr<AudioFrameReader>) override {
 		log_.insert("setReader ");
 	}
 
-	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) override {
-		audioFrameProcessor_ = std::move(p);
+	void setProcessor(std::shared_ptr<AudioFrameProcessor>) override {
 		log_.insert("setProcessor ");
 	}
 };

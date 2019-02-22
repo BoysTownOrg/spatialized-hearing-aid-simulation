@@ -5,6 +5,7 @@
 #include <common-includes/RuntimeError.h>
 #include <vector>
 #include <string>
+#include <memory>
 
 class AudioPlayer {
 public:
@@ -20,7 +21,7 @@ public:
 	virtual void prepareToPlay(Preparation) = 0;
 	RUNTIME_ERROR(PreparationFailure);
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
-	virtual void setAudioLoader(AudioLoader *) = 0;
+	virtual void setAudioLoader(std::shared_ptr<AudioLoader>) = 0;
 	virtual void play() = 0;
 	virtual void stop() = 0;
 	virtual bool isPlaying() = 0;

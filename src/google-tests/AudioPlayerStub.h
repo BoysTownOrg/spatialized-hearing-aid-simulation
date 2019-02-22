@@ -8,7 +8,7 @@ class AudioPlayerStub : public AudioPlayer {
 	Preparation preparation_{};
 	LogString log_{};
 	std::function<void(void)> callOnPlay_{ []() {} };
-	AudioLoader *audioLoader_{};
+	std::shared_ptr<AudioLoader> audioLoader_{};
 	bool isPlaying_{};
 	bool played_{};
 	bool stopped_{};
@@ -56,8 +56,8 @@ public:
 		return stopped_;
 	}
 
-	void setAudioLoader(AudioLoader *a) override {
-		audioLoader_ = a;
+	void setAudioLoader(std::shared_ptr<AudioLoader> a) override {
+		audioLoader_ = std::move(a);
 	}
 
 	auto audioLoader() const noexcept {
@@ -88,5 +88,5 @@ public:
 	void play() override {}
 	void stop() override {}
 	bool isPlaying() override { return {}; }
-	void setAudioLoader(AudioLoader *) override {}
+	void setAudioLoader(std::shared_ptr<AudioLoader>) override {}
 };

@@ -268,7 +268,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	StimulusList *stimulusList,
 	Documenter *documenter,
 	AudioPlayer *player,
-	AudioProcessingLoader *audioLoader,
+	AudioProcessingLoaderFactory *audioLoaderFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,
@@ -283,7 +283,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	audioReaderFactory{ audioReaderFactory },
 	audioWriterFactory{ audioWriterFactory },
 	player{ player },
-	audioLoader{ audioLoader },
+	audioLoaderFactory{ audioLoaderFactory },
 	processorFactoryFactory{
 		std::make_shared<StereoProcessorFactoryFactory>(
 			simulationFactory, 
@@ -294,7 +294,6 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 		std::make_shared<NullProcessorFactory>()
 	}
 {
-	player->setAudioLoader(audioLoader);
 }
 
 void SpatialHearingAidModel::prepareNewTest(Testing *p) {
@@ -405,9 +404,10 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 		return;
 
 	auto reader = makeReader(nextStimulus_);
-	audioLoader->setProcessor(processorFactoryForTest->make(reader.get(), p->level_dB_Spl));
-	audioLoader->setReader(reader);
-	audioLoader->reset();
+	player->setAudioLoader(audioLoaderFactory->make(
+		reader, 
+		processorFactoryForTest->make(reader.get(), p->level_dB_Spl))
+	);
 	prepareAudioPlayer(*reader, framesPerBufferForTest, p->audioDevice);
 	player->play();
 	Documenter::TrialParameters documenting;
@@ -455,9 +455,10 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 
 	auto reader = makeReader(p->audioFilePath);
-	audioLoader->setProcessor(processorFactory_->make(reader.get(), p->level_dB_Spl));
-	audioLoader->setReader(reader);
-	audioLoader->reset();
+	player->setAudioLoader(audioLoaderFactory->make(
+		reader, 
+		processorFactory_->make(reader.get(), p->level_dB_Spl))
+	);
 	prepareAudioPlayer(*reader, framesPerBuffer, p->audioDevice);
 	player->play();
 }

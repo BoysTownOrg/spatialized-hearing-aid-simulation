@@ -8,11 +8,12 @@ namespace {
 	class AudioDevicePlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		AudioProcessingLoaderStub loader{};
+		std::shared_ptr<AudioProcessingLoaderStub> loader =
+			std::make_shared<AudioProcessingLoaderStub>();
 		AudioDevicePlayer player{ &device };
 
 		AudioDevicePlayerTests() {
-			player.setAudioLoader(&loader);
+			player.setAudioLoader(loader);
 		}
 
 		auto prepareToPlay(AudioDevicePlayer::Preparation r = {}) {
@@ -86,7 +87,7 @@ namespace {
 	TEST_F(AudioDevicePlayerTests, fillStreamBufferSetsCallbackResultToCompleteWhenLoadingCompletes) {
 		fillStreamBuffer();
 		assertFalse(device.complete());
-		loader.setComplete();
+		loader->setComplete();
 		fillStreamBuffer();
 		assertTrue(device.complete());
 	}
@@ -99,10 +100,10 @@ namespace {
 		float right{};
 		float *x[]{ &left, &right };
 		fillStreamBuffer(x, 1);
-		assertEqual(&left, loader.audioBuffer().at(0).data());
-		assertEqual(&right, loader.audioBuffer().at(1).data());
-		assertEqual(1, loader.audioBuffer().at(0).size());
-		assertEqual(1, loader.audioBuffer().at(1).size());
+		assertEqual(&left, loader->audioBuffer().at(0).data());
+		assertEqual(&right, loader->audioBuffer().at(1).data());
+		assertEqual(1, loader->audioBuffer().at(0).size());
+		assertEqual(1, loader->audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioDevicePlayerTests, isPlayingWhenDeviceIsStreaming) {
@@ -119,9 +120,7 @@ namespace {
 	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		AudioProcessingLoaderStub defaultLoader{};
 		AudioDevice *device{&defaultDevice};
-		AudioLoader *loader{&defaultLoader};
 
 		void assertConstructorThrowsDeviceFailure(std::string what) {
 			try {
@@ -135,7 +134,6 @@ namespace {
 
 		AudioDevicePlayer makePlayer() {
 			AudioDevicePlayer player{ device };
-			player.setAudioLoader(loader);
 			return player;
 		}
 

@@ -13,8 +13,8 @@ void AudioDevicePlayer::throwIfDeviceFailed() {
 		throw exception{ device->errorMessage() };
 }
 
-void AudioDevicePlayer::setAudioLoader(AudioLoader *a) {
-	loader = a;
+void AudioDevicePlayer::setAudioLoader(std::shared_ptr<AudioLoader> loader_) {
+	loader = std::move(loader_);
 }
 
 void AudioDevicePlayer::prepareToPlay(Preparation p) {
