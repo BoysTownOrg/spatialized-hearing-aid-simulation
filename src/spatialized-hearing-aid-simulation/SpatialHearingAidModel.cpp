@@ -270,7 +270,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	IAudioPlayer *player,
 	AudioLoader *loader,
 	AudioFrameReaderFactory *audioReaderFactory,
-	AudioFrameWriterFactory *,
+	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	ISpatializedHearingAidSimulationFactory *simulationFactory,
@@ -281,6 +281,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
 	audioReaderFactory{ audioReaderFactory },
+	audioWriterFactory{ audioWriterFactory },
 	player{ player },
 	loader{ loader },
 	processorFactoryFactory{
@@ -474,6 +475,12 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
 
 void SpatialHearingAidModel::saveAudio(std::string)
 {
+	try {
+		audioWriterFactory->make({});
+	}
+	catch (const AudioFrameWriterFactory::CreateError &e) {
+		throw RequestFailure{ e.what() };
+	}
 }
 
 bool SpatialHearingAidModel::testComplete() {

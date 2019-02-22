@@ -10,7 +10,10 @@
 #include "StimulusList.h"
 #include "Documenter.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
+#include <common-includes/RuntimeError.h>
 #include <presentation/Model.h>
+#include <memory>
+#include <string>
 
 class AudioFrameWriter {
 public:
@@ -20,6 +23,8 @@ public:
 class AudioFrameWriterFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameWriterFactory);
+	virtual std::shared_ptr<AudioFrameWriter> make(std::string filePath) = 0;
+	RUNTIME_ERROR(CreateError);
 };
 
 class AudioFrameProcessorFactory {
@@ -68,6 +73,7 @@ class SpatialHearingAidModel : public Model {
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	AudioFrameReaderFactory *audioReaderFactory;
+	AudioFrameWriterFactory *audioWriterFactory;
 	IAudioPlayer *player;
 	AudioLoader *loader;
 public:
@@ -88,7 +94,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
 	SPATIALIZED_HA_SIMULATION_API void playCalibration(Calibration *) override;
 	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(SavingAudio *) override;
-	void saveAudio(std::string) override;
+	SPATIALIZED_HA_SIMULATION_API void saveAudio(std::string) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
 	SPATIALIZED_HA_SIMULATION_API static const double fullScaleLevel_dB_Spl;

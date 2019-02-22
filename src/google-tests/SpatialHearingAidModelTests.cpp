@@ -39,6 +39,19 @@ public:
 	}
 };
 
+class ErrorAudioFrameWriterFactory : public AudioFrameWriterFactory {
+	std::string errorMessage{};
+public:
+	explicit ErrorAudioFrameWriterFactory(
+		std::string errorMessage
+	) noexcept : 
+		errorMessage{ std::move(errorMessage) } {}
+
+	std::shared_ptr<AudioFrameWriter> make(std::string) {
+		throw CreateError{ errorMessage };
+	}
+};
+
 namespace {
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
@@ -1458,6 +1471,17 @@ namespace {
 			}
 		}
 
+		void assertSaveAudioThrowsRequestFailure(std::string what) {
+			auto model = constructModel();
+			try {
+				model.saveAudio({});
+				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
+			}
+			catch (const SpatialHearingAidModel::RequestFailure &e) {
+				assertEqual(std::move(what), e.what());
+			}
+		}
+		
 		void assertProcessAudioForSavingThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
 			try {
@@ -1718,5 +1742,14 @@ namespace {
 		failing.setErrorMessage("error.");
 		audioPlayer = &failing;
 		assertPlayCalibrationThrowsRequestFailure("error.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		saveAudioThrowsRequestFailureWhenAudioFrameWriterCannotBeCreated
+	) {
+		ErrorAudioFrameWriterFactory failing{ "error." };
+		audioWriterFactory = &failing;
+		assertSaveAudioThrowsRequestFailure("error.");
 	}
 }
