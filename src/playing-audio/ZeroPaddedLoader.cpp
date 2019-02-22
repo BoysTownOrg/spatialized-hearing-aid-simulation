@@ -15,9 +15,12 @@ class NullReader : public AudioFrameReader {
 	long long remainingFrames() override { return 0; }
 };
 
-ZeroPaddedLoader::ZeroPaddedLoader() noexcept :
-	reader{ std::make_shared<NullReader>() },
-	processor{ std::make_shared<NullProcessor>() },
+ZeroPaddedLoader::ZeroPaddedLoader(
+	std::shared_ptr<AudioFrameReader> reader,
+	std::shared_ptr<AudioFrameProcessor> processor
+) noexcept :
+	reader{ std::move(reader) },
+	processor{ std::move(processor) },
 	paddedZeros{ 0 } {}
 
 void ZeroPaddedLoader::reset() {
@@ -54,4 +57,9 @@ void ZeroPaddedLoader::padZeros(gsl::span<channel_type> audio, long long zerosTo
 
 bool ZeroPaddedLoader::complete() {
 	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
+}
+
+std::shared_ptr<AudioProcessingLoader> ZeroPaddedLoaderFactory::make(std::shared_ptr<AudioFrameReader>, std::shared_ptr<AudioFrameProcessor>)
+{
+	return std::shared_ptr<AudioProcessingLoader>();
 }

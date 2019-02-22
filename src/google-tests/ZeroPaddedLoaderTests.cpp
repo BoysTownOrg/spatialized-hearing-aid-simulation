@@ -18,12 +18,7 @@ namespace {
 			std::make_shared<AudioFrameReaderStub>();
 		std::shared_ptr<AudioFrameProcessorStub> processor =
 			std::make_shared<AudioFrameProcessorStub>();
-		ZeroPaddedLoader loader{};
-
-		ZeroPaddedLoaderTests() {
-			setReader(reader);
-			setProcessor(processor);
-		}
+		ZeroPaddedLoader loader{reader, processor};
 
 		void setReader(std::shared_ptr<AudioFrameReader> r) {
 			loader.setReader(std::move(r));
