@@ -31,3 +31,19 @@ std::string LibsndfileReader::errorMessage() {
 int LibsndfileReader::sampleRate() {
 	return info.samplerate;
 }
+
+LibsndfileWriter::~LibsndfileWriter() {
+    sf_close(file);
+}
+
+bool LibsndfileWriter::failed() {
+    return file == nullptr;
+}
+
+std::string LibsndfileWriter::errorMessage() {
+    return sf_strerror(nullptr);
+}
+
+void LibsndfileWriter::writeFrames(float *y, long long count) {
+    sf_writef_float(file, y, count);
+}

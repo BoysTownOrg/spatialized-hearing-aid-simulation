@@ -6,6 +6,7 @@
 #include "WindowsDirectoryReader.h"
 #include "FileSystemWriter.h"
 #include "MersenneTwisterRandomizer.h"
+#include <audio-file-reading-writing/AudioFileWriterAdapter.h>
 #include <audio-file-reading-writing/ChannelCopier.h>
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
@@ -65,6 +66,8 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	LibsndfileReaderFactory audioFileReaderFactory{};
 	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
+	LibsndfileWriterFactory audioFileWriterFactory{};
+	AudioFileWriterAdapterFactory audioFrameWriterFactory{ &audioFileWriterFactory };
 	NlohmannJsonParserFactory parserFactory{};
 	PrescriptionAdapter prescriptionReader{ &parserFactory };
 	BrirAdapter brirReader{ &audioFileReaderFactory };
@@ -84,6 +87,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 		&player,
 		&audioLoaderFactory,
 		&audioFrameReaderFactory,
+		&audioFrameWriterFactory,
 		&prescriptionReader, 
 		&brirReader, 
 		&simulationFactory,
