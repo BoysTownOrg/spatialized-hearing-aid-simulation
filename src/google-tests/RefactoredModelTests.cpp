@@ -370,6 +370,17 @@ namespace {
 			);
 		}
 
+		void assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			std::function<void(void)> f
+		) {
+			setHearingAidSimulationOnly(processing);
+			assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
+				simulationFactory.hearingAidSimulation(),
+				f
+			);
+		}
+
 		void assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
@@ -1156,9 +1167,8 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnlyForTest();
-		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
-			simulationFactory.hearingAidSimulation(),
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
+			testParameters.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
@@ -1167,10 +1177,19 @@ namespace {
 		RefactoredModelTests, 
 		playCalibrationPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		setHearingAidSimulationOnlyForCalibration();
-		assertHearingAidSimulationFullScaleLevelMatchesAfterCall(
-			simulationFactory.hearingAidSimulation(),
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
+			calibrationParameters.processing,
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
+		processAudioForSavingPassesFullScaleLevelToFactoryForHearingAidSimulation
+	) {
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
 		);
 	}
 
