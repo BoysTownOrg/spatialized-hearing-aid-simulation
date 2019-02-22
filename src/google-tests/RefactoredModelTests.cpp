@@ -591,6 +591,16 @@ namespace {
 			assertSimulationFactoryHasNotMadeFullSimulation();
 			assertSimulationFactoryHasNotMadeHearingAidSimulation();
 		}
+
+		void assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
+			RefactoredModel::ProcessingParameters &p,
+			std::function<void(void)> f
+		) {
+			p.usingSpatialization = false;
+			f();
+			assertSimulationFactoryHasNotMadeFullSimulation();
+			assertSimulationFactoryHasNotMadeSpatialization();
+		}
 	};
 
 	TEST_F(
@@ -1105,30 +1115,30 @@ namespace {
 		RefactoredModelTests, 
 		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		testParameters.processing.usingSpatialization = false;
-		playFirstTrialOfNewTest();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeSpatialization();
+		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
+			testParameters.processing,
+			[=]() { playFirstTrialOfNewTest(); }
+		);
 	}
 
 	TEST_F(
 		RefactoredModelTests, 
 		playCalibrationDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		calibrationParameters.processing.usingSpatialization = false;
-		playCalibration();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeSpatialization();
+		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
+			calibrationParameters.processing,
+			[=]() { playCalibration(); }
+		);
 	}
 
 	TEST_F(
 		RefactoredModelTests, 
 		processAudioForSavingDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		saveAudioParameters.processing.usingSpatialization = false;
-		processAudioForSaving();
-		assertSimulationFactoryHasNotMadeFullSimulation();
-		assertSimulationFactoryHasNotMadeSpatialization();
+		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
+		);
 	}
 
 	TEST_F(
