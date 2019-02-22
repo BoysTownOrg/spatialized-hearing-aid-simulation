@@ -12,22 +12,22 @@
 #include "SpatializedHearingAidSimulationFactoryStub.h"
 #include "assert-utility.h"
 #include <audio-file-reading/AudioFileInMemory.h>
-#include <spatialized-hearing-aid-simulation/RefactoredModel.h>
+#include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 #include <gtest/gtest.h>
 
 namespace {
-	class RefactoredModelTests : public ::testing::Test {
+	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
 		using channel_type = AudioFrameProcessor::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
 
-		RefactoredModel::Testing testParameters{};
-		RefactoredModel::Trial trialParameters{};
-		RefactoredModel::Calibration calibrationParameters{};
-		RefactoredModel::SavingAudio saveAudioParameters{};
+		SpatialHearingAidModel::Testing testing{};
+		SpatialHearingAidModel::Trial trial{};
+		SpatialHearingAidModel::Calibration calibration{};
+		SpatialHearingAidModel::SavingAudio savingAudio{};
 		PrescriptionReaderStub prescriptionReader{};
 		BrirReaderStub brirReader{};
-		FakeStimulusList list{};
+		FakeStimulusList stimulusList{};
 		DocumenterStub documenter{};
 		std::shared_ptr<AudioFrameReaderStub> audioFrameReader
 			= std::make_shared<AudioFrameReaderStub>();
@@ -38,8 +38,8 @@ namespace {
 		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
 			std::make_shared<CalibrationComputerStub>();
 		CalibrationComputerStubFactory calibrationFactory{ calibrationComputer };
-		RefactoredModel model{
-			&list,
+		SpatialHearingAidModel model{
+			&stimulusList,
 			&documenter,
 			&audioPlayer,
 			&audioLoader,
@@ -50,7 +50,7 @@ namespace {
 			&calibrationFactory
 		};
 
-		RefactoredModelTests() {
+		SpatialHearingAidModelTests() {
 			setValidDefaults();
 		}
 
@@ -59,12 +59,12 @@ namespace {
 			brir.left = { 0 };
 			brir.right = { 0 };
 			brirReader.setBrir(brir);
-			setValidProcessingSizes(testParameters.processing);
-			setValidProcessingSizes(calibrationParameters.processing);
-			setValidProcessingSizes(saveAudioParameters.processing);
+			setValidProcessingSizes(testing.processing);
+			setValidProcessingSizes(calibration.processing);
+			setValidProcessingSizes(savingAudio.processing);
 		}
 
-		void setValidProcessingSizes(RefactoredModel::Processing &p) noexcept {
+		void setValidProcessingSizes(SpatialHearingAidModel::Processing &p) noexcept {
 			p.chunkSize = 1;
 			p.windowSize = 1;
 		}
@@ -75,19 +75,19 @@ namespace {
 		}
 
 		void prepareNewTest() {
-			model.prepareNewTest(&testParameters);
+			model.prepareNewTest(&testing);
 		}
 
 		void playNextTrial() {
-			model.playNextTrial(&trialParameters);
+			model.playNextTrial(&trial);
 		}
 
 		void playCalibration() {
-			model.playCalibration(&calibrationParameters);
+			model.playCalibration(&calibration);
 		}
 
 		void processAudioForSaving() {
-			model.processAudioForSaving(&saveAudioParameters);
+			model.processAudioForSaving(&savingAudio);
 		}
 		
 		void setInMemoryReader(AudioFileReader &reader_) {
@@ -95,71 +95,71 @@ namespace {
 		}
 
 		void setFullSimulationForTest() noexcept {
-			setFullSimulation(testParameters.processing);
+			setFullSimulation(testing.processing);
 		}
 
-		void setFullSimulation(RefactoredModel::Processing &p) noexcept {
+		void setFullSimulation(SpatialHearingAidModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = true;
 		}
 
 		void setHearingAidSimulationOnlyForTest() noexcept {
-			setHearingAidSimulationOnly(testParameters.processing);
+			setHearingAidSimulationOnly(testing.processing);
 		}
 		
-		void setHearingAidSimulationOnly(RefactoredModel::Processing &p) noexcept {
+		void setHearingAidSimulationOnly(SpatialHearingAidModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = false;
 		}
 
 		void setSpatializationOnlyForTest() noexcept {
-			setSpatializationOnly(testParameters.processing);
+			setSpatializationOnly(testing.processing);
 		}
 		
-		void setSpatializationOnly(RefactoredModel::Processing &p) noexcept {
+		void setSpatializationOnly(SpatialHearingAidModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = true;
 		}
 
 		void setNoSimulationForTest() noexcept {
-			setNoSimulation(testParameters.processing);
+			setNoSimulation(testing.processing);
 		}
 		
-		void setNoSimulation(RefactoredModel::Processing &p) noexcept {
+		void setNoSimulation(SpatialHearingAidModel::Processing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = false;
 		}
 
 		void setFullSimulationForCalibration() noexcept {
-			setFullSimulation(calibrationParameters.processing);
+			setFullSimulation(calibration.processing);
 		}
 
 		void setFullSimulationForSaving() noexcept {
-			setFullSimulation(saveAudioParameters.processing);
+			setFullSimulation(savingAudio.processing);
 		}
 		
 		void setHearingAidSimulationOnlyForCalibration() noexcept {
-			setHearingAidSimulationOnly(calibrationParameters.processing);
+			setHearingAidSimulationOnly(calibration.processing);
 		}
 		
 		void setHearingAidSimulationOnlyForSaving() noexcept {
-			setHearingAidSimulationOnly(saveAudioParameters.processing);
+			setHearingAidSimulationOnly(savingAudio.processing);
 		}
 		
 		void setSpatializationOnlyForCalibration() noexcept {
-			setSpatializationOnly(calibrationParameters.processing);
+			setSpatializationOnly(calibration.processing);
 		}
 		
 		void setSpatializationOnlyForSaving() noexcept {
-			setSpatializationOnly(saveAudioParameters.processing);
+			setSpatializationOnly(savingAudio.processing);
 		}
 		
 		void setNoSimulationForCalibration() noexcept {
-			setNoSimulation(calibrationParameters.processing);
+			setNoSimulation(calibration.processing);
 		}
 		
 		void setNoSimulationForSaving() noexcept {
-			setNoSimulation(saveAudioParameters.processing);
+			setNoSimulation(savingAudio.processing);
 		}
 		
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
@@ -203,7 +203,7 @@ namespace {
 		}
 
 		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			RefactoredModel::Processing &processing, 
+			SpatialHearingAidModel::Processing &processing, 
 			std::function<void(void)> f
 		) {
 			processing.chunkSize = 1;
@@ -213,7 +213,7 @@ namespace {
 
 		void assertAudioPlayerFramesPerBufferMatchesDefault() {
 			assertEqual(
-				RefactoredModel::defaultFramesPerBuffer, 
+				SpatialHearingAidModel::defaultFramesPerBuffer, 
 				audioPlayer.preparation().framesPerBuffer
 			);
 		}
@@ -226,8 +226,8 @@ namespace {
 			audioFrameReader->setChannels(2);
 			level = 65;
 			f();
-			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
-			assertEqual(65 - RefactoredModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
+			assertEqual(65 - SpatialHearingAidModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
+			assertEqual(65 - SpatialHearingAidModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 		}
 
 		void assertScalarsMatchCalibrationAfterCall(
@@ -243,7 +243,7 @@ namespace {
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -288,7 +288,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -300,7 +300,7 @@ namespace {
 		}
 
 		void assertHearingAidCompressionParametersMatchAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
 			std::function<void(void)> f
@@ -326,7 +326,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -338,7 +338,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -360,7 +360,7 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setFullSimulation(processing);
@@ -371,7 +371,7 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			setHearingAidSimulationOnly(processing);
@@ -388,11 +388,11 @@ namespace {
 		) {
 			f();
 			assertEqual(
-				RefactoredModel::fullScaleLevel_dB_Spl, 
+				SpatialHearingAidModel::fullScaleLevel_dB_Spl, 
 				hearingAid.at(0).fullScaleLevel_dB_Spl
 			);
 			assertEqual(
-				RefactoredModel::fullScaleLevel_dB_Spl, 
+				SpatialHearingAidModel::fullScaleLevel_dB_Spl, 
 				hearingAid.at(1).fullScaleLevel_dB_Spl
 			);
 		}
@@ -433,7 +433,7 @@ namespace {
 		}
 
 		void assertPrescriptionReaderContainsFilePathsAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			processing.leftDslPrescriptionFilePath = "a";
@@ -448,7 +448,7 @@ namespace {
 		}
 
 		void assertBrirReaderReceivesFilePathAfterCall(
-			RefactoredModel::Processing &processing,
+			SpatialHearingAidModel::Processing &processing,
 			std::function<void(void)> f
 		) {
 			processing.brirFilePath = "a";
@@ -485,7 +485,7 @@ namespace {
 		}
 
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			RefactoredModel::Processing &p,
+			SpatialHearingAidModel::Processing &p,
 			std::function<void(void)> f
 		) {
 			p.usingHearingAidSimulation = false;
@@ -495,7 +495,7 @@ namespace {
 		}
 
 		void assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			RefactoredModel::Processing &p,
+			SpatialHearingAidModel::Processing &p,
 			std::function<void(void)> f
 		) {
 			p.usingSpatialization = false;
@@ -506,33 +506,33 @@ namespace {
 	};
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestInitializesStimulusList
 	) {
-		testParameters.audioDirectory = "a";
+		testing.audioDirectory = "a";
 		prepareNewTest();
-		assertEqual("a", list.directory());
+		assertEqual("a", stimulusList.directory());
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestInitializesDocumenter
 	) {
-		testParameters.testFilePath = "a";
+		testing.testFilePath = "a";
 		prepareNewTest();
 		assertEqual("a", documenter.filePath());
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestDocumentsTestParameters
 	) {
 		prepareNewTest();
-		EXPECT_EQ(&testParameters, documenter.documentedTestParameters());
+		EXPECT_EQ(&testing, documenter.documentedTestParameters());
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestDocumentsTestParametersAfterInitializing
 	) {
 		prepareNewTest();
@@ -540,10 +540,10 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playTrialPassesNextStimulusToFactory
 	) {
-		list.setContents({ "a", "b", "c" });
+		stimulusList.setContents({ "a", "b", "c" });
 		playFirstTrialOfNewTest();
 		assertEqual("a", audioFrameReaderFactory.filePath());
 		playNextTrial();
@@ -553,269 +553,269 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playNextTrialDocumentsTrial
 	) {
-		list.setContents({ "a", "b", "c" });
-		trialParameters.level_dB_Spl = 1.1;
+		stimulusList.setContents({ "a", "b", "c" });
+		trial.level_dB_Spl = 1.1;
 		playFirstTrialOfNewTest();
 		assertEqual("a", documenter.documentedTrialParameters().stimulus);
 		assertEqual(1.1, documenter.documentedTrialParameters().level_dB_Spl);
-		trialParameters.level_dB_Spl = 2.2;
+		trial.level_dB_Spl = 2.2;
 		playNextTrial();
 		assertEqual("b", documenter.documentedTrialParameters().stimulus);
 		assertEqual(2.2, documenter.documentedTrialParameters().level_dB_Spl);
 	}
 
-	TEST_F(RefactoredModelTests, constructorAssignsAudioLoaderToPlayer) {
+	TEST_F(SpatialHearingAidModelTests, constructorAssignsAudioLoaderToPlayer) {
 		EXPECT_EQ(&audioLoader, audioPlayer.audioLoader());
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		testParameters.processing.usingHearingAidSimulation = true;
+		testing.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { prepareNewTest(); }
 		);
 
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playCalibrationPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibration.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		processAudioForSavingPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		saveAudioParameters.processing.usingHearingAidSimulation = true;
+		savingAudio.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.processing.usingHearingAidSimulation = false;
+		testing.processing.usingHearingAidSimulation = false;
 		prepareNewTest();
 		assertPrescriptionReaderDidNotReadAnything();
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playCalibrationDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = false;
+		calibration.processing.usingHearingAidSimulation = false;
 		playCalibration();
 		assertPrescriptionReaderDidNotReadAnything();
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		processAudioForSavingDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		saveAudioParameters.processing.usingHearingAidSimulation = false;
+		savingAudio.processing.usingHearingAidSimulation = false;
 		processAudioForSaving();
 		assertPrescriptionReaderDidNotReadAnything();
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		testParameters.processing.usingSpatialization = true;
+		testing.processing.usingSpatialization = true;
 		assertBrirReaderReceivesFilePathAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { prepareNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playCalibrationPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		calibrationParameters.processing.usingSpatialization = true;
+		calibration.processing.usingSpatialization = true;
 		assertBrirReaderReceivesFilePathAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		processAudioForSavingPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		saveAudioParameters.processing.usingSpatialization = true;
+		savingAudio.processing.usingSpatialization = true;
 		assertBrirReaderReceivesFilePathAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-		testParameters.processing.usingSpatialization = false;
+	TEST_F(SpatialHearingAidModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
+		testing.processing.usingSpatialization = false;
 		prepareNewTest();
 		assertBrirReaderDidNotReadAnything();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
-		calibrationParameters.processing.usingSpatialization = false;
+	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
+		calibration.processing.usingSpatialization = false;
 		playCalibration();
 		assertBrirReaderDidNotReadAnything();
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingDoesNotReadBrirWhenNotUsingSpatialization) {
-		saveAudioParameters.processing.usingSpatialization = false;
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingDoesNotReadBrirWhenNotUsingSpatialization) {
+		savingAudio.processing.usingSpatialization = false;
 		processAudioForSaving();
 		assertBrirReaderDidNotReadAnything();
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPlaysPlayer) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPlaysPlayer) {
 		playNextTrial();
 		assertAudioPlayerHasBeenPlayed();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPlaysPlayer) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPlaysPlayer) {
 		playCalibration();
 		assertAudioPlayerHasBeenPlayed();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFileToFactory) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFileToFactory) {
 		assertAudioReaderFactoryReceivesFilePathAfterCall(
-			calibrationParameters.audioFilePath,
+			calibration.audioFilePath,
 			[=]() { playCalibration(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingPassesAudioFileToFactory) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFileToFactory) {
 		assertAudioReaderFactoryReceivesFilePathAfterCall(
-			saveAudioParameters.inputAudioFilePath,
+			savingAudio.inputAudioFilePath,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
 			[=]() { playNextTrial(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
 		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
 			[=]() { playCalibration(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
 		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playNextTrial(); });
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
 		assertAudioPlayerParametersMatchAudioFrameReaderAfterCall([=]() { playCalibration(); });
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioDeviceToPlayer) {
-		trialParameters.audioDevice = "a";
+	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioDeviceToPlayer) {
+		trial.audioDevice = "a";
 		playNextTrial();
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesAudioDeviceToPlayer) {
-		calibrationParameters.audioDevice = "a";
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioDeviceToPlayer) {
+		calibration.audioDevice = "a";
 		playCalibration();
 		assertEqual("a", audioPlayer.preparation().audioDevice);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		testParameters.processing.usingHearingAidSimulation = true;
+		testing.processing.usingHearingAidSimulation = true;
 		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibration.processing.usingHearingAidSimulation = true;
 		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
-		testParameters.processing.usingHearingAidSimulation = false;
+		testing.processing.usingHearingAidSimulation = false;
 		playFirstTrialOfNewTest();
 		assertAudioPlayerFramesPerBufferMatchesDefault();
 	}
 
 	TEST_F(
-		RefactoredModelTests,
+		SpatialHearingAidModelTests,
 		playCalibrationUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = false;
+		calibration.processing.usingHearingAidSimulation = false;
 		playCalibration();
 		assertAudioPlayerFramesPerBufferMatchesDefault();
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
 		playFirstTrialOfNewTest();
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesAudioFrameReaderToCalibrationFactory) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFrameReaderToCalibrationFactory) {
 		playCalibration();
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingPassesAudioFrameReaderToCalibrationFactory) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFrameReaderToCalibrationFactory) {
 		processAudioForSaving();
 		assertCalibrationFactoryReceivesAudioFrameReader();
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
 		assertCalibrationDigitalLevelsAfterCall(
-			trialParameters.level_dB_Spl,
+			trial.level_dB_Spl,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPassesDigitalLevelToCalibrationComputer) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesDigitalLevelToCalibrationComputer) {
 		assertCalibrationDigitalLevelsAfterCall(
-			calibrationParameters.level_dB_Spl,
+			calibration.level_dB_Spl,
 			[=]() { playCalibration(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingPassesDigitalLevelToCalibrationComputer) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesDigitalLevelToCalibrationComputer) {
 		assertCalibrationDigitalLevelsAfterCall(
-			saveAudioParameters.level_dB_Spl,
+			savingAudio.level_dB_Spl,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
 		setFullSimulationForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
@@ -823,7 +823,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForFullSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationComputesCalibrationScalarsForFullSimulation) {
 		setFullSimulationForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
@@ -831,7 +831,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForFullSimulation) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingComputesCalibrationScalarsForFullSimulation) {
 		setFullSimulationForSaving();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
@@ -839,7 +839,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playTrialComputesCalibrationScalarsForHearingAidSimulation) {
 		setHearingAidSimulationOnlyForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
@@ -847,7 +847,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForHearingAidSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationComputesCalibrationScalarsForHearingAidSimulation) {
 		setHearingAidSimulationOnlyForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
@@ -855,7 +855,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForHearingAidSimulation) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingComputesCalibrationScalarsForHearingAidSimulation) {
 		setHearingAidSimulationOnlyForSaving();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.hearingAidSimulationScale(),
@@ -863,7 +863,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
+	TEST_F(SpatialHearingAidModelTests, playTrialComputesCalibrationScalarsForSpatialization) {
 		setSpatializationOnlyForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
@@ -871,7 +871,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForSpatialization) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationComputesCalibrationScalarsForSpatialization) {
 		setSpatializationOnlyForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
@@ -879,7 +879,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForSpatialization) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingComputesCalibrationScalarsForSpatialization) {
 		setSpatializationOnlyForSaving();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.spatializationScale(),
@@ -887,7 +887,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playTrialComputesCalibrationScalarsForNoSimulation) {
 		setNoSimulationForTest();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
@@ -895,7 +895,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationComputesCalibrationScalarsForNoSimulation) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationComputesCalibrationScalarsForNoSimulation) {
 		setNoSimulationForCalibration();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
@@ -903,7 +903,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForNoSimulation) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingComputesCalibrationScalarsForNoSimulation) {
 		setNoSimulationForSaving();
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.withoutSimulationScale(),
@@ -912,289 +912,289 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
 		setHearingAidSimulationOnlyForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			testParameters.processing, 
+			testing.processing, 
 			simulationFactory.hearingAidSimulation(),
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
 		setHearingAidSimulationOnlyForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			calibrationParameters.processing, 
+			calibration.processing, 
 			simulationFactory.hearingAidSimulation(),
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesPrescriptionsToFactoryForHearingAidSimulation
 	) {
 		setHearingAidSimulationOnlyForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			saveAudioParameters.processing, 
+			savingAudio.processing, 
 			simulationFactory.hearingAidSimulation(),
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesPrescriptionsToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			testParameters.processing, 
+			testing.processing, 
 			simulationFactory.fullSimulationHearingAid(),
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesPrescriptionsToFactoryForFullSimulation
 	) {
 		setFullSimulationForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			calibrationParameters.processing, 
+			calibration.processing, 
 			simulationFactory.fullSimulationHearingAid(),
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesPrescriptionsToFactoryForFullSimulation
 	) {
 		setFullSimulationForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			saveAudioParameters.processing, 
+			savingAudio.processing, 
 			simulationFactory.fullSimulationHearingAid(),
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
 		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
 		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
 		assertNoHearingAidSimulationYieldsNoSuchSimulationMadeAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
 		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
 		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
 		assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesCompressionParametersToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesCompressionParametersToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
 		assertFullSimulationYieldsHearingAidSampleRateMatchingAudioReaderAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			testParameters.processing,
+			testing.processing,
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			calibrationParameters.processing,
+			calibration.processing,
 			[=]() { playCalibration(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
 		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatchingAfterCall(
-			saveAudioParameters.processing,
+			savingAudio.processing,
 			[=]() { processAudioForSaving(); }
 		);
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
@@ -1205,7 +1205,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesFullScaleLevelToFactoryForFullSimulation
 	) {
 		setFullSimulationForCalibration();
@@ -1215,7 +1215,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
 		setFullSimulationForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.fullSimulationProcessors,
@@ -1223,7 +1223,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationAssignsFullSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsFullSimulationProcessorsToAudioLoader) {
 		setFullSimulationForCalibration();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.fullSimulationProcessors,
@@ -1231,7 +1231,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
 		setHearingAidSimulationOnlyForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.hearingAidSimulationProcessors,
@@ -1239,7 +1239,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationAssignsHearingAidSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsHearingAidSimulationProcessorsToAudioLoader) {
 		setHearingAidSimulationOnlyForCalibration();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.hearingAidSimulationProcessors,
@@ -1247,7 +1247,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
 		setSpatializationOnlyForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.spatializationProcessors,
@@ -1255,7 +1255,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationAssignsSpatializationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsSpatializationProcessorsToAudioLoader) {
 		setSpatializationOnlyForCalibration();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.spatializationProcessors,
@@ -1263,7 +1263,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
 		setNoSimulationForTest();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.withoutSimulationProcessors,
@@ -1271,7 +1271,7 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationAssignsWithoutSimulationProcessorsToAudioLoader) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsWithoutSimulationProcessorsToAudioLoader) {
 		setNoSimulationForCalibration();
 		assertAudioLoaderAppliesSimulationWhenPlayerPlaysAfterCall(
 			simulationFactory.withoutSimulationProcessors,
@@ -1280,7 +1280,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
 		setSpatializationOnlyForTest();
@@ -1291,7 +1291,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesBrirToFactoryForSpatialization
 	) {
 		setSpatializationOnlyForCalibration();
@@ -1302,7 +1302,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
@@ -1313,7 +1313,7 @@ namespace {
 	}
 
 	TEST_F(
-		RefactoredModelTests, 
+		SpatialHearingAidModelTests, 
 		playCalibrationPassesBrirToFactoryForFullSimulation
 	) {
 		setFullSimulationForCalibration();
@@ -1323,58 +1323,58 @@ namespace {
 		);
 	}
 
-	TEST_F(RefactoredModelTests, playTrialResetsAudioLoaderBeforePlaying) {
+	TEST_F(SpatialHearingAidModelTests, playTrialResetsAudioLoaderBeforePlaying) {
 		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
 		playNextTrial();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationResetsAudioLoaderBeforePlaying) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationResetsAudioLoaderBeforePlaying) {
 		callWhenPlayerPlays([=]() { assertTrue(audioLoader.log().contains("reset")); });
 		playCalibration();
 	}
 
-	TEST_F(RefactoredModelTests, playTrialPreparesPlayerBeforePlaying) {
+	TEST_F(SpatialHearingAidModelTests, playTrialPreparesPlayerBeforePlaying) {
 		playNextTrial();
 		assertPlayerPreparedPriorToPlaying();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationPreparesPlayerBeforePlaying) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationPreparesPlayerBeforePlaying) {
 		playCalibration();
 		assertPlayerPreparedPriorToPlaying();
 	}
 
-	TEST_F(RefactoredModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
+	TEST_F(SpatialHearingAidModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
 		playNextTrial();
 		assertAudioLoaderHasNotBeenModified();
 	}
 
-	TEST_F(RefactoredModelTests, playCalibrationDoesNotAlterLoaderWhenPlayerPlaying) {
+	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotAlterLoaderWhenPlayerPlaying) {
 		audioPlayer.setPlaying();
 		playCalibration();
 		assertAudioLoaderHasNotBeenModified();
 	}
 
-	TEST_F(RefactoredModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
+	TEST_F(SpatialHearingAidModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
 		audioPlayer.setAudioDeviceDescriptions({ "a", "b", "c" });
 		assertEqual({ "a", "b", "c" }, model.audioDeviceDescriptions());
 	}
 
-	TEST_F(RefactoredModelTests, testCompleteWhenListEmpty) {
-		list.setContents({});
+	TEST_F(SpatialHearingAidModelTests, testCompleteWhenListEmpty) {
+		stimulusList.setContents({});
 		assertTrue(model.testComplete());
 	}
 
-	TEST_F(RefactoredModelTests, stopCalibrationStopsPlayer) {
+	TEST_F(SpatialHearingAidModelTests, stopCalibrationStopsPlayer) {
 		model.stopCalibration();
 		assertTrue(audioPlayer.stopped());
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
-		RefactoredModel::Testing testParameters{};
-		RefactoredModel::Trial trialParameters{};
-		RefactoredModel::Calibration calibrationParameters{};
+		SpatialHearingAidModel::Testing testing{};
+		SpatialHearingAidModel::Trial trial{};
+		SpatialHearingAidModel::Calibration calibration{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
@@ -1397,10 +1397,10 @@ namespace {
 		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
 			try {
-				model.prepareNewTest(&testParameters);
-				FAIL() << "Expected RefactoredModel::RequestFailure.";
+				model.prepareNewTest(&testing);
+				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
-			catch (const RefactoredModel::RequestFailure & e) {
+			catch (const SpatialHearingAidModel::RequestFailure & e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -1408,10 +1408,10 @@ namespace {
 		void assertPlayTrialThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
 			try {
-				model.playNextTrial(&trialParameters);
-				FAIL() << "Expected RefactoredModel::RequestFailure.";
+				model.playNextTrial(&trial);
+				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
-			catch (const RefactoredModel::RequestFailure &e) {
+			catch (const SpatialHearingAidModel::RequestFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -1419,10 +1419,10 @@ namespace {
 		void assertPlayCalibrationThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
 			try {
-				model.playCalibration(&calibrationParameters);
-				FAIL() << "Expected RefactoredModel::RequestFailure.";
+				model.playCalibration(&calibration);
+				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
-			catch (const RefactoredModel::RequestFailure &e) {
+			catch (const SpatialHearingAidModel::RequestFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -1430,22 +1430,22 @@ namespace {
 		void prepareNewTestIgnoringFailure() {
 			auto model = constructModel();
 			try {
-				model.prepareNewTest(&testParameters);
+				model.prepareNewTest(&testing);
 			}
-			catch (const RefactoredModel::RequestFailure &) {
+			catch (const SpatialHearingAidModel::RequestFailure &) {
 			}
 		}
 
 		void playTrialIgnoringFailure() {
 			auto model = constructModel();
 			try {
-				model.playNextTrial(&trialParameters);
+				model.playNextTrial(&trial);
 			}
-			catch (const RefactoredModel::RequestFailure &) {
+			catch (const SpatialHearingAidModel::RequestFailure &) {
 			}
 		}
 
-		RefactoredModel constructModel() {
+		SpatialHearingAidModel constructModel() {
 			return
 			{
 				stimulusList,
@@ -1461,13 +1461,13 @@ namespace {
 		}
 
 		void setValidSizesForTest() {
-			testParameters.processing.chunkSize = 1;
-			testParameters.processing.windowSize = 1;
+			testing.processing.chunkSize = 1;
+			testing.processing.windowSize = 1;
 		}
 
 		void setValidSizesForCalibration() {
-			calibrationParameters.processing.chunkSize = 1;
-			calibrationParameters.processing.windowSize = 1;
+			calibration.processing.chunkSize = 1;
+			calibration.processing.windowSize = 1;
 		}
 	};
 
@@ -1487,10 +1487,10 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		testParameters.processing.usingHearingAidSimulation = true;
+		testing.processing.usingHearingAidSimulation = true;
 		setValidSizesForTest();
-		testParameters.processing.leftDslPrescriptionFilePath = "a";
-		testParameters.processing.rightDslPrescriptionFilePath = "a";
+		testing.processing.leftDslPrescriptionFilePath = "a";
+		testing.processing.rightDslPrescriptionFilePath = "a";
 		assertPreparingNewTestThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 
@@ -1500,10 +1500,10 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		calibrationParameters.processing.usingHearingAidSimulation = true;
+		calibration.processing.usingHearingAidSimulation = true;
 		setValidSizesForCalibration();
-		calibrationParameters.processing.leftDslPrescriptionFilePath = "a";
-		calibrationParameters.processing.rightDslPrescriptionFilePath = "a";
+		calibration.processing.leftDslPrescriptionFilePath = "a";
+		calibration.processing.rightDslPrescriptionFilePath = "a";
 		assertPlayCalibrationThrowsRequestFailure("Prescription 'a' cannot be read.");
 	}
 
@@ -1513,7 +1513,7 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		testParameters.processing.usingHearingAidSimulation = true;
+		testing.processing.usingHearingAidSimulation = true;
 		prepareNewTestIgnoringFailure();
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
@@ -1524,8 +1524,8 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		testParameters.processing.usingSpatialization = true;
-		testParameters.processing.brirFilePath = "a";
+		testing.processing.usingSpatialization = true;
+		testing.processing.brirFilePath = "a";
 		assertPreparingNewTestThrowsRequestFailure("BRIR 'a' cannot be read.");
 	}
 
@@ -1535,8 +1535,8 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		calibrationParameters.processing.usingSpatialization = true;
-		calibrationParameters.processing.brirFilePath = "a";
+		calibration.processing.usingSpatialization = true;
+		calibration.processing.brirFilePath = "a";
 		assertPlayCalibrationThrowsRequestFailure("BRIR 'a' cannot be read.");
 	}
 
@@ -1546,7 +1546,7 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		testParameters.processing.usingSpatialization = true;
+		testing.processing.usingSpatialization = true;
 		prepareNewTestIgnoringFailure();
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
@@ -1555,7 +1555,7 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenCoefficientsAreEmpty
 	) {
-		testParameters.processing.usingSpatialization = true;
+		testing.processing.usingSpatialization = true;
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = {};
 		brir.right = { 0 };
@@ -1575,14 +1575,14 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
-		testParameters.processing.usingHearingAidSimulation = true;
-		testParameters.processing.chunkSize = 0;
-		testParameters.processing.windowSize = 1;
+		testing.processing.usingHearingAidSimulation = true;
+		testing.processing.chunkSize = 0;
+		testing.processing.windowSize = 1;
 		assertPreparingNewTestThrowsRequestFailure(
 			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
 		);
-		testParameters.processing.chunkSize = 2;
-		testParameters.processing.windowSize = 3;
+		testing.processing.chunkSize = 2;
+		testing.processing.windowSize = 3;
 		assertPreparingNewTestThrowsRequestFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);
@@ -1592,9 +1592,9 @@ namespace {
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenChunkSizeIsNotPowerOfTwo
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = true;
-		calibrationParameters.processing.chunkSize = 0;
-		calibrationParameters.processing.windowSize = 1;
+		calibration.processing.usingHearingAidSimulation = true;
+		calibration.processing.chunkSize = 0;
+		calibration.processing.windowSize = 1;
 		assertPlayCalibrationThrowsRequestFailure(
 			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
 		);
@@ -1604,9 +1604,9 @@ namespace {
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenWindowSizeIsNotPowerOfTwo
 	) {
-		calibrationParameters.processing.usingHearingAidSimulation = true;
-		calibrationParameters.processing.chunkSize = 2;
-		calibrationParameters.processing.windowSize = 3;
+		calibration.processing.usingHearingAidSimulation = true;
+		calibration.processing.chunkSize = 2;
+		calibration.processing.windowSize = 3;
 		assertPlayCalibrationThrowsRequestFailure(
 			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 		);

@@ -1,4 +1,4 @@
-#include "RefactoredModel.h"
+#include "SpatialHearingAidModel.h"
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
@@ -36,7 +36,7 @@ public:
 		double level_dB_Spl
 	) {
 		auto computer = calibrationFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
+		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 
 		return { 
 			simulationFactory->makeSpatialization(
@@ -72,7 +72,7 @@ public:
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
 		both_hs.windowSize = processing.windowSize;
-		both_hs.fullScaleLevel_dB_Spl = RefactoredModel::fullScaleLevel_dB_Spl;
+		both_hs.fullScaleLevel_dB_Spl = SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 
 		left_hs = both_hs;
 		right_hs = both_hs;
@@ -92,7 +92,7 @@ public:
 		right_hs.sampleRate = reader->sampleRate();
 
 		auto computer = calibrationFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
+		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 
 		return { 
 			simulationFactory->makeHearingAidSimulation(
@@ -132,7 +132,7 @@ public:
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
 		both_hs.windowSize = processing.windowSize;
-		both_hs.fullScaleLevel_dB_Spl = RefactoredModel::fullScaleLevel_dB_Spl;
+		both_hs.fullScaleLevel_dB_Spl = SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 
 		left_fs.hearingAid = both_hs;
 		right_fs.hearingAid = both_hs;
@@ -152,7 +152,7 @@ public:
 		right_fs.hearingAid.sampleRate = reader->sampleRate();
 
 		auto computer = calibrationFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
+		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 
 		return { 
 			simulationFactory->makeFullSimulation(
@@ -187,7 +187,7 @@ public:
 		double level_dB_Spl
 	) {
 		auto computer = calibrationFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - RefactoredModel::fullScaleLevel_dB_Spl;
+		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
 		return { 
 			simulationFactory->makeWithoutSimulation(
 				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
@@ -261,11 +261,11 @@ public:
 };
 
 // The MATLAB hearing aid simulation uses 119 dB SPL as a "max"
-double const RefactoredModel::fullScaleLevel_dB_Spl = 119;
-int const RefactoredModel::defaultFramesPerBuffer = 1024;
+double const SpatialHearingAidModel::fullScaleLevel_dB_Spl = 119;
+int const SpatialHearingAidModel::defaultFramesPerBuffer = 1024;
 
-RefactoredModel::RefactoredModel(
-	StimulusList *list,
+SpatialHearingAidModel::SpatialHearingAidModel(
+	StimulusList *stimulusList,
 	Documenter *documenter,
 	IAudioPlayer *player,
 	AudioLoader *loader,
@@ -275,7 +275,7 @@ RefactoredModel::RefactoredModel(
 	ISpatializedHearingAidSimulationFactory *simulationFactory,
 	ICalibrationComputerFactory *calibrationFactory
 ) :
-	list{ list },
+	stimulusList{ stimulusList },
 	documenter{ documenter },
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
@@ -295,7 +295,7 @@ RefactoredModel::RefactoredModel(
 	player->setAudioLoader(loader);
 }
 
-void RefactoredModel::prepareNewTest(Testing *p) {
+void SpatialHearingAidModel::prepareNewTest(Testing *p) {
 	framesPerBufferForTest = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
@@ -303,7 +303,7 @@ void RefactoredModel::prepareNewTest(Testing *p) {
 	prepareNewTest_(p);
 }
 
-std::shared_ptr<AudioFrameProcessorFactory> RefactoredModel::makeProcessorFactory(
+std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcessorFactory(
 	Processing p
 ) {
 	if (p.usingHearingAidSimulation) {
@@ -344,7 +344,7 @@ static std::string coefficientErrorMessage(std::string which) {
 		"therefore a filter operation cannot be defined.";
 }
 
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readAndCheckBrir(std::string filePath) {
+BrirReader::BinauralRoomImpulseResponse SpatialHearingAidModel::readAndCheckBrir(std::string filePath) {
 	auto brir = readBrir(std::move(filePath));
 	if (brir.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
@@ -353,7 +353,7 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readAndCheckBrir(std::s
 	return brir;
 }
 
-BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string filePath) {
+BrirReader::BinauralRoomImpulseResponse SpatialHearingAidModel::readBrir(std::string filePath) {
 	try {
 		return brirReader->read(filePath);
 	}
@@ -362,7 +362,7 @@ BrirReader::BinauralRoomImpulseResponse RefactoredModel::readBrir(std::string fi
 	}
 }
 
-PrescriptionReader::Dsl RefactoredModel::readPrescription(std::string filePath) {
+PrescriptionReader::Dsl SpatialHearingAidModel::readPrescription(std::string filePath) {
 	try {
 		return prescriptionReader->read(filePath);
 	}
@@ -381,35 +381,35 @@ static std::string windowChunkSizesErrorMessage(int offender) {
 		std::to_string(offender) + " is not a power of two.";
 }
 
-void RefactoredModel::assertSizeIsPowerOfTwo(int size) {
+void SpatialHearingAidModel::assertSizeIsPowerOfTwo(int size) {
 	if (!powerOfTwo(size))
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
-void RefactoredModel::saveAudio(std::string)
+void SpatialHearingAidModel::saveAudio(std::string)
 {
 }
 
-void RefactoredModel::processAudioForSaving(SavingAudio *p_)
+void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
 {
 	auto reader = makeReader(p_->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p_->processing);
 	processorFactory_->make(reader.get(), p_->level_dB_Spl);
 }
 
-void RefactoredModel::prepareNewTest_(Testing *p) {
+void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
 	try {
-		list->initialize(p->audioDirectory);
+		stimulusList->initialize(p->audioDirectory);
 		documenter->initialize(p->testFilePath);
 		documenter->documentTestParameters(p);
-		nextStimulus_ = list->next();
+		nextStimulus_ = stimulusList->next();
 	}
 	catch (const std::runtime_error &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
 
-void RefactoredModel::playNextTrial(Trial *p) {
+void SpatialHearingAidModel::playNextTrial(Trial *p) {
 	if (player->isPlaying())
 		return;
 
@@ -423,10 +423,10 @@ void RefactoredModel::playNextTrial(Trial *p) {
 	documenting.level_dB_Spl = p->level_dB_Spl;
 	documenting.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(documenting));
-	nextStimulus_ = list->next();
+	nextStimulus_ = stimulusList->next();
 }
 
-std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePath) {
+std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string filePath) {
 	try {
 		return audioReaderFactory->make(std::move(filePath));
 	}
@@ -435,7 +435,7 @@ std::shared_ptr<AudioFrameReader> RefactoredModel::makeReader(std::string filePa
 	}
 }
 
-void RefactoredModel::prepareAudioPlayer(
+void SpatialHearingAidModel::prepareAudioPlayer(
 	AudioFrameReader &reader, 
 	int framesPerBuffer, 
 	std::string audioDevice
@@ -453,11 +453,11 @@ void RefactoredModel::prepareAudioPlayer(
 	}
 }
 
-bool RefactoredModel::testComplete() {
-	return list->empty();
+bool SpatialHearingAidModel::testComplete() {
+	return stimulusList->empty();
 }
 
-void RefactoredModel::playCalibration(Calibration *p) {
+void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	if (player->isPlaying())
 		return;
 
@@ -475,10 +475,10 @@ void RefactoredModel::playCalibration(Calibration *p) {
 	player->play();
 }
 
-void RefactoredModel::stopCalibration() {
+void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
 }
 
-std::vector<std::string> RefactoredModel::audioDeviceDescriptions() {
+std::vector<std::string> SpatialHearingAidModel::audioDeviceDescriptions() {
 	return player->audioDeviceDescriptions();
 }

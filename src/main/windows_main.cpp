@@ -21,7 +21,7 @@
 #include <test-documenting/TestDocumenter.h>
 #include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
-#include <spatialized-hearing-aid-simulation/RefactoredModel.h>
+#include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
 class HearingAidFactoryImpl : public HearingAidFactory {
 	FilterbankCompressorFactory *compressorFactory;
@@ -78,7 +78,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 		&hearingAidFactory
 	};
 	CalibrationComputerFactoryImpl calibrationFactory{};
-	RefactoredModel model{
+	SpatialHearingAidModel model{
 		&stimulusList,
 		&testDocumenter,
 		&player,

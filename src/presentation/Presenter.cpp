@@ -145,7 +145,7 @@ void Presenter::confirmTestSetup() {
 }
 
 void Presenter::prepareNewTest() {
-	auto p = testParameters();
+	auto p = testing();
 	model->prepareNewTest(&p);
 	hideTestSetupView();
 	showTesterView();
@@ -182,7 +182,7 @@ void Presenter::hideTestSetupView() {
 	view->hideBrowseForStimulusListButton();
 }
 
-Model::Testing Presenter::testParameters() {
+Model::Testing Presenter::testing() {
 	Model::Testing test;
 	test.processing = processingParameters();
 	test.testFilePath = view->testFilePath();
@@ -253,12 +253,12 @@ void Presenter::playNextTrial() {
 }
 
 void Presenter::playTrial_() {
-	auto p = trialParameters();
+	auto p = trial();
 	model->playNextTrial(&p);
 	switchViewIfTestComplete();
 }
 
-Model::Trial Presenter::trialParameters() {
+Model::Trial Presenter::trial() {
 	Model::Trial trial;
 	trial.audioDevice = view->audioDevice();
 	trial.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");

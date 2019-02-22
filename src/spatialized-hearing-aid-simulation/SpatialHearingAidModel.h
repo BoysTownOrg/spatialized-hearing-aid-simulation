@@ -48,12 +48,12 @@ public:
 	virtual std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() = 0;
 };
 
-class RefactoredModel : public Model {
+class SpatialHearingAidModel : public Model {
 	std::string nextStimulus_{};
 	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<AudioFrameProcessorFactory> processorFactoryForTest;
-	StimulusList *list;
+	StimulusList *stimulusList;
 	Documenter *documenter;
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
@@ -61,7 +61,7 @@ class RefactoredModel : public Model {
 	IAudioPlayer *player;
 	AudioLoader *loader;
 public:
-	SPATIALIZED_HA_SIMULATION_API RefactoredModel(
+	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
 		Documenter *,
 		IAudioPlayer *,

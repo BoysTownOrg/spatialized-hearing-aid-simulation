@@ -523,10 +523,10 @@ namespace {
 		view.setSubjectId("c");
 		view.setTesterId("d");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().audioDirectory);
-		assertEqual("b", model.testParameters().testFilePath);
-		assertEqual("c", model.testParameters().subjectId);
-		assertEqual("d", model.testParameters().testerId);
+		assertEqual("a", model.testing().audioDirectory);
+		assertEqual("b", model.testing().testFilePath);
+		assertEqual("c", model.testing().subjectId);
+		assertEqual("d", model.testing().testerId);
 	}
 
 	TEST_F(
@@ -541,12 +541,12 @@ namespace {
 		view.setWindowSize("4");
 		view.setChunkSize("5");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.testParameters().processing.rightDslPrescriptionFilePath);
-		assertEqual(2.2, model.testParameters().processing.attack_ms);
-		assertEqual(3.3, model.testParameters().processing.release_ms);
-		assertEqual(4, model.testParameters().processing.windowSize);
-		assertEqual(5, model.testParameters().processing.chunkSize);
+		assertEqual("a", model.testing().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.testing().processing.rightDslPrescriptionFilePath);
+		assertEqual(2.2, model.testing().processing.attack_ms);
+		assertEqual(3.3, model.testing().processing.release_ms);
+		assertEqual(4, model.testing().processing.windowSize);
+		assertEqual(5, model.testing().processing.chunkSize);
 	}
 
 	TEST_F(
@@ -556,7 +556,7 @@ namespace {
 		view.setSpatializationOn();
 		view.setBrirFilePath("a");
 		view.confirmTestSetup();
-		assertEqual("a", model.testParameters().processing.brirFilePath);
+		assertEqual("a", model.testing().processing.brirFilePath);
 	}
 
 	TEST_F(
@@ -565,7 +565,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.confirmTestSetup();
-		assertTrue(model.testParameters().processing.usingSpatialization);
+		assertTrue(model.testing().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -574,7 +574,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.confirmTestSetup();
-		assertFalse(model.testParameters().processing.usingSpatialization);
+		assertFalse(model.testing().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -583,7 +583,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.confirmTestSetup();
-		assertTrue(model.testParameters().processing.usingHearingAidSimulation);
+		assertTrue(model.testing().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -592,7 +592,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.confirmTestSetup();
-		assertFalse(model.testParameters().processing.usingHearingAidSimulation);
+		assertFalse(model.testing().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -778,8 +778,8 @@ namespace {
 		view.setAudioDevice("e");
 		view.setLevel_dB_Spl("1.1");
 		view.playNextTrial();
-		assertEqual("e", model.trialParameters().audioDevice);
-		assertEqual(1.1, model.trialParameters().level_dB_Spl);
+		assertEqual("e", model.trial().audioDevice);
+		assertEqual(1.1, model.trial().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
@@ -787,17 +787,17 @@ namespace {
 		view.setAudioFilePath("b");
 		view.setLevel_dB_Spl("1.1");
 		view.playCalibration();
-		assertEqual("a", model.calibrationParameters().audioDevice);
-		assertEqual("b", model.calibrationParameters().audioFilePath);
-		assertEqual(1.1, model.calibrationParameters().level_dB_Spl);
+		assertEqual("a", model.calibration().audioDevice);
+		assertEqual("b", model.calibration().audioFilePath);
+		assertEqual(1.1, model.calibration().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, saveAudioPassesParametersToModel) {
 		view.setAudioFilePath("a");
 		view.setLevel_dB_Spl("1.1");
 		view.saveAudio();
-		assertEqual("a", model.saveAudioParameters().inputAudioFilePath);
-		assertEqual(1.1, model.saveAudioParameters().level_dB_Spl);
+		assertEqual("a", model.savingAudio().inputAudioFilePath);
+		assertEqual(1.1, model.savingAudio().level_dB_Spl);
 	}
 
 	TEST_F(PresenterTests, saveAudioSavesAfterProcessing) {
@@ -840,12 +840,12 @@ namespace {
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
 		view.playCalibration();
-		assertEqual(1.1, model.calibrationParameters().processing.attack_ms);
-		assertEqual(2.2, model.calibrationParameters().processing.release_ms);
-		assertEqual(3, model.calibrationParameters().processing.chunkSize);
-		assertEqual(4, model.calibrationParameters().processing.windowSize);
-		assertEqual("a", model.calibrationParameters().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.calibrationParameters().processing.rightDslPrescriptionFilePath);
+		assertEqual(1.1, model.calibration().processing.attack_ms);
+		assertEqual(2.2, model.calibration().processing.release_ms);
+		assertEqual(3, model.calibration().processing.chunkSize);
+		assertEqual(4, model.calibration().processing.windowSize);
+		assertEqual("a", model.calibration().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.calibration().processing.rightDslPrescriptionFilePath);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithHearingAidSimulationPassesParametersToModel) {
@@ -857,26 +857,26 @@ namespace {
 		view.setLeftDslPrescriptionFilePath("a");
 		view.setRightDslPrescriptionFilePath("b");
 		view.saveAudio();
-		assertEqual(1.1, model.saveAudioParameters().processing.attack_ms);
-		assertEqual(2.2, model.saveAudioParameters().processing.release_ms);
-		assertEqual(3, model.saveAudioParameters().processing.chunkSize);
-		assertEqual(4, model.saveAudioParameters().processing.windowSize);
-		assertEqual("a", model.saveAudioParameters().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.saveAudioParameters().processing.rightDslPrescriptionFilePath);
+		assertEqual(1.1, model.savingAudio().processing.attack_ms);
+		assertEqual(2.2, model.savingAudio().processing.release_ms);
+		assertEqual(3, model.savingAudio().processing.chunkSize);
+		assertEqual(4, model.savingAudio().processing.windowSize);
+		assertEqual("a", model.savingAudio().processing.leftDslPrescriptionFilePath);
+		assertEqual("b", model.savingAudio().processing.rightDslPrescriptionFilePath);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithSpatializationPassesParametersToModel) {
 		view.setSpatializationOn();
 		view.setBrirFilePath("a");
 		view.playCalibration();
-		assertEqual("a", model.calibrationParameters().processing.brirFilePath);
+		assertEqual("a", model.calibration().processing.brirFilePath);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithSpatializationPassesParametersToModel) {
 		view.setSpatializationOn();
 		view.setBrirFilePath("a");
 		view.saveAudio();
-		assertEqual("a", model.saveAudioParameters().processing.brirFilePath);
+		assertEqual("a", model.savingAudio().processing.brirFilePath);
 	}
 
 	TEST_F(
@@ -885,7 +885,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.playCalibration();
-		assertTrue(model.calibrationParameters().processing.usingSpatialization);
+		assertTrue(model.calibration().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -894,7 +894,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.playCalibration();
-		assertFalse(model.calibrationParameters().processing.usingSpatialization);
+		assertFalse(model.calibration().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -903,7 +903,7 @@ namespace {
 	) {
 		view.setSpatializationOn();
 		view.saveAudio();
-		assertTrue(model.saveAudioParameters().processing.usingSpatialization);
+		assertTrue(model.savingAudio().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -912,7 +912,7 @@ namespace {
 	) {
 		view.setSpatializationOff();
 		view.saveAudio();
-		assertFalse(model.saveAudioParameters().processing.usingSpatialization);
+		assertFalse(model.savingAudio().processing.usingSpatialization);
 	}
 
 	TEST_F(
@@ -921,7 +921,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.playCalibration();
-		assertTrue(model.calibrationParameters().processing.usingHearingAidSimulation);
+		assertTrue(model.calibration().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -930,7 +930,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.playCalibration();
-		assertFalse(model.calibrationParameters().processing.usingHearingAidSimulation);
+		assertFalse(model.calibration().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -939,7 +939,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOn();
 		view.saveAudio();
-		assertTrue(model.saveAudioParameters().processing.usingHearingAidSimulation);
+		assertTrue(model.savingAudio().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -948,7 +948,7 @@ namespace {
 	) {
 		view.setHearingAidSimulationOff();
 		view.saveAudio();
-		assertFalse(model.saveAudioParameters().processing.usingHearingAidSimulation);
+		assertFalse(model.savingAudio().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {

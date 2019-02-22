@@ -23,11 +23,11 @@ public:
 		return saveAudioLog_;
 	}
 
-	auto saveAudioParameters() noexcept {
+	auto savingAudio() noexcept {
 		return saveAudioParameters_;
 	}
 
-	auto calibrationParameters() noexcept {
+	auto calibration() noexcept {
 		return calibrationParameters_;
 	}
 
@@ -71,7 +71,7 @@ public:
 		return calibrationPlayed_;
 	}
 
-	auto testParameters() const noexcept {
+	auto testing() const noexcept {
 		return testParameters_;
 	}
 
@@ -105,7 +105,7 @@ public:
 		return testComplete_;
 	}
 
-	auto trialParameters() const noexcept {
+	auto trial() const noexcept {
 		return trialParameters_;
 	}
 

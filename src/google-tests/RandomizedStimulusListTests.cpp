@@ -12,19 +12,19 @@ namespace {
 			= std::make_shared<DirectoryReaderStub>();
 		DirectoryReaderStubFactory factory{reader};
 		RandomizerStub randomizer{};
-		RandomizedStimulusList list{ &factory, &randomizer };
+		RandomizedStimulusList stimulusList{ &factory, &randomizer };
 
 		auto initialize(std::string d = {}) {
-			return list.initialize(std::move(d));
+			return stimulusList.initialize(std::move(d));
 		}
 
 		auto next() {
-			return list.next();
+			return stimulusList.next();
 		}
 
 		void assertInitializeThrowsInitializationFailure(std::string what) {
 			try {
-				list.initialize({});
+				stimulusList.initialize({});
 				FAIL() << "Expected RandomizedStimulusList::InitializationFailure";
 			}
 			catch (const RandomizedStimulusList::InitializationFailure &e) {
@@ -47,11 +47,11 @@ namespace {
 	) {
 		reader->setFileNames({ "a", "b" });
 		initialize();
-		assertFalse(list.empty());
+		assertFalse(stimulusList.empty());
 		next();
-		assertFalse(list.empty());
+		assertFalse(stimulusList.empty());
 		next();
-		assertTrue(list.empty());
+		assertTrue(stimulusList.empty());
 	}
 
 	TEST_F(

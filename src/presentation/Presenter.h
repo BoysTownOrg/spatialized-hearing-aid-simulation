@@ -47,8 +47,8 @@ private:
 	void showTesterView();
 	void hideTestSetupView();
 	void showTestSetupView();
-	Model::Testing testParameters();
-	Model::Trial trialParameters();
+	Model::Testing testing();
+	Model::Trial trial();
 	Model::Processing processingParameters();
 	RUNTIME_ERROR(BadInput);
 	double convertToDouble(std::string x, std::string identifier);
