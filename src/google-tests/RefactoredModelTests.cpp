@@ -482,6 +482,18 @@ namespace {
 			assertEqual(8, right.windowSize);
 		}
 
+		void assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
+			RefactoredModel::ProcessingParameters &processing,
+			std::function<void(void)> f
+		) {
+			setFullSimulation(processing);
+			assertHearingAidCompressionParametersMatchAfterCall(
+				processing,
+				simulationFactory.fullSimulationHearingAid(),
+				f
+			);
+		}
+
 		void assertHearingAidSimulationSampleRateMatchesAudioReaderAfterCall(
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
@@ -1187,10 +1199,8 @@ namespace {
 		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		setFullSimulationForTest();
-		assertHearingAidCompressionParametersMatchAfterCall(
+		assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
 			testParameters.processing,
-			simulationFactory.fullSimulationHearingAid(),
 			[=]() { playFirstTrialOfNewTest(); }
 		);
 	}
@@ -1199,10 +1209,8 @@ namespace {
 		RefactoredModelTests, 
 		playCalibrationPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		setFullSimulationForCalibration();
-		assertHearingAidCompressionParametersMatchAfterCall(
+		assertFullSimulationYieldsCompressionParametersMatchingAfterCall(
 			calibrationParameters.processing,
-			simulationFactory.fullSimulationHearingAid(),
 			[=]() { playCalibration(); }
 		);
 	}
