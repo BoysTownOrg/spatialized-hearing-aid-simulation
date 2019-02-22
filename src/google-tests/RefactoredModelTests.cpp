@@ -1123,6 +1123,16 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		processAudioForSavingDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
+	) {
+		saveAudioParameters.processing.usingSpatialization = false;
+		processAudioForSaving();
+		assertSimulationFactoryHasNotMadeFullSimulation();
+		assertSimulationFactoryHasNotMadeSpatialization();
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
 		setHearingAidSimulationOnlyForTest();
