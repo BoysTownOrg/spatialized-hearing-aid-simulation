@@ -1,9 +1,9 @@
 #pragma once
 
 #include "playing-audio-exports.h"
-#include <spatialized-hearing-aid-simulation/AudioLoader.h>
+#include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class ZeroPaddedLoader : public AudioLoader {
+class ZeroPaddedLoader : public AudioProcessingLoader {
 	std::shared_ptr<AudioFrameProcessor> processor;
 	std::shared_ptr<AudioFrameReader> reader;
 	long long paddedZeros{};
