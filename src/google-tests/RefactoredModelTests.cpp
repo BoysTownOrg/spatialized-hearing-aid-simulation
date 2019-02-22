@@ -69,6 +69,11 @@ namespace {
 			p.windowSize = 1;
 		}
 
+		void playFirstTrialOfNewTest() {
+			prepareNewTest();
+			playNextTrial();
+		}
+
 		void prepareNewTest() {
 			model.prepareNewTest(&testParameters);
 		}
@@ -87,11 +92,6 @@ namespace {
 		
 		void setInMemoryReader(AudioFileReader &reader_) {
 			audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
-		}
-
-		void playFirstTrialOfNewTest() {
-			prepareNewTest();
-			playNextTrial();
 		}
 
 		void setFullSimulationForTest() noexcept {
@@ -163,26 +163,30 @@ namespace {
 		}
 		
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
-			callWhenPlayerPlays([=]() { audioLoader.audioFrameProcessor()->process(channels); });
-		}
-
-		void assertAudioLoaderHasNotBeenModified() {
-			assertTrue(audioLoader.log().isEmpty());
+			callWhenPlayerPlays([=]() { processAudioLoaderProcessor(channels); });
 		}
 
 		void callWhenPlayerPlays(std::function<void(void)> f) {
 			audioPlayer.callOnPlay([=]() { f(); });
 		}
 
-		void assertSimulationFactoryHasNotMadeFullSimulation() {
+		void processAudioLoaderProcessor(gsl::span<channel_type> channels) {
+			audioLoader.audioFrameProcessor()->process(channels);
+		}
+
+		void assertAudioLoaderHasNotBeenModified() {
+			assertTrue(audioLoader.log().isEmpty());
+		}
+
+		void assertFullSimulationNotMade() {
 			assertTrue(simulationFactory.fullSimulationHearingAid().empty());
 		}
 
-		void assertSimulationFactoryHasNotMadeHearingAidSimulation() {
+		void assertHearingAidSimulationOnlyNotMade() {
 			assertTrue(simulationFactory.hearingAidSimulation().empty());
 		}
 
-		void assertSimulationFactoryHasNotMadeSpatialization() {
+		void assertSpatializationOnlyNotMade() {
 			assertTrue(simulationFactory.spatialization().empty());
 		}
 
@@ -464,8 +468,8 @@ namespace {
 		) {
 			p.usingHearingAidSimulation = false;
 			f();
-			assertSimulationFactoryHasNotMadeFullSimulation();
-			assertSimulationFactoryHasNotMadeHearingAidSimulation();
+			assertFullSimulationNotMade();
+			assertHearingAidSimulationOnlyNotMade();
 		}
 
 		void assertNoSpatializationYieldsNoSuchSimulationMadeAfterCall(
@@ -474,8 +478,8 @@ namespace {
 		) {
 			p.usingSpatialization = false;
 			f();
-			assertSimulationFactoryHasNotMadeFullSimulation();
-			assertSimulationFactoryHasNotMadeSpatialization();
+			assertFullSimulationNotMade();
+			assertSpatializationOnlyNotMade();
 		}
 	};
 
