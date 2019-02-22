@@ -1,5 +1,5 @@
 #include "AudioDeviceStub.h"
-#include "AudioLoaderStub.h"
+#include "AudioProcessingLoaderStub.h"
 #include "assert-utility.h"
 #include <playing-audio/AudioDevicePlayer.h>
 #include <gtest/gtest.h>
@@ -8,7 +8,7 @@ namespace {
 	class AudioDevicePlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		AudioLoaderStub loader{};
+		AudioProcessingLoaderStub loader{};
 		AudioDevicePlayer player{ &device };
 
 		AudioDevicePlayerTests() {
@@ -119,7 +119,7 @@ namespace {
 	class AudioPlayerFailureTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub defaultDevice{};
-		AudioLoaderStub defaultLoader{};
+		AudioProcessingLoaderStub defaultLoader{};
 		AudioDevice *device{&defaultDevice};
 		AudioLoader *loader{&defaultLoader};
 

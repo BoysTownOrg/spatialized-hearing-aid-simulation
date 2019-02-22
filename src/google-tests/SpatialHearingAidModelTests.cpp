@@ -1,6 +1,6 @@
 #include "FilterbankCompressorSpy.h"
 #include "AudioFrameReaderStub.h"
-#include "AudioLoaderStub.h"
+#include "AudioProcessingLoaderStub.h"
 #include "PrescriptionReaderStub.h"
 #include "BrirReaderStub.h"
 #include "FakeAudioFileReader.h"
@@ -73,7 +73,7 @@ namespace {
 			= std::make_shared<AudioFrameWriterStub>();
 		AudioFrameWriterStubFactory audioFrameWriterFactory{ audioFrameWriter };
 		AudioPlayerStub audioPlayer{};
-		AudioLoaderStub audioLoader{};
+		AudioProcessingLoaderStub audioLoader{};
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
 			std::make_shared<CalibrationComputerStub>();
@@ -1436,7 +1436,7 @@ namespace {
 		AudioFrameWriterFactory *audioWriterFactory{ &defaultAudioWriterFactory };
 		AudioPlayerStub defaultPlayer{};
 		AudioPlayer *audioPlayer{ &defaultPlayer };
-		AudioLoaderStub defaultLoader{};
+		AudioProcessingLoaderStub defaultLoader{};
 		AudioProcessingLoader *audioLoader{ &defaultLoader };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};

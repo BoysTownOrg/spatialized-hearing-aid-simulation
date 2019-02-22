@@ -3,7 +3,7 @@
 #include "LogString.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class AudioLoaderStub : public AudioProcessingLoader {
+class AudioProcessingLoaderStub : public AudioProcessingLoader {
 	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
 	std::shared_ptr<AudioFrameReader> audioFrameReader_{};
@@ -60,5 +60,34 @@ public:
 	void setProcessor(std::shared_ptr<AudioFrameProcessor> p) override {
 		audioFrameProcessor_ = std::move(p);
 		log_.insert("setProcessor ");
+	}
+};
+
+class AudioProcessingLoaderStubFactory : public AudioProcessingLoaderFactory {
+	std::shared_ptr<AudioFrameReader> reader_{};
+	std::shared_ptr<AudioFrameProcessor> processor_{};
+	std::shared_ptr<AudioProcessingLoader> loader;
+public:
+	explicit AudioProcessingLoaderStubFactory(
+		std::shared_ptr<AudioProcessingLoader> loader =
+			std::make_shared<AudioProcessingLoaderStub>()
+	) noexcept :
+		loader{ std::move(loader) } {}
+
+	std::shared_ptr<AudioProcessingLoader> make(
+		std::shared_ptr<AudioFrameReader> r,
+		std::shared_ptr<AudioFrameProcessor> p
+	) override {
+		reader_ = std::move(r);
+		processor_ = std::move(p);
+		return loader;
+	}
+
+	auto audioFrameReader() const {
+		return reader_;
+	}
+
+	auto audioFrameProcessor() const {
+		return processor_;
 	}
 };

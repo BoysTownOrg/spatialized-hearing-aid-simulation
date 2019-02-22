@@ -98,9 +98,6 @@
     <ClInclude Include="AudioFrameProcessorStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioLoaderStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ViewStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -141,6 +138,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CalibrationComputerStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioProcessingLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
