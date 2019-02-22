@@ -392,15 +392,8 @@ void RefactoredModel::saveAudio(std::string)
 
 void RefactoredModel::processAudioForSaving(SaveAudioParameters *p_)
 {
-	auto p = p_->processing;
-	if (p.usingHearingAidSimulation) {
-		readPrescription(std::move(p.leftDslPrescriptionFilePath));
-		readPrescription(std::move(p.rightDslPrescriptionFilePath));
-	}
-	if (p.usingSpatialization)
-		readAndCheckBrir(std::move(p.brirFilePath));
 	auto reader = makeReader(p_->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory({});
+	auto processorFactory_ = makeProcessorFactory(p_->processing);
 	processorFactory_->make(reader.get(), p_->level_dB_Spl);
 }
 

@@ -224,6 +224,8 @@ namespace {
 			testParameters.processing.windowSize = 1;
 			calibrationParameters.processing.chunkSize = 1;
 			calibrationParameters.processing.windowSize = 1;
+			saveAudioParameters.processing.chunkSize = 1;
+			saveAudioParameters.processing.windowSize = 1;
 		}
 
 		void prepareNewTest() {
@@ -276,6 +278,11 @@ namespace {
 			calibrationParameters.processing.usingSpatialization = true;
 		}
 
+		void setFullSimulationForSaving() noexcept {
+			saveAudioParameters.processing.usingHearingAidSimulation = true;
+			saveAudioParameters.processing.usingSpatialization = true;
+		}
+		
 		void setHearingAidSimulationOnlyForCalibration() noexcept {
 			calibrationParameters.processing.usingHearingAidSimulation = true;
 			calibrationParameters.processing.usingSpatialization = false;
@@ -874,6 +881,14 @@ namespace {
 		assertScalarsMatchCalibrationAfterCall(
 			simulationFactory.fullSimulationScale(),
 			[=]() { playCalibration(); }
+		);
+	}
+
+	TEST_F(RefactoredModelTests, processAudioForSavingComputesCalibrationScalarsForFullSimulation) {
+		setFullSimulationForSaving();
+		assertScalarsMatchCalibrationAfterCall(
+			simulationFactory.fullSimulationScale(),
+			[=]() { processAudioForSaving(); }
 		);
 	}
 
