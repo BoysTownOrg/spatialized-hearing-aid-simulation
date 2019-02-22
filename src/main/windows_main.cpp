@@ -77,7 +77,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 		&firFilterFactory, 
 		&hearingAidFactory
 	};
-	CalibrationComputerFactoryImpl calibrationFactory{};
+	CalibrationComputerFactoryImpl calibrationComputerFactory{};
 	SpatialHearingAidModel model{
 		&stimulusList,
 		&testDocumenter,
@@ -87,7 +87,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 		&prescriptionReader, 
 		&brirReader, 
 		&simulationFactory,
-		&calibrationFactory
+		&calibrationComputerFactory
 	};
 	FltkView view{};
 	Presenter presenter{ &model, &view };

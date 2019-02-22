@@ -37,7 +37,7 @@ namespace {
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
 			std::make_shared<CalibrationComputerStub>();
-		CalibrationComputerStubFactory calibrationFactory{ calibrationComputer };
+		CalibrationComputerStubFactory calibrationComputerFactory{ calibrationComputer };
 		SpatialHearingAidModel model{
 			&stimulusList,
 			&documenter,
@@ -47,7 +47,7 @@ namespace {
 			&prescriptionReader,
 			&brirReader,
 			&simulationFactory,
-			&calibrationFactory
+			&calibrationComputerFactory
 		};
 
 		SpatialHearingAidModelTests() {
@@ -219,7 +219,7 @@ namespace {
 		}
 
 		void assertCalibrationFactoryReceivesAudioFrameReader() noexcept {
-			EXPECT_EQ(audioFrameReader.get(), calibrationFactory.reader());
+			EXPECT_EQ(audioFrameReader.get(), calibrationComputerFactory.reader());
 		}
 
 		void assertCalibrationDigitalLevelsAfterCall(double &level, std::function<void(void)> f) {
@@ -1392,7 +1392,7 @@ namespace {
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
-		ICalibrationComputerFactory *calibrationFactory{ &defaultCalibrationFactory };
+		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 
 		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
@@ -1456,7 +1456,7 @@ namespace {
 				prescriptionReader,
 				brirReader,
 				simulationFactory,
-				calibrationFactory
+				calibrationComputerFactory
 			};
 		}
 
