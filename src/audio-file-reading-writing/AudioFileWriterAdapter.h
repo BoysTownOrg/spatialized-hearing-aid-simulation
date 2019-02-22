@@ -32,14 +32,11 @@ public:
 	AUDIO_FILE_READING_WRITING_API void write(gsl::span<channel_type> audio);
 };
 
-
 class AudioFileWriterAdapterFactory {
 	AudioFileWriterFactory *factory;
 public:
-	explicit AudioFileWriterAdapterFactory(AudioFileWriterFactory *factory) : 
-		factory{ factory } {}
+	AUDIO_FILE_READING_WRITING_API explicit AudioFileWriterAdapterFactory(AudioFileWriterFactory *);
 
 	AUDIO_FILE_READING_WRITING_API std::shared_ptr<AudioFileWriterAdapter> make(std::string filePath);
-
 	RUNTIME_ERROR(CreateError);
 };
