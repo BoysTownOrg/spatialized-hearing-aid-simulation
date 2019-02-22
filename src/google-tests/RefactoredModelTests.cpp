@@ -1175,6 +1175,16 @@ namespace {
 
 	TEST_F(
 		RefactoredModelTests, 
+		processAudioForSavingPassesCompressionParametersToFactoryForHearingAidSimulation
+	) {
+		assertHearingAidSimulationOnlyYieldsCompressionParametersMatchingAfterCall(
+			saveAudioParameters.processing,
+			[=]() { processAudioForSaving(); }
+		);
+	}
+
+	TEST_F(
+		RefactoredModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
 		setFullSimulationForTest();
