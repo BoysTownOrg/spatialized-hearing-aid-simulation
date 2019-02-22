@@ -473,10 +473,9 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
 	processorFactory_->make(reader.get(), p_->level_dB_Spl);
 }
 
-void SpatialHearingAidModel::saveAudio(std::string)
-{
+void SpatialHearingAidModel::saveAudio(std::string filePath) {
 	try {
-		audioWriterFactory->make({});
+		audioWriterFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameWriterFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };

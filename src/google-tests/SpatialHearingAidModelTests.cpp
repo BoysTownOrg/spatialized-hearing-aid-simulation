@@ -1411,6 +1411,11 @@ namespace {
 		assertTrue(audioPlayer.stopped());
 	}
 
+	TEST_F(SpatialHearingAidModelTests, saveAudioPassesFileToAudioWriterFactory) {
+		model.saveAudio("a");
+		assertEqual("a", audioFrameWriterFactory.filePath());
+	}
+
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		SpatialHearingAidModel::Testing testing{};
