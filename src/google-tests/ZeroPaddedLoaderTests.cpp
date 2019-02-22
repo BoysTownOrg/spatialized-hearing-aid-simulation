@@ -20,14 +20,6 @@ namespace {
 			std::make_shared<AudioFrameProcessorStub>();
 		ZeroPaddedLoader loader{reader, processor};
 
-		void setReader(std::shared_ptr<AudioFrameReader> r) {
-			loader.setReader(std::move(r));
-		}
-
-		void setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-			loader.setProcessor(std::move(p));
-		}
-
 		void reset() {
 			loader.reset();
 		}
@@ -45,8 +37,12 @@ namespace {
 			loader.load(stereo);
 		}
 
-		void setInMemoryReader(AudioFileReader &reader_) {
-			setReader(std::make_shared<AudioFileInMemory>(reader_));
+		void reconstructInMemory(
+			AudioFileReader &reader_, 
+			std::shared_ptr<AudioFrameProcessor> p =
+				std::make_shared<AudioFrameProcessorStub>()
+		) {
+			loader = { std::make_shared<AudioFileInMemory>(reader_), std::move(p) };
 		}
 
 		void assertComplete() {
@@ -64,7 +60,7 @@ namespace {
 
 	TEST_F(ZeroPaddedLoaderTests, loadPadsZeroToEndOfInput_Mono) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		setInMemoryReader(fakeReader);
+		reconstructInMemory(fakeReader);
 		loadMonoFrames(4);
 		assertEqual({ 1, 2, 3, 0 }, left);
 	}
@@ -72,7 +68,7 @@ namespace {
 	TEST_F(ZeroPaddedLoaderTests, loadPadsZeroToEndOfInput_Stereo) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3, 4, 5, 6 } };
 		fakeReader.setChannels(2);
-		setInMemoryReader(fakeReader);
+		reconstructInMemory(fakeReader);
 		loadStereoFrames(4);
 		assertEqual({ 1, 3, 5, 0 }, left);
 		assertEqual({ 2, 4, 6, 0 }, right);
@@ -91,7 +87,7 @@ namespace {
 	TEST_F(ZeroPaddedLoaderTests, completeAfterLoadingGroupDelayManyZeros_PartiallyPaddedLoad) {
 		buffer_type tenSamples(10);
 		FakeAudioFileReader fakeReader{ tenSamples };
-		setInMemoryReader(fakeReader);
+		reconstructInMemory(fakeReader, processor);
 		processor->setGroupDelay(2);
 		loadMonoFrames(10 + 1);
 		assertIncomplete();
@@ -124,8 +120,7 @@ namespace {
 
 	TEST_F(ZeroPaddedLoaderTests, loadReadsThenProcesses) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		setInMemoryReader(fakeReader);
-		setProcessor(std::make_shared<TimesTwo>());
+		reconstructInMemory(fakeReader, std::make_shared<TimesTwo>());
 		loadMonoFrames(3);
 		assertEqual({ 2, 4, 6 }, left);
 	}
@@ -142,8 +137,7 @@ namespace {
 
 	TEST_F(ZeroPaddedLoaderTests, loadPadsZerosBeforeProcessing) {
 		FakeAudioFileReader fakeReader{ { 1, 2, 3 } };
-		setInMemoryReader(fakeReader);
-		setProcessor(std::make_shared<AddsOne>());
+		reconstructInMemory(fakeReader, std::make_shared<AddsOne>());
 		loadMonoFrames(4);
 		assertEqual({ 1 + 1, 2 + 1, 3 + 1, 0 + 1 }, left);
 	}

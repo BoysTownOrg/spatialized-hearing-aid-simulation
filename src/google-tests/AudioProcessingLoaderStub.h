@@ -41,14 +41,6 @@ public:
 	auto &log() const noexcept {
 		return log_;
 	}
-
-	void setReader(std::shared_ptr<AudioFrameReader>) override {
-		log_.insert("setReader ");
-	}
-
-	void setProcessor(std::shared_ptr<AudioFrameProcessor>) override {
-		log_.insert("setProcessor ");
-	}
 };
 
 class AudioProcessingLoaderStubFactory : public AudioProcessingLoaderFactory {

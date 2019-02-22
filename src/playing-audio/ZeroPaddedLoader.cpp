@@ -1,20 +1,5 @@
 #include "ZeroPaddedLoader.h"
 
-class NullProcessor : public AudioFrameProcessor {
-	void process(gsl::span<channel_type>) override {}
-	channel_type::index_type groupDelay() override { return 0; }
-};
-
-class NullReader : public AudioFrameReader {
-	void read(gsl::span<channel_type>) override {}
-	bool complete() override { return true; }
-	int sampleRate() override { return 0; }
-	int channels() override { return 0; }
-	long long frames() override { return 0; }
-	void reset() override {}
-	long long remainingFrames() override { return 0; }
-};
-
 ZeroPaddedLoader::ZeroPaddedLoader(
 	std::shared_ptr<AudioFrameReader> reader,
 	std::shared_ptr<AudioFrameProcessor> processor
@@ -25,14 +10,6 @@ ZeroPaddedLoader::ZeroPaddedLoader(
 
 void ZeroPaddedLoader::reset() {
 	paddedZeros = 0;
-}
-
-void ZeroPaddedLoader::setReader(std::shared_ptr<AudioFrameReader> r) {
-	reader = std::move(r);
-}
-
-void ZeroPaddedLoader::setProcessor(std::shared_ptr<AudioFrameProcessor> p) {
-	processor = std::move(p);
 }
 
 void ZeroPaddedLoader::load(gsl::span<channel_type> audio) {
@@ -59,7 +36,9 @@ bool ZeroPaddedLoader::complete() {
 	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
 }
 
-std::shared_ptr<AudioProcessingLoader> ZeroPaddedLoaderFactory::make(std::shared_ptr<AudioFrameReader>, std::shared_ptr<AudioFrameProcessor>)
-{
-	return std::shared_ptr<AudioProcessingLoader>();
+std::shared_ptr<AudioProcessingLoader> ZeroPaddedLoaderFactory::make(
+	std::shared_ptr<AudioFrameReader> r, 
+	std::shared_ptr<AudioFrameProcessor> p
+) {
+	return std::make_shared<ZeroPaddedLoader>(std::move(r), std::move(p));
 }

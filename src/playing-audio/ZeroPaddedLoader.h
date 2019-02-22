@@ -15,8 +15,6 @@ public:
 	PLAYING_AUDIO_API void reset() override;
 	PLAYING_AUDIO_API void load(gsl::span<channel_type> audio) override;
 	PLAYING_AUDIO_API bool complete() override;
-	PLAYING_AUDIO_API void setReader(std::shared_ptr<AudioFrameReader>) override;
-	PLAYING_AUDIO_API void setProcessor(std::shared_ptr<AudioFrameProcessor>) override;
 private:
 	void padZeros(gsl::span<channel_type> audio, long long zerosToPad);
 };
