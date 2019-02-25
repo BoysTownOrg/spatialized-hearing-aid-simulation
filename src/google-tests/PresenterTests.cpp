@@ -329,6 +329,24 @@ namespace {
 			f();
 			assertFalse(p.usingSpatialization);
 		}
+
+		void assertUsingHearingAidSimulationFollowingCall(
+			const Model::SignalProcessing &p, 
+			std::function<void()> f
+		) {	
+			view.setHearingAidSimulationOn();
+			f();
+			assertTrue(p.usingHearingAidSimulation);
+		}
+
+		void assertNotUsingHearingAidSimulationFollowingCall(
+			const Model::SignalProcessing &p, 
+			std::function<void()> f
+		) {	
+			view.setHearingAidSimulationOff();
+			f();
+			assertFalse(p.usingHearingAidSimulation);
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -863,39 +881,31 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		confirmTestSetupNotUsingSpatialization
-	) {
-		assertNotUsingSpatializationFollowingCall(
-			model.testing().processing,
-			[=]() { view.confirmTestSetup(); }
-		);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOn();
-		view.confirmTestSetup();
-		assertTrue(model.testing().processing.usingHearingAidSimulation);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupNotUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOff();
-		view.confirmTestSetup();
-		assertFalse(model.testing().processing.usingHearingAidSimulation);
-	}
-
-	TEST_F(
-		PresenterTests,
 		playCalibrationUsingSpatialization
 	) {
 		assertUsingSpatializationFollowingCall(
 			model.calibration().processing,
 			[=]() { view.playCalibration(); }
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		saveAudioUsingSpatialization
+	) {
+		assertUsingSpatializationFollowingCall(
+			model.savingAudio().processing,
+			[=]() { view.saveAudio(); }
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingSpatialization
+	) {
+		assertNotUsingSpatializationFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
 		);
 	}
 
@@ -911,56 +921,72 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		saveAudioUsingSpatialization
+		saveAudioNotUsingSpatialization
 	) {
-		view.setSpatializationOn();
-		view.saveAudio();
-		assertTrue(model.savingAudio().processing.usingSpatialization);
+		assertNotUsingSpatializationFollowingCall(
+			model.savingAudio().processing,
+			[=]() { view.saveAudio(); }
+		);
 	}
 
 	TEST_F(
 		PresenterTests,
-		saveAudioNotUsingSpatialization
+		confirmTestSetupUsingHearingAidSimulation
 	) {
-		view.setSpatializationOff();
-		view.saveAudio();
-		assertFalse(model.savingAudio().processing.usingSpatialization);
+		assertUsingHearingAidSimulationFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
+		);
 	}
 
 	TEST_F(
 		PresenterTests,
 		playCalibrationUsingHearingAidSimulation
 	) {
-		view.setHearingAidSimulationOn();
-		view.playCalibration();
-		assertTrue(model.calibration().processing.usingHearingAidSimulation);
-	}
-
-	TEST_F(
-		PresenterTests,
-		playCalibrationNotUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOff();
-		view.playCalibration();
-		assertFalse(model.calibration().processing.usingHearingAidSimulation);
+		assertUsingHearingAidSimulationFollowingCall(
+			model.calibration().processing,
+			[=]() { view.playCalibration(); }
+		);
 	}
 
 	TEST_F(
 		PresenterTests,
 		saveAudioUsingHearingAidSimulation
 	) {
-		view.setHearingAidSimulationOn();
-		view.saveAudio();
-		assertTrue(model.savingAudio().processing.usingHearingAidSimulation);
+		assertUsingHearingAidSimulationFollowingCall(
+			model.savingAudio().processing,
+			[=]() { view.saveAudio(); }
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingHearingAidSimulation
+	) {
+		assertNotUsingHearingAidSimulationFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		playCalibrationNotUsingHearingAidSimulation
+	) {
+		assertNotUsingHearingAidSimulationFollowingCall(
+			model.calibration().processing,
+			[=]() { view.playCalibration(); }
+		);
 	}
 
 	TEST_F(
 		PresenterTests,
 		saveAudioNotUsingHearingAidSimulation
 	) {
-		view.setHearingAidSimulationOff();
-		view.saveAudio();
-		assertFalse(model.savingAudio().processing.usingHearingAidSimulation);
+		assertNotUsingHearingAidSimulationFollowingCall(
+			model.savingAudio().processing,
+			[=]() { view.saveAudio(); }
+		);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
