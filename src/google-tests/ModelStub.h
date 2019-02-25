@@ -71,7 +71,7 @@ public:
 		return calibrationPlayed_;
 	}
 
-	auto testing() const noexcept {
+	auto &testing() const noexcept {
 		return testParameters_;
 	}
 

@@ -553,20 +553,10 @@ namespace {
 		PresenterTests,
 		confirmTestSetupPassesHearingAidParametersToModel
 	) {
-		view.setHearingAidSimulationOn();
-		view.setLeftDslPrescriptionFilePath("a");
-		view.setRightDslPrescriptionFilePath("b");
-		view.setAttack_ms("2.2");
-		view.setRelease_ms("3.3");
-		view.setWindowSize("4");
-		view.setChunkSize("5");
-		view.confirmTestSetup();
-		assertEqual("a", model.testing().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.testing().processing.rightDslPrescriptionFilePath);
-		assertEqual(2.2, model.testing().processing.attack_ms);
-		assertEqual(3.3, model.testing().processing.release_ms);
-		assertEqual(4, model.testing().processing.windowSize);
-		assertEqual(5, model.testing().processing.chunkSize);
+		assertHearingAidSimulationMatchesViewFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
+		);
 	}
 
 	TEST_F(
