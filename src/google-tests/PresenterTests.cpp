@@ -320,6 +320,15 @@ namespace {
 			f();
 			assertTrue(p.usingSpatialization);
 		}
+
+		void assertNotUsingSpatializationFollowingCall(
+			const Model::SignalProcessing &p, 
+			std::function<void()> f
+		) {
+			view.setSpatializationOff();
+			f();
+			assertFalse(p.usingSpatialization);
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -856,9 +865,10 @@ namespace {
 		PresenterTests,
 		confirmTestSetupNotUsingSpatialization
 	) {
-		view.setSpatializationOff();
-		view.confirmTestSetup();
-		assertFalse(model.testing().processing.usingSpatialization);
+		assertNotUsingSpatializationFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
+		);
 	}
 
 	TEST_F(
@@ -893,9 +903,10 @@ namespace {
 		PresenterTests,
 		playCalibrationNotUsingSpatialization
 	) {
-		view.setSpatializationOff();
-		view.playCalibration();
-		assertFalse(model.calibration().processing.usingSpatialization);
+		assertNotUsingSpatializationFollowingCall(
+			model.calibration().processing,
+			[=]() { view.playCalibration(); }
+		);
 	}
 
 	TEST_F(
