@@ -1446,6 +1446,25 @@ namespace {
 				assertEqual(4U, channel.size());
 	}
 
+	TEST_F(
+		SpatialHearingAidModelTests, 
+		processAudioForSavingLoadsDefaultFrameSizeChannelsWhenNotUsingHearingAidSimulation
+	) {
+		std::shared_ptr<FakeAudioProcessingLoader> fakeLoader = 
+			std::make_shared<FakeAudioProcessingLoader>();
+		audioFrameReader->setChannels(2);
+		savingAudio.processing.usingHearingAidSimulation = false;
+		audioLoaderFactory.setLoader(fakeLoader);
+		processAudioForSaving();
+		for (auto audio : fakeLoader->audio())
+			for (auto channel : audio) {
+				auto expected = gsl::narrow<decltype(channel)::size_type>(
+					SpatialHearingAidModel::defaultFramesPerBuffer
+				);
+				assertEqual(expected, channel.size());
+			}
+	}
+
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		SpatialHearingAidModel::Testing testing{};
