@@ -469,8 +469,9 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
 	auto loader_ = audioProcessingLoaderFactory->make(reader, {});
-	std::vector<std::vector<float>> channels(reader->channels());
-	std::vector<AudioProcessingLoader::channel_type> adapted;
+	using channel_type = AudioProcessingLoader::channel_type;
+	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
+	std::vector<channel_type> adapted;
 	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
