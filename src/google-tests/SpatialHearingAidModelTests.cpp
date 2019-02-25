@@ -515,11 +515,11 @@ namespace {
 		void assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
 			std::function<void(void)> f
 		) {
-			callWhenPlayerPlays([=]() { assertAudioFrameReaderPassedToLoader(); });
+			callWhenPlayerPlays([=]() { assertAudioFrameReaderPassedToLoaderFactory(); });
 			f();
 		}
 
-		void assertAudioFrameReaderPassedToLoader() noexcept {
+		void assertAudioFrameReaderPassedToLoaderFactory() noexcept {
 			EXPECT_EQ(audioFrameReader, audioLoaderFactory.audioFrameReader());
 		}
 
@@ -1402,6 +1402,11 @@ namespace {
 	TEST_F(SpatialHearingAidModelTests, saveAudioPassesFileToAudioWriterFactory) {
 		model.saveAudio("a");
 		assertEqual("a", audioFrameWriterFactory.filePath());
+	}
+
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFrameReaderToFactory) {
+		processAudioForSaving();
+		assertAudioFrameReaderPassedToLoaderFactory();
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {

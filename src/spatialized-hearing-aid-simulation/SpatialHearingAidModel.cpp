@@ -472,6 +472,7 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
 	auto reader = makeReader(p_->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p_->processing);
 	processorFactory_->make(reader.get(), p_->level_dB_Spl);
+	audioLoaderFactory->make(reader, {});
 }
 
 void SpatialHearingAidModel::saveAudio(std::string filePath) {
