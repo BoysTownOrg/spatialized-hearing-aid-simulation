@@ -310,10 +310,7 @@ namespace {
 			assertTrue(view.release_msDeactivated_);
 		}
 
-		void assertHearingAidSimulationMatchesViewFollowingCall(
-			const Model::SignalProcessing &p, 
-			std::function<void()> f
-		) {
+		void assertHearingAidSimulationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
 			view.setHearingAidSimulationOn();
 			view.setAttack_ms("1.1");
 			view.setRelease_ms("2.2");
@@ -321,13 +318,13 @@ namespace {
 			view.setWindowSize("4");
 			view.setLeftDslPrescriptionFilePath("a");
 			view.setRightDslPrescriptionFilePath("b");
-			f();
-			assertEqual(1.1, p.attack_ms);
-			assertEqual(2.2, p.release_ms);
-			assertEqual(3, p.chunkSize);
-			assertEqual(4, p.windowSize);
-			assertEqual("a", p.leftDslPrescriptionFilePath);
-			assertEqual("b", p.rightDslPrescriptionFilePath);
+			useCase.request();
+			assertEqual(1.1, useCase.processing.attack_ms);
+			assertEqual(2.2, useCase.processing.release_ms);
+			assertEqual(3, useCase.processing.chunkSize);
+			assertEqual(4, useCase.processing.windowSize);
+			assertEqual("a", useCase.processing.leftDslPrescriptionFilePath);
+			assertEqual("b", useCase.processing.rightDslPrescriptionFilePath);
 		}
 
 		void assertUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
@@ -593,16 +590,6 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		confirmTestSetupPassesHearingAidParametersToModel
-	) {
-		assertHearingAidSimulationMatchesViewFollowingCall(
-			model.testing().processing,
-			[=]() { view.confirmTestSetup(); }
-		);
-	}
-
-	TEST_F(
-		PresenterTests,
 		confirmTestSetupPassesSpatializationParametersToModel
 	) {
 		view.setSpatializationOn();
@@ -847,18 +834,16 @@ namespace {
 		assertFalse(model.audioSaved());
 	}
 
+	TEST_F(PresenterTests, confirmTestSetupPassesHearingAidParametersToModel) {
+		assertHearingAidSimulationMatchesViewFollowingRequest(confirmingTestSetup);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
-		assertHearingAidSimulationMatchesViewFollowingCall(
-			model.calibration().processing,
-			[=]() { view.playCalibration(); }
-		);
+		assertHearingAidSimulationMatchesViewFollowingRequest(playingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithHearingAidSimulationPassesParametersToModel) {
-		assertHearingAidSimulationMatchesViewFollowingCall(
-			model.savingAudio().processing,
-			[=]() { view.saveAudio(); }
-		);
+		assertHearingAidSimulationMatchesViewFollowingRequest(savingAudio);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithSpatializationPassesParametersToModel) {
