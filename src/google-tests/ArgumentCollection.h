@@ -25,4 +25,16 @@ public:
 	auto at(typename std::vector<T>::size_type position) const {
 		return collection.at(position);
 	}
+
+	auto begin() {
+		return collection.begin();
+	}
+
+	auto end() {
+		return collection.end();
+	}
+
+	auto size() {
+		return collection.size();
+	}
 };

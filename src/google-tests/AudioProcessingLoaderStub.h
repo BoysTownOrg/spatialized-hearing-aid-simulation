@@ -54,6 +54,10 @@ public:
 	) noexcept :
 		loader{ std::move(loader) } {}
 
+	void setLoader(std::shared_ptr<AudioProcessingLoader> loader_) {
+		loader = std::move(loader_);
+	}
+
 	std::shared_ptr<AudioProcessingLoader> make(
 		std::shared_ptr<AudioFrameReader> r,
 		std::shared_ptr<AudioFrameProcessor> p

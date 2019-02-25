@@ -64,5 +64,6 @@ template void assertEqual(int, int);
 template void assertEqual(float, float);
 template void assertEqual(double, double);
 template void assertEqual(unsigned long, unsigned long);
+template void assertEqual(unsigned, unsigned);
 template void assertEqual(long long, long long);
 template void assertEqual(float *, float *);

@@ -1,4 +1,5 @@
 #include "FilterbankCompressorSpy.h"
+#include "FakeAudioProcessingLoader.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioProcessingLoaderStub.h"
 #include "PrescriptionReaderStub.h"
@@ -105,6 +106,7 @@ namespace {
 			setValidProcessingSizes(testing.processing);
 			setValidProcessingSizes(calibration.processing);
 			setValidProcessingSizes(savingAudio.processing);
+			audioLoader->setComplete();
 		}
 
 		void setValidProcessingSizes(SpatialHearingAidModel::SignalProcessing &p) noexcept {
@@ -1407,6 +1409,23 @@ namespace {
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFrameReaderToFactory) {
 		processAudioForSaving();
 		assertAudioFrameReaderPassedToLoaderFactory();
+	}
+
+	TEST_F(SpatialHearingAidModelTests, tbd) {
+		std::shared_ptr<FakeAudioProcessingLoader> fakeLoader = 
+			std::make_shared<FakeAudioProcessingLoader>();
+		fakeLoader->setLoadCompleteThreshold(2);
+		audioFrameReader->setChannels(3);
+		savingAudio.processing.chunkSize = 4;
+		savingAudio.processing.usingHearingAidSimulation = true;
+		audioLoaderFactory.setLoader(fakeLoader);
+		processAudioForSaving();
+		assertEqual(2U, fakeLoader->audio().size());
+		for (auto audio : fakeLoader->audio()) {
+			assertEqual(3U, audio.size());
+			for (auto channel : audio)
+				assertEqual(4U, channel.size());
+		}
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {

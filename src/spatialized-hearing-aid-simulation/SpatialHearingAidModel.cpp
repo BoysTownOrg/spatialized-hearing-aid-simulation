@@ -280,7 +280,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	audioReaderFactory{ audioReaderFactory },
 	audioWriterFactory{ audioWriterFactory },
 	player{ player },
-	audioLoaderFactory{ audioLoaderFactory },
+	audioProcessingLoaderFactory{ audioLoaderFactory },
 	processorFactoryFactory{
 		std::make_shared<StereoProcessorFactoryFactory>(
 			simulationFactory, 
@@ -401,7 +401,7 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 		return;
 
 	auto reader = makeReader(nextStimulus_);
-	player->setAudioLoader(audioLoaderFactory->make(
+	player->setAudioLoader(audioProcessingLoaderFactory->make(
 		reader, 
 		processorFactoryForTest->make(reader.get(), p->level_dB_Spl))
 	);
@@ -452,7 +452,7 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	auto reader = makeReader(p->audioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 
-	player->setAudioLoader(audioLoaderFactory->make(
+	player->setAudioLoader(audioProcessingLoaderFactory->make(
 		reader, 
 		processorFactory_->make(reader.get(), p->level_dB_Spl))
 	);
@@ -467,13 +467,34 @@ void SpatialHearingAidModel::stopCalibration() {
 void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto reader = makeReader(p->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
-	processorFactory_->make(reader.get(), p->level_dB_Spl);
-	audioLoaderFactory->make(reader, {});
+	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
+	auto loader_ = audioProcessingLoaderFactory->make(reader, {});
+	std::vector<std::vector<float>> channels(reader->channels());
+	std::vector<AudioProcessingLoader::channel_type> adapted;
+	/*
+	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
+		? p->processing.chunkSize
+		: defaultFramesPerBuffer;
+	*/
+	for (auto &channel : channels) {
+		channel.resize(p->processing.chunkSize);
+		adapted.push_back({ channel });
+	}
+	/*
+	std::vector<std::vector<float>> processed(reader->channels());
+	std::vector<float> processed{};
+	*/
+
+	while (!loader_->complete()) {
+		loader_->load(adapted);
+		//for (int i = 0; i < reader->channels(); ++i)
+		//	processed.at(i).insert(processed.at(i).end(), channels.at(i).begin(), channels.at(i).end());
+	}
 }
 
 void SpatialHearingAidModel::saveAudio(std::string filePath) {
 	try {
-		audioWriterFactory->make(std::move(filePath));
+		auto writer_ = audioWriterFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameWriterFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };

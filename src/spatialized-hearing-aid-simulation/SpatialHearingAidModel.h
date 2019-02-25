@@ -75,7 +75,7 @@ class SpatialHearingAidModel : public Model {
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioFrameWriterFactory *audioWriterFactory;
 	AudioPlayer *player;
-	AudioProcessingLoaderFactory *audioLoaderFactory;
+	AudioProcessingLoaderFactory *audioProcessingLoaderFactory;
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,

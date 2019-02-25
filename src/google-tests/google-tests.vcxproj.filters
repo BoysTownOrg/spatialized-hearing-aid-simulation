@@ -143,5 +143,8 @@
     <ClInclude Include="AudioProcessingLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FakeAudioProcessingLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
