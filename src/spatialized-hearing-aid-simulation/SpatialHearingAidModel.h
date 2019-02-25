@@ -100,6 +100,14 @@ public:
 	SPATIALIZED_HA_SIMULATION_API static const double fullScaleLevel_dB_Spl;
 	SPATIALIZED_HA_SIMULATION_API static const int defaultFramesPerBuffer;
 private:
+	struct PlayAudioRequest {
+		std::string audioFilePath;
+		std::string audioDevice;
+		double level_dB_Spl;
+		int framesPerBuffer;
+		AudioFrameProcessorFactory *processorFactory;
+	};
+	void playAudio(PlayAudioRequest *);
 	void assertSizeIsPowerOfTwo(int);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
