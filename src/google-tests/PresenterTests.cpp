@@ -330,25 +330,25 @@ namespace {
 			assertEqual("b", p.rightDslPrescriptionFilePath);
 		}
 
-		void assertUsingSpatializationFollowingCall(ProcessingUseCase useCase) {
+		void assertUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
 			view.setSpatializationOn();
 			useCase.request();
 			assertTrue(useCase.processing.usingSpatialization);
 		}
 
-		void assertNotUsingSpatializationFollowingCall(ProcessingUseCase useCase) {
+		void assertNotUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
 			view.setSpatializationOff();
 			useCase.request();
 			assertFalse(useCase.processing.usingSpatialization);
 		}
 
-		void assertUsingHearingAidSimulationFollowingCall(ProcessingUseCase useCase) {	
+		void assertUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
 			view.setHearingAidSimulationOn();
 			useCase.request();
 			assertTrue(useCase.processing.usingHearingAidSimulation);
 		}
 
-		void assertNotUsingHearingAidSimulationFollowingCall(ProcessingUseCase useCase) {	
+		void assertNotUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
 			view.setHearingAidSimulationOff();
 			useCase.request();
 			assertFalse(useCase.processing.usingHearingAidSimulation);
@@ -875,88 +875,52 @@ namespace {
 		assertEqual("a", model.savingAudio().processing.brirFilePath);
 	}
 
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupUsingSpatialization
-	) {
-		assertUsingSpatializationFollowingCall(confirmingTestSetup);
+	TEST_F(PresenterTests, confirmTestSetupUsingSpatialization) {
+		assertUsingSpatializationFollowingRequest(confirmingTestSetup);
 	}
 
-	TEST_F(
-		PresenterTests,
-		playCalibrationUsingSpatialization
-	) {
-		assertUsingSpatializationFollowingCall(playingCalibration);
+	TEST_F(PresenterTests, playCalibrationUsingSpatialization) {
+		assertUsingSpatializationFollowingRequest(playingCalibration);
 	}
 
-	TEST_F(
-		PresenterTests,
-		saveAudioUsingSpatialization
-	) {
-		assertUsingSpatializationFollowingCall(savingAudio);
+	TEST_F(PresenterTests, saveAudioUsingSpatialization) {
+		assertUsingSpatializationFollowingRequest(savingAudio);
 	}
 
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupNotUsingSpatialization
-	) {
-		assertNotUsingSpatializationFollowingCall(confirmingTestSetup);
+	TEST_F(PresenterTests, confirmTestSetupNotUsingSpatialization) {
+		assertNotUsingSpatializationFollowingRequest(confirmingTestSetup);
 	}
 
-	TEST_F(
-		PresenterTests,
-		playCalibrationNotUsingSpatialization
-	) {
-		assertNotUsingSpatializationFollowingCall(playingCalibration);
+	TEST_F(PresenterTests, playCalibrationNotUsingSpatialization) {
+		assertNotUsingSpatializationFollowingRequest(playingCalibration);
 	}
 
-	TEST_F(
-		PresenterTests,
-		saveAudioNotUsingSpatialization
-	) {
-		assertNotUsingSpatializationFollowingCall(savingAudio);
+	TEST_F(PresenterTests, saveAudioNotUsingSpatialization) {
+		assertNotUsingSpatializationFollowingRequest(savingAudio);
 	}
 
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupUsingHearingAidSimulation
-	) {
-		assertUsingHearingAidSimulationFollowingCall(confirmingTestSetup);
+	TEST_F(PresenterTests, confirmTestSetupUsingHearingAidSimulation) {
+		assertUsingHearingAidSimulationFollowingRequest(confirmingTestSetup);
 	}
 
-	TEST_F(
-		PresenterTests,
-		playCalibrationUsingHearingAidSimulation
-	) {
-		assertUsingHearingAidSimulationFollowingCall(playingCalibration);
+	TEST_F(PresenterTests, playCalibrationUsingHearingAidSimulation) {
+		assertUsingHearingAidSimulationFollowingRequest(playingCalibration);
 	}
 
-	TEST_F(
-		PresenterTests,
-		saveAudioUsingHearingAidSimulation
-	) {
-		assertUsingHearingAidSimulationFollowingCall(savingAudio);
+	TEST_F(PresenterTests, saveAudioUsingHearingAidSimulation) {
+		assertUsingHearingAidSimulationFollowingRequest(savingAudio);
 	}
 
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupNotUsingHearingAidSimulation
-	) {
-		assertNotUsingHearingAidSimulationFollowingCall(confirmingTestSetup);
+	TEST_F(PresenterTests, confirmTestSetupNotUsingHearingAidSimulation) {
+		assertNotUsingHearingAidSimulationFollowingRequest(confirmingTestSetup);
 	}
 
-	TEST_F(
-		PresenterTests,
-		playCalibrationNotUsingHearingAidSimulation
-	) {
-		assertNotUsingHearingAidSimulationFollowingCall(playingCalibration);
+	TEST_F(PresenterTests, playCalibrationNotUsingHearingAidSimulation) {
+		assertNotUsingHearingAidSimulationFollowingRequest(playingCalibration);
 	}
 
-	TEST_F(
-		PresenterTests,
-		saveAudioNotUsingHearingAidSimulation
-	) {
-		assertNotUsingHearingAidSimulationFollowingCall(savingAudio);
+	TEST_F(PresenterTests, saveAudioNotUsingHearingAidSimulation) {
+		assertNotUsingHearingAidSimulationFollowingRequest(savingAudio);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
