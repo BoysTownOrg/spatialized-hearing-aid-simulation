@@ -37,7 +37,7 @@ namespace {
 
 	TEST_F(ChannelCopierTests, resetsDecoratedReaderWhenReset) {
 		copier.reset();
-		assertTrue(decorated->readingLog().contains("reset "));
+		assertTrue(decorated->log().contains("reset "));
 	}
 
 	class ChannelCopierFacade {

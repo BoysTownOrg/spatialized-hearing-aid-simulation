@@ -4,7 +4,7 @@
 #include <spatialized-hearing-aid-simulation/AudioFrameReader.h>
 
 class AudioFrameReaderStub : public AudioFrameReader {
-	LogString readingLog_{};
+	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
 	long long frames_{};
 	int sampleRate_{};
@@ -12,7 +12,6 @@ class AudioFrameReaderStub : public AudioFrameReader {
     int remainingFrames_{};
 	bool complete_{};
 public:
-
     long long remainingFrames() override {
         return remainingFrames_;
     }
@@ -31,7 +30,7 @@ public:
 
 	void read(gsl::span<channel_type> audio) override {
 		audioBuffer_ = audio;
-		readingLog_.insert("read ");
+		log_.insert("read ");
 	}
 
 	void setComplete() noexcept {
@@ -62,12 +61,12 @@ public:
 		frames_ = f;
 	}
 
-	auto &readingLog() const {
-		return readingLog_;
+	auto &log() const {
+		return log_;
 	}
 
 	void reset() override {
-		readingLog_.insert("reset ");
+		log_.insert("reset ");
 	}
 
 	void setIncomplete() noexcept {

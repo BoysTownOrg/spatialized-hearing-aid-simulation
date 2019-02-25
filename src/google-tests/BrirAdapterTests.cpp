@@ -1,5 +1,5 @@
-#include "assert-utility.h"
 #include "FakeAudioFile.h"
+#include "assert-utility.h"
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <gtest/gtest.h>
 
@@ -17,7 +17,7 @@ namespace {
 
 		void assertReadThrowsReadError(std::string what) {
 			try {
-				read();
+				auto brir = read();
 				FAIL() << "Expected BrirReader::ReadFailure";
 			}
 			catch (const BrirReader::ReadFailure &e) {
