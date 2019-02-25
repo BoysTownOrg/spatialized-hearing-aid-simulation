@@ -1,6 +1,6 @@
-#include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
 #include "FakeAudioFile.h"
+#include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <audio-file-reading-writing/ChannelCopier.h>
 #include <gtest/gtest.h>
@@ -79,9 +79,13 @@ namespace {
 		assertEqual({ 1, 2, 3 }, copier.right);
 	}
 
-	TEST(ChannelCopierFactoryTests, factoryPassesFilePath) {
+	class ChannelCopierFactoryTests : public ::testing::Test {
+	protected:
 		AudioFrameReaderStubFactory factory;
 		ChannelCopierFactory adapter{ &factory };
+	};
+
+	TEST_F(ChannelCopierFactoryTests, factoryPassesFilePath) {
 		adapter.make("a");
 		assertEqual("a", factory.filePath());
 	}
