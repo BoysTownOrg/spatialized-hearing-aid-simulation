@@ -20,19 +20,13 @@ public:
 	bool failed() override;
 	std::string errorMessage() override;
 	int sampleRate() override;
-};
-
-class LibsndfileFactory : public AudioFileFactory {
-	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
-		return std::make_shared<LibsndfileReader>(std::move(filePath));
-	}
+	const SF_INFO &sfInfo() noexcept { return info; }
 };
 
 class LibsndfileWriter : public AudioFileWriter {
-	SF_INFO info{};
 	SNDFILE *file{};
 public:
-	explicit LibsndfileWriter(std::string filePath);
+	LibsndfileWriter(std::string filePath, SF_INFO *);
 	~LibsndfileWriter() noexcept;
 	LibsndfileWriter(LibsndfileWriter &&) = delete;
 	LibsndfileWriter &operator=(LibsndfileWriter &&) = delete;
@@ -43,8 +37,9 @@ public:
 	std::string errorMessage() override;
 };
 
-class LibsndfileWriterFactory : public AudioFileWriterFactory {
-	std::shared_ptr<AudioFileWriter> make(std::string filePath) override {
-		return std::make_shared<LibsndfileWriter>(std::move(filePath));
-	}
+class LibsndfileFactory : public AudioFileFactory {
+	SF_INFO lastReaderFormat{};
+public:
+	std::shared_ptr<AudioFileReader> makeReader(std::string filePath) override;
+	std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) override;
 };

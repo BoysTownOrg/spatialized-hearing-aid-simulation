@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LibsndfileReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PortAudioDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,11 +39,11 @@
     <ClCompile Include="windows_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Libsndfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LibsndfileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PortAudioDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MersenneTwisterRandomizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Libsndfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

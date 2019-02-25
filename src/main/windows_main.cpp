@@ -1,6 +1,6 @@
 #include "Chapro.h"
 #include "FltkView.h"
-#include "LibsndfileReader.h"
+#include "Libsndfile.h"
 #include "PortAudioDevice.h"
 #include "NlohmannJsonParser.h"
 #include "WindowsDirectoryReader.h"
@@ -63,14 +63,13 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	PortAudioDevice audioDevice{};
 	AudioDevicePlayer player{&audioDevice};
 	ZeroPaddedLoaderFactory audioLoaderFactory{};
-	LibsndfileFactory audioFileReaderFactory{};
-	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
+	LibsndfileFactory audioFileFactory{};
+	AudioFileInMemoryFactory inMemoryFactory{&audioFileFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
-	LibsndfileWriterFactory audioFileWriterFactory{};
-	AudioFileWriterAdapterFactory audioFrameWriterFactory{ &audioFileWriterFactory };
+	AudioFileWriterAdapterFactory audioFrameWriterFactory{ &audioFileFactory };
 	NlohmannJsonParserFactory parserFactory{};
 	PrescriptionAdapter prescriptionReader{ &parserFactory };
-	BrirAdapter brirReader{ &audioFileReaderFactory };
+	BrirAdapter brirReader{ &audioFileFactory };
 	ScalarFactoryImpl scalarFactory{};
 	ChaproFactory compressorFactory{};
 	FirFilterFactoryImpl firFilterFactory{};

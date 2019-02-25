@@ -153,7 +153,7 @@
     <ClCompile Include="Chapro.cpp" />
     <ClCompile Include="FileSystemWriter.cpp" />
     <ClCompile Include="FltkView.cpp" />
-    <ClCompile Include="LibsndfileReader.cpp" />
+    <ClCompile Include="Libsndfile.cpp" />
     <ClCompile Include="windows_main.cpp" />
     <ClCompile Include="MersenneTwisterRandomizer.cpp" />
     <ClCompile Include="NlohmannJsonParser.cpp" />
@@ -164,7 +164,7 @@
     <ClInclude Include="Chapro.h" />
     <ClInclude Include="FileSystemWriter.h" />
     <ClInclude Include="FltkView.h" />
-    <ClInclude Include="LibsndfileReader.h" />
+    <ClInclude Include="Libsndfile.h" />
     <ClInclude Include="MersenneTwisterRandomizer.h" />
     <ClInclude Include="NlohmannJsonParser.h" />
     <ClInclude Include="PortAudioDevice.h" />

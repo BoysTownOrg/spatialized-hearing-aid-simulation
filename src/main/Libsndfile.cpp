@@ -1,4 +1,4 @@
-#include "LibsndfileReader.h"
+#include "Libsndfile.h"
 
 LibsndfileReader::LibsndfileReader(std::string filePath) {
 	file = sf_open(filePath.c_str(), SFM_READ, &info);
@@ -32,6 +32,10 @@ int LibsndfileReader::sampleRate() {
 	return info.samplerate;
 }
 
+LibsndfileWriter::LibsndfileWriter(std::string filePath, SF_INFO *info) {
+	file = sf_open(filePath.c_str(), SFM_WRITE, info);
+}
+
 LibsndfileWriter::~LibsndfileWriter() {
     sf_close(file);
 }
@@ -46,4 +50,14 @@ std::string LibsndfileWriter::errorMessage() {
 
 void LibsndfileWriter::writeFrames(float *y, long long count) {
     sf_writef_float(file, y, count);
+}
+
+std::shared_ptr<AudioFileReader> LibsndfileFactory::makeReader(std::string filePath) {
+	auto reader = std::make_shared<LibsndfileReader>(std::move(filePath));
+	lastReaderFormat = reader->sfInfo();
+	return reader;
+}
+
+std::shared_ptr<AudioFileWriter> LibsndfileFactory::makeWriterUsingLastReaderFormat(std::string filePath) {
+	return std::make_shared<LibsndfileWriter>(std::move(filePath), &lastReaderFormat);
 }
