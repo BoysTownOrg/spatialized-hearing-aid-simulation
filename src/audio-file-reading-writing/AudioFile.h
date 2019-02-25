@@ -27,6 +27,6 @@ class AudioFileFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFileFactory);
 	virtual std::shared_ptr<AudioFileReader> makeReader(std::string filePath) = 0;
-	virtual std::shared_ptr<AudioFileWriter> makeWriter(std::string filePath) = 0;
+	virtual std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) = 0;
 };
 

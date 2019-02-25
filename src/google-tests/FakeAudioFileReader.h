@@ -83,7 +83,7 @@ public:
 		return reader;
 	}
 
-	std::shared_ptr<AudioFileWriter> makeWriter(std::string filePath) override {
+	std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) override {
 		filePathForWriting_ = std::move(filePath);
 		return writer;
 	}

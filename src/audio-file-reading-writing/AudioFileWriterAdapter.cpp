@@ -23,7 +23,7 @@ std::shared_ptr<AudioFileWriterAdapter> AudioFileWriterAdapterFactory::make(
 ) {
 	try {
 		return std::make_shared<AudioFileWriterAdapter>(
-			factory->makeWriter(std::move(filePath))
+			factory->makeWriterUsingLastReaderFormat(std::move(filePath))
 		);
 	}
 	catch (const AudioFileWriterAdapter::FileError &e) {
