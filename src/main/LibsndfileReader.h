@@ -1,6 +1,6 @@
 #pragma once
 
-#include <audio-file-reading-writing/AudioFileReader.h>
+#include <audio-file-reading-writing/AudioFile.h>
 #include <audio-file-reading-writing/AudioFileWriterAdapter.h>
 #include <sndfile.h>
 
@@ -22,7 +22,7 @@ public:
 	int sampleRate() override;
 };
 
-class LibsndfileReaderFactory : public AudioFileReaderFactory {
+class LibsndfileFactory : public AudioFileFactory {
 	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
 		return std::make_shared<LibsndfileReader>(std::move(filePath));
 	}

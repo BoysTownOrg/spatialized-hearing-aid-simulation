@@ -1,7 +1,7 @@
 #pragma once
 
 #include <spatialized-hearing-aid-simulation/BrirReader.h>
-#include <audio-file-reading-writing/AudioFileReader.h>
+#include <audio-file-reading-writing/AudioFile.h>
 
 #ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
 	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
@@ -10,10 +10,10 @@
 #endif
 
 class BrirAdapter : public BrirReader {
-	AudioFileReaderFactory *factory;
+	AudioFileFactory *factory;
 public:
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
-		explicit BrirAdapter(AudioFileReaderFactory *) noexcept;
+		explicit BrirAdapter(AudioFileFactory *) noexcept;
 	BINAURAL_ROOM_IMPULSE_RESPONSE_API 
 		BinauralRoomImpulseResponse read(std::string filePath) override;
 private:

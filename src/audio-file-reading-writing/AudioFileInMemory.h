@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioFileReader.h"
+#include "AudioFile.h"
 #include "audio-file-reading-writing-exports.h"
 #include <spatialized-hearing-aid-simulation/AudioFrameReader.h>
 #include <common-includes/RuntimeError.h>
@@ -30,10 +30,10 @@ private:
 };
 
 class AudioFileInMemoryFactory : public AudioFrameReaderFactory {
-	AudioFileReaderFactory *factory;
+	AudioFileFactory *factory;
 public:
 	AUDIO_FILE_READING_WRITING_API explicit AudioFileInMemoryFactory(
-		AudioFileReaderFactory *
+		AudioFileFactory *
 	) noexcept;
 	AUDIO_FILE_READING_WRITING_API 
 		std::shared_ptr<AudioFrameReader> make(std::string filePath) override;

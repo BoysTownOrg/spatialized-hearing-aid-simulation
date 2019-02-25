@@ -59,7 +59,7 @@ auto AudioFileInMemory::remainingFrames_() -> size_type {
 }
 
 AudioFileInMemoryFactory::AudioFileInMemoryFactory(
-	AudioFileReaderFactory *factory
+	AudioFileFactory *factory
 ) noexcept :
 	factory{ factory } {}
 
@@ -68,7 +68,7 @@ std::shared_ptr<AudioFrameReader> AudioFileInMemoryFactory::make(
 ) {
 	try {
 		return std::make_shared<AudioFileInMemory>(
-			*factory->make(std::move(filePath))
+			*factory->makeReader(std::move(filePath))
 		);
 	}
 	catch (const AudioFileInMemory::FileError &e) {

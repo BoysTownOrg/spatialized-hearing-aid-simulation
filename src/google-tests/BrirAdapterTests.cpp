@@ -8,7 +8,7 @@ namespace {
 	protected:
 		std::shared_ptr<FakeAudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>();
-		FakeAudioFileReaderFactory factory{ reader };
+		FakeAudioFileFactory factory{ reader };
 		BrirAdapter adapter{ &factory };
 
 		auto read(std::string f = {}) {
@@ -64,7 +64,7 @@ namespace {
 
 	TEST_F(BrirAdapterTests, readPassesFilePathToFactory) {
 		read("a");
-		assertEqual("a", factory.filePath());
+		assertEqual("a", factory.filePathForReading());
 	}
 
 	TEST_F(BrirAdapterTests, failedReaderThrowsReadError) {

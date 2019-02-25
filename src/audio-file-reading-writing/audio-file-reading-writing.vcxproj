@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClInclude Include="audio-file-reading-writing-exports.h" />
     <ClInclude Include="AudioFileInMemory.h" />
-    <ClInclude Include="AudioFileReader.h" />
+    <ClInclude Include="AudioFile.h" />
     <ClInclude Include="AudioFileWriterAdapter.h" />
     <ClInclude Include="ChannelCopier.h" />
   </ItemGroup>

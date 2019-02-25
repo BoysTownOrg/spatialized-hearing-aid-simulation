@@ -63,7 +63,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	PortAudioDevice audioDevice{};
 	AudioDevicePlayer player{&audioDevice};
 	ZeroPaddedLoaderFactory audioLoaderFactory{};
-	LibsndfileReaderFactory audioFileReaderFactory{};
+	LibsndfileFactory audioFileReaderFactory{};
 	AudioFileInMemoryFactory inMemoryFactory{&audioFileReaderFactory};
 	ChannelCopierFactory audioFrameReaderFactory{ &inMemoryFactory };
 	LibsndfileWriterFactory audioFileWriterFactory{};

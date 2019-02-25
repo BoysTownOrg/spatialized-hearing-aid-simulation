@@ -1,6 +1,6 @@
 #pragma once
 
-#include <audio-file-reading-writing/AudioFileReader.h>
+#include <audio-file-reading-writing/AudioFile.h>
 #include <gsl/gsl>
 #include <vector>
 
@@ -62,22 +62,37 @@ public:
 	}
 };
 
-class FakeAudioFileReaderFactory : public AudioFileReaderFactory {
-	std::string filePath_{};
+class FakeAudioFileFactory : public AudioFileFactory {
+	std::string filePathForReading_{};
+	std::string filePathForWriting_{};
 	std::shared_ptr<AudioFileReader> reader;
+	std::shared_ptr<AudioFileWriter> writer;
 public:
-	explicit FakeAudioFileReaderFactory(
-		std::shared_ptr<AudioFileReader> reader =
-			std::make_shared<FakeAudioFileReader>()
+	explicit FakeAudioFileFactory(
+		std::shared_ptr<AudioFileReader> reader
 	) noexcept :
 		reader{ std::move(reader) } {}
 
-	std::shared_ptr<AudioFileReader> make(std::string filePath) override {
-		filePath_ = std::move(filePath);
+	explicit FakeAudioFileFactory(
+		std::shared_ptr<AudioFileWriter> writer
+	) noexcept :
+		writer{ std::move(writer) } {}
+
+	std::shared_ptr<AudioFileReader> makeReader(std::string filePath) override {
+		filePathForReading_ = std::move(filePath);
 		return reader;
 	}
 
-	auto filePath() const {
-		return filePath_;
+	std::shared_ptr<AudioFileWriter> makeWriter(std::string filePath) override {
+		filePathForWriting_ = std::move(filePath);
+		return writer;
+	}
+
+	auto filePathForReading() const {
+		return filePathForReading_;
+	}
+
+	auto filePathForWriting() const {
+		return filePathForWriting_;
 	}
 };

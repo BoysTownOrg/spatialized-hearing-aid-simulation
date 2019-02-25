@@ -1,3 +1,4 @@
+#include "FakeAudioFileReader.h"
 #include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileWriterAdapter.h>
 #include <gtest/gtest.h>
@@ -34,25 +35,6 @@ public:
 	}
 };
 
-class FakeAudioFileWriterFactory : public AudioFileWriterFactory {
-	std::string filePath_{};
-	std::shared_ptr<AudioFileWriter> writer;
-public:
-	explicit FakeAudioFileWriterFactory(
-		std::shared_ptr<AudioFileWriter> writer
-	) noexcept :
-		writer{ std::move(writer) } {}
-
-	std::shared_ptr<AudioFileWriter> make(std::string filePath) override {
-		filePath_ = std::move(filePath);
-		return writer;
-	}
-
-	auto filePath() const {
-		return filePath_;
-	}
-};
-
 namespace {
 	class AudioFileWriterAdapterTests : public ::testing::Test {
 	protected:
@@ -73,7 +55,7 @@ namespace {
 	protected:
 		std::shared_ptr<FakeAudioFileWriter> writer =
 			std::make_shared<FakeAudioFileWriter>();
-		FakeAudioFileWriterFactory factory{ writer };
+		FakeAudioFileFactory factory{ writer };
 		AudioFileWriterAdapterFactory adapterFactory{ &factory };
 
 		void assertMakeThrowsCreateError(std::string what) {
@@ -99,6 +81,6 @@ namespace {
 
 	TEST_F(AudioFileWriterAdapterFactoryTests, passesFilePath) {
 		make("a");
-		assertEqual("a", factory.filePath());
+		assertEqual("a", factory.filePathForWriting());
 	}
 }
