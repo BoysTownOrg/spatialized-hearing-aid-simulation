@@ -7,15 +7,25 @@
 class AudioDeviceStub : public AudioDevice {
 	std::vector<std::string> _descriptions{};
 	std::string errorMessage_{};
-	std::string _streamLog{};
-	std::string _callbackLog{};
+	std::string streamLog_{};
 	StreamParameters _streamParameters{};
 	AudioDeviceController *_controller{};
-	bool _streaming{};
+	bool streaming_{};
 	bool failed_{};
-	bool _setCallbackResultToCompleteCalled{};
+	bool setCallbackResultToCompleteCalled_{};
+	bool setCallbackResultToContinueCalled_{};
 	bool complete_{};
+	bool streamStarted_{};
+	bool streamStopped_{};
 public:
+	auto streamStopped() const noexcept {
+		return streamStopped_;
+	}
+
+	auto streamStarted() const noexcept {
+		return streamStarted_;
+	}
+
 	auto controller() const noexcept {
 		return _controller;
 	}
@@ -25,20 +35,21 @@ public:
 	}
 
 	bool streaming() override {
-		return _streaming;
+		return streaming_;
 	}
 
 	void setStreaming() noexcept {
-		_streaming = true;
+		streaming_ = true;
 	}
 
 	void startStream() override {
-		_streamLog += "start ";
-		_callbackLog += "start ";
+		streamLog_ += "start ";
+		streamStarted_ = true;
 	}
 
 	void stopStream() override {
-		_streamLog += "stop ";
+		streamLog_ += "stop ";
+		streamStopped_ = true;
 	}
 
 	void fillStreamBuffer(void *x, int n) {
@@ -62,25 +73,29 @@ public:
 	}
 
 	auto setCallbackResultToCompleteCalled() const noexcept {
-		return _setCallbackResultToCompleteCalled;
+		return setCallbackResultToCompleteCalled_;
+	}
+
+	auto setCallbackResultToContinueCalled() const noexcept {
+		return setCallbackResultToContinueCalled_;
 	}
 
 	void setCallbackResultToComplete() override {
-		_setCallbackResultToCompleteCalled = true;
+		setCallbackResultToCompleteCalled_ = true;
 		complete_ = true;
 	}
 
 	auto streamLog() const {
-		return _streamLog;
+		return streamLog_;
 	}
 
 	void openStream(StreamParameters p) override {
 		_streamParameters = std::move(p);
-		_streamLog += "open ";
+		streamLog_ += "open ";
 	}
 
 	void closeStream() override {
-		_streamLog += "close ";
+		streamLog_ += "close ";
 	}
 
 	auto streamParameters() const noexcept {
@@ -88,7 +103,7 @@ public:
 	}
 
 	void setCallbackResultToContinue() override {
-		_callbackLog += "setCallbackResultToContinue ";
+		setCallbackResultToContinueCalled_ = true;
 		complete_ = false;
 	}
 
@@ -102,10 +117,6 @@ public:
 
 	int count() override {
 		return gsl::narrow_cast<int>(_descriptions.size());
-	}
-
-	auto callbackLog() const {
-		return _callbackLog;
 	}
 
 	bool complete() const {

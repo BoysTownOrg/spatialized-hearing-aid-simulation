@@ -46,17 +46,17 @@ namespace {
 
 	TEST_F(AudioDevicePlayerTests, prepareToPlaySetsCallbackResultToContinue) {
 		prepareToPlay();
-		assertEqual("setCallbackResultToContinue ", device.callbackLog());
+		assertTrue(device.setCallbackResultToContinueCalled());
 	}
 
 	TEST_F(AudioDevicePlayerTests, playStartsStream) {
 		player.play();
-		assertEqual("start ", device.streamLog());
+		assertTrue(device.streamStarted());
 	}
 
 	TEST_F(AudioDevicePlayerTests, stopStopsStream) {
 		player.stop();
-		assertEqual("stop ", device.streamLog());
+		assertTrue(device.streamStopped());
 	}
 
 	TEST_F(AudioDevicePlayerTests, prepareToPlayWhileStreamingDoesNotAlterStream) {
