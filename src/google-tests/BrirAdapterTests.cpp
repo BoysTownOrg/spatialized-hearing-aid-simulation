@@ -1,5 +1,5 @@
 #include "assert-utility.h"
-#include "FakeAudioFileReader.h"
+#include "FakeAudioFile.h"
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <gtest/gtest.h>
 

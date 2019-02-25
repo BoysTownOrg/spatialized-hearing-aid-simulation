@@ -1,4 +1,4 @@
-#include "FakeAudioFileReader.h"
+#include "FakeAudioFile.h"
 #include "AudioFrameReaderStub.h"
 #include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>

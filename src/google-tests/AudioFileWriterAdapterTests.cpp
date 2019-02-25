@@ -1,53 +1,30 @@
-#include "FakeAudioFileReader.h"
+#include "FakeAudioFile.h"
 #include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileWriterAdapter.h>
 #include <gtest/gtest.h>
 #include <vector>
 
-class FakeAudioFileWriter : public AudioFileWriter {
-	std::vector<float> written_{};
-	std::string errorMessage_{};
-	bool failed_{};
-public:
-	void fail() {
-		failed_ = true;
-	}
-
-	void setErrorMessage(std::string s) {
-		errorMessage_ = std::move(s);
-	}
-
-	auto written() {
-		return written_;
-	}
-
-	void writeFrames(float *x, long long n) override {
-		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n) };
-		std::copy(audio.begin(), audio.end(), std::back_inserter(written_));
-	}
-
-	bool failed() override {
-		return failed_;
-	}
-
-	std::string errorMessage() override {
-		return errorMessage_;
-	}
-};
-
 namespace {
 	class AudioFileWriterAdapterTests : public ::testing::Test {
 	protected:
+		using channel_type = AudioFileWriterAdapter::channel_type;
+		using buffer_type = std::vector<channel_type::element_type>;
+		buffer_type left{};
+		buffer_type right{};
 		std::shared_ptr<FakeAudioFileWriter> writer = 
 			std::make_shared<FakeAudioFileWriter>();
 		AudioFileWriterAdapter adapter{ writer };
+
+		void write() {
+			std::vector<channel_type> channels{ left, right };
+			adapter.write(channels);
+		}
 	};
 
 	TEST_F(AudioFileWriterAdapterTests, writeInterleavesChannels) {
-		std::vector<float> left{ 1, 3, 5 };
-		std::vector<float> right{ 2, 4, 6 };
-		std::vector<gsl::span<float>> channels = { left, right };
-		adapter.write(channels);
+		left = { 1, 3, 5 };
+		right = { 2, 4, 6 };
+		write();
 		assertEqual({ 1, 2, 3, 4, 5, 6 }, writer->written());
 	}
 

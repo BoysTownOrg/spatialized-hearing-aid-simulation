@@ -1,7 +1,7 @@
 #include "assert-utility.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioFrameProcessorStub.h"
-#include "FakeAudioFileReader.h"
+#include "FakeAudioFile.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <playing-audio/ZeroPaddedLoader.h>
 #include <gtest/gtest.h>

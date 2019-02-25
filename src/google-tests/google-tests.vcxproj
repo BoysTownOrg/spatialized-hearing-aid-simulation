@@ -183,7 +183,7 @@
     <ClInclude Include="BrirReaderStub.h" />
     <ClInclude Include="DirectoryReaderStub.h" />
     <ClInclude Include="DocumenterStub.h" />
-    <ClInclude Include="FakeAudioFileReader.h" />
+    <ClInclude Include="FakeAudioFile.h" />
     <ClInclude Include="AudioProcessingLoaderStub.h" />
     <ClInclude Include="AudioFrameReaderStub.h" />
     <ClInclude Include="FakeAudioProcessingLoader.h" />

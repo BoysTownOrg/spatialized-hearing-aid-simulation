@@ -62,6 +62,37 @@ public:
 	}
 };
 
+class FakeAudioFileWriter : public AudioFileWriter {
+	std::vector<float> written_{};
+	std::string errorMessage_{};
+	bool failed_{};
+public:
+	void fail() {
+		failed_ = true;
+	}
+
+	void setErrorMessage(std::string s) {
+		errorMessage_ = std::move(s);
+	}
+
+	auto written() {
+		return written_;
+	}
+
+	void writeFrames(float *x, long long n) override {
+		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n) };
+		std::copy(audio.begin(), audio.end(), std::back_inserter(written_));
+	}
+
+	bool failed() override {
+		return failed_;
+	}
+
+	std::string errorMessage() override {
+		return errorMessage_;
+	}
+};
+
 class FakeAudioFileFactory : public AudioFileFactory {
 	std::string filePathForReading_{};
 	std::string filePathForWriting_{};

@@ -89,9 +89,6 @@
     <ClInclude Include="AudioFrameReaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FakeAudioFileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LogString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -144,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FakeAudioProcessingLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeAudioFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

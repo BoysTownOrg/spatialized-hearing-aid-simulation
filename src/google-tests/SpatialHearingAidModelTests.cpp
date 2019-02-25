@@ -4,7 +4,7 @@
 #include "AudioProcessingLoaderStub.h"
 #include "PrescriptionReaderStub.h"
 #include "BrirReaderStub.h"
-#include "FakeAudioFileReader.h"
+#include "FakeAudioFile.h"
 #include "SignalProcessorStub.h"
 #include "AudioPlayerStub.h"
 #include "FakeStimulusList.h"
