@@ -368,7 +368,7 @@ namespace {
 		}
 	};
 
-	TEST_F(PresenterTests, subscribesToViewEvents) {
+	TEST_F(PresenterTests, constructorSubscribesToViewEvents) {
 		EXPECT_EQ(&presenter, view.listener());
 	}
 
@@ -394,7 +394,7 @@ namespace {
 		assertSpatializationUIHasOnlyBeenActivated();
 	}
 
-	TEST_F(PresenterTests, constructordeactivatesSpatializationUIWhenInitiallyOff) {
+	TEST_F(PresenterTests, constructorDeactivatesSpatializationUIWhenInitiallyOff) {
 		view.clearActivationState();
 		view.setSpatializationOff();
 		Presenter presenter_{ &model, &view };
@@ -708,10 +708,10 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
-		view.setAudioDevice("e");
+		view.setAudioDevice("a");
 		view.setLevel_dB_Spl("1.1");
 		view.playNextTrial();
-		assertEqual("e", model.trial().audioDevice);
+		assertEqual("a", model.trial().audioDevice);
 		assertEqual(1.1, model.trial().level_dB_Spl);
 	}
 
