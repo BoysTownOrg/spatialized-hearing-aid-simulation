@@ -105,6 +105,7 @@ private:
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
+	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
 	void prepareAudioPlayer(AudioFrameReader &, int framesPerBuffer, std::string audioDevice);
 	void prepareNewTest_(Testing *);
 	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);

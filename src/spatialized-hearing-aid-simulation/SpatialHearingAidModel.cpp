@@ -492,8 +492,12 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 }
 
 void SpatialHearingAidModel::saveAudio(std::string filePath) {
+	auto writer_ = makeWriter(std::move(filePath));
+}
+
+std::shared_ptr<AudioFrameWriter> SpatialHearingAidModel::makeWriter(std::string filePath) {
 	try {
-		auto writer_ = audioWriterFactory->make(std::move(filePath));
+		return audioWriterFactory->make(std::move(filePath));
 	}
 	catch (const AudioFrameWriterFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
