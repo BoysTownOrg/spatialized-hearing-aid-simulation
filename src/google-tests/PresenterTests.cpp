@@ -415,6 +415,110 @@ namespace {
 		assertHearingAidUIHasOnlyBeenDeactivated();
 	}
 
+	TEST_F(PresenterTests, cancellingBrowseForAudioFileDoesNotChangeAudioFilePath) {
+		assertCancellingBrowseDoesNotChangePath(view.audioFilePath_, &ViewStub::browseForAudioFile);
+	}
+
+	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
+		assertCancellingBrowseDoesNotChangePath(view.testFilePath_, &ViewStub::browseForTestFile);
+	}
+
+	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
+		assertCancellingBrowseDoesNotChangePath(
+			view.leftDslPrescriptionFilePath_, 
+			&ViewStub::browseForLeftDslPrescription
+		);
+		assertCancellingBrowseDoesNotChangePath(
+			view.rightDslPrescriptionFilePath_, 
+			&ViewStub::browseForRightDslPrescription
+		);
+	}
+
+	TEST_F(PresenterTests, cancellingBrowseForStimulusListNotChangeStimulusList) {
+		assertCancellingBrowseDoesNotChangePath(view.stimulusList_, &ViewStub::browseForStimulusList);
+	}
+
+	TEST_F(PresenterTests, cancellingBrowseForBrirDoesNotChangeBrirFilePath) {
+		assertCancellingBrowseDoesNotChangePath(view.brirFilePath_, &ViewStub::browseForBrir);
+	}
+
+	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
+		view.browseForTestFile();
+		assertEqual({ "*.txt" }, view.browseFiltersForSavingFile());
+	}
+
+	TEST_F(PresenterTests, browseForAudioFileFiltersAudioFiles) {
+		view.browseForAudioFile();
+		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
+	}
+
+	TEST_F(PresenterTests, browseForBrirFiltersWavFiles) {
+		view.browseForBrir();
+		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
+	}
+
+	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
+		view.setBrowseForSavingFileResult("a");
+		view.browseForTestFile();
+		assertEqual("a", view.testFilePath());
+	}
+
+	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(view.audioFilePath_, &ViewStub::browseForAudioFile);
+	}
+
+	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.leftDslPrescriptionFilePath_, 
+			&ViewStub::browseForLeftDslPrescription
+		);
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.rightDslPrescriptionFilePath_, 
+			&ViewStub::browseForRightDslPrescription
+		);
+	}
+
+	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
+		view.setBrowseDirectory("a");
+		view.browseForStimulusList();
+		assertEqual("a", view.stimulusList());
+	}
+
+	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.brirFilePath_, 
+			&ViewStub::browseForBrir
+		);
+	}
+
+	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
+		view.clearActivationState();
+		view.setSpatializationOff();
+		view.toggleSpatialization();
+		assertSpatializationUIHasOnlyBeenDeactivated();
+	}
+
+	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
+		view.clearActivationState();
+		view.setSpatializationOn();
+		view.toggleSpatialization();
+		assertSpatializationUIHasOnlyBeenActivated();
+	}
+
+	TEST_F(PresenterTests, togglingHearingAidSimulationOffDeactivatesUI) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOn();
+		view.toggleHearingAidSimulation();
+		assertHearingAidUIHasOnlyBeenActivated();
+	}
+
+	TEST_F(PresenterTests, togglingHearingAidSimulationOnActivatesUI) {
+		view.clearActivationState();
+		view.setHearingAidSimulationOff();
+		view.toggleHearingAidSimulation();
+		assertHearingAidUIHasOnlyBeenDeactivated();
+	}
+
 	TEST_F(PresenterTests, confirmTestSetupShowsTesterView) {
 		confirmTestSetupShowsTesterView();
 	}
@@ -567,148 +671,6 @@ namespace {
 		confirmTestSetupDoesNotShowTesterView();
 	}
 
-	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		for (auto s : { "a", "0.1", "-1" })
-			confirmTestSetupWithChunkSizeShowsErrorMessage(s);
-	}
-
-	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		for (auto s : { "a", "0.1", "-1" })
-			confirmTestSetupWithWindowSizeShowsErrorMessage(s);
-	}
-
-	TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		confirmTestSetupWithAttackTimeShowsErrorMessage("a");
-	}
-
-	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
-	}
-
-	TEST_F(PresenterTests, confirmTestSetupPassesParametersToModel) {
-		view.setStimulusList("a");
-		view.setTestFilePath("b");
-		view.setSubjectId("c");
-		view.setTesterId("d");
-		view.confirmTestSetup();
-		assertEqual("a", model.testing().audioDirectory);
-		assertEqual("b", model.testing().testFilePath);
-		assertEqual("c", model.testing().subjectId);
-		assertEqual("d", model.testing().testerId);
-	}
-
-	TEST_F(PresenterTests, cancellingBrowseForAudioFileDoesNotChangeAudioFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.audioFilePath_, &ViewStub::browseForAudioFile);
-	}
-
-	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.testFilePath_, &ViewStub::browseForTestFile);
-	}
-
-	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
-		assertCancellingBrowseDoesNotChangePath(
-			view.leftDslPrescriptionFilePath_, 
-			&ViewStub::browseForLeftDslPrescription
-		);
-		assertCancellingBrowseDoesNotChangePath(
-			view.rightDslPrescriptionFilePath_, 
-			&ViewStub::browseForRightDslPrescription
-		);
-	}
-
-	TEST_F(PresenterTests, cancellingBrowseForStimulusListNotChangeStimulusList) {
-		assertCancellingBrowseDoesNotChangePath(view.stimulusList_, &ViewStub::browseForStimulusList);
-	}
-
-	TEST_F(PresenterTests, cancellingBrowseForBrirDoesNotChangeBrirFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.brirFilePath_, &ViewStub::browseForBrir);
-	}
-
-	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
-		view.browseForTestFile();
-		assertEqual({ "*.txt" }, view.browseFiltersForSavingFile());
-	}
-
-	TEST_F(PresenterTests, browseForAudioFileFiltersAudioFiles) {
-		view.browseForAudioFile();
-		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
-	}
-
-	TEST_F(PresenterTests, browseForBrirFiltersWavFiles) {
-		view.browseForBrir();
-		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
-	}
-
-	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
-		view.setBrowseForSavingFileResult("a");
-		view.browseForTestFile();
-		assertEqual("a", view.testFilePath());
-	}
-
-	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(view.audioFilePath_, &ViewStub::browseForAudioFile);
-	}
-
-	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.leftDslPrescriptionFilePath_, 
-			&ViewStub::browseForLeftDslPrescription
-		);
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.rightDslPrescriptionFilePath_, 
-			&ViewStub::browseForRightDslPrescription
-		);
-	}
-
-	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
-		view.setBrowseDirectory("a");
-		view.browseForStimulusList();
-		assertEqual("a", view.stimulusList());
-	}
-
-	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.brirFilePath_, 
-			&ViewStub::browseForBrir
-		);
-	}
-
-	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
-		view.clearActivationState();
-		view.setSpatializationOff();
-		view.toggleSpatialization();
-		assertSpatializationUIHasOnlyBeenDeactivated();
-	}
-
-	TEST_F(PresenterTests, togglingSpatializationOnActivatesUI) {
-		view.clearActivationState();
-		view.setSpatializationOn();
-		view.toggleSpatialization();
-		assertSpatializationUIHasOnlyBeenActivated();
-	}
-
-	TEST_F(PresenterTests, togglingHearingAidSimulationOffDeactivatesUI) {
-		view.clearActivationState();
-		view.setHearingAidSimulationOn();
-		view.toggleHearingAidSimulation();
-		assertHearingAidUIHasOnlyBeenActivated();
-	}
-
-	TEST_F(PresenterTests, togglingHearingAidSimulationOnActivatesUI) {
-		view.clearActivationState();
-		view.setHearingAidSimulationOff();
-		view.toggleHearingAidSimulation();
-		assertHearingAidUIHasOnlyBeenDeactivated();
-	}
-
-	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
-		playTrialWithLevelShowsErrorMessage("b");
-	}
-
 	TEST_F(PresenterTests, playingTrialPlaysTrial) {
 		view.playNextTrial();
 		assertTrue(model.trialPlayed());
@@ -731,6 +693,18 @@ namespace {
 		view.playNextTrial();
 		assertTesterViewHidden();
 		assertTestSetupViewShown();
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupPassesParametersToModel) {
+		view.setStimulusList("a");
+		view.setTestFilePath("b");
+		view.setSubjectId("c");
+		view.setTesterId("d");
+		view.confirmTestSetup();
+		assertEqual("a", model.testing().audioDirectory);
+		assertEqual("b", model.testing().testFilePath);
+		assertEqual("c", model.testing().subjectId);
+		assertEqual("d", model.testing().testerId);
 	}
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
@@ -862,27 +836,9 @@ namespace {
 		assertNotUsingHearingAidSimulationFollowingRequest(savingAudio);
 	}
 
-	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
-		playCalibrationWithLevelShowsErrorMessage("a");
-	}
-
-	TEST_F(PresenterTests, saveAudioWithInvalidLevelShowsErrorMessage) {
-		saveAudioWithLevelShowsErrorMessage("a");
-	}
-
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelDoesNotPlay) {
 		setInvalidLevel();
 		playCalibrationDoesNotPlay();
-	}
-
-	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		playCalibrationWithAttackTimeShowsErrorMessage("a");
-	}
-
-	TEST_F(PresenterTests, saveAudioWithInvalidAttackShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		saveAudioWithAttackTimeShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidAttackDoesNotPlay) {
@@ -903,16 +859,6 @@ namespace {
 		saveAudioSaves();
 	}
 
-	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		playCalibrationWithReleaseTimeShowsErrorMessage("a");
-	}
-
-	TEST_F(PresenterTests, saveAudioWithInvalidReleaseShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		saveAudioWithReleaseTimeShowsErrorMessage("a");
-	}
-
 	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseDoesNotPlay) {
 		view.setHearingAidSimulationOn();
 		setInvalidReleaseTime();
@@ -925,10 +871,70 @@ namespace {
 		playCalibrationPlays();
 	}
 
+	TEST_F(PresenterTests, playTrialWithInvalidLevelShowsErrorMessage) {
+		playTrialWithLevelShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidLevelShowsErrorMessage) {
+		playCalibrationWithLevelShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidLevelShowsErrorMessage) {
+		saveAudioWithLevelShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidChunkSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		for (auto s : { "a", "0.1", "-1" })
+			confirmTestSetupWithChunkSizeShowsErrorMessage(s);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeShowsErrorMessage) {
 		view.setHearingAidSimulationOn();
 		for (auto s : { "a", "0.1", "-1" })
 			playCalibrationWithChunkSizeShowsErrorMessage(s);
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidWindowSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		for (auto s : { "a", "0.1", "-1" })
+			confirmTestSetupWithWindowSizeShowsErrorMessage(s);
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		for (auto s : { "a", "0.1", "-1" })
+			playCalibrationWithWindowSizeShowsErrorMessage(s);
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidAttackTimeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		confirmTestSetupWithAttackTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidAttackShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		playCalibrationWithAttackTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidAttackShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		saveAudioWithAttackTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, confirmTestSetupWithInvalidReleaseTimeShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		confirmTestSetupWithReleaseTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, playCalibrationWithInvalidReleaseShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		playCalibrationWithReleaseTimeShowsErrorMessage("a");
+	}
+
+	TEST_F(PresenterTests, saveAudioWithInvalidReleaseShowsErrorMessage) {
+		view.setHearingAidSimulationOn();
+		saveAudioWithReleaseTimeShowsErrorMessage("a");
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidChunkSizeDoesNotPlay) {
@@ -941,12 +947,6 @@ namespace {
 		view.setHearingAidSimulationOff();
 		setInvalidChunkSize();
 		playCalibrationPlays();
-	}
-
-	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeShowsErrorMessage) {
-		view.setHearingAidSimulationOn();
-		for (auto s : { "a", "0.1", "-1" })
-			playCalibrationWithWindowSizeShowsErrorMessage(s);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidWindowSizeDoesNotPlay) {
