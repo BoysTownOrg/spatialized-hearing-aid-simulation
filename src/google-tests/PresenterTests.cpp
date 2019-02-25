@@ -311,6 +311,15 @@ namespace {
 			assertEqual("a", p.leftDslPrescriptionFilePath);
 			assertEqual("b", p.rightDslPrescriptionFilePath);
 		}
+
+		void assertUsingSpatializationFollowingCall(
+			const Model::SignalProcessing &p, 
+			std::function<void()> f
+		) {
+			view.setSpatializationOn();
+			f();
+			assertTrue(p.usingSpatialization);
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -567,42 +576,6 @@ namespace {
 		view.setBrirFilePath("a");
 		view.confirmTestSetup();
 		assertEqual("a", model.testing().processing.brirFilePath);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupUsingSpatialization
-	) {
-		view.setSpatializationOn();
-		view.confirmTestSetup();
-		assertTrue(model.testing().processing.usingSpatialization);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupNotUsingSpatialization
-	) {
-		view.setSpatializationOff();
-		view.confirmTestSetup();
-		assertFalse(model.testing().processing.usingSpatialization);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOn();
-		view.confirmTestSetup();
-		assertTrue(model.testing().processing.usingHearingAidSimulation);
-	}
-
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupNotUsingHearingAidSimulation
-	) {
-		view.setHearingAidSimulationOff();
-		view.confirmTestSetup();
-		assertFalse(model.testing().processing.usingHearingAidSimulation);
 	}
 
 	TEST_F(
@@ -871,11 +844,49 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
+		confirmTestSetupUsingSpatialization
+	) {
+		assertUsingSpatializationFollowingCall(
+			model.testing().processing,
+			[=]() { view.confirmTestSetup(); }
+		);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingSpatialization
+	) {
+		view.setSpatializationOff();
+		view.confirmTestSetup();
+		assertFalse(model.testing().processing.usingSpatialization);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOn();
+		view.confirmTestSetup();
+		assertTrue(model.testing().processing.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
+		confirmTestSetupNotUsingHearingAidSimulation
+	) {
+		view.setHearingAidSimulationOff();
+		view.confirmTestSetup();
+		assertFalse(model.testing().processing.usingHearingAidSimulation);
+	}
+
+	TEST_F(
+		PresenterTests,
 		playCalibrationUsingSpatialization
 	) {
-		view.setSpatializationOn();
-		view.playCalibration();
-		assertTrue(model.calibration().processing.usingSpatialization);
+		assertUsingSpatializationFollowingCall(
+			model.calibration().processing,
+			[=]() { view.playCalibration(); }
+		);
 	}
 
 	TEST_F(
