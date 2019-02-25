@@ -30,13 +30,13 @@ namespace {
 		};
 
 		void assertCancellingBrowseDoesNotChangePath(
-			std::string expected, 
 			std::string &path, 
 			void(ViewStub::*browse)()
 		) {
+			path = "a";
 			view.setBrowseCancelled();
 			(view.*browse)();
-			assertEqual(std::move(expected), path);
+			assertEqual("a", path);
 		}
 
 		void setInvalidChunkSize() {
@@ -599,31 +599,25 @@ namespace {
 		PresenterTests,
 		cancellingBrowseForAudioFileDoesNotChangeAudioFilePath
 	) {
-		view.audioFilePath_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.audioFilePath_, &ViewStub::browseForAudioFile);
+		assertCancellingBrowseDoesNotChangePath(view.audioFilePath_, &ViewStub::browseForAudioFile);
 	}
 
 	TEST_F(
 		PresenterTests,
 		cancellingBrowseForTestFileDoesNotChangeTestFilePath
 	) {
-		view.testFilePath_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.testFilePath_, &ViewStub::browseForTestFile);
+		assertCancellingBrowseDoesNotChangePath(view.testFilePath_, &ViewStub::browseForTestFile);
 	}
 
 	TEST_F(
 		PresenterTests,
 		cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
 	) {
-		view.leftDslPrescriptionFilePath_ = "a";
-		view.rightDslPrescriptionFilePath_ = "b";
 		assertCancellingBrowseDoesNotChangePath(
-			"a", 
 			view.leftDslPrescriptionFilePath_, 
 			&ViewStub::browseForLeftDslPrescription
 		);
 		assertCancellingBrowseDoesNotChangePath(
-			"b", 
 			view.rightDslPrescriptionFilePath_, 
 			&ViewStub::browseForRightDslPrescription
 		);
@@ -633,17 +627,14 @@ namespace {
 		PresenterTests,
 		cancellingBrowseForStimulusListNotChangeStimulusList
 	) {
-		view.stimulusList_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.stimulusList_, &ViewStub::browseForStimulusList);
+		assertCancellingBrowseDoesNotChangePath(view.stimulusList_, &ViewStub::browseForStimulusList);
 	}
-
 
 	TEST_F(
 		PresenterTests,
 		cancellingBrowseForBrirDoesNotChangeBrirFilePath
 	) {
-		view.brirFilePath_ = "a";
-		assertCancellingBrowseDoesNotChangePath("a", view.brirFilePath_, &ViewStub::browseForBrir);
+		assertCancellingBrowseDoesNotChangePath(view.brirFilePath_, &ViewStub::browseForBrir);
 	}
 
 	TEST_F(
