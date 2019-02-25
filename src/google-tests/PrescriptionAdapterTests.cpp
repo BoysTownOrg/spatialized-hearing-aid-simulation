@@ -1,5 +1,5 @@
-#include "assert-utility.h"
 #include "FakeConfigurationFileParser.h"
+#include "assert-utility.h"
 #include <dsl-prescription/PrescriptionAdapter.h>
 #include <gtest/gtest.h>
 

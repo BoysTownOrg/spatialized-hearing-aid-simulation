@@ -1,5 +1,5 @@
-#include "assert-utility.h"
 #include "SignalProcessorStub.h"
+#include "assert-utility.h"
 #include <spatialized-hearing-aid-simulation/ChannelProcessingGroup.h>
 #include <gtest/gtest.h>
 

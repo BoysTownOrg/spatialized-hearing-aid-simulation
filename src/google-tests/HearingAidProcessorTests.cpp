@@ -1,5 +1,5 @@
-#include "assert-utility.h"
 #include "FilterbankCompressorSpy.h"
+#include "assert-utility.h"
 #include <hearing-aid-processing/HearingAidProcessor.h>
 #include <gtest/gtest.h>
 
