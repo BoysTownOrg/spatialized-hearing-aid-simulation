@@ -19,11 +19,12 @@ AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileWriterFact
 	factory{ factory } {}
 
 std::shared_ptr<AudioFileWriterAdapter> AudioFileWriterAdapterFactory::make(
-	std::string filePath
+	std::string filePath,
+	std::string formatMatchedFilePath
 ) {
 	try {
 		return std::make_shared<AudioFileWriterAdapter>(
-			factory->make(std::move(filePath))
+			factory->make(std::move(filePath), std::move(formatMatchedFilePath))
 		);
 	}
 	catch (const AudioFileWriterAdapter::FileError &e) {

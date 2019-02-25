@@ -15,7 +15,10 @@ public:
 class AudioFileWriterFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFileWriterFactory);
-	virtual std::shared_ptr<AudioFileWriter> make(std::string filePath) = 0;
+	virtual std::shared_ptr<AudioFileWriter> make(
+		std::string filePath, 
+		std::string formatMatchedFilePath
+	) = 0;
 };
 
 #include "audio-file-reading-writing-exports.h"
@@ -37,6 +40,9 @@ class AudioFileWriterAdapterFactory {
 public:
 	AUDIO_FILE_READING_WRITING_API explicit AudioFileWriterAdapterFactory(AudioFileWriterFactory *);
 
-	AUDIO_FILE_READING_WRITING_API std::shared_ptr<AudioFileWriterAdapter> make(std::string filePath);
+	AUDIO_FILE_READING_WRITING_API std::shared_ptr<AudioFileWriterAdapter> make(
+		std::string filePath,
+		std::string formatMatchedFilePath
+	);
 	RUNTIME_ERROR(CreateError);
 };
