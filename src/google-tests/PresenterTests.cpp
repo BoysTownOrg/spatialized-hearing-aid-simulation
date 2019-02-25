@@ -327,6 +327,13 @@ namespace {
 			assertEqual("b", useCase.processing.rightDslPrescriptionFilePath);
 		}
 
+		void assertSpatializationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
+			view.setSpatializationOn();
+			view.setBrirFilePath("a");
+			useCase.request();
+			assertEqual("a", useCase.processing.brirFilePath);
+		}
+
 		void assertUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
 			view.setSpatializationOn();
 			useCase.request();
@@ -590,16 +597,6 @@ namespace {
 
 	TEST_F(
 		PresenterTests,
-		confirmTestSetupPassesSpatializationParametersToModel
-	) {
-		view.setSpatializationOn();
-		view.setBrirFilePath("a");
-		view.confirmTestSetup();
-		assertEqual("a", model.testing().processing.brirFilePath);
-	}
-
-	TEST_F(
-		PresenterTests,
 		cancellingBrowseForAudioFileDoesNotChangeAudioFilePath
 	) {
 		view.audioFilePath_ = "a";
@@ -846,18 +843,16 @@ namespace {
 		assertHearingAidSimulationMatchesViewFollowingRequest(savingAudio);
 	}
 
+	TEST_F(PresenterTests, confirmTestSetupPassesSpatializationParametersToModel) {
+		assertSpatializationMatchesViewFollowingRequest(confirmingTestSetup);
+	}
+
 	TEST_F(PresenterTests, playCalibrationWithSpatializationPassesParametersToModel) {
-		view.setSpatializationOn();
-		view.setBrirFilePath("a");
-		view.playCalibration();
-		assertEqual("a", model.calibration().processing.brirFilePath);
+		assertSpatializationMatchesViewFollowingRequest(playingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithSpatializationPassesParametersToModel) {
-		view.setSpatializationOn();
-		view.setBrirFilePath("a");
-		view.saveAudio();
-		assertEqual("a", model.savingAudio().processing.brirFilePath);
+		assertSpatializationMatchesViewFollowingRequest(savingAudio);
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupUsingSpatialization) {
