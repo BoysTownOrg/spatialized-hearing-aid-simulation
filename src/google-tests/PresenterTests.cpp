@@ -39,6 +39,15 @@ namespace {
 			assertEqual("a", path);
 		}
 
+		void assertBrowseForOpeningFileResultPassedToPath(
+			const std::string &path, 
+			void(ViewStub::*browse)()
+		) {
+			view.setBrowseForOpeningFileResult("a");
+			(view.*browse)();
+			assertEqual("a", path);
+		}
+
 		void setInvalidChunkSize() {
 			view.setChunkSize("a");
 		}
@@ -84,7 +93,7 @@ namespace {
 		}
 
 		void confirmTestSetupDoesNotHideSetupView() {
-			auto assertTestSetupViewNotHidden = &PresenterTests::assertTestSetupViewNotHidden;
+			const auto assertTestSetupViewNotHidden = &PresenterTests::assertTestSetupViewNotHidden;
 			confirmTestSetupThen(assertTestSetupViewNotHidden);
 		}
 
@@ -99,22 +108,22 @@ namespace {
 		}
 
 		void confirmTestSetupHidesSetupView() {
-			auto assertTestSetupViewHidden = &PresenterTests::assertTestSetupViewHidden;
+			const auto assertTestSetupViewHidden = &PresenterTests::assertTestSetupViewHidden;
 			confirmTestSetupThen(assertTestSetupViewHidden);
 		}
 
 		void confirmTestSetupDoesNotShowTesterView() {
-			auto assertTestSetupViewNotShown = &PresenterTests::assertTestSetupViewNotShown;
+			const auto assertTestSetupViewNotShown = &PresenterTests::assertTestSetupViewNotShown;
 			confirmTestSetupThen(assertTestSetupViewNotShown);
 		}
 
 		void confirmTestSetupShowsTesterView() {
-			auto assertTesterViewShown = &PresenterTests::assertTesterViewShown;
+			const auto assertTesterViewShown = &PresenterTests::assertTesterViewShown;
 			confirmTestSetupThen(assertTesterViewShown);
 		}
 
 		void confirmTestSetupDoesNotPrepareTest() {
-			auto assertTestHasNotBeenPrepared = &PresenterTests::assertTestHasNotBeenPrepared;
+			const auto assertTestHasNotBeenPrepared = &PresenterTests::assertTestHasNotBeenPrepared;
 			confirmTestSetupThen(assertTestHasNotBeenPrepared);
 		}
 
@@ -128,7 +137,7 @@ namespace {
 		}
 
 		void confirmTestSetupShowsErrorMessage(std::string s) {
-			auto assertErrorMessageEquals = &PresenterTests::assertErrorMessageEquals;
+			const auto assertErrorMessageEquals = &PresenterTests::assertErrorMessageEquals;
 			confirmTestSetupThen(assertErrorMessageEquals, std::move(s));
 		}
 
@@ -580,10 +589,7 @@ namespace {
 		confirmTestSetupWithReleaseTimeShowsErrorMessage("b");
 	}
 
-	TEST_F(
-		PresenterTests,
-		confirmTestSetupPassesParametersToModel
-	) {
+	TEST_F(PresenterTests, confirmTestSetupPassesParametersToModel) {
 		view.setStimulusList("a");
 		view.setTestFilePath("b");
 		view.setSubjectId("c");
@@ -595,24 +601,15 @@ namespace {
 		assertEqual("d", model.testing().testerId);
 	}
 
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForAudioFileDoesNotChangeAudioFilePath
-	) {
+	TEST_F(PresenterTests, cancellingBrowseForAudioFileDoesNotChangeAudioFilePath) {
 		assertCancellingBrowseDoesNotChangePath(view.audioFilePath_, &ViewStub::browseForAudioFile);
 	}
 
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForTestFileDoesNotChangeTestFilePath
-	) {
+	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
 		assertCancellingBrowseDoesNotChangePath(view.testFilePath_, &ViewStub::browseForTestFile);
 	}
 
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath
-	) {
+	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
 		assertCancellingBrowseDoesNotChangePath(
 			view.leftDslPrescriptionFilePath_, 
 			&ViewStub::browseForLeftDslPrescription
@@ -623,90 +620,61 @@ namespace {
 		);
 	}
 
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForStimulusListNotChangeStimulusList
-	) {
+	TEST_F(PresenterTests, cancellingBrowseForStimulusListNotChangeStimulusList) {
 		assertCancellingBrowseDoesNotChangePath(view.stimulusList_, &ViewStub::browseForStimulusList);
 	}
 
-	TEST_F(
-		PresenterTests,
-		cancellingBrowseForBrirDoesNotChangeBrirFilePath
-	) {
+	TEST_F(PresenterTests, cancellingBrowseForBrirDoesNotChangeBrirFilePath) {
 		assertCancellingBrowseDoesNotChangePath(view.brirFilePath_, &ViewStub::browseForBrir);
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForTestFileFiltersTextFiles
-	) {
+	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
 		view.browseForTestFile();
 		assertEqual({ "*.txt" }, view.browseFiltersForSavingFile());
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForAudioFileFiltersAudioFiles
-	) {
+	TEST_F(PresenterTests, browseForAudioFileFiltersAudioFiles) {
 		view.browseForAudioFile();
 		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForBrirFiltersWavFiles
-	) {
+	TEST_F(PresenterTests, browseForBrirFiltersWavFiles) {
 		view.browseForBrir();
 		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForTestFileUpdatesTestFilePath
-	) {
+	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
 		view.setBrowseForSavingFileResult("a");
 		view.browseForTestFile();
 		assertEqual("a", view.testFilePath());
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForAudioFileUpdatesAudioFilePath
-	) {
-		view.setBrowseForOpeningFileResult("a");
-		view.browseForAudioFile();
-		assertEqual("a", view.audioFilePath());
+	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(view.audioFilePath_, &ViewStub::browseForAudioFile);
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForDslPrescriptionUpdatesDslPrescriptionFilePath
-	) {
-		view.setBrowseForOpeningFileResult("a");
-		view.browseForLeftDslPrescription();
-		assertEqual("a", view.leftDslPrescriptionFilePath());
-		view.setBrowseForOpeningFileResult("b");
-		view.browseForRightDslPrescription();
-		assertEqual("b", view.rightDslPrescriptionFilePath());
+	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.leftDslPrescriptionFilePath_, 
+			&ViewStub::browseForLeftDslPrescription
+		);
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.rightDslPrescriptionFilePath_, 
+			&ViewStub::browseForRightDslPrescription
+		);
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForStimulusListUpdatesStimulusList
-	) {
+	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
 		view.setBrowseDirectory("a");
 		view.browseForStimulusList();
 		assertEqual("a", view.stimulusList());
 	}
 
-	TEST_F(
-		PresenterTests,
-		browseForBrirUpdatesBrirFilePath
-	) {
-		view.setBrowseForOpeningFileResult("a");
-		view.browseForBrir();
-		assertEqual("a", view.brirFilePath());
+	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
+		assertBrowseForOpeningFileResultPassedToPath(
+			view.brirFilePath_, 
+			&ViewStub::browseForBrir
+		);
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
