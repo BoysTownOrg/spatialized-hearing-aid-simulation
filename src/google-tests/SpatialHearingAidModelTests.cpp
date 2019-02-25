@@ -266,10 +266,9 @@ namespace {
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			SpatialHearingAidModel::SignalProcessing &processing,
+			ProcessingUseCase useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
-			std::function<void(void)> f
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
 			PrescriptionReader::Dsl left;
 			left.compressionRatios = { 1 };
@@ -278,7 +277,7 @@ namespace {
 			left.kneepoints_dBSpl = { 4 };
 			left.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 			left.channels = 6;
-			processing.leftDslPrescriptionFilePath = "leftFilePath";
+			useCase.processing.leftDslPrescriptionFilePath = "leftFilePath";
 			prescriptionReader.addPrescription("leftFilePath", left);
 
 			PrescriptionReader::Dsl right;
@@ -288,10 +287,10 @@ namespace {
 			right.kneepoints_dBSpl = { 10 };
 			right.broadbandOutputLimitingThresholds_dBSpl = { 11 };
 			right.channels = 12;
-			processing.rightDslPrescriptionFilePath = "rightFilePath";
+			useCase.processing.rightDslPrescriptionFilePath = "rightFilePath";
 			prescriptionReader.addPrescription("rightFilePath", right);
 
-			f();
+			useCase.request();
 
 			auto actualLeft = hearingAid.at(0).prescription;
 			assertEqual({ 1 }, actualLeft.compressionRatios);
@@ -930,9 +929,8 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			testing.processing, 
-			simulationFactory.hearingAidSimulation(),
-			[=]() { playFirstTrialOfNewTest(); }
+			playingFirstTrialOfNewTest,
+			simulationFactory.hearingAidSimulation()
 		);
 	}
 
@@ -942,9 +940,8 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			calibration.processing, 
-			simulationFactory.hearingAidSimulation(),
-			[=]() { playCalibration(); }
+			playingCalibration,
+			simulationFactory.hearingAidSimulation()
 		);
 	}
 
@@ -954,9 +951,8 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			savingAudio.processing, 
-			simulationFactory.hearingAidSimulation(),
-			[=]() { processAudioForSaving(); }
+			processingAudioForSaving,
+			simulationFactory.hearingAidSimulation()
 		);
 	}
 
@@ -966,9 +962,8 @@ namespace {
 	) {
 		setFullSimulationForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			testing.processing, 
-			simulationFactory.fullSimulationHearingAid(),
-			[=]() { playFirstTrialOfNewTest(); }
+			playingFirstTrialOfNewTest, 
+			simulationFactory.fullSimulationHearingAid()
 		);
 	}
 
@@ -978,9 +973,8 @@ namespace {
 	) {
 		setFullSimulationForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			calibration.processing, 
-			simulationFactory.fullSimulationHearingAid(),
-			[=]() { playCalibration(); }
+			playingCalibration,
+			simulationFactory.fullSimulationHearingAid()
 		);
 	}
 
@@ -990,9 +984,8 @@ namespace {
 	) {
 		setFullSimulationForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReaderAfterCall(
-			savingAudio.processing, 
-			simulationFactory.fullSimulationHearingAid(),
-			[=]() { processAudioForSaving(); }
+			processingAudioForSaving,
+			simulationFactory.fullSimulationHearingAid()
 		);
 	}
 
