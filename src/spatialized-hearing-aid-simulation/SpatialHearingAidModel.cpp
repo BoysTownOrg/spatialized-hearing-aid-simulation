@@ -407,10 +407,10 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
 	playAudio(&request);
-	Documenter::TrialParameters documenting;
-	documenting.level_dB_Spl = p->level_dB_Spl;
-	documenting.stimulus = nextStimulus_;
-	documenter->documentTrialParameters(std::move(documenting));
+	Documenter::TrialParameters trial;
+	trial.level_dB_Spl = p->level_dB_Spl;
+	trial.stimulus = nextStimulus_;
+	documenter->documentTrialParameters(std::move(trial));
 	nextStimulus_ = stimulusList->next();
 }
 
@@ -484,16 +484,9 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 		channel.resize(framesPerBuffer);
 		adapted.push_back({ channel });
 	}
-	/*
-	std::vector<std::vector<float>> processed(reader->channels());
-	std::vector<float> processed{};
-	*/
 
-	while (!loader_->complete()) {
+	while (!loader_->complete())
 		loader_->load(adapted);
-		//for (int i = 0; i < reader->channels(); ++i)
-		//	processed.at(i).insert(processed.at(i).end(), channels.at(i).begin(), channels.at(i).end());
-	}
 }
 
 void SpatialHearingAidModel::saveAudio(std::string filePath) {
