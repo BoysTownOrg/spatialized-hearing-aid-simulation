@@ -106,7 +106,7 @@ private:
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
-	void prepareAudioPlayer(AudioFrameReader &, int framesPerBuffer, std::string audioDevice);
+	void prepareAudioPlayer(AudioPlayer::Preparation);
 	void prepareNewTest_(Testing *);
 	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);
 };

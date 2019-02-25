@@ -405,7 +405,12 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 		reader, 
 		processorFactoryForTest->make(reader.get(), p->level_dB_Spl))
 	);
-	prepareAudioPlayer(*reader, framesPerBufferForTest, p->audioDevice);
+	AudioPlayer::Preparation playing;
+	playing.channels = reader->channels();
+	playing.sampleRate = reader->sampleRate();
+	playing.framesPerBuffer = framesPerBufferForTest;
+	playing.audioDevice = std::move(p->audioDevice);
+	prepareAudioPlayer(std::move(playing));
 	player->play();
 	Documenter::TrialParameters documenting;
 	documenting.level_dB_Spl = p->level_dB_Spl;
@@ -423,18 +428,9 @@ std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string
 	}
 }
 
-void SpatialHearingAidModel::prepareAudioPlayer(
-	AudioFrameReader &reader, 
-	int framesPerBuffer, 
-	std::string audioDevice
-) {
-	AudioPlayer::Preparation playing;
-	playing.channels = reader.channels();
-	playing.sampleRate = reader.sampleRate();
-	playing.framesPerBuffer = framesPerBuffer;
-	playing.audioDevice = std::move(audioDevice);
+void SpatialHearingAidModel::prepareAudioPlayer(AudioPlayer::Preparation p) {
 	try {
-		player->prepareToPlay(std::move(playing));
+		player->prepareToPlay(std::move(p));
 	}
 	catch (const AudioPlayer::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
@@ -456,7 +452,12 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 		reader, 
 		processorFactory_->make(reader.get(), p->level_dB_Spl))
 	);
-	prepareAudioPlayer(*reader, framesPerBuffer, p->audioDevice);
+	AudioPlayer::Preparation playing;
+	playing.channels = reader->channels();
+	playing.sampleRate = reader->sampleRate();
+	playing.framesPerBuffer = framesPerBuffer;
+	playing.audioDevice = std::move(p->audioDevice);
+	prepareAudioPlayer(std::move(playing));
 	player->play();
 }
 
