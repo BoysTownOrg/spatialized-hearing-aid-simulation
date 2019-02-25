@@ -291,6 +291,26 @@ namespace {
 			assertTrue(view.attack_msDeactivated_);
 			assertTrue(view.release_msDeactivated_);
 		}
+
+		void assertHearingAidSimulationMatchesViewFollowingCall(
+			const Model::SignalProcessing &p, 
+			std::function<void()> f
+		) {
+			view.setHearingAidSimulationOn();
+			view.setAttack_ms("1.1");
+			view.setRelease_ms("2.2");
+			view.setChunkSize("3");
+			view.setWindowSize("4");
+			view.setLeftDslPrescriptionFilePath("a");
+			view.setRightDslPrescriptionFilePath("b");
+			f();
+			assertEqual(1.1, p.attack_ms);
+			assertEqual(2.2, p.release_ms);
+			assertEqual(3, p.chunkSize);
+			assertEqual(4, p.windowSize);
+			assertEqual("a", p.leftDslPrescriptionFilePath);
+			assertEqual("b", p.rightDslPrescriptionFilePath);
+		}
 	};
 
 	TEST_F(PresenterTests, subscribesToViewEvents) {
@@ -308,35 +328,35 @@ namespace {
 
 	TEST_F(PresenterTests, constructorPopulatesAudioDeviceMenu) {
 		model.setAudioDeviceDescriptions({ "a", "b", "c" });
-		Presenter{ &model, &view };
+		Presenter presenter_{ &model, &view };
 		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
 	}
 
 	TEST_F(PresenterTests, constructorActivatesSpatializationUIWhenInitiallyOn) {
 		view.clearActivationState();
 		view.setSpatializationOn();
-		Presenter{ &model, &view };
+		Presenter presenter_{ &model, &view };
 		assertSpatializationUIHasOnlyBeenActivated();
 	}
 
 	TEST_F(PresenterTests, constructordeactivatesSpatializationUIWhenInitiallyOff) {
 		view.clearActivationState();
 		view.setSpatializationOff();
-		Presenter{ &model, &view };
+		Presenter presenter_{ &model, &view };
 		assertSpatializationUIHasOnlyBeenDeactivated();
 	}
 
 	TEST_F(PresenterTests, constructorActivatesHearingAidSimulationUIWhenInitiallyOn) {
 		view.clearActivationState();
 		view.setHearingAidSimulationOn();
-		Presenter{ &model, &view };
+		Presenter presenter_{ &model, &view };
 		assertHearingAidUIHasOnlyBeenActivated();
 	}
 
 	TEST_F(PresenterTests, constructorDeactivatesHearingAidSimulationUIWhenInitiallyOff) {
 		view.clearActivationState();
 		view.setHearingAidSimulationOff();
-		Presenter{ &model, &view };
+		Presenter presenter_{ &model, &view };
 		assertHearingAidUIHasOnlyBeenDeactivated();
 	}
 
@@ -832,37 +852,17 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
-		view.setHearingAidSimulationOn();
-		view.setAttack_ms("1.1");
-		view.setRelease_ms("2.2");
-		view.setChunkSize("3");
-		view.setWindowSize("4");
-		view.setLeftDslPrescriptionFilePath("a");
-		view.setRightDslPrescriptionFilePath("b");
-		view.playCalibration();
-		assertEqual(1.1, model.calibration().processing.attack_ms);
-		assertEqual(2.2, model.calibration().processing.release_ms);
-		assertEqual(3, model.calibration().processing.chunkSize);
-		assertEqual(4, model.calibration().processing.windowSize);
-		assertEqual("a", model.calibration().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.calibration().processing.rightDslPrescriptionFilePath);
+		assertHearingAidSimulationMatchesViewFollowingCall(
+			model.calibration().processing,
+			[=]() { view.playCalibration(); }
+		);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithHearingAidSimulationPassesParametersToModel) {
-		view.setHearingAidSimulationOn();
-		view.setAttack_ms("1.1");
-		view.setRelease_ms("2.2");
-		view.setChunkSize("3");
-		view.setWindowSize("4");
-		view.setLeftDslPrescriptionFilePath("a");
-		view.setRightDslPrescriptionFilePath("b");
-		view.saveAudio();
-		assertEqual(1.1, model.savingAudio().processing.attack_ms);
-		assertEqual(2.2, model.savingAudio().processing.release_ms);
-		assertEqual(3, model.savingAudio().processing.chunkSize);
-		assertEqual(4, model.savingAudio().processing.windowSize);
-		assertEqual("a", model.savingAudio().processing.leftDslPrescriptionFilePath);
-		assertEqual("b", model.savingAudio().processing.rightDslPrescriptionFilePath);
+		assertHearingAidSimulationMatchesViewFollowingCall(
+			model.savingAudio().processing,
+			[=]() { view.saveAudio(); }
+		);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithSpatializationPassesParametersToModel) {

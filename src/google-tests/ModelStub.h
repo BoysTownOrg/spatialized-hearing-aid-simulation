@@ -23,11 +23,11 @@ public:
 		return saveAudioLog_;
 	}
 
-	auto savingAudio() noexcept {
+	auto &savingAudio() const noexcept {
 		return saveAudioParameters_;
 	}
 
-	auto calibration() noexcept {
+	auto &calibration() const noexcept {
 		return calibrationParameters_;
 	}
 
