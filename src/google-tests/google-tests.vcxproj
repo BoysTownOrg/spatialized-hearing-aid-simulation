@@ -179,6 +179,7 @@
     <ClInclude Include="ArgumentCollection.h" />
     <ClInclude Include="AudioDeviceStub.h" />
     <ClInclude Include="AudioFrameProcessorStub.h" />
+    <ClInclude Include="AudioFrameWriterStub.h" />
     <ClInclude Include="AudioPlayerStub.h" />
     <ClInclude Include="BrirReaderStub.h" />
     <ClInclude Include="DirectoryReaderStub.h" />

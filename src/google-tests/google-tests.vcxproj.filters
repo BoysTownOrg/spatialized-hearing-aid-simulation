@@ -146,5 +146,8 @@
     <ClInclude Include="FakeAudioFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AudioFrameWriterStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

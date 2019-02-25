@@ -11,51 +11,20 @@
 #include "DocumenterStub.h"
 #include "CalibrationComputerStub.h"
 #include "SpatializedHearingAidSimulationFactoryStub.h"
+#include "AudioFrameWriterStub.h"
 #include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 #include <gtest/gtest.h>
 
-class AudioFrameWriterStub : public AudioFrameWriter {
-
-};
-
-class AudioFrameWriterStubFactory : public AudioFrameWriterFactory {
-	std::string filePath_{};
-	std::shared_ptr<AudioFrameWriter> writer;
-public:
-	explicit AudioFrameWriterStubFactory(
-		std::shared_ptr<AudioFrameWriter> writer =
-			std::make_shared<AudioFrameWriterStub>()
-	) noexcept :
-		writer{ std::move(writer) } {}
-
-	std::shared_ptr<AudioFrameWriter> make(std::string filePath) {
-		filePath_ = std::move(filePath);
-		return writer;
-	}
-
-	auto filePath() const {
-		return filePath_;
-	}
-};
-
-class ErrorAudioFrameWriterFactory : public AudioFrameWriterFactory {
-	std::string errorMessage{};
-public:
-	explicit ErrorAudioFrameWriterFactory(
-		std::string errorMessage
-	) noexcept : 
-		errorMessage{ std::move(errorMessage) } {}
-
-	std::shared_ptr<AudioFrameWriter> make(std::string) {
-		throw CreateError{ errorMessage };
-	}
-};
-
 namespace {
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
+		struct ProcessingUseCase {
+			SpatialHearingAidModel::SignalProcessing &processing;
+			std::function<void()> request;
+		};
+
 		using channel_type = AudioFrameProcessor::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
 
@@ -92,6 +61,18 @@ namespace {
 			&brirReader,
 			&simulationFactory,
 			&calibrationComputerFactory
+		};
+		ProcessingUseCase playingFirstTrialOfNewTest{
+			testing.processing,
+			[=]() { playFirstTrialOfNewTest(); }
+		};
+		ProcessingUseCase playingCalibration{
+			calibration.processing,
+			[=]() { playCalibration(); }
+		};
+		ProcessingUseCase processingAudioForSaving{
+			savingAudio.processing,
+			[=]() { processAudioForSaving(); }
 		};
 
 		SpatialHearingAidModelTests() {
@@ -247,12 +228,9 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			SpatialHearingAidModel::SignalProcessing &processing, 
-			std::function<void(void)> f
-		) {
-			processing.chunkSize = 1;
-			f();
+		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(ProcessingUseCase useCase) {
+			useCase.processing.chunkSize = 1;
+			useCase.request();
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 		}
 
@@ -785,10 +763,7 @@ namespace {
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
 		testing.processing.usingHearingAidSimulation = true;
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			testing.processing,
-			[=]() { playFirstTrialOfNewTest(); }
-		);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(playingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
@@ -796,10 +771,7 @@ namespace {
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
 		calibration.processing.usingHearingAidSimulation = true;
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(
-			calibration.processing,
-			[=]() { playCalibration(); }
-		);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterCall(playingCalibration);
 	}
 
 	TEST_F(
