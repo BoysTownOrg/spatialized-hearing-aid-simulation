@@ -6,7 +6,7 @@
 class FakeAudioProcessingLoader : public AudioProcessingLoader {
 	ArgumentCollection<std::vector<std::vector<float>>> audio_{};
 	int loadCount_{};
-	int loadCompleteThreshold_{};
+	int loadCompleteThreshold_{1};
 public:
 	void setLoadCompleteThreshold(int x) {
 		loadCompleteThreshold_ = x;

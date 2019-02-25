@@ -1411,21 +1411,39 @@ namespace {
 		assertAudioFrameReaderPassedToLoaderFactory();
 	}
 
-	TEST_F(SpatialHearingAidModelTests, tbd) {
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsAudioUntilComplete) {
 		std::shared_ptr<FakeAudioProcessingLoader> fakeLoader = 
 			std::make_shared<FakeAudioProcessingLoader>();
 		fakeLoader->setLoadCompleteThreshold(2);
+		audioLoaderFactory.setLoader(fakeLoader);
+		processAudioForSaving();
+		assertEqual(2U, fakeLoader->audio().size());
+	}
+
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsChannelSizeMatchedAudio) {
+		std::shared_ptr<FakeAudioProcessingLoader> fakeLoader = 
+			std::make_shared<FakeAudioProcessingLoader>();
 		audioFrameReader->setChannels(3);
+		audioLoaderFactory.setLoader(fakeLoader);
+		processAudioForSaving();
+		for (auto audio : fakeLoader->audio())
+			assertEqual(3U, audio.size());
+	}
+
+	TEST_F(
+		SpatialHearingAidModelTests, 
+		processAudioForSavingLoadsChunkSizedChannelsWhenUsingHearingAidSimulation
+	) {
+		std::shared_ptr<FakeAudioProcessingLoader> fakeLoader = 
+			std::make_shared<FakeAudioProcessingLoader>();
+		audioFrameReader->setChannels(2);
 		savingAudio.processing.chunkSize = 4;
 		savingAudio.processing.usingHearingAidSimulation = true;
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
-		assertEqual(2U, fakeLoader->audio().size());
-		for (auto audio : fakeLoader->audio()) {
-			assertEqual(3U, audio.size());
+		for (auto audio : fakeLoader->audio())
 			for (auto channel : audio)
 				assertEqual(4U, channel.size());
-		}
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {
