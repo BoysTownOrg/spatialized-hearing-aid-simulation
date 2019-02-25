@@ -36,7 +36,6 @@ public:
 
 class FakeAudioFileWriterFactory : public AudioFileWriterFactory {
 	std::string filePath_{};
-	std::string formatMatchedFilePath_{};
 	std::shared_ptr<AudioFileWriter> writer;
 public:
 	explicit FakeAudioFileWriterFactory(
@@ -44,21 +43,13 @@ public:
 	) noexcept :
 		writer{ std::move(writer) } {}
 
-	std::shared_ptr<AudioFileWriter> make(
-		std::string filePath, 
-		std::string formatMatchedFilePath
-	) override {
+	std::shared_ptr<AudioFileWriter> make(std::string filePath) override {
 		filePath_ = std::move(filePath);
-		formatMatchedFilePath_ = std::move(formatMatchedFilePath);
 		return writer;
 	}
 
 	auto filePath() const {
 		return filePath_;
-	}
-
-	auto formatMatchedFilePath() const {
-		return formatMatchedFilePath_;
 	}
 };
 
@@ -95,8 +86,8 @@ namespace {
 			}
 		}
 
-		void make(std::string f = {}, std::string g = {}) {
-			adapterFactory.make(std::move(f), std::move(g));
+		void make(std::string f = {}) {
+			adapterFactory.make(std::move(f));
 		}
 	};
 
@@ -107,8 +98,7 @@ namespace {
 	}
 
 	TEST_F(AudioFileWriterAdapterFactoryTests, passesFilePath) {
-		make("a", "b");
+		make("a");
 		assertEqual("a", factory.filePath());
-		assertEqual("b", factory.formatMatchedFilePath());
 	}
 }
