@@ -133,8 +133,7 @@ namespace {
 		}
 
 		AudioDevicePlayer makePlayer() {
-			AudioDevicePlayer player{ device };
-			return player;
+			return AudioDevicePlayer{ device };
 		}
 
 		void assertPrepareToPlayThrowsPreparationFailure(std::string what) {

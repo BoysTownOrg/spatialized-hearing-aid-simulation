@@ -1,5 +1,5 @@
-#include "assert-utility.h"
 #include "FakeAudioFileReader.h"
+#include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <gtest/gtest.h>
 
@@ -52,7 +52,7 @@ namespace {
 		}
 	};
 
-	TEST_F(AudioFileInMemoryTests, readFillsChannel_Mono) {
+	TEST_F(AudioFileInMemoryTests, readFillsChannelMono) {
 		reader.setChannels(1);
 		reader.setContents({ 1, 2, 3 });
 		AudioFileInMemoryFacade facade{ reader };
@@ -60,7 +60,7 @@ namespace {
 		assertEqual({ 1, 2, 3 }, facade.left);
 	}
 
-	TEST_F(AudioFileInMemoryTests, readFillsEachChannel_Stereo) {
+	TEST_F(AudioFileInMemoryTests, readFillsEachChannelStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 1, 2, 3, 4, 5, 6 });
 		AudioFileInMemoryFacade facade{ reader };
@@ -87,7 +87,7 @@ namespace {
 		assertTrue(facade.complete());
 	}
 
-	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingMoreThanOneSampleAtATime) {
+	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingMoreThanOneSampleAtATime) {
 		reader.setContents({ 3, 4, 5, 6 });
 		AudioFileInMemoryFacade facade{ reader };
 		facade.readMonoFrames(2);
@@ -96,7 +96,7 @@ namespace {
 		assertTrue(facade.complete());
 	}
 
-	TEST_F(AudioFileInMemoryTests, completeWhenExhausted_ReadingBeyondContents) {
+	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingBeyondContents) {
 		reader.setContents({ 2, 3, 4, 5 });
 		AudioFileInMemoryFacade facade{ reader };
 		facade.readMonoFrames(3);
@@ -117,7 +117,7 @@ namespace {
 		assertEqual(0LL, facade.remainingFrames());
 	}
 
-	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReads_Stereo) {
+	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReadsStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 1, 2, 3, 4, 5, 6 });
 		AudioFileInMemoryFacade facade{ reader };
@@ -140,7 +140,7 @@ namespace {
 		assertEqual(2, inMemory.sampleRate());
 	}
 
-	TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset_Mono) {
+	TEST_F(AudioFileInMemoryTests, seeksBeginningOnResetMono) {
 		reader.setChannels(1);
 		reader.setContents({ 2, 3 });
 		AudioFileInMemoryFacade facade{ reader };
@@ -155,7 +155,7 @@ namespace {
 		assertEqual({ 3 }, facade.left);
 	}
 
-	TEST_F(AudioFileInMemoryTests, seeksBeginningOnReset_Stereo) {
+	TEST_F(AudioFileInMemoryTests, seeksBeginningOnResetStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 3, 4, 5, 6 });
 		AudioFileInMemoryFacade facade{ reader };
