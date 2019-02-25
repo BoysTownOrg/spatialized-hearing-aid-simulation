@@ -3,10 +3,7 @@
 #include <gsl/gsl>
 
 class NullProcessorFactory : public AudioFrameProcessorFactory {
-	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override
-	{
-		return {};
-	}
+	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override { return {}; }
 };
 
 class StereoSpatializationFactory : public AudioFrameProcessorFactory {
@@ -452,9 +449,9 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
 	
+	auto reader = makeReader(p->audioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 
-	auto reader = makeReader(p->audioFilePath);
 	player->setAudioLoader(audioLoaderFactory->make(
 		reader, 
 		processorFactory_->make(reader.get(), p->level_dB_Spl))
@@ -467,11 +464,10 @@ void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
 }
 
-void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p_)
-{
-	auto reader = makeReader(p_->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory(p_->processing);
-	processorFactory_->make(reader.get(), p_->level_dB_Spl);
+void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
+	auto reader = makeReader(p->inputAudioFilePath);
+	auto processorFactory_ = makeProcessorFactory(p->processing);
+	processorFactory_->make(reader.get(), p->level_dB_Spl);
 	audioLoaderFactory->make(reader, {});
 }
 
