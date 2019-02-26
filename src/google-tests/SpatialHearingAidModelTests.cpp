@@ -453,6 +453,7 @@ namespace {
 		void assertPrescriptionReaderContainsFilePathsAfterRequest(
 			ProcessingUseCase useCase
 		) {
+			useCase.processing.usingHearingAidSimulation = true;
 			useCase.processing.leftDslPrescriptionFilePath = "a";
 			useCase.processing.rightDslPrescriptionFilePath = "b";
 			useCase.request();
@@ -460,13 +461,18 @@ namespace {
 			assertTrue(prescriptionReader.filePaths().contains("b"));
 		}
 
-		void assertPrescriptionReaderDidNotReadAnything() {
+		void assertPrescriptionReaderDoesNotReadFollowingRequestWhenNoHearingAidSimulation(
+			ProcessingUseCase useCase
+		) {
+			useCase.processing.usingHearingAidSimulation = false;
+			useCase.request();
 			assertTrue(prescriptionReader.filePaths().empty());
 		}
 
-		void assertBrirReaderReceivesFilePathAfterRequest(
+		void assertBrirReaderReceivesFilePathFollowingRequestWhenUsingSpatialization(
 			ProcessingUseCase useCase
 		) {
+			useCase.processing.usingSpatialization = true;
 			useCase.processing.brirFilePath = "a";
 			useCase.request();
 			assertEqual("a", brirReader.filePath());
@@ -585,7 +591,6 @@ namespace {
 		SpatialHearingAidModelTests,
 		prepareNewTestPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		testing.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterRequest(preparingNewTest);
 	}
 
@@ -593,7 +598,6 @@ namespace {
 		SpatialHearingAidModelTests,
 		playCalibrationPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		calibration.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterRequest(playingCalibration);
 	}
 
@@ -601,7 +605,6 @@ namespace {
 		SpatialHearingAidModelTests,
 		processAudioForSavingPassesPrescriptionFilePathsToReaderWhenUsingHearingAidSimulation
 	) {
-		savingAudio.processing.usingHearingAidSimulation = true;
 		assertPrescriptionReaderContainsFilePathsAfterRequest(processingAudioForSaving);
 	}
 
@@ -609,51 +612,42 @@ namespace {
 		SpatialHearingAidModelTests,
 		prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		testing.processing.usingHearingAidSimulation = false;
-		prepareNewTest();
-		assertPrescriptionReaderDidNotReadAnything();
+		assertPrescriptionReaderDoesNotReadFollowingRequestWhenNoHearingAidSimulation(preparingNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playCalibrationDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		calibration.processing.usingHearingAidSimulation = false;
-		playCalibration();
-		assertPrescriptionReaderDidNotReadAnything();
+		assertPrescriptionReaderDoesNotReadFollowingRequestWhenNoHearingAidSimulation(playingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		processAudioForSavingDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		savingAudio.processing.usingHearingAidSimulation = false;
-		processAudioForSaving();
-		assertPrescriptionReaderDidNotReadAnything();
+		assertPrescriptionReaderDoesNotReadFollowingRequestWhenNoHearingAidSimulation(processingAudioForSaving);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		testing.processing.usingSpatialization = true;
-		assertBrirReaderReceivesFilePathAfterRequest(preparingNewTest);
+		assertBrirReaderReceivesFilePathFollowingRequestWhenUsingSpatialization(preparingNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playCalibrationPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		calibration.processing.usingSpatialization = true;
-		assertBrirReaderReceivesFilePathAfterRequest(playingCalibration);
+		assertBrirReaderReceivesFilePathFollowingRequestWhenUsingSpatialization(playingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		processAudioForSavingPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		savingAudio.processing.usingSpatialization = true;
-		assertBrirReaderReceivesFilePathAfterRequest(processingAudioForSaving);
+		assertBrirReaderReceivesFilePathFollowingRequestWhenUsingSpatialization(processingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
