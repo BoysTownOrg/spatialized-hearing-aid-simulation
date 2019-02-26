@@ -13,7 +13,7 @@ public:
 
 	SPATIALIZED_HA_SIMULATION_API explicit ChannelProcessingGroup(
 		processing_group_type processors
-	);
+	) noexcept;
 	SPATIALIZED_HA_SIMULATION_API void process(gsl::span<channel_type> audio) override;
 	SPATIALIZED_HA_SIMULATION_API channel_type::index_type groupDelay() override;
 private:

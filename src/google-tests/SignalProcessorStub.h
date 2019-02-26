@@ -3,16 +3,16 @@
 #include <spatialized-hearing-aid-simulation/SignalProcessor.h>
 
 class SignalProcessorStub : public SignalProcessor {
-	signal_type signal_{};
+	std::vector<signal_type::element_type> processed_{};
 	int samples_{};
 	int groupDelay_{};
 public:
-	auto signal() const noexcept {
-		return signal_;
+	void process(signal_type signal) override {
+		std::copy(signal.begin(), signal.end(), std::back_inserter(processed_));
 	}
 
-	void process(signal_type signal) override {
-		signal_ = std::move(signal);
+	auto processed() const {
+		return processed_;
 	}
 
 	void setGroupDelay(int n) noexcept {

@@ -9,6 +9,7 @@ namespace {
 		using channel_type = ChannelProcessingGroup::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
 		std::vector<std::shared_ptr<SignalProcessorStub>> processors{};
+		std::vector<channel_type> channels{};
 
 		ChannelProcessingGroup construct() {
 			return ChannelProcessingGroup{ { processors.begin(), processors.end() } };
@@ -31,13 +32,13 @@ namespace {
 		assignStubs(3);
 		auto group = construct();
 		buffer_type a{ 1 };
-		buffer_type b{ 2 };
-		buffer_type c{ 3 };
-		std::vector<channel_type> channels{ a, b, c };
+		buffer_type b{ 2, 3 };
+		buffer_type c{ 4, 5, 6 };
+		channels = { a, b, c };
 		group.process(channels);
-		assertEqual(1.0f, processors.at(0)->signal().at(0));
-		assertEqual(2.0f, processors.at(1)->signal().at(0));
-		assertEqual(3.0f, processors.at(2)->signal().at(0));
+		assertEqual({ 1 }, processors.at(0)->processed());
+		assertEqual({ 2, 3 }, processors.at(1)->processed());
+		assertEqual({ 4, 5, 6 }, processors.at(2)->processed());
 	}
 
 	TEST_F(ChannelProcessingGroupTests, groupDelayReturnsMaxGroupDelay) {
@@ -60,10 +61,10 @@ namespace {
 		buffer_type a{ 1 };
 		buffer_type b{ 2 };
 		buffer_type c{ 3 };
-		std::vector<channel_type> channels{ a, b, c };
+		channels = { a, b, c };
 		group.process(channels);
-		assertEqual(1.0f, processors.at(0)->signal().at(0));
-		assertEqual(2.0f, processors.at(1)->signal().at(0));
+		assertEqual({ 1 }, processors.at(0)->processed());
+		assertEqual({ 2 }, processors.at(1)->processed());
 	}
 
 	TEST_F(ChannelProcessingGroupTests, processOnlyChannelsAvailable) {
@@ -71,9 +72,9 @@ namespace {
 		auto group = construct();
 		buffer_type a{ 1 };
 		buffer_type b{ 2 };
-		std::vector<channel_type> channels{ a, b };
+		channels = { a, b };
 		group.process(channels);
-		assertEqual(1.0f, processors.at(0)->signal().at(0));
-		assertEqual(2.0f, processors.at(1)->signal().at(0));
+		assertEqual({ 1 }, processors.at(0)->processed());
+		assertEqual({ 2 }, processors.at(1)->processed());
 	}
 }

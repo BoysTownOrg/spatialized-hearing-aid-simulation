@@ -3,11 +3,14 @@
 
 ChannelProcessingGroup::ChannelProcessingGroup(
 	std::vector<channel_processing_type> processors
-) :
+) noexcept :
 	processors{ std::move(processors) } {}
 
 void ChannelProcessingGroup::process(gsl::span<channel_type> audio) {
-	auto channelsToProcess = std::min(gsl::narrow<processing_group_type::size_type>(audio.size()), processors.size());
+	auto channelsToProcess = std::min(
+		gsl::narrow<processing_group_type::size_type>(audio.size()), 
+		processors.size()
+	);
 	for (processing_group_type::size_type i{ 0 }; i < channelsToProcess; ++i)
 		processors.at(i)->process(audio.at(i));
 }
