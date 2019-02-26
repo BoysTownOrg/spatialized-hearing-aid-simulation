@@ -17,7 +17,9 @@
 
 class AudioFrameWriter {
 public:
+	using channel_type = gsl::span<float>;
 	INTERFACE_OPERATIONS(AudioFrameWriter);
+	virtual void write(gsl::span<channel_type> audio) = 0;
 };
 
 class AudioFrameWriterFactory {
@@ -64,6 +66,7 @@ public:
 };
 
 class SpatialHearingAidModel : public Model {
+	std::vector<std::vector<AudioFrameWriter::channel_type::element_type>> toWrite_{};
 	std::string nextStimulus_{};
 	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;

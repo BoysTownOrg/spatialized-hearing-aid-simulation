@@ -31,3 +31,24 @@ public:
 
 	void reset() override {}
 };
+
+class FakeAudioProcessingLoader2 : public AudioProcessingLoader {
+	std::vector<float> audioToLoad_{};
+	std::vector<float>::size_type head{};
+public:
+	void setAudioToLoad(std::vector<float> x) {
+		audioToLoad_ = std::move(x);
+	}
+
+	bool complete() override {
+		return head == audioToLoad_.size();
+	}
+
+	void load(gsl::span<channel_type> audio) override {
+		for (auto channel : audio)
+			for (auto &x : channel)
+				x = audioToLoad_.at(head++);
+	}
+
+	void reset() override {}
+};

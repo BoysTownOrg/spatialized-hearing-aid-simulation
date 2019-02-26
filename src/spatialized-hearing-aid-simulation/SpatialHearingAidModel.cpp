@@ -476,6 +476,7 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto loader_ = audioProcessingLoaderFactory->make(reader, processor_);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
+	toWrite_.resize(reader->channels());
 	std::vector<channel_type> adapted;
 	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
@@ -484,13 +485,24 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 		channel.resize(framesPerBuffer);
 		adapted.push_back({ channel });
 	}
+	for (auto &channel : toWrite_) {
+		channel.clear();
+	}
 
-	while (!loader_->complete())
+	while (!loader_->complete()) {
 		loader_->load(adapted);
+		for (int i = 0; i < reader->channels(); ++i)
+			toWrite_.at(i).insert(toWrite_.at(i).end(), channels.at(i).begin(), channels.at(i).end());
+	}
 }
 
 void SpatialHearingAidModel::saveAudio(std::string filePath) {
 	auto writer_ = makeWriter(std::move(filePath));
+	using channel_type = AudioFrameWriter::channel_type;
+	std::vector<channel_type> adapted;
+	for (auto &channel : toWrite_)
+		adapted.push_back({ channel });
+	writer_->write(adapted);
 }
 
 std::shared_ptr<AudioFrameWriter> SpatialHearingAidModel::makeWriter(std::string filePath) {

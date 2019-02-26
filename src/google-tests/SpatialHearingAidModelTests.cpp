@@ -1372,6 +1372,19 @@ namespace {
 		assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(processingAudioForSaving);
 	}
 
+	TEST_F(SpatialHearingAidModelTests, savingAudioWritesPreviouslyProcessedAudio) {
+		std::shared_ptr<FakeAudioProcessingLoader2> fakeLoader = 
+			std::make_shared<FakeAudioProcessingLoader2>();
+		fakeLoader->setAudioToLoad({ 1, 2, 3, 4, 5, 6, 7, 8 });
+		audioFrameReader->setChannels(2);
+		savingAudio.processing.chunkSize = 4;
+		savingAudio.processing.usingHearingAidSimulation = true;
+		audioLoaderFactory.setLoader(fakeLoader);
+		processAudioForSaving();
+		model.saveAudio({});
+		assertEqual({ 1, 2, 3, 4, 5, 6, 7, 8 }, audioFrameWriter->written());
+	}
+
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
 		SpatialHearingAidModel::Testing testing{};
