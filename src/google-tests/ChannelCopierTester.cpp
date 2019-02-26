@@ -66,8 +66,10 @@ namespace {
 
 	class ChannelCopierDecorateTests : public ::testing::Test {
 	protected:
-		ChannelCopierFacade copyInMemoryReader(AudioFileReader &r) {
-			return ChannelCopierFacade{ std::make_shared<AudioFileInMemory>(r) };
+		FakeAudioFileReader reader;
+
+		ChannelCopierFacade copyInMemoryReader() {
+			return ChannelCopierFacade{ std::make_shared<AudioFileInMemory>(reader) };
 		}
 	};
 
@@ -75,10 +77,9 @@ namespace {
 		ChannelCopierDecorateTests, 
 		copiesFirstChannelToSecondWhenDecoratedReaderHasOnlyOneChannel
 	) {
-		FakeAudioFileReader reader;
 		reader.setContents({ 1, 2, 3 });
 		reader.setChannels(1);
-		auto copier = copyInMemoryReader(reader);
+		auto copier = copyInMemoryReader();
 		copier.readStereoFrames(3);
 		assertEqual({ 1, 2, 3 }, copier.left);
 		assertEqual({ 1, 2, 3 }, copier.right);
@@ -88,8 +89,7 @@ namespace {
 		ChannelCopierDecorateTests, 
 		ableToReadEmptyAudioWithoutThrowing
 	) {
-		FakeAudioFileReader reader;
-		auto copier = copyInMemoryReader(reader);
+		auto copier = copyInMemoryReader();
 		copier.readEmptyAudio();
 	}
 
