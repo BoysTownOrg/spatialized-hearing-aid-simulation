@@ -57,6 +57,11 @@ namespace {
 			std::vector<channel_type> stereo{ left, right };
 			copier.read(stereo);
 		}
+
+		void readEmptyAudio() {
+			std::vector<channel_type> empty{};
+			copier.read(empty);
+		}
 	};
 
 	class ChannelCopierDecorateTests : public ::testing::Test {
@@ -77,6 +82,15 @@ namespace {
 		copier.readStereoFrames(3);
 		assertEqual({ 1, 2, 3 }, copier.left);
 		assertEqual({ 1, 2, 3 }, copier.right);
+	}
+
+	TEST_F(
+		ChannelCopierDecorateTests, 
+		ableToReadEmptyAudioWithoutThrowing
+	) {
+		FakeAudioFileReader reader;
+		auto copier = copyInMemoryReader(reader);
+		copier.readEmptyAudio();
 	}
 
 	class ChannelCopierFactoryTests : public ::testing::Test {
