@@ -23,6 +23,14 @@ namespace {
 		) :
 			loader{ std::make_shared<AudioFileInMemory>(reader), std::move(processor) } {}
 
+		explicit ZeroPaddedLoaderFacade(
+			std::shared_ptr<AudioFrameReader> r =
+				std::make_shared<AudioFrameReaderStub>(),
+			std::shared_ptr<AudioFrameProcessor> p =
+				std::make_shared<AudioFrameProcessorStub>()
+		) :
+			loader{ std::move(r), std::move(p) } {}
+
 		void loadMonoFrames(size_type n) {
 			left.resize(n);
 			std::vector<channel_type> mono{ left };
@@ -38,6 +46,10 @@ namespace {
 
 		auto complete() {
 			return loader.complete();
+		}
+
+		auto reset() {
+			return loader.reset();
 		}
 	};
 
@@ -58,25 +70,21 @@ namespace {
 			loader.reset();
 		}
 
-		void loadMonoFrames(size_type n) {
-			left.resize(n);
-			std::vector<channel_type> mono{ left };
-			loader.load(mono);
-		}
-
-		void loadStereoFrames(size_type n) {
-			left.resize(n);
-			right.resize(n);
-			std::vector<channel_type> stereo{ left, right };
-			loader.load(stereo);
-		}
-
 		ZeroPaddedLoaderFacade construct(
 			AudioFileReader &reader_, 
 			std::shared_ptr<AudioFrameProcessor> p =
 				std::make_shared<AudioFrameProcessorStub>()
 		) {
 			return ZeroPaddedLoaderFacade{ reader_, std::move(p) };
+		}
+
+		ZeroPaddedLoaderFacade construct(
+			std::shared_ptr<AudioFrameProcessor> p =
+				std::make_shared<AudioFrameProcessorStub>(),
+			std::shared_ptr<AudioFrameReader> r =
+				std::make_shared<AudioFrameReaderStub>()
+		) {
+			return ZeroPaddedLoaderFacade{ std::move(r), std::move(p) };
 		}
 
 		void assertComplete() {
@@ -110,12 +118,13 @@ namespace {
 
 	TEST_F(ZeroPaddedLoaderTests, completeAfterLoadingGroupDelayManyZeros) {
 		processor->setGroupDelay(3);
-		loadMonoFrames(1);
-		assertIncomplete();
-		loadMonoFrames(1);
-		assertIncomplete();
-		loadMonoFrames(1);
-		assertComplete();
+		auto loader_ = construct(processor);
+		loader_.loadMonoFrames(1);
+		assertFalse(loader_.complete());
+		loader_.loadMonoFrames(1);
+		assertFalse(loader_.complete());
+		loader_.loadMonoFrames(1);
+		assertTrue(loader_.complete());
 	}
 
 	TEST_F(ZeroPaddedLoaderTests, completeAfterLoadingGroupDelayManyZerosPartiallyPaddedLoad) {
@@ -136,10 +145,11 @@ namespace {
 
 	TEST_F(ZeroPaddedLoaderTests, resetResetsZeroPadCount) {
 		processor->setGroupDelay(1);
-		loadMonoFrames(1);
-		assertComplete();
-		reset();
-		assertIncomplete();
+		auto loader_ = construct(processor);
+		loader_.loadMonoFrames(1);
+		assertTrue(loader_.complete());
+		loader_.reset();
+		assertFalse(loader_.complete());
 	}
 
 	class TimesTwo : public AudioFrameProcessor {
