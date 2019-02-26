@@ -25,6 +25,7 @@ namespace {
 		virtual void setHearingAidSimulationOn() = 0;
 		virtual void setHearingAidSimulationOff() = 0;
 		virtual void setChunkSize(int) = 0;
+		virtual void setLevel_dB_Spl(double) = 0;
 	};
 
 	void setHearingAidSimulationOn(Model::SignalProcessing &p) {
@@ -59,6 +60,10 @@ namespace {
 		void setChunkSize(int x) override {
 			::setChunkSize(testing.processing, x);
 		}
+
+		void setLevel_dB_Spl(double x) override {
+			trial.level_dB_Spl = x;
+		}
 	};
 
 	class PlayingCalibration : public ExperimentalUseCase {
@@ -79,6 +84,10 @@ namespace {
 		void setChunkSize(int x) override {
 			::setChunkSize(calibration.processing, x);
 		}
+
+		void setLevel_dB_Spl(double x) override {
+			calibration.level_dB_Spl = x;
+		}
 	};
 
 	class ProcessingAudioForSaving : public ExperimentalUseCase {
@@ -98,6 +107,10 @@ namespace {
 		
 		void setChunkSize(int x) override {
 			::setChunkSize(savingAudio.processing, x);
+		}
+
+		void setLevel_dB_Spl(double x) override {
+			savingAudio.level_dB_Spl = x;
 		}
 	};
 
@@ -322,13 +335,17 @@ namespace {
 		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ExperimentalUseCase *useCase) {
 			useCase->setChunkSize(1);
 			useCase->setHearingAidSimulationOn();
-			useCase->run(&model);
+			runUseCase(useCase);
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
+		}
+
+		void runUseCase(ExperimentalUseCase *useCase) {
+			useCase->run(&model);
 		}
 
 		void assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(ExperimentalUseCase *useCase) {
 			useCase->setHearingAidSimulationOff();
-			useCase->run(&model);
+			runUseCase(useCase);
 			assertEqual(
 				SpatialHearingAidModel::defaultFramesPerBuffer, 
 				audioPlayer.preparation().framesPerBuffer
@@ -336,14 +353,14 @@ namespace {
 		}
 
 		void assertCalibrationComputerFactoryReceivesAudioFrameReader(ExperimentalUseCase *useCase) noexcept {
-			useCase->run(&model);
+			runUseCase(useCase);
 			EXPECT_EQ(audioFrameReader.get(), calibrationComputerFactory.reader());
 		}
 
-		void assertCalibrationDigitalLevels(double &level, std::function<void(void)> f) {
+		void assertCalibrationDigitalLevels(ExperimentalUseCase *useCase) {
 			audioFrameReader->setChannels(2);
-			level = 65;
-			f();
+			useCase->setLevel_dB_Spl(65);
+			runUseCase(useCase);
 			assertEqual(65 - SpatialHearingAidModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(0));
 			assertEqual(65 - SpatialHearingAidModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 		}
@@ -935,24 +952,15 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
-		assertCalibrationDigitalLevels(
-			trial.level_dB_Spl,
-			[=]() { playFirstTrialOfNewTest(); }
-		);
+		assertCalibrationDigitalLevels(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesDigitalLevelToCalibrationComputer) {
-		assertCalibrationDigitalLevels(
-			calibration.level_dB_Spl,
-			[=]() { playCalibration(); }
-		);
+		assertCalibrationDigitalLevels(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesDigitalLevelToCalibrationComputer) {
-		assertCalibrationDigitalLevels(
-			savingAudio.level_dB_Spl,
-			[=]() { processAudioForSaving(); }
-		);
+		assertCalibrationDigitalLevels(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialComputesCalibrationScalarsForFullSimulation) {
