@@ -232,7 +232,8 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterRequest(ProcessingUseCase useCase) {
+		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(ProcessingUseCase useCase) {
+			useCase.processing.usingHearingAidSimulation = true;
 			useCase.processing.chunkSize = 1;
 			useCase.request();
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
@@ -487,7 +488,11 @@ namespace {
 			assertEqual("a", audioFrameReaderFactory.filePath());
 		}
 		
-		void assertBrirReaderDidNotReadAnything() {
+		void assertBrirReaderDidNotReadAnything(
+			ProcessingUseCase useCase
+		) {
+			useCase.processing.usingSpatialization = false;
+			useCase.request();
 			assertFalse(brirReader.readCalled());
 		}
 
@@ -651,21 +656,15 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-		testing.processing.usingSpatialization = false;
-		prepareNewTest();
-		assertBrirReaderDidNotReadAnything();
+		assertBrirReaderDidNotReadAnything(preparingNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
-		calibration.processing.usingSpatialization = false;
-		playCalibration();
-		assertBrirReaderDidNotReadAnything();
+		assertBrirReaderDidNotReadAnything(playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingDoesNotReadBrirWhenNotUsingSpatialization) {
-		savingAudio.processing.usingSpatialization = false;
-		processAudioForSaving();
-		assertBrirReaderDidNotReadAnything();
+		assertBrirReaderDidNotReadAnything(processingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPlaysPlayer) {
@@ -728,16 +727,14 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		testing.processing.usingHearingAidSimulation = true;
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterRequest(playingFirstTrialOfNewTest);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(playingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		calibration.processing.usingHearingAidSimulation = true;
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeAfterRequest(playingCalibration);
+		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(playingCalibration);
 	}
 
 	TEST_F(
