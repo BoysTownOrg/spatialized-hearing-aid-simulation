@@ -18,7 +18,7 @@ void AudioFileWriterAdapter::write(gsl::span<channel_type> audio) {
 AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileFactory *factory) : 
 	factory{ factory } {}
 
-std::shared_ptr<AudioFileWriterAdapter> AudioFileWriterAdapterFactory::make(
+std::shared_ptr<AudioFrameWriter> AudioFileWriterAdapterFactory::make(
 	std::string filePath
 ) {
 	try {

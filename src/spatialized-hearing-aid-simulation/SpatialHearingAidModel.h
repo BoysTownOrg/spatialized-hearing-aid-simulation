@@ -5,29 +5,15 @@
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
+#include "AudioFrameWriter.h"
 #include "AudioProcessingLoader.h"
 #include "ICalibrationComputer.h"
 #include "StimulusList.h"
 #include "Documenter.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
-#include <common-includes/RuntimeError.h>
 #include <presentation/Model.h>
 #include <memory>
 #include <string>
-
-class AudioFrameWriter {
-public:
-	using channel_type = gsl::span<float>;
-	INTERFACE_OPERATIONS(AudioFrameWriter);
-	virtual void write(gsl::span<channel_type> audio) = 0;
-};
-
-class AudioFrameWriterFactory {
-public:
-	INTERFACE_OPERATIONS(AudioFrameWriterFactory);
-	virtual std::shared_ptr<AudioFrameWriter> make(std::string filePath) = 0;
-	RUNTIME_ERROR(CreateError);
-};
 
 class AudioFrameProcessorFactory {
 public:
