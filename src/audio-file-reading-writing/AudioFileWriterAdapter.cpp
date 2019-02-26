@@ -8,6 +8,9 @@ AudioFileWriterAdapter::AudioFileWriterAdapter(std::shared_ptr<AudioFileWriter> 
 }
 
 void AudioFileWriterAdapter::write(gsl::span<channel_type> audio) {
+	if (audio.size() == 0)
+		return;
+
 	auto found = std::min_element(
 		audio.begin(),
 		audio.end(),

@@ -15,7 +15,7 @@ namespace {
 			std::make_shared<FakeAudioFileWriter>();
 		AudioFileWriterAdapter adapter{ writer };
 
-		void write() {
+		void writeStereo() {
 			std::vector<channel_type> channels{ left, right };
 			writer->setChannels(2);
 			adapter.write(channels);
@@ -25,22 +25,28 @@ namespace {
 	TEST_F(AudioFileWriterAdapterTests, writeInterleavesChannels) {
 		left = { 1, 3, 5 };
 		right = { 2, 4, 6 };
-		write();
+		writeStereo();
 		assertEqual({ 1, 2, 3, 4, 5, 6 }, writer->written());
 	}
 
-	TEST_F(AudioFileWriterAdapterTests, ableToWriteNothing) {
+	TEST_F(AudioFileWriterAdapterTests, writeEmptyChannelsDoesNotThrow) {
 		left = {};
 		right = {};
-		write();
+		writeStereo();
 		assertTrue(writer->written().empty());
 	}
 
-	TEST_F(AudioFileWriterAdapterTests, truncatesToSmallestChannel) {
+	TEST_F(AudioFileWriterAdapterTests, writeTruncatesToSmallestChannel) {
 		left = { 1, 3, 5 };
 		right = { 2, 4 };
-		write();
+		writeStereo();
 		assertEqual({ 1, 2, 3, 4 }, writer->written());
+	}
+
+	TEST_F(AudioFileWriterAdapterTests, writeEmptyAudioDoesNotThrow) {
+		std::vector<channel_type> channels{};
+		adapter.write(channels);
+		assertTrue(writer->written().empty());
 	}
 
 	class AudioFileWriterAdapterFactoryTests : public ::testing::Test {
