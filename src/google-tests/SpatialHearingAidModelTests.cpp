@@ -81,6 +81,26 @@ namespace {
 		}
 	};
 
+	class ProcessingAudioForSaving : public ExperimentalUseCase {
+		SpatialHearingAidModel::SavingAudio savingAudio{};
+	public:
+		void run(Model *model) override {
+			model->processAudioForSaving(&savingAudio);
+		}
+
+		void setHearingAidSimulationOn() override {
+			::setHearingAidSimulationOn(savingAudio.processing);
+		}
+
+		void setHearingAidSimulationOff() override {
+			::setHearingAidSimulationOff(savingAudio.processing);
+		}
+		
+		void setChunkSize(int x) override {
+			::setChunkSize(savingAudio.processing, x);
+		}
+	};
+
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
 		struct ProcessingUseCase {
@@ -144,6 +164,7 @@ namespace {
 
 		PlayingFirstTrialOfNewTest experimentalPlayingFirstTrialOfNewTest{};
 		PlayingCalibration experimentalPlayingCalibration{};
+		ProcessingAudioForSaving experimentalProcessingAudioForSaving{};
 
 		SpatialHearingAidModelTests() {
 			setValidDefaults();
@@ -314,8 +335,8 @@ namespace {
 			);
 		}
 
-		void assertCalibrationComputerFactoryReceivesAudioFrameReader(ProcessingUseCase useCase) noexcept {
-			(this->*useCase.request)();
+		void assertCalibrationComputerFactoryReceivesAudioFrameReader(ExperimentalUseCase *useCase) noexcept {
+			useCase->run(&model);
 			EXPECT_EQ(audioFrameReader.get(), calibrationComputerFactory.reader());
 		}
 
@@ -902,15 +923,15 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
-		assertCalibrationComputerFactoryReceivesAudioFrameReader(playingFirstTrialOfNewTest);
+		assertCalibrationComputerFactoryReceivesAudioFrameReader(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFrameReaderToCalibrationFactory) {
-		assertCalibrationComputerFactoryReceivesAudioFrameReader(playingCalibration);
+		assertCalibrationComputerFactoryReceivesAudioFrameReader(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFrameReaderToCalibrationFactory) {
-		assertCalibrationComputerFactoryReceivesAudioFrameReader(processingAudioForSaving);
+		assertCalibrationComputerFactoryReceivesAudioFrameReader(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesDigitalLevelToCalibrationComputer) {
