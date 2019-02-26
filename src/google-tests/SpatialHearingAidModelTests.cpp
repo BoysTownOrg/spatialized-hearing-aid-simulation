@@ -232,14 +232,16 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(ProcessingUseCase useCase) {
+		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ProcessingUseCase useCase) {
 			useCase.processing.usingHearingAidSimulation = true;
 			useCase.processing.chunkSize = 1;
 			useCase.request();
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 		}
 
-		void assertAudioPlayerFramesPerBufferMatchesDefault() {
+		void assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(ProcessingUseCase useCase) {
+			useCase.processing.usingHearingAidSimulation = false;
+			useCase.request();
 			assertEqual(
 				SpatialHearingAidModel::defaultFramesPerBuffer, 
 				audioPlayer.preparation().framesPerBuffer
@@ -727,32 +729,28 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(playingFirstTrialOfNewTest);
+		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(playingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		assertAudioPlayerFramesPerBufferMatchesProcessingChunkSizeFollowingRequestWhenUsingHearingAidSimulation(playingCalibration);
+		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(playingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playTrialUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
-		testing.processing.usingHearingAidSimulation = false;
-		playFirstTrialOfNewTest();
-		assertAudioPlayerFramesPerBufferMatchesDefault();
+		assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(playingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playCalibrationUsesDefaultFramesPerBufferWhenNotUsingHearingAidSimulation
 	) {
-		calibration.processing.usingHearingAidSimulation = false;
-		playCalibration();
-		assertAudioPlayerFramesPerBufferMatchesDefault();
+		assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToCalibrationFactory) {
