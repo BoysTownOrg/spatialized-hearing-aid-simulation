@@ -26,6 +26,8 @@ namespace {
 		virtual void setHearingAidSimulationOff() = 0;
 		virtual void setChunkSize(int) = 0;
 		virtual void setLevel_dB_Spl(double) = 0;
+		virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
+		virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	};
 
 	void setHearingAidSimulationOn(Model::SignalProcessing &p) {
@@ -38,6 +40,14 @@ namespace {
 
 	void setChunkSize(Model::SignalProcessing &p, int x) {
 		p.chunkSize = x;
+	}
+
+	void setLeftDslPrescriptionFilePath(Model::SignalProcessing &p, std::string s) {
+		p.leftDslPrescriptionFilePath = std::move(s);
+	}
+
+	void setRightDslPrescriptionFilePath(Model::SignalProcessing &p, std::string s) {
+		p.rightDslPrescriptionFilePath = std::move(s);
 	}
 
 	class PlayingFirstTrialOfNewTest : public ExperimentalUseCase {
@@ -64,6 +74,14 @@ namespace {
 		void setLevel_dB_Spl(double x) override {
 			trial.level_dB_Spl = x;
 		}
+
+		void setLeftDslPrescriptionFilePath(std::string s) override {
+			::setLeftDslPrescriptionFilePath(testing.processing, std::move(s));
+		}
+
+		void setRightDslPrescriptionFilePath(std::string s) override {
+			::setRightDslPrescriptionFilePath(testing.processing, std::move(s));
+		}
 	};
 
 	class PlayingCalibration : public ExperimentalUseCase {
@@ -88,6 +106,14 @@ namespace {
 		void setLevel_dB_Spl(double x) override {
 			calibration.level_dB_Spl = x;
 		}
+		
+		void setLeftDslPrescriptionFilePath(std::string s) override {
+			::setLeftDslPrescriptionFilePath(calibration.processing, std::move(s));
+		}
+
+		void setRightDslPrescriptionFilePath(std::string s) override {
+			::setRightDslPrescriptionFilePath(calibration.processing, std::move(s));
+		}
 	};
 
 	class ProcessingAudioForSaving : public ExperimentalUseCase {
@@ -111,6 +137,14 @@ namespace {
 
 		void setLevel_dB_Spl(double x) override {
 			savingAudio.level_dB_Spl = x;
+		}
+		
+		void setLeftDslPrescriptionFilePath(std::string s) override {
+			::setLeftDslPrescriptionFilePath(savingAudio.processing, std::move(s));
+		}
+
+		void setRightDslPrescriptionFilePath(std::string s) override {
+			::setRightDslPrescriptionFilePath(savingAudio.processing, std::move(s));
 		}
 	};
 
@@ -378,7 +412,7 @@ namespace {
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReader(
-			ProcessingUseCase useCase,
+			ExperimentalUseCase *useCase,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
@@ -389,7 +423,7 @@ namespace {
 			left.kneepoints_dBSpl = { 4 };
 			left.broadbandOutputLimitingThresholds_dBSpl = { 5 };
 			left.channels = 6;
-			useCase.processing.leftDslPrescriptionFilePath = "leftFilePath";
+			useCase->setLeftDslPrescriptionFilePath("leftFilePath");
 			prescriptionReader.addPrescription("leftFilePath", left);
 
 			PrescriptionReader::Dsl right;
@@ -399,10 +433,10 @@ namespace {
 			right.kneepoints_dBSpl = { 10 };
 			right.broadbandOutputLimitingThresholds_dBSpl = { 11 };
 			right.channels = 12;
-			useCase.processing.rightDslPrescriptionFilePath = "rightFilePath";
+			useCase->setRightDslPrescriptionFilePath("rightFilePath");
 			prescriptionReader.addPrescription("rightFilePath", right);
 			
-			(this->*useCase.request)();
+			runUseCase(useCase);
 
 			auto actualLeft = hearingAid.at(0).prescription;
 			assertEqual({ 1 }, actualLeft.compressionRatios);
@@ -1065,7 +1099,7 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			playingFirstTrialOfNewTest,
+			&experimentalPlayingFirstTrialOfNewTest,
 			simulationFactory.hearingAidSimulation()
 		);
 	}
@@ -1076,7 +1110,7 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			playingCalibration,
+			&experimentalPlayingCalibration,
 			simulationFactory.hearingAidSimulation()
 		);
 	}
@@ -1087,7 +1121,7 @@ namespace {
 	) {
 		setHearingAidSimulationOnlyForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			processingAudioForSaving,
+			&experimentalProcessingAudioForSaving,
 			simulationFactory.hearingAidSimulation()
 		);
 	}
@@ -1098,7 +1132,7 @@ namespace {
 	) {
 		setFullSimulationForTest();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			playingFirstTrialOfNewTest, 
+			&experimentalPlayingFirstTrialOfNewTest, 
 			simulationFactory.fullSimulationHearingAid()
 		);
 	}
@@ -1109,7 +1143,7 @@ namespace {
 	) {
 		setFullSimulationForCalibration();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			playingCalibration,
+			&experimentalPlayingCalibration,
 			simulationFactory.fullSimulationHearingAid()
 		);
 	}
@@ -1120,7 +1154,7 @@ namespace {
 	) {
 		setFullSimulationForSaving();
 		assertSimulationPrescriptionsMatchPrescriptionReader(
-			processingAudioForSaving,
+			&experimentalProcessingAudioForSaving,
 			simulationFactory.fullSimulationHearingAid()
 		);
 	}
