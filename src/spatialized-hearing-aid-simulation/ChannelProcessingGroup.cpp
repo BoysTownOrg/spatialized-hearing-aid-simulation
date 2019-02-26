@@ -7,12 +7,9 @@ ChannelProcessingGroup::ChannelProcessingGroup(
 	processors{ std::move(processors) } {}
 
 void ChannelProcessingGroup::process(gsl::span<channel_type> audio) {
-	if (gsl::narrow<processing_group_type::size_type>(audio.size()) != processors.size())
-		return;
-
-	auto it = processors.begin();
-	for (auto channel : audio)
-		(*it++)->process(channel);
+	auto channelsToProcess = std::min(gsl::narrow<processing_group_type::size_type>(audio.size()), processors.size());
+	for (processing_group_type::size_type i{ 0 }; i < channelsToProcess; ++i)
+		processors.at(i)->process(audio.at(i));
 }
 
 auto ChannelProcessingGroup::groupDelay() -> channel_type::index_type {

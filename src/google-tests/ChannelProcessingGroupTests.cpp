@@ -54,7 +54,7 @@ namespace {
 		assertEqual(0, group.groupDelay());
 	}
 
-	TEST_F(ChannelProcessingGroupTests, processIncorrectNumberOfChannelsJustReturns) {
+	TEST_F(ChannelProcessingGroupTests, processIgnoresExtraChannels) {
 		assignStubs(2);
 		auto group = construct();
 		buffer_type a{ 1 };
@@ -62,5 +62,18 @@ namespace {
 		buffer_type c{ 3 };
 		std::vector<channel_type> channels{ a, b, c };
 		group.process(channels);
+		assertEqual(1.0f, processors.at(0)->signal().at(0));
+		assertEqual(2.0f, processors.at(1)->signal().at(0));
+	}
+
+	TEST_F(ChannelProcessingGroupTests, processOnlyChannelsAvailable) {
+		assignStubs(3);
+		auto group = construct();
+		buffer_type a{ 1 };
+		buffer_type b{ 2 };
+		std::vector<channel_type> channels{ a, b };
+		group.process(channels);
+		assertEqual(1.0f, processors.at(0)->signal().at(0));
+		assertEqual(2.0f, processors.at(1)->signal().at(0));
 	}
 }
