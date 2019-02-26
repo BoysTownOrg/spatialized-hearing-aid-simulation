@@ -36,6 +36,13 @@ namespace {
 		assertTrue(writer->written().empty());
 	}
 
+	TEST_F(AudioFileWriterAdapterTests, truncatesToSmallestChannel) {
+		left = { 1, 3, 5 };
+		right = { 2, 4 };
+		write();
+		assertEqual({ 1, 2, 3, 4 }, writer->written());
+	}
+
 	class AudioFileWriterAdapterFactoryTests : public ::testing::Test {
 	protected:
 		std::shared_ptr<FakeAudioFileWriter> writer =

@@ -8,12 +8,20 @@ AudioFileWriterAdapter::AudioFileWriterAdapter(std::shared_ptr<AudioFileWriter> 
 }
 
 void AudioFileWriterAdapter::write(gsl::span<channel_type> audio) {
+	auto found = std::min_element(
+		audio.begin(),
+		audio.end(),
+		[](channel_type a, channel_type b) { 
+			return a.size() < b.size(); 
+		}
+	);
+	const auto channelSize = found->size();
 	std::vector<channel_type::element_type> buffer{};
-	for (int i = 0; i < audio.begin()->size(); ++i)
+	for (int i = 0; i < channelSize; ++i)
 		for (auto channel : audio)
 			buffer.push_back(channel.at(i));
 	if (buffer.size() > 0)
-		writer->writeFrames(&buffer.front(), audio.begin()->size());
+		writer->writeFrames(&buffer.front(), channelSize);
 }
 
 AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileFactory *factory) : 
