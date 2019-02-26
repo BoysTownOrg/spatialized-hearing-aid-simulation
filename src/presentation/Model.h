@@ -16,8 +16,8 @@ public:
 		std::string brirFilePath;
 		double attack_ms;
 		double release_ms;
-		int windowSize;
-		int chunkSize;
+		int windowSize{ 256 };
+		int chunkSize{ 1024 };
 		bool usingHearingAidSimulation;
 		bool usingSpatialization;
 	};

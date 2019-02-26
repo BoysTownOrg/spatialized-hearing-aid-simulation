@@ -18,6 +18,56 @@
 #include <gtest/gtest.h>
 
 namespace {
+	class ExperimentalUseCase {
+	public:
+		INTERFACE_OPERATIONS(ExperimentalUseCase);
+		virtual void run(Model *) = 0;
+		virtual void setHearingAidSimulationOn() = 0;
+		virtual void setChunkSize(int) = 0;
+	};
+
+	void setHearingAidSimulationOn(Model::SignalProcessing &p) {
+		p.usingHearingAidSimulation = true;
+	}
+
+	void setChunkSize(Model::SignalProcessing &p, int x) {
+		p.chunkSize = x;
+	}
+
+	class PlayingFirstTrialOfNewTest : public ExperimentalUseCase {
+		SpatialHearingAidModel::Testing testing{};
+		SpatialHearingAidModel::Trial trial{};
+	public:
+		void run(Model *model) override {
+			model->prepareNewTest(&testing);
+			model->playNextTrial(&trial);
+		}
+
+		void setHearingAidSimulationOn() override {
+			::setHearingAidSimulationOn(testing.processing);
+		}
+		
+		void setChunkSize(int x) override {
+			::setChunkSize(testing.processing, x);
+		}
+	};
+
+	class PlayingCalibration : public ExperimentalUseCase {
+		SpatialHearingAidModel::Calibration calibration{};
+	public:
+		void run(Model *model) override {
+			model->playCalibration(&calibration);
+		}
+
+		void setHearingAidSimulationOn() override {
+			::setHearingAidSimulationOn(calibration.processing);
+		}
+		
+		void setChunkSize(int x) override {
+			::setChunkSize(calibration.processing, x);
+		}
+	};
+
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
 		struct ProcessingUseCase {
@@ -78,6 +128,9 @@ namespace {
 			savingAudio.processing,
 			&SpatialHearingAidModelTests::processAudioForSaving
 		};
+
+		PlayingFirstTrialOfNewTest experimentalPlayingFirstTrialOfNewTest{};
+		PlayingCalibration experimentalPlayingCalibration{};
 
 		SpatialHearingAidModelTests() {
 			setValidDefaults();
@@ -232,10 +285,10 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ProcessingUseCase useCase) {
-			useCase.processing.usingHearingAidSimulation = true;
-			useCase.processing.chunkSize = 1;
-			(this->*useCase.request)();
+		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ExperimentalUseCase *useCase) {
+			useCase->setChunkSize(1);
+			useCase->setHearingAidSimulationOn();
+			useCase->run(&model);
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 		}
 
@@ -811,14 +864,14 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(playingFirstTrialOfNewTest);
+		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationUsesChunkSizeAsFramesPerBufferWhenUsingHearingAidSimulation
 	) {
-		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(playingCalibration);
+		assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
