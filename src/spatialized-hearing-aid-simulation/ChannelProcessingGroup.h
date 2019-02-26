@@ -9,12 +9,14 @@
 class ChannelProcessingGroup : public AudioFrameProcessor {
 public:
 	using channel_processing_type = std::shared_ptr<SignalProcessor>;
+	using processing_group_type = std::vector<channel_processing_type>;
+
 	SPATIALIZED_HA_SIMULATION_API explicit ChannelProcessingGroup(
-		std::vector<channel_processing_type> processors
+		processing_group_type processors
 	);
 	SPATIALIZED_HA_SIMULATION_API void process(gsl::span<channel_type> audio) override;
 	SPATIALIZED_HA_SIMULATION_API channel_type::index_type groupDelay() override;
 private:
-	std::vector<channel_processing_type> processors;
+	processing_group_type processors;
 };
 

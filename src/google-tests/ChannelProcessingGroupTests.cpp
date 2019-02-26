@@ -53,4 +53,14 @@ namespace {
 		auto group = construct();
 		assertEqual(0, group.groupDelay());
 	}
+
+	TEST_F(ChannelProcessingGroupTests, processIncorrectNumberOfChannelsJustReturns) {
+		assignStubs(2);
+		auto group = construct();
+		buffer_type a{ 1 };
+		buffer_type b{ 2 };
+		buffer_type c{ 3 };
+		std::vector<channel_type> channels{ a, b, c };
+		group.process(channels);
+	}
 }
