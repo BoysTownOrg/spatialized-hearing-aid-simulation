@@ -33,6 +33,7 @@ void Presenter::showTestSetupView() {
 	view->showAudioFilePath();
 	view->showPlayButton();
 	view->showStopButton();
+	view->showSaveButton();
 	view->showLevel_dB_Spl();
 	view->showBrowseForAudioFileButton();
 	view->showBrowseForStimulusListButton();
@@ -177,6 +178,7 @@ void Presenter::hideTestSetupView() {
 	view->hideAudioFilePath();
 	view->hidePlayButton();
 	view->hideStopButton();
+	view->hideSaveButton();
 	view->hideLevel_dB_Spl();
 	view->hideBrowseForAudioFileButton();
 	view->hideBrowseForStimulusListButton();

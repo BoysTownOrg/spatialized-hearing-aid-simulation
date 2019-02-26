@@ -73,6 +73,7 @@ public:
 	bool usingHearingAidSimulationCheckBoxHidden_{};
 	bool audioFilePathHidden_{};
 	bool playButtonHidden_{};
+	bool saveButtonHidden_{};
 	bool stopButtonHidden_{};
 	bool level_dB_SplHidden_{};
 	bool subjectIdShown_{};
@@ -94,6 +95,7 @@ public:
 	bool usingHearingAidSimulationCheckBoxShown_{};
 	bool audioFilePathShown_{};
 	bool playButtonShown_{};
+	bool saveButtonShown_{};
 	bool stopButtonShown_{};
 	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
@@ -183,6 +185,7 @@ public:
 			audioFilePathShown_ &&
 			playButtonShown_ &&
 			stopButtonShown_ &&
+			saveButtonShown_ &&
 			level_dB_SplShown_ &&
 			browseForAudioFileButtonShown_ &&
 			browseForStimulusListButtonShown_;
@@ -211,6 +214,7 @@ public:
 			audioFilePathHidden_ &&
 			playButtonHidden_ &&
 			stopButtonHidden_ &&
+			saveButtonHidden_ &&
 			level_dB_SplHidden_ &&
 			browseForAudioFileButtonHidden_ &&
 			browseForStimulusListButtonHidden_;
@@ -239,6 +243,7 @@ public:
 			audioFilePathHidden_ ||
 			playButtonHidden_ ||
 			stopButtonHidden_ ||
+			saveButtonHidden_ ||
 			level_dB_SplHidden_ ||
 			browseForAudioFileButtonHidden_ ||
 			browseForStimulusListButtonHidden_
@@ -325,6 +330,10 @@ public:
 		stopButtonHidden_ = true;
 	}
 	
+	void hideSaveButton() override {
+		saveButtonHidden_ = true;
+	}
+	
 	void hideLevel_dB_Spl() override {
 		level_dB_SplHidden_ = true;
 	}
@@ -407,6 +416,10 @@ public:
 	
 	void showStopButton() override {
 		stopButtonShown_ = true;
+	}
+	
+	void showSaveButton() override {
+		saveButtonShown_ = true;
 	}
 	
 	void showLevel_dB_Spl() override {

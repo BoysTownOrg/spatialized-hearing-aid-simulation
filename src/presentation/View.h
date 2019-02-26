@@ -98,6 +98,7 @@ public:
 	virtual void hideAudioFilePath() = 0;
 	virtual void hidePlayButton() = 0;
 	virtual void hideStopButton() = 0;
+	virtual void hideSaveButton() = 0;
 	virtual void hideLevel_dB_Spl() = 0;
 	virtual void hidePlayNextTrialButton() = 0;
 	virtual void hideBrowseForAudioFileButton() = 0;
@@ -123,6 +124,7 @@ public:
 	virtual void showAudioFilePath() = 0;
 	virtual void showPlayButton() = 0;
 	virtual void showStopButton() = 0;
+	virtual void showSaveButton() = 0;
 	virtual void showLevel_dB_Spl() = 0;
 	virtual void showPlayNextTrialButton() = 0;
 	virtual void showBrowseForAudioFileButton() = 0;
