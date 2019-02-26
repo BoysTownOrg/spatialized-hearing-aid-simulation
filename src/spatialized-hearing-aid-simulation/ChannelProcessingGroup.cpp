@@ -13,11 +13,15 @@ void ChannelProcessingGroup::process(gsl::span<channel_type> audio) {
 }
 
 auto ChannelProcessingGroup::groupDelay() -> channel_type::index_type {
-	return (*std::max_element(
+	if (processors.size() == 0)
+		return 0;
+
+	auto maximumDelayedProcessor = std::max_element(
 		processors.begin(),
 		processors.end(),
 		[](channel_processing_type a, channel_processing_type b) { 
 			return a->groupDelay() < b->groupDelay(); 
 		}
-	))->groupDelay();
+	);
+	return (*maximumDelayedProcessor)->groupDelay();
 }

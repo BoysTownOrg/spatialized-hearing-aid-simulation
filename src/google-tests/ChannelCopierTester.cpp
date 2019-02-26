@@ -96,11 +96,11 @@ namespace {
 	class ChannelCopierFactoryTests : public ::testing::Test {
 	protected:
 		AudioFrameReaderStubFactory factory;
-		ChannelCopierFactory adapter{ &factory };
+		ChannelCopierFactory copierFactory{ &factory };
 	};
 
 	TEST_F(ChannelCopierFactoryTests, factoryPassesFilePath) {
-		adapter.make("a");
+		copierFactory.make("a");
 		assertEqual("a", factory.filePath());
 	}
 }

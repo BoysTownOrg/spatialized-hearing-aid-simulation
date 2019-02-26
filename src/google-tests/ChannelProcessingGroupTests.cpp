@@ -8,8 +8,15 @@ namespace {
 	protected:
 		using channel_type = ChannelProcessingGroup::channel_type;
 		using buffer_type = std::vector<channel_type::element_type>;
-		std::vector<std::shared_ptr<SignalProcessorStub>> processors = makeStubs(3);
-		ChannelProcessingGroup group{ { processors.begin(), processors.end() } };
+		std::vector<std::shared_ptr<SignalProcessorStub>> processors{};
+
+		ChannelProcessingGroup construct() {
+			return ChannelProcessingGroup{ { processors.begin(), processors.end() } };
+		}
+
+		void assignStubs(int n) {
+			processors = makeStubs(n);
+		}
 
 	private:
 		static std::vector<std::shared_ptr<SignalProcessorStub>> makeStubs(int n) {
@@ -21,6 +28,8 @@ namespace {
 	};
 
 	TEST_F(ChannelProcessingGroupTests, processesChannelsInOrder) {
+		assignStubs(3);
+		auto group = construct();
 		buffer_type a{ 1 };
 		buffer_type b{ 2 };
 		buffer_type c{ 3 };
@@ -32,9 +41,16 @@ namespace {
 	}
 
 	TEST_F(ChannelProcessingGroupTests, groupDelayReturnsMaxGroupDelay) {
+		assignStubs(3);
 		processors.at(0)->setGroupDelay(1);
 		processors.at(1)->setGroupDelay(2);
 		processors.at(2)->setGroupDelay(3);
+		auto group = construct();
 		assertEqual(3, group.groupDelay());
+	}
+
+	TEST_F(ChannelProcessingGroupTests, groupDelayReturnsZeroWhenNoProcessors) {
+		auto group = construct();
+		assertEqual(0, group.groupDelay());
 	}
 }

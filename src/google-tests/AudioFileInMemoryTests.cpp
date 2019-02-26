@@ -4,16 +4,6 @@
 #include <gtest/gtest.h>
 
 namespace {
-	class AudioFileInMemoryTests : public ::testing::Test {
-	protected:
-		FakeAudioFileReader reader{};
-	};
-
-	TEST_F(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
-		reader.setContents({});
-		AudioFileInMemory adapter{ reader };
-	}
-
 	class AudioFileInMemoryFacade {
 		AudioFileInMemory inMemory;
 	public:
@@ -52,10 +42,28 @@ namespace {
 		}
 	};
 
+	class AudioFileInMemoryTests : public ::testing::Test {
+	protected:
+		FakeAudioFileReader reader{};
+
+		AudioFileInMemory construct() {
+			return AudioFileInMemory{ reader };
+		}
+
+		AudioFileInMemoryFacade constructFacade() {
+			return AudioFileInMemoryFacade{ reader };
+		}
+	};
+
+	TEST_F(AudioFileInMemoryTests, emptyFileDoesNotThrowException) {
+		reader.setContents({});
+		auto inMemory = construct();
+	}
+
 	TEST_F(AudioFileInMemoryTests, readFillsChannelMono) {
 		reader.setChannels(1);
 		reader.setContents({ 1, 2, 3 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(3);
 		assertEqual({ 1, 2, 3 }, facade.left);
 	}
@@ -63,7 +71,7 @@ namespace {
 	TEST_F(AudioFileInMemoryTests, readFillsEachChannelStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 1, 2, 3, 4, 5, 6 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readStereoFrames(3);
 		assertEqual({ 1, 3, 5 }, facade.left);
 		assertEqual({ 2, 4, 6 }, facade.right);
@@ -71,7 +79,7 @@ namespace {
 
 	TEST_F(AudioFileInMemoryTests, readNothingWhenExhausted) {
 		reader.setContents({ 2 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(1);
 		assertEqual({ 2 }, facade.left);
 		facade.readMonoFrames(1);
@@ -80,7 +88,7 @@ namespace {
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhausted) {
 		reader.setContents({ 2, 3 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(1);
 		assertFalse(facade.complete());
 		facade.readMonoFrames(1);
@@ -89,7 +97,7 @@ namespace {
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingMoreThanOneSampleAtATime) {
 		reader.setContents({ 3, 4, 5, 6 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(2);
 		assertFalse(facade.complete());
 		facade.readMonoFrames(2);
@@ -98,7 +106,7 @@ namespace {
 
 	TEST_F(AudioFileInMemoryTests, completeWhenExhaustedReadingBeyondContents) {
 		reader.setContents({ 2, 3, 4, 5 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(3);
 		assertFalse(facade.complete());
 		facade.readMonoFrames(3);
@@ -107,7 +115,7 @@ namespace {
 
 	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReads) {
 		reader.setContents({ 1, 2, 3 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		assertEqual(3LL, facade.remainingFrames());
 		facade.readMonoFrames(1);
 		assertEqual(2LL, facade.remainingFrames());
@@ -120,7 +128,7 @@ namespace {
 	TEST_F(AudioFileInMemoryTests, remainingFramesUpdatesAfterReadsStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 1, 2, 3, 4, 5, 6 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		assertEqual(3LL, facade.remainingFrames());
 		facade.readStereoFrames(1);
 		assertEqual(2LL, facade.remainingFrames());
@@ -143,7 +151,7 @@ namespace {
 	TEST_F(AudioFileInMemoryTests, seeksBeginningOnResetMono) {
 		reader.setChannels(1);
 		reader.setContents({ 2, 3 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readMonoFrames(1);
 		assertEqual({ 2 }, facade.left);
 		facade.readMonoFrames(1);
@@ -158,7 +166,7 @@ namespace {
 	TEST_F(AudioFileInMemoryTests, seeksBeginningOnResetStereo) {
 		reader.setChannels(2);
 		reader.setContents({ 3, 4, 5, 6 });
-		AudioFileInMemoryFacade facade{ reader };
+		auto facade = constructFacade();
 		facade.readStereoFrames(1);
 		assertEqual({ 3 }, facade.left);
 		assertEqual({ 4 }, facade.right);
@@ -179,7 +187,7 @@ namespace {
 		std::shared_ptr<FakeAudioFileReader> reader =
 			std::make_shared<FakeAudioFileReader>();
 		FakeAudioFileFactory factory{ reader };
-		AudioFileInMemoryFactory adapterFactory{ &factory };
+		AudioFileInMemoryFactory inMemoryFactory{ &factory };
 
 		void assertMakeThrowsCreateError(std::string what) {
 			try {
@@ -192,7 +200,7 @@ namespace {
 		}
 
 		void make(std::string f = {}) {
-			adapterFactory.make(std::move(f));
+			inMemoryFactory.make(std::move(f));
 		}
 	};
 
