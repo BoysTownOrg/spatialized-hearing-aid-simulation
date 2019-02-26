@@ -20,7 +20,7 @@ private:
 };
 
 class ZeroPaddedLoaderFactory : public AudioProcessingLoaderFactory {
-	std::shared_ptr<AudioProcessingLoader> make(
+	PLAYING_AUDIO_API std::shared_ptr<AudioProcessingLoader> make(
 		std::shared_ptr<AudioFrameReader>, 
 		std::shared_ptr<AudioFrameProcessor>
 	) override;
