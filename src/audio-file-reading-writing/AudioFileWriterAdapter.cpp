@@ -12,7 +12,7 @@ void AudioFileWriterAdapter::write(gsl::span<channel_type> audio) {
 	for (int i = 0; i < audio.begin()->size(); ++i)
 		for (auto channel : audio)
 			buffer.push_back(channel.at(i));
-	writer->writeFrames(&buffer.front(), buffer.size());
+	writer->writeFrames(&buffer.front(), audio.begin()->size());
 }
 
 AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileFactory *factory) : 

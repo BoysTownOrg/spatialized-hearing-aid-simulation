@@ -175,6 +175,8 @@ public:
 	void showBrowseForStimulusListButton() override;
 	void hideBrowseForTestFileButton() override;
 	void showBrowseForTestFileButton() override;
+	void hideSaveButton() override;
+	void showSaveButton() override;
 
 private:
 	void registerCallbacks();

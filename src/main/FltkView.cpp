@@ -188,6 +188,14 @@ void FltkView::turnOnSpatialization() {
 	window.usingSpatialization_.value(1);
 }
 
+void FltkView::hideSaveButton() {
+	window.calibration.save.hide();
+}
+
+void FltkView::showSaveButton() {
+	window.calibration.save.show();
+}
+
 void FltkView::hideSubjectId()
 {
 	window.subjectId_.hide();

@@ -65,8 +65,13 @@ public:
 class FakeAudioFileWriter : public AudioFileWriter {
 	std::vector<float> written_{};
 	std::string errorMessage_{};
+	int channels_{ 1 };
 	bool failed_{};
 public:
+	void setChannels(int x) {
+		channels_ = x;
+	}
+
 	void fail() {
 		failed_ = true;
 	}
@@ -80,7 +85,7 @@ public:
 	}
 
 	void writeFrames(float *x, long long n) override {
-		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n) };
+		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n * channels_) };
 		std::copy(audio.begin(), audio.end(), std::back_inserter(written_));
 	}
 

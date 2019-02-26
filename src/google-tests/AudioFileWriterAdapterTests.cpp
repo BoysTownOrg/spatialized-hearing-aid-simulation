@@ -17,6 +17,7 @@ namespace {
 
 		void write() {
 			std::vector<channel_type> channels{ left, right };
+			writer->setChannels(2);
 			adapter.write(channels);
 		}
 	};
