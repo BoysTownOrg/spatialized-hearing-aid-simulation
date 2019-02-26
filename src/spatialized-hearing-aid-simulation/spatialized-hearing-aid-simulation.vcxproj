@@ -173,6 +173,7 @@
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
     <ClInclude Include="StimulusList.h" />
+    <ClInclude Include="ZeroPaddedLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CalibrationComputer.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="SpatialHearingAidModel.cpp" />
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
     <ClCompile Include="SignalProcessingChain.cpp" />
+    <ClCompile Include="ZeroPaddedLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -161,11 +161,9 @@
     <ClInclude Include="AudioDevice.h" />
     <ClInclude Include="playing-audio-exports.h" />
     <ClInclude Include="AudioDevicePlayer.h" />
-    <ClInclude Include="ZeroPaddedLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDevicePlayer.cpp" />
-    <ClCompile Include="ZeroPaddedLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

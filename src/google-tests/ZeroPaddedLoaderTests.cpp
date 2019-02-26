@@ -3,7 +3,7 @@
 #include "AudioFrameProcessorStub.h"
 #include "FakeAudioFile.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
-#include <playing-audio/ZeroPaddedLoader.h>
+#include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <gtest/gtest.h>
 
 namespace {

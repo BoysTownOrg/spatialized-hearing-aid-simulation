@@ -72,6 +72,9 @@
     <ClInclude Include="AudioFrameWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZeroPaddedLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SignalProcessingChain.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpatialHearingAidModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZeroPaddedLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
