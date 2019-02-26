@@ -29,6 +29,13 @@ namespace {
 		assertEqual({ 1, 2, 3, 4, 5, 6 }, writer->written());
 	}
 
+	TEST_F(AudioFileWriterAdapterTests, ableToWriteNothing) {
+		left = {};
+		right = {};
+		write();
+		assertTrue(writer->written().empty());
+	}
+
 	class AudioFileWriterAdapterFactoryTests : public ::testing::Test {
 	protected:
 		std::shared_ptr<FakeAudioFileWriter> writer =
