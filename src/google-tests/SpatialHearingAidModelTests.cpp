@@ -490,6 +490,37 @@ namespace {
 			);
 		}
 
+		void assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(
+			ProcessingUseCase useCase
+		) {
+			setNoSimulation(useCase.processing);
+			assertAudioLoaderAppliesSimulation(
+				simulationFactory.withoutSimulationProcessors,
+				useCase.request
+			);
+		}
+
+		void assertAudioLoaderAppliesSimulation(
+			PoppableVector<std::shared_ptr<SignalProcessor>> &processors,
+			void(SpatialHearingAidModelTests::*request)()
+		) {
+			std::vector<std::shared_ptr<SignalProcessor>> simulation = {
+				std::make_shared<MultipliesSamplesBy>(2.0f),
+				std::make_shared<MultipliesSamplesBy>(3.0f)
+			};
+			processors.set(simulation);
+			(this->*request)();
+
+			buffer_type left = { 5 };
+			buffer_type right = { 7 };
+			std::vector<channel_type> channels = { left, right };
+
+			processAudioLoaderProcessor(channels);
+			
+			assertEqual({ 5 * 2 }, left);
+			assertEqual({ 7 * 3 }, right);
+		}
+
 		void assertSpatializationFilterCoefficientsMatchBrir(
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization,
@@ -1335,6 +1366,10 @@ namespace {
 				);
 				assertEqual(expected, channel.size());
 			}
+	}
+
+	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesProcessorToAudioLoaderFactory) {
+		assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(processingAudioForSaving);
 	}
 
 	class RefactoredModelFailureTests : public ::testing::Test {

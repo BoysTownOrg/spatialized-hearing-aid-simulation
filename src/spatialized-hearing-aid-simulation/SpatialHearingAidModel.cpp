@@ -473,7 +473,7 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto reader = makeReader(p->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
-	auto loader_ = audioProcessingLoaderFactory->make(reader, {});
+	auto loader_ = audioProcessingLoaderFactory->make(reader, processor_);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
 	std::vector<channel_type> adapted;
