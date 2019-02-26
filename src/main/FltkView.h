@@ -45,6 +45,7 @@ struct FltkCalibration : public Fl_Group {
 	Fl_Button browseForAudioFile;
 	Fl_Button play;
 	Fl_Button stop;
+	Fl_Button save;
 	void hide() override;
 };
 
@@ -191,4 +192,5 @@ private:
 	static void onToggleHearingAidSimulation(Fl_Widget *, void *);
 	static void onPlayCalibration(Fl_Widget *, void *);
 	static void onStopCalibration(Fl_Widget *, void *);
+	static void onSaveAudio(Fl_Widget *, void *);
 };

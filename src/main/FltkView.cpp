@@ -59,6 +59,10 @@ void FltkView::onStopCalibration(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->stopCalibration();
 }
 
+void FltkView::onSaveAudio(Fl_Widget *, void *self) {
+	static_cast<FltkView *>(self)->listener->saveAudio();
+}
+
 static void hideAllChildren(Fl_Group *parent)
 {
 	auto children = parent->children();
@@ -103,8 +107,9 @@ FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	audioFilePath_{x + 100, y + 10, 200, 25, "audio file path"},
 	browseForAudioFile{x + 310, y + 10, 80, 25, "browse..." },
 	level_dB_Spl_{x + 100, y + 35, 200, 25, "level (dB SPL)" },
-	play{ x + 75, y + 60, 60, 25, "play" },
-	stop{ x + 175, y + 60, 60, 25, "stop" }
+	play{ x + 25, y + 60, 60, 25, "play" },
+	stop{ x + 125, y + 60, 60, 25, "stop" },
+	save{ x + 225, y + 60, 60, 25, "save" }
 {
 	end();
 }
@@ -172,6 +177,7 @@ void FltkView::registerCallbacks() {
 	window.playNextTrial.callback(onPlayTrial, this);
 	window.calibration.play.callback(onPlayCalibration, this);
 	window.calibration.stop.callback(onStopCalibration, this);
+	window.calibration.save.callback(onSaveAudio, this);
 }
 
 void FltkView::turnOnHearingAidSimulation() {
