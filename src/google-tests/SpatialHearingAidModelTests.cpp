@@ -447,7 +447,8 @@ namespace {
 			assertTrue(simulationFactory.spatialization().empty());
 		}
 
-		void assertAudioPlayerHasBeenPlayed() {
+		void assertAudioPlayerHasBeenPlayed(LevelUseCase *useCase) {
+			runUseCase(useCase);
 			assertTrue(audioPlayer.played());
 		}
 
@@ -1043,13 +1044,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPlaysPlayer) {
-		playNextTrial();
-		assertAudioPlayerHasBeenPlayed();
+		assertAudioPlayerHasBeenPlayed(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPlaysPlayer) {
-		playCalibration();
-		assertAudioPlayerHasBeenPlayed();
+		assertAudioPlayerHasBeenPlayed(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFileToFactory) {
