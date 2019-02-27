@@ -337,14 +337,6 @@ public:
 		brirFilePathActivated_ = true;
 	}
 
-	auto browseForBrirButtonActivated() const noexcept {
-		return browseForBrirButtonActivated_;
-	}
-
-	auto brirFilePathActivated() const noexcept {
-		return brirFilePathActivated_;
-	}
-
 	void setSpatializationOn() noexcept {
 		usingSpatialization_ = true;
 	}
@@ -355,14 +347,6 @@ public:
 
 	void deactivateBrirFilePath() override {
 		brirFilePathDeactivated_ = true;
-	}
-
-	auto browseForBrirButtonDeactivated() const noexcept {
-		return browseForBrirButtonDeactivated_;
-	}
-
-	auto brirFilePathDeactivated() const noexcept {
-		return brirFilePathDeactivated_;
 	}
 
 	void toggleSpatialization() {
