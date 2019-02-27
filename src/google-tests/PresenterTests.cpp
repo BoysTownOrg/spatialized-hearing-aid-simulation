@@ -6,27 +6,27 @@
 #include <functional>
 
 namespace {
-	void assertSpatializationUIHasBeenDeactivated(ViewStub *view) {
+	void assertSpatializationUIHasBeenDeactivated(const ViewStub *view) {
 		assertTrue(view->brirFilePathDeactivated());
 		assertTrue(view->browseForBrirButtonDeactivated());
 	}
 
-	void assertSpatializationUIHasNotBeenActivated(ViewStub *view) {
+	void assertSpatializationUIHasNotBeenActivated(const ViewStub *view) {
 		assertFalse(view->brirFilePathActivated());
 		assertFalse(view->browseForBrirButtonActivated());
 	}
 
-	void assertSpatializationUIHasBeenActivated(ViewStub *view) {
+	void assertSpatializationUIHasBeenActivated(const ViewStub *view) {
 		assertTrue(view->brirFilePathActivated());
 		assertTrue(view->browseForBrirButtonActivated());
 	}
 
-	void assertSpatializationUIHasNotBeenDeactivated(ViewStub *view) {
+	void assertSpatializationUIHasNotBeenDeactivated(const ViewStub *view) {
 		assertFalse(view->brirFilePathDeactivated());
 		assertFalse(view->browseForBrirButtonDeactivated());
 	}
 
-	void assertHearingAidUIHasBeenActivated(ViewStub *view) {
+	void assertHearingAidUIHasBeenActivated(const ViewStub *view) {
 		assertTrue(view->leftDslPrescriptionFilePathActivated_);
 		assertTrue(view->rightDslPrescriptionFilePathActivated_);
 		assertTrue(view->browseForLeftDslPrescriptionButtonActivated_);
@@ -37,7 +37,7 @@ namespace {
 		assertTrue(view->release_msActivated_);
 	}
 
-	void assertHearingAidUIHasNotBeenDeactivated(ViewStub *view) {
+	void assertHearingAidUIHasNotBeenDeactivated(const ViewStub *view) {
 		assertFalse(view->leftDslPrescriptionFilePathDeactivated_);
 		assertFalse(view->rightDslPrescriptionFilePathDeactivated_);
 		assertFalse(view->browseForLeftDslPrescriptionButtonDeactivated_);
@@ -48,7 +48,7 @@ namespace {
 		assertFalse(view->release_msDeactivated_);
 	}
 
-	void assertHearingAidUIHasNotBeenActivated(ViewStub *view) {
+	void assertHearingAidUIHasNotBeenActivated(const ViewStub *view) {
 		assertFalse(view->leftDslPrescriptionFilePathActivated_);
 		assertFalse(view->rightDslPrescriptionFilePathActivated_);
 		assertFalse(view->browseForLeftDslPrescriptionButtonActivated_);
@@ -59,7 +59,7 @@ namespace {
 		assertFalse(view->release_msActivated_);
 	}
 
-	void assertHearingAidUIHasBeenDeactivated(ViewStub *view) {
+	void assertHearingAidUIHasBeenDeactivated(const ViewStub *view) {
 		assertTrue(view->leftDslPrescriptionFilePathDeactivated_);
 		assertTrue(view->rightDslPrescriptionFilePathDeactivated_);
 		assertTrue(view->browseForLeftDslPrescriptionButtonDeactivated_);
@@ -68,6 +68,66 @@ namespace {
 		assertTrue(view->windowSizeDeactivated_);
 		assertTrue(view->attack_msDeactivated_);
 		assertTrue(view->release_msDeactivated_);
+	}
+
+	class PresenterConstructionTests : public ::testing::Test {
+	protected:
+		ModelStub model;
+		ViewStub view;
+
+		void assertSpatializationUIHasOnlyBeenDeactivated() {
+			assertSpatializationUIHasBeenDeactivated(&view);
+			assertSpatializationUIHasNotBeenActivated(&view);
+		}
+
+		void assertSpatializationUIHasOnlyBeenActivated() {
+			assertSpatializationUIHasBeenActivated(&view);
+			assertSpatializationUIHasNotBeenDeactivated(&view);
+		}
+
+		void assertHearingAidUIHasOnlyBeenDeactivated() {
+			assertHearingAidUIHasNotBeenActivated(&view);
+			assertHearingAidUIHasBeenDeactivated(&view);
+		}
+
+		void assertHearingAidUIHasOnlyBeenActivated() {
+			assertHearingAidUIHasBeenActivated(&view);
+			assertHearingAidUIHasNotBeenDeactivated(&view);
+		}
+
+		Presenter construct() {
+			return { &model, &view };
+		}
+	};
+
+	TEST_F(PresenterConstructionTests, constructorPopulatesAudioDeviceMenu) {
+		model.setAudioDeviceDescriptions({ "a", "b", "c" });
+		auto presenter = construct();
+		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
+	}
+
+	TEST_F(PresenterConstructionTests, constructorActivatesSpatializationUIWhenInitiallyOn) {
+		view.setSpatializationOn();
+		auto presenter = construct();
+		assertSpatializationUIHasOnlyBeenActivated();
+	}
+
+	TEST_F(PresenterConstructionTests, constructorDeactivatesSpatializationUIWhenInitiallyOff) {
+		view.setSpatializationOff();
+		auto presenter = construct();
+		assertSpatializationUIHasOnlyBeenDeactivated();
+	}
+
+	TEST_F(PresenterConstructionTests, constructorActivatesHearingAidSimulationUIWhenInitiallyOn) {
+		view.setHearingAidSimulationOn();
+		auto presenter = construct();
+		assertHearingAidUIHasOnlyBeenActivated();
+	}
+
+	TEST_F(PresenterConstructionTests, constructorDeactivatesHearingAidSimulationUIWhenInitiallyOff) {
+		view.setHearingAidSimulationOff();
+		auto presenter = construct();
+		assertHearingAidUIHasOnlyBeenDeactivated();
 	}
 
 	class PresenterTests : public ::testing::Test {
@@ -367,62 +427,6 @@ namespace {
 			assertFalse(useCase.processing.usingHearingAidSimulation);
 		}
 	};
-
-	class PresenterConstructionTests : public ::testing::Test {
-	protected:
-		ModelStub model;
-		ViewStub view;
-
-		void assertSpatializationUIHasOnlyBeenDeactivated() {
-			assertSpatializationUIHasBeenDeactivated(&view);
-			assertSpatializationUIHasNotBeenActivated(&view);
-		}
-
-		void assertSpatializationUIHasOnlyBeenActivated() {
-			assertSpatializationUIHasBeenActivated(&view);
-			assertSpatializationUIHasNotBeenDeactivated(&view);
-		}
-
-		void assertHearingAidUIHasOnlyBeenDeactivated() {
-			assertHearingAidUIHasNotBeenActivated(&view);
-			assertHearingAidUIHasBeenDeactivated(&view);
-		}
-
-		void assertHearingAidUIHasOnlyBeenActivated() {
-			assertHearingAidUIHasBeenActivated(&view);
-			assertHearingAidUIHasNotBeenDeactivated(&view);
-		}
-	};
-
-	TEST_F(PresenterConstructionTests, constructorPopulatesAudioDeviceMenu) {
-		model.setAudioDeviceDescriptions({ "a", "b", "c" });
-		Presenter presenter_{ &model, &view };
-		assertEqual({ "a", "b", "c" }, view.audioDeviceMenuItems());
-	}
-
-	TEST_F(PresenterConstructionTests, constructorActivatesSpatializationUIWhenInitiallyOn) {
-		view.setSpatializationOn();
-		Presenter presenter_{ &model, &view };
-		assertSpatializationUIHasOnlyBeenActivated();
-	}
-
-	TEST_F(PresenterConstructionTests, constructorDeactivatesSpatializationUIWhenInitiallyOff) {
-		view.setSpatializationOff();
-		Presenter presenter_{ &model, &view };
-		assertSpatializationUIHasOnlyBeenDeactivated();
-	}
-
-	TEST_F(PresenterConstructionTests, constructorActivatesHearingAidSimulationUIWhenInitiallyOn) {
-		view.setHearingAidSimulationOn();
-		Presenter presenter_{ &model, &view };
-		assertHearingAidUIHasOnlyBeenActivated();
-	}
-
-	TEST_F(PresenterConstructionTests, constructorDeactivatesHearingAidSimulationUIWhenInitiallyOff) {
-		view.setHearingAidSimulationOff();
-		Presenter presenter_{ &model, &view };
-		assertHearingAidUIHasOnlyBeenDeactivated();
-	}
 
 	TEST_F(PresenterTests, constructorSubscribesToViewEvents) {
 		EXPECT_EQ(&presenter, view.listener());
