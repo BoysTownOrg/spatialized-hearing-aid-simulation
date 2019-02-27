@@ -187,10 +187,10 @@ void Presenter::hideTestSetupView() {
 Model::Testing Presenter::testing() {
 	Model::Testing testing_;
 	testing_.processing = signalProcessing();
-	testing_.testFilePath = view->testFilePath();
+	testing_.testFilePath = view->testSetup()->testFilePath();
 	testing_.audioDirectory = view->stimulusList();
-	testing_.subjectId = view->subjectId();
-	testing_.testerId = view->testerId();
+	testing_.subjectId = view->testSetup()->subjectId();
+	testing_.testerId = view->testSetup()->testerId();
 	return testing_;
 }
 

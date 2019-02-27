@@ -6,6 +6,14 @@
 
 class View {
 public:
+	class TestSetup {
+	public:
+		INTERFACE_OPERATIONS(TestSetup);
+		virtual std::string subjectId() = 0;
+		virtual std::string testerId() = 0;
+		virtual std::string testFilePath() = 0;
+	};
+
 	class EventListener {
 	public:
 		INTERFACE_OPERATIONS(EventListener);
@@ -25,6 +33,7 @@ public:
 	};
 
 	INTERFACE_OPERATIONS(View);
+	virtual TestSetup *testSetup() = 0;
 	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;
 	virtual std::string browseForOpeningFile(std::vector<std::string> filters) = 0;
@@ -37,9 +46,6 @@ public:
 	virtual void setStimulusList(std::string) = 0;
 	virtual void setBrirFilePath(std::string) = 0;
 	virtual void setAudioFilePath(std::string) = 0;
-	virtual std::string subjectId() = 0;
-	virtual std::string testerId() = 0;
-	virtual std::string testFilePath() = 0;
 	virtual std::string leftDslPrescriptionFilePath() = 0;
 	virtual std::string rightDslPrescriptionFilePath() = 0;
 	virtual std::string stimulusList() = 0;
@@ -105,8 +111,8 @@ public:
 	virtual void hideBrowseForStimulusListButton() = 0;
 	virtual void showSubjectId() = 0;
 	virtual void showTesterId() = 0;
-	virtual void showStimulusList() = 0;
 	virtual void showTestFilePath() = 0;
+	virtual void showStimulusList() = 0;
 	virtual void showBrowseForTestFileButton() = 0;
 	virtual void showConfirmButton() = 0;
 	virtual void showBrirFilePath() = 0;

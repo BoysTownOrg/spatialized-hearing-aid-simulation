@@ -4,19 +4,36 @@
 
 class ViewStub : public View {
 public:
+	class TestSetupStub : public TestSetup {
+	public:
+		std::string testFilePath_{};
+		std::string subjectId_{};
+		std::string testerId_{};
+
+		std::string subjectId() override {
+			return subjectId_;
+		}
+
+		std::string testerId() override {
+			return testerId_;
+		}
+
+		std::string testFilePath() override {
+			return testFilePath_;
+		}
+	};
+
+	TestSetupStub testSetup_{};
 	std::vector<std::string> browseFiltersForOpeningFile_{};
 	std::vector<std::string> browseFiltersForSavingFile_{};
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
-	std::string testFilePath_{};
 	std::string stimulusList_{};
 	std::string leftDslPrescriptionFilePath_{};
 	std::string rightDslPrescriptionFilePath_{};
 	std::string brirFilePath_{};
 	std::string audioFilePath_{};
-	std::string subjectId_{};
-	std::string testerId_{};
 	std::string audioDevice_{};
 	std::string level_dB_Spl_{ "0" };
 	std::string attack_ms_{ "0" };
@@ -109,6 +126,9 @@ public:
 	bool cancelBrowsingForSavingFile_{};
 	bool cancelOpeningForSavingFile_{};
 
+	TestSetup *testSetup() override {
+		return &testSetup_;
+	}
 	
 	void showBrowseForTestFileButton() override {
 		browseForTestFileButtonShown_ = true;
@@ -598,19 +618,11 @@ public:
 	}
 
 	void setSubjectId(std::string s) {
-		subjectId_ = std::move(s);
+		testSetup_.subjectId_ = std::move(s);
 	}
 
 	void setTesterId(std::string s) {
-		testerId_ = std::move(s);
-	}
-
-	std::string subjectId() override {
-		return subjectId_;
-	}
-
-	std::string testerId() override {
-		return testerId_;
+		testSetup_.testerId_ = std::move(s);
 	}
 
 	void subscribe(EventListener * listener) override {
@@ -684,11 +696,7 @@ public:
 	}
 
 	void setTestFilePath(std::string p) override {
-		testFilePath_ = std::move(p);
-	}
-
-	std::string testFilePath() override {
-		return testFilePath_;
+		testSetup_.testFilePath_ = std::move(p);
 	}
 
 	void setLeftDslPrescriptionFilePath(std::string p) override {

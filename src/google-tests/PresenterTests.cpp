@@ -420,7 +420,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.testFilePath_, &ViewStub::browseForTestFile);
+		assertCancellingBrowseDoesNotChangePath(view.testSetup_.testFilePath_, &ViewStub::browseForTestFile);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
@@ -460,7 +460,7 @@ namespace {
 	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
 		view.setBrowseForSavingFileResult("a");
 		view.browseForTestFile();
-		assertEqual("a", view.testFilePath());
+		assertEqual("a", view.testSetup_.testFilePath());
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
