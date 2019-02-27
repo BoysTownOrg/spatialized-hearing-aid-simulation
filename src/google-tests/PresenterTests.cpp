@@ -608,6 +608,11 @@ namespace {
 		assertBrowsingFilters(&browsingForBrir, { "*.wav" });
 	}
 
+	TEST_F(PresenterTests, browseForPrescriptionsFiltersJsonFiles) {
+		assertBrowsingFilters(&browsingForLeftDslPrescription, { "*.json" });
+		assertBrowsingFilters(&browsingForRightDslPrescription, { "*.json" });
+	}
+
 	TEST_F(
 		PresenterTests,
 		saveAudioFiltersWavFiles
