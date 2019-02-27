@@ -1,9 +1,7 @@
 #pragma once
 
 #include "PersistentMemoryWriter.h"
-#include <presentation/Presenter.h>
 #include <spatialized-hearing-aid-simulation/Documenter.h>
-#include <common-includes/RuntimeError.h>
 
 #ifdef TEST_DOCUMENTING_EXPORTS
 	#define TEST_DOCUMENTING_API __declspec(dllexport)
