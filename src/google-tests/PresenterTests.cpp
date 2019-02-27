@@ -48,6 +48,72 @@ namespace {
 		}
 	};
 
+	class BrowsingUseCase : public UseCase {
+	public:
+		INTERFACE_OPERATIONS(BrowsingUseCase);
+		virtual std::string &path(ViewStub &) = 0;
+	};
+
+	class BrowsingForAudioFile : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForAudioFile();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.audioFilePath_;
+		}
+	};
+
+	class BrowsingForBrir : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForBrir();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.brirFilePath_;
+		}
+	};
+
+	class BrowsingForLeftDslPrescription : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForLeftDslPrescription();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.leftDslPrescriptionFilePath_;
+		}
+	};
+
+	class BrowsingForRightDslPrescription : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForRightDslPrescription();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.rightDslPrescriptionFilePath_;
+		}
+	};
+
+	class BrowsingForStimulusList : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForStimulusList();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.stimulusList_;
+		}
+	};
+
+	class BrowsingForTestFile : public BrowsingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->browseForTestFile();
+		}
+
+		std::string &path(ViewStub &view) override {
+			return view.testSetup_.testFilePath_;
+		}
+	};
+
 	void assertSpatializationUIHasBeenDeactivated(const ViewStub *view) {
 		assertTrue(view->brirFilePathDeactivated());
 		assertTrue(view->browseForBrirButtonDeactivated());
@@ -180,6 +246,12 @@ namespace {
 		ConfirmingTestSetup confirmingTestSetup{};
 		PlayingCalibration playingCalibration{};
 		SavingAudio savingAudio{};
+		BrowsingForAudioFile browsingForAudioFile{};
+		BrowsingForBrir browsingForBrir{};
+		BrowsingForLeftDslPrescription browsingForLeftDslPrescription{};
+		BrowsingForRightDslPrescription browsingForRightDslPrescription{};
+		BrowsingForStimulusList browsingForStimulusList{};
+		BrowsingForTestFile browsingForTestFile{};
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
 			assertSpatializationUIHasBeenDeactivated(&view);
@@ -201,14 +273,11 @@ namespace {
 			assertHearingAidUIHasNotBeenDeactivated(&view);
 		}
 
-		void assertCancellingBrowseDoesNotChangePath(
-			std::string &path, 
-			void(ViewStub::*browse)()
-		) {
-			path = "a";
+		void assertCancellingBrowseDoesNotChangePath(BrowsingUseCase *useCase) {
+			useCase->path(view) = "a";
 			view.setBrowseCancelled();
-			(view.*browse)();
-			assertEqual("a", path);
+			runUseCase(useCase);
+			assertEqual("a", useCase->path(view));
 		}
 
 		void assertBrowseForOpeningFileResultPassedToPath(
@@ -474,30 +543,24 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForAudioFileDoesNotChangeAudioFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.testSetup_.audioFilePath_, &ViewStub::browseForAudioFile);
+		assertCancellingBrowseDoesNotChangePath(&browsingForAudioFile);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.testSetup_.testFilePath_, &ViewStub::browseForTestFile);
+		assertCancellingBrowseDoesNotChangePath(&browsingForTestFile);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
-		assertCancellingBrowseDoesNotChangePath(
-			view.testSetup_.leftDslPrescriptionFilePath_, 
-			&ViewStub::browseForLeftDslPrescription
-		);
-		assertCancellingBrowseDoesNotChangePath(
-			view.testSetup_.rightDslPrescriptionFilePath_, 
-			&ViewStub::browseForRightDslPrescription
-		);
+		assertCancellingBrowseDoesNotChangePath(&browsingForLeftDslPrescription);
+		assertCancellingBrowseDoesNotChangePath(&browsingForRightDslPrescription);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForStimulusListNotChangeStimulusList) {
-		assertCancellingBrowseDoesNotChangePath(view.testSetup_.stimulusList_, &ViewStub::browseForStimulusList);
+		assertCancellingBrowseDoesNotChangePath(&browsingForStimulusList);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForBrirDoesNotChangeBrirFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.testSetup_.brirFilePath_, &ViewStub::browseForBrir);
+		assertCancellingBrowseDoesNotChangePath(&browsingForBrir);
 	}
 
 	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
