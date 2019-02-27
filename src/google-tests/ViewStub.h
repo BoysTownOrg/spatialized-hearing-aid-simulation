@@ -10,6 +10,11 @@ public:
 		std::string subjectId_{};
 		std::string testerId_{};
 		bool shown_{};
+		bool hidden_{};
+
+		void hide() override {
+			hidden_ = true;
+		}
 
 		void show() override {
 			shown_ = true;
@@ -135,20 +140,8 @@ public:
 		return &testSetup_;
 	}
 
-	void hideBrowseForTestFileButton() override {
-		browseForTestFileButtonHidden_ = true;
-	}
-
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
-	}
-
-	void hideBrowseForStimulusListButton() override {
-		browseForStimulusListButtonHidden_ = true;
-	}
-
-	void hideBrowseForAudioFileButton() override {
-		browseForAudioFileButtonHidden_ = true;
 	}
 
 	void hidePlayNextTrialButton() override {
@@ -261,94 +254,6 @@ public:
 			browseForAudioFileButtonHidden_ ||
 			browseForStimulusListButtonHidden_
 		);
-	}
-
-	void hideSubjectId() override {
-		subjectIdHidden_ = true;
-	}
-
-	void hideTesterId() override {
-		testerIdHidden_ = true;
-	}
-	
-	void hideStimulusList() override {
-		simulusListHidden_ = true;
-	}
-	
-	void hideTestFilePath() override {
-		testFilePathHidden_ = true;
-	}
-	
-	void hideConfirmButton() override {
-		confirmButtonHidden_ = true;
-	}
-	
-	void hideBrirFilePath() override {
-		brirFilePathHidden_ = true;
-	}
-	
-	void hideBrowseForBrirButton() override {
-		browseForBrirButtonHidden_ = true;
-	}
-	
-	void hideUsingSpatializationCheckBox() override {
-		usingSpatializationCheckBoxHidden_ = true;
-	}
-	
-	void hideLeftDslPrescriptionFilePath() override {
-		leftDslPrescriptionFilePathHidden_ = true;
-	}
-	
-	void hideBrowseForLeftDslPrescriptionButton() override {
-		browseForLeftDslPrescriptionButtonHidden_ = true;
-	}
-	
-	void hideRightDslPrescriptionFilePath() override {
-		rightDslPrescriptionFilePathHidden_ = true;
-	}
-	
-	void hideBrowseForRightDslPrescriptionButton() override {
-		browseForRightDslPrescriptionButtonHidden_ = true;
-	}
-	
-	void hideAttack_ms() override {
-		attack_msHidden_ = true;
-	}
-	
-	void hideRelease_ms() override {
-		release_msHidden_ = true;
-	}
-	
-	void hideChunkSize() override {
-		chunkSizeHidden_ = true;
-	}
-	
-	void hideWindowSize() override {
-		windowSizeHidden_ = true;
-	}
-	
-	void hideUsingHearingAidSimulationCheckBox() override {
-		usingHearingAidSimulationCheckBoxHidden_ = true;
-	}
-	
-	void hideAudioFilePath() override {
-		audioFilePathHidden_ = true;
-	}
-	
-	void hidePlayButton() override {
-		playButtonHidden_ = true;
-	}
-	
-	void hideStopButton() override {
-		stopButtonHidden_ = true;
-	}
-	
-	void hideSaveButton() override {
-		saveButtonHidden_ = true;
-	}
-	
-	void hideLevel_dB_Spl() override {
-		level_dB_SplHidden_ = true;
 	}
 
 	void saveAudio() {

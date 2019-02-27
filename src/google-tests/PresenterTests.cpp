@@ -81,7 +81,7 @@ namespace {
 		}
 
 		void assertTestSetupViewHidden() {
-			assertTrue(view.everyItemInTestSetupHidden());
+			assertTrue(view.testSetup_.hidden_);
 		}
 
 		void assertTestSetupViewNotShown() {

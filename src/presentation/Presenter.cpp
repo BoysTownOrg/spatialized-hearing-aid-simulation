@@ -133,31 +133,7 @@ void Presenter::showTesterView() {
 }
 
 void Presenter::hideTestSetupView() {
-	view->hideSubjectId();
-	view->hideTesterId();
-	view->hideStimulusList();
-	view->hideTestFilePath();
-	view->hideBrowseForTestFileButton();
-	view->hideConfirmButton();
-	view->hideBrirFilePath();
-	view->hideBrowseForBrirButton();
-	view->hideUsingSpatializationCheckBox();
-	view->hideLeftDslPrescriptionFilePath();
-	view->hideBrowseForLeftDslPrescriptionButton();
-	view->hideRightDslPrescriptionFilePath();
-	view->hideBrowseForRightDslPrescriptionButton();
-	view->hideAttack_ms();
-	view->hideRelease_ms();
-	view->hideChunkSize();
-	view->hideWindowSize();
-	view->hideUsingHearingAidSimulationCheckBox();
-	view->hideAudioFilePath();
-	view->hidePlayButton();
-	view->hideStopButton();
-	view->hideSaveButton();
-	view->hideLevel_dB_Spl();
-	view->hideBrowseForAudioFileButton();
-	view->hideBrowseForStimulusListButton();
+	view->testSetup()->hide();
 }
 
 Model::Testing Presenter::testing() {
