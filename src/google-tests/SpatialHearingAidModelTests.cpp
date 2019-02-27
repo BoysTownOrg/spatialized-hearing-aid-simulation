@@ -24,21 +24,24 @@ namespace {
 		virtual void setLevel_dB_Spl(double) = 0;
 	};
 
-	class ExperimentalProcessingUseCase {
+	class ExperimentalSignalProcessingUseCase {
 	public:
-		INTERFACE_OPERATIONS(ExperimentalProcessingUseCase);
+		INTERFACE_OPERATIONS(ExperimentalSignalProcessingUseCase);
 		virtual void run(Model *) = 0;
 		virtual void setHearingAidSimulationOn() = 0;
 		virtual void setHearingAidSimulationOff() = 0;
 		virtual void setSpatializationOn() = 0;
 		virtual void setSpatializationOff() = 0;
+		virtual void setAttack_ms(double) = 0;
+		virtual void setRelease_ms(double) = 0;
+		virtual void setWindowSize(int) = 0;
 		virtual void setChunkSize(int) = 0;
 		virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 		virtual void setRightDslPrescriptionFilePath(std::string) = 0;
 	};
 
 	class ExperimentalCombinedUseCase :
-		public ExperimentalProcessingUseCase,
+		public ExperimentalSignalProcessingUseCase,
 		public ExperimentalLevelUseCase
 	{};
 
@@ -58,8 +61,20 @@ namespace {
 		p.usingSpatialization = false;
 	}
 
+	void setAttack_ms(Model::SignalProcessing &p, double x) noexcept {
+		p.attack_ms = x;
+	}
+
+	void setRelease_ms(Model::SignalProcessing &p, double x) noexcept {
+		p.release_ms = x;
+	}
+
 	void setChunkSize(Model::SignalProcessing &p, int x) noexcept {
 		p.chunkSize = x;
+	}
+
+	void setWindowSize(Model::SignalProcessing &p, int x) noexcept {
+		p.windowSize = x;
 	}
 
 	void setLeftDslPrescriptionFilePath(Model::SignalProcessing &p, std::string s) {
@@ -70,7 +85,7 @@ namespace {
 		p.rightDslPrescriptionFilePath = std::move(s);
 	}
 
-	class PreparingNewTest : public ExperimentalProcessingUseCase {
+	class PreparingNewTest : public ExperimentalSignalProcessingUseCase {
 		SpatialHearingAidModel::Testing testing{};
 	public:
 		void run(Model *model) override {
@@ -91,6 +106,18 @@ namespace {
 
 		void setSpatializationOff() override {
 			::setSpatializationOff(testing.processing);
+		}
+		
+		void setAttack_ms(double x) override {
+			::setAttack_ms(testing.processing, x);
+		}
+		
+		void setRelease_ms(double x) override {
+			::setRelease_ms(testing.processing, x);
+		}
+		
+		void setWindowSize(int x) override {
+			::setWindowSize(testing.processing, x);
 		}
 		
 		void setChunkSize(int x) override {
@@ -129,6 +156,18 @@ namespace {
 
 		void setSpatializationOff() override {
 			preparingNewTest.setSpatializationOff();
+		}
+		
+		void setAttack_ms(double x) override {
+			preparingNewTest.setAttack_ms(x);
+		}
+		
+		void setRelease_ms(double x) override {
+			preparingNewTest.setRelease_ms(x);
+		}
+		
+		void setWindowSize(int x) override {
+			preparingNewTest.setWindowSize(x);
 		}
 		
 		void setChunkSize(int x) override {
@@ -171,6 +210,18 @@ namespace {
 			::setSpatializationOff(calibration.processing);
 		}
 		
+		void setAttack_ms(double x) override {
+			::setAttack_ms(calibration.processing, x);
+		}
+		
+		void setRelease_ms(double x) override {
+			::setRelease_ms(calibration.processing, x);
+		}
+		
+		void setWindowSize(int x) override {
+			::setWindowSize(calibration.processing, x);
+		}
+		
 		void setChunkSize(int x) override {
 			::setChunkSize(calibration.processing, x);
 		}
@@ -209,6 +260,18 @@ namespace {
 
 		void setSpatializationOff() override {
 			::setSpatializationOff(savingAudio.processing);
+		}
+		
+		void setAttack_ms(double x) override {
+			::setAttack_ms(savingAudio.processing, x);
+		}
+		
+		void setRelease_ms(double x) override {
+			::setRelease_ms(savingAudio.processing, x);
+		}
+		
+		void setWindowSize(int x) override {
+			::setWindowSize(savingAudio.processing, x);
 		}
 		
 		void setChunkSize(int x) override {
@@ -300,11 +363,6 @@ namespace {
 
 		void setValidDefaults() noexcept {
 			audioLoader->setComplete();
-		}
-
-		void setValidProcessingSizes(SpatialHearingAidModel::SignalProcessing &p) noexcept {
-			p.chunkSize = 1;
-			p.windowSize = 1;
 		}
 
 		void playFirstTrialOfNewTest() {
@@ -440,18 +498,18 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setChunkSize(1);
 			useCase->setHearingAidSimulationOn();
 			runUseCase(useCase);
 			assertEqual(1, audioPlayer.preparation().framesPerBuffer);
 		}
 
-		void runUseCase(ExperimentalProcessingUseCase *useCase) {
+		void runUseCase(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->run(&model);
 		}
 
-		void assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertFramesPerBufferMatchesDefaultWhenNotUsingHearingAidSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setHearingAidSimulationOff();
 			runUseCase(useCase);
 			assertEqual(
@@ -460,7 +518,7 @@ namespace {
 			);
 		}
 
-		void assertCalibrationComputerFactoryReceivesAudioFrameReader(ExperimentalProcessingUseCase *useCase) noexcept {
+		void assertCalibrationComputerFactoryReceivesAudioFrameReader(ExperimentalSignalProcessingUseCase *useCase) noexcept {
 			runUseCase(useCase);
 			EXPECT_EQ(audioFrameReader.get(), calibrationComputerFactory.reader());
 		}
@@ -473,7 +531,7 @@ namespace {
 			assertEqual(65 - SpatialHearingAidModel::fullScaleLevel_dB_Spl, calibrationComputer->levels().at(1));
 		}
 
-		void assertScalarsMatchCalibrationWhenUsingOnlyHearingAidSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertScalarsMatchCalibrationWhenUsingOnlyHearingAidSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			setHearingAidSimulationOnly(useCase);
 			assertScalarsMatchCalibration(
 				useCase,
@@ -482,7 +540,7 @@ namespace {
 		}
 
 		void assertScalarsMatchCalibration(
-			ExperimentalProcessingUseCase *useCase,
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<float> &scalars
 		) {
 			audioFrameReader->setChannels(2);
@@ -493,7 +551,7 @@ namespace {
 			assertEqual(4.4f, scalars.at(1));
 		}
 
-		void assertScalarsMatchCalibrationWhenUsingFullSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertScalarsMatchCalibrationWhenUsingFullSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			setFullSimulation(useCase);
 			assertScalarsMatchCalibration(
 				useCase,
@@ -501,7 +559,7 @@ namespace {
 			);
 		}
 
-		void assertScalarsMatchCalibrationWhenUsingOnlySpatialization(ExperimentalProcessingUseCase *useCase) {
+		void assertScalarsMatchCalibrationWhenUsingOnlySpatialization(ExperimentalSignalProcessingUseCase *useCase) {
 			setSpatializationOnly(useCase);
 			assertScalarsMatchCalibration(
 				useCase,
@@ -509,12 +567,12 @@ namespace {
 			);
 		}
 
-		void setSpatializationOnly(ExperimentalProcessingUseCase *useCase) {
+		void setSpatializationOnly(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setSpatializationOn();
 			useCase->setHearingAidSimulationOff();
 		}
 
-		void assertScalarsMatchCalibrationWhenNotUsingSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertScalarsMatchCalibrationWhenNotUsingSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			setNoSimulation(useCase);
 			assertScalarsMatchCalibration(
 				useCase,
@@ -522,12 +580,12 @@ namespace {
 			);
 		}
 
-		void setNoSimulation(ExperimentalProcessingUseCase *useCase) {
+		void setNoSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setHearingAidSimulationOff();
 			useCase->setSpatializationOff();
 		}
 
-		void assertSimulationPrescriptionsMatchReaderWhenUsingOnlyHearingAidSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertSimulationPrescriptionsMatchReaderWhenUsingOnlyHearingAidSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			setHearingAidSimulationOnly(useCase);
 			assertSimulationPrescriptionsMatchPrescriptionReader(
 				useCase,
@@ -535,13 +593,13 @@ namespace {
 			);
 		}
 
-		void setHearingAidSimulationOnly(ExperimentalProcessingUseCase *useCase) {
+		void setHearingAidSimulationOnly(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setHearingAidSimulationOn();
 			useCase->setSpatializationOff();
 		}
 
 		void assertSimulationPrescriptionsMatchPrescriptionReader(
-			ExperimentalProcessingUseCase *useCase,
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
@@ -584,7 +642,7 @@ namespace {
 			assertEqual(12, actualRight.channels);
 		}
 
-		void assertSimulationPrescriptionsMatchReaderWhenUsingFullSimulation(ExperimentalProcessingUseCase *useCase) {
+		void assertSimulationPrescriptionsMatchReaderWhenUsingFullSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			setFullSimulation(useCase);
 			assertSimulationPrescriptionsMatchPrescriptionReader(
 				useCase,
@@ -592,15 +650,15 @@ namespace {
 			);
 		}
 
-		void setFullSimulation(ExperimentalProcessingUseCase *useCase) {
+		void setFullSimulation(ExperimentalSignalProcessingUseCase *useCase) {
 			useCase->setHearingAidSimulationOn();
 			useCase->setSpatializationOn();
 		}
 
 		void assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setHearingAidSimulationOnly(useCase.processing);
+			setHearingAidSimulationOnly(useCase);
 			assertSimulationFactoryReceivesCompressionParameters(
 				useCase,
 				simulationFactory.hearingAidSimulation()
@@ -608,16 +666,16 @@ namespace {
 		}
 
 		void assertSimulationFactoryReceivesCompressionParameters(
-			ProcessingUseCase useCase,
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<
 				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
-			useCase.processing.attack_ms = 1;
-			useCase.processing.release_ms = 2;
-			useCase.processing.chunkSize = 4;
-			useCase.processing.windowSize = 8;
+			useCase->setAttack_ms(1);
+			useCase->setRelease_ms(2);
+			useCase->setChunkSize(4);
+			useCase->setWindowSize(8);
 			
-			(this->*useCase.request)();
+			runUseCase(useCase);
 
 			auto left = hearingAid.at(0);
 			assertEqual(1.0, left.attack_ms);
@@ -633,9 +691,9 @@ namespace {
 		}
 
 		void assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setFullSimulation(useCase.processing);
+			setFullSimulation(useCase);
 			assertSimulationFactoryReceivesCompressionParameters(
 				useCase,
 				simulationFactory.fullSimulationHearingAid()
@@ -816,7 +874,7 @@ namespace {
 		}
 
 		void assertPrescriptionReaderReceivesFilePathsWhenUsingHearingAidSimulation(
-			ExperimentalProcessingUseCase *useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
 			useCase->setHearingAidSimulationOn();
 			useCase->setLeftDslPrescriptionFilePath("a");
@@ -1275,42 +1333,42 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(playingFirstTrialOfNewTest);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(playingCalibration);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesCompressionParametersToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(processingAudioForSaving);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingOnlyHearingAidSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playTrialPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(playingFirstTrialOfNewTest);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(playingCalibration);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesCompressionParametersToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(processingAudioForSaving);
+		assertSimulationFactoryReceivesCompressionParametersWhenUsingFullSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
