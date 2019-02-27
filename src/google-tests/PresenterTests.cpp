@@ -47,15 +47,19 @@ namespace {
 		}
 	};
 
-	class BrowsingUseCase : public UseCase {
+	class BrowsingEnteredPathUseCase : public UseCase {
 	public:
 		virtual std::string &path(ViewStub &) = 0;
 	};
 
-	class BrowsingForFileUseCase : public BrowsingUseCase {
+	class BrowsingForFileUseCase : public UseCase {
 	public:
 		virtual const std::vector<std::string> &filters(ViewStub &) = 0;
 	};
+
+	class BrowsingForEnteredFilePathUseCase :
+		public BrowsingEnteredPathUseCase,
+		public BrowsingForFileUseCase {};
 
 	const std::vector<std::string> &browseFiltersForOpeningFile(ViewStub &view) {
 		return view.browseFiltersForOpeningFile_;
@@ -65,7 +69,7 @@ namespace {
 		return view.browseFiltersForSavingFile_;
 	}
 	
-	class BrowsingForAudioFile : public BrowsingForFileUseCase {
+	class BrowsingForAudioFile : public BrowsingForEnteredFilePathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForAudioFile();
 		}
@@ -79,7 +83,7 @@ namespace {
 		}
 	};
 
-	class BrowsingForBrir : public BrowsingForFileUseCase {
+	class BrowsingForBrir : public BrowsingForEnteredFilePathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForBrir();
 		}
@@ -93,7 +97,7 @@ namespace {
 		}
 	};
 
-	class BrowsingForLeftDslPrescription : public BrowsingForFileUseCase {
+	class BrowsingForLeftDslPrescription : public BrowsingForEnteredFilePathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForLeftDslPrescription();
 		}
@@ -107,7 +111,7 @@ namespace {
 		}
 	};
 
-	class BrowsingForRightDslPrescription : public BrowsingForFileUseCase {
+	class BrowsingForRightDslPrescription : public BrowsingForEnteredFilePathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForRightDslPrescription();
 		}
@@ -121,7 +125,7 @@ namespace {
 		}
 	};
 
-	class BrowsingForStimulusList : public BrowsingUseCase {
+	class BrowsingForStimulusList : public BrowsingEnteredPathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForStimulusList();
 		}
@@ -131,13 +135,23 @@ namespace {
 		}
 	};
 
-	class BrowsingForTestFile : public BrowsingForFileUseCase {
+	class BrowsingForTestFile : public BrowsingForEnteredFilePathUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForTestFile();
 		}
 
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.testFilePath_;
+		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForSavingFile(view);
+		}
+	};
+
+	class BrowsingForSavingAudio : public BrowsingForFileUseCase {
+		void run(View::EventListener *listener) override {
+			listener->saveAudio();
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -283,6 +297,7 @@ namespace {
 		BrowsingForRightDslPrescription browsingForRightDslPrescription{};
 		BrowsingForStimulusList browsingForStimulusList{};
 		BrowsingForTestFile browsingForTestFile{};
+		BrowsingForSavingAudio browsingForSavingAudio{};
 
 		void runUseCase(UseCase *useCase) {
 			useCase->run(&presenter);
@@ -308,14 +323,14 @@ namespace {
 			assertHearingAidUIHasNotBeenDeactivated(&view);
 		}
 
-		void assertCancellingBrowseDoesNotChangePath(BrowsingUseCase *useCase) {
+		void assertCancellingBrowseDoesNotChangePath(BrowsingEnteredPathUseCase *useCase) {
 			useCase->path(view) = "a";
 			view.setBrowseCancelled();
 			runUseCase(useCase);
 			assertEqual("a", useCase->path(view));
 		}
 
-		void assertBrowseForOpeningFileResultPassedToPath(BrowsingUseCase *useCase) {
+		void assertBrowseForOpeningFileResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
 			view.setBrowseForOpeningFileResult("a");
 			runUseCase(useCase);
 			assertEqual("a", useCase->path(view));
@@ -617,8 +632,7 @@ namespace {
 		PresenterTests,
 		saveAudioFiltersWavFiles
 	) {
-		view.saveAudio();
-		assertEqual({ "*.wav" }, view.browseFiltersForSavingFile());
+		assertBrowsingFilters(&browsingForSavingAudio, { "*.wav" });
 	}
 
 	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
