@@ -63,6 +63,12 @@ void FltkView::onSaveAudio(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->saveAudio();
 }
 
+static void hideAllChildren(Fl_Group *parent) {
+	auto children = parent->children();
+	for (auto i{ 0 }; i < children; ++i)
+		parent->child(i)->hide();
+}
+
 FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	brirFilePath_{x + 100, y + 10, 200, 25, "BRIR file path" },
@@ -117,7 +123,7 @@ FltkTestSetupGroup::FltkTestSetupGroup(int x, int y, int w, int h, const char *)
 
 FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	Fl_Double_Window{ x, y, w, h },
-	testSetup{ x, y, w, h },
+	testSetup{ 0, 0, w, h - 25 },
 	audioDevice_{100, 550, 200, 25, "audio device" },
 	playNextTrial{350, 550, 100, 25, "play next trial" }
 {
@@ -146,7 +152,7 @@ FltkView::FltkView() :
 	window.testSetup.hearingAidSimulation.attack_ms_.value("5");
 	window.testSetup.hearingAidSimulation.release_ms_.value("50");
 	window.testSetup.calibration.level_dB_Spl_.value("65");
-	//hideAllChildren(&window);
+	hideAllChildren(&window);
 	window.audioDevice_.show();
 }
 
