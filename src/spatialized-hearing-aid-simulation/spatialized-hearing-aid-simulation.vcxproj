@@ -161,6 +161,7 @@
     <ClInclude Include="AudioProcessingLoader.h" />
     <ClInclude Include="BrirReader.h" />
     <ClInclude Include="CalibrationComputer.h" />
+    <ClInclude Include="ChannelCopier.h" />
     <ClInclude Include="ChannelProcessingGroup.h" />
     <ClInclude Include="Documenter.h" />
     <ClInclude Include="AudioPlayer.h" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CalibrationComputer.cpp" />
+    <ClCompile Include="ChannelCopier.cpp" />
     <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="SpatialHearingAidModel.cpp" />
     <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />

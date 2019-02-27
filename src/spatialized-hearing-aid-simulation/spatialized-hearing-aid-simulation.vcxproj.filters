@@ -75,6 +75,9 @@
     <ClInclude Include="ZeroPaddedLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChannelCopier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SignalProcessingChain.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ZeroPaddedLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelCopier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

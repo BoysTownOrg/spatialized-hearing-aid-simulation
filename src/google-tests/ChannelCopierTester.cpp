@@ -2,7 +2,7 @@
 #include "FakeAudioFile.h"
 #include "assert-utility.h"
 #include <audio-file-reading-writing/AudioFileInMemory.h>
-#include <audio-file-reading-writing/ChannelCopier.h>
+#include <spatialized-hearing-aid-simulation/ChannelCopier.h>
 #include <gtest/gtest.h>
 
 namespace {
