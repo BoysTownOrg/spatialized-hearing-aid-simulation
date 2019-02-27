@@ -47,12 +47,17 @@ namespace {
 		}
 	};
 
-	class BrowsingEnteredPathUseCase : public UseCase {
+	class BrowsingUseCase : public UseCase {
 	public:
-		virtual std::string &path(ViewStub &) = 0;
+		virtual std::string &result(ViewStub &) = 0;
 	};
 
-	class BrowsingForFileUseCase : public UseCase {
+	class BrowsingEnteredPathUseCase : public BrowsingUseCase {
+	public:
+		virtual std::string &entry(ViewStub &) = 0;
+	};
+
+	class BrowsingForFileUseCase : public BrowsingUseCase {
 	public:
 		virtual const std::vector<std::string> &filters(ViewStub &) = 0;
 	};
@@ -61,12 +66,24 @@ namespace {
 		public BrowsingEnteredPathUseCase,
 		public BrowsingForFileUseCase {};
 
-	const std::vector<std::string> &browseFiltersForOpeningFile(ViewStub &view) {
+	const std::vector<std::string> &browseFiltersForOpeningFile(ViewStub &view) noexcept {
 		return view.browseFiltersForOpeningFile_;
 	}
 
-	const std::vector<std::string> &browseFiltersForSavingFile(ViewStub &view) {
+	const std::vector<std::string> &browseFiltersForSavingFile(ViewStub &view) noexcept {
 		return view.browseFiltersForSavingFile_;
+	}
+
+	std::string &browseForSavingFileResult(ViewStub &view) noexcept {
+		return view.browseForSavingFileResult_;
+	}
+
+	std::string &browseForOpeningFileResult(ViewStub &view) noexcept {
+		return view.browseForOpeningFileResult_;
+	}
+
+	std::string &browseForDirectoryResult(ViewStub &view) noexcept {
+		return view.browseDirectory_;
 	}
 	
 	class BrowsingForAudioFile : public BrowsingForEnteredFilePathUseCase {
@@ -74,8 +91,12 @@ namespace {
 			listener->browseForAudioFile();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.audioFilePath_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForOpeningFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -88,8 +109,12 @@ namespace {
 			listener->browseForBrir();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.brirFilePath_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForOpeningFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -102,8 +127,12 @@ namespace {
 			listener->browseForLeftDslPrescription();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.leftDslPrescriptionFilePath_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForOpeningFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -116,8 +145,12 @@ namespace {
 			listener->browseForRightDslPrescription();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.rightDslPrescriptionFilePath_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForOpeningFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -130,8 +163,12 @@ namespace {
 			listener->browseForStimulusList();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.stimulusList_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForDirectoryResult(view);
 		}
 	};
 
@@ -140,8 +177,12 @@ namespace {
 			listener->browseForTestFile();
 		}
 
-		std::string &path(ViewStub &view) override {
+		std::string &entry(ViewStub &view) override {
 			return view.testSetup_.testFilePath_;
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForSavingFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -152,6 +193,10 @@ namespace {
 	class BrowsingForSavingAudio : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->saveAudio();
+		}
+
+		std::string &result(ViewStub &view) override {
+			return browseForSavingFileResult(view);
 		}
 
 		const std::vector<std::string>& filters(ViewStub &view) override {
@@ -324,28 +369,16 @@ namespace {
 		}
 
 		void assertCancellingBrowseDoesNotChangePath(BrowsingEnteredPathUseCase *useCase) {
-			useCase->path(view) = "a";
+			useCase->entry(view) = "a";
 			view.setBrowseCancelled();
 			runUseCase(useCase);
-			assertEqual("a", useCase->path(view));
+			assertEqual("a", useCase->entry(view));
 		}
 
-		void assertBrowseForOpeningFileResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
-			view.setBrowseForOpeningFileResult("a");
+		void assertBrowseResultPassedToEntry(BrowsingEnteredPathUseCase *useCase) {
+			useCase->result(view) = "a";
 			runUseCase(useCase);
-			assertEqual("a", useCase->path(view));
-		}
-
-		void assertBrowseForSavingFileResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
-			view.setBrowseForSavingFileResult("a");
-			runUseCase(useCase);
-			assertEqual("a", useCase->path(view));
-		}
-
-		void assertBrowseForDirectoryResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
-			view.setBrowseDirectory("a");
-			runUseCase(useCase);
-			assertEqual("a", useCase->path(view));
+			assertEqual("a", useCase->entry(view));
 		}
 
 		void assertBrowsingFilters(BrowsingForFileUseCase *useCase, std::vector<std::string> expected) {
@@ -640,32 +673,29 @@ namespace {
 		assertBrowsingFilters(&browsingForRightDslPrescription, { "*.json" });
 	}
 
-	TEST_F(
-		PresenterTests,
-		saveAudioFiltersWavFiles
-	) {
+	TEST_F(PresenterTests, saveAudioFiltersWavFiles) {
 		assertBrowsingFilters(&browsingForSavingAudio, { "*.wav" });
 	}
 
 	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
-		assertBrowseForSavingFileResultPassedToPath(&browsingForTestFile);
+		assertBrowseResultPassedToEntry(&browsingForTestFile);
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(&browsingForAudioFile);
+		assertBrowseResultPassedToEntry(&browsingForAudioFile);
 	}
 
 	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(&browsingForLeftDslPrescription);
-		assertBrowseForOpeningFileResultPassedToPath(&browsingForRightDslPrescription);
+		assertBrowseResultPassedToEntry(&browsingForLeftDslPrescription);
+		assertBrowseResultPassedToEntry(&browsingForRightDslPrescription);
 	}
 
 	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
-		assertBrowseForDirectoryResultPassedToPath(&browsingForStimulusList);
+		assertBrowseResultPassedToEntry(&browsingForStimulusList);
 	}
 
 	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(&browsingForBrir);
+		assertBrowseResultPassedToEntry(&browsingForBrir);
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
