@@ -452,10 +452,10 @@ namespace {
 			assertEqual("a", useCase->processing(model).brirFilePath);
 		}
 
-		void assertUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
+		void assertUsingSpatializationFollowingRequest(ExperimentalProcessingUseCase *useCase) {
 			view.setSpatializationOn();
-			useCase.request();
-			assertTrue(useCase.processing.usingSpatialization);
+			runUseCase(useCase);
+			assertTrue(useCase->processing(model).usingSpatialization);
 		}
 
 		void assertNotUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
@@ -864,15 +864,15 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupUsingSpatialization) {
-		assertUsingSpatializationFollowingRequest(confirmingTestSetup);
+		assertUsingSpatializationFollowingRequest(&experimentalConfirmingTestSetup);
 	}
 
 	TEST_F(PresenterTests, playCalibrationUsingSpatialization) {
-		assertUsingSpatializationFollowingRequest(playingCalibration);
+		assertUsingSpatializationFollowingRequest(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioUsingSpatialization) {
-		assertUsingSpatializationFollowingRequest(savingAudio);
+		assertUsingSpatializationFollowingRequest(&experimentalSavingAudio);
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupNotUsingSpatialization) {
