@@ -923,19 +923,19 @@ namespace {
 		}
 
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMade(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			useCase.processing.usingHearingAidSimulation = false;
-			(this->*useCase.request)();
+			useCase->setHearingAidSimulationOff();
+			runUseCase(useCase);
 			assertFullSimulationNotMade();
 			assertHearingAidSimulationOnlyNotMade();
 		}
 
 		void assertNoSpatializationYieldsNoSuchSimulationMade(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			useCase.processing.usingSpatialization = false;
-			(this->*useCase.request)();
+			useCase->setSpatializationOff();
+			runUseCase(useCase);
 			assertFullSimulationNotMade();
 			assertSpatializationOnlyNotMade();
 		}
@@ -1280,42 +1280,42 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(playingFirstTrialOfNewTest);
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(playingCalibration);
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingDoesNotMakeHearingAidSimulationOrFullSimulationWhenNotUsingHearingAidSimulation
 	) {
-		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(processingAudioForSaving);
+		assertNoHearingAidSimulationYieldsNoSuchSimulationMade(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playTrialDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		assertNoSpatializationYieldsNoSuchSimulationMade(playingFirstTrialOfNewTest);
+		assertNoSpatializationYieldsNoSuchSimulationMade(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		assertNoSpatializationYieldsNoSuchSimulationMade(playingCalibration);
+		assertNoSpatializationYieldsNoSuchSimulationMade(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingDoesNotMakeSpatializationOrFullSimulationWhenNotUsingSpatialization
 	) {
-		assertNoSpatializationYieldsNoSuchSimulationMade(processingAudioForSaving);
+		assertNoSpatializationYieldsNoSuchSimulationMade(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
