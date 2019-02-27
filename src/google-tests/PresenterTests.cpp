@@ -6,6 +6,48 @@
 #include <functional>
 
 namespace {
+	class UseCase {
+	public:
+		INTERFACE_OPERATIONS(UseCase);
+		virtual void run(View::EventListener *) = 0;
+	};
+
+	class ExperimentalProcessingUseCase : public UseCase {
+	public:
+		INTERFACE_OPERATIONS(ExperimentalProcessingUseCase);
+		virtual const Model::SignalProcessing &processing(const ModelStub &) = 0;
+	};
+
+	class ConfirmingTestSetup : public ExperimentalProcessingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->confirmTestSetup();
+		}
+
+		const Model::SignalProcessing & processing(const ModelStub &m) override {
+			return m.testing().processing;
+		}
+	};
+
+	class PlayingCalibration : public ExperimentalProcessingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->playCalibration();
+		}
+
+		const Model::SignalProcessing & processing(const ModelStub &m) override {
+			return m.calibration().processing;
+		}
+	};
+
+	class SavingAudio : public ExperimentalProcessingUseCase {
+		void run(View::EventListener *listener) override {
+			listener->saveAudio();
+		}
+
+		const Model::SignalProcessing & processing(const ModelStub &m) override {
+			return m.savingAudio().processing;
+		}
+	};
+
 	void assertSpatializationUIHasBeenDeactivated(const ViewStub *view) {
 		assertTrue(view->brirFilePathDeactivated());
 		assertTrue(view->browseForBrirButtonDeactivated());
@@ -152,6 +194,9 @@ namespace {
 			model.savingAudio().processing,
 			[=]() { view.saveAudio(); }
 		};
+		ConfirmingTestSetup experimentalConfirmingTestSetup{};
+		PlayingCalibration experimentalPlayingCalibration{};
+		SavingAudio experimentalSavingAudio{};
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
 			assertSpatializationUIHasBeenDeactivated(&view);
@@ -379,7 +424,7 @@ namespace {
 			assertErrorMessageEquals(std::move(s));
 		}
 
-		void assertHearingAidSimulationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
+		void assertHearingAidSimulationMatchesViewFollowingRequest(ExperimentalProcessingUseCase *useCase) {
 			view.setHearingAidSimulationOn();
 			view.testSetup_.setAttack_ms("1.1");
 			view.testSetup_.setRelease_ms("2.2");
@@ -387,13 +432,17 @@ namespace {
 			view.testSetup_.setWindowSize("4");
 			view.testSetup_.setLeftDslPrescriptionFilePath("a");
 			view.testSetup_.setRightDslPrescriptionFilePath("b");
-			useCase.request();
-			assertEqual(1.1, useCase.processing.attack_ms);
-			assertEqual(2.2, useCase.processing.release_ms);
-			assertEqual(3, useCase.processing.chunkSize);
-			assertEqual(4, useCase.processing.windowSize);
-			assertEqual("a", useCase.processing.leftDslPrescriptionFilePath);
-			assertEqual("b", useCase.processing.rightDslPrescriptionFilePath);
+			runUseCase(useCase);
+			assertEqual(1.1, useCase->processing(model).attack_ms);
+			assertEqual(2.2, useCase->processing(model).release_ms);
+			assertEqual(3, useCase->processing(model).chunkSize);
+			assertEqual(4, useCase->processing(model).windowSize);
+			assertEqual("a", useCase->processing(model).leftDslPrescriptionFilePath);
+			assertEqual("b", useCase->processing(model).rightDslPrescriptionFilePath);
+		}
+
+		void runUseCase(UseCase *useCase) {
+			useCase->run(&presenter);
 		}
 
 		void assertSpatializationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
@@ -791,15 +840,15 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupPassesHearingAidParametersToModel) {
-		assertHearingAidSimulationMatchesViewFollowingRequest(confirmingTestSetup);
+		assertHearingAidSimulationMatchesViewFollowingRequest(&experimentalConfirmingTestSetup);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithHearingAidSimulationPassesParametersToModel) {
-		assertHearingAidSimulationMatchesViewFollowingRequest(playingCalibration);
+		assertHearingAidSimulationMatchesViewFollowingRequest(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioWithHearingAidSimulationPassesParametersToModel) {
-		assertHearingAidSimulationMatchesViewFollowingRequest(savingAudio);
+		assertHearingAidSimulationMatchesViewFollowingRequest(&experimentalSavingAudio);
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupPassesSpatializationParametersToModel) {
