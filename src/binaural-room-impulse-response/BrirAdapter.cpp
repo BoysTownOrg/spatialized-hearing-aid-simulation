@@ -53,6 +53,8 @@ auto BrirAdapter::makeBrir(AudioFileReader &reader) -> BinauralRoomImpulseRespon
 			const auto rightChannel = 1;
 			brir.right = channelReader.read(rightChannel);
 		}
+		else
+			brir.right = {};
 	}
 	brir.sampleRate = reader.sampleRate();
 	return brir;

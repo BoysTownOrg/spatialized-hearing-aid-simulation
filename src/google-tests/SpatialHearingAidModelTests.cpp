@@ -256,9 +256,6 @@ namespace {
 			brir.left = { 0 };
 			brir.right = { 0 };
 			brirReader.setBrir(brir);
-			setValidProcessingSizes(testing.processing);
-			setValidProcessingSizes(calibration.processing);
-			setValidProcessingSizes(savingAudio.processing);
 			audioLoader->setComplete();
 		}
 
