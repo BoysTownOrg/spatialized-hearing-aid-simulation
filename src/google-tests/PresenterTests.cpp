@@ -59,18 +59,18 @@ namespace {
 
 	class BrowsingForFileUseCase : public BrowsingUseCase {
 	public:
-		virtual const std::vector<std::string> &filters(ViewStub &) = 0;
+		virtual const std::vector<std::string> &filters(const ViewStub &) = 0;
 	};
 
 	class BrowsingForEnteredFilePathUseCase :
 		public BrowsingEnteredPathUseCase,
 		public BrowsingForFileUseCase {};
 
-	const std::vector<std::string> &browseFiltersForOpeningFile(ViewStub &view) noexcept {
+	const std::vector<std::string> &browseFiltersForOpeningFile(const ViewStub &view) noexcept {
 		return view.browseFiltersForOpeningFile_;
 	}
 
-	const std::vector<std::string> &browseFiltersForSavingFile(ViewStub &view) noexcept {
+	const std::vector<std::string> &browseFiltersForSavingFile(const ViewStub &view) noexcept {
 		return view.browseFiltersForSavingFile_;
 	}
 
@@ -99,7 +99,7 @@ namespace {
 			return browseForOpeningFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForOpeningFile(view);
 		}
 	};
@@ -117,7 +117,7 @@ namespace {
 			return browseForOpeningFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForOpeningFile(view);
 		}
 	};
@@ -135,7 +135,7 @@ namespace {
 			return browseForOpeningFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForOpeningFile(view);
 		}
 	};
@@ -153,7 +153,7 @@ namespace {
 			return browseForOpeningFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForOpeningFile(view);
 		}
 	};
@@ -185,7 +185,7 @@ namespace {
 			return browseForSavingFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForSavingFile(view);
 		}
 	};
@@ -199,73 +199,73 @@ namespace {
 			return browseForSavingFileResult(view);
 		}
 
-		const std::vector<std::string>& filters(ViewStub &view) override {
+		const std::vector<std::string>& filters(const ViewStub &view) override {
 			return browseFiltersForSavingFile(view);
 		}
 	};
 
-	void assertSpatializationUIHasBeenDeactivated(const ViewStub *view) {
-		assertTrue(view->brirFilePathDeactivated());
-		assertTrue(view->browseForBrirButtonDeactivated());
+	void assertSpatializationUIHasBeenDeactivated(const ViewStub &view) {
+		assertTrue(view.brirFilePathDeactivated_);
+		assertTrue(view.browseForBrirButtonDeactivated_);
 	}
 
-	void assertSpatializationUIHasNotBeenActivated(const ViewStub *view) {
-		assertFalse(view->brirFilePathActivated());
-		assertFalse(view->browseForBrirButtonActivated());
+	void assertSpatializationUIHasNotBeenActivated(const ViewStub &view) {
+		assertFalse(view.brirFilePathActivated_);
+		assertFalse(view.browseForBrirButtonActivated_);
 	}
 
-	void assertSpatializationUIHasBeenActivated(const ViewStub *view) {
-		assertTrue(view->brirFilePathActivated());
-		assertTrue(view->browseForBrirButtonActivated());
+	void assertSpatializationUIHasBeenActivated(const ViewStub &view) {
+		assertTrue(view.brirFilePathActivated_);
+		assertTrue(view.browseForBrirButtonActivated_);
 	}
 
-	void assertSpatializationUIHasNotBeenDeactivated(const ViewStub *view) {
-		assertFalse(view->brirFilePathDeactivated());
-		assertFalse(view->browseForBrirButtonDeactivated());
+	void assertSpatializationUIHasNotBeenDeactivated(const ViewStub &view) {
+		assertFalse(view.brirFilePathDeactivated_);
+		assertFalse(view.browseForBrirButtonDeactivated_);
 	}
 
-	void assertHearingAidUIHasBeenActivated(const ViewStub *view) {
-		assertTrue(view->leftDslPrescriptionFilePathActivated_);
-		assertTrue(view->rightDslPrescriptionFilePathActivated_);
-		assertTrue(view->browseForLeftDslPrescriptionButtonActivated_);
-		assertTrue(view->browseForRightDslPrescriptionButtonActivated_);
-		assertTrue(view->chunkSizeActivated_);
-		assertTrue(view->windowSizeActivated_);
-		assertTrue(view->attack_msActivated_);
-		assertTrue(view->release_msActivated_);
+	void assertHearingAidUIHasBeenActivated(const ViewStub &view) {
+		assertTrue(view.leftDslPrescriptionFilePathActivated_);
+		assertTrue(view.rightDslPrescriptionFilePathActivated_);
+		assertTrue(view.browseForLeftDslPrescriptionButtonActivated_);
+		assertTrue(view.browseForRightDslPrescriptionButtonActivated_);
+		assertTrue(view.chunkSizeActivated_);
+		assertTrue(view.windowSizeActivated_);
+		assertTrue(view.attack_msActivated_);
+		assertTrue(view.release_msActivated_);
 	}
 
-	void assertHearingAidUIHasNotBeenDeactivated(const ViewStub *view) {
-		assertFalse(view->leftDslPrescriptionFilePathDeactivated_);
-		assertFalse(view->rightDslPrescriptionFilePathDeactivated_);
-		assertFalse(view->browseForLeftDslPrescriptionButtonDeactivated_);
-		assertFalse(view->browseForRightDslPrescriptionButtonDeactivated_);
-		assertFalse(view->chunkSizeDeactivated_);
-		assertFalse(view->windowSizeDeactivated_);
-		assertFalse(view->attack_msDeactivated_);
-		assertFalse(view->release_msDeactivated_);
+	void assertHearingAidUIHasNotBeenDeactivated(const ViewStub &view) {
+		assertFalse(view.leftDslPrescriptionFilePathDeactivated_);
+		assertFalse(view.rightDslPrescriptionFilePathDeactivated_);
+		assertFalse(view.browseForLeftDslPrescriptionButtonDeactivated_);
+		assertFalse(view.browseForRightDslPrescriptionButtonDeactivated_);
+		assertFalse(view.chunkSizeDeactivated_);
+		assertFalse(view.windowSizeDeactivated_);
+		assertFalse(view.attack_msDeactivated_);
+		assertFalse(view.release_msDeactivated_);
 	}
 
-	void assertHearingAidUIHasNotBeenActivated(const ViewStub *view) {
-		assertFalse(view->leftDslPrescriptionFilePathActivated_);
-		assertFalse(view->rightDslPrescriptionFilePathActivated_);
-		assertFalse(view->browseForLeftDslPrescriptionButtonActivated_);
-		assertFalse(view->browseForRightDslPrescriptionButtonActivated_);
-		assertFalse(view->chunkSizeActivated_);
-		assertFalse(view->windowSizeActivated_);
-		assertFalse(view->attack_msActivated_);
-		assertFalse(view->release_msActivated_);
+	void assertHearingAidUIHasNotBeenActivated(const ViewStub &view) {
+		assertFalse(view.leftDslPrescriptionFilePathActivated_);
+		assertFalse(view.rightDslPrescriptionFilePathActivated_);
+		assertFalse(view.browseForLeftDslPrescriptionButtonActivated_);
+		assertFalse(view.browseForRightDslPrescriptionButtonActivated_);
+		assertFalse(view.chunkSizeActivated_);
+		assertFalse(view.windowSizeActivated_);
+		assertFalse(view.attack_msActivated_);
+		assertFalse(view.release_msActivated_);
 	}
 
-	void assertHearingAidUIHasBeenDeactivated(const ViewStub *view) {
-		assertTrue(view->leftDslPrescriptionFilePathDeactivated_);
-		assertTrue(view->rightDslPrescriptionFilePathDeactivated_);
-		assertTrue(view->browseForLeftDslPrescriptionButtonDeactivated_);
-		assertTrue(view->browseForRightDslPrescriptionButtonDeactivated_);
-		assertTrue(view->chunkSizeDeactivated_);
-		assertTrue(view->windowSizeDeactivated_);
-		assertTrue(view->attack_msDeactivated_);
-		assertTrue(view->release_msDeactivated_);
+	void assertHearingAidUIHasBeenDeactivated(const ViewStub &view) {
+		assertTrue(view.leftDslPrescriptionFilePathDeactivated_);
+		assertTrue(view.rightDslPrescriptionFilePathDeactivated_);
+		assertTrue(view.browseForLeftDslPrescriptionButtonDeactivated_);
+		assertTrue(view.browseForRightDslPrescriptionButtonDeactivated_);
+		assertTrue(view.chunkSizeDeactivated_);
+		assertTrue(view.windowSizeDeactivated_);
+		assertTrue(view.attack_msDeactivated_);
+		assertTrue(view.release_msDeactivated_);
 	}
 
 	class PresenterConstructionTests : public ::testing::Test {
@@ -274,23 +274,23 @@ namespace {
 		ViewStub view;
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
-			assertSpatializationUIHasBeenDeactivated(&view);
-			assertSpatializationUIHasNotBeenActivated(&view);
+			assertSpatializationUIHasBeenDeactivated(view);
+			assertSpatializationUIHasNotBeenActivated(view);
 		}
 
 		void assertSpatializationUIHasOnlyBeenActivated() {
-			assertSpatializationUIHasBeenActivated(&view);
-			assertSpatializationUIHasNotBeenDeactivated(&view);
+			assertSpatializationUIHasBeenActivated(view);
+			assertSpatializationUIHasNotBeenDeactivated(view);
 		}
 
 		void assertHearingAidUIHasOnlyBeenDeactivated() {
-			assertHearingAidUIHasNotBeenActivated(&view);
-			assertHearingAidUIHasBeenDeactivated(&view);
+			assertHearingAidUIHasNotBeenActivated(view);
+			assertHearingAidUIHasBeenDeactivated(view);
 		}
 
 		void assertHearingAidUIHasOnlyBeenActivated() {
-			assertHearingAidUIHasBeenActivated(&view);
-			assertHearingAidUIHasNotBeenDeactivated(&view);
+			assertHearingAidUIHasBeenActivated(view);
+			assertHearingAidUIHasNotBeenDeactivated(view);
 		}
 
 		Presenter construct() {
@@ -349,23 +349,23 @@ namespace {
 		}
 
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
-			assertSpatializationUIHasBeenDeactivated(&view);
-			assertSpatializationUIHasNotBeenActivated(&view);
+			assertSpatializationUIHasBeenDeactivated(view);
+			assertSpatializationUIHasNotBeenActivated(view);
 		}
 
 		void assertSpatializationUIHasOnlyBeenActivated() {
-			assertSpatializationUIHasBeenActivated(&view);
-			assertSpatializationUIHasNotBeenDeactivated(&view);
+			assertSpatializationUIHasBeenActivated(view);
+			assertSpatializationUIHasNotBeenDeactivated(view);
 		}
 
 		void assertHearingAidUIHasOnlyBeenDeactivated() {
-			assertHearingAidUIHasNotBeenActivated(&view);
-			assertHearingAidUIHasBeenDeactivated(&view);
+			assertHearingAidUIHasNotBeenActivated(view);
+			assertHearingAidUIHasBeenDeactivated(view);
 		}
 
 		void assertHearingAidUIHasOnlyBeenActivated() {
-			assertHearingAidUIHasBeenActivated(&view);
-			assertHearingAidUIHasNotBeenDeactivated(&view);
+			assertHearingAidUIHasBeenActivated(view);
+			assertHearingAidUIHasNotBeenDeactivated(view);
 		}
 
 		void assertCancellingBrowseDoesNotChangePath(BrowsingEnteredPathUseCase *useCase) {
