@@ -464,10 +464,10 @@ namespace {
 			assertFalse(useCase->processing(model).usingSpatialization);
 		}
 
-		void assertUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
+		void assertUsingHearingAidSimulationFollowingRequest(ExperimentalProcessingUseCase *useCase) {	
 			view.setHearingAidSimulationOn();
-			useCase.request();
-			assertTrue(useCase.processing.usingHearingAidSimulation);
+			runUseCase(useCase);
+			assertTrue(useCase->processing(model).usingHearingAidSimulation);
 		}
 
 		void assertNotUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
@@ -888,15 +888,15 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupUsingHearingAidSimulation) {
-		assertUsingHearingAidSimulationFollowingRequest(confirmingTestSetup);
+		assertUsingHearingAidSimulationFollowingRequest(&experimentalConfirmingTestSetup);
 	}
 
 	TEST_F(PresenterTests, playCalibrationUsingHearingAidSimulation) {
-		assertUsingHearingAidSimulationFollowingRequest(playingCalibration);
+		assertUsingHearingAidSimulationFollowingRequest(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioUsingHearingAidSimulation) {
-		assertUsingHearingAidSimulationFollowingRequest(savingAudio);
+		assertUsingHearingAidSimulationFollowingRequest(&experimentalSavingAudio);
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupNotUsingHearingAidSimulation) {
