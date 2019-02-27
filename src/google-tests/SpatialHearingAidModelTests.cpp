@@ -859,18 +859,34 @@ namespace {
 			assertEqual({ 7 * 3 }, right);
 		}
 
+		void assertSpatializationFilterCoefficientsMatchBrirWhenUsingOnlySpatialization(ExperimentalSignalProcessingUseCase *useCase) {
+			setSpatializationOnly(useCase);
+			assertSpatializationFilterCoefficientsMatchBrir(
+				useCase,
+				simulationFactory.spatialization()
+			);
+		}
+
 		void assertSpatializationFilterCoefficientsMatchBrir(
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization,
-			std::function<void(void)> f
+				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization
 		) {
 			BrirReader::BinauralRoomImpulseResponse brir;
 			brir.left = { 1, 2 };
 			brir.right = { 3, 4 };
 			brirReader.setBrir(brir);
-			f();
+			runUseCase(useCase);
 			assertEqual({ 1, 2, }, spatialization.at(0).filterCoefficients);
 			assertEqual({ 3, 4, }, spatialization.at(1).filterCoefficients);
+		}
+
+		void assertSpatializationFilterCoefficientsMatchBrirWhenUsingFullSimulation(ExperimentalSignalProcessingUseCase *useCase) {
+			setFullSimulation(useCase);
+			assertSpatializationFilterCoefficientsMatchBrir(
+				useCase,
+				simulationFactory.fullSimulationSpatialization()
+			);
 		}
 
 		void assertPrescriptionReaderReceivesFilePathsWhenUsingHearingAidSimulation(
@@ -1484,44 +1500,28 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialPassesBrirToFactoryForSpatialization
 	) {
-		setSpatializationOnlyForTest();
-		assertSpatializationFilterCoefficientsMatchBrir(
-			simulationFactory.spatialization(),
-			[=]() { playFirstTrialOfNewTest(); }
-		);
+		assertSpatializationFilterCoefficientsMatchBrirWhenUsingOnlySpatialization(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesBrirToFactoryForSpatialization
 	) {
-		setSpatializationOnlyForCalibration();
-		assertSpatializationFilterCoefficientsMatchBrir(
-			simulationFactory.spatialization(),
-			[=]() { playCalibration(); }
-		);
+		assertSpatializationFilterCoefficientsMatchBrirWhenUsingOnlySpatialization(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
-		setFullSimulationForTest();
-		assertSpatializationFilterCoefficientsMatchBrir(
-			simulationFactory.fullSimulationSpatialization(),
-			[=]() { playFirstTrialOfNewTest(); }
-		);
+		assertSpatializationFilterCoefficientsMatchBrirWhenUsingFullSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesBrirToFactoryForFullSimulation
 	) {
-		setFullSimulationForCalibration();
-		assertSpatializationFilterCoefficientsMatchBrir(
-			simulationFactory.fullSimulationSpatialization(),
-			[=]() { playCalibration(); }
-		);
+		assertSpatializationFilterCoefficientsMatchBrirWhenUsingFullSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPreparesPlayerBeforePlaying) {
