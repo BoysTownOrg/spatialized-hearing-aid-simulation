@@ -22,7 +22,6 @@ struct FltkSpatialization : public Fl_Group {
 	FltkSpatialization(int, int, int, int, const char * = {});
 	Fl_Input brirFilePath_;
 	Fl_Button browseBrir;
-	void hide() override;
 };
 
 struct FltkHearingAidSimulationGroup : public Fl_Group {
@@ -35,7 +34,6 @@ struct FltkHearingAidSimulationGroup : public Fl_Group {
 	Fl_Button browseRightPrescription;
 	Fl_ChoiceFacade windowSize_;
 	Fl_ChoiceFacade chunkSize_;
-	void hide() override;
 };
 
 struct FltkCalibration : public Fl_Group {
@@ -46,11 +44,10 @@ struct FltkCalibration : public Fl_Group {
 	Fl_Button play;
 	Fl_Button stop;
 	Fl_Button save;
-	void hide() override;
 };
 
-struct FltkWindow : public Fl_Double_Window {
-	FltkWindow(int, int, int, int, const char * = {});
+struct FltkTestSetupGroup : Fl_Group {
+	FltkTestSetupGroup(int, int, int, int, const char * = {});
 	FltkHearingAidSimulationGroup hearingAidSimulation;
 	FltkCalibration calibration;
 	FltkSpatialization spatialization;
@@ -58,46 +55,59 @@ struct FltkWindow : public Fl_Double_Window {
 	Fl_Input testerId_;
 	Fl_Input testFilePath_;
 	Fl_Input stimulusList_;
-	Fl_ChoiceFacade audioDevice_;
 	Fl_Button browseTestFilePath;
 	Fl_Button browseForStimulusList;
 	Fl_Button confirm;
-	Fl_Button playNextTrial;
 	Fl_Check_Button usingSpatialization_;
 	Fl_Check_Button usingHearingAidSimulation_;
 };
 
+struct FltkWindow : public Fl_Double_Window {
+	FltkWindow(int, int, int, int, const char * = {});
+	FltkTestSetupGroup testSetup;
+	Fl_ChoiceFacade audioDevice_;
+	Fl_Button playNextTrial;
+};
+
 class FltkView : public View {
-	FltkWindow window;
-	EventListener *listener{};
-	int browseResult{};
 public:
+	class FltkTestSetup : public TestSetup {
+	public:
+		explicit FltkTestSetup(FltkTestSetupGroup *);
+		void setStimulusList(std::string) override;
+		void setLeftDslPrescriptionFilePath(std::string) override;
+		void setRightDslPrescriptionFilePath(std::string) override;
+		void setBrirFilePath(std::string) override;
+		void setTestFilePath(std::string) override;
+		void setAudioFilePath(std::string) override;
+		std::string subjectId() override;
+		std::string testerId() override;
+		std::string testFilePath() override;
+		std::string stimulusList() override;
+		std::string audioFilePath() override;
+		std::string leftDslPrescriptionFilePath() override;
+		std::string rightDslPrescriptionFilePath() override;
+		std::string brirFilePath() override;
+		std::string level_dB_Spl() override;
+		std::string attack_ms() override;
+		std::string release_ms() override;
+		std::string windowSize() override;
+		std::string chunkSize() override;
+		void hide() override;
+		void show() override;
+	private:
+		FltkTestSetupGroup *view;
+	};
+
 	FltkView();
+	TestSetup *testSetup() override;
 	void subscribe(EventListener * listener) override;
 	void runEventLoop() override;
 	std::string browseForOpeningFile(std::vector<std::string> filters) override;
 	std::string browseForSavingFile(std::vector<std::string> filters) override;
 	std::string browseForDirectory() override;
 	bool browseCancelled() override;
-	void setStimulusList(std::string) override;
-	void setLeftDslPrescriptionFilePath(std::string) override;
-	void setRightDslPrescriptionFilePath(std::string) override;
-	void setBrirFilePath(std::string) override;
-	void setTestFilePath(std::string) override;
-	std::string subjectId() override;
-	std::string testerId() override;
-	std::string testFilePath() override;
-	std::string stimulusList() override;
-	std::string audioFilePath() override;
-	std::string leftDslPrescriptionFilePath() override;
-	std::string rightDslPrescriptionFilePath() override;
-	std::string brirFilePath() override;
 	std::string audioDevice() override;
-	std::string level_dB_Spl() override;
-	std::string attack_ms() override;
-	std::string release_ms() override;
-	std::string windowSize() override;
-	std::string chunkSize() override;
 	bool usingSpatialization() override;
 	void showErrorDialog(std::string message) override;
 	void populateAudioDeviceMenu(std::vector<std::string> items) override;
@@ -124,59 +134,8 @@ public:
 	void deactivateAttackTime_ms() override;
 	void deactivateWindowSize() override;
 	void deactivateChunkSize() override;
-	void hideSubjectId() override;
-	void hideTesterId() override;
-	void hideStimulusList() override;
-	void hideTestFilePath() override;
-	void hideConfirmButton() override;
-	void hideBrirFilePath() override;
-	void hideBrowseForBrirButton() override;
-	void hideUsingSpatializationCheckBox() override;
-	void hideLeftDslPrescriptionFilePath() override;
-	void hideBrowseForLeftDslPrescriptionButton() override;
-	void hideRightDslPrescriptionFilePath() override;
-	void hideBrowseForRightDslPrescriptionButton() override;
-	void hideAttack_ms() override;
-	void hideRelease_ms() override;
-	void hideChunkSize() override;
-	void hideWindowSize() override;
-	void hideUsingHearingAidSimulationCheckBox() override;
-	void hideAudioFilePath() override;
-	void hidePlayButton() override;
-	void hideStopButton() override;
-	void hideLevel_dB_Spl() override;
-	void showSubjectId() override;
-	void showTesterId() override;
-	void showStimulusList() override;
-	void showTestFilePath() override;
-	void showConfirmButton() override;
-	void showBrirFilePath() override;
-	void showBrowseForBrirButton() override;
-	void showUsingSpatializationCheckBox() override;
-	void showLeftDslPrescriptionFilePath() override;
-	void showBrowseForLeftDslPrescriptionButton() override;
-	void showRightDslPrescriptionFilePath() override;
-	void showBrowseForRightDslPrescriptionButton() override;
-	void showAttack_ms() override;
-	void showRelease_ms() override;
-	void showChunkSize() override;
-	void showWindowSize() override;
-	void showUsingHearingAidSimulationCheckBox() override;
-	void showAudioFilePath() override;
-	void showPlayButton() override;
-	void showStopButton() override;
-	void showLevel_dB_Spl() override;
-	void setAudioFilePath(std::string) override;
 	void hidePlayNextTrialButton() override;
 	void showPlayNextTrialButton() override;
-	void hideBrowseForAudioFileButton() override;
-	void hideBrowseForStimulusListButton() override;
-	void showBrowseForAudioFileButton() override;
-	void showBrowseForStimulusListButton() override;
-	void hideBrowseForTestFileButton() override;
-	void showBrowseForTestFileButton() override;
-	void hideSaveButton() override;
-	void showSaveButton() override;
 
 private:
 	void registerCallbacks();
@@ -195,4 +154,9 @@ private:
 	static void onPlayCalibration(Fl_Widget *, void *);
 	static void onStopCalibration(Fl_Widget *, void *);
 	static void onSaveAudio(Fl_Widget *, void *);
+
+	FltkWindow window;
+	FltkTestSetup testSetup_;
+	EventListener *listener{};
+	int browseResult{};
 };

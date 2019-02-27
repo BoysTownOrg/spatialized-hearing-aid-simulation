@@ -63,24 +63,12 @@ void FltkView::onSaveAudio(Fl_Widget *, void *self) {
 	static_cast<FltkView *>(self)->listener->saveAudio();
 }
 
-static void hideAllChildren(Fl_Group *parent)
-{
-	auto children = parent->children();
-	for (auto i{ 0 }; i < children; ++i)
-		parent->child(i)->hide();
-}
-
 FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	brirFilePath_{x + 100, y + 10, 200, 25, "BRIR file path" },
 	browseBrir{x + 310, y + 10, 80, 25, "browse..." }
 {
 	end();
-}
-
-void FltkSpatialization::hide()
-{
-	hideAllChildren(this);
 }
 
 FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w, int h, const char *) :
@@ -97,11 +85,6 @@ FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w
 	end();
 }
 
-void FltkHearingAidSimulationGroup::hide()
-{
-	hideAllChildren(this);
-}
-
 FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	audioFilePath_{x + 100, y + 10, 200, 25, "audio file path"},
@@ -114,13 +97,8 @@ FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	end();
 }
 
-void FltkCalibration::hide()
-{
-	hideAllChildren(this);
-}
-
-FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
-	Fl_Double_Window{ x, y, w, h },
+FltkTestSetupGroup::FltkTestSetupGroup(int x, int y, int w, int h, const char *):
+	Fl_Group{ x, y, w, h },
 	subjectId_{ 100, 10, 200, 25, "subject ID" },
 	testerId_{ 100, 35, 200, 25, "tester ID" },
 	stimulusList_{ 100, 60, 200, 25, "stimulus list" },
@@ -132,173 +110,72 @@ FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
 	usingHearingAidSimulation_{ 425, 80, 18, 25, "hearing aid simulation" },
 	hearingAidSimulation{ 425, 105, 500, 170 },
 	calibration{ 425, 275, 400, 95 },
-	audioDevice_{100, 550, 200, 25, "audio device" },
-	playNextTrial{350, 550, 100, 25, "play next trial" },
 	confirm{850, 550, 60, 25, "confirm" }
 {
 	end();
 }
 
+FltkWindow::FltkWindow(int x, int y, int w, int h, const char *):
+	Fl_Double_Window{ x, y, w, h },
+	testSetup{ x, y, w, h },
+	audioDevice_{100, 550, 200, 25, "audio device" },
+	playNextTrial{350, 550, 100, 25, "play next trial" }
+{
+	end();
+}
+
 FltkView::FltkView() :
-	window{ 425, 300, 950, 600 }
+	window{ 425, 300, 950, 600 },
+	testSetup_{ &window.testSetup }
 {
 	Fl::set_font(0, "Segoe UI");
 	window.color(FL_LIGHT2);
-	window.hearingAidSimulation.box(FL_ENGRAVED_BOX);
-	window.hearingAidSimulation.color(FL_LIGHT2);
-	window.spatialization.box(FL_ENGRAVED_BOX);
-	window.spatialization.color(FL_LIGHT2);
-	window.calibration.box(FL_ENGRAVED_BOX);
-	window.calibration.color(FL_LIGHT2);
+	window.testSetup.hearingAidSimulation.box(FL_ENGRAVED_BOX);
+	window.testSetup.hearingAidSimulation.color(FL_LIGHT2);
+	window.testSetup.spatialization.box(FL_ENGRAVED_BOX);
+	window.testSetup.spatialization.color(FL_LIGHT2);
+	window.testSetup.calibration.box(FL_ENGRAVED_BOX);
+	window.testSetup.calibration.color(FL_LIGHT2);
 	registerCallbacks();
 	turnOnSpatialization();
 	turnOnHearingAidSimulation();
 	populateChunkSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
-	window.hearingAidSimulation.chunkSize_.value(4);
+	window.testSetup.hearingAidSimulation.chunkSize_.value(4);
 	populateWindowSizeMenu({ "64", "128", "256", "512", "1024", "2048", "4096", "8192" });
-	window.hearingAidSimulation.windowSize_.value(2);
-	window.hearingAidSimulation.attack_ms_.value("5");
-	window.hearingAidSimulation.release_ms_.value("50");
-	window.calibration.level_dB_Spl_.value("65");
-	hideAllChildren(&window);
+	window.testSetup.hearingAidSimulation.windowSize_.value(2);
+	window.testSetup.hearingAidSimulation.attack_ms_.value("5");
+	window.testSetup.hearingAidSimulation.release_ms_.value("50");
+	window.testSetup.calibration.level_dB_Spl_.value("65");
+	//hideAllChildren(&window);
 	window.audioDevice_.show();
 }
 
+auto FltkView::testSetup() -> TestSetup * {
+	return &testSetup_;
+}
+
 void FltkView::registerCallbacks() {
-	window.browseTestFilePath.callback(onBrowseTestFile, this);
-	window.hearingAidSimulation.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
-	window.hearingAidSimulation.browseRightPrescription.callback(onBrowseRightPrescription, this);
-	window.browseForStimulusList.callback(onBrowseStimulusList, this);
-	window.calibration.browseForAudioFile.callback(onBrowseAudio, this);
-	window.spatialization.browseBrir.callback(onBrowseBrir, this);
-	window.confirm.callback(onConfirmTestSetup, this);
-	window.usingSpatialization_.callback(onToggleSpatialization, this);
-	window.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
+	window.testSetup.browseTestFilePath.callback(onBrowseTestFile, this);
+	window.testSetup.hearingAidSimulation.browseLeftPrescription.callback(onBrowseLeftPrescription, this);
+	window.testSetup.hearingAidSimulation.browseRightPrescription.callback(onBrowseRightPrescription, this);
+	window.testSetup.browseForStimulusList.callback(onBrowseStimulusList, this);
+	window.testSetup.calibration.browseForAudioFile.callback(onBrowseAudio, this);
+	window.testSetup.spatialization.browseBrir.callback(onBrowseBrir, this);
+	window.testSetup.confirm.callback(onConfirmTestSetup, this);
+	window.testSetup.usingSpatialization_.callback(onToggleSpatialization, this);
+	window.testSetup.usingHearingAidSimulation_.callback(onToggleHearingAidSimulation, this);
 	window.playNextTrial.callback(onPlayTrial, this);
-	window.calibration.play.callback(onPlayCalibration, this);
-	window.calibration.stop.callback(onStopCalibration, this);
-	window.calibration.save.callback(onSaveAudio, this);
+	window.testSetup.calibration.play.callback(onPlayCalibration, this);
+	window.testSetup.calibration.stop.callback(onStopCalibration, this);
+	window.testSetup.calibration.save.callback(onSaveAudio, this);
 }
 
 void FltkView::turnOnHearingAidSimulation() {
-	window.usingHearingAidSimulation_.value(1);
+	window.testSetup.usingHearingAidSimulation_.value(1);
 }
 
 void FltkView::turnOnSpatialization() {
-	window.usingSpatialization_.value(1);
-}
-
-void FltkView::hideSaveButton() {
-	window.calibration.save.hide();
-}
-
-void FltkView::showSaveButton() {
-	window.calibration.save.show();
-}
-
-void FltkView::hideSubjectId()
-{
-	window.subjectId_.hide();
-}
-
-void FltkView::hideTesterId()
-{
-	window.testerId_.hide();
-}
-
-void FltkView::hideStimulusList()
-{
-	window.stimulusList_.hide();
-}
-
-void FltkView::hideTestFilePath()
-{
-	window.testFilePath_.hide();
-}
-
-void FltkView::hideConfirmButton()
-{
-	window.confirm.hide();
-}
-
-void FltkView::hideBrirFilePath()
-{
-	window.spatialization.brirFilePath_.hide();
-}
-
-void FltkView::hideBrowseForBrirButton()
-{
-	window.spatialization.browseBrir.hide();
-}
-
-void FltkView::hideUsingSpatializationCheckBox()
-{
-	window.usingSpatialization_.hide();
-}
-
-void FltkView::hideLeftDslPrescriptionFilePath()
-{
-	window.hearingAidSimulation.leftPrescriptionFilePath_.hide();
-}
-
-void FltkView::hideBrowseForLeftDslPrescriptionButton()
-{
-	window.hearingAidSimulation.browseLeftPrescription.hide();
-}
-
-void FltkView::hideRightDslPrescriptionFilePath()
-{
-	window.hearingAidSimulation.rightPrescriptionFilePath_.hide();
-}
-
-void FltkView::hideBrowseForRightDslPrescriptionButton()
-{
-	window.hearingAidSimulation.browseRightPrescription.hide();
-}
-
-void FltkView::hideAttack_ms()
-{
-	window.hearingAidSimulation.attack_ms_.hide();
-}
-
-void FltkView::hideRelease_ms()
-{
-	window.hearingAidSimulation.release_ms_.hide();
-}
-
-void FltkView::hideChunkSize()
-{
-	window.hearingAidSimulation.chunkSize_.hide();
-}
-
-void FltkView::hideWindowSize()
-{
-	window.hearingAidSimulation.windowSize_.hide();
-}
-
-void FltkView::hideUsingHearingAidSimulationCheckBox()
-{
-	window.usingHearingAidSimulation_.hide();
-}
-
-void FltkView::hideAudioFilePath()
-{
-	window.calibration.audioFilePath_.hide();
-}
-
-void FltkView::hidePlayButton()
-{
-	window.calibration.play.hide();
-}
-
-void FltkView::hideStopButton()
-{
-	window.calibration.stop.hide();
-}
-
-void FltkView::hideLevel_dB_Spl()
-{
-	window.calibration.level_dB_Spl_.hide();
+	window.testSetup.usingSpatialization_.value(1);
 }
 
 void FltkView::hidePlayNextTrialButton()
@@ -306,140 +183,6 @@ void FltkView::hidePlayNextTrialButton()
 	window.playNextTrial.hide();
 }
 
-void FltkView::hideBrowseForAudioFileButton()
-{
-	window.calibration.browseForAudioFile.hide();
-}
-
-void FltkView::hideBrowseForStimulusListButton()
-{
-	window.browseForStimulusList.hide();
-}
-
-void FltkView::hideBrowseForTestFileButton()
-{
-	window.browseTestFilePath.hide();
-}
-
-void FltkView::showBrowseForTestFileButton()
-{
-	window.browseTestFilePath.show();
-}
-
-void FltkView::showBrowseForAudioFileButton()
-{
-	window.calibration.browseForAudioFile.show();
-}
-
-void FltkView::showBrowseForStimulusListButton()
-{
-	window.browseForStimulusList.show();
-}
-
-void FltkView::showSubjectId()
-{
-	window.subjectId_.show();
-}
-
-void FltkView::showTesterId()
-{
-	window.testerId_.show();
-}
-
-void FltkView::showStimulusList()
-{
-	window.stimulusList_.show();
-}
-
-void FltkView::showTestFilePath()
-{
-	window.testFilePath_.show();
-}
-
-void FltkView::showConfirmButton()
-{
-	window.confirm.show();
-}
-
-void FltkView::showBrirFilePath()
-{
-	window.spatialization.brirFilePath_.show();
-}
-
-void FltkView::showBrowseForBrirButton()
-{
-	window.spatialization.browseBrir.show();
-}
-
-void FltkView::showUsingSpatializationCheckBox()
-{
-	window.usingSpatialization_.show();
-}
-
-void FltkView::showLeftDslPrescriptionFilePath()
-{
-	window.hearingAidSimulation.leftPrescriptionFilePath_.show();
-}
-
-void FltkView::showBrowseForLeftDslPrescriptionButton()
-{
-	window.hearingAidSimulation.browseLeftPrescription.show();
-}
-
-void FltkView::showRightDslPrescriptionFilePath()
-{
-	window.hearingAidSimulation.rightPrescriptionFilePath_.show();
-}
-
-void FltkView::showBrowseForRightDslPrescriptionButton()
-{
-	window.hearingAidSimulation.browseRightPrescription.show();
-}
-
-void FltkView::showAttack_ms()
-{
-	window.hearingAidSimulation.attack_ms_.show();
-}
-
-void FltkView::showRelease_ms()
-{
-	window.hearingAidSimulation.release_ms_.show();
-}
-
-void FltkView::showChunkSize()
-{
-	window.hearingAidSimulation.chunkSize_.show();
-}
-
-void FltkView::showWindowSize()
-{
-	window.hearingAidSimulation.windowSize_.show();
-}
-
-void FltkView::showUsingHearingAidSimulationCheckBox()
-{
-	window.usingHearingAidSimulation_.show();
-}
-
-void FltkView::showAudioFilePath()
-{
-	window.calibration.audioFilePath_.show();
-}
-
-void FltkView::showPlayButton()
-{
-	window.calibration.play.show();
-}
-
-void FltkView::showStopButton()
-{
-	window.calibration.stop.show();
-}
-
-void FltkView::showLevel_dB_Spl()
-{
-	window.calibration.level_dB_Spl_.show();
-}
 
 void FltkView::showPlayNextTrialButton()
 {
@@ -447,83 +190,83 @@ void FltkView::showPlayNextTrialButton()
 }
 
 void FltkView::deactivateBrowseForBrirButton() {
-	window.spatialization.browseBrir.deactivate();
+	window.testSetup.spatialization.browseBrir.deactivate();
 }
 
 void FltkView::deactivateBrirFilePath() {
-	window.spatialization.brirFilePath_.deactivate();
+	window.testSetup.spatialization.brirFilePath_.deactivate();
 }
 
 void FltkView::activateBrowseForBrirButton() {
-	window.spatialization.browseBrir.activate();
+	window.testSetup.spatialization.browseBrir.activate();
 }
 
 void FltkView::activateBrirFilePath() {
-	window.spatialization.brirFilePath_.activate();
+	window.testSetup.spatialization.brirFilePath_.activate();
 }
 
 void FltkView::activateLeftDslPrescriptionFilePath() {
-	window.hearingAidSimulation.leftPrescriptionFilePath_.activate();
+	window.testSetup.hearingAidSimulation.leftPrescriptionFilePath_.activate();
 }
 
 void FltkView::activateRightDslPrescriptionFilePath() {
-	window.hearingAidSimulation.rightPrescriptionFilePath_.activate();
+	window.testSetup.hearingAidSimulation.rightPrescriptionFilePath_.activate();
 }
 
 void FltkView::activateBrowseForLeftDslPrescriptionButton() {
-	window.hearingAidSimulation.browseLeftPrescription.activate();
+	window.testSetup.hearingAidSimulation.browseLeftPrescription.activate();
 }
 
 void FltkView::activateBrowseForRightDslPrescriptionButton() {
-	window.hearingAidSimulation.browseRightPrescription.activate();
+	window.testSetup.hearingAidSimulation.browseRightPrescription.activate();
 }
 
 void FltkView::deactivateLeftDslPrescriptionFilePath() {
-	window.hearingAidSimulation.leftPrescriptionFilePath_.deactivate();
+	window.testSetup.hearingAidSimulation.leftPrescriptionFilePath_.deactivate();
 }
 
 void FltkView::deactivateRightDslPrescriptionFilePath() {
-	window.hearingAidSimulation.rightPrescriptionFilePath_.deactivate();
+	window.testSetup.hearingAidSimulation.rightPrescriptionFilePath_.deactivate();
 }
 
 void FltkView::deactivateBrowseForLeftDslPrescriptionButton() {
-	window.hearingAidSimulation.browseLeftPrescription.deactivate();
+	window.testSetup.hearingAidSimulation.browseLeftPrescription.deactivate();
 }
 
 void FltkView::deactivateBrowseForRightDslPrescriptionButton() {
-	window.hearingAidSimulation.browseRightPrescription.deactivate();
+	window.testSetup.hearingAidSimulation.browseRightPrescription.deactivate();
 }
 
 void FltkView::activateReleaseTime_ms() {
-	window.hearingAidSimulation.release_ms_.activate();
+	window.testSetup.hearingAidSimulation.release_ms_.activate();
 }
 
 void FltkView::activateAttackTime_ms() {
-	window.hearingAidSimulation.attack_ms_.activate();
+	window.testSetup.hearingAidSimulation.attack_ms_.activate();
 }
 
 void FltkView::activateWindowSize() {
-	window.hearingAidSimulation.windowSize_.activate();
+	window.testSetup.hearingAidSimulation.windowSize_.activate();
 }
 
 void FltkView::activateChunkSize() {
-	window.hearingAidSimulation.chunkSize_.activate();
+	window.testSetup.hearingAidSimulation.chunkSize_.activate();
 }
 
 void FltkView::deactivateReleaseTime_ms() {
-	window.hearingAidSimulation.release_ms_.deactivate();
+	window.testSetup.hearingAidSimulation.release_ms_.deactivate();
 }
 
 void FltkView::deactivateAttackTime_ms() {
-	window.hearingAidSimulation.attack_ms_.deactivate();
+	window.testSetup.hearingAidSimulation.attack_ms_.deactivate();
 }
 
 void FltkView::deactivateWindowSize() {
-	window.hearingAidSimulation.windowSize_.deactivate();
+	window.testSetup.hearingAidSimulation.windowSize_.deactivate();
 }
 
 void FltkView::deactivateChunkSize() {
-	window.hearingAidSimulation.chunkSize_.deactivate();
+	window.testSetup.hearingAidSimulation.chunkSize_.deactivate();
 }
 
 void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
@@ -531,11 +274,11 @@ void FltkView::populateAudioDeviceMenu(std::vector<std::string> items) {
 }
 
 void FltkView::populateChunkSizeMenu(std::vector<std::string> items) {
-	window.hearingAidSimulation.chunkSize_.populate(std::move(items));
+	window.testSetup.hearingAidSimulation.chunkSize_.populate(std::move(items));
 }
 
 void FltkView::populateWindowSizeMenu(std::vector<std::string> items) {
-	window.hearingAidSimulation.windowSize_.populate(std::move(items));
+	window.testSetup.hearingAidSimulation.windowSize_.populate(std::move(items));
 }
 
 std::string FltkView::audioDevice() {
@@ -615,91 +358,103 @@ std::string FltkView::browseForSavingFile(std::vector<std::string> filters) {
 	return chooser.filename();
 }
 
-void FltkView::setTestFilePath(std::string p) {
-	window.testFilePath_.value(p.c_str());
-}
-
-void FltkView::setStimulusList(std::string d) {
-	window.stimulusList_.value(d.c_str());
-}
-
-void FltkView::setLeftDslPrescriptionFilePath(std::string p) {
-	window.hearingAidSimulation.leftPrescriptionFilePath_.value(p.c_str());
-}
-
-void FltkView::setRightDslPrescriptionFilePath(std::string p) {
-	window.hearingAidSimulation.rightPrescriptionFilePath_.value(p.c_str());
-}
-
-void FltkView::setBrirFilePath(std::string p) {
-	window.spatialization.brirFilePath_.value(p.c_str());
-}
-
-void FltkView::setAudioFilePath(std::string p)
-{
-	window.calibration.audioFilePath_.value(p.c_str());
-}
-
-std::string FltkView::subjectId() {
-	return window.subjectId_.value();
-}
-
-std::string FltkView::testerId() {
-	return window.testerId_.value();
-}
-
-std::string FltkView::testFilePath() {
-	return window.testFilePath_.value();
-}
-
-std::string FltkView::audioFilePath() {
-	return window.calibration.audioFilePath_.value();
-}
-
-std::string FltkView::stimulusList() {
-	return window.stimulusList_.value();
-}
-
-std::string FltkView::leftDslPrescriptionFilePath() {
-	return window.hearingAidSimulation.leftPrescriptionFilePath_.value();
-}
-
-std::string FltkView::rightDslPrescriptionFilePath() {
-	return window.hearingAidSimulation.rightPrescriptionFilePath_.value();
-}
-
-std::string FltkView::brirFilePath() {
-	return window.spatialization.brirFilePath_.value();
-}
-
-std::string FltkView::level_dB_Spl() {
-	return window.calibration.level_dB_Spl_.value();
-}
-
-std::string FltkView::attack_ms() {
-	return window.hearingAidSimulation.attack_ms_.value();
-}
-
-std::string FltkView::release_ms() {
-	return window.hearingAidSimulation.release_ms_.value();
-}
-
-std::string FltkView::windowSize() {
-	return window.hearingAidSimulation.windowSize_.text();
-}
-
-std::string FltkView::chunkSize() {
-	return window.hearingAidSimulation.chunkSize_.text();
-}
-
 bool FltkView::usingSpatialization() {
-	return window.usingSpatialization_.value();
+	return window.testSetup.usingSpatialization_.value();
 }
 
 bool FltkView::usingHearingAidSimulation() {
-	return window.usingHearingAidSimulation_.value();
+	return window.testSetup.usingHearingAidSimulation_.value();
 }
 
 void FltkView::showErrorDialog(std::string message) {
 	fl_alert(message.c_str());
+}
+
+FltkView::FltkTestSetup::FltkTestSetup(FltkTestSetupGroup *view) : view{ view }
+{
+}
+
+void FltkView::FltkTestSetup::setTestFilePath(std::string p) {
+	view->testFilePath_.value(p.c_str());
+}
+
+void FltkView::FltkTestSetup::hide() {
+	view->hide();
+}
+
+void FltkView::FltkTestSetup::show() {
+	view->show();
+}
+
+void FltkView::FltkTestSetup::setStimulusList(std::string d) {
+	view->stimulusList_.value(d.c_str());
+}
+
+void FltkView::FltkTestSetup::setLeftDslPrescriptionFilePath(std::string p) {
+	view->hearingAidSimulation.leftPrescriptionFilePath_.value(p.c_str());
+}
+
+void FltkView::FltkTestSetup::setRightDslPrescriptionFilePath(std::string p) {
+	view->hearingAidSimulation.rightPrescriptionFilePath_.value(p.c_str());
+}
+
+void FltkView::FltkTestSetup::setBrirFilePath(std::string p) {
+	view->spatialization.brirFilePath_.value(p.c_str());
+}
+
+void FltkView::FltkTestSetup::setAudioFilePath(std::string p)
+{
+	view->calibration.audioFilePath_.value(p.c_str());
+}
+
+std::string FltkView::FltkTestSetup::subjectId() {
+	return view->subjectId_.value();
+}
+
+std::string FltkView::FltkTestSetup::testerId() {
+	return view->testerId_.value();
+}
+
+std::string FltkView::FltkTestSetup::testFilePath() {
+	return view->testFilePath_.value();
+}
+
+std::string FltkView::FltkTestSetup::audioFilePath() {
+	return view->calibration.audioFilePath_.value();
+}
+
+std::string FltkView::FltkTestSetup::stimulusList() {
+	return view->stimulusList_.value();
+}
+
+std::string FltkView::FltkTestSetup::leftDslPrescriptionFilePath() {
+	return view->hearingAidSimulation.leftPrescriptionFilePath_.value();
+}
+
+std::string FltkView::FltkTestSetup::rightDslPrescriptionFilePath() {
+	return view->hearingAidSimulation.rightPrescriptionFilePath_.value();
+}
+
+std::string FltkView::FltkTestSetup::brirFilePath() {
+	return view->spatialization.brirFilePath_.value();
+}
+
+std::string FltkView::FltkTestSetup::level_dB_Spl() {
+	return view->calibration.level_dB_Spl_.value();
+}
+
+std::string FltkView::FltkTestSetup::attack_ms() {
+	return view->hearingAidSimulation.attack_ms_.value();
+}
+
+std::string FltkView::FltkTestSetup::release_ms() {
+	return view->hearingAidSimulation.release_ms_.value();
+}
+
+std::string FltkView::FltkTestSetup::windowSize() {
+	return view->hearingAidSimulation.windowSize_.text();
+}
+
+std::string FltkView::FltkTestSetup::chunkSize() {
+	return view->hearingAidSimulation.chunkSize_.text();
 }

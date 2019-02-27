@@ -16,10 +16,10 @@
 #include <signal-processing/ScalingProcessor.h>
 #include <presentation/Presenter.h>
 #include <playing-audio/AudioDevicePlayer.h>
-#include <playing-audio/ZeroPaddedLoader.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
+#include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
