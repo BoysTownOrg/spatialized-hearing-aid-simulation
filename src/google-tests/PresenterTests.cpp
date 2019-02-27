@@ -14,7 +14,6 @@ namespace {
 
 	class SignalProcessingUseCase : public UseCase {
 	public:
-		INTERFACE_OPERATIONS(SignalProcessingUseCase);
 		virtual const Model::SignalProcessing &processing(const ModelStub &) = 0;
 	};
 
@@ -50,11 +49,23 @@ namespace {
 
 	class BrowsingUseCase : public UseCase {
 	public:
-		INTERFACE_OPERATIONS(BrowsingUseCase);
 		virtual std::string &path(ViewStub &) = 0;
 	};
 
-	class BrowsingForAudioFile : public BrowsingUseCase {
+	class BrowsingForFileUseCase : public BrowsingUseCase {
+	public:
+		virtual const std::vector<std::string> &filters(ViewStub &) = 0;
+	};
+
+	const std::vector<std::string> &browseFiltersForOpeningFile(ViewStub &view) {
+		return view.browseFiltersForOpeningFile_;
+	}
+
+	const std::vector<std::string> &browseFiltersForSavingFile(ViewStub &view) {
+		return view.browseFiltersForSavingFile_;
+	}
+	
+	class BrowsingForAudioFile : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForAudioFile();
 		}
@@ -62,9 +73,13 @@ namespace {
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.audioFilePath_;
 		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForOpeningFile(view);
+		}
 	};
 
-	class BrowsingForBrir : public BrowsingUseCase {
+	class BrowsingForBrir : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForBrir();
 		}
@@ -72,9 +87,13 @@ namespace {
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.brirFilePath_;
 		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForOpeningFile(view);
+		}
 	};
 
-	class BrowsingForLeftDslPrescription : public BrowsingUseCase {
+	class BrowsingForLeftDslPrescription : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForLeftDslPrescription();
 		}
@@ -82,15 +101,23 @@ namespace {
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.leftDslPrescriptionFilePath_;
 		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForOpeningFile(view);
+		}
 	};
 
-	class BrowsingForRightDslPrescription : public BrowsingUseCase {
+	class BrowsingForRightDslPrescription : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForRightDslPrescription();
 		}
 
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.rightDslPrescriptionFilePath_;
+		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForOpeningFile(view);
 		}
 	};
 
@@ -104,13 +131,17 @@ namespace {
 		}
 	};
 
-	class BrowsingForTestFile : public BrowsingUseCase {
+	class BrowsingForTestFile : public BrowsingForFileUseCase {
 		void run(View::EventListener *listener) override {
 			listener->browseForTestFile();
 		}
 
 		std::string &path(ViewStub &view) override {
 			return view.testSetup_.testFilePath_;
+		}
+
+		const std::vector<std::string>& filters(ViewStub &view) override {
+			return browseFiltersForSavingFile(view);
 		}
 	};
 
@@ -253,6 +284,10 @@ namespace {
 		BrowsingForStimulusList browsingForStimulusList{};
 		BrowsingForTestFile browsingForTestFile{};
 
+		void runUseCase(UseCase *useCase) {
+			useCase->run(&presenter);
+		}
+
 		void assertSpatializationUIHasOnlyBeenDeactivated() {
 			assertSpatializationUIHasBeenDeactivated(&view);
 			assertSpatializationUIHasNotBeenActivated(&view);
@@ -284,6 +319,11 @@ namespace {
 			view.setBrowseForOpeningFileResult("a");
 			runUseCase(useCase);
 			assertEqual("a", useCase->path(view));
+		}
+
+		void assertBrowsingFilters(BrowsingForFileUseCase *useCase, std::vector<std::string> expected) {
+			runUseCase(useCase);
+			assertEqual(std::move(expected), useCase->filters(view));
 		}
 
 		void setInvalidChunkSize() {
@@ -490,10 +530,6 @@ namespace {
 			assertEqual("b", useCase->processing(model).rightDslPrescriptionFilePath);
 		}
 
-		void runUseCase(UseCase *useCase) {
-			useCase->run(&presenter);
-		}
-
 		void assertSpatializationMatchesViewFollowingRequest(SignalProcessingUseCase *useCase) {
 			view.setSpatializationOn();
 			view.testSetup_.setBrirFilePath("a");
@@ -561,18 +597,23 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
-		view.browseForTestFile();
-		assertEqual({ "*.txt" }, view.browseFiltersForSavingFile());
+		assertBrowsingFilters(&browsingForTestFile, { "*.txt" });
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileFiltersAudioFiles) {
-		view.browseForAudioFile();
-		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
+		assertBrowsingFilters(&browsingForAudioFile, { "*.wav" });
 	}
 
 	TEST_F(PresenterTests, browseForBrirFiltersWavFiles) {
-		view.browseForBrir();
-		assertEqual({ "*.wav" }, view.browseForOpeningFileFilters());
+		assertBrowsingFilters(&browsingForBrir, { "*.wav" });
+	}
+
+	TEST_F(
+		PresenterTests,
+		saveAudioFiltersWavFiles
+	) {
+		view.saveAudio();
+		assertEqual({ "*.wav" }, view.browseFiltersForSavingFile());
 	}
 
 	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
@@ -854,14 +895,6 @@ namespace {
 		view.setBrowseForSavingFileResult("a");
 		view.saveAudio();
 		assertEqual("a", model.savedAudioFilePath());
-	}
-
-	TEST_F(
-		PresenterTests,
-		saveAudioFiltersWavFiles
-	) {
-		view.saveAudio();
-		assertEqual({ "*.wav" }, view.browseFiltersForSavingFile());
 	}
 
 	TEST_F(

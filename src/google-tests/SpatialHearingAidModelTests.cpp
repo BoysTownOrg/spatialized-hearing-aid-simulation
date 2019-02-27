@@ -26,19 +26,16 @@ namespace {
 
 	class AudioFileUseCase : public UseCase {
 	public:
-		INTERFACE_OPERATIONS(AudioFileUseCase);
 		virtual void setAudioFilePath(std::string) = 0;
 	};
 
 	class LevelUseCase : public UseCase {
 	public:
-		INTERFACE_OPERATIONS(LevelUseCase);
 		virtual void setLevel_dB_Spl(double) = 0;
 	};
 
 	class SignalProcessingUseCase : public UseCase {
 	public:
-		INTERFACE_OPERATIONS(SignalProcessingUseCase);
 		virtual void setHearingAidSimulationOn() = 0;
 		virtual void setHearingAidSimulationOff() = 0;
 		virtual void setSpatializationOn() = 0;
