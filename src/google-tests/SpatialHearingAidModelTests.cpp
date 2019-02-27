@@ -781,25 +781,25 @@ namespace {
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setNoSimulation(useCase.processing);
+			setNoSimulation(useCase);
 			assertAudioLoaderAppliesSimulation(
-				simulationFactory.withoutSimulationProcessors,
-				useCase.request
+				useCase,
+				simulationFactory.withoutSimulationProcessors
 			);
 		}
 
 		void assertAudioLoaderAppliesSimulation(
-			PoppableVector<std::shared_ptr<SignalProcessor>> &processors,
-			void(SpatialHearingAidModelTests::*request)()
+			ExperimentalSignalProcessingUseCase *useCase,
+			PoppableVector<std::shared_ptr<SignalProcessor>> &processors
 		) {
 			std::vector<std::shared_ptr<SignalProcessor>> simulation = {
 				std::make_shared<MultipliesSamplesBy>(2.0f),
 				std::make_shared<MultipliesSamplesBy>(3.0f)
 			};
 			processors.set(simulation);
-			(this->*request)();
+			runUseCase(useCase);
 
 			buffer_type left = { 5 };
 			buffer_type right = { 7 };
@@ -1578,7 +1578,7 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesProcessorToAudioLoaderFactory) {
-		assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(processingAudioForSaving);
+		assertAudioLoaderAppliesSimulationWhenUsingNoSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, savingAudioWritesPreviouslyProcessedAudio) {
