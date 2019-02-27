@@ -336,6 +336,18 @@ namespace {
 			assertEqual("a", useCase->path(view));
 		}
 
+		void assertBrowseForSavingFileResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
+			view.setBrowseForSavingFileResult("a");
+			runUseCase(useCase);
+			assertEqual("a", useCase->path(view));
+		}
+
+		void assertBrowseForDirectoryResultPassedToPath(BrowsingEnteredPathUseCase *useCase) {
+			view.setBrowseDirectory("a");
+			runUseCase(useCase);
+			assertEqual("a", useCase->path(view));
+		}
+
 		void assertBrowsingFilters(BrowsingForFileUseCase *useCase, std::vector<std::string> expected) {
 			runUseCase(useCase);
 			assertEqual(std::move(expected), useCase->filters(view));
@@ -636,9 +648,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForTestFileUpdatesTestFilePath) {
-		view.setBrowseForSavingFileResult("a");
-		view.browseForTestFile();
-		assertEqual("a", view.testSetup_.testFilePath());
+		assertBrowseForSavingFileResultPassedToPath(&browsingForTestFile);
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
@@ -651,9 +661,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
-		view.setBrowseDirectory("a");
-		view.browseForStimulusList();
-		assertEqual("a", view.testSetup_.stimulusList());
+		assertBrowseForDirectoryResultPassedToPath(&browsingForStimulusList);
 	}
 
 	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
