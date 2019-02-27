@@ -4,26 +4,26 @@
 #include <string>
 #include <vector>
 
-class EventListener {
-public:
-	INTERFACE_OPERATIONS(EventListener);
-	virtual void browseForTestFile() = 0;
-	virtual void browseForAudioFile() = 0;
-	virtual void browseForLeftDslPrescription() = 0;
-	virtual void browseForRightDslPrescription() = 0;
-	virtual void browseForStimulusList() = 0;
-	virtual void browseForBrir() = 0;
-	virtual void toggleUsingSpatialization() = 0;
-	virtual void toggleUsingHearingAidSimulation() = 0;
-	virtual void playCalibration() = 0;
-	virtual void stopCalibration() = 0;
-	virtual void confirmTestSetup() = 0;
-	virtual void playNextTrial() = 0;
-	virtual void saveAudio() = 0;
-};
-
 class View {
 public:
+	class EventListener {
+	public:
+		INTERFACE_OPERATIONS(EventListener);
+		virtual void browseForTestFile() = 0;
+		virtual void browseForAudioFile() = 0;
+		virtual void browseForLeftDslPrescription() = 0;
+		virtual void browseForRightDslPrescription() = 0;
+		virtual void browseForStimulusList() = 0;
+		virtual void browseForBrir() = 0;
+		virtual void toggleUsingSpatialization() = 0;
+		virtual void toggleUsingHearingAidSimulation() = 0;
+		virtual void playCalibration() = 0;
+		virtual void stopCalibration() = 0;
+		virtual void confirmTestSetup() = 0;
+		virtual void playNextTrial() = 0;
+		virtual void saveAudio() = 0;
+	};
+
 	INTERFACE_OPERATIONS(View);
 	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;
