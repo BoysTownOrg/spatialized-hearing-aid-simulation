@@ -280,13 +280,10 @@ namespace {
 			assertEqual("a", useCase->path(view));
 		}
 
-		void assertBrowseForOpeningFileResultPassedToPath(
-			const std::string &path, 
-			void(ViewStub::*browse)()
-		) {
+		void assertBrowseForOpeningFileResultPassedToPath(BrowsingUseCase *useCase) {
 			view.setBrowseForOpeningFileResult("a");
-			(view.*browse)();
-			assertEqual("a", path);
+			runUseCase(useCase);
+			assertEqual("a", useCase->path(view));
 		}
 
 		void setInvalidChunkSize() {
@@ -585,18 +582,12 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(view.testSetup_.audioFilePath_, &ViewStub::browseForAudioFile);
+		assertBrowseForOpeningFileResultPassedToPath(&browsingForAudioFile);
 	}
 
 	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.testSetup_.leftDslPrescriptionFilePath_, 
-			&ViewStub::browseForLeftDslPrescription
-		);
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.testSetup_.rightDslPrescriptionFilePath_, 
-			&ViewStub::browseForRightDslPrescription
-		);
+		assertBrowseForOpeningFileResultPassedToPath(&browsingForLeftDslPrescription);
+		assertBrowseForOpeningFileResultPassedToPath(&browsingForRightDslPrescription);
 	}
 
 	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
@@ -606,10 +597,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(
-			view.testSetup_.brirFilePath_, 
-			&ViewStub::browseForBrir
-		);
+		assertBrowseForOpeningFileResultPassedToPath(&browsingForBrir);
 	}
 
 	TEST_F(PresenterTests, togglingSpatializationOffDeactivatesUI) {
