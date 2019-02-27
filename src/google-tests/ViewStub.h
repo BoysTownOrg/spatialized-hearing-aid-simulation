@@ -165,58 +165,8 @@ public:
 	bool windowSizeDeactivated_{};
 	bool attack_msDeactivated_{};
 	bool release_msDeactivated_{};
-	bool subjectIdHidden_{};
-	bool testerIdHidden_{};
-	bool simulusListHidden_{};
-	bool testFilePathHidden_{};
-	bool confirmButtonHidden_{};
-	bool brirFilePathHidden_{};
-	bool browseForBrirButtonHidden_{};
-	bool usingSpatializationCheckBoxHidden_{};
-	bool leftDslPrescriptionFilePathHidden_{};
-	bool browseForLeftDslPrescriptionButtonHidden_{};
-	bool rightDslPrescriptionFilePathHidden_{};
-	bool browseForRightDslPrescriptionButtonHidden_{};
-	bool attack_msHidden_{};
-	bool release_msHidden_{};
-	bool chunkSizeHidden_{};
-	bool windowSizeHidden_{};
-	bool usingHearingAidSimulationCheckBoxHidden_{};
-	bool audioFilePathHidden_{};
-	bool playButtonHidden_{};
-	bool saveButtonHidden_{};
-	bool stopButtonHidden_{};
-	bool level_dB_SplHidden_{};
-	bool subjectIdShown_{};
-	bool testerIdShown_{};
-	bool simulusListShown_{};
-	bool testFilePathShown_{};
-	bool confirmButtonShown_{};
-	bool brirFilePathShown_{};
-	bool browseForBrirButtonShown_{};
-	bool usingSpatializationCheckBoxShown_{};
-	bool leftDslPrescriptionFilePathShown_{};
-	bool browseForLeftDslPrescriptionButtonShown_{};
-	bool rightDslPrescriptionFilePathShown_{};
-	bool browseForRightDslPrescriptionButtonShown_{};
-	bool attack_msShown_{};
-	bool release_msShown_{};
-	bool chunkSizeShown_{};
-	bool windowSizeShown_{};
-	bool usingHearingAidSimulationCheckBoxShown_{};
-	bool audioFilePathShown_{};
-	bool playButtonShown_{};
-	bool saveButtonShown_{};
-	bool stopButtonShown_{};
-	bool level_dB_SplShown_{};
 	bool playNextTrialButtonShown_{};
 	bool playNextTrialButtonHidden_{};
-	bool browseForAudioFileButtonHidden_{};
-	bool browseForStimulusListButtonHidden_{};
-	bool browseForAudioFileButtonShown_{};
-	bool browseForStimulusListButtonShown_{};
-	bool browseForTestFileButtonHidden_{};
-	bool browseForTestFileButtonShown_{};
 	bool cancelBrowsingForSavingFile_{};
 	bool cancelOpeningForSavingFile_{};
 
@@ -257,94 +207,6 @@ public:
 	bool notASingleElementInTesterViewShown() noexcept {
 		return !(
 			playNextTrialButtonShown_
-		);
-	}
-
-	bool everyItemInTestSetupShown() noexcept {
-		return
-			subjectIdShown_ &&
-			testerIdShown_ &&
-			simulusListShown_ &&
-			testFilePathShown_ &&
-			browseForTestFileButtonShown_ &&
-			confirmButtonShown_ &&
-			brirFilePathShown_ &&
-			browseForBrirButtonShown_ &&
-			usingSpatializationCheckBoxShown_ &&
-			leftDslPrescriptionFilePathShown_ &&
-			browseForLeftDslPrescriptionButtonShown_ &&
-			rightDslPrescriptionFilePathShown_ &&
-			browseForRightDslPrescriptionButtonShown_ &&
-			attack_msShown_ &&
-			release_msShown_ &&
-			chunkSizeShown_ &&
-			windowSizeShown_ &&
-			usingHearingAidSimulationCheckBoxShown_ &&
-			audioFilePathShown_ &&
-			playButtonShown_ &&
-			stopButtonShown_ &&
-			saveButtonShown_ &&
-			level_dB_SplShown_ &&
-			browseForAudioFileButtonShown_ &&
-			browseForStimulusListButtonShown_;
-	}
-
-	bool everyItemInTestSetupHidden() noexcept {
-		return
-			subjectIdHidden_ &&
-			testerIdHidden_ &&
-			simulusListHidden_ &&
-			testFilePathHidden_ &&
-			browseForTestFileButtonHidden_ &&
-			confirmButtonHidden_ &&
-			brirFilePathHidden_ &&
-			browseForBrirButtonHidden_ &&
-			usingSpatializationCheckBoxHidden_ &&
-			leftDslPrescriptionFilePathHidden_ &&
-			browseForLeftDslPrescriptionButtonHidden_ &&
-			rightDslPrescriptionFilePathHidden_ &&
-			browseForRightDslPrescriptionButtonHidden_ &&
-			attack_msHidden_ &&
-			release_msHidden_ &&
-			chunkSizeHidden_ &&
-			windowSizeHidden_ &&
-			usingHearingAidSimulationCheckBoxHidden_ &&
-			audioFilePathHidden_ &&
-			playButtonHidden_ &&
-			stopButtonHidden_ &&
-			saveButtonHidden_ &&
-			level_dB_SplHidden_ &&
-			browseForAudioFileButtonHidden_ &&
-			browseForStimulusListButtonHidden_;
-	}
-
-	bool notASingleElementInTestSetupHidden() noexcept {
-		return !(
-			subjectIdHidden_ ||
-			testerIdHidden_ ||
-			simulusListHidden_ ||
-			testFilePathHidden_ ||
-			browseForTestFileButtonHidden_ ||
-			confirmButtonHidden_ ||
-			brirFilePathHidden_ ||
-			browseForBrirButtonHidden_ ||
-			usingSpatializationCheckBoxHidden_ ||
-			leftDslPrescriptionFilePathHidden_ ||
-			browseForLeftDslPrescriptionButtonHidden_ ||
-			rightDslPrescriptionFilePathHidden_ ||
-			browseForRightDslPrescriptionButtonHidden_ ||
-			attack_msHidden_ ||
-			release_msHidden_ ||
-			chunkSizeHidden_ ||
-			windowSizeHidden_ ||
-			usingHearingAidSimulationCheckBoxHidden_ ||
-			audioFilePathHidden_ ||
-			playButtonHidden_ ||
-			stopButtonHidden_ ||
-			saveButtonHidden_ ||
-			level_dB_SplHidden_ ||
-			browseForAudioFileButtonHidden_ ||
-			browseForStimulusListButtonHidden_
 		);
 	}
 

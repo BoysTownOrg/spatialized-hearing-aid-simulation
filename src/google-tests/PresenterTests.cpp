@@ -77,7 +77,7 @@ namespace {
 		}
 
 		void assertTestSetupViewNotHidden() {
-			assertTrue(view.notASingleElementInTestSetupHidden());
+			assertFalse(view.testSetup_.hidden_);
 		}
 
 		void assertTestSetupViewHidden() {
@@ -986,7 +986,7 @@ namespace {
 
 	TEST_F(PresenterWithFailingModel, confirmTestSetupDoesNotHideSetupView) {
 		view.confirmTestSetup();
-		assertFalse(view.everyItemInTestSetupHidden());
+		assertFalse(view.testSetup_.hidden_);
 	}
 
 	TEST_F(PresenterWithFailingModel, playTrialShowsErrorMessage) {
