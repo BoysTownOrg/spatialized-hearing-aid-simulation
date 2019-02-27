@@ -853,10 +853,10 @@ namespace {
 		}
 
 		void assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			useCase.processing.usingHearingAidSimulation = false;
-			(this->*useCase.request)();
+			useCase->setHearingAidSimulationOff();
+			runUseCase(useCase);
 			assertTrue(prescriptionReader.filePaths().empty());
 		}
 
@@ -1007,21 +1007,21 @@ namespace {
 		SpatialHearingAidModelTests,
 		prepareNewTestDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(preparingNewTest);
+		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(&experimentalPreparingNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playCalibrationDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(playingCalibration);
+		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		processAudioForSavingDoesNotReadPrescriptionsWhenNotUsingHearingAidSimulation
 	) {
-		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(processingAudioForSaving);
+		assertPrescriptionReaderDoesNotReadWhenNotUsingHearingAidSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
