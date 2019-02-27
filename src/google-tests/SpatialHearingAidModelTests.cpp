@@ -684,21 +684,21 @@ namespace {
 		}
 
 		void assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setHearingAidSimulationOnly(useCase.processing);
+			setHearingAidSimulationOnly(useCase);
 			assertHearingAidSimulationFullScaleLevelMatches(
-				simulationFactory.hearingAidSimulation(),
-				useCase.request
+				useCase,
+				simulationFactory.hearingAidSimulation()
 			);
 		}
 
 		void assertHearingAidSimulationFullScaleLevelMatches(
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
-			void(SpatialHearingAidModelTests::*request)()
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
-			(this->*request)();
+			runUseCase(useCase);
 			assertEqual(
 				SpatialHearingAidModel::fullScaleLevel_dB_Spl, 
 				hearingAid.at(0).fullScaleLevel_dB_Spl
@@ -710,12 +710,12 @@ namespace {
 		}
 
 		void assertFullSimulationYieldsFullScaleLevelMatching(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setFullSimulation(useCase.processing);
+			setFullSimulation(useCase);
 			assertHearingAidSimulationFullScaleLevelMatches(
-				simulationFactory.fullSimulationHearingAid(),
-				useCase.request
+				useCase,
+				simulationFactory.fullSimulationHearingAid()
 			);
 		}
 
@@ -1385,35 +1385,35 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(playingFirstTrialOfNewTest);
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(playingCalibration);
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesFullScaleLevelToFactoryForHearingAidSimulation
 	) {
-		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(processingAudioForSaving);
+		assertHearingAidSimulationOnlyYieldsFullScaleLevelMatching(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playTrialPassesFullScaleLevelToFactoryForFullSimulation
 	) {
-		assertFullSimulationYieldsFullScaleLevelMatching(playingFirstTrialOfNewTest);
+		assertFullSimulationYieldsFullScaleLevelMatching(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesFullScaleLevelToFactoryForFullSimulation
 	) {
-		assertFullSimulationYieldsFullScaleLevelMatching(playingCalibration);
+		assertFullSimulationYieldsFullScaleLevelMatching(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
