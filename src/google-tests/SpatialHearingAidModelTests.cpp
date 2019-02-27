@@ -900,10 +900,10 @@ namespace {
 		}
 		
 		void assertBrirReaderDoesNotReadWhenNotUsingSpatialization(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			useCase.processing.usingSpatialization = false;
-			(this->*useCase.request)();
+			useCase->setSpatializationOff();
+			runUseCase(useCase);
 			assertFalse(brirReader.readCalled());
 		}
 
@@ -1067,15 +1067,15 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
-		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(preparingNewTest);
+		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(&experimentalPreparingNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotReadBrirWhenNotUsingSpatialization) {
-		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(playingCalibration);
+		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingDoesNotReadBrirWhenNotUsingSpatialization) {
-		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(processingAudioForSaving);
+		assertBrirReaderDoesNotReadWhenNotUsingSpatialization(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPlaysPlayer) {
