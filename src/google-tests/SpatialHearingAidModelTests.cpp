@@ -24,6 +24,12 @@ namespace {
 		virtual void run(Model *) = 0;
 	};
 
+	class AudioFileUseCase : public UseCase {
+	public:
+		INTERFACE_OPERATIONS(AudioFileUseCase);
+		virtual void setAudioFilePath(std::string) = 0;
+	};
+
 	class LevelUseCase : public UseCase {
 	public:
 		INTERFACE_OPERATIONS(LevelUseCase);
@@ -205,7 +211,7 @@ namespace {
 		}
 	};
 
-	class PlayingCalibration : public SignalProcessingWithLevelUseCase {
+	class PlayingCalibration : public SignalProcessingWithLevelUseCase, public AudioFileUseCase {
 		SpatialHearingAidModel::Calibration calibration{};
 	public:
 		void run(Model *model) override {
@@ -259,9 +265,13 @@ namespace {
 		void setBrirFilePath(std::string s) override {
 			::setBrirFilePath(calibration.processing, std::move(s));
 		}
+
+		void setAudioFilePath(std::string s) override {
+			calibration.audioFilePath = std::move(s);
+		}
 	};
 
-	class ProcessingAudioForSaving : public SignalProcessingWithLevelUseCase {
+	class ProcessingAudioForSaving : public SignalProcessingWithLevelUseCase, public AudioFileUseCase {
 		SpatialHearingAidModel::SavingAudio savingAudio{};
 	public:
 		void run(Model *model) override {
@@ -314,6 +324,10 @@ namespace {
 
 		void setBrirFilePath(std::string s) override {
 			::setBrirFilePath(savingAudio.processing, std::move(s));
+		}
+
+		void setAudioFilePath(std::string s) override {
+			savingAudio.inputAudioFilePath = std::move(s);
 		}
 	};
 
@@ -856,11 +870,10 @@ namespace {
 		}
 
 		void assertAudioReaderFactoryReceivesFilePath(
-			std::string &filePath,
-			std::function<void(void)> f
+			AudioFileUseCase *useCase
 		) {
-			filePath = "a";
-			f();
+			useCase->setAudioFilePath("a");
+			runUseCase(useCase);
 			assertEqual("a", audioFrameReaderFactory.filePath());
 		}
 		
@@ -1052,17 +1065,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFileToFactory) {
-		assertAudioReaderFactoryReceivesFilePath(
-			calibration.audioFilePath,
-			[=]() { playCalibration(); }
-		);
+		assertAudioReaderFactoryReceivesFilePath(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFileToFactory) {
-		assertAudioReaderFactoryReceivesFilePath(
-			savingAudio.inputAudioFilePath,
-			[=]() { processAudioForSaving(); }
-		);
+		assertAudioReaderFactoryReceivesFilePath(&processingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
