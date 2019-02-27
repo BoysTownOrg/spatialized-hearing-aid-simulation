@@ -470,10 +470,10 @@ namespace {
 			assertTrue(useCase->processing(model).usingHearingAidSimulation);
 		}
 
-		void assertNotUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
+		void assertNotUsingHearingAidSimulationFollowingRequest(ExperimentalProcessingUseCase *useCase) {	
 			view.setHearingAidSimulationOff();
-			useCase.request();
-			assertFalse(useCase.processing.usingHearingAidSimulation);
+			runUseCase(useCase);
+			assertFalse(useCase->processing(model).usingHearingAidSimulation);
 		}
 	};
 
@@ -900,15 +900,15 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupNotUsingHearingAidSimulation) {
-		assertNotUsingHearingAidSimulationFollowingRequest(confirmingTestSetup);
+		assertNotUsingHearingAidSimulationFollowingRequest(&experimentalConfirmingTestSetup);
 	}
 
 	TEST_F(PresenterTests, playCalibrationNotUsingHearingAidSimulation) {
-		assertNotUsingHearingAidSimulationFollowingRequest(playingCalibration);
+		assertNotUsingHearingAidSimulationFollowingRequest(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioNotUsingHearingAidSimulation) {
-		assertNotUsingHearingAidSimulationFollowingRequest(savingAudio);
+		assertNotUsingHearingAidSimulationFollowingRequest(&experimentalSavingAudio);
 	}
 
 	TEST_F(PresenterTests, playCalibrationWithInvalidLevelDoesNotPlay) {
