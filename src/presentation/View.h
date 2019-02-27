@@ -9,6 +9,7 @@ public:
 	class TestSetup {
 	public:
 		INTERFACE_OPERATIONS(TestSetup);
+		virtual void show() = 0;
 		virtual std::string subjectId() = 0;
 		virtual std::string testerId() = 0;
 		virtual std::string testFilePath() = 0;
@@ -109,30 +110,5 @@ public:
 	virtual void hidePlayNextTrialButton() = 0;
 	virtual void hideBrowseForAudioFileButton() = 0;
 	virtual void hideBrowseForStimulusListButton() = 0;
-	virtual void showSubjectId() = 0;
-	virtual void showTesterId() = 0;
-	virtual void showTestFilePath() = 0;
-	virtual void showStimulusList() = 0;
-	virtual void showBrowseForTestFileButton() = 0;
-	virtual void showConfirmButton() = 0;
-	virtual void showBrirFilePath() = 0;
-	virtual void showBrowseForBrirButton() = 0;
-	virtual void showUsingSpatializationCheckBox() = 0;
-	virtual void showLeftDslPrescriptionFilePath() = 0;
-	virtual void showBrowseForLeftDslPrescriptionButton() = 0;
-	virtual void showRightDslPrescriptionFilePath() = 0;
-	virtual void showBrowseForRightDslPrescriptionButton() = 0;
-	virtual void showAttack_ms() = 0;
-	virtual void showRelease_ms() = 0;
-	virtual void showChunkSize() = 0;
-	virtual void showWindowSize() = 0;
-	virtual void showUsingHearingAidSimulationCheckBox() = 0;
-	virtual void showAudioFilePath() = 0;
-	virtual void showPlayButton() = 0;
-	virtual void showStopButton() = 0;
-	virtual void showSaveButton() = 0;
-	virtual void showLevel_dB_Spl() = 0;
 	virtual void showPlayNextTrialButton() = 0;
-	virtual void showBrowseForAudioFileButton() = 0;
-	virtual void showBrowseForStimulusListButton() = 0;
 };

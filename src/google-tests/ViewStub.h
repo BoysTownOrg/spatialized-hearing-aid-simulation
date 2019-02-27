@@ -9,6 +9,11 @@ public:
 		std::string testFilePath_{};
 		std::string subjectId_{};
 		std::string testerId_{};
+		bool shown_{};
+
+		void show() override {
+			shown_ = true;
+		}
 
 		std::string subjectId() override {
 			return subjectId_;
@@ -129,10 +134,6 @@ public:
 	TestSetup *testSetup() override {
 		return &testSetup_;
 	}
-	
-	void showBrowseForTestFileButton() override {
-		browseForTestFileButtonShown_ = true;
-	}
 
 	void hideBrowseForTestFileButton() override {
 		browseForTestFileButtonHidden_ = true;
@@ -140,14 +141,6 @@ public:
 
 	void browseForAudioFile() {
 		listener_->browseForAudioFile();
-	}
-
-	void showBrowseForAudioFileButton() override {
-		browseForAudioFileButtonShown_ = true;
-	}
-
-	void showBrowseForStimulusListButton() override {
-		browseForStimulusListButtonShown_ = true;
 	}
 
 	void hideBrowseForStimulusListButton() override {
@@ -356,94 +349,6 @@ public:
 	
 	void hideLevel_dB_Spl() override {
 		level_dB_SplHidden_ = true;
-	}
-
-	void showSubjectId() override {
-		subjectIdShown_ = true;
-	}
-
-	void showTesterId() override {
-		testerIdShown_ = true;
-	}
-	
-	void showStimulusList() override {
-		simulusListShown_ = true;
-	}
-	
-	void showTestFilePath() override {
-		testFilePathShown_ = true;
-	}
-	
-	void showConfirmButton() override {
-		confirmButtonShown_ = true;
-	}
-	
-	void showBrirFilePath() override {
-		brirFilePathShown_ = true;
-	}
-	
-	void showBrowseForBrirButton() override {
-		browseForBrirButtonShown_ = true;
-	}
-	
-	void showUsingSpatializationCheckBox() override {
-		usingSpatializationCheckBoxShown_ = true;
-	}
-	
-	void showLeftDslPrescriptionFilePath() override {
-		leftDslPrescriptionFilePathShown_ = true;
-	}
-	
-	void showBrowseForLeftDslPrescriptionButton() override {
-		browseForLeftDslPrescriptionButtonShown_ = true;
-	}
-	
-	void showRightDslPrescriptionFilePath() override {
-		rightDslPrescriptionFilePathShown_ = true;
-	}
-	
-	void showBrowseForRightDslPrescriptionButton() override {
-		browseForRightDslPrescriptionButtonShown_ = true;
-	}
-	
-	void showAttack_ms() override {
-		attack_msShown_ = true;
-	}
-	
-	void showRelease_ms() override {
-		release_msShown_ = true;
-	}
-	
-	void showChunkSize() override {
-		chunkSizeShown_ = true;
-	}
-	
-	void showWindowSize() override {
-		windowSizeShown_ = true;
-	}
-	
-	void showUsingHearingAidSimulationCheckBox() override {
-		usingHearingAidSimulationCheckBoxShown_ = true;
-	}
-	
-	void showAudioFilePath() override {
-		audioFilePathShown_ = true;
-	}
-	
-	void showPlayButton() override {
-		playButtonShown_ = true;
-	}
-	
-	void showStopButton() override {
-		stopButtonShown_ = true;
-	}
-	
-	void showSaveButton() override {
-		saveButtonShown_ = true;
-	}
-	
-	void showLevel_dB_Spl() override {
-		level_dB_SplShown_ = true;
 	}
 
 	void saveAudio() {

@@ -12,31 +12,7 @@ Presenter::Presenter(Model *model, View *view) :
 }
 
 void Presenter::showTestSetupView() {
-	view->showSubjectId();
-	view->showTesterId();
-	view->showStimulusList();
-	view->showTestFilePath();
-	view->showBrowseForTestFileButton();
-	view->showConfirmButton();
-	view->showBrirFilePath();
-	view->showBrowseForBrirButton();
-	view->showUsingSpatializationCheckBox();
-	view->showLeftDslPrescriptionFilePath();
-	view->showBrowseForLeftDslPrescriptionButton();
-	view->showRightDslPrescriptionFilePath();
-	view->showBrowseForRightDslPrescriptionButton();
-	view->showAttack_ms();
-	view->showRelease_ms();
-	view->showChunkSize();
-	view->showWindowSize();
-	view->showUsingHearingAidSimulationCheckBox();
-	view->showAudioFilePath();
-	view->showPlayButton();
-	view->showStopButton();
-	view->showSaveButton();
-	view->showLevel_dB_Spl();
-	view->showBrowseForAudioFileButton();
-	view->showBrowseForStimulusListButton();
+	view->testSetup()->show();
 }
 
 void Presenter::toggleSpatializationActivation() {
