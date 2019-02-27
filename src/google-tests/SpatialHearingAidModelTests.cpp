@@ -720,18 +720,18 @@ namespace {
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingFullSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setFullSimulation(useCase.processing);
+			setFullSimulation(useCase);
 			assertAudioLoaderAppliesSimulationWhenPlayerPlays(
-				simulationFactory.fullSimulationProcessors,
-				useCase.request
+				useCase,
+				simulationFactory.fullSimulationProcessors
 			);
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenPlayerPlays(
-			PoppableVector<std::shared_ptr<SignalProcessor>> &processors,
-			void(SpatialHearingAidModelTests::*request)()
+			ExperimentalSignalProcessingUseCase *useCase,
+			PoppableVector<std::shared_ptr<SignalProcessor>> &processors
 		) {
 			std::vector<std::shared_ptr<SignalProcessor>> simulation = {
 				std::make_shared<MultipliesSamplesBy>(2.0f),
@@ -744,39 +744,39 @@ namespace {
 			std::vector<channel_type> channels = { left, right };
 			processWhenPlayerPlays(channels);
 			
-			(this->*request)();
+			runUseCase(useCase);
 			
 			assertEqual({ 5 * 2 }, left);
 			assertEqual({ 7 * 3 }, right);
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlyHearingAidSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setHearingAidSimulationOnly(useCase.processing);
+			setHearingAidSimulationOnly(useCase);
 			assertAudioLoaderAppliesSimulationWhenPlayerPlays(
-				simulationFactory.hearingAidSimulationProcessors,
-				useCase.request
+				useCase,
+				simulationFactory.hearingAidSimulationProcessors
 			);
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlySpatialization(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setSpatializationOnly(useCase.processing);
+			setSpatializationOnly(useCase);
 			assertAudioLoaderAppliesSimulationWhenPlayerPlays(
-				simulationFactory.spatializationProcessors,
-				useCase.request
+				useCase,
+				simulationFactory.spatializationProcessors
 			);
 		}
 
 		void assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingNoSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setNoSimulation(useCase.processing);
+			setNoSimulation(useCase);
 			assertAudioLoaderAppliesSimulationWhenPlayerPlays(
-				simulationFactory.withoutSimulationProcessors,
-				useCase.request
+				useCase,
+				simulationFactory.withoutSimulationProcessors
 			);
 		}
 
@@ -1417,35 +1417,35 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialAssignsFullSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingFullSimulation(playingFirstTrialOfNewTest);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingFullSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsFullSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingFullSimulation(playingCalibration);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingFullSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialAssignsHearingAidSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlyHearingAidSimulation(playingFirstTrialOfNewTest);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlyHearingAidSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsHearingAidSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlyHearingAidSimulation(playingCalibration);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlyHearingAidSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialAssignsSpatializationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlySpatialization(playingFirstTrialOfNewTest);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlySpatialization(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsSpatializationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlySpatialization(playingCalibration);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingOnlySpatialization(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialAssignsWithoutSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingNoSimulation(playingFirstTrialOfNewTest);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingNoSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationAssignsWithoutSimulationProcessorsToAudioLoader) {
-		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingNoSimulation(playingCalibration);
+		assertAudioLoaderAppliesSimulationWhenPlayerPlaysWhenUsingNoSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
