@@ -49,23 +49,23 @@ namespace {
 		}
 
 		void setInvalidChunkSize() {
-			view.setChunkSize("a");
+			view.testSetup_.setChunkSize("a");
 		}
 
 		void setInvalidWindowSize() {
-			view.setWindowSize("a");
+			view.testSetup_.setWindowSize("a");
 		}
 
 		void setInvalidReleaseTime() {
-			view.setRelease_ms("a");
+			view.testSetup_.setRelease_ms("a");
 		}
 
 		void setInvalidAttackTime() {
-			view.setAttack_ms("a");
+			view.testSetup_.setAttack_ms("a");
 		}
 
 		void setInvalidLevel() {
-			view.setLevel_dB_Spl("a");
+			view.testSetup_.setLevel_dB_Spl("a");
 		}
 
 		void assertTesterViewHidden() {
@@ -132,7 +132,7 @@ namespace {
 		}
 
 		void confirmTestSetupWithChunkSizeShowsErrorMessage(std::string s) {
-			view.setChunkSize(s);
+			view.testSetup_.setChunkSize(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid chunk size.");
 		}
 
@@ -146,17 +146,17 @@ namespace {
 		}
 
 		void confirmTestSetupWithWindowSizeShowsErrorMessage(std::string s) {
-			view.setWindowSize(s);
+			view.testSetup_.setWindowSize(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid window size.");
 		}
 
 		void confirmTestSetupWithAttackTimeShowsErrorMessage(std::string s) {
-			view.setAttack_ms(s);
+			view.testSetup_.setAttack_ms(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid attack time.");
 		}
 
 		void confirmTestSetupWithReleaseTimeShowsErrorMessage(std::string s) {
-			view.setRelease_ms(s);
+			view.testSetup_.setRelease_ms(s);
 			confirmTestSetupShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
 
@@ -176,42 +176,42 @@ namespace {
 		}
 		
 		void playCalibrationWithAttackTimeShowsErrorMessage(std::string s) {
-			view.setAttack_ms(s);
+			view.testSetup_.setAttack_ms(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid attack time.");
 		}
 
 		void saveAudioWithAttackTimeShowsErrorMessage(std::string s) {
-			view.setAttack_ms(s);
+			view.testSetup_.setAttack_ms(s);
 			saveAudioShowsErrorMessage("'" + s + "' is not a valid attack time.");
 		}
 		
 		void playCalibrationWithReleaseTimeShowsErrorMessage(std::string s) {
-			view.setRelease_ms(s);
+			view.testSetup_.setRelease_ms(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
 		
 		void saveAudioWithReleaseTimeShowsErrorMessage(std::string s) {
-			view.setRelease_ms(s);
+			view.testSetup_.setRelease_ms(s);
 			saveAudioShowsErrorMessage("'" + s + "' is not a valid release time.");
 		}
 		
 		void playCalibrationWithChunkSizeShowsErrorMessage(std::string s) {
-			view.setChunkSize(s);
+			view.testSetup_.setChunkSize(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid chunk size.");
 		}
 
 		void playCalibrationWithWindowSizeShowsErrorMessage(std::string s) {
-			view.setWindowSize(s);
+			view.testSetup_.setWindowSize(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid window size.");
 		}
 
 		void playCalibrationWithLevelShowsErrorMessage(std::string s) {
-			view.setLevel_dB_Spl(s);
+			view.testSetup_.setLevel_dB_Spl(s);
 			playCalibrationShowsErrorMessage("'" + s + "' is not a valid level.");
 		}
 
 		void saveAudioWithLevelShowsErrorMessage(std::string s) {
-			view.setLevel_dB_Spl(s);
+			view.testSetup_.setLevel_dB_Spl(s);
 			saveAudioShowsErrorMessage("'" + s + "' is not a valid level.");
 		}
 
@@ -226,7 +226,7 @@ namespace {
 		}
 		
 		void playTrialWithLevelShowsErrorMessage(std::string s) {
-			view.setLevel_dB_Spl(s);
+			view.testSetup_.setLevel_dB_Spl(s);
 			playTrialShowsErrorMessage("'" + s + "' is not a valid level.");
 		}
 
@@ -321,12 +321,12 @@ namespace {
 
 		void assertHearingAidSimulationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
 			view.setHearingAidSimulationOn();
-			view.setAttack_ms("1.1");
-			view.setRelease_ms("2.2");
-			view.setChunkSize("3");
-			view.setWindowSize("4");
-			view.setLeftDslPrescriptionFilePath("a");
-			view.setRightDslPrescriptionFilePath("b");
+			view.testSetup_.setAttack_ms("1.1");
+			view.testSetup_.setRelease_ms("2.2");
+			view.testSetup_.setChunkSize("3");
+			view.testSetup_.setWindowSize("4");
+			view.testSetup_.setLeftDslPrescriptionFilePath("a");
+			view.testSetup_.setRightDslPrescriptionFilePath("b");
 			useCase.request();
 			assertEqual(1.1, useCase.processing.attack_ms);
 			assertEqual(2.2, useCase.processing.release_ms);
@@ -338,7 +338,7 @@ namespace {
 
 		void assertSpatializationMatchesViewFollowingRequest(ProcessingUseCase useCase) {
 			view.setSpatializationOn();
-			view.setBrirFilePath("a");
+			view.testSetup_.setBrirFilePath("a");
 			useCase.request();
 			assertEqual("a", useCase.processing.brirFilePath);
 		}
@@ -416,7 +416,7 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForAudioFileDoesNotChangeAudioFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.audioFilePath_, &ViewStub::browseForAudioFile);
+		assertCancellingBrowseDoesNotChangePath(view.testSetup_.audioFilePath_, &ViewStub::browseForAudioFile);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForTestFileDoesNotChangeTestFilePath) {
@@ -425,21 +425,21 @@ namespace {
 
 	TEST_F(PresenterTests, cancellingBrowseForDslPrescriptionDoesNotChangeDslPrescriptionFilePath) {
 		assertCancellingBrowseDoesNotChangePath(
-			view.leftDslPrescriptionFilePath_, 
+			view.testSetup_.leftDslPrescriptionFilePath_, 
 			&ViewStub::browseForLeftDslPrescription
 		);
 		assertCancellingBrowseDoesNotChangePath(
-			view.rightDslPrescriptionFilePath_, 
+			view.testSetup_.rightDslPrescriptionFilePath_, 
 			&ViewStub::browseForRightDslPrescription
 		);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForStimulusListNotChangeStimulusList) {
-		assertCancellingBrowseDoesNotChangePath(view.stimulusList_, &ViewStub::browseForStimulusList);
+		assertCancellingBrowseDoesNotChangePath(view.testSetup_.stimulusList_, &ViewStub::browseForStimulusList);
 	}
 
 	TEST_F(PresenterTests, cancellingBrowseForBrirDoesNotChangeBrirFilePath) {
-		assertCancellingBrowseDoesNotChangePath(view.brirFilePath_, &ViewStub::browseForBrir);
+		assertCancellingBrowseDoesNotChangePath(view.testSetup_.brirFilePath_, &ViewStub::browseForBrir);
 	}
 
 	TEST_F(PresenterTests, browseForTestFileFiltersTextFiles) {
@@ -464,16 +464,16 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, browseForAudioFileUpdatesAudioFilePath) {
-		assertBrowseForOpeningFileResultPassedToPath(view.audioFilePath_, &ViewStub::browseForAudioFile);
+		assertBrowseForOpeningFileResultPassedToPath(view.testSetup_.audioFilePath_, &ViewStub::browseForAudioFile);
 	}
 
 	TEST_F(PresenterTests, browseForDslPrescriptionUpdatesDslPrescriptionFilePath) {
 		assertBrowseForOpeningFileResultPassedToPath(
-			view.leftDslPrescriptionFilePath_, 
+			view.testSetup_.leftDslPrescriptionFilePath_, 
 			&ViewStub::browseForLeftDslPrescription
 		);
 		assertBrowseForOpeningFileResultPassedToPath(
-			view.rightDslPrescriptionFilePath_, 
+			view.testSetup_.rightDslPrescriptionFilePath_, 
 			&ViewStub::browseForRightDslPrescription
 		);
 	}
@@ -481,12 +481,12 @@ namespace {
 	TEST_F(PresenterTests, browseForStimulusListUpdatesStimulusList) {
 		view.setBrowseDirectory("a");
 		view.browseForStimulusList();
-		assertEqual("a", view.stimulusList());
+		assertEqual("a", view.testSetup_.stimulusList());
 	}
 
 	TEST_F(PresenterTests, browseForBrirUpdatesBrirFilePath) {
 		assertBrowseForOpeningFileResultPassedToPath(
-			view.brirFilePath_, 
+			view.testSetup_.brirFilePath_, 
 			&ViewStub::browseForBrir
 		);
 	}
@@ -696,8 +696,8 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupPassesParametersToModel) {
-		view.setStimulusList("a");
-		view.setTestFilePath("b");
+		view.testSetup_.setStimulusList("a");
+		view.testSetup_.setTestFilePath("b");
 		view.setSubjectId("c");
 		view.setTesterId("d");
 		view.confirmTestSetup();
@@ -709,7 +709,7 @@ namespace {
 
 	TEST_F(PresenterTests, playTrialPassesParametersToModel) {
 		view.setAudioDevice("a");
-		view.setLevel_dB_Spl("1.1");
+		view.testSetup_.setLevel_dB_Spl("1.1");
 		view.playNextTrial();
 		assertEqual("a", model.trial().audioDevice);
 		assertEqual(1.1, model.trial().level_dB_Spl);
@@ -717,8 +717,8 @@ namespace {
 
 	TEST_F(PresenterTests, playCalibrationPassesCalibrationParametersToModel) {
 		view.setAudioDevice("a");
-		view.setAudioFilePath("b");
-		view.setLevel_dB_Spl("1.1");
+		view.testSetup_.setAudioFilePath("b");
+		view.testSetup_.setLevel_dB_Spl("1.1");
 		view.playCalibration();
 		assertEqual("a", model.calibration().audioDevice);
 		assertEqual("b", model.calibration().audioFilePath);
@@ -726,8 +726,8 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, saveAudioPassesParametersToModel) {
-		view.setAudioFilePath("a");
-		view.setLevel_dB_Spl("1.1");
+		view.testSetup_.setAudioFilePath("a");
+		view.testSetup_.setLevel_dB_Spl("1.1");
 		view.saveAudio();
 		assertEqual("a", model.savingAudio().inputAudioFilePath);
 		assertEqual(1.1, model.savingAudio().level_dB_Spl);

@@ -9,6 +9,16 @@ public:
 		std::string testFilePath_{};
 		std::string subjectId_{};
 		std::string testerId_{};
+		std::string leftDslPrescriptionFilePath_{};
+		std::string rightDslPrescriptionFilePath_{};
+		std::string brirFilePath_{};
+		std::string audioFilePath_{};
+		std::string level_dB_Spl_{ "0" };
+		std::string attack_ms_{ "0" };
+		std::string release_ms_{ "0" };
+		std::string windowSize_{ "0" };
+		std::string chunkSize_{ "0" };
+		std::string stimulusList_{};
 		bool shown_{};
 		bool hidden_{};
 
@@ -31,6 +41,90 @@ public:
 		std::string testFilePath() override {
 			return testFilePath_;
 		}
+
+		std::string leftDslPrescriptionFilePath() override {
+			return leftDslPrescriptionFilePath_;
+		}
+
+		std::string rightDslPrescriptionFilePath() override {
+			return rightDslPrescriptionFilePath_;
+		}
+
+		std::string brirFilePath() override {
+			return brirFilePath_;
+		}
+
+		std::string level_dB_Spl() override {
+			return level_dB_Spl_;
+		}
+
+		std::string attack_ms() override {
+			return attack_ms_;
+		}
+
+		std::string release_ms() override {
+			return release_ms_;
+		}
+
+		std::string windowSize() override {
+			return windowSize_;
+		}
+
+		std::string chunkSize() override {
+			return chunkSize_;
+		}
+
+		std::string stimulusList() override {
+			return stimulusList_;
+		}
+
+		std::string audioFilePath() override {
+			return audioFilePath_;
+		}
+
+		void setAudioFilePath(std::string s) override {
+			audioFilePath_ = std::move(s);
+		}
+
+		void setTestFilePath(std::string p) override {
+			testFilePath_ = std::move(p);
+		}
+
+		void setLeftDslPrescriptionFilePath(std::string p) override {
+			leftDslPrescriptionFilePath_ = std::move(p);
+		}
+
+		void setRightDslPrescriptionFilePath(std::string p) override {
+			rightDslPrescriptionFilePath_ = std::move(p);
+		}
+
+		void setBrirFilePath(std::string p) override {
+			brirFilePath_ = std::move(p);
+		}
+
+		void setLevel_dB_Spl(std::string level) {
+			level_dB_Spl_ = std::move(level);
+		}
+
+		void setAttack_ms(std::string a) {
+			attack_ms_ = std::move(a);
+		}
+
+		void setRelease_ms(std::string r) {
+			release_ms_ = std::move(r);
+		}
+
+		void setWindowSize(std::string s) {
+			windowSize_ = std::move(s);
+		}
+
+		void setChunkSize(std::string s) {
+			chunkSize_ = std::move(s);
+		}
+
+		void setStimulusList(std::string d) override {
+			stimulusList_ = std::move(d);
+		}
 	};
 
 	TestSetupStub testSetup_{};
@@ -39,17 +133,7 @@ public:
 	std::vector<std::string> audioDeviceMenuItems_{};
 	std::vector<std::string> chunkSizeItems_{};
 	std::vector<std::string> windowSizeItems_{};
-	std::string stimulusList_{};
-	std::string leftDslPrescriptionFilePath_{};
-	std::string rightDslPrescriptionFilePath_{};
-	std::string brirFilePath_{};
-	std::string audioFilePath_{};
 	std::string audioDevice_{};
-	std::string level_dB_Spl_{ "0" };
-	std::string attack_ms_{ "0" };
-	std::string release_ms_{ "0" };
-	std::string windowSize_{ "0" };
-	std::string chunkSize_{ "0" };
 	std::string errorMessage_{};
 	std::string browseForOpeningFileResult_{};
 	std::string browseForSavingFileResult_{};
@@ -135,6 +219,14 @@ public:
 	bool browseForTestFileButtonShown_{};
 	bool cancelBrowsingForSavingFile_{};
 	bool cancelOpeningForSavingFile_{};
+
+	void browseForBrir() {
+		listener_->browseForBrir();
+	}
+
+	void browseForRightDslPrescription() {
+		listener_->browseForRightDslPrescription();
+	}
 
 	TestSetup *testSetup() override {
 		return &testSetup_;
@@ -258,14 +350,6 @@ public:
 
 	void saveAudio() {
 		listener_->saveAudio();
-	}
-
-	std::string audioFilePath() override {
-		return audioFilePath_;
-	}
-
-	void setAudioFilePath(std::string s) override {
-		audioFilePath_ = std::move(s);
 	}
 
 	void stopCalibration() {
@@ -505,88 +589,12 @@ public:
 		browseForSavingFileResult_ = std::move(p);
 	}
 
-	void setTestFilePath(std::string p) override {
-		testSetup_.testFilePath_ = std::move(p);
-	}
-
-	void setLeftDslPrescriptionFilePath(std::string p) override {
-		leftDslPrescriptionFilePath_ = std::move(p);
-	}
-
-	std::string leftDslPrescriptionFilePath() override {
-		return leftDslPrescriptionFilePath_;
-	}
-
-	void browseForRightDslPrescription() {
-		listener_->browseForRightDslPrescription();
-	}
-
-	std::string rightDslPrescriptionFilePath() override {
-		return rightDslPrescriptionFilePath_;
-	}
-
-	void setRightDslPrescriptionFilePath(std::string p) override {
-		rightDslPrescriptionFilePath_ = std::move(p);
-	}
-
 	void browseForStimulusList() {
 		listener_->browseForStimulusList();
 	}
 
-	void browseForBrir() {
-		listener_->browseForBrir();
-	}
-
-	void setBrirFilePath(std::string p) override {
-		brirFilePath_ = std::move(p);
-	}
-
-	std::string brirFilePath() override {
-		return brirFilePath_;
-	}
-
 	auto browseForOpeningFileFilters() const {
 		return browseFiltersForOpeningFile_;
-	}
-
-	void setLevel_dB_Spl(std::string level) {
-		level_dB_Spl_ = std::move(level);
-	}
-
-	std::string level_dB_Spl() override {
-		return level_dB_Spl_;
-	}
-
-	void setAttack_ms(std::string a) {
-		attack_ms_ = std::move(a);
-	}
-
-	std::string attack_ms() override {
-		return attack_ms_;
-	}
-
-	void setRelease_ms(std::string r) {
-		release_ms_ = std::move(r);
-	}
-
-	std::string release_ms() override {
-		return release_ms_;
-	}
-
-	void setWindowSize(std::string s) {
-		windowSize_ = std::move(s);
-	}
-
-	std::string windowSize() override {
-		return windowSize_;
-	}
-
-	void setChunkSize(std::string s) {
-		chunkSize_ = std::move(s);
-	}
-
-	std::string chunkSize() override {
-		return chunkSize_;
 	}
 
 	auto errorMessage() const {
@@ -617,16 +625,8 @@ public:
 		browseDirectory_ = std::move(d);
 	}
 
-	std::string stimulusList() override {
-		return stimulusList_;
-	}
-
 	std::string browseForDirectory() override {
 		return browseDirectory_;
-	}
-
-	void setStimulusList(std::string d) override {
-		stimulusList_ = std::move(d);
 	}
 
 	void confirmTestSetup() {

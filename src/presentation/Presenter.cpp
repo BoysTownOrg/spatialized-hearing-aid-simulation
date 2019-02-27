@@ -68,21 +68,21 @@ void Presenter::run() {
 void Presenter::browseForTestFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForSavingFile({ "*.txt" }), 
-		[=](std::string p) { view->setTestFilePath(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setTestFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForAudioFile() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.wav" }), 
-		[=](std::string p) { view->setAudioFilePath(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setAudioFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForLeftDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.json" }), 
-		[=](std::string p) { view->setLeftDslPrescriptionFilePath(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setLeftDslPrescriptionFilePath(std::move(p)); }
 	);
 }
 
@@ -94,21 +94,21 @@ void Presenter::applyIfBrowseNotCancelled(std::string s, std::function<void(std:
 void Presenter::browseForRightDslPrescription() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.json" }), 
-		[=](std::string p) { view->setRightDslPrescriptionFilePath(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setRightDslPrescriptionFilePath(std::move(p)); }
 	);
 }
 
 void Presenter::browseForStimulusList() {
 	applyIfBrowseNotCancelled(
 		view->browseForDirectory(), 
-		[=](std::string p) { view->setStimulusList(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setStimulusList(std::move(p)); }
 	);
 }
 
 void Presenter::browseForBrir() {
 	applyIfBrowseNotCancelled(
 		view->browseForOpeningFile({ "*.wav" }), 
-		[=](std::string p) { view->setBrirFilePath(std::move(p)); }
+		[=](std::string p) { view->testSetup()->setBrirFilePath(std::move(p)); }
 	);
 }
 
@@ -140,7 +140,7 @@ Model::Testing Presenter::testing() {
 	Model::Testing testing_;
 	testing_.processing = signalProcessing();
 	testing_.testFilePath = view->testSetup()->testFilePath();
-	testing_.audioDirectory = view->stimulusList();
+	testing_.audioDirectory = view->testSetup()->stimulusList();
 	testing_.subjectId = view->testSetup()->subjectId();
 	testing_.testerId = view->testSetup()->testerId();
 	return testing_;
@@ -149,14 +149,14 @@ Model::Testing Presenter::testing() {
 Model::SignalProcessing Presenter::signalProcessing() {
 	Model::SignalProcessing p;
 	if (view->usingHearingAidSimulation()) {
-		p.attack_ms = convertToDouble(view->attack_ms(), "attack time");
-		p.release_ms = convertToDouble(view->release_ms(), "release time");
-		p.chunkSize = convertToPositiveInteger(view->chunkSize(), "chunk size");
-		p.windowSize = convertToPositiveInteger(view->windowSize(), "window size");
+		p.attack_ms = convertToDouble(view->testSetup()->attack_ms(), "attack time");
+		p.release_ms = convertToDouble(view->testSetup()->release_ms(), "release time");
+		p.chunkSize = convertToPositiveInteger(view->testSetup()->chunkSize(), "chunk size");
+		p.windowSize = convertToPositiveInteger(view->testSetup()->windowSize(), "window size");
 	}
-	p.leftDslPrescriptionFilePath = view->leftDslPrescriptionFilePath();
-	p.rightDslPrescriptionFilePath = view->rightDslPrescriptionFilePath();
-	p.brirFilePath = view->brirFilePath();
+	p.leftDslPrescriptionFilePath = view->testSetup()->leftDslPrescriptionFilePath();
+	p.rightDslPrescriptionFilePath = view->testSetup()->rightDslPrescriptionFilePath();
+	p.brirFilePath = view->testSetup()->brirFilePath();
 	p.usingHearingAidSimulation = view->usingHearingAidSimulation();
 	p.usingSpatialization = view->usingSpatialization();
 	return p;
@@ -215,7 +215,7 @@ void Presenter::playTrial_() {
 Model::Trial Presenter::trial() {
 	Model::Trial trial_;
 	trial_.audioDevice = view->audioDevice();
-	trial_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	trial_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	return trial_;
 }
 
@@ -241,8 +241,8 @@ void Presenter::saveAudio() {
 
 void Presenter::saveAudio_() {
 	Model::SavingAudio saving_;
-	saving_.inputAudioFilePath = view->audioFilePath();
-	saving_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	saving_.inputAudioFilePath = view->testSetup()->audioFilePath();
+	saving_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	saving_.processing = signalProcessing();
 	model->processAudioForSaving(&saving_);
 	auto save = view->browseForSavingFile({ "*.wav" });
@@ -262,8 +262,8 @@ void Presenter::playCalibration() {
 void Presenter::playCalibration_() {
 	Model::Calibration calibration_;
 	calibration_.audioDevice = view->audioDevice();
-	calibration_.audioFilePath = view->audioFilePath();
-	calibration_.level_dB_Spl = convertToDouble(view->level_dB_Spl(), "level");
+	calibration_.audioFilePath = view->testSetup()->audioFilePath();
+	calibration_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	calibration_.processing = signalProcessing();
 	model->playCalibration(&calibration_);
 }

@@ -14,6 +14,22 @@ public:
 		virtual std::string subjectId() = 0;
 		virtual std::string testerId() = 0;
 		virtual std::string testFilePath() = 0;
+		virtual std::string leftDslPrescriptionFilePath() = 0;
+		virtual std::string rightDslPrescriptionFilePath() = 0;
+		virtual std::string stimulusList() = 0;
+		virtual std::string audioFilePath() = 0;
+		virtual std::string brirFilePath() = 0;
+		virtual std::string level_dB_Spl() = 0;
+		virtual std::string attack_ms() = 0;
+		virtual std::string release_ms() = 0;
+		virtual std::string windowSize() = 0;
+		virtual std::string chunkSize() = 0;
+		virtual void setTestFilePath(std::string) = 0;
+		virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
+		virtual void setRightDslPrescriptionFilePath(std::string) = 0;
+		virtual void setStimulusList(std::string) = 0;
+		virtual void setBrirFilePath(std::string) = 0;
+		virtual void setAudioFilePath(std::string) = 0;
 	};
 
 	class EventListener {
@@ -42,23 +58,7 @@ public:
 	virtual std::string browseForSavingFile(std::vector<std::string> filters) = 0;
 	virtual std::string browseForDirectory() = 0;
 	virtual bool browseCancelled() = 0;
-	virtual void setTestFilePath(std::string) = 0;
-	virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
-	virtual void setRightDslPrescriptionFilePath(std::string) = 0;
-	virtual void setStimulusList(std::string) = 0;
-	virtual void setBrirFilePath(std::string) = 0;
-	virtual void setAudioFilePath(std::string) = 0;
-	virtual std::string leftDslPrescriptionFilePath() = 0;
-	virtual std::string rightDslPrescriptionFilePath() = 0;
-	virtual std::string stimulusList() = 0;
-	virtual std::string audioFilePath() = 0;
-	virtual std::string brirFilePath() = 0;
 	virtual std::string audioDevice() = 0;
-	virtual std::string level_dB_Spl() = 0;
-	virtual std::string attack_ms() = 0;
-	virtual std::string release_ms() = 0;
-	virtual std::string windowSize() = 0;
-	virtual std::string chunkSize() = 0;
 	virtual bool usingSpatialization() = 0;
 	virtual bool usingHearingAidSimulation() = 0;
 	virtual void showErrorDialog(std::string message) = 0;
