@@ -458,10 +458,10 @@ namespace {
 			assertTrue(useCase->processing(model).usingSpatialization);
 		}
 
-		void assertNotUsingSpatializationFollowingRequest(ProcessingUseCase useCase) {
+		void assertNotUsingSpatializationFollowingRequest(ExperimentalProcessingUseCase *useCase) {
 			view.setSpatializationOff();
-			useCase.request();
-			assertFalse(useCase.processing.usingSpatialization);
+			runUseCase(useCase);
+			assertFalse(useCase->processing(model).usingSpatialization);
 		}
 
 		void assertUsingHearingAidSimulationFollowingRequest(ProcessingUseCase useCase) {	
@@ -876,15 +876,15 @@ namespace {
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupNotUsingSpatialization) {
-		assertNotUsingSpatializationFollowingRequest(confirmingTestSetup);
+		assertNotUsingSpatializationFollowingRequest(&experimentalConfirmingTestSetup);
 	}
 
 	TEST_F(PresenterTests, playCalibrationNotUsingSpatialization) {
-		assertNotUsingSpatializationFollowingRequest(playingCalibration);
+		assertNotUsingSpatializationFollowingRequest(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(PresenterTests, saveAudioNotUsingSpatialization) {
-		assertNotUsingSpatializationFollowingRequest(savingAudio);
+		assertNotUsingSpatializationFollowingRequest(&experimentalSavingAudio);
 	}
 
 	TEST_F(PresenterTests, confirmTestSetupUsingHearingAidSimulation) {
