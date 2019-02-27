@@ -38,6 +38,7 @@ namespace {
 		virtual void setChunkSize(int) = 0;
 		virtual void setLeftDslPrescriptionFilePath(std::string) = 0;
 		virtual void setRightDslPrescriptionFilePath(std::string) = 0;
+		virtual void setBrirFilePath(std::string) = 0;
 	};
 
 	class ExperimentalCombinedUseCase :
@@ -85,6 +86,10 @@ namespace {
 		p.rightDslPrescriptionFilePath = std::move(s);
 	}
 
+	void setBrirFilePath(Model::SignalProcessing &p, std::string s) {
+		p.brirFilePath = std::move(s);
+	}
+
 	class PreparingNewTest : public ExperimentalSignalProcessingUseCase {
 		SpatialHearingAidModel::Testing testing{};
 	public:
@@ -130,6 +135,10 @@ namespace {
 
 		void setRightDslPrescriptionFilePath(std::string s) override {
 			::setRightDslPrescriptionFilePath(testing.processing, std::move(s));
+		}
+
+		void setBrirFilePath(std::string s) override {
+			::setBrirFilePath(testing.processing, std::move(s));
 		}
 	};
 
@@ -185,6 +194,10 @@ namespace {
 		void setRightDslPrescriptionFilePath(std::string s) override {
 			preparingNewTest.setRightDslPrescriptionFilePath(std::move(s));
 		}
+
+		void setBrirFilePath(std::string s) override {
+			preparingNewTest.setBrirFilePath(std::move(s));
+		}
 	};
 
 	class PlayingCalibration : public ExperimentalCombinedUseCase {
@@ -237,6 +250,10 @@ namespace {
 		void setRightDslPrescriptionFilePath(std::string s) override {
 			::setRightDslPrescriptionFilePath(calibration.processing, std::move(s));
 		}
+
+		void setBrirFilePath(std::string s) override {
+			::setBrirFilePath(calibration.processing, std::move(s));
+		}
 	};
 
 	class ProcessingAudioForSaving : public ExperimentalCombinedUseCase {
@@ -288,6 +305,10 @@ namespace {
 
 		void setRightDslPrescriptionFilePath(std::string s) override {
 			::setRightDslPrescriptionFilePath(savingAudio.processing, std::move(s));
+		}
+
+		void setBrirFilePath(std::string s) override {
+			::setBrirFilePath(savingAudio.processing, std::move(s));
 		}
 	};
 
@@ -861,11 +882,11 @@ namespace {
 		}
 
 		void assertBrirReaderReceivesFilePathWhenUsingSpatialization(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			useCase.processing.usingSpatialization = true;
-			useCase.processing.brirFilePath = "a";
-			(this->*useCase.request)();
+			useCase->setSpatializationOn();
+			useCase->setBrirFilePath("a");
+			runUseCase(useCase);
 			assertEqual("a", brirReader.filePath());
 		}
 
@@ -1028,21 +1049,21 @@ namespace {
 		SpatialHearingAidModelTests,
 		prepareNewTestPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		assertBrirReaderReceivesFilePathWhenUsingSpatialization(preparingNewTest);
+		assertBrirReaderReceivesFilePathWhenUsingSpatialization(&experimentalPreparingNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		playCalibrationPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		assertBrirReaderReceivesFilePathWhenUsingSpatialization(playingCalibration);
+		assertBrirReaderReceivesFilePathWhenUsingSpatialization(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests,
 		processAudioForSavingPassesBrirFilePathToReaderWhenUsingSpatialization
 	) {
-		assertBrirReaderReceivesFilePathWhenUsingSpatialization(processingAudioForSaving);
+		assertBrirReaderReceivesFilePathWhenUsingSpatialization(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, prepareNewTestDoesNotReadBrirWhenNotUsingSpatialization) {
