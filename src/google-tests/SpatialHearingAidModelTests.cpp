@@ -390,72 +390,24 @@ namespace {
 			audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
 
-		void setFullSimulationForTest() noexcept {
-			setFullSimulation(testing.processing);
-		}
-
 		void setFullSimulation(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = true;
-		}
-
-		void setHearingAidSimulationOnlyForTest() noexcept {
-			setHearingAidSimulationOnly(testing.processing);
 		}
 		
 		void setHearingAidSimulationOnly(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = true;
 			p.usingSpatialization = false;
 		}
-
-		void setSpatializationOnlyForTest() noexcept {
-			setSpatializationOnly(testing.processing);
-		}
 		
 		void setSpatializationOnly(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = true;
 		}
-
-		void setNoSimulationForTest() noexcept {
-			setNoSimulation(testing.processing);
-		}
 		
 		void setNoSimulation(SpatialHearingAidModel::SignalProcessing &p) noexcept {
 			p.usingHearingAidSimulation = false;
 			p.usingSpatialization = false;
-		}
-
-		void setFullSimulationForCalibration() noexcept {
-			setFullSimulation(calibration.processing);
-		}
-
-		void setFullSimulationForSaving() noexcept {
-			setFullSimulation(savingAudio.processing);
-		}
-		
-		void setHearingAidSimulationOnlyForCalibration() noexcept {
-			setHearingAidSimulationOnly(calibration.processing);
-		}
-		
-		void setHearingAidSimulationOnlyForSaving() noexcept {
-			setHearingAidSimulationOnly(savingAudio.processing);
-		}
-		
-		void setSpatializationOnlyForCalibration() noexcept {
-			setSpatializationOnly(calibration.processing);
-		}
-		
-		void setSpatializationOnlyForSaving() noexcept {
-			setSpatializationOnly(savingAudio.processing);
-		}
-		
-		void setNoSimulationForCalibration() noexcept {
-			setNoSimulation(calibration.processing);
-		}
-		
-		void setNoSimulationForSaving() noexcept {
-			setNoSimulation(savingAudio.processing);
 		}
 		
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
@@ -701,33 +653,33 @@ namespace {
 		}
 
 		void assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setHearingAidSimulationOnly(useCase.processing);
+			setHearingAidSimulationOnly(useCase);
 			assertSimulationFactoryReceivesSampleRate(
-				simulationFactory.hearingAidSimulation(),
-				useCase.request
+				useCase,
+				simulationFactory.hearingAidSimulation()
 			);
 		}
 
 		void assertSimulationFactoryReceivesSampleRate(
+			ExperimentalSignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid,
-			void(SpatialHearingAidModelTests::*request)()
+				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
 		) {
 			audioFrameReader->setSampleRate(1);
-			(this->*request)();
+			runUseCase(useCase);
 			assertEqual(1, hearingAid.at(0).sampleRate);
 			assertEqual(1, hearingAid.at(1).sampleRate);
 		}
 
 		void assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(
-			ProcessingUseCase useCase
+			ExperimentalSignalProcessingUseCase *useCase
 		) {
-			setFullSimulation(useCase.processing);
+			setFullSimulation(useCase);
 			assertSimulationFactoryReceivesSampleRate(
-				simulationFactory.fullSimulationHearingAid(),
-				useCase.request
+				useCase,
+				simulationFactory.fullSimulationHearingAid()
 			);
 		}
 
@@ -1391,42 +1343,42 @@ namespace {
 		SpatialHearingAidModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(playingFirstTrialOfNewTest);
+		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(playingCalibration);
+		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesAudioReaderSampleRateToFactoryForHearingAidSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(processingAudioForSaving);
+		assertSimulationFactoryReceivesSampleRateWhenUsingOnlyHearingAidSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playTrialPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(playingFirstTrialOfNewTest);
+		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(&experimentalPlayingFirstTrialOfNewTest);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		playCalibrationPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(playingCalibration);
+		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(&experimentalPlayingCalibration);
 	}
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
 		processAudioForSavingPassesAudioReaderSampleRateToFactoryForFullSimulation
 	) {
-		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(processingAudioForSaving);
+		assertSimulationFactoryReceivesSampleRateWhenUsingFullSimulation(&experimentalProcessingAudioForSaving);
 	}
 
 	TEST_F(
