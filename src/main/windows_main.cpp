@@ -35,9 +35,23 @@ public:
 	}
 };
 
+class FirFilterAdapter : public SignalProcessor {
+	FirFilter filter;
+public:
+	explicit FirFilterAdapter(std::vector<float> b) : filter{ std::move(b) } {}
+
+	void process(signal_type signal) override {
+		return filter.process(signal);
+	}
+
+	index_type groupDelay() override {
+		return filter.groupDelay();
+	}
+};
+
 class FirFilterFactoryImpl : public FirFilterFactory {
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
-		return std::make_shared<FirFilter>(std::move(b));
+		return std::make_shared<FirFilterAdapter>(std::move(b));
 	}
 };
 
