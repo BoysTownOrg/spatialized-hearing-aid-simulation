@@ -1,7 +1,7 @@
 #pragma once
 
-#include <spatialized-hearing-aid-simulation/SignalProcessor.h>
 #include <fftw3.h>
+#include <gsl/gsl>
 #include <vector>
 #include <complex>
 
@@ -11,8 +11,10 @@
 	#define FIR_FILTERING_API __declspec(dllimport)
 #endif
 
-class FirFilter : public SignalProcessor {
+class FirFilter {
 public:
+	using signal_type = gsl::span<float>;
+	using index_type = signal_type::index_type;
 	using sample_type = signal_type::element_type;
 	using coefficients_type = std::vector<sample_type>;
 	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
@@ -22,8 +24,8 @@ public:
 	FirFilter &operator=(const FirFilter &) = delete;
 	FirFilter(FirFilter&&) = delete;
     FirFilter& operator=(FirFilter&&) = delete;
-	FIR_FILTERING_API void process(signal_type) override;
-	FIR_FILTERING_API index_type groupDelay() override;
+	FIR_FILTERING_API void process(signal_type);
+	FIR_FILTERING_API index_type groupDelay();
 private:
 	using complex_signal_type = std::vector<std::complex<sample_type>>;
 	complex_signal_type H{};
