@@ -7,7 +7,6 @@
 #include "FileSystemWriter.h"
 #include "MersenneTwisterRandomizer.h"
 #include <audio-file-reading-writing/AudioFileWriterAdapter.h>
-#include <audio-file-reading-writing/ChannelCopier.h>
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <binaural-room-impulse-response/BrirAdapter.h>
 #include <dsl-prescription/PrescriptionAdapter.h>
@@ -20,6 +19,7 @@
 #include <stimulus-list/FileFilterDecorator.h>
 #include <test-documenting/TestDocumenter.h>
 #include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
+#include <spatialized-hearing-aid-simulation/ChannelCopier.h>
 #include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
 #include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
