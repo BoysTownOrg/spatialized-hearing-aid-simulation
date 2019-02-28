@@ -24,6 +24,22 @@
 #include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
+template<typename T>
+class SignalProcessorAdapter : public SignalProcessor {
+	T processor;
+public:
+	template<typename... Targs>
+	explicit SignalProcessorAdapter(Targs&&... args) : processor{ std::forward<Targs>(args)... } {}
+
+	void process(signal_type signal) override {
+		return processor.process(signal);
+	}
+
+	index_type groupDelay() override {
+		return processor.groupDelay();
+	}
+};
+
 class HearingAidFactoryImpl : public HearingAidFactory {
 	FilterbankCompressorFactory *compressorFactory;
 public:
@@ -31,27 +47,13 @@ public:
 		compressorFactory{ compressorFactory } {}
 
 	std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
-		return std::make_shared<HearingAidProcessor>(compressorFactory->make(std::move(p)));
-	}
-};
-
-class FirFilterAdapter : public SignalProcessor {
-	FirFilter filter;
-public:
-	explicit FirFilterAdapter(std::vector<float> b) : filter{ std::move(b) } {}
-
-	void process(signal_type signal) override {
-		return filter.process(signal);
-	}
-
-	index_type groupDelay() override {
-		return filter.groupDelay();
+		return std::make_shared<SignalProcessorAdapter<HearingAidProcessor>>(compressorFactory->make(std::move(p)));
 	}
 };
 
 class FirFilterFactoryImpl : public FirFilterFactory {
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
-		return std::make_shared<FirFilterAdapter>(std::move(b));
+		return std::make_shared<SignalProcessorAdapter<FirFilter>>(std::move(b));
 	}
 };
 
