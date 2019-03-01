@@ -1771,6 +1771,13 @@ namespace {
 			audioReaderFactory = &failing;
 			assertThrowsRequestFailure(useCase, "error.");
 		}
+
+		void assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(UseCase *useCase) {
+			PreparationFailingAudioPlayer failing;
+			failing.setErrorMessage("error.");
+			audioPlayer = &failing;
+			assertThrowsRequestFailure(useCase, "error.");
+		}
 	};
 
 	TEST_F(
@@ -1924,10 +1931,14 @@ namespace {
 		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenPlayerThrowsPreparationFailure
 	) {
-		PreparationFailingAudioPlayer failing;
-		failing.setErrorMessage("error.");
-		audioPlayer = &failing;
-		assertThrowsRequestFailure(&playingTrial, "error.");
+		assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(&playingTrial);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		playCalibrationThrowsRequestFailureWhenPlayerThrowsPreparationFailure
+	) {
+		assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(&playingCalibration);
 	}
 
 	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvanceStimulusWhenPlayerFails) {
@@ -1936,16 +1947,6 @@ namespace {
 		defaultStimulusList.setContents({ "a", "b", "c" });
 		ignoreFailure(&playingTrial);
 		assertEqual("a", defaultStimulusList.next());
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
-		playCalibrationThrowsRequestFailureWhenPlayerThrowsPreparationFailure
-	) {
-		PreparationFailingAudioPlayer failing;
-		failing.setErrorMessage("error.");
-		audioPlayer = &failing;
-		assertThrowsRequestFailure(&playingCalibration, "error.");
 	}
 
 	TEST_F(
