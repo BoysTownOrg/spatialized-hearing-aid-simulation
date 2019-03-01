@@ -1637,6 +1637,11 @@ namespace {
 
 	class RefactoredModelFailureTests : public ::testing::Test {
 	protected:
+		PreparingNewTest preparingNewTest{};
+		PlayingTrial playingTrial{};
+		PlayingFirstTrialOfNewTest playingFirstTrialOfNewTest{};
+		PlayingCalibration playingCalibration{};
+		ProcessingAudioForSaving processingAudioForSaving{};
 		SpatialHearingAidModel::Testing testing{};
 		SpatialHearingAidModel::Trial trial{};
 		SpatialHearingAidModel::Calibration calibration{};
@@ -1662,10 +1667,10 @@ namespace {
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
 		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 
-		void assertPreparingNewTestThrowsRequestFailure(std::string what) {
+		void assertThrowsRequestFailure(UseCase *useCase, std::string what) {
 			auto model = constructModel();
 			try {
-				model.prepareNewTest(&testing);
+				useCase->run(&model);
 				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
 			catch (const SpatialHearingAidModel::RequestFailure & e) {
@@ -1760,6 +1765,41 @@ namespace {
 			calibration.processing.chunkSize = 1;
 			calibration.processing.windowSize = 1;
 		}
+
+		void assertThrowsRequestFailureWhenFailingPrescriptionReader(SignalProcessingUseCase *useCase) {
+			FailingPrescriptionReader failing;
+			prescriptionReader = &failing;
+			useCase->setHearingAidSimulationOn();
+			useCase->setChunkSize(1);
+			useCase->setWindowSize(1);
+			useCase->setLeftDslPrescriptionFilePath("a");
+			useCase->setRightDslPrescriptionFilePath("a");
+			assertThrowsRequestFailure(useCase, "Prescription 'a' cannot be read.");
+		}
+
+		void assertThrowsRequestFailureWhenFailingBrirReader(SignalProcessingUseCase *useCase) {
+			FailingBrirReader failing;
+			brirReader = &failing;
+			useCase->setSpatializationOn();
+			useCase->setBrirFilePath("a");
+			assertThrowsRequestFailure(useCase, "BRIR 'a' cannot be read.");
+		}
+
+		void assertThrowsRequestFailureWhenProcessingSizesNotPowersOfTwo(SignalProcessingUseCase *useCase) {
+			useCase->setHearingAidSimulationOn();
+			useCase->setChunkSize(0);
+			useCase->setWindowSize(1);
+			assertThrowsRequestFailure(
+				useCase,
+				"Both the chunk size and window size must be powers of two; 0 is not a power of two."
+			);
+			useCase->setChunkSize(2);
+			useCase->setWindowSize(3);
+			assertThrowsRequestFailure(
+				useCase,
+				"Both the chunk size and window size must be powers of two; 3 is not a power of two."
+			);
+		}
 	};
 
 	TEST_F(
@@ -1769,33 +1809,21 @@ namespace {
 		InitializationFailingDocumenter failing;
 		documenter = &failing;
 		failing.setErrorMessage("error.");
-		assertPreparingNewTestThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&preparingNewTest, "error.");
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
-		FailingPrescriptionReader failing;
-		prescriptionReader = &failing;
-		testing.processing.usingHearingAidSimulation = true;
-		setValidSizesForTest();
-		testing.processing.leftDslPrescriptionFilePath = "a";
-		testing.processing.rightDslPrescriptionFilePath = "a";
-		assertPreparingNewTestThrowsRequestFailure("Prescription 'a' cannot be read.");
+		assertThrowsRequestFailureWhenFailingPrescriptionReader(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
-		FailingPrescriptionReader failing;
-		prescriptionReader = &failing;
-		calibration.processing.usingHearingAidSimulation = true;
-		setValidSizesForCalibration();
-		calibration.processing.leftDslPrescriptionFilePath = "a";
-		calibration.processing.rightDslPrescriptionFilePath = "a";
-		assertPlayCalibrationThrowsRequestFailure("Prescription 'a' cannot be read.");
+		assertThrowsRequestFailureWhenFailingPrescriptionReader(&playingCalibration);
 	}
 
 	TEST_F(
@@ -1813,22 +1841,14 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenBrirReaderFails
 	) {
-		FailingBrirReader failing;
-		brirReader = &failing;
-		testing.processing.usingSpatialization = true;
-		testing.processing.brirFilePath = "a";
-		assertPreparingNewTestThrowsRequestFailure("BRIR 'a' cannot be read.");
+		assertThrowsRequestFailureWhenFailingBrirReader(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenBrirReaderFails
 	) {
-		FailingBrirReader failing;
-		brirReader = &failing;
-		calibration.processing.usingSpatialization = true;
-		calibration.processing.brirFilePath = "a";
-		assertPlayCalibrationThrowsRequestFailure("BRIR 'a' cannot be read.");
+		assertThrowsRequestFailureWhenFailingBrirReader(&playingCalibration);
 	}
 
 	TEST_F(
@@ -1846,18 +1866,20 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenCoefficientsAreEmpty
 	) {
-		testing.processing.usingSpatialization = true;
+		preparingNewTest.setSpatializationOn();
 		BrirReader::BinauralRoomImpulseResponse brir;
 		brir.left = {};
 		brir.right = { 0 };
 		defaultBrirReader.setBrir(brir);
-		assertPreparingNewTestThrowsRequestFailure(
+		assertThrowsRequestFailure(
+			&preparingNewTest,
 			"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
 		);
 		brir.left = { 0 };
 		brir.right = {};
 		defaultBrirReader.setBrir(brir);
-		assertPreparingNewTestThrowsRequestFailure(
+		assertThrowsRequestFailure(
+			&preparingNewTest,
 			"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
 		);
 	}
@@ -1866,41 +1888,14 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenWindowOrChunkSizeIsNotPowerOfTwo
 	) {
-		testing.processing.usingHearingAidSimulation = true;
-		testing.processing.chunkSize = 0;
-		testing.processing.windowSize = 1;
-		assertPreparingNewTestThrowsRequestFailure(
-			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
-		);
-		testing.processing.chunkSize = 2;
-		testing.processing.windowSize = 3;
-		assertPreparingNewTestThrowsRequestFailure(
-			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
-		);
+		assertThrowsRequestFailureWhenProcessingSizesNotPowersOfTwo(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenChunkSizeIsNotPowerOfTwo
 	) {
-		calibration.processing.usingHearingAidSimulation = true;
-		calibration.processing.chunkSize = 0;
-		calibration.processing.windowSize = 1;
-		assertPlayCalibrationThrowsRequestFailure(
-			"Both the chunk size and window size must be powers of two; 0 is not a power of two."
-		);
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
-		playCalibrationThrowsRequestFailureWhenWindowSizeIsNotPowerOfTwo
-	) {
-		calibration.processing.usingHearingAidSimulation = true;
-		calibration.processing.chunkSize = 2;
-		calibration.processing.windowSize = 3;
-		assertPlayCalibrationThrowsRequestFailure(
-			"Both the chunk size and window size must be powers of two; 3 is not a power of two."
-		);
+		assertThrowsRequestFailureWhenProcessingSizesNotPowersOfTwo(&playingCalibration);
 	}
 
 	TEST_F(
@@ -1910,7 +1905,7 @@ namespace {
 		FailsToInitializeStimulusList failing;
 		failing.setErrorMessage("error.");
 		stimulusList = &failing;
-		assertPreparingNewTestThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&preparingNewTest, "error.");
 	}
 
 	TEST_F(
