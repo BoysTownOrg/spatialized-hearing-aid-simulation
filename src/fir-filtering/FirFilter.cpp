@@ -1,35 +1,35 @@
 #include "FirFilter.h"
 #include <algorithm>
 
-static auto fftw_plan_dft_r2c_1d_adapted(int n, double *in, fftw_complex *out, unsigned int flags) {
-	return fftw_plan_dft_r2c_1d(n, in, out, flags);
+static auto fftw_plan_dft_r2c_1d_adapted(int n, double *in, FirFilter<double>::complex_type *out, unsigned int flags) noexcept {
+	return fftw_plan_dft_r2c_1d(n, in, reinterpret_cast<fftw_complex *>(out), flags);
 }
 
-static auto fftw_plan_dft_r2c_1d_adapted(int n, float *in, fftwf_complex *out, unsigned int flags) {
-	return fftwf_plan_dft_r2c_1d(n, in, out, flags);
+static auto fftw_plan_dft_r2c_1d_adapted(int n, float *in, FirFilter<float>::complex_type *out, unsigned int flags) noexcept {
+	return fftwf_plan_dft_r2c_1d(n, in, reinterpret_cast<fftwf_complex *>(out), flags);
 }
 
-static auto fftw_plan_dft_c2r_1d_adapted(int n, fftw_complex *in, double *out, unsigned int flags) {
-	return fftw_plan_dft_c2r_1d(n, in, out, flags);
+static auto fftw_plan_dft_c2r_1d_adapted(int n, typename FirFilter<double>::complex_type *in, double *out, unsigned int flags) noexcept {
+	return fftw_plan_dft_c2r_1d(n, reinterpret_cast<fftw_complex *>(in), out, flags);
 }
 
-static auto fftw_plan_dft_c2r_1d_adapted(int n, fftwf_complex *in, float *out, unsigned int flags) {
-	return fftwf_plan_dft_c2r_1d(n, in, out, flags);
+static auto fftw_plan_dft_c2r_1d_adapted(int n, typename FirFilter<float>::complex_type *in, float *out, unsigned int flags) noexcept {
+	return fftwf_plan_dft_c2r_1d(n, reinterpret_cast<fftwf_complex *>(in), out, flags);
 }
 
-static auto fftw_execute_adapted(fftw_plan p) {
+static auto fftw_execute_adapted(fftw_plan p) noexcept {
 	return fftw_execute(p);
 }
 
-static auto fftw_execute_adapted(fftwf_plan p) {
+static auto fftw_execute_adapted(fftwf_plan p) noexcept {
 	return fftwf_execute(p);
 }
 
-static auto fftw_destroy_plan_adapted(fftw_plan p) {
+static auto fftw_destroy_plan_adapted(fftw_plan p) noexcept {
 	return fftw_destroy_plan(p);
 }
 
-static auto fftw_destroy_plan_adapted(fftwf_plan p) {
+static auto fftw_destroy_plan_adapted(fftwf_plan p) noexcept {
 	return fftwf_destroy_plan(p);
 }
 
@@ -54,17 +54,15 @@ FirFilter<T>::FirFilter(coefficients_type b) :
 	dftReal = std::move(b);
 	dftReal.resize(N);
 	dftComplex.resize(N/2 + 1);
-	using fftw_complex_type = typename std::conditional<std::is_same_v<T, double>, fftw_complex, fftwf_complex>::type;
-	const auto to_fftw = reinterpret_cast<fftw_complex_type *>(&dftComplex.front());
 	fftPlan = fftw_plan_dft_r2c_1d_adapted(
 		N, 
 		&dftReal.front(),
-		to_fftw,
+		&dftComplex.front(),
 		FFTW_ESTIMATE
 	);
 	ifftPlan = fftw_plan_dft_c2r_1d_adapted(
 		N, 
-		to_fftw,
+		&dftComplex.front(),
 		&dftReal.front(),
 		FFTW_ESTIMATE
 	);

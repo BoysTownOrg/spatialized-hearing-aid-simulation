@@ -24,6 +24,8 @@ public:
 	using sample_type = typename signal_type::element_type;
 	using coefficients_type = std::vector<sample_type>;
 	using coefficients_size_type = typename coefficients_type::size_type;
+	using complex_type = std::complex<sample_type>;
+	using complex_signal_type = std::vector<complex_type>;
 
 	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
 	class InvalidCoefficients {};
@@ -35,7 +37,6 @@ public:
 	FIR_FILTERING_API void process(signal_type);
 	FIR_FILTERING_API index_type groupDelay();
 private:
-	using complex_signal_type = std::vector<std::complex<sample_type>>;
 	complex_signal_type H{};
 	complex_signal_type dftComplex{};
 	using real_signal_type = std::vector<sample_type>;
