@@ -1678,43 +1678,10 @@ namespace {
 			}
 		}
 
-		void assertPlayTrialThrowsRequestFailure(std::string what) {
-			auto model = constructModel();
-			try {
-				model.playNextTrial(&trial);
-				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
-			}
-			catch (const SpatialHearingAidModel::RequestFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-
-		void assertPlayCalibrationThrowsRequestFailure(std::string what) {
-			auto model = constructModel();
-			try {
-				model.playCalibration(&calibration);
-				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
-			}
-			catch (const SpatialHearingAidModel::RequestFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-
 		void assertSaveAudioThrowsRequestFailure(std::string what) {
 			auto model = constructModel();
 			try {
 				model.saveAudio({});
-				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
-			}
-			catch (const SpatialHearingAidModel::RequestFailure &e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-		
-		void assertProcessAudioForSavingThrowsRequestFailure(std::string what) {
-			auto model = constructModel();
-			try {
-				model.processAudioForSaving(&savingAudio);
 				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
 			catch (const SpatialHearingAidModel::RequestFailure &e) {
@@ -1914,7 +1881,7 @@ namespace {
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
 		audioReaderFactory = &failing;
-		assertPlayTrialThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&playingTrial, "error.");
 	}
 
 	TEST_F(
@@ -1923,7 +1890,7 @@ namespace {
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
 		audioReaderFactory = &failing;
-		assertPlayCalibrationThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&playingCalibration, "error.");
 	}
 
 	TEST_F(
@@ -1932,7 +1899,7 @@ namespace {
 	) {
 		ErrorAudioFrameReaderFactory failing{ "error." };
 		audioReaderFactory = &failing;
-		assertProcessAudioForSavingThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&processingAudioForSaving, "error.");
 	}
 
 	TEST_F(
@@ -1942,7 +1909,7 @@ namespace {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
 		audioPlayer = &failing;
-		assertPlayTrialThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&playingTrial, "error.");
 	}
 
 	TEST_F(RefactoredModelFailureTests, playTrialDoesNotAdvanceStimulusWhenPlayerFails) {
@@ -1960,7 +1927,7 @@ namespace {
 		PreparationFailingAudioPlayer failing;
 		failing.setErrorMessage("error.");
 		audioPlayer = &failing;
-		assertPlayCalibrationThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&playingCalibration, "error.");
 	}
 
 	TEST_F(
