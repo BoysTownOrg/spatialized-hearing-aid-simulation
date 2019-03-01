@@ -11,12 +11,20 @@
 	#define FIR_FILTERING_API __declspec(dllimport)
 #endif
 
+template<typename T>
 class FirFilter {
+static_assert(
+	std::is_same_v<T, float> || std::is_same_v<T, double>, 
+	"FirFilter only supports float and double."
+);
+
 public:
-	using signal_type = gsl::span<float>;
-	using index_type = signal_type::index_type;
-	using sample_type = signal_type::element_type;
+	using signal_type = gsl::span<T>;
+	using index_type = typename signal_type::index_type;
+	using sample_type = typename signal_type::element_type;
 	using coefficients_type = std::vector<sample_type>;
+	using coefficients_size_type = typename coefficients_type::size_type;
+
 	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
 	class InvalidCoefficients {};
 	FIR_FILTERING_API ~FirFilter();
@@ -33,11 +41,12 @@ private:
 	using real_signal_type = std::vector<sample_type>;
 	real_signal_type dftReal{};
 	real_signal_type overlap{};
-	fftwf_plan fftPlan{};
-	fftwf_plan ifftPlan{};
+	using fftw_plan_type = typename std::conditional<std::is_same_v<T, double>, fftw_plan, fftwf_plan>::type;
+	fftw_plan_type fftPlan{};
+	fftw_plan_type ifftPlan{};
 	long N{};
-	coefficients_type::size_type L{};
-	coefficients_type::size_type order;
+	coefficients_size_type L{};
+	coefficients_size_type order;
 	
 	void filterCompleteSegments(signal_type);
 	void filterRemaining(signal_type);

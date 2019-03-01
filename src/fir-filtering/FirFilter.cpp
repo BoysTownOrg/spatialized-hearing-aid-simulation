@@ -1,61 +1,102 @@
 #include "FirFilter.h"
 #include <algorithm>
 
-static constexpr long nextPowerOfTwo(FirFilter::coefficients_type::size_type x) noexcept {
+static auto fftw_plan_dft_r2c_1d_adapted(int n, double *in, fftw_complex *out, unsigned int flags) {
+	return fftw_plan_dft_r2c_1d(n, in, out, flags);
+}
+
+static auto fftw_plan_dft_r2c_1d_adapted(int n, float *in, fftwf_complex *out, unsigned int flags) {
+	return fftwf_plan_dft_r2c_1d(n, in, out, flags);
+}
+
+static auto fftw_plan_dft_c2r_1d_adapted(int n, fftw_complex *in, double *out, unsigned int flags) {
+	return fftw_plan_dft_c2r_1d(n, in, out, flags);
+}
+
+static auto fftw_plan_dft_c2r_1d_adapted(int n, fftwf_complex *in, float *out, unsigned int flags) {
+	return fftwf_plan_dft_c2r_1d(n, in, out, flags);
+}
+
+static auto fftw_execute_adapted(fftw_plan p) {
+	return fftw_execute(p);
+}
+
+static auto fftw_execute_adapted(fftwf_plan p) {
+	return fftwf_execute(p);
+}
+
+static auto fftw_destroy_plan_adapted(fftw_plan p) {
+	return fftw_destroy_plan(p);
+}
+
+static auto fftw_destroy_plan_adapted(fftwf_plan p) {
+	return fftwf_destroy_plan(p);
+}
+
+template<typename T>
+static constexpr long nextPowerOfTwo(typename FirFilter<T>::coefficients_size_type x) noexcept {
 	int power{};
 	while (x /= 2)
 		++power;
 	return 1 << (power + 1);
 }
 
-FirFilter::FirFilter(coefficients_type b) :
+template<typename T>
+FirFilter<T>::FirFilter(coefficients_type b) :
 	order{ b.size() - 1 }
 {
 	if (b.size() == 0)
 		throw InvalidCoefficients{};
-	N = nextPowerOfTwo(order);
+
+	N = nextPowerOfTwo<T>(order);
 	L = N - order;
 	overlap.resize(N);
 	dftReal = std::move(b);
 	dftReal.resize(N);
 	dftComplex.resize(N/2 + 1);
-	const auto to_fftw = reinterpret_cast<fftwf_complex *>(&dftComplex.front());
-	fftPlan = fftwf_plan_dft_r2c_1d(
+	using fftw_complex_type = typename std::conditional<std::is_same_v<T, double>, fftw_complex, fftwf_complex>::type;
+	const auto to_fftw = reinterpret_cast<fftw_complex_type *>(&dftComplex.front());
+	fftPlan = fftw_plan_dft_r2c_1d_adapted(
 		N, 
 		&dftReal.front(),
 		to_fftw,
 		FFTW_ESTIMATE
 	);
-	ifftPlan = fftwf_plan_dft_c2r_1d(
+	ifftPlan = fftw_plan_dft_c2r_1d_adapted(
 		N, 
 		to_fftw,
 		&dftReal.front(),
 		FFTW_ESTIMATE
 	);
-	fftwf_execute(fftPlan);
+	fftw_execute_adapted(fftPlan);
 	H = dftComplex;
 }
 
-FirFilter::~FirFilter() {
-	fftwf_destroy_plan(fftPlan);
-	fftwf_destroy_plan(ifftPlan);
+template<typename T>
+FirFilter<T>::~FirFilter() {
+	fftw_destroy_plan_adapted(fftPlan);
+	fftw_destroy_plan_adapted(ifftPlan);
 }
 
-void FirFilter::process(signal_type signal) {
+template<typename T>
+void FirFilter<T>::process(signal_type signal) {
 	filterCompleteSegments(signal);
 	filterRemaining(signal);
 }
 
-void FirFilter::filterCompleteSegments(signal_type signal) {
-	for (coefficients_type::size_type i = 0; i < signal.size() / L; ++i)
+template<typename T>
+void FirFilter<T>::filterCompleteSegments(signal_type signal) {
+	for (coefficients_size_type i = 0; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 }
 
-void FirFilter::filterRemaining(signal_type signal) {
+template<typename T>
+void FirFilter<T>::filterRemaining(signal_type signal) {
 	filter(signal.last(signal.size() % L));
 }
 
-void FirFilter::filter(signal_type signal) {
+template<typename T>
+void FirFilter<T>::filter(signal_type signal) {
 	std::fill(
 		std::copy(signal.begin(), signal.end(), dftReal.begin()), 
 		dftReal.end(), 
@@ -67,8 +108,9 @@ void FirFilter::filter(signal_type signal) {
 	shiftOverlap(signal.size());
 }
 
-void FirFilter::overlapAdd() {
-	fftwf_execute(fftPlan);
+template<typename T>
+void FirFilter<T>::overlapAdd() {
+	fftw_execute_adapted(fftPlan);
 	std::transform(
 		dftComplex.begin(), 
 		dftComplex.end(), 
@@ -76,7 +118,7 @@ void FirFilter::overlapAdd() {
 		dftComplex.begin(), 
 		std::multiplies{}
 	);
-	fftwf_execute(ifftPlan);
+	fftw_execute_adapted(ifftPlan);
 	std::transform(
 		overlap.begin(), 
 		overlap.end(), 
@@ -86,12 +128,17 @@ void FirFilter::overlapAdd() {
 	);
 }
 
-void FirFilter::shiftOverlap(index_type n) {
+template<typename T>
+void FirFilter<T>::shiftOverlap(index_type n) {
 	for (index_type i = 0; i < N - n; ++i)
 		overlap.at(i) = overlap.at(i + n);
 	std::fill(overlap.end() - n, overlap.end(), sample_type{ 0 });
 }
 
-auto FirFilter::groupDelay() -> index_type {
+template<typename T>
+auto FirFilter<T>::groupDelay() -> index_type {
 	return order / 2;
 }
+
+template FirFilter<float>;
+template FirFilter<double>;
