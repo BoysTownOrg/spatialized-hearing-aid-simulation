@@ -1677,9 +1677,8 @@ namespace {
 		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 
 		void assertThrowsRequestFailure(UseCase *useCase, std::string what) {
-			auto model = constructModel();
 			try {
-				useCase->run(&model);
+				runUseCase(useCase);
 				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
 			catch (const SpatialHearingAidModel::RequestFailure & e) {
@@ -1687,17 +1686,21 @@ namespace {
 			}
 		}
 		
-		void ignoreFailure(UseCase *useCase) {
+		void runUseCase(UseCase *useCase) {
 			auto model = constructModel();
+			useCase->run(&model);
+		}
+
+		void ignoreRequestFailure(UseCase *useCase) {
 			try {
-				useCase->run(&model);
+				runUseCase(useCase);
 			}
 			catch (const SpatialHearingAidModel::RequestFailure &) {
 			}
 		}
 
 		SpatialHearingAidModel constructModel() {
-			return
+			return 
 			{
 				stimulusList,
 				documenter,
@@ -1712,7 +1715,7 @@ namespace {
 			};
 		}
 
-		void assertThrowsRequestFailureWhenFailingPrescriptionReader(SignalProcessingUseCase *useCase) {
+		void assertThrowsRequestFailureWhenPrescriptionReaderFails(SignalProcessingUseCase *useCase) {
 			FailingPrescriptionReader failing;
 			prescriptionReader = &failing;
 			useCase->setHearingAidSimulationOn();
@@ -1723,7 +1726,7 @@ namespace {
 			assertThrowsRequestFailure(useCase, "Prescription 'a' cannot be read.");
 		}
 
-		void assertThrowsRequestFailureWhenFailingBrirReader(SignalProcessingUseCase *useCase) {
+		void assertThrowsRequestFailureWhenBrirReaderFails(SignalProcessingUseCase *useCase) {
 			FailingBrirReader failing;
 			brirReader = &failing;
 			useCase->setSpatializationOn();
@@ -1807,7 +1810,7 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		preparingNewTest.setHearingAidSimulationOn();
-		ignoreFailure(&preparingNewTest);
+		ignoreRequestFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
@@ -1818,7 +1821,7 @@ namespace {
 		FailingBrirReader failing;
 		brirReader = &failing;
 		preparingNewTest.setSpatializationOn();
-		ignoreFailure(&preparingNewTest);
+		ignoreRequestFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
@@ -1826,42 +1829,42 @@ namespace {
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingPrescriptionReader(&preparingNewTest);
+		assertThrowsRequestFailureWhenPrescriptionReaderFails(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingPrescriptionReader(&playingCalibration);
+		assertThrowsRequestFailureWhenPrescriptionReaderFails(&playingCalibration);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		processAudioForSavingThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingPrescriptionReader(&processingAudioForSaving);
+		assertThrowsRequestFailureWhenPrescriptionReaderFails(&processingAudioForSaving);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenBrirReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingBrirReader(&preparingNewTest);
+		assertThrowsRequestFailureWhenBrirReaderFails(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenBrirReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingBrirReader(&playingCalibration);
+		assertThrowsRequestFailureWhenBrirReaderFails(&playingCalibration);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		processAudioForSavingThrowsRequestFailureWhenBrirReaderFails
 	) {
-		assertThrowsRequestFailureWhenFailingBrirReader(&processingAudioForSaving);
+		assertThrowsRequestFailureWhenBrirReaderFails(&processingAudioForSaving);
 	}
 
 	TEST_F(
@@ -1945,7 +1948,7 @@ namespace {
 		PreparationFailingAudioPlayer failing;
 		audioPlayer = &failing;
 		defaultStimulusList.setContents({ "a", "b", "c" });
-		ignoreFailure(&playingTrial);
+		ignoreRequestFailure(&playingTrial);
 		assertEqual("a", defaultStimulusList.next());
 	}
 
