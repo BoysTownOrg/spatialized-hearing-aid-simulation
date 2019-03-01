@@ -932,7 +932,8 @@ namespace {
 			EXPECT_EQ(audioFrameReader, audioLoaderFactory.audioFrameReader());
 		}
 
-		void assertPlayerPreparedPriorToPlaying() {
+		void assertPlayerPreparedPriorToPlaying(UseCase *useCase) {
+			runUseCase(useCase);
 			assertEqual("prepareToPlay play ", audioPlayer.log());
 		}
 
@@ -1517,13 +1518,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPreparesPlayerBeforePlaying) {
-		playNextTrial();
-		assertPlayerPreparedPriorToPlaying();
+		assertPlayerPreparedPriorToPlaying(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPreparesPlayerBeforePlaying) {
-		playCalibration();
-		assertPlayerPreparedPriorToPlaying();
+		assertPlayerPreparedPriorToPlaying(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
