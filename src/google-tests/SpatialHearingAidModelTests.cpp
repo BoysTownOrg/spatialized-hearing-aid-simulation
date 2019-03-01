@@ -1689,10 +1689,10 @@ namespace {
 			}
 		}
 		
-		void prepareNewTestIgnoringFailure() {
+		void prepareNewTestIgnoringFailure(UseCase *useCase) {
 			auto model = constructModel();
 			try {
-				model.prepareNewTest(&testing);
+				useCase->run(&model);
 			}
 			catch (const SpatialHearingAidModel::RequestFailure &) {
 			}
@@ -1799,8 +1799,8 @@ namespace {
 	) {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
-		testing.processing.usingHearingAidSimulation = true;
-		prepareNewTestIgnoringFailure();
+		preparingNewTest.setHearingAidSimulationOn();
+		prepareNewTestIgnoringFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
@@ -1824,8 +1824,8 @@ namespace {
 	) {
 		FailingBrirReader failing;
 		brirReader = &failing;
-		testing.processing.usingSpatialization = true;
-		prepareNewTestIgnoringFailure();
+		preparingNewTest.setSpatializationOn();
+		prepareNewTestIgnoringFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
