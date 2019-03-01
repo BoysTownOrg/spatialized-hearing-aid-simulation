@@ -1774,6 +1774,13 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		processAudioForSavingThrowsRequestFailureWhenPrescriptionReaderFails
+	) {
+		assertThrowsRequestFailureWhenFailingPrescriptionReader(&processingAudioForSaving);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		prepareNewTestDoesNotDocumentWhenPrescriptionReaderFails
 	) {
 		FailingPrescriptionReader failing;
