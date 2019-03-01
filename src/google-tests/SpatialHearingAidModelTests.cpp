@@ -360,6 +360,18 @@ namespace {
 		}
 	};
 
+	class SavingAudio : public UseCase {
+		std::string audioFilePath_{};
+	public:
+		void run(Model *m) override {
+			m->saveAudio(audioFilePath_);
+		}
+
+		void setAudioFilePath(std::string s) {
+			audioFilePath_ = std::move(s);
+		}
+	};
+
 	class SpatialHearingAidModelTests : public ::testing::Test {
 	protected:
 		using channel_type = AudioFrameProcessor::channel_type;
@@ -1642,6 +1654,7 @@ namespace {
 		PlayingFirstTrialOfNewTest playingFirstTrialOfNewTest{};
 		PlayingCalibration playingCalibration{};
 		ProcessingAudioForSaving processingAudioForSaving{};
+		SavingAudio savingAudio{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
@@ -1670,17 +1683,6 @@ namespace {
 				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
 			}
 			catch (const SpatialHearingAidModel::RequestFailure & e) {
-				assertEqual(std::move(what), e.what());
-			}
-		}
-
-		void assertSaveAudioThrowsRequestFailure(std::string what) {
-			auto model = constructModel();
-			try {
-				model.saveAudio({});
-				FAIL() << "Expected SpatialHearingAidModel::RequestFailure.";
-			}
-			catch (const SpatialHearingAidModel::RequestFailure &e) {
 				assertEqual(std::move(what), e.what());
 			}
 		}
@@ -1913,6 +1915,6 @@ namespace {
 	) {
 		ErrorAudioFrameWriterFactory failing{ "error." };
 		audioWriterFactory = &failing;
-		assertSaveAudioThrowsRequestFailure("error.");
+		assertThrowsRequestFailure(&savingAudio, "error.");
 	}
 }
