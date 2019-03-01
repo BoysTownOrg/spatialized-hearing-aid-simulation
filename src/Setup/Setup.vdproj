@@ -1,4 +1,4 @@
-﻿"DeployProject"
+"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_05BC170014717A22F13390FA3570A79F"
+        "OwnerKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0C42664366864896BAECDDDDD0E7F51D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -33,8 +39,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_176BEEE020EFB5E9C0B15EE0213A3025"
+        "OwnerKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_18159923672046E88E836B9EE31C0C28"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_21ED0B866219185C3D44EA2D9593D4DD"
+        "OwnerKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,6 +99,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7655458B08EB4135998C09084B5F4DC9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -105,6 +129,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C9635E5E027990111DA55E2ED44E7D21"
+        "OwnerKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CCBC662E13134BFD8ACF4CFE0A3DFE1A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -113,6 +143,12 @@
         {
         "MsmKey" = "8:_D55372B75EE5462995694C4E8D8977BE"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D6CA7050B589C679B3938BDBF5B273A0"
+        "OwnerKey" = "8:_79ABC8E4C60E441D937D5D0570CE75BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -131,12 +167,6 @@
         {
         "MsmKey" = "8:_FA340B3C6DBA411393F1A1A80C1C4F10"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6FFBE8CCD8C54D00AEA8B58AD37F4929"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -164,6 +194,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
         "Release"
@@ -188,6 +226,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
             }
         }
     }
@@ -210,6 +256,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05BC170014717A22F13390FA3570A79F"
+            {
+            "SourcePath" = "8:VCRUNTIME140.dll"
+            "TargetName" = "8:VCRUNTIME140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E17CF38139C4E4F9EEF5B079DA1DA61"
             {
             "SourcePath" = "8:..\\Release\\fftw3f.dll"
@@ -268,6 +334,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_21ED0B866219185C3D44EA2D9593D4DD"
+            {
+            "SourcePath" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4586C9F17C114E0B93150E9E6CCD3EE6"
@@ -330,6 +416,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C9635E5E027990111DA55E2ED44E7D21"
+            {
+            "SourcePath" = "8:MSVCP140.dll"
+            "TargetName" = "8:MSVCP140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D55372B75EE5462995694C4E8D8977BE"
             {
             "SourcePath" = "8:..\\Release\\vorbisenc.dll"
@@ -348,6 +454,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6CA7050B589C679B3938BDBF5B273A0"
+            {
+            "SourcePath" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8D7AC268E3547A298613F71588BA872"
@@ -466,15 +592,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Spatialized Hearing Aid Simulation"
-        "ProductCode" = "8:{D06B66FC-8AB0-44B3-A880-B9E1815534B3}"
-        "PackageCode" = "8:{51DE9DFB-6BEB-46CF-8543-0095A06CF762}"
+        "ProductCode" = "8:{8CDEEA42-927F-4B37-BB50-3717CEF42D78}"
+        "PackageCode" = "8:{F2BF7937-99DF-4EB7-BE71-AA632E968F6F}"
         "UpgradeCode" = "8:{5B894583-B787-4C98-A903-928921C0CC8C}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:BTNRH Technology Core"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -988,7 +1114,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_048B23FC07DC4F4CADE9D867D39C2875"
             {
-            "SourcePath" = "8:..\\Debug\\fir-filtering.dll"
+            "SourcePath" = "8:..\\Release\\fir-filtering.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1016,7 +1142,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0C42664366864896BAECDDDDD0E7F51D"
             {
-            "SourcePath" = "8:..\\Debug\\dsl-prescription.dll"
+            "SourcePath" = "8:..\\Release\\dsl-prescription.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1044,7 +1170,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2C2EC096AC7B462694317CF4CFE064AD"
             {
-            "SourcePath" = "8:..\\Debug\\signal-processing.dll"
+            "SourcePath" = "8:..\\Release\\signal-processing.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1072,7 +1198,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4AF7C7E829F049739B482F2BCDC415BC"
             {
-            "SourcePath" = "8:..\\Debug\\playing-audio.dll"
+            "SourcePath" = "8:..\\Release\\playing-audio.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1100,7 +1226,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_520E28696359434C85EB5C4651466EF1"
             {
-            "SourcePath" = "8:..\\Debug\\binaural-room-impulse-response.dll"
+            "SourcePath" = "8:..\\Release\\binaural-room-impulse-response.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1128,7 +1254,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6FFBE8CCD8C54D00AEA8B58AD37F4929"
             {
-            "SourcePath" = "8:..\\Debug\\main.exe"
+            "SourcePath" = "8:..\\Release\\main.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1156,7 +1282,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_75A5519EDCA94F91A67D4775F98BE642"
             {
-            "SourcePath" = "8:..\\Debug\\hearing-aid-processing.dll"
+            "SourcePath" = "8:..\\Release\\hearing-aid-processing.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1182,9 +1308,37 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7655458B08EB4135998C09084B5F4DC9"
+            {
+            "SourcePath" = "8:..\\Release\\audio-file-reading-writing.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{49E34B8E-1578-4405-A9D4-3A01039A0543}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_79ABC8E4C60E441D937D5D0570CE75BD"
             {
-            "SourcePath" = "8:..\\Debug\\presentation.dll"
+            "SourcePath" = "8:..\\Release\\presentation.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1212,7 +1366,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_89D097B34E3B4B4A89BE60853C292FCC"
             {
-            "SourcePath" = "8:..\\Debug\\test-documenting.dll"
+            "SourcePath" = "8:..\\Release\\test-documenting.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1240,7 +1394,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B2BC2F7472454D52A0EDF551F4522E44"
             {
-            "SourcePath" = "8:..\\Debug\\stimulus-list.dll"
+            "SourcePath" = "8:..\\Release\\stimulus-list.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
@@ -1268,7 +1422,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CCBC662E13134BFD8ACF4CFE0A3DFE1A"
             {
-            "SourcePath" = "8:..\\Debug\\spatialized-hearing-aid-simulation.dll"
+            "SourcePath" = "8:..\\Release\\spatialized-hearing-aid-simulation.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_635B32782BBF489BA9F3EEF4DC218064"
