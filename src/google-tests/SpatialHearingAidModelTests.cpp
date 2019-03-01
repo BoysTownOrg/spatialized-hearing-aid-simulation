@@ -1760,6 +1760,17 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		prepareNewTestDoesNotDocumentWhenPrescriptionReaderFails
+	) {
+		FailingPrescriptionReader failing;
+		prescriptionReader = &failing;
+		preparingNewTest.setHearingAidSimulationOn();
+		ignoreFailure(&preparingNewTest);
+		assertTrue(defaultDocumenter.log().isEmpty());
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenPrescriptionReaderFails
 	) {
 		assertThrowsRequestFailureWhenFailingPrescriptionReader(&preparingNewTest);
@@ -1781,17 +1792,6 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestDoesNotDocumentWhenPrescriptionReaderFails
-	) {
-		FailingPrescriptionReader failing;
-		prescriptionReader = &failing;
-		preparingNewTest.setHearingAidSimulationOn();
-		ignoreFailure(&preparingNewTest);
-		assertTrue(defaultDocumenter.log().isEmpty());
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenBrirReaderFails
 	) {
 		assertThrowsRequestFailureWhenFailingBrirReader(&preparingNewTest);
@@ -1802,6 +1802,13 @@ namespace {
 		playCalibrationThrowsRequestFailureWhenBrirReaderFails
 	) {
 		assertThrowsRequestFailureWhenFailingBrirReader(&playingCalibration);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		processAudioForSavingThrowsRequestFailureWhenBrirReaderFails
+	) {
+		assertThrowsRequestFailureWhenFailingBrirReader(&processingAudioForSaving);
 	}
 
 	TEST_F(
