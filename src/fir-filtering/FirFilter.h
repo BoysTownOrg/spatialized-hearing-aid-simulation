@@ -26,6 +26,7 @@ public:
 	using coefficients_size_type = typename coefficients_type::size_type;
 	using complex_type = std::complex<sample_type>;
 	using complex_signal_type = std::vector<complex_type>;
+	using real_signal_type = std::vector<sample_type>;
 
 	FIR_FILTERING_API explicit FirFilter(coefficients_type b);
 	class InvalidCoefficients {};
@@ -39,10 +40,13 @@ public:
 private:
 	complex_signal_type H{};
 	complex_signal_type dftComplex{};
-	using real_signal_type = std::vector<sample_type>;
 	real_signal_type dftReal{};
 	real_signal_type overlap{};
-	using fftw_plan_type = typename std::conditional<std::is_same_v<T, double>, fftw_plan, fftwf_plan>::type;
+	using fftw_plan_type = typename std::conditional<
+		std::is_same_v<sample_type, double>, 
+		fftw_plan, 
+		fftwf_plan
+	>::type;
 	fftw_plan_type fftPlan{};
 	fftw_plan_type ifftPlan{};
 	long N{};
