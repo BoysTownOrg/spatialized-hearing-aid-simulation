@@ -53,7 +53,7 @@ public:
 
 class FirFilterFactoryImpl : public FirFilterFactory {
 	std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type b) override {
-		return std::make_shared<SignalProcessorAdapter<FirFilter>>(std::move(b));
+		return std::make_shared<SignalProcessorAdapter<FirFilter<float>>>(std::move(b));
 	}
 };
 
