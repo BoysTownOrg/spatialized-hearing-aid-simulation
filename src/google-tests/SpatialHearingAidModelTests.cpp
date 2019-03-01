@@ -1765,6 +1765,12 @@ namespace {
 				"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
 			);
 		}
+
+		void assertThrowsRequestFailureWhenAudioReaderFactoryFails(UseCase *useCase) {
+			ErrorAudioFrameReaderFactory failing{ "error." };
+			audioReaderFactory = &failing;
+			assertThrowsRequestFailure(useCase, "error.");
+		}
 	};
 
 	TEST_F(
@@ -1774,6 +1780,16 @@ namespace {
 		InitializationFailingDocumenter failing;
 		documenter = &failing;
 		failing.setErrorMessage("error.");
+		assertThrowsRequestFailure(&preparingNewTest, "error.");
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		prepareNewTestThrowsRequestFailureWhenStimulusListFails
+	) {
+		FailsToInitializeStimulusList failing;
+		failing.setErrorMessage("error.");
+		stimulusList = &failing;
 		assertThrowsRequestFailure(&preparingNewTest, "error.");
 	}
 
@@ -1885,39 +1901,23 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsRequestFailureWhenStimulusListFails
-	) {
-		FailsToInitializeStimulusList failing;
-		failing.setErrorMessage("error.");
-		stimulusList = &failing;
-		assertThrowsRequestFailure(&preparingNewTest, "error.");
-	}
-
-	TEST_F(
-		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
-		ErrorAudioFrameReaderFactory failing{ "error." };
-		audioReaderFactory = &failing;
-		assertThrowsRequestFailure(&playingTrial, "error.");
+		assertThrowsRequestFailureWhenAudioReaderFactoryFails(&playingTrial);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		playCalibrationThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
-		ErrorAudioFrameReaderFactory failing{ "error." };
-		audioReaderFactory = &failing;
-		assertThrowsRequestFailure(&playingCalibration, "error.");
+		assertThrowsRequestFailureWhenAudioReaderFactoryFails(&playingCalibration);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
 		processAudioForSavingThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
-		ErrorAudioFrameReaderFactory failing{ "error." };
-		audioReaderFactory = &failing;
-		assertThrowsRequestFailure(&processingAudioForSaving, "error.");
+		assertThrowsRequestFailureWhenAudioReaderFactoryFails(&processingAudioForSaving);
 	}
 
 	TEST_F(
