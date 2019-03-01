@@ -24,17 +24,22 @@ namespace {
 		virtual void run(Model *) = 0;
 	};
 
-	class AudioFileUseCase : public UseCase {
+	class AudioFileUseCase : virtual public UseCase {
 	public:
 		virtual void setAudioFilePath(std::string) = 0;
 	};
 
-	class LevelUseCase : public UseCase {
+	class AudioDeviceUseCase : virtual public UseCase {
+	public:
+		virtual void setAudioDevice(std::string) = 0;
+	};
+
+	class LevelUseCase : virtual public UseCase {
 	public:
 		virtual void setLevel_dB_Spl(double) = 0;
 	};
 
-	class SignalProcessingUseCase : public UseCase {
+	class SignalProcessingUseCase : virtual public UseCase {
 	public:
 		virtual void setHearingAidSimulationOn() = 0;
 		virtual void setHearingAidSimulationOff() = 0;
@@ -50,12 +55,12 @@ namespace {
 	};
 
 	class SignalProcessingWithLevelUseCase :
-		public SignalProcessingUseCase,
-		public LevelUseCase {};
+		virtual public SignalProcessingUseCase,
+		virtual public LevelUseCase {};
 
 	class SignalProcessingAudioFileWithLevelUseCase : 
-		public SignalProcessingWithLevelUseCase, 
-		public AudioFileUseCase {};
+		virtual public SignalProcessingWithLevelUseCase, 
+		virtual public AudioFileUseCase {};
 
 	void setHearingAidSimulationOn(Model::SignalProcessing &p) noexcept {
 		p.usingHearingAidSimulation = true;
@@ -153,7 +158,11 @@ namespace {
 		}
 	};
 
-	class PlayingTrial : public LevelUseCase {
+	class PlayingAudioUseCase : 
+		virtual public AudioDeviceUseCase, 
+		virtual public LevelUseCase {};
+
+	class PlayingTrial : public PlayingAudioUseCase {
 		SpatialHearingAidModel::Trial trial{};
 	public:
 		void run(Model *model) override {
@@ -162,6 +171,10 @@ namespace {
 
 		void setLevel_dB_Spl(double x) override {
 			trial.level_dB_Spl = x;
+		}
+
+		void setAudioDevice(std::string s) override {
+			trial.audioDevice = std::move(s);
 		}
 	};
 
@@ -223,7 +236,7 @@ namespace {
 		}
 	};
 
-	class PlayingCalibration : public SignalProcessingAudioFileWithLevelUseCase {
+	class PlayingCalibration : public SignalProcessingUseCase, public AudioFileUseCase, public PlayingAudioUseCase {
 		SpatialHearingAidModel::Calibration calibration{};
 	public:
 		void run(Model *model) override {
@@ -280,6 +293,10 @@ namespace {
 
 		void setAudioFilePath(std::string s) override {
 			calibration.audioFilePath = std::move(s);
+		}
+
+		void setAudioDevice(std::string s) override {
+			calibration.audioDevice = std::move(s);
 		}
 	};
 
@@ -474,17 +491,23 @@ namespace {
 			assertTrue(simulationFactory.spatialization().empty());
 		}
 
-		void assertAudioPlayerHasBeenPlayed(LevelUseCase *useCase) {
+		void assertAudioPlayerHasBeenPlayed(PlayingAudioUseCase *useCase) {
 			runUseCase(useCase);
 			assertTrue(audioPlayer.played());
 		}
 
-		void assertAudioPlayerParametersMatchAudioFrameReader(std::function<void(void)> f) {
+		void assertAudioPlayerParametersMatchAudioFrameReader(PlayingAudioUseCase *useCase) {
 			audioFrameReader->setChannels(1);
 			audioFrameReader->setSampleRate(2);
-			f();
+			runUseCase(useCase);
 			assertEqual(1, audioPlayer.preparation().channels);
 			assertEqual(2, audioPlayer.preparation().sampleRate);
+		}
+
+		void x() {
+			trial.audioDevice = "a";
+			playNextTrial();
+			assertEqual("a", audioPlayer.preparation().audioDevice);
 		}
 
 		void assertFramesPerBufferMatchesChunkSizeWhenUsingHearingAidSimulation(SignalProcessingUseCase *useCase) {
@@ -1094,11 +1117,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
-		assertAudioPlayerParametersMatchAudioFrameReader([=]() { playNextTrial(); });
+		assertAudioPlayerParametersMatchAudioFrameReader(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesReaderMatchedParametersToPlayer) {
-		assertAudioPlayerParametersMatchAudioFrameReader([=]() { playCalibration(); });
+		assertAudioPlayerParametersMatchAudioFrameReader(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioDeviceToPlayer) {
