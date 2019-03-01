@@ -1878,6 +1878,13 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
+		processAudioForSavingThrowsRequestFailureWhenChunkSizeIsNotPowerOfTwo
+	) {
+		assertThrowsRequestFailureWhenProcessingSizesNotPowersOfTwo(&processingAudioForSaving);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
 		prepareNewTestThrowsRequestFailureWhenStimulusListFails
 	) {
 		FailsToInitializeStimulusList failing;
