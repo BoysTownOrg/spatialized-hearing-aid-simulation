@@ -153,13 +153,25 @@ namespace {
 		}
 	};
 
-	class PlayingFirstTrialOfNewTest : public SignalProcessingWithLevelUseCase {
-		PreparingNewTest preparingNewTest{};
+	class PlayingTrial : public LevelUseCase {
 		SpatialHearingAidModel::Trial trial{};
 	public:
 		void run(Model *model) override {
-			preparingNewTest.run(model);
 			model->playNextTrial(&trial);
+		}
+
+		void setLevel_dB_Spl(double x) override {
+			trial.level_dB_Spl = x;
+		}
+	};
+
+	class PlayingFirstTrialOfNewTest : public SignalProcessingWithLevelUseCase {
+		PreparingNewTest preparingNewTest{};
+		PlayingTrial playingTrial{};
+	public:
+		void run(Model *model) override {
+			preparingNewTest.run(model);
+			playingTrial.run(model);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -195,7 +207,7 @@ namespace {
 		}
 
 		void setLevel_dB_Spl(double x) override {
-			trial.level_dB_Spl = x;
+			playingTrial.setLevel_dB_Spl(x);
 		}
 
 		void setLeftDslPrescriptionFilePath(std::string s) override {
@@ -372,6 +384,7 @@ namespace {
 		};
 		
 		PreparingNewTest preparingNewTest{};
+		PlayingTrial playingTrial{};
 		PlayingFirstTrialOfNewTest playingFirstTrialOfNewTest{};
 		PlayingCalibration playingCalibration{};
 		ProcessingAudioForSaving processingAudioForSaving{};
@@ -886,10 +899,10 @@ namespace {
 		}
 
 		void assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
-			std::function<void(void)> f
+			LevelUseCase *useCase
 		) {
 			callWhenPlayerPlays([=]() { assertAudioFrameReaderPassedToLoaderFactory(); });
-			f();
+			runUseCase(useCase);
 		}
 
 		void assertAudioFrameReaderPassedToLoaderFactory() noexcept {
@@ -1073,15 +1086,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
-			[=]() { playNextTrial(); }
-		);
+		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioFrameReaderToAudioLoaderPriorToPlaying) {
-		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(
-			[=]() { playCalibration(); }
-		);
+		assertAudioFrameReaderPassedToLoaderWhenPlayerPlaysDuringCall(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesReaderMatchedParametersToPlayer) {
