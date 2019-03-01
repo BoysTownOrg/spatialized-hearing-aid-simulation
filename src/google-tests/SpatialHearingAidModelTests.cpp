@@ -504,9 +504,9 @@ namespace {
 			assertEqual(2, audioPlayer.preparation().sampleRate);
 		}
 
-		void x() {
-			trial.audioDevice = "a";
-			playNextTrial();
+		void assertAudioPlayerReceivesAudioDevice(AudioDeviceUseCase *useCase) {
+			useCase->setAudioDevice("a");
+			runUseCase(useCase);
 			assertEqual("a", audioPlayer.preparation().audioDevice);
 		}
 
@@ -1125,15 +1125,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPassesAudioDeviceToPlayer) {
-		trial.audioDevice = "a";
-		playNextTrial();
-		assertEqual("a", audioPlayer.preparation().audioDevice);
+		assertAudioPlayerReceivesAudioDevice(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPassesAudioDeviceToPlayer) {
-		calibration.audioDevice = "a";
-		playCalibration();
-		assertEqual("a", audioPlayer.preparation().audioDevice);
+		assertAudioPlayerReceivesAudioDevice(&playingCalibration);
 	}
 
 	TEST_F(
