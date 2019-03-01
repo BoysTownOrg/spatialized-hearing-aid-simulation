@@ -1490,6 +1490,13 @@ namespace {
 
 	TEST_F(
 		SpatialHearingAidModelTests, 
+		processAudioForSavingPassesBrirToFactoryForSpatialization
+	) {
+		assertSpatializationFilterCoefficientsMatchBrirWhenUsingOnlySpatialization(&processingAudioForSaving);
+	}
+
+	TEST_F(
+		SpatialHearingAidModelTests, 
 		playTrialPassesBrirToFactoryForFullSimulation
 	) {
 		assertSpatializationFilterCoefficientsMatchBrirWhenUsingFullSimulation(&playingFirstTrialOfNewTest);
