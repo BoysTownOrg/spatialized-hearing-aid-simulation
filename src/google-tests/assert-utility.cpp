@@ -56,6 +56,12 @@ template void assertEqual(
 );
 
 template void assertEqual(
+	std::vector<double> expected,
+	std::vector<double> actual,
+	double tolerance
+);
+
+template void assertEqual(
 	std::vector<std::string> expected,
 	std::vector<std::string> actual
 );
