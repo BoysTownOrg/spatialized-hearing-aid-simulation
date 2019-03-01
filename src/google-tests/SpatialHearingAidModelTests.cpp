@@ -937,6 +937,12 @@ namespace {
 			assertEqual("prepareToPlay play ", audioPlayer.log());
 		}
 
+		void assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(UseCase *useCase) {
+			audioPlayer.setPlaying();
+			runUseCase(useCase);
+			assertAudioLoaderHasNotBeenModified();
+		}
+
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMade(
 			SignalProcessingUseCase *useCase
 		) {
@@ -1526,15 +1532,11 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
-		audioPlayer.setPlaying();
-		playNextTrial();
-		assertAudioLoaderHasNotBeenModified();
+		assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotAlterLoaderWhenPlayerPlaying) {
-		audioPlayer.setPlaying();
-		playCalibration();
-		assertAudioLoaderHasNotBeenModified();
+		assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {
