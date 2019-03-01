@@ -1642,10 +1642,6 @@ namespace {
 		PlayingFirstTrialOfNewTest playingFirstTrialOfNewTest{};
 		PlayingCalibration playingCalibration{};
 		ProcessingAudioForSaving processingAudioForSaving{};
-		SpatialHearingAidModel::Testing testing{};
-		SpatialHearingAidModel::Trial trial{};
-		SpatialHearingAidModel::Calibration calibration{};
-		SpatialHearingAidModel::SavingAudio savingAudio{};
 		PrescriptionReaderStub defaultPrescriptionReader{};
 		PrescriptionReader *prescriptionReader{ &defaultPrescriptionReader };
 		BrirReaderStub defaultBrirReader{};
@@ -1689,19 +1685,10 @@ namespace {
 			}
 		}
 		
-		void prepareNewTestIgnoringFailure(UseCase *useCase) {
+		void ignoreFailure(UseCase *useCase) {
 			auto model = constructModel();
 			try {
 				useCase->run(&model);
-			}
-			catch (const SpatialHearingAidModel::RequestFailure &) {
-			}
-		}
-
-		void playTrialIgnoringFailure() {
-			auto model = constructModel();
-			try {
-				model.playNextTrial(&trial);
 			}
 			catch (const SpatialHearingAidModel::RequestFailure &) {
 			}
@@ -1721,16 +1708,6 @@ namespace {
 				simulationFactory,
 				calibrationComputerFactory
 			};
-		}
-
-		void setValidSizesForTest() {
-			testing.processing.chunkSize = 1;
-			testing.processing.windowSize = 1;
-		}
-
-		void setValidSizesForCalibration() {
-			calibration.processing.chunkSize = 1;
-			calibration.processing.windowSize = 1;
 		}
 
 		void assertThrowsRequestFailureWhenFailingPrescriptionReader(SignalProcessingUseCase *useCase) {
@@ -1800,7 +1777,7 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		preparingNewTest.setHearingAidSimulationOn();
-		prepareNewTestIgnoringFailure(&preparingNewTest);
+		ignoreFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
@@ -1825,7 +1802,7 @@ namespace {
 		FailingBrirReader failing;
 		brirReader = &failing;
 		preparingNewTest.setSpatializationOn();
-		prepareNewTestIgnoringFailure(&preparingNewTest);
+		ignoreFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
 
@@ -1916,7 +1893,7 @@ namespace {
 		PreparationFailingAudioPlayer failing;
 		audioPlayer = &failing;
 		defaultStimulusList.setContents({ "a", "b", "c" });
-		playTrialIgnoringFailure();
+		ignoreFailure(&playingTrial);
 		assertEqual("a", defaultStimulusList.next());
 	}
 
