@@ -1070,7 +1070,7 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playTrialPlaysPlayer) {
-		assertAudioPlayerHasBeenPlayed(&playingFirstTrialOfNewTest);
+		assertAudioPlayerHasBeenPlayed(&playingTrial);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPlaysPlayer) {
