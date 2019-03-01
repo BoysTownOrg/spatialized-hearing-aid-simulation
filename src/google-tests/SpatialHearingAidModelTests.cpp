@@ -1746,6 +1746,25 @@ namespace {
 				"Both the chunk size and window size must be powers of two; 3 is not a power of two."
 			);
 		}
+
+		void assertThrowsRequestFailureWhenBrirCoefficientsEmpty(SignalProcessingUseCase *useCase) {
+			useCase->setSpatializationOn();
+			BrirReader::BinauralRoomImpulseResponse brir;
+			brir.left = {};
+			brir.right = { 0 };
+			defaultBrirReader.setBrir(brir);
+			assertThrowsRequestFailure(
+				useCase,
+				"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
+			);
+			brir.left = { 0 };
+			brir.right = {};
+			defaultBrirReader.setBrir(brir);
+			assertThrowsRequestFailure(
+				useCase,
+				"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
+			);
+		}
 	};
 
 	TEST_F(
@@ -1765,6 +1784,17 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		preparingNewTest.setHearingAidSimulationOn();
+		ignoreFailure(&preparingNewTest);
+		assertTrue(defaultDocumenter.log().isEmpty());
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		prepareNewTestDoesNotDocumentWhenBrirReaderFails
+	) {
+		FailingBrirReader failing;
+		brirReader = &failing;
+		preparingNewTest.setSpatializationOn();
 		ignoreFailure(&preparingNewTest);
 		assertTrue(defaultDocumenter.log().isEmpty());
 	}
@@ -1813,35 +1843,23 @@ namespace {
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestDoesNotDocumentWhenBrirReaderFails
+		prepareNewTestThrowsRequestFailureWhenCoefficientsAreEmpty
 	) {
-		FailingBrirReader failing;
-		brirReader = &failing;
-		preparingNewTest.setSpatializationOn();
-		ignoreFailure(&preparingNewTest);
-		assertTrue(defaultDocumenter.log().isEmpty());
+		assertThrowsRequestFailureWhenBrirCoefficientsEmpty(&preparingNewTest);
 	}
 
 	TEST_F(
 		RefactoredModelFailureTests,
-		prepareNewTestThrowsRequestFailureWhenCoefficientsAreEmpty
+		playCalibrationThrowsRequestFailureWhenCoefficientsAreEmpty
 	) {
-		preparingNewTest.setSpatializationOn();
-		BrirReader::BinauralRoomImpulseResponse brir;
-		brir.left = {};
-		brir.right = { 0 };
-		defaultBrirReader.setBrir(brir);
-		assertThrowsRequestFailure(
-			&preparingNewTest,
-			"The left BRIR coefficients are empty, therefore a filter operation cannot be defined."
-		);
-		brir.left = { 0 };
-		brir.right = {};
-		defaultBrirReader.setBrir(brir);
-		assertThrowsRequestFailure(
-			&preparingNewTest,
-			"The right BRIR coefficients are empty, therefore a filter operation cannot be defined."
-		);
+		assertThrowsRequestFailureWhenBrirCoefficientsEmpty(&playingCalibration);
+	}
+
+	TEST_F(
+		RefactoredModelFailureTests,
+		processAudioForSavingThrowsRequestFailureWhenCoefficientsAreEmpty
+	) {
+		assertThrowsRequestFailureWhenBrirCoefficientsEmpty(&processingAudioForSaving);
 	}
 
 	TEST_F(
