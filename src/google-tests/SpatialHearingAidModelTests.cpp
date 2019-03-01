@@ -1781,6 +1781,11 @@ namespace {
 			audioPlayer = &failing;
 			assertThrowsRequestFailure(useCase, "error.");
 		}
+
+		void assertDocumenterLogIsStillEmpty(SignalProcessingUseCase *useCase) {
+			ignoreRequestFailure(useCase);
+			assertTrue(defaultDocumenter.log().isEmpty());
+		}
 	};
 
 	TEST_F(
@@ -1810,8 +1815,7 @@ namespace {
 		FailingPrescriptionReader failing;
 		prescriptionReader = &failing;
 		preparingNewTest.setHearingAidSimulationOn();
-		ignoreRequestFailure(&preparingNewTest);
-		assertTrue(defaultDocumenter.log().isEmpty());
+		assertDocumenterLogIsStillEmpty(&preparingNewTest);
 	}
 
 	TEST_F(
@@ -1821,8 +1825,7 @@ namespace {
 		FailingBrirReader failing;
 		brirReader = &failing;
 		preparingNewTest.setSpatializationOn();
-		ignoreRequestFailure(&preparingNewTest);
-		assertTrue(defaultDocumenter.log().isEmpty());
+		assertDocumenterLogIsStillEmpty(&preparingNewTest);
 	}
 
 	TEST_F(
