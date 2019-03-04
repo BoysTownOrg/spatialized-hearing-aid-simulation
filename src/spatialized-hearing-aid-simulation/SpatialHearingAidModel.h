@@ -15,9 +15,9 @@
 #include <memory>
 #include <string>
 
-class AudioFrameProcessorFactory {
+class StereoSimulationFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
+	INTERFACE_OPERATIONS(StereoSimulationFactory);
 
 	struct HearingAidSimulation {
 		PrescriptionReader::Dsl leftPrescription;
@@ -36,27 +36,27 @@ public:
 class AudioFrameProcessorFactoryFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactoryFactory);
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
-		BrirReader::BinauralRoomImpulseResponse) = 0;
-
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::HearingAidSimulation
+	virtual std::shared_ptr<StereoSimulationFactory> makeSpatialization(
+		BrirReader::BinauralRoomImpulseResponse
 	) = 0;
 
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
+	virtual std::shared_ptr<StereoSimulationFactory> makeHearingAid(
+		StereoSimulationFactory::HearingAidSimulation
+	) = 0;
+
+	virtual std::shared_ptr<StereoSimulationFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse,
-		AudioFrameProcessorFactory::HearingAidSimulation
+		StereoSimulationFactory::HearingAidSimulation
 	) = 0;
 
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() = 0;
+	virtual std::shared_ptr<StereoSimulationFactory> makeNoSimulation() = 0;
 };
 
 class SpatialHearingAidModel : public Model {
 	std::vector<std::vector<AudioFrameWriter::channel_type::element_type>> toWrite_{};
 	std::string nextStimulus_{};
-	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactoryForTest;
+	std::shared_ptr<StereoSimulationFactory> processorFactoryForTest;
 	StimulusList *stimulusList;
 	Documenter *documenter;
 	PrescriptionReader* prescriptionReader;
@@ -65,6 +65,7 @@ class SpatialHearingAidModel : public Model {
 	AudioFrameWriterFactory *audioWriterFactory;
 	AudioPlayer *player;
 	AudioProcessingLoaderFactory *audioProcessingLoaderFactory;
+	int framesPerBufferForTest{};
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
@@ -94,7 +95,7 @@ private:
 		std::string audioDevice;
 		double level_dB_Spl;
 		int framesPerBuffer;
-		AudioFrameProcessorFactory *processorFactory;
+		StereoSimulationFactory *processorFactory;
 	};
 	void playAudio(PlayAudioRequest *);
 	void assertSizeIsPowerOfTwo(int);
@@ -105,6 +106,6 @@ private:
 	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
 	void prepareAudioPlayer(AudioPlayer::Preparation);
 	void prepareNewTest_(Testing *);
-	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);
-	AudioFrameProcessorFactory::HearingAidSimulation hearingAidSimulation(SignalProcessing);
+	std::shared_ptr<StereoSimulationFactory> makeProcessorFactory(SignalProcessing);
+	StereoSimulationFactory::HearingAidSimulation hearingAidSimulation(SignalProcessing);
 };

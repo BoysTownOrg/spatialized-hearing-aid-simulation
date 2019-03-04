@@ -2,11 +2,11 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-class NullProcessorFactory : public AudioFrameProcessorFactory {
+class NullProcessorFactory : public StereoSimulationFactory {
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override { return {}; }
 };
 
-class StereoSpatializationFactory : public AudioFrameProcessorFactory {
+class StereoSpatializationFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::Spatialization left_spatial;
 	SimulationChannelFactory::Spatialization right_spatial;
 	SimulationChannelFactory *simulationFactory;
@@ -48,7 +48,7 @@ public:
 	}
 };
 
-class StereoHearingAidFactory : public AudioFrameProcessorFactory {
+class StereoHearingAidFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::HearingAidSimulation left_hs;
 	SimulationChannelFactory::HearingAidSimulation right_hs;
 	SimulationChannelFactory *simulationFactory;
@@ -102,7 +102,7 @@ public:
 	}
 };
 
-class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {	
+class StereoSpatializedHearingAidSimulationFactory : public StereoSimulationFactory {	
 	SimulationChannelFactory::FullSimulation left_fs;	
 	SimulationChannelFactory::FullSimulation right_fs;
 	SimulationChannelFactory *simulationFactory;
@@ -110,7 +110,7 @@ class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorF
 public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		AudioFrameProcessorFactory::HearingAidSimulation processing,
+		StereoSimulationFactory::HearingAidSimulation processing,
 		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
@@ -160,7 +160,7 @@ public:
 	}
 };
 
-class StereoNoSimulation : public AudioFrameProcessorFactory {
+class StereoNoSimulation : public StereoSimulationFactory {
 	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
@@ -203,7 +203,7 @@ public:
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
+	std::shared_ptr<StereoSimulationFactory> makeSpatialization(
 		BrirReader::BinauralRoomImpulseResponse brir
 	) override {
 		return std::make_shared<StereoSpatializationFactory>(
@@ -213,10 +213,9 @@ public:
 		);
 	}
 	
-	std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::HearingAidSimulation common
-	) override
-	{
+	std::shared_ptr<StereoSimulationFactory> makeHearingAid(
+		StereoSimulationFactory::HearingAidSimulation common
+	) override {
 		return std::make_shared<StereoHearingAidFactory>(
 			std::move(common),
 			simulationFactory, 
@@ -224,11 +223,10 @@ public:
 		);
 	}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
+	std::shared_ptr<StereoSimulationFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		AudioFrameProcessorFactory::HearingAidSimulation common
-	) override
-	{
+		StereoSimulationFactory::HearingAidSimulation common
+	) override {
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
 			std::move(common),
@@ -237,7 +235,7 @@ public:
 		);
 	}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() override {
+	std::shared_ptr<StereoSimulationFactory> makeNoSimulation() override {
 		return std::make_shared<StereoNoSimulation>(
 			simulationFactory, 
 			calibrationComputerFactory
@@ -289,7 +287,7 @@ void SpatialHearingAidModel::prepareNewTest(Testing *p) {
 	prepareNewTest_(p);
 }
 
-std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcessorFactory(
+std::shared_ptr<StereoSimulationFactory> SpatialHearingAidModel::makeProcessorFactory(
 	SignalProcessing p
 ) {
 	if (p.usingHearingAidSimulation && p.usingSpatialization)
@@ -307,12 +305,12 @@ std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcesso
 		return processorFactoryFactory->makeNoSimulation();
 }
 
-AudioFrameProcessorFactory::HearingAidSimulation 
+StereoSimulationFactory::HearingAidSimulation 
 	SpatialHearingAidModel::hearingAidSimulation(SignalProcessing p) 
 {
 	assertSizeIsPowerOfTwo(p.chunkSize);
 	assertSizeIsPowerOfTwo(p.windowSize);
-	AudioFrameProcessorFactory::HearingAidSimulation simulation;
+	StereoSimulationFactory::HearingAidSimulation simulation;
 	simulation.attack_ms = p.attack_ms;
 	simulation.release_ms = p.release_ms;
 	simulation.chunkSize = p.chunkSize;
