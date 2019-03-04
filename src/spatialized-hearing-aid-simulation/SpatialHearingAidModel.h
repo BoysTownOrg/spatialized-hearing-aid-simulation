@@ -19,7 +19,7 @@ class AudioFrameProcessorFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
 
-	struct CommonHearingAidSimulation {
+	struct HearingAidSimulation {
 		PrescriptionReader::Dsl leftPrescription;
 		PrescriptionReader::Dsl rightPrescription;
 		double attack_ms;
@@ -40,12 +40,12 @@ public:
 		BrirReader::BinauralRoomImpulseResponse) = 0;
 
 	virtual std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::CommonHearingAidSimulation
+		AudioFrameProcessorFactory::HearingAidSimulation
 	) = 0;
 
 	virtual std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse,
-		AudioFrameProcessorFactory::CommonHearingAidSimulation
+		AudioFrameProcessorFactory::HearingAidSimulation
 	) = 0;
 
 	virtual std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() = 0;
@@ -106,4 +106,5 @@ private:
 	void prepareAudioPlayer(AudioPlayer::Preparation);
 	void prepareNewTest_(Testing *);
 	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);
+	AudioFrameProcessorFactory::HearingAidSimulation hearingAidSimulation(SignalProcessing);
 };

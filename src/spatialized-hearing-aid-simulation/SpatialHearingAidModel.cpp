@@ -55,7 +55,7 @@ class StereoHearingAidFactory : public AudioFrameProcessorFactory {
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoHearingAidFactory(
-		CommonHearingAidSimulation processing,
+		HearingAidSimulation processing,
 		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
@@ -110,7 +110,7 @@ class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorF
 public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
+		AudioFrameProcessorFactory::HearingAidSimulation processing,
 		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
@@ -214,7 +214,7 @@ public:
 	}
 	
 	std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common
+		AudioFrameProcessorFactory::HearingAidSimulation common
 	) override
 	{
 		return std::make_shared<StereoHearingAidFactory>(
@@ -226,7 +226,7 @@ public:
 
 	std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common
+		AudioFrameProcessorFactory::HearingAidSimulation common
 	) override
 	{
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
@@ -292,38 +292,34 @@ void SpatialHearingAidModel::prepareNewTest(Testing *p) {
 std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcessorFactory(
 	SignalProcessing p
 ) {
-	if (p.usingHearingAidSimulation) {
-		assertSizeIsPowerOfTwo(p.chunkSize);
-		assertSizeIsPowerOfTwo(p.windowSize);
-	}
-
-	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
-	common.attack_ms = p.attack_ms;
-	common.release_ms = p.release_ms;
-	common.chunkSize = p.chunkSize;
-	common.windowSize = p.windowSize;
-
-	if (p.usingHearingAidSimulation && p.usingSpatialization) {
-		common.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
-		common.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	if (p.usingHearingAidSimulation && p.usingSpatialization)
 		return processorFactoryFactory->makeFullSimulation(
 			readAndCheckBrir(std::move(p.brirFilePath)),
-			std::move(common)
+			hearingAidSimulation(p)
 		);
-	}
 	else if (p.usingSpatialization)
 		return processorFactoryFactory->makeSpatialization(
 			readAndCheckBrir(std::move(p.brirFilePath))
 		);
-	else if (p.usingHearingAidSimulation) {
-		common.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
-		common.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
-		return processorFactoryFactory->makeHearingAid(
-			std::move(common)
-		);
-	}
+	else if (p.usingHearingAidSimulation)
+		return processorFactoryFactory->makeHearingAid(hearingAidSimulation(p));
 	else
 		return processorFactoryFactory->makeNoSimulation();
+}
+
+AudioFrameProcessorFactory::HearingAidSimulation 
+	SpatialHearingAidModel::hearingAidSimulation(SignalProcessing p) 
+{
+	assertSizeIsPowerOfTwo(p.chunkSize);
+	assertSizeIsPowerOfTwo(p.windowSize);
+	AudioFrameProcessorFactory::HearingAidSimulation simulation;
+	simulation.attack_ms = p.attack_ms;
+	simulation.release_ms = p.release_ms;
+	simulation.chunkSize = p.chunkSize;
+	simulation.windowSize = p.windowSize;
+	simulation.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
+	simulation.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	return simulation;
 }
 
 static std::string coefficientErrorMessage(std::string which) {
