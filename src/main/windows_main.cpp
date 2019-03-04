@@ -20,7 +20,7 @@
 #include <test-documenting/TestDocumenter.h>
 #include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <spatialized-hearing-aid-simulation/ChannelCopier.h>
-#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/SimulationChannelFactoryImpl.h>
 #include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
@@ -74,7 +74,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	ChaproFactory compressorFactory{};
 	FirFilterFactoryImpl firFilterFactory{};
 	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
-	SpatializedHearingAidSimulationFactory simulationFactory{
+	SimulationChannelFactoryImpl simulationFactory{
 		&scalarFactory, 
 		&firFilterFactory, 
 		&hearingAidFactory

@@ -5,9 +5,9 @@
 #include "SignalProcessor.h"
 #include <common-includes/Interface.h>
 
-class ISpatializedHearingAidSimulationFactory {
+class SimulationChannelFactory {
 public:
-	INTERFACE_OPERATIONS(ISpatializedHearingAidSimulationFactory);
+	INTERFACE_OPERATIONS(SimulationChannelFactory);
 
 	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 		float

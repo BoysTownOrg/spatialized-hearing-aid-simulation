@@ -606,7 +606,7 @@ namespace {
 		void assertSimulationPrescriptionsMatchPrescriptionReader(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			PrescriptionReader::Dsl left;
 			left.compressionRatios = { 1 };
@@ -668,7 +668,7 @@ namespace {
 		void assertSimulationFactoryReceivesCompressionParameters(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			useCase->setAttack_ms(1);
 			useCase->setRelease_ms(2);
@@ -713,7 +713,7 @@ namespace {
 		void assertSimulationFactoryReceivesSampleRate(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			audioFrameReader->setSampleRate(1);
 			runUseCase(useCase);
@@ -744,7 +744,7 @@ namespace {
 		void assertHearingAidSimulationFullScaleLevelMatches(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			runUseCase(useCase);
 			assertEqual(
@@ -870,7 +870,7 @@ namespace {
 		void assertSpatializationFilterCoefficientsMatchBrir(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization
+				SimulationChannelFactory::Spatialization> &spatialization
 		) {
 			BrirReader::BinauralRoomImpulseResponse brir;
 			brir.left = { 1, 2 };
@@ -1672,7 +1672,7 @@ namespace {
 		AudioProcessingLoaderStubFactory defaultAudioLoaderFactory{};
 		AudioProcessingLoaderFactory *audioLoaderFactory{ &defaultAudioLoaderFactory };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
-		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
+		SimulationChannelFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
 		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 

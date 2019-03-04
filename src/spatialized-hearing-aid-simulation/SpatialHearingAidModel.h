@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AudioPlayer.h"
-#include "ISpatializedHearingAidSimulationFactory.h"
+#include "SimulationChannelFactory.h"
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
@@ -75,7 +75,7 @@ public:
 		AudioFrameWriterFactory *,
 		PrescriptionReader *,
 		BrirReader *,
-		ISpatializedHearingAidSimulationFactory *,
+		SimulationChannelFactory *,
 		ICalibrationComputerFactory *
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(Testing *) override;

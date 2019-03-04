@@ -166,10 +166,10 @@
     <ClInclude Include="Documenter.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="ICalibrationComputer.h" />
-    <ClInclude Include="ISpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="SimulationChannelFactory.h" />
     <ClInclude Include="PrescriptionReader.h" />
     <ClInclude Include="SpatialHearingAidModel.h" />
-    <ClInclude Include="SpatializedHearingAidSimulationFactory.h" />
+    <ClInclude Include="SimulationChannelFactoryImpl.h" />
     <ClInclude Include="SignalProcessingChain.h" />
     <ClInclude Include="SignalProcessor.h" />
     <ClInclude Include="spatialized-hearing-aid-simulation-exports.h" />
@@ -181,7 +181,7 @@
     <ClCompile Include="ChannelCopier.cpp" />
     <ClCompile Include="ChannelProcessingGroup.cpp" />
     <ClCompile Include="SpatialHearingAidModel.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactory.cpp" />
+    <ClCompile Include="SimulationChannelFactoryImpl.cpp" />
     <ClCompile Include="SignalProcessingChain.cpp" />
     <ClCompile Include="ZeroPaddedLoader.cpp" />
   </ItemGroup>

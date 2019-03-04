@@ -1,6 +1,6 @@
 #include "assert-utility.h"
 #include "SignalProcessorStub.h"
-#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/SimulationChannelFactoryImpl.h>
 #include <gtest/gtest.h>
 
 namespace {
@@ -58,45 +58,45 @@ namespace {
 		}
 	};
 
-	class SpatializedHearingAidSimulationFactoryTests : public ::testing::Test {
+	class SimulationChannelFactoryImplTests : public ::testing::Test {
 	protected:
 		using buffer_type = std::vector<SignalProcessor::signal_type::element_type>;
 
-		SpatializedHearingAidSimulationFactory::Spatialization spatialization;
-		SpatializedHearingAidSimulationFactory::HearingAidSimulation hearingAidSimulation;
-		SpatializedHearingAidSimulationFactory::FullSimulation fullSimulation;
+		SimulationChannelFactoryImpl::Spatialization spatialization;
+		SimulationChannelFactoryImpl::HearingAidSimulation hearingAidSimulation;
+		SimulationChannelFactoryImpl::FullSimulation fullSimulation;
 		ScalarFactoryStub scalarFactory{};
 		FirFilterFactoryStub firFilterFactory{};
 		HearingAidFactoryStub hearingAidFactory{};
-		SpatializedHearingAidSimulationFactory simulationFactory{ 
+		SimulationChannelFactoryImpl simulationFactory{ 
 			&scalarFactory, 
 			&firFilterFactory,
 			&hearingAidFactory 
 		};
 	};
 
-	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeWithoutSimulationPassesScalarToFactory) {
+	TEST_F(SimulationChannelFactoryImplTests, makeWithoutSimulationPassesScalarToFactory) {
 		simulationFactory.makeWithoutSimulation(1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
-	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeSpatializationPassesScalarToFactory) {
+	TEST_F(SimulationChannelFactoryImplTests, makeSpatializationPassesScalarToFactory) {
 		simulationFactory.makeSpatialization({}, 1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
-	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeHearingAidSimulationPassesScalarToFactory) {
+	TEST_F(SimulationChannelFactoryImplTests, makeHearingAidSimulationPassesScalarToFactory) {
 		simulationFactory.makeHearingAidSimulation({}, 1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
-	TEST_F(SpatializedHearingAidSimulationFactoryTests, makeFullSimulationPassesScalarToFactory) {
+	TEST_F(SimulationChannelFactoryImplTests, makeFullSimulationPassesScalarToFactory) {
 		simulationFactory.makeFullSimulation({}, 1);
 		assertEqual(1.0f, scalarFactory.scalar());
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
+		SimulationChannelFactoryImplTests, 
 		makeHearingAidSimulationPassesPrescriptionToHearingAidFactory
 	) {
 		hearingAidSimulation.prescription.compressionRatios = { 1 };
@@ -115,7 +115,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeFullSimulationPassesPrescriptionToHearingAidFactory
 	) {
 		fullSimulation.hearingAid.prescription.compressionRatios = { 1 };
@@ -134,7 +134,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
+		SimulationChannelFactoryImplTests, 
 		makeHearingAidSimulationPassesCompressionParametersToHearingAidFactory
 	) {
 		hearingAidSimulation.attack_ms = 1;
@@ -153,7 +153,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeFullSimulationPassesCompressionParametersToHearingAidFactory
 	) {
 		fullSimulation.hearingAid.attack_ms = 1;
@@ -172,7 +172,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests, 
+		SimulationChannelFactoryImplTests, 
 		makeSpatializationPassesCoefficientsToFirFilterFactory
 	) {
 		spatialization.filterCoefficients = { 1 };
@@ -181,7 +181,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeFullSimulationPassesCoefficientsToFirFilterFactory
 	) {
 		fullSimulation.spatialization.filterCoefficients = { 1 };
@@ -190,7 +190,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeFullSimulationCombinesProcessorsInOrder
 	) {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
@@ -203,7 +203,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeHearingAidSimulationCombinesProcessorsInOrder
 	) {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
@@ -215,7 +215,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeSpatializationCombinesProcessorsInOrder
 	) {
 		scalarFactory.setProcessor(std::make_shared<AddsSamplesBy>(1.0f));
@@ -227,7 +227,7 @@ namespace {
 	}
 
 	TEST_F(
-		SpatializedHearingAidSimulationFactoryTests,
+		SimulationChannelFactoryImplTests,
 		makeWithoutSimulationReturnsScalarProcessor
 	) {
 		auto processor = std::make_shared<SignalProcessorStub>();

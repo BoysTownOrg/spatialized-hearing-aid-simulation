@@ -7,14 +7,14 @@ class NullProcessorFactory : public AudioFrameProcessorFactory {
 };
 
 class StereoSpatializationFactory : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	SimulationChannelFactory::Spatialization left_spatial;
+	SimulationChannelFactory::Spatialization right_spatial;
+	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
@@ -49,22 +49,22 @@ public:
 };
 
 class StereoHearingAidFactory : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	SimulationChannelFactory::HearingAidSimulation left_hs;
+	SimulationChannelFactory::HearingAidSimulation right_hs;
+	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoHearingAidFactory(
 		CommonHearingAidSimulation processing,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+		SimulationChannelFactory::HearingAidSimulation both_hs;
 		both_hs.attack_ms = processing.attack_ms;
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
@@ -105,9 +105,9 @@ public:
 };
 
 class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {	
-	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;	
-	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	SimulationChannelFactory::FullSimulation left_fs;	
+	SimulationChannelFactory::FullSimulation right_fs;
+	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializedHearingAidSimulationFactory(
@@ -115,7 +115,7 @@ public:
 		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
 		PrescriptionReader::Dsl leftPrescription_,
 		PrescriptionReader::Dsl rightPrescription_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
@@ -124,7 +124,7 @@ public:
 		left_fs.spatialization.filterCoefficients = std::move(brir_.left);
 		right_fs.spatialization.filterCoefficients = std::move(brir_.right);
 
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+		SimulationChannelFactory::HearingAidSimulation both_hs;
 		both_hs.attack_ms = processing.attack_ms;
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
@@ -165,11 +165,11 @@ public:
 };
 
 class StereoNoSimulation : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoNoSimulation(
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
 		simulationFactory{ simulationFactory },
@@ -197,11 +197,11 @@ public:
 };
 
 class StereoProcessorFactoryFactory : public AudioFrameProcessorFactoryFactory {
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
+	SimulationChannelFactory *simulationFactory;
 	ICalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoProcessorFactoryFactory(
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
+		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
 		simulationFactory{ simulationFactory },
@@ -270,7 +270,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	ISpatializedHearingAidSimulationFactory *simulationFactory,
+	SimulationChannelFactory *simulationFactory,
 	ICalibrationComputerFactory *calibrationComputerFactory
 ) :
 	stimulusList{ stimulusList },
