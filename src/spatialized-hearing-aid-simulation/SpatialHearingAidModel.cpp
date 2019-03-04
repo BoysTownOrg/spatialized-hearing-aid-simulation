@@ -56,8 +56,6 @@ class StereoHearingAidFactory : public AudioFrameProcessorFactory {
 public:
 	StereoHearingAidFactory(
 		CommonHearingAidSimulation processing,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_,
 		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
@@ -73,8 +71,8 @@ public:
 
 		left_hs = both_hs;
 		right_hs = both_hs;
-		left_hs.prescription = std::move(leftPrescription_);
-		right_hs.prescription = std::move(rightPrescription_);
+		left_hs.prescription = std::move(processing.leftPrescription);
+		right_hs.prescription = std::move(processing.rightPrescription);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -113,8 +111,6 @@ public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_,
 		SimulationChannelFactory *simulationFactory,
 		ICalibrationComputerFactory *calibrationComputerFactory
 	) :
@@ -133,8 +129,8 @@ public:
 
 		left_fs.hearingAid = both_hs;
 		right_fs.hearingAid = both_hs;
-		left_fs.hearingAid.prescription = std::move(leftPrescription_);
-		right_fs.hearingAid.prescription = std::move(rightPrescription_);
+		left_fs.hearingAid.prescription = std::move(processing.leftPrescription);
+		right_fs.hearingAid.prescription = std::move(processing.rightPrescription);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -218,15 +214,11 @@ public:
 	}
 	
 	std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
-		PrescriptionReader::Dsl leftPrescription_, 
-		PrescriptionReader::Dsl rightPrescription_
+		AudioFrameProcessorFactory::CommonHearingAidSimulation common
 	) override
 	{
 		return std::make_shared<StereoHearingAidFactory>(
-			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_), 
+			std::move(common),
 			simulationFactory, 
 			calibrationComputerFactory
 		);
@@ -234,16 +226,12 @@ public:
 
 	std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
-		PrescriptionReader::Dsl leftPrescription_, 
-		PrescriptionReader::Dsl rightPrescription_
+		AudioFrameProcessorFactory::CommonHearingAidSimulation common
 	) override
 	{
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
-			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_), 
+			std::move(common),
 			simulationFactory, 
 			calibrationComputerFactory
 		);
@@ -315,23 +303,25 @@ std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcesso
 	common.chunkSize = p.chunkSize;
 	common.windowSize = p.windowSize;
 
-	if (p.usingHearingAidSimulation && p.usingSpatialization)
+	if (p.usingHearingAidSimulation && p.usingSpatialization) {
+		common.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
+		common.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
 		return processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.brirFilePath)), 
-			common, 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
+			readAndCheckBrir(std::move(p.brirFilePath)),
+			std::move(common)
 		);
+	}
 	else if (p.usingSpatialization)
 		return processorFactoryFactory->makeSpatialization(
 			readAndCheckBrir(std::move(p.brirFilePath))
 		);
-	else if (p.usingHearingAidSimulation)
+	else if (p.usingHearingAidSimulation) {
+		common.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
+		common.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
 		return processorFactoryFactory->makeHearingAid(
-			common, 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
+			std::move(common)
 		);
+	}
 	else
 		return processorFactoryFactory->makeNoSimulation();
 }
