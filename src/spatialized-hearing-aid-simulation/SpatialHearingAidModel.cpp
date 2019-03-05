@@ -15,11 +15,15 @@ public:
 	{}
 
 	float leftChannelScale() {
-		return gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
+		return gsl::narrow_cast<float>(channelScale(0));
+	}
+
+	double channelScale(int channel) {
+		return computer->signalScale(channel, digitalLevel);
 	}
 
 	float rightChannelScale() {
-		return gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
+		return gsl::narrow_cast<float>(channelScale(1));
 	}
 };
 
