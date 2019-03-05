@@ -467,8 +467,8 @@ void SpatialHearingAidModel::prepareAudioPlayer(const AudioPlayer::Preparation &
 	try {
 		player->prepareToPlay(p);
 	}
-	catch (const AudioPlayer::PreparationFailure &e) {
-		throw RequestFailure{ e.what() };
+	catch (const AudioPlayer::PreparationFailure &) {
+		throw RequestFailure{ "Audio device '" + p.audioDevice + "' cannot be opened." };
 	}
 }
 

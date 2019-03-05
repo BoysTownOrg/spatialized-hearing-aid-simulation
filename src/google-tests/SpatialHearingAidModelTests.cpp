@@ -1784,11 +1784,11 @@ namespace {
 			assertThrowsRequestFailure(useCase, "Audio file 'a' cannot be read.");
 		}
 
-		void assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(UseCase *useCase) {
+		void assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(AudioDeviceUseCase *useCase) {
 			PreparationFailingAudioPlayer failing;
-			failing.setErrorMessage("error.");
 			audioPlayer = &failing;
-			assertThrowsRequestFailure(useCase, "error.");
+			useCase->setAudioDevice("a");
+			assertThrowsRequestFailure(useCase, "Audio device 'a' cannot be opened.");
 		}
 
 		void assertDocumenterLogIsStillEmpty(SignalProcessingUseCase *useCase) {
