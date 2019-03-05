@@ -302,11 +302,16 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 }
 
 void SpatialHearingAidModel::prepareNewTest(Testing *p) {
-	framesPerBufferForTest = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
+	framesPerBufferForTest = framesPerBuffer(p->processing);
 	processorFactoryForTest = makeProcessorFactory(p->processing);
 	prepareNewTest_(p);
+}
+
+int SpatialHearingAidModel::framesPerBuffer(SignalProcessing p) {
+	return 
+		p.usingHearingAidSimulation
+		? p.chunkSize
+		: defaultFramesPerBuffer;
 }
 
 std::shared_ptr<StereoSimulationFactory> SpatialHearingAidModel::makeProcessorFactory(
@@ -468,16 +473,14 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	if (player->isPlaying())
 		return;
 
-	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
+	const auto framesPerBuffer_ = framesPerBuffer(p->processing);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 
 	PlayAudioRequest request;
 	request.audioFilePath = std::move(p->audioFilePath);
 	request.audioDevice = std::move(p->audioDevice);
 	request.level_dB_Spl = p->level_dB_Spl;
-	request.framesPerBuffer = framesPerBuffer;
+	request.framesPerBuffer = framesPerBuffer_;
 	request.processorFactory = processorFactory_.get();
 	playAudio(&request);
 }
@@ -494,14 +497,12 @@ void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	loading.reader = reader;
 	loading.processorFactory = processorFactory_.get();
 	auto loader_ = makeLoader(&loading);
-	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
+	const auto framesPerBuffer_ = framesPerBuffer(p->processing);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
 	std::vector<channel_type> adapted;
 	for (auto &channel : channels) {
-		channel.resize(framesPerBuffer);
+		channel.resize(framesPerBuffer_);
 		adapted.push_back({ channel });
 	}
 	toWrite_.resize(reader->channels());

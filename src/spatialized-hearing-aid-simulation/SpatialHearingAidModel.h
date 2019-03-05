@@ -107,6 +107,7 @@ private:
 	std::shared_ptr<AudioLoader>makeLoader(MakeAudioLoader *);
 
 	void assertSizeIsPowerOfTwo(int);
+	int framesPerBuffer(SignalProcessing);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
