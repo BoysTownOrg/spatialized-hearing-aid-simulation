@@ -214,12 +214,12 @@ static std::string coefficientErrorMessage(std::string which) {
 }
 
 BrirReader::BinauralRoomImpulseResponse SpatialHearingAidModel::readAndCheckBrir(std::string filePath) {
-	auto brir = readBrir(std::move(filePath));
-	if (brir.left.empty())
+	auto brir_ = readBrir(std::move(filePath));
+	if (brir_.left.empty())
 		throw RequestFailure{ coefficientErrorMessage("left") };
-	if (brir.right.empty())
+	if (brir_.right.empty())
 		throw RequestFailure{ coefficientErrorMessage("right") };
-	return brir;
+	return brir_;
 }
 
 BrirReader::BinauralRoomImpulseResponse SpatialHearingAidModel::readBrir(std::string filePath) {
@@ -271,33 +271,40 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 	if (player->isPlaying())
 		return;
 
-	PlayAudioRequest request;
-	request.audioFilePath = nextStimulus_;
-	request.audioDevice = p->audioDevice;
-	request.level_dB_Spl = p->level_dB_Spl;
-	request.framesPerBuffer = framesPerBufferForTest;
-	request.processorFactory = processorFactoryForTest.get();
-	playAudio(&request);
+	auto reader = makeReader(nextStimulus_);
+	
+	auto factory = processorFactoryFactory->make(reader.get(), p->level_dB_Spl);
+	std::shared_ptr<AudioFrameProcessor> processor_{};
+	if (usingHearingAidSimulation && usingSpatialization)
+		processor_ = factory->makeFullSimulation(
+			brir,
+			hearingAidSimulation_
+		);
+	else if (usingSpatialization)
+		processor_ = factory->makeSpatialization(
+			brir
+		);
+	else if (usingHearingAidSimulation)
+		processor_ = factory->makeHearingAid(hearingAidSimulation_);
+	else
+		processor_ = factory->makeNoSimulation();
+
+	player->setAudioLoader(audioProcessingLoaderFactory->make(
+		reader, 
+		processor_)
+	);
+	AudioPlayer::Preparation playing;
+	playing.channels = reader->channels();
+	playing.sampleRate = reader->sampleRate();
+	playing.framesPerBuffer = framesPerBufferForTest;
+	playing.audioDevice = p->audioDevice;
+	prepareAudioPlayer(std::move(playing));
+	player->play();
 	Documenter::TrialParameters trial;
 	trial.level_dB_Spl = p->level_dB_Spl;
 	trial.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(trial));
 	nextStimulus_ = stimulusList->next();
-}
-
-void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
-	auto reader = makeReader(p->audioFilePath);
-	player->setAudioLoader(audioProcessingLoaderFactory->make(
-		reader, 
-		p->processorFactory->make(reader.get(), p->level_dB_Spl))
-	);
-	AudioPlayer::Preparation playing;
-	playing.channels = reader->channels();
-	playing.sampleRate = reader->sampleRate();
-	playing.framesPerBuffer = p->framesPerBuffer;
-	playing.audioDevice = p->audioDevice;
-	prepareAudioPlayer(std::move(playing));
-	player->play();
 }
 
 std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string filePath) {
@@ -325,15 +332,36 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;
-	auto processorFactory_ = makeProcessorFactory(p->processing);
 
-	PlayAudioRequest request;
-	request.audioFilePath = p->audioFilePath;
-	request.audioDevice = p->audioDevice;
-	request.level_dB_Spl = p->level_dB_Spl;
-	request.framesPerBuffer = framesPerBuffer;
-	request.processorFactory = processorFactory_.get();
-	playAudio(&request);
+	auto reader = makeReader(p->audioFilePath);
+
+	auto factory = processorFactoryFactory->make(reader.get(), p->level_dB_Spl);
+	std::shared_ptr<AudioFrameProcessor> processor_{};
+	if (p->processing.usingHearingAidSimulation && p->processing.usingSpatialization)
+		processor_ = factory->makeFullSimulation(
+			readAndCheckBrir(std::move(p->processing.brirFilePath)),
+			hearingAidSimulation(p->processing)
+		);
+	else if (p->processing.usingSpatialization)
+		processor_ = factory->makeSpatialization(
+			readAndCheckBrir(std::move(p->processing.brirFilePath))
+		);
+	else if (p->processing.usingHearingAidSimulation)
+		processor_ = factory->makeHearingAid(hearingAidSimulation(p->processing));
+	else
+		processor_ = factory->makeNoSimulation();
+
+	player->setAudioLoader(audioProcessingLoaderFactory->make(
+		reader, 
+		processor_)
+	);
+	AudioPlayer::Preparation playing;
+	playing.channels = reader->channels();
+	playing.sampleRate = reader->sampleRate();
+	playing.framesPerBuffer = framesPerBuffer;
+	playing.audioDevice = p->audioDevice;
+	prepareAudioPlayer(std::move(playing));
+	player->play();
 }
 
 void SpatialHearingAidModel::stopCalibration() {
@@ -342,8 +370,22 @@ void SpatialHearingAidModel::stopCalibration() {
 
 void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto reader = makeReader(p->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory(p->processing);
-	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
+	
+	auto factory = processorFactoryFactory->make(reader.get(), p->level_dB_Spl);
+	std::shared_ptr<AudioFrameProcessor> processor_{};
+	if (p->processing.usingHearingAidSimulation && p->processing.usingSpatialization)
+		processor_ = factory->makeFullSimulation(
+			readAndCheckBrir(std::move(p->processing.brirFilePath)),
+			hearingAidSimulation(p->processing)
+		);
+	else if (p->processing.usingSpatialization)
+		processor_ = factory->makeSpatialization(
+			readAndCheckBrir(std::move(p->processing.brirFilePath))
+		);
+	else if (p->processing.usingHearingAidSimulation)
+		processor_ = factory->makeHearingAid(hearingAidSimulation(p->processing));
+	else
+		processor_ = factory->makeNoSimulation();
 	auto loader_ = audioProcessingLoaderFactory->make(reader, processor_);
 	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
@@ -386,26 +428,6 @@ std::shared_ptr<AudioFrameWriter> SpatialHearingAidModel::makeWriter(std::string
 	catch (const AudioFrameWriterFactory::CreateError &e) {
 		throw RequestFailure{ e.what() };
 	}
-}
-
-std::shared_ptr<AudioFrameProcessor> SpatialHearingAidModel::makeProcessor(
-	AudioFrameReader * reader, 
-	double level_dB_Spl
-) {
-	auto factory = processorFactoryFactory->make(reader, level_dB_Spl);
-	if (p.usingHearingAidSimulation && p.usingSpatialization)
-		return factory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.brirFilePath)),
-			hearingAidSimulation(p)
-		);
-	else if (p.usingSpatialization)
-		return factory->makeSpatialization(
-			readAndCheckBrir(std::move(p.brirFilePath))
-		);
-	else if (p.usingHearingAidSimulation)
-		return factory->makeHearingAid(hearingAidSimulation(p));
-	else
-		return factory->makeNoSimulation();
 }
 
 bool SpatialHearingAidModel::testComplete() {
