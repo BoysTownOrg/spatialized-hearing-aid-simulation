@@ -57,16 +57,16 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
 			channelFactory->makeSpatialization(
 				left_spatial, 
-				stereo.leftChannelScale()
+				stereoCalibration.leftChannelScale()
 			), 
 			channelFactory->makeSpatialization(
 				right_spatial, 
-				stereo.rightChannelScale()
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
@@ -110,17 +110,16 @@ public:
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
-		
-		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
 			channelFactory->makeHearingAidSimulation(
 				left_hs, 
-				stereo.leftChannelScale()
+				stereoCalibration.leftChannelScale()
 			), 
 			channelFactory->makeHearingAidSimulation(
 				right_hs, 
-				stereo.rightChannelScale()
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
@@ -168,16 +167,16 @@ public:
 		left_fs.hearingAid.sampleRate = reader->sampleRate();
 		right_fs.hearingAid.sampleRate = reader->sampleRate();
 		
-		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
 			channelFactory->makeFullSimulation(
 				left_fs, 
-				stereo.leftChannelScale()
+				stereoCalibration.leftChannelScale()
 			), 
 			channelFactory->makeFullSimulation(
 				right_fs, 
-				stereo.rightChannelScale()
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
@@ -202,13 +201,14 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
+
 		return { 
 			channelFactory->makeWithoutSimulation(
-				stereo.leftChannelScale()
+				stereoCalibration.leftChannelScale()
 			), 
 			channelFactory->makeWithoutSimulation(
-				stereo.rightChannelScale()
+				stereoCalibration.rightChannelScale()
 			)
 		};
 	}
@@ -226,20 +226,20 @@ public:
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
 	std::shared_ptr<StereoSimulationFactory> makeSpatialization(
-		BrirReader::BinauralRoomImpulseResponse brir
+		BrirReader::BinauralRoomImpulseResponse hearingAid
 	) override {
 		return std::make_shared<StereoSpatializationFactory>(
-			std::move(brir), 
+			std::move(hearingAid), 
 			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
 	
 	std::shared_ptr<StereoSimulationFactory> makeHearingAid(
-		StereoSimulationFactory::HearingAidSimulation common
+		StereoSimulationFactory::HearingAidSimulation hearingAid
 	) override {
 		return std::make_shared<StereoHearingAidFactory>(
-			std::move(common),
+			std::move(hearingAid),
 			channelFactory, 
 			calibrationComputerFactory
 		);
@@ -247,11 +247,11 @@ public:
 
 	std::shared_ptr<StereoSimulationFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		StereoSimulationFactory::HearingAidSimulation common
+		StereoSimulationFactory::HearingAidSimulation hearingAid
 	) override {
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
-			std::move(common),
+			std::move(hearingAid),
 			channelFactory, 
 			calibrationComputerFactory
 		);
