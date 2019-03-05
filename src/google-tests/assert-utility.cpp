@@ -1,21 +1,30 @@
 #include "assert-utility.h"
 #include <gtest/gtest.h>
 
-void assertEqual(std::string expected, std::string actual) {
-	EXPECT_EQ(expected, actual);
-}
-
-void assertTrue(bool condition) {
+void assertTrue(bool condition) noexcept {
 	EXPECT_TRUE(condition);
 }
 
-void assertFalse(bool condition) {
+void assertFalse(bool condition) noexcept {
 	EXPECT_FALSE(condition);
 }
 
 template<typename T>
-void assertEqual(T expected, T actual) {
+void assertEqual(T expected, T actual) noexcept {
 	EXPECT_EQ(expected, actual);
+}
+
+template<typename T>
+void assertEqual(
+	T expected,
+	T actual,
+	T tolerance
+) noexcept {
+	EXPECT_NEAR(expected, actual, tolerance);
+}
+
+void assertEqual(std::string expected, std::string actual) noexcept {
+	assertEqual<std::string>(std::move(expected), std::move(actual));
 }
 
 template<typename T>
@@ -23,9 +32,9 @@ void assertEqual(
 	std::vector<T> expected,
 	std::vector<T> actual
 ) {
-	EXPECT_EQ(expected.size(), actual.size());
+	assertEqual<std::vector<T>::size_type>(expected.size(), actual.size());
 	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
-		EXPECT_EQ(expected.at(i), actual.at(i));
+		assertEqual<T>(expected.at(i), actual.at(i));
 }
 
 template<typename T>
@@ -34,9 +43,9 @@ void assertEqual(
 	std::vector<T> actual,
 	T tolerance
 ) {
-	EXPECT_EQ(expected.size(), actual.size());
+	assertEqual<std::vector<T>::size_type>(expected.size(), actual.size());
 	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
-		EXPECT_NEAR(expected.at(i), actual.at(i), tolerance);
+		assertEqual<T>(expected.at(i), actual.at(i), tolerance);
 }
 
 template void assertEqual(
@@ -66,10 +75,10 @@ template void assertEqual(
 	std::vector<std::string> actual
 );
 
-template void assertEqual(int, int);
-template void assertEqual(float, float);
-template void assertEqual(double, double);
-template void assertEqual(unsigned long, unsigned long);
-template void assertEqual(unsigned, unsigned);
-template void assertEqual(long long, long long);
-template void assertEqual(float *, float *);
+template void assertEqual(int, int) noexcept;
+template void assertEqual(float, float) noexcept;
+template void assertEqual(double, double) noexcept;
+template void assertEqual(unsigned long, unsigned long) noexcept;
+template void assertEqual(unsigned, unsigned) noexcept;
+template void assertEqual(long long, long long) noexcept;
+template void assertEqual(float *, float *) noexcept;

@@ -2,9 +2,9 @@
 #include <vector>
 
 template<typename T>
-void assertEqual(T expected, T actual);
+void assertEqual(T expected, T actual) noexcept;
 
-void assertEqual(std::string expected, std::string actual);
+void assertEqual(std::string expected, std::string actual) noexcept;
 
 template<typename T>
 void assertEqual(
@@ -19,5 +19,5 @@ void assertEqual(
 	T tolerance
 );
 
-void assertTrue(bool condition);
-void assertFalse(bool condition);
+void assertTrue(bool condition) noexcept;
+void assertFalse(bool condition) noexcept;
