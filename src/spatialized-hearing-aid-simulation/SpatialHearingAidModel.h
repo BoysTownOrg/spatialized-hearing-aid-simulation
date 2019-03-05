@@ -9,7 +9,7 @@
 #include "AudioProcessingLoader.h"
 #include "CalibrationComputer.h"
 #include "StimulusList.h"
-#include "Documenter.h"
+#include "TestDocumenter.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 #include <memory>
@@ -58,7 +58,7 @@ class SpatialHearingAidModel : public Model {
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<StereoSimulationFactory> processorFactoryForTest;
 	StimulusList *stimulusList;
-	Documenter *documenter;
+	TestDocumenter *documenter;
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	AudioFrameReaderFactory *audioReaderFactory;
@@ -69,7 +69,7 @@ class SpatialHearingAidModel : public Model {
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
-		Documenter *,
+		TestDocumenter *,
 		AudioPlayer *,
 		AudioProcessingLoaderFactory *,
 		AudioFrameReaderFactory *,

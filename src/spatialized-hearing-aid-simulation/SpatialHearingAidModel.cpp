@@ -271,7 +271,7 @@ int const SpatialHearingAidModel::defaultFramesPerBuffer = 1024;
 
 SpatialHearingAidModel::SpatialHearingAidModel(
 	StimulusList *stimulusList,
-	Documenter *documenter,
+	TestDocumenter *documenter,
 	AudioPlayer *player,
 	AudioProcessingLoaderFactory *audioLoaderFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
@@ -418,7 +418,7 @@ void SpatialHearingAidModel::playNextTrial(const Trial &p) {
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
 	playAudio(&request);
-	Documenter::TrialParameters trial;
+	TestDocumenter::TrialParameters trial;
 	trial.level_dB_Spl = p.level_dB_Spl;
 	trial.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(trial));

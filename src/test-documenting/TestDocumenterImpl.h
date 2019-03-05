@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PersistentMemoryWriter.h"
-#include <spatialized-hearing-aid-simulation/Documenter.h>
+#include <spatialized-hearing-aid-simulation/TestDocumenter.h>
 
 #ifdef TEST_DOCUMENTING_EXPORTS
 	#define TEST_DOCUMENTING_API __declspec(dllexport)
@@ -9,10 +9,10 @@
 	#define TEST_DOCUMENTING_API __declspec(dllimport)
 #endif
 
-class TestDocumenter : public Documenter {
+class TestDocumenterImpl : public TestDocumenter {
 	PersistentMemoryWriter *writer;
 public:
-	TEST_DOCUMENTING_API explicit TestDocumenter(PersistentMemoryWriter *);
+	TEST_DOCUMENTING_API explicit TestDocumenterImpl(PersistentMemoryWriter *);
 	TEST_DOCUMENTING_API void documentTestParameters(Model::Testing *) override;
 	TEST_DOCUMENTING_API void documentTrialParameters(TrialParameters) override;
 	TEST_DOCUMENTING_API void initialize(std::string filePath) override;

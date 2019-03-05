@@ -143,10 +143,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="PersistentMemoryWriter.h" />
-    <ClInclude Include="TestDocumenter.h" />
+    <ClInclude Include="TestDocumenterImpl.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestDocumenter.cpp" />
+    <ClCompile Include="TestDocumenterImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

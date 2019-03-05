@@ -1,10 +1,10 @@
 #pragma once
 
 #include "LogString.h"
-#include <spatialized-hearing-aid-simulation/Documenter.h>
+#include <spatialized-hearing-aid-simulation/TestDocumenter.h>
 #include <sstream>
 
-class DocumenterStub : public Documenter {
+class DocumenterStub : public TestDocumenter {
 	TrialParameters trialParameters_{};
 	LogString log_{};
 	std::stringstream content_{};
@@ -47,7 +47,7 @@ public:
 	}
 };
 
-class InitializationFailingDocumenter : public Documenter {
+class InitializationFailingDocumenter : public TestDocumenter {
 	std::string errorMessage_{};
 public:
 	void setErrorMessage(std::string s) {

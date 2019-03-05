@@ -5,9 +5,9 @@
 #include <common-includes/RuntimeError.h>
 #include <string>
 
-class Documenter {
+class TestDocumenter {
 public:
-	INTERFACE_OPERATIONS(Documenter);
+	INTERFACE_OPERATIONS(TestDocumenter);
 	virtual void initialize(std::string filePath) = 0;
 	RUNTIME_ERROR(InitializationFailure);
 

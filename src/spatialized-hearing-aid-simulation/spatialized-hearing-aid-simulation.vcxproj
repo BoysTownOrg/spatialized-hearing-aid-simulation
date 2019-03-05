@@ -163,7 +163,7 @@
     <ClInclude Include="CalibrationComputerImpl.h" />
     <ClInclude Include="ChannelCopier.h" />
     <ClInclude Include="ChannelProcessingGroup.h" />
-    <ClInclude Include="Documenter.h" />
+    <ClInclude Include="TestDocumenter.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="CalibrationComputer.h" />
     <ClInclude Include="SimulationChannelFactory.h" />

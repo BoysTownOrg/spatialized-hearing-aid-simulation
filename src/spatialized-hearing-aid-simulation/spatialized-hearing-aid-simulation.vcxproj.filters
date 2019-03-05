@@ -42,9 +42,6 @@
     <ClInclude Include="SignalProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Documenter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StimulusList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,6 +73,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CalibrationComputer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestDocumenter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

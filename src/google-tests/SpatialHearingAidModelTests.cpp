@@ -1662,7 +1662,7 @@ namespace {
 		FakeStimulusList defaultStimulusList{};
 		StimulusList *stimulusList{ &defaultStimulusList };
 		DocumenterStub defaultDocumenter{};
-		Documenter *documenter{ &defaultDocumenter };
+		TestDocumenter *documenter{ &defaultDocumenter };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioFrameWriterStubFactory defaultAudioWriterFactory{};

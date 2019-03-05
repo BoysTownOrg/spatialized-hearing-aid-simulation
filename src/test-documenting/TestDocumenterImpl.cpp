@@ -1,4 +1,4 @@
-#include "TestDocumenter.h"
+#include "TestDocumenterImpl.h"
 #include <sstream>
 #include <iomanip>
 
@@ -40,18 +40,18 @@ public:
 	}
 };
 
-TestDocumenter::TestDocumenter(
+TestDocumenterImpl::TestDocumenterImpl(
 	PersistentMemoryWriter *writer
 ) :
 	writer{ writer } {}
 
-void TestDocumenter::initialize(std::string filePath) {
+void TestDocumenterImpl::initialize(std::string filePath) {
 	writer->initialize(std::move(filePath));
 	if (writer->failed())
 		throw InitializationFailure{ writer->errorMessage() };
 }
 
-void TestDocumenter::documentTestParameters(Model::Testing *p) {
+void TestDocumenterImpl::documentTestParameters(Model::Testing *p) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("subject", p->subjectId);
 	stream.insertLabeledParameterLine("tester", p->testerId);
@@ -84,7 +84,7 @@ void TestDocumenter::documentTestParameters(Model::Testing *p) {
 	writer->write(stream.str());
 }
 
-void TestDocumenter::documentTrialParameters(TrialParameters p) {
+void TestDocumenterImpl::documentTrialParameters(TrialParameters p) {
 	FormattedStream stream;
 	stream.insertLabeledParameterLine("stimulus", p.stimulus);
 	stream.insertLabeledParameterLine("level (dB SPL)", p.level_dB_Spl);

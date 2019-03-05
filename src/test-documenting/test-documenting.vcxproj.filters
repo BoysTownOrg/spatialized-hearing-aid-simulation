@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestDocumenter.h">
+    <ClInclude Include="PersistentMemoryWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PersistentMemoryWriter.h">
+    <ClInclude Include="TestDocumenterImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestDocumenter.cpp">
+    <ClCompile Include="TestDocumenterImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
