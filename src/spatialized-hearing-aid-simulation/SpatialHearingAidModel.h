@@ -82,7 +82,7 @@ public:
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(Testing *) override;
 	SPATIALIZED_HA_SIMULATION_API void playNextTrial(Trial *) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
-	SPATIALIZED_HA_SIMULATION_API void playCalibration(Calibration *) override;
+	SPATIALIZED_HA_SIMULATION_API void playCalibration(const Calibration &) override;
 	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(const SavingAudio &) override;
 	SPATIALIZED_HA_SIMULATION_API void saveAudio(std::string) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;

@@ -265,7 +265,7 @@ void Presenter::playCalibration_() {
 	calibration_.audioFilePath = view->testSetup()->audioFilePath();
 	calibration_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	calibration_.processing = signalProcessing();
-	model->playCalibration(&calibration_);
+	model->playCalibration(calibration_);
 }
 
 void Presenter::stopCalibration() {

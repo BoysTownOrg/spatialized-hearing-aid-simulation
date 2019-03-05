@@ -62,8 +62,8 @@ public:
 		return calibrationStopped_;
 	}
 
-	void playCalibration(Calibration *p) override {
-		calibrationParameters_ = *p;
+	void playCalibration(const Calibration &p) override {
+		calibrationParameters_ = p;
 		calibrationPlayed_ = true;
 	}
 
@@ -133,7 +133,7 @@ public:
 		throw RequestFailure{ message };
 	}
 
-	void playCalibration(Calibration *) override {
+	void playCalibration(const Calibration &) override {
 		throw RequestFailure{ message };
 	}
 

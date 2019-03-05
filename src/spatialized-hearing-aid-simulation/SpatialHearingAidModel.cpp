@@ -469,17 +469,17 @@ void SpatialHearingAidModel::prepareAudioPlayer(AudioPlayer::Preparation p) {
 	}
 }
 
-void SpatialHearingAidModel::playCalibration(Calibration *p) {
+void SpatialHearingAidModel::playCalibration(const Calibration &p) {
 	if (player->isPlaying())
 		return;
 
-	const auto framesPerBuffer_ = framesPerBuffer(p->processing);
-	auto processorFactory_ = makeProcessorFactory(p->processing);
+	const auto framesPerBuffer_ = framesPerBuffer(p.processing);
+	auto processorFactory_ = makeProcessorFactory(p.processing);
 
 	PlayAudioRequest request;
-	request.audioFilePath = std::move(p->audioFilePath);
-	request.audioDevice = std::move(p->audioDevice);
-	request.level_dB_Spl = p->level_dB_Spl;
+	request.audioFilePath = std::move(p.audioFilePath);
+	request.audioDevice = std::move(p.audioDevice);
+	request.level_dB_Spl = p.level_dB_Spl;
 	request.framesPerBuffer = framesPerBuffer_;
 	request.processorFactory = processorFactory_.get();
 	playAudio(&request);

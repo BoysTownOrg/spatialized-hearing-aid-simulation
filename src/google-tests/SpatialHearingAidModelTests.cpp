@@ -240,7 +240,7 @@ namespace {
 		SpatialHearingAidModel::Calibration calibration{};
 	public:
 		void run(Model *model) override {
-			model->playCalibration(&calibration);
+			model->playCalibration(calibration);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -440,7 +440,7 @@ namespace {
 		}
 
 		void playCalibration() {
-			model.playCalibration(&calibration);
+			model.playCalibration(calibration);
 		}
 
 		void processAudioForSaving() {

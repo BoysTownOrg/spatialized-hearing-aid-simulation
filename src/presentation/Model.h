@@ -43,7 +43,7 @@ public:
 		std::string audioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void playCalibration(Calibration *) = 0;
+	virtual void playCalibration(const Calibration &) = 0;
 	virtual void stopCalibration() = 0;
 
 	struct SavingAudio {
