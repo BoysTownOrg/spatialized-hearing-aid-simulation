@@ -17,7 +17,7 @@ class HearingAidProcessor {
 	std::vector<FilterbankCompressor::complex_type> buffer;
 	std::shared_ptr<FilterbankCompressor> compressor;
 public:
-	using signal_type = gsl::span<float>;
+	using signal_type = gsl::span<FilterbankCompressor::real_type>;
 	using index_type = signal_type::index_type;
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
 		std::shared_ptr<FilterbankCompressor>

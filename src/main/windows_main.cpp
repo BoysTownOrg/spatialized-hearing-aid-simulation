@@ -17,7 +17,7 @@
 #include <playing-audio/AudioDevicePlayer.h>
 #include <stimulus-list/RandomizedStimulusList.h>
 #include <stimulus-list/FileFilterDecorator.h>
-#include <test-documenting/TestDocumenter.h>
+#include <test-documenting/TestDocumenterImpl.h>
 #include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <spatialized-hearing-aid-simulation/ChannelCopier.h>
 #include <spatialized-hearing-aid-simulation/SimulationChannelFactoryImpl.h>
@@ -75,7 +75,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	MersenneTwisterRandomizer randomizer{};
 	RandomizedStimulusList stimulusList{&fileDecorator, &randomizer};
 	FileSystemWriter persistentWriter;
-	TestDocumenter testDocumenter{ &persistentWriter };
+	TestDocumenterImpl testDocumenter{ &persistentWriter };
 	PortAudioDevice audioDevice{};
 	AudioDevicePlayer player{&audioDevice};
 	ZeroPaddedLoaderFactory audioLoaderFactory{};
