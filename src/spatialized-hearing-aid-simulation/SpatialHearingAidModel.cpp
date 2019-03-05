@@ -301,7 +301,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 {
 }
 
-void SpatialHearingAidModel::prepareNewTest(const Testing & p) {
+void SpatialHearingAidModel::prepareNewTest(const Testing &p) {
 	framesPerBufferForTest = framesPerBuffer(p.processing);
 	processorFactoryForTest = makeProcessorFactory(p.processing);
 	prepareNewTest_(p);
@@ -433,7 +433,7 @@ void SpatialHearingAidModel::playAudio(const PlayAudioRequest &p) {
 	preparation.sampleRate = reader->sampleRate();
 	preparation.framesPerBuffer = p.framesPerBuffer;
 	preparation.audioDevice = std::move(p.audioDevice);
-	prepareAudioPlayer(std::move(preparation));
+	prepareAudioPlayer(preparation);
 
 	MakeAudioLoader makingLoader;
 	makingLoader.level_dB_Spl = p.level_dB_Spl;
