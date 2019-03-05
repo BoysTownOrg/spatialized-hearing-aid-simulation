@@ -410,11 +410,11 @@ public:
 		listener_->browseForLeftDslPrescription();
 	}
 
-	void cancelWhenBrowsingForOpeningFile() {
+	void cancelWhenBrowsingForOpeningFile() noexcept {
 		cancelOpeningForSavingFile_ = true;
 	}
 
-	void cancelWhenBrowsingForSavingFile() {
+	void cancelWhenBrowsingForSavingFile() noexcept {
 		cancelBrowsingForSavingFile_ = true;
 	}
 

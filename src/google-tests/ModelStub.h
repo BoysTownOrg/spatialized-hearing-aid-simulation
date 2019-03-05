@@ -19,7 +19,7 @@ class ModelStub : public Model {
 	bool testPrepared_{};
 	bool audioSaved_{};
 public:
-	auto &saveAudioLog() const {
+	auto &saveAudioLog() const noexcept {
 		return saveAudioLog_;
 	}
 

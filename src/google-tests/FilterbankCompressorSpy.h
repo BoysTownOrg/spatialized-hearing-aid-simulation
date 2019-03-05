@@ -15,7 +15,7 @@ class FilterbankCompressorSpy : public FilterbankCompressor {
 	int windowSize_{};
 	bool failed_{};
 public:
-	auto &processingLog() const {
+	auto &processingLog() const noexcept {
 		return processingLog_;
 	}
 
