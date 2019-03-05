@@ -156,6 +156,10 @@ namespace {
 		void setBrirFilePath(std::string s) override {
 			::setBrirFilePath(testing.processing, std::move(s));
 		}
+
+		void setTestFilePath(std::string s) {
+			testing.testFilePath = std::move(s);
+		}
 	};
 
 	class PlayingAudioUseCase : 
@@ -1795,8 +1799,8 @@ namespace {
 	) {
 		InitializationFailingDocumenter failing;
 		documenter = &failing;
-		failing.setErrorMessage("error.");
-		assertThrowsRequestFailure(&preparingNewTest, "error.");
+		preparingNewTest.setTestFilePath("a");
+		assertThrowsRequestFailure(&preparingNewTest, "Test file 'a' cannot be written.");
 	}
 
 	TEST_F(

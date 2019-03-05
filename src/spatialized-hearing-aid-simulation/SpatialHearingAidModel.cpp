@@ -402,6 +402,9 @@ void SpatialHearingAidModel::prepareNewTest_(const Testing &p) {
 		documenter->documentTestParameters(p);
 		nextStimulus_ = stimulusList->next();
 	}
+	catch (const TestDocumenter::InitializationFailure &) {
+		throw RequestFailure{ "Test file '" + p.testFilePath + "' cannot be written." };
+	}
 	catch (const std::runtime_error &e) {
 		throw RequestFailure{ e.what() };
 	}
