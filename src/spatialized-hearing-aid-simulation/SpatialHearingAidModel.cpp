@@ -408,7 +408,7 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 
 	PlayAudioRequest request;
 	request.audioFilePath = nextStimulus_;
-	request.audioDevice = p->audioDevice;
+	request.audioDevice = std::move(p->audioDevice);
 	request.level_dB_Spl = p->level_dB_Spl;
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
@@ -422,17 +422,20 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 
 void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
 	auto reader = makeReader(p->audioFilePath);
-	MakeAudioLoader loading;
-	loading.level_dB_Spl = p->level_dB_Spl;
-	loading.reader = reader;
-	loading.processorFactory = p->processorFactory;
-	player->setAudioLoader(makeLoader(&loading));
-	AudioPlayer::Preparation playing;
-	playing.channels = reader->channels();
-	playing.sampleRate = reader->sampleRate();
-	playing.framesPerBuffer = p->framesPerBuffer;
-	playing.audioDevice = p->audioDevice;
-	prepareAudioPlayer(std::move(playing));
+
+	AudioPlayer::Preparation preparation;
+	preparation.channels = reader->channels();
+	preparation.sampleRate = reader->sampleRate();
+	preparation.framesPerBuffer = p->framesPerBuffer;
+	preparation.audioDevice = std::move(p->audioDevice);
+	prepareAudioPlayer(std::move(preparation));
+
+	MakeAudioLoader makingLoader;
+	makingLoader.level_dB_Spl = p->level_dB_Spl;
+	makingLoader.reader = std::move(reader);
+	makingLoader.processorFactory = p->processorFactory;
+	player->setAudioLoader(makeLoader(&makingLoader));
+
 	player->play();
 }
 
@@ -471,8 +474,8 @@ void SpatialHearingAidModel::playCalibration(Calibration *p) {
 	auto processorFactory_ = makeProcessorFactory(p->processing);
 
 	PlayAudioRequest request;
-	request.audioFilePath = p->audioFilePath;
-	request.audioDevice = p->audioDevice;
+	request.audioFilePath = std::move(p->audioFilePath);
+	request.audioDevice = std::move(p->audioDevice);
 	request.level_dB_Spl = p->level_dB_Spl;
 	request.framesPerBuffer = framesPerBuffer;
 	request.processorFactory = processorFactory_.get();
