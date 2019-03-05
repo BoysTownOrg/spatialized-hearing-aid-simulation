@@ -2,6 +2,27 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
+class StereoCalibration {
+	std::shared_ptr<CalibrationComputer> computer;
+	double digitalLevel;
+public:
+	StereoCalibration(
+		std::shared_ptr<CalibrationComputer> computer, 
+		double level_dB_Spl
+	) :
+		computer{ std::move(computer) },
+		digitalLevel{ level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl }
+	{}
+
+	float leftChannelScale() {
+		return gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel));
+	}
+
+	float rightChannelScale() {
+		return gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel));
+	}
+};
+
 class NullProcessorFactory : public StereoSimulationFactory {
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override { return {}; }
 };
@@ -9,15 +30,15 @@ class NullProcessorFactory : public StereoSimulationFactory {
 class StereoSpatializationFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::Spatialization left_spatial;
 	SimulationChannelFactory::Spatialization right_spatial;
-	SimulationChannelFactory *simulationFactory;
+	SimulationChannelFactory *channelFactory;
 	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		SimulationChannelFactory *simulationFactory,
+		SimulationChannelFactory *channelFactory,
 		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
 		left_spatial.filterCoefficients = std::move(brir_.left);
@@ -32,17 +53,16 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeSpatialization(
+			channelFactory->makeSpatialization(
 				left_spatial, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereo.leftChannelScale()
 			), 
-			simulationFactory->makeSpatialization(
+			channelFactory->makeSpatialization(
 				right_spatial, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereo.rightChannelScale()
 			) 
 		};
 	}
@@ -51,15 +71,15 @@ public:
 class StereoHearingAidFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::HearingAidSimulation left_hs;
 	SimulationChannelFactory::HearingAidSimulation right_hs;
-	SimulationChannelFactory *simulationFactory;
+	SimulationChannelFactory *channelFactory;
 	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoHearingAidFactory(
 		HearingAidSimulation processing,
-		SimulationChannelFactory *simulationFactory,
+		SimulationChannelFactory *channelFactory,
 		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
 		SimulationChannelFactory::HearingAidSimulation both_hs;
@@ -86,17 +106,17 @@ public:
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		
+		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeHearingAidSimulation(
+			channelFactory->makeHearingAidSimulation(
 				left_hs, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereo.leftChannelScale()
 			), 
-			simulationFactory->makeHearingAidSimulation(
+			channelFactory->makeHearingAidSimulation(
 				right_hs, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereo.rightChannelScale()
 			) 
 		};
 	}
@@ -105,16 +125,16 @@ public:
 class StereoSpatializedHearingAidSimulationFactory : public StereoSimulationFactory {	
 	SimulationChannelFactory::FullSimulation left_fs;	
 	SimulationChannelFactory::FullSimulation right_fs;
-	SimulationChannelFactory *simulationFactory;
+	SimulationChannelFactory *channelFactory;
 	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		StereoSimulationFactory::HearingAidSimulation processing,
-		SimulationChannelFactory *simulationFactory,
+		SimulationChannelFactory *channelFactory,
 		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
 		left_fs.spatialization.filterCoefficients = std::move(brir_.left);
@@ -143,32 +163,31 @@ public:
 	) {
 		left_fs.hearingAid.sampleRate = reader->sampleRate();
 		right_fs.hearingAid.sampleRate = reader->sampleRate();
-
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		
+		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeFullSimulation(
+			channelFactory->makeFullSimulation(
 				left_fs, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereo.leftChannelScale()
 			), 
-			simulationFactory->makeFullSimulation(
+			channelFactory->makeFullSimulation(
 				right_fs, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereo.rightChannelScale()
 			) 
 		};
 	}
 };
 
 class StereoNoSimulation : public StereoSimulationFactory {
-	SimulationChannelFactory *simulationFactory;
+	SimulationChannelFactory *channelFactory;
 	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoNoSimulation(
-		SimulationChannelFactory *simulationFactory,
+		SimulationChannelFactory *channelFactory,
 		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -179,28 +198,27 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		StereoCalibration stereo{ calibrationComputerFactory->make(reader), level_dB_Spl };
 		return { 
-			simulationFactory->makeWithoutSimulation(
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+			channelFactory->makeWithoutSimulation(
+				stereo.leftChannelScale()
 			), 
-			simulationFactory->makeWithoutSimulation(
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+			channelFactory->makeWithoutSimulation(
+				stereo.rightChannelScale()
 			)
 		};
 	}
 };
 
 class StereoProcessorFactoryFactory : public AudioFrameProcessorFactoryFactory {
-	SimulationChannelFactory *simulationFactory;
+	SimulationChannelFactory *channelFactory;
 	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoProcessorFactoryFactory(
-		SimulationChannelFactory *simulationFactory,
+		SimulationChannelFactory *channelFactory,
 		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
 	std::shared_ptr<StereoSimulationFactory> makeSpatialization(
@@ -208,7 +226,7 @@ public:
 	) override {
 		return std::make_shared<StereoSpatializationFactory>(
 			std::move(brir), 
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
@@ -218,7 +236,7 @@ public:
 	) override {
 		return std::make_shared<StereoHearingAidFactory>(
 			std::move(common),
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
@@ -230,14 +248,14 @@ public:
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
 			std::move(common),
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
 
 	std::shared_ptr<StereoSimulationFactory> makeNoSimulation() override {
 		return std::make_shared<StereoNoSimulation>(
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
@@ -256,7 +274,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	SimulationChannelFactory *simulationFactory,
+	SimulationChannelFactory *channelFactory,
 	CalibrationComputerFactory *calibrationComputerFactory
 ) :
 	stimulusList{ stimulusList },
@@ -269,7 +287,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	audioProcessingLoaderFactory{ audioLoaderFactory },
 	processorFactoryFactory{
 		std::make_shared<StereoProcessorFactoryFactory>(
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		)
 	},
