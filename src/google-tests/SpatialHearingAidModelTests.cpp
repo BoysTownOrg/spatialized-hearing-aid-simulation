@@ -160,6 +160,10 @@ namespace {
 		void setTestFilePath(std::string s) {
 			testing.testFilePath = std::move(s);
 		}
+
+		void setAudioDirectory(std::string s) {
+			testing.audioDirectory = std::move(s);
+		}
 	};
 
 	class PlayingAudioUseCase : 
@@ -1808,9 +1812,9 @@ namespace {
 		prepareNewTestThrowsRequestFailureWhenStimulusListFails
 	) {
 		FailsToInitializeStimulusList failing;
-		failing.setErrorMessage("error.");
 		stimulusList = &failing;
-		assertThrowsRequestFailure(&preparingNewTest, "error.");
+		preparingNewTest.setAudioDirectory("a");
+		assertThrowsRequestFailure(&preparingNewTest, "Stimulus list 'a' cannot be read.");
 	}
 
 	TEST_F(

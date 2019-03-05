@@ -405,8 +405,8 @@ void SpatialHearingAidModel::prepareNewTest_(const Testing &p) {
 	catch (const TestDocumenter::InitializationFailure &) {
 		throw RequestFailure{ "Test file '" + p.testFilePath + "' cannot be written." };
 	}
-	catch (const std::runtime_error &e) {
-		throw RequestFailure{ e.what() };
+	catch (const StimulusList::InitializationFailure &) {
+		throw RequestFailure{ "Stimulus list '" + p.audioDirectory + "' cannot be read." };
 	}
 }
 
