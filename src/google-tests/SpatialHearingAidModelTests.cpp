@@ -1769,10 +1769,11 @@ namespace {
 			);
 		}
 
-		void assertThrowsRequestFailureWhenAudioReaderFactoryFails(UseCase *useCase) {
-			ErrorAudioFrameReaderFactory failing{ "error." };
+		void assertThrowsRequestFailureWhenAudioReaderFactoryFails(AudioFileUseCase *useCase) {
+			ErrorAudioFrameReaderFactory failing{};
 			audioReaderFactory = &failing;
-			assertThrowsRequestFailure(useCase, "error.");
+			useCase->setAudioFilePath("a");
+			assertThrowsRequestFailure(useCase, "Audio file 'a' cannot be read.");
 		}
 
 		void assertThrowsRequestFailureWhenAudioPlayerFailsToPrepare(UseCase *useCase) {
@@ -1916,7 +1917,10 @@ namespace {
 		RefactoredModelFailureTests,
 		playTrialThrowsRequestFailureWhenAudioFrameReaderCannotBeCreated
 	) {
-		assertThrowsRequestFailureWhenAudioReaderFactoryFails(&playingTrial);
+		ErrorAudioFrameReaderFactory failing{};
+		audioReaderFactory = &failing;
+		defaultStimulusList.setContents({ "a" });
+		assertThrowsRequestFailure(&playingFirstTrialOfNewTest, "Audio file 'a' cannot be read.");
 	}
 
 	TEST_F(

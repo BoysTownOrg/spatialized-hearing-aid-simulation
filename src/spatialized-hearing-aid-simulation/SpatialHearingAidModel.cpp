@@ -453,10 +453,10 @@ std::shared_ptr<AudioLoader> SpatialHearingAidModel::makeLoader(const MakeAudioL
 
 std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string filePath) {
 	try {
-		return audioReaderFactory->make(std::move(filePath));
+		return audioReaderFactory->make(filePath);
 	}
-	catch (const AudioFrameReaderFactory::CreateError &e) {
-		throw RequestFailure{ e.what() };
+	catch (const AudioFrameReaderFactory::CreateError &) {
+		throw RequestFailure{ "Audio file '" + filePath + "' cannot be read." };
 	}
 }
 

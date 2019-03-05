@@ -102,7 +102,7 @@ class ErrorAudioFrameReaderFactory : public AudioFrameReaderFactory {
 	std::string errorMessage{};
 public:
 	explicit ErrorAudioFrameReaderFactory(
-		std::string errorMessage
+		std::string errorMessage = {}
 	) noexcept : 
 		errorMessage{ std::move(errorMessage) } {}
 
