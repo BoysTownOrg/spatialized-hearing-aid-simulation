@@ -489,15 +489,15 @@ void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
 }
 
-void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
-	auto reader = makeReader(p->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory(p->processing);
+void SpatialHearingAidModel::processAudioForSaving(const SavingAudio &p) {
+	auto reader = makeReader(p.inputAudioFilePath);
+	auto processorFactory_ = makeProcessorFactory(p.processing);
 	MakeAudioLoader loading;
-	loading.level_dB_Spl = p->level_dB_Spl;
+	loading.level_dB_Spl = p.level_dB_Spl;
 	loading.reader = reader;
 	loading.processorFactory = processorFactory_.get();
 	auto loader_ = makeLoader(&loading);
-	const auto framesPerBuffer_ = framesPerBuffer(p->processing);
+	const auto framesPerBuffer_ = framesPerBuffer(p.processing);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
 	std::vector<channel_type> adapted;

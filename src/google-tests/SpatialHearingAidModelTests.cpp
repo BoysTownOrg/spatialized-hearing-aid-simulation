@@ -304,7 +304,7 @@ namespace {
 		SpatialHearingAidModel::SavingAudio savingAudio{};
 	public:
 		void run(Model *model) override {
-			model->processAudioForSaving(&savingAudio);
+			model->processAudioForSaving(savingAudio);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -444,7 +444,7 @@ namespace {
 		}
 
 		void processAudioForSaving() {
-			model.processAudioForSaving(&savingAudio);
+			model.processAudioForSaving(savingAudio);
 		}
 
 		void runUseCase(UseCase *useCase) {

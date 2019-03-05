@@ -31,8 +31,8 @@ public:
 		return calibrationParameters_;
 	}
 
-	void processAudioForSaving(SavingAudio *p) override {
-		saveAudioParameters_ = *p;
+	void processAudioForSaving(const SavingAudio &p) override {
+		saveAudioParameters_ = p;
 		saveAudioLog_.insert("processAudioForSaving ");
 	}
 
@@ -140,6 +140,6 @@ public:
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void processAudioForSaving(SavingAudio *) override {}
+	void processAudioForSaving(const SavingAudio &) override {}
 	void saveAudio(std::string) override {}
 };

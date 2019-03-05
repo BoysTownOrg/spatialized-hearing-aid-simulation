@@ -244,7 +244,7 @@ void Presenter::saveAudio_() {
 	saving_.inputAudioFilePath = view->testSetup()->audioFilePath();
 	saving_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	saving_.processing = signalProcessing();
-	model->processAudioForSaving(&saving_);
+	model->processAudioForSaving(saving_);
 	auto save = view->browseForSavingFile({ "*.wav" });
 	if (!view->browseCancelled())
 		model->saveAudio(save);

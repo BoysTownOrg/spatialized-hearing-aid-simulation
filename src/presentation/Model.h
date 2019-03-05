@@ -51,7 +51,7 @@ public:
 		std::string inputAudioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void processAudioForSaving(SavingAudio *) = 0;
+	virtual void processAudioForSaving(const SavingAudio &) = 0;
 	virtual void saveAudio(std::string filePath) = 0;
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
