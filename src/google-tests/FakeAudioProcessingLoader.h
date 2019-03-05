@@ -18,10 +18,11 @@ public:
 	}
 
 	void load(gsl::span<channel_type> audio) override {
-		std::vector<buffer_type> stored(audio.size());
-		for (int i = 0; i < audio.size(); ++i)
-			for (auto x : audio.at(i))
-				stored.at(i).push_back(x);
+		std::vector<buffer_type> stored{};
+		for (auto channel : audio) {
+			stored.push_back(buffer_type{});
+			std::copy(channel.begin(), channel.end(), std::back_inserter(stored.back()));
+		}
 		audio_.push_back(std::move(stored));
 		++loadCount_;
 	}
