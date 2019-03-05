@@ -3,7 +3,7 @@
 #include "ArgumentCollection.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class FakeAudioLoader : public AudioLoader {
+class AudioLoaderSpy : public AudioLoader {
 	using buffer_type = std::vector<channel_type::element_type>;
 	ArgumentCollection<std::vector<buffer_type>> audio_{};
 	int loadCount_{};
@@ -32,11 +32,12 @@ public:
 	}
 };
 
-class FakeAudioProcessingLoader2 : public AudioLoader {
-	std::vector<float> audioToLoad_{};
-	std::vector<float>::size_type head{};
+class FakeAudioLoader : public AudioLoader {
+	using buffer_type = std::vector<channel_type::element_type>;
+	buffer_type audioToLoad_{};
+	buffer_type::size_type head{};
 public:
-	void setAudioToLoad(std::vector<float> x) {
+	void setAudioToLoad(buffer_type x) {
 		audioToLoad_ = std::move(x);
 	}
 

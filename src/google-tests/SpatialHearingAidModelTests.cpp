@@ -1585,8 +1585,8 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsAudioUntilComplete) {
-		std::shared_ptr<FakeAudioLoader> fakeLoader = 
-			std::make_shared<FakeAudioLoader>();
+		std::shared_ptr<AudioLoaderSpy> fakeLoader = 
+			std::make_shared<AudioLoaderSpy>();
 		fakeLoader->setLoadCompleteThreshold(2);
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
@@ -1594,8 +1594,8 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsChannelSizeMatchedAudio) {
-		std::shared_ptr<FakeAudioLoader> fakeLoader = 
-			std::make_shared<FakeAudioLoader>();
+		std::shared_ptr<AudioLoaderSpy> fakeLoader = 
+			std::make_shared<AudioLoaderSpy>();
 		audioFrameReader->setChannels(3);
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
@@ -1607,8 +1607,8 @@ namespace {
 		SpatialHearingAidModelTests, 
 		processAudioForSavingLoadsChunkSizedChannelsWhenUsingHearingAidSimulation
 	) {
-		std::shared_ptr<FakeAudioLoader> fakeLoader = 
-			std::make_shared<FakeAudioLoader>();
+		std::shared_ptr<AudioLoaderSpy> fakeLoader = 
+			std::make_shared<AudioLoaderSpy>();
 		audioFrameReader->setChannels(2);
 		savingAudio.processing.chunkSize = 4;
 		savingAudio.processing.usingHearingAidSimulation = true;
@@ -1623,8 +1623,8 @@ namespace {
 		SpatialHearingAidModelTests, 
 		processAudioForSavingLoadsDefaultFrameSizeChannelsWhenNotUsingHearingAidSimulation
 	) {
-		std::shared_ptr<FakeAudioLoader> fakeLoader = 
-			std::make_shared<FakeAudioLoader>();
+		std::shared_ptr<AudioLoaderSpy> fakeLoader = 
+			std::make_shared<AudioLoaderSpy>();
 		audioFrameReader->setChannels(2);
 		savingAudio.processing.usingHearingAidSimulation = false;
 		audioLoaderFactory.setLoader(fakeLoader);
@@ -1643,8 +1643,8 @@ namespace {
 	}
 
 	TEST_F(SpatialHearingAidModelTests, savingAudioWritesPreviouslyProcessedAudio) {
-		std::shared_ptr<FakeAudioProcessingLoader2> fakeLoader = 
-			std::make_shared<FakeAudioProcessingLoader2>();
+		std::shared_ptr<FakeAudioLoader> fakeLoader = 
+			std::make_shared<FakeAudioLoader>();
 		fakeLoader->setAudioToLoad({ 1, 2, 3, 4, 5, 6, 7, 8 });
 		audioFrameReader->setChannels(2);
 		savingAudio.processing.chunkSize = 4;
