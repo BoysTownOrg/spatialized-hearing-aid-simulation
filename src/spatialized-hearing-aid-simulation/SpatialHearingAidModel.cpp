@@ -307,7 +307,7 @@ void SpatialHearingAidModel::prepareNewTest(const Testing & p) {
 	prepareNewTest_(p);
 }
 
-int SpatialHearingAidModel::framesPerBuffer(SignalProcessing p) {
+int SpatialHearingAidModel::framesPerBuffer(const SignalProcessing &p) {
 	return 
 		p.usingHearingAidSimulation
 		? p.chunkSize
@@ -315,7 +315,7 @@ int SpatialHearingAidModel::framesPerBuffer(SignalProcessing p) {
 }
 
 std::shared_ptr<StereoSimulationFactory> SpatialHearingAidModel::makeProcessorFactory(
-	SignalProcessing p
+	const SignalProcessing &p
 ) {
 	if (p.usingHearingAidSimulation && p.usingSpatialization)
 		return processorFactoryFactory->makeFullSimulation(
@@ -333,7 +333,7 @@ std::shared_ptr<StereoSimulationFactory> SpatialHearingAidModel::makeProcessorFa
 }
 
 StereoSimulationFactory::HearingAidSimulation 
-	SpatialHearingAidModel::hearingAidSimulation(SignalProcessing p) 
+	SpatialHearingAidModel::hearingAidSimulation(const SignalProcessing &p) 
 {
 	assertSizeIsPowerOfTwo(p.chunkSize);
 	assertSizeIsPowerOfTwo(p.windowSize);
@@ -417,7 +417,7 @@ void SpatialHearingAidModel::playNextTrial(const Trial &p) {
 	request.level_dB_Spl = p.level_dB_Spl;
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
-	playAudio(&request);
+	playAudio(request);
 	TestDocumenter::TrialParameters trial;
 	trial.level_dB_Spl = p.level_dB_Spl;
 	trial.stimulus = nextStimulus_;
@@ -425,29 +425,29 @@ void SpatialHearingAidModel::playNextTrial(const Trial &p) {
 	nextStimulus_ = stimulusList->next();
 }
 
-void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
-	auto reader = makeReader(p->audioFilePath);
+void SpatialHearingAidModel::playAudio(const PlayAudioRequest &p) {
+	auto reader = makeReader(p.audioFilePath);
 
 	AudioPlayer::Preparation preparation;
 	preparation.channels = reader->channels();
 	preparation.sampleRate = reader->sampleRate();
-	preparation.framesPerBuffer = p->framesPerBuffer;
-	preparation.audioDevice = std::move(p->audioDevice);
+	preparation.framesPerBuffer = p.framesPerBuffer;
+	preparation.audioDevice = std::move(p.audioDevice);
 	prepareAudioPlayer(std::move(preparation));
 
 	MakeAudioLoader makingLoader;
-	makingLoader.level_dB_Spl = p->level_dB_Spl;
+	makingLoader.level_dB_Spl = p.level_dB_Spl;
 	makingLoader.reader = std::move(reader);
-	makingLoader.processorFactory = p->processorFactory;
-	player->setAudioLoader(makeLoader(&makingLoader));
+	makingLoader.processorFactory = p.processorFactory;
+	player->setAudioLoader(makeLoader(makingLoader));
 
 	player->play();
 }
 
-std::shared_ptr<AudioLoader> SpatialHearingAidModel::makeLoader(MakeAudioLoader *p) {
+std::shared_ptr<AudioLoader> SpatialHearingAidModel::makeLoader(const MakeAudioLoader &p) {
 	return audioProcessingLoaderFactory->make(
-		p->reader, 
-		p->processorFactory->make(p->reader.get(), p->level_dB_Spl)
+		p.reader, 
+		p.processorFactory->make(p.reader.get(), p.level_dB_Spl)
 	);
 }
 
@@ -460,9 +460,9 @@ std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string
 	}
 }
 
-void SpatialHearingAidModel::prepareAudioPlayer(AudioPlayer::Preparation p) {
+void SpatialHearingAidModel::prepareAudioPlayer(const AudioPlayer::Preparation &p) {
 	try {
-		player->prepareToPlay(std::move(p));
+		player->prepareToPlay(p);
 	}
 	catch (const AudioPlayer::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
@@ -482,7 +482,7 @@ void SpatialHearingAidModel::playCalibration(const Calibration &p) {
 	request.level_dB_Spl = p.level_dB_Spl;
 	request.framesPerBuffer = framesPerBuffer_;
 	request.processorFactory = processorFactory_.get();
-	playAudio(&request);
+	playAudio(request);
 }
 
 void SpatialHearingAidModel::stopCalibration() {
@@ -496,7 +496,7 @@ void SpatialHearingAidModel::processAudioForSaving(const SavingAudio &p) {
 	loading.level_dB_Spl = p.level_dB_Spl;
 	loading.reader = reader;
 	loading.processorFactory = processorFactory_.get();
-	auto loader_ = makeLoader(&loading);
+	auto loader_ = makeLoader(loading);
 	const auto framesPerBuffer_ = framesPerBuffer(p.processing);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());

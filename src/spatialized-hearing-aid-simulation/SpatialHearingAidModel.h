@@ -97,24 +97,24 @@ private:
 		int framesPerBuffer;
 		StereoSimulationFactory *processorFactory;
 	};
-	void playAudio(PlayAudioRequest *);
+	void playAudio(const PlayAudioRequest &);
 	
 	struct MakeAudioLoader {
 		double level_dB_Spl;
 		std::shared_ptr<AudioFrameReader> reader;
 		StereoSimulationFactory *processorFactory;
 	};
-	std::shared_ptr<AudioLoader>makeLoader(MakeAudioLoader *);
+	std::shared_ptr<AudioLoader>makeLoader(const MakeAudioLoader &);
 
 	void assertSizeIsPowerOfTwo(int);
-	int framesPerBuffer(SignalProcessing);
+	int framesPerBuffer(const SignalProcessing &);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
-	void prepareAudioPlayer(AudioPlayer::Preparation);
+	void prepareAudioPlayer(const AudioPlayer::Preparation &);
 	void prepareNewTest_(const Testing &);
-	std::shared_ptr<StereoSimulationFactory> makeProcessorFactory(SignalProcessing);
-	StereoSimulationFactory::HearingAidSimulation hearingAidSimulation(SignalProcessing);
+	std::shared_ptr<StereoSimulationFactory> makeProcessorFactory(const SignalProcessing &);
+	StereoSimulationFactory::HearingAidSimulation hearingAidSimulation(const SignalProcessing &);
 };
