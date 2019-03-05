@@ -6,7 +6,7 @@
 #include <spatialized-hearing-aid-simulation/AudioPlayer.h>
 
 class AudioDevicePlayer : public AudioDeviceController, public AudioPlayer {
-	std::vector<gsl::span<float>> audio;
+	std::vector<AudioLoader::channel_type> audio;
 	std::shared_ptr<AudioLoader> loader{};
 	AudioDevice *device;
 public:
