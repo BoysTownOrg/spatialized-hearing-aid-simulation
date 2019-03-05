@@ -3,12 +3,13 @@
 #include "ArgumentCollection.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class FakeAudioProcessingLoader : public AudioLoader {
-	ArgumentCollection<std::vector<std::vector<float>>> audio_{};
+class FakeAudioLoader : public AudioLoader {
+	using buffer_type = std::vector<channel_type::element_type>;
+	ArgumentCollection<std::vector<buffer_type>> audio_{};
 	int loadCount_{};
 	int loadCompleteThreshold_{1};
 public:
-	void setLoadCompleteThreshold(int x) {
+	void setLoadCompleteThreshold(int x) noexcept {
 		loadCompleteThreshold_ = x;
 	}
 
@@ -17,7 +18,7 @@ public:
 	}
 
 	void load(gsl::span<channel_type> audio) override {
-		std::vector<std::vector<float>> stored(audio.size());
+		std::vector<buffer_type> stored(audio.size());
 		for (int i = 0; i < audio.size(); ++i)
 			for (auto x : audio.at(i))
 				stored.at(i).push_back(x);

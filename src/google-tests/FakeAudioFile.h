@@ -33,8 +33,8 @@ public:
 	}
 
 	void readFrames(float *x, long long n) override {
-		for (int i = 0; i < n * channels_; ++i)
-			x[i] = contents.at(i);
+		const gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n * channels_) };
+		std::copy(contents.begin(), contents.end(), audio.begin());
 	}
 
 	void fail() noexcept {
@@ -68,11 +68,11 @@ class FakeAudioFileWriter : public AudioFileWriter {
 	int channels_{ 1 };
 	bool failed_{};
 public:
-	void setChannels(int x) {
+	void setChannels(int x) noexcept {
 		channels_ = x;
 	}
 
-	void fail() {
+	void fail() noexcept {
 		failed_ = true;
 	}
 
@@ -85,7 +85,7 @@ public:
 	}
 
 	void writeFrames(float *x, long long n) override {
-		gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n * channels_) };
+		const gsl::span<float> audio{ x, gsl::narrow<gsl::span<float>::index_type>(n * channels_) };
 		std::copy(audio.begin(), audio.end(), std::back_inserter(written_));
 	}
 
