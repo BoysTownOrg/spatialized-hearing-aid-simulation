@@ -3,7 +3,7 @@
 #include "ArgumentCollection.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class FakeAudioProcessingLoader : public AudioProcessingLoader {
+class FakeAudioProcessingLoader : public AudioLoader {
 	ArgumentCollection<std::vector<std::vector<float>>> audio_{};
 	int loadCount_{};
 	int loadCompleteThreshold_{1};
@@ -28,11 +28,9 @@ public:
 	auto audio() const {
 		return audio_;
 	}
-
-	void reset() override {}
 };
 
-class FakeAudioProcessingLoader2 : public AudioProcessingLoader {
+class FakeAudioProcessingLoader2 : public AudioLoader {
 	std::vector<float> audioToLoad_{};
 	std::vector<float>::size_type head{};
 public:
@@ -49,6 +47,4 @@ public:
 			for (auto &x : channel)
 				x = audioToLoad_.at(head++);
 	}
-
-	void reset() override {}
 };

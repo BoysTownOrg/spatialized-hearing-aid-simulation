@@ -3,7 +3,7 @@
 #include "LogString.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class AudioProcessingLoaderStub : public AudioProcessingLoader {
+class AudioProcessingLoaderStub : public AudioLoader {
 	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
 	int sampleRate_{};
@@ -34,10 +34,6 @@ public:
 		channels_ = c;
 	}
 
-	void reset() override {
-		log_.insert("reset ");
-	}
-
 	auto &log() const noexcept {
 		return log_;
 	}
@@ -46,19 +42,19 @@ public:
 class AudioProcessingLoaderStubFactory : public AudioProcessingLoaderFactory {
 	std::shared_ptr<AudioFrameReader> reader_{};
 	std::shared_ptr<AudioFrameProcessor> processor_{};
-	std::shared_ptr<AudioProcessingLoader> loader;
+	std::shared_ptr<AudioLoader> loader;
 public:
 	explicit AudioProcessingLoaderStubFactory(
-		std::shared_ptr<AudioProcessingLoader> loader =
+		std::shared_ptr<AudioLoader> loader =
 			std::make_shared<AudioProcessingLoaderStub>()
 	) noexcept :
 		loader{ std::move(loader) } {}
 
-	void setLoader(std::shared_ptr<AudioProcessingLoader> loader_) {
+	void setLoader(std::shared_ptr<AudioLoader> loader_) {
 		loader = std::move(loader_);
 	}
 
-	std::shared_ptr<AudioProcessingLoader> make(
+	std::shared_ptr<AudioLoader> make(
 		std::shared_ptr<AudioFrameReader> r,
 		std::shared_ptr<AudioFrameProcessor> p
 	) override {

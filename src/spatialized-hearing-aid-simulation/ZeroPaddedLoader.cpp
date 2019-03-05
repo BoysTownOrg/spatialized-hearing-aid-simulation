@@ -36,7 +36,7 @@ bool ZeroPaddedLoader::complete() {
 	return reader->remainingFrames() == 0 && paddedZeros >= processor->groupDelay();
 }
 
-std::shared_ptr<AudioProcessingLoader> ZeroPaddedLoaderFactory::make(
+std::shared_ptr<AudioLoader> ZeroPaddedLoaderFactory::make(
 	std::shared_ptr<AudioFrameReader> r, 
 	std::shared_ptr<AudioFrameProcessor> p
 ) {
