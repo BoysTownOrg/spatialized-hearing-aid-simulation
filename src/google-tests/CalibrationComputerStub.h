@@ -8,8 +8,7 @@ class CalibrationComputerStub : public CalibrationComputer {
 	ArgumentCollection<double> levels_{};
 	std::map<int, double> signalScales;
 public:
-	double signalScale(int channel, double level) override
-	{
+	double signalScale(int channel, double level) override {
 		levels_.push_back(level);
 		return signalScales[channel];
 	}
@@ -33,13 +32,12 @@ public:
 	) :
 		computer{ computer } {}
 
-	std::shared_ptr<CalibrationComputer> make(AudioFrameReader *r) override
-	{
+	std::shared_ptr<CalibrationComputer> make(AudioFrameReader *r) override {
 		reader_ = r;
 		return computer;
 	}
 
-	auto reader() const {
+	auto reader() const noexcept {
 		return reader_;
 	}
 };

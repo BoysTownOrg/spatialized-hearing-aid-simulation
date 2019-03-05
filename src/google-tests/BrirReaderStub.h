@@ -7,7 +7,7 @@ class BrirReaderStub : public BrirReader {
 	std::string filePath_{};
 	bool readCalled_{};
 public:
-	void setBrir(BinauralRoomImpulseResponse brir) {
+	void setBrir(BinauralRoomImpulseResponse brir) noexcept {
 		brir_ = std::move(brir);
 	}
 

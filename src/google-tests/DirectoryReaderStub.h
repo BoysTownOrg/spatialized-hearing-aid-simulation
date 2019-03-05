@@ -36,10 +36,10 @@ class DirectoryReaderStubFactory : public DirectoryReaderFactory {
 	std::string directory_{};
 	std::shared_ptr<DirectoryReader> reader;
 public:
-	explicit DirectoryReaderStubFactory(std::shared_ptr<DirectoryReader> reader) : 
+	explicit DirectoryReaderStubFactory(std::shared_ptr<DirectoryReader> reader) noexcept : 
 		reader{ std::move(reader) } {}
 
-	std::shared_ptr<DirectoryReader> make(std::string d) {
+	std::shared_ptr<DirectoryReader> make(std::string d) override {
 		directory_ = std::move(d);
 		return reader;
 	}
