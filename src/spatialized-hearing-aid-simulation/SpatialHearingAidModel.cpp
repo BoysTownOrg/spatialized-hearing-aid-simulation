@@ -422,10 +422,11 @@ void SpatialHearingAidModel::playNextTrial(Trial *p) {
 
 void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
 	auto reader = makeReader(p->audioFilePath);
-	player->setAudioLoader(audioProcessingLoaderFactory->make(
-		reader, 
-		p->processorFactory->make(reader.get(), p->level_dB_Spl))
-	);
+	MakeAudioLoader loading;
+	loading.level_dB_Spl = p->level_dB_Spl;
+	loading.reader = reader;
+	loading.processorFactory = p->processorFactory;
+	player->setAudioLoader(makeLoader(&loading));
 	AudioPlayer::Preparation playing;
 	playing.channels = reader->channels();
 	playing.sampleRate = reader->sampleRate();
@@ -433,6 +434,13 @@ void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
 	playing.audioDevice = p->audioDevice;
 	prepareAudioPlayer(std::move(playing));
 	player->play();
+}
+
+std::shared_ptr<AudioLoader> SpatialHearingAidModel::makeLoader(MakeAudioLoader *p) {
+	return audioProcessingLoaderFactory->make(
+		p->reader, 
+		p->processorFactory->make(p->reader.get(), p->level_dB_Spl)
+	);
 }
 
 std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string filePath) {
@@ -478,8 +486,11 @@ void SpatialHearingAidModel::stopCalibration() {
 void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
 	auto reader = makeReader(p->inputAudioFilePath);
 	auto processorFactory_ = makeProcessorFactory(p->processing);
-	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
-	auto loader_ = audioProcessingLoaderFactory->make(reader, processor_);
+	MakeAudioLoader loading;
+	loading.level_dB_Spl = p->level_dB_Spl;
+	loading.reader = reader;
+	loading.processorFactory = processorFactory_.get();
+	auto loader_ = makeLoader(&loading);
 	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
 		? p->processing.chunkSize
 		: defaultFramesPerBuffer;

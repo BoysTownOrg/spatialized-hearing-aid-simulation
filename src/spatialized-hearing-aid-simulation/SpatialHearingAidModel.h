@@ -98,6 +98,14 @@ private:
 		StereoSimulationFactory *processorFactory;
 	};
 	void playAudio(PlayAudioRequest *);
+	
+	struct MakeAudioLoader {
+		double level_dB_Spl;
+		std::shared_ptr<AudioFrameReader> reader;
+		StereoSimulationFactory *processorFactory;
+	};
+	std::shared_ptr<AudioLoader>makeLoader(MakeAudioLoader *);
+
 	void assertSizeIsPowerOfTwo(int);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
