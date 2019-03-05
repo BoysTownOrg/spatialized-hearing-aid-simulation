@@ -47,7 +47,9 @@ public:
 		compressorFactory{ compressorFactory } {}
 
 	std::shared_ptr<SignalProcessor> make(FilterbankCompressor::Parameters p) override {
-		return std::make_shared<SignalProcessorAdapter<HearingAidProcessor>>(compressorFactory->make(std::move(p)));
+		return std::make_shared<SignalProcessorAdapter<HearingAidProcessor>>(
+			compressorFactory->make(std::move(p))
+		);
 	}
 };
 
@@ -59,7 +61,7 @@ class FirFilterFactoryImpl : public FirFilterFactory {
 
 class ScalarFactoryImpl : public ScalarFactory {
 	std::shared_ptr<SignalProcessor> make(float x) override {
-		return std::make_shared<ScalingProcessor>(x);
+		return std::make_shared<SignalProcessorAdapter<ScalingProcessor<float>>>(x);
 	}
 };
 

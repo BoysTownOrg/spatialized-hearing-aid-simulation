@@ -144,7 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ScalingProcessor.h" />
-    <ClInclude Include="signal-processing-exports.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScalingProcessor.cpp" />

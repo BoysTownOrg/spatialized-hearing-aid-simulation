@@ -1,12 +1,17 @@
 #include "ScalingProcessor.h"
 
-ScalingProcessor::ScalingProcessor(float scale) : scale{ scale } {}
+template<typename T>
+ScalingProcessor<T>::ScalingProcessor(T scale) : scale{ scale } {}
 
-void ScalingProcessor::process(signal_type signal) {
+template<typename T>
+void ScalingProcessor<T>::process(signal_type signal) {
 	for (auto &x : signal)
 		x *= scale;
 }
 
-auto ScalingProcessor::groupDelay() -> index_type {
+template<typename T>
+auto ScalingProcessor<T>::groupDelay() -> index_type {
 	return index_type{ 0 };
 }
+
+template ScalingProcessor<float>;
