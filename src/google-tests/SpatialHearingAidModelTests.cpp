@@ -1,7 +1,7 @@
 #include "FilterbankCompressorSpy.h"
 #include "AudioLoaderStub.h"
 #include "AudioFrameReaderStub.h"
-#include "AudioProcessingLoaderStub.h"
+#include "AudioLoaderStub.h"
 #include "PrescriptionReaderStub.h"
 #include "BrirReaderStub.h"
 #include "FakeAudioFile.h"

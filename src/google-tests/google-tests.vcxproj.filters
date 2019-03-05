@@ -137,9 +137,6 @@
     <ClInclude Include="CalibrationComputerStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioProcessingLoaderStub.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FakeAudioFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
