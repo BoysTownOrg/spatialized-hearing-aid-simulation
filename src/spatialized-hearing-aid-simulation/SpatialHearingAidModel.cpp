@@ -407,19 +407,19 @@ void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
 	}
 }
 
-void SpatialHearingAidModel::playNextTrial(Trial *p) {
+void SpatialHearingAidModel::playNextTrial(const Trial &p) {
 	if (player->isPlaying())
 		return;
 
 	PlayAudioRequest request;
 	request.audioFilePath = nextStimulus_;
-	request.audioDevice = std::move(p->audioDevice);
-	request.level_dB_Spl = p->level_dB_Spl;
+	request.audioDevice = std::move(p.audioDevice);
+	request.level_dB_Spl = p.level_dB_Spl;
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
 	playAudio(&request);
 	Documenter::TrialParameters trial;
-	trial.level_dB_Spl = p->level_dB_Spl;
+	trial.level_dB_Spl = p.level_dB_Spl;
 	trial.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(trial));
 	nextStimulus_ = stimulusList->next();

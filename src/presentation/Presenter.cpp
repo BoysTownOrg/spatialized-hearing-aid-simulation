@@ -207,8 +207,7 @@ void Presenter::playNextTrial() {
 }
 
 void Presenter::playTrial_() {
-	auto p = trial();
-	model->playNextTrial(&p);
+	model->playNextTrial(trial());
 	switchViewIfTestComplete();
 }
 

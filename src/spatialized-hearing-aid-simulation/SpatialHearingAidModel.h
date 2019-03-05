@@ -80,7 +80,7 @@ public:
 		CalibrationComputerFactory *
 	);
 	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(Testing *) override;
-	SPATIALIZED_HA_SIMULATION_API void playNextTrial(Trial *) override;
+	SPATIALIZED_HA_SIMULATION_API void playNextTrial(const Trial &) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
 	SPATIALIZED_HA_SIMULATION_API void playCalibration(const Calibration &) override;
 	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(const SavingAudio &) override;

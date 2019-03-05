@@ -96,8 +96,8 @@ public:
 		return trialPlayed_;
 	}
 
-	void playNextTrial(Trial *p) override {
-		trialParameters_ = *p;
+	void playNextTrial(const Trial &p) override {
+		trialParameters_ = p;
 		trialPlayed_ = true;
 	}
 
@@ -129,7 +129,7 @@ public:
 		throw RequestFailure{ message };
 	}
 
-	void playNextTrial(Trial *) override {
+	void playNextTrial(const Trial &) override {
 		throw RequestFailure{ message };
 	}
 

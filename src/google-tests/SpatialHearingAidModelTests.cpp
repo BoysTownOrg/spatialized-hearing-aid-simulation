@@ -166,7 +166,7 @@ namespace {
 		SpatialHearingAidModel::Trial trial{};
 	public:
 		void run(Model *model) override {
-			model->playNextTrial(&trial);
+			model->playNextTrial(trial);
 		}
 
 		void setLevel_dB_Spl(double x) override {
@@ -436,7 +436,7 @@ namespace {
 		}
 
 		void playNextTrial() {
-			model.playNextTrial(&trial);
+			model.playNextTrial(trial);
 		}
 
 		void playCalibration() {

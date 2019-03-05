@@ -35,7 +35,7 @@ public:
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void playNextTrial(Trial *) = 0;
+	virtual void playNextTrial(const Trial &) = 0;
 
 	struct Calibration {
 		SignalProcessing processing;
