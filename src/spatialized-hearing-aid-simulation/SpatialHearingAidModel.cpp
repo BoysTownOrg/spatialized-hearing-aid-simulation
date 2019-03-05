@@ -301,9 +301,9 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 {
 }
 
-void SpatialHearingAidModel::prepareNewTest(Testing *p) {
-	framesPerBufferForTest = framesPerBuffer(p->processing);
-	processorFactoryForTest = makeProcessorFactory(p->processing);
+void SpatialHearingAidModel::prepareNewTest(const Testing & p) {
+	framesPerBufferForTest = framesPerBuffer(p.processing);
+	processorFactoryForTest = makeProcessorFactory(p.processing);
 	prepareNewTest_(p);
 }
 
@@ -395,10 +395,10 @@ void SpatialHearingAidModel::assertSizeIsPowerOfTwo(int size) {
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
-void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
+void SpatialHearingAidModel::prepareNewTest_(const Testing &p) {
 	try {
-		stimulusList->initialize(p->audioDirectory);
-		documenter->initialize(p->testFilePath);
+		stimulusList->initialize(p.audioDirectory);
+		documenter->initialize(p.testFilePath);
 		documenter->documentTestParameters(p);
 		nextStimulus_ = stimulusList->next();
 	}

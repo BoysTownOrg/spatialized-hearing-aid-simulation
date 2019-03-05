@@ -122,8 +122,7 @@ void Presenter::confirmTestSetup() {
 }
 
 void Presenter::prepareNewTest() {
-	auto p = testing();
-	model->prepareNewTest(&p);
+	model->prepareNewTest(testing());
 	hideTestSetupView();
 	showTesterView();
 }

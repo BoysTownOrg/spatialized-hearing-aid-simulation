@@ -11,7 +11,7 @@ public:
 	virtual void initialize(std::string filePath) = 0;
 	RUNTIME_ERROR(InitializationFailure);
 
-	virtual void documentTestParameters(Model::Testing *) = 0;
+	virtual void documentTestParameters(const Model::Testing &) = 0;
 	
 	struct TrialParameters{
 		std::string stimulus;

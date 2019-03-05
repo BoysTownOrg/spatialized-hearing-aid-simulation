@@ -110,7 +110,7 @@ namespace {
 		SpatialHearingAidModel::Testing testing{};
 	public:
 		void run(Model *model) override {
-			model->prepareNewTest(&testing);
+			model->prepareNewTest(testing);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -432,7 +432,7 @@ namespace {
 		}
 
 		void prepareNewTest() {
-			model.prepareNewTest(&testing);
+			model.prepareNewTest(testing);
 		}
 
 		void playNextTrial() {

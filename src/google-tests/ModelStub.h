@@ -79,8 +79,8 @@ public:
 		audioDeviceDescriptions_ = std::move(d);
 	}
 
-	void prepareNewTest(Testing *p) override {
-		testParameters_ = *p;
+	void prepareNewTest(const Testing &p) override {
+		testParameters_ = p;
 		testPrepared_ = true;
 	}
 
@@ -125,7 +125,7 @@ public:
 		message = std::move(s);
 	}
 
-	void prepareNewTest(Testing *) override {
+	void prepareNewTest(const Testing &) override {
 		throw RequestFailure{ message };
 	}
 

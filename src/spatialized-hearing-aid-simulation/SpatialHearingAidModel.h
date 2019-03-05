@@ -79,7 +79,7 @@ public:
 		SimulationChannelFactory *,
 		CalibrationComputerFactory *
 	);
-	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(Testing *) override;
+	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(const Testing &) override;
 	SPATIALIZED_HA_SIMULATION_API void playNextTrial(const Trial &) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
 	SPATIALIZED_HA_SIMULATION_API void playCalibration(const Calibration &) override;
@@ -114,7 +114,7 @@ private:
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
 	void prepareAudioPlayer(AudioPlayer::Preparation);
-	void prepareNewTest_(Testing *);
+	void prepareNewTest_(const Testing &);
 	std::shared_ptr<StereoSimulationFactory> makeProcessorFactory(SignalProcessing);
 	StereoSimulationFactory::HearingAidSimulation hearingAidSimulation(SignalProcessing);
 };
