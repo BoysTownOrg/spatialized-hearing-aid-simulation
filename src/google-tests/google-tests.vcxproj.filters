@@ -54,12 +54,6 @@
     <ClCompile Include="assert-utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpatializedHearingAidSimulationFactoryTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibrationComputerTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SpatialHearingAidModelTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,6 +64,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AudioDevicePlayerTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulationChannelFactoryImplTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibrationComputerImplTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

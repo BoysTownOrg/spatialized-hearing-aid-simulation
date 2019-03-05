@@ -122,8 +122,7 @@ void Presenter::confirmTestSetup() {
 }
 
 void Presenter::prepareNewTest() {
-	auto p = testing();
-	model->prepareNewTest(&p);
+	model->prepareNewTest(testing());
 	hideTestSetupView();
 	showTesterView();
 }
@@ -207,8 +206,7 @@ void Presenter::playNextTrial() {
 }
 
 void Presenter::playTrial_() {
-	auto p = trial();
-	model->playNextTrial(&p);
+	model->playNextTrial(trial());
 	switchViewIfTestComplete();
 }
 
@@ -244,7 +242,7 @@ void Presenter::saveAudio_() {
 	saving_.inputAudioFilePath = view->testSetup()->audioFilePath();
 	saving_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	saving_.processing = signalProcessing();
-	model->processAudioForSaving(&saving_);
+	model->processAudioForSaving(saving_);
 	auto save = view->browseForSavingFile({ "*.wav" });
 	if (!view->browseCancelled())
 		model->saveAudio(save);
@@ -265,7 +263,7 @@ void Presenter::playCalibration_() {
 	calibration_.audioFilePath = view->testSetup()->audioFilePath();
 	calibration_.level_dB_Spl = convertToDouble(view->testSetup()->level_dB_Spl(), "level");
 	calibration_.processing = signalProcessing();
-	model->playCalibration(&calibration_);
+	model->playCalibration(calibration_);
 }
 
 void Presenter::stopCalibration() {

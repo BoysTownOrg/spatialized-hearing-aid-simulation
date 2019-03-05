@@ -1,15 +1,15 @@
 #pragma once
 
 #include "LogString.h"
-#include <spatialized-hearing-aid-simulation/Documenter.h>
+#include <spatialized-hearing-aid-simulation/TestDocumenter.h>
 #include <sstream>
 
-class DocumenterStub : public Documenter {
+class DocumenterStub : public TestDocumenter {
 	TrialParameters trialParameters_{};
 	LogString log_{};
 	std::stringstream content_{};
 	std::string filePath_{};
-	Model::Testing *testParameters_{};
+	const Model::Testing *testParameters_{};
 public:
 	void documentTrialParameters(TrialParameters p) override {
 		trialParameters_ = std::move(p);
@@ -20,8 +20,8 @@ public:
 		return trialParameters_;
 	}
 
-	void documentTestParameters(Model::Testing *p) override {
-		testParameters_ = std::move(p);
+	void documentTestParameters(const Model::Testing &p) override {
+		testParameters_ = &p;
 		log_.insert("documentTestParameters ");
 	}
 
@@ -47,7 +47,7 @@ public:
 	}
 };
 
-class InitializationFailingDocumenter : public Documenter {
+class InitializationFailingDocumenter : public TestDocumenter {
 	std::string errorMessage_{};
 public:
 	void setErrorMessage(std::string s) {
@@ -58,6 +58,6 @@ public:
 		throw InitializationFailure{ errorMessage_ };
 	}
 
-	void documentTestParameters(Model::Testing *) override {}
+	void documentTestParameters(const Model::Testing &) override {}
 	void documentTrialParameters(TrialParameters) override {}
 };

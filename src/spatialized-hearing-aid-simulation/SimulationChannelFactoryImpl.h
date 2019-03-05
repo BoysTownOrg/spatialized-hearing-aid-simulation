@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ISpatializedHearingAidSimulationFactory.h"
+#include "SimulationChannelFactory.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <hearing-aid-processing/FilterbankCompressor.h>
 
@@ -24,14 +24,13 @@ public:
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 
-class SpatializedHearingAidSimulationFactory :
-	public ISpatializedHearingAidSimulationFactory
+class SimulationChannelFactoryImpl : public SimulationChannelFactory
 {
 	ScalarFactory *scalarFactory;
 	FirFilterFactory *firFilterFactory;
 	HearingAidFactory *hearingAidFactory;
 public:
-	SPATIALIZED_HA_SIMULATION_API SpatializedHearingAidSimulationFactory(
+	SPATIALIZED_HA_SIMULATION_API SimulationChannelFactoryImpl(
 		ScalarFactory *scalarFactory,
 		FirFilterFactory *firFilterFactory,
 		HearingAidFactory *hearingAidFactory

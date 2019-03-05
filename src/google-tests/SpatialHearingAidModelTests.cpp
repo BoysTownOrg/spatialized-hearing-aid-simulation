@@ -110,7 +110,7 @@ namespace {
 		SpatialHearingAidModel::Testing testing{};
 	public:
 		void run(Model *model) override {
-			model->prepareNewTest(&testing);
+			model->prepareNewTest(testing);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -166,7 +166,7 @@ namespace {
 		SpatialHearingAidModel::Trial trial{};
 	public:
 		void run(Model *model) override {
-			model->playNextTrial(&trial);
+			model->playNextTrial(trial);
 		}
 
 		void setLevel_dB_Spl(double x) override {
@@ -240,7 +240,7 @@ namespace {
 		SpatialHearingAidModel::Calibration calibration{};
 	public:
 		void run(Model *model) override {
-			model->playCalibration(&calibration);
+			model->playCalibration(calibration);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -304,7 +304,7 @@ namespace {
 		SpatialHearingAidModel::SavingAudio savingAudio{};
 	public:
 		void run(Model *model) override {
-			model->processAudioForSaving(&savingAudio);
+			model->processAudioForSaving(savingAudio);
 		}
 
 		void setHearingAidSimulationOn() override {
@@ -432,19 +432,19 @@ namespace {
 		}
 
 		void prepareNewTest() {
-			model.prepareNewTest(&testing);
+			model.prepareNewTest(testing);
 		}
 
 		void playNextTrial() {
-			model.playNextTrial(&trial);
+			model.playNextTrial(trial);
 		}
 
 		void playCalibration() {
-			model.playCalibration(&calibration);
+			model.playCalibration(calibration);
 		}
 
 		void processAudioForSaving() {
-			model.processAudioForSaving(&savingAudio);
+			model.processAudioForSaving(savingAudio);
 		}
 
 		void runUseCase(UseCase *useCase) {
@@ -606,7 +606,7 @@ namespace {
 		void assertSimulationPrescriptionsMatchPrescriptionReader(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			PrescriptionReader::Dsl left;
 			left.compressionRatios = { 1 };
@@ -668,7 +668,7 @@ namespace {
 		void assertSimulationFactoryReceivesCompressionParameters(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			useCase->setAttack_ms(1);
 			useCase->setRelease_ms(2);
@@ -713,7 +713,7 @@ namespace {
 		void assertSimulationFactoryReceivesSampleRate(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			audioFrameReader->setSampleRate(1);
 			runUseCase(useCase);
@@ -744,7 +744,7 @@ namespace {
 		void assertHearingAidSimulationFullScaleLevelMatches(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::HearingAidSimulation> &hearingAid
+				SimulationChannelFactory::HearingAidSimulation> &hearingAid
 		) {
 			runUseCase(useCase);
 			assertEqual(
@@ -870,7 +870,7 @@ namespace {
 		void assertSpatializationFilterCoefficientsMatchBrir(
 			SignalProcessingUseCase *useCase,
 			const ArgumentCollection<
-				ISpatializedHearingAidSimulationFactory::Spatialization> &spatialization
+				SimulationChannelFactory::Spatialization> &spatialization
 		) {
 			BrirReader::BinauralRoomImpulseResponse brir;
 			brir.left = { 1, 2 };
@@ -1662,7 +1662,7 @@ namespace {
 		FakeStimulusList defaultStimulusList{};
 		StimulusList *stimulusList{ &defaultStimulusList };
 		DocumenterStub defaultDocumenter{};
-		Documenter *documenter{ &defaultDocumenter };
+		TestDocumenter *documenter{ &defaultDocumenter };
 		AudioFrameReaderStubFactory defaultAudioReaderFactory{};
 		AudioFrameReaderFactory *audioReaderFactory{ &defaultAudioReaderFactory };
 		AudioFrameWriterStubFactory defaultAudioWriterFactory{};
@@ -1672,9 +1672,9 @@ namespace {
 		AudioProcessingLoaderStubFactory defaultAudioLoaderFactory{};
 		AudioProcessingLoaderFactory *audioLoaderFactory{ &defaultAudioLoaderFactory };
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
-		ISpatializedHearingAidSimulationFactory *simulationFactory{&defaultSimulationFactory};
+		SimulationChannelFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
-		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
+		CalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 
 		void assertThrowsRequestFailure(UseCase *useCase, std::string what) {
 			try {

@@ -160,14 +160,14 @@
     <ClCompile Include="AudioFileWriterAdapterTests.cpp" />
     <ClCompile Include="AudioDevicePlayerTests.cpp" />
     <ClCompile Include="BrirAdapterTests.cpp" />
-    <ClCompile Include="CalibrationComputerTests.cpp" />
+    <ClCompile Include="CalibrationComputerImplTests.cpp" />
     <ClCompile Include="RandomizedStimulusListTests.cpp" />
     <ClCompile Include="ChannelCopierTester.cpp" />
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />
     <ClCompile Include="PrescriptionAdapterTests.cpp" />
     <ClCompile Include="ZeroPaddedLoaderTests.cpp" />
     <ClCompile Include="SpatialHearingAidModelTests.cpp" />
-    <ClCompile Include="SpatializedHearingAidSimulationFactoryTests.cpp" />
+    <ClCompile Include="SimulationChannelFactoryImplTests.cpp" />
     <ClCompile Include="ScalingProcessorTests.cpp" />
     <ClCompile Include="FirFilterTests.cpp" />
     <ClCompile Include="HearingAidProcessorTests.cpp" />

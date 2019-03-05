@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ArgumentCollection.h"
-#include <spatialized-hearing-aid-simulation/ISpatializedHearingAidSimulationFactory.h>
+#include <spatialized-hearing-aid-simulation/SimulationChannelFactory.h>
 #include <vector>
 
 template<typename T>
@@ -23,7 +23,7 @@ public:
 	}
 };
 class SpatializedHearingAidSimulationFactoryStub : 
-	public ISpatializedHearingAidSimulationFactory 
+	public SimulationChannelFactory 
 {
 	ArgumentCollection<HearingAidSimulation> fullSimulationHearingAid_{};
 	ArgumentCollection<HearingAidSimulation> hearingAidSimulation_{};

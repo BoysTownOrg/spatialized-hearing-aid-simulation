@@ -1,16 +1,16 @@
 #include "assert-utility.h"
 #include "PersistentMemoryWriterStub.h"
-#include <test-documenting/TestDocumenter.h>
+#include <test-documenting/TestDocumenterImpl.h>
 #include <gtest/gtest.h>
 
-class TestDocumenterTests : public ::testing::Test {
+class TestDocumenterImplTests : public ::testing::Test {
 protected:
 	PersistentMemoryWriterStub writer;
-	TestDocumenter documenter{ &writer };
+	TestDocumenterImpl documenter{ &writer };
 };
 
 TEST_F(
-	TestDocumenterTests,
+	TestDocumenterImplTests,
 	formatsTestParameters
 ) {
 	Model::Testing test;
@@ -26,7 +26,7 @@ TEST_F(
 	test.processing.release_ms = 2.2;
 	test.processing.windowSize = 3;
 	test.processing.chunkSize = 4;
-	documenter.documentTestParameters(&test);
+	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -48,7 +48,7 @@ TEST_F(
 }
 
 TEST_F(
-	TestDocumenterTests,
+	TestDocumenterImplTests,
 	ignoresPrescriptionsIfNotUsingHearingAidSimulation
 ) {
 	Model::Testing test;
@@ -58,7 +58,7 @@ TEST_F(
 	test.processing.usingSpatialization = true;
 	test.processing.brirFilePath = "d";
 	test.processing.usingHearingAidSimulation = false;
-	documenter.documentTestParameters(&test);
+	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -71,7 +71,7 @@ TEST_F(
 }
 
 TEST_F(
-	TestDocumenterTests,
+	TestDocumenterImplTests,
 	ignoresBrirIfNotUsingSpatialization
 ) {
 	Model::Testing test;
@@ -86,7 +86,7 @@ TEST_F(
 	test.processing.release_ms = 2.2;
 	test.processing.windowSize = 3;
 	test.processing.chunkSize = 4;
-	documenter.documentTestParameters(&test);
+	documenter.documentTestParameters(test);
 	assertEqual(
 		"subject: a\n"
 		"tester: b\n"
@@ -105,7 +105,7 @@ TEST_F(
 }
 
 TEST_F(
-	TestDocumenterTests,
+	TestDocumenterImplTests,
 	playTrialDocumentsTrial
 ) {
 	TestDocumenter::TrialParameters trial;
@@ -120,7 +120,7 @@ TEST_F(
 }
 
 TEST_F(
-	TestDocumenterTests,
+	TestDocumenterImplTests,
 	initializePassesFilePath
 ) {
 	documenter.initialize("a");
@@ -133,7 +133,7 @@ TEST(
 ) {
 	InitializationFailingWriter writer{};
 	writer.setErrorMessage("error.");
-	TestDocumenter documenter{ &writer };
+	TestDocumenterImpl documenter{ &writer };
 	try {
 		documenter.initialize({});
 		FAIL() << "Expected TestDocumenter::InitializationFailure";

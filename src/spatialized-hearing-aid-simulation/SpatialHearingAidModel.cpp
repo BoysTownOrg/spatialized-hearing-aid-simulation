@@ -2,22 +2,47 @@
 #include "ChannelProcessingGroup.h"
 #include <gsl/gsl>
 
-class NullProcessorFactory : public AudioFrameProcessorFactory {
+class StereoCalibration {
+	std::shared_ptr<CalibrationComputer> computer;
+	double digitalLevel;
+public:
+	StereoCalibration(
+		std::shared_ptr<CalibrationComputer> computer, 
+		double level_dB_Spl
+	) :
+		computer{ std::move(computer) },
+		digitalLevel{ level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl }
+	{}
+
+	float leftChannelScale() {
+		return gsl::narrow_cast<float>(channelScale(0));
+	}
+
+	double channelScale(int channel) {
+		return computer->signalScale(channel, digitalLevel);
+	}
+
+	float rightChannelScale() {
+		return gsl::narrow_cast<float>(channelScale(1));
+	}
+};
+
+class NullProcessorFactory : public StereoSimulationFactory {
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *, double) override { return {}; }
 };
 
-class StereoSpatializationFactory : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory::Spatialization left_spatial;
-	ISpatializedHearingAidSimulationFactory::Spatialization right_spatial;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+class StereoSpatializationFactory : public StereoSimulationFactory {
+	SimulationChannelFactory::Spatialization left_spatial;
+	SimulationChannelFactory::Spatialization right_spatial;
+	SimulationChannelFactory *channelFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		SimulationChannelFactory *channelFactory,
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
 		left_spatial.filterCoefficients = std::move(brir_.left);
@@ -32,39 +57,36 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeSpatialization(
+			channelFactory->makeSpatialization(
 				left_spatial, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereoCalibration.leftChannelScale()
 			), 
-			simulationFactory->makeSpatialization(
+			channelFactory->makeSpatialization(
 				right_spatial, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
 };
 
-class StereoHearingAidFactory : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation left_hs;
-	ISpatializedHearingAidSimulationFactory::HearingAidSimulation right_hs;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+class StereoHearingAidFactory : public StereoSimulationFactory {
+	SimulationChannelFactory::HearingAidSimulation left_hs;
+	SimulationChannelFactory::HearingAidSimulation right_hs;
+	SimulationChannelFactory *channelFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoHearingAidFactory(
-		CommonHearingAidSimulation processing,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		HearingAidSimulation processing,
+		SimulationChannelFactory *channelFactory,
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+		SimulationChannelFactory::HearingAidSimulation both_hs;
 		both_hs.attack_ms = processing.attack_ms;
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
@@ -73,8 +95,8 @@ public:
 
 		left_hs = both_hs;
 		right_hs = both_hs;
-		left_hs.prescription = std::move(leftPrescription_);
-		right_hs.prescription = std::move(rightPrescription_);
+		left_hs.prescription = std::move(processing.leftPrescription);
+		right_hs.prescription = std::move(processing.rightPrescription);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -88,43 +110,40 @@ public:
 		left_hs.sampleRate = reader->sampleRate();
 		right_hs.sampleRate = reader->sampleRate();
 
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeHearingAidSimulation(
+			channelFactory->makeHearingAidSimulation(
 				left_hs, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereoCalibration.leftChannelScale()
 			), 
-			simulationFactory->makeHearingAidSimulation(
+			channelFactory->makeHearingAidSimulation(
 				right_hs, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
 };
 
-class StereoSpatializedHearingAidSimulationFactory : public AudioFrameProcessorFactory {	
-	ISpatializedHearingAidSimulationFactory::FullSimulation left_fs;	
-	ISpatializedHearingAidSimulationFactory::FullSimulation right_fs;
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+class StereoSpatializedHearingAidSimulationFactory : public StereoSimulationFactory {	
+	SimulationChannelFactory::FullSimulation left_fs;	
+	SimulationChannelFactory::FullSimulation right_fs;
+	SimulationChannelFactory *channelFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
-		AudioFrameProcessorFactory::CommonHearingAidSimulation processing,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_,
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		StereoSimulationFactory::HearingAidSimulation processing,
+		SimulationChannelFactory *channelFactory,
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
 	{
 		left_fs.spatialization.filterCoefficients = std::move(brir_.left);
 		right_fs.spatialization.filterCoefficients = std::move(brir_.right);
 
-		ISpatializedHearingAidSimulationFactory::HearingAidSimulation both_hs;
+		SimulationChannelFactory::HearingAidSimulation both_hs;
 		both_hs.attack_ms = processing.attack_ms;
 		both_hs.release_ms = processing.release_ms;
 		both_hs.chunkSize = processing.chunkSize;
@@ -133,8 +152,8 @@ public:
 
 		left_fs.hearingAid = both_hs;
 		right_fs.hearingAid = both_hs;
-		left_fs.hearingAid.prescription = std::move(leftPrescription_);
-		right_fs.hearingAid.prescription = std::move(rightPrescription_);
+		left_fs.hearingAid.prescription = std::move(processing.leftPrescription);
+		right_fs.hearingAid.prescription = std::move(processing.rightPrescription);
 	}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -147,32 +166,31 @@ public:
 	) {
 		left_fs.hearingAid.sampleRate = reader->sampleRate();
 		right_fs.hearingAid.sampleRate = reader->sampleRate();
-
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
 
 		return { 
-			simulationFactory->makeFullSimulation(
+			channelFactory->makeFullSimulation(
 				left_fs, 
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+				stereoCalibration.leftChannelScale()
 			), 
-			simulationFactory->makeFullSimulation(
+			channelFactory->makeFullSimulation(
 				right_fs, 
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+				stereoCalibration.rightChannelScale()
 			) 
 		};
 	}
 };
 
-class StereoNoSimulation : public AudioFrameProcessorFactory {
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+class StereoNoSimulation : public StereoSimulationFactory {
+	SimulationChannelFactory *channelFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoNoSimulation(
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		SimulationChannelFactory *channelFactory,
+		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
 	std::shared_ptr<AudioFrameProcessor> make(AudioFrameReader *reader, double level_dB_Spl) override {
@@ -183,75 +201,65 @@ public:
 		AudioFrameReader *reader, 
 		double level_dB_Spl
 	) {
-		auto computer = calibrationComputerFactory->make(reader);
-		const auto digitalLevel = level_dB_Spl - SpatialHearingAidModel::fullScaleLevel_dB_Spl;
+		StereoCalibration stereoCalibration{ calibrationComputerFactory->make(reader), level_dB_Spl };
+
 		return { 
-			simulationFactory->makeWithoutSimulation(
-				gsl::narrow_cast<float>(computer->signalScale(0, digitalLevel))
+			channelFactory->makeWithoutSimulation(
+				stereoCalibration.leftChannelScale()
 			), 
-			simulationFactory->makeWithoutSimulation(
-				gsl::narrow_cast<float>(computer->signalScale(1, digitalLevel))
+			channelFactory->makeWithoutSimulation(
+				stereoCalibration.rightChannelScale()
 			)
 		};
 	}
 };
 
 class StereoProcessorFactoryFactory : public AudioFrameProcessorFactoryFactory {
-	ISpatializedHearingAidSimulationFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	SimulationChannelFactory *channelFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoProcessorFactoryFactory(
-		ISpatializedHearingAidSimulationFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		SimulationChannelFactory *channelFactory,
+		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
-		simulationFactory{ simulationFactory },
+		channelFactory{ channelFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
-		BrirReader::BinauralRoomImpulseResponse brir
+	std::shared_ptr<StereoSimulationFactory> makeSpatialization(
+		BrirReader::BinauralRoomImpulseResponse hearingAid
 	) override {
 		return std::make_shared<StereoSpatializationFactory>(
-			std::move(brir), 
-			simulationFactory, 
+			std::move(hearingAid), 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
 	
-	std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
-		PrescriptionReader::Dsl leftPrescription_, 
-		PrescriptionReader::Dsl rightPrescription_
-	) override
-	{
+	std::shared_ptr<StereoSimulationFactory> makeHearingAid(
+		StereoSimulationFactory::HearingAidSimulation hearingAid
+	) override {
 		return std::make_shared<StereoHearingAidFactory>(
-			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_), 
-			simulationFactory, 
+			std::move(hearingAid),
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
+	std::shared_ptr<StereoSimulationFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse brir, 
-		AudioFrameProcessorFactory::CommonHearingAidSimulation common, 
-		PrescriptionReader::Dsl leftPrescription_, 
-		PrescriptionReader::Dsl rightPrescription_
-	) override
-	{
+		StereoSimulationFactory::HearingAidSimulation hearingAid
+	) override {
 		return std::make_shared<StereoSpatializedHearingAidSimulationFactory>(
 			std::move(brir), 
-			std::move(common), 
-			std::move(leftPrescription_), 
-			std::move(rightPrescription_), 
-			simulationFactory, 
+			std::move(hearingAid),
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
 
-	std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() override {
+	std::shared_ptr<StereoSimulationFactory> makeNoSimulation() override {
 		return std::make_shared<StereoNoSimulation>(
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		);
 	}
@@ -263,15 +271,15 @@ int const SpatialHearingAidModel::defaultFramesPerBuffer = 1024;
 
 SpatialHearingAidModel::SpatialHearingAidModel(
 	StimulusList *stimulusList,
-	Documenter *documenter,
+	TestDocumenter *documenter,
 	AudioPlayer *player,
 	AudioProcessingLoaderFactory *audioLoaderFactory,
 	AudioFrameReaderFactory *audioReaderFactory,
 	AudioFrameWriterFactory *audioWriterFactory,
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
-	ISpatializedHearingAidSimulationFactory *simulationFactory,
-	ICalibrationComputerFactory *calibrationComputerFactory
+	SimulationChannelFactory *channelFactory,
+	CalibrationComputerFactory *calibrationComputerFactory
 ) :
 	stimulusList{ stimulusList },
 	documenter{ documenter },
@@ -283,7 +291,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	audioProcessingLoaderFactory{ audioLoaderFactory },
 	processorFactoryFactory{
 		std::make_shared<StereoProcessorFactoryFactory>(
-			simulationFactory, 
+			channelFactory, 
 			calibrationComputerFactory
 		)
 	},
@@ -293,47 +301,50 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 {
 }
 
-void SpatialHearingAidModel::prepareNewTest(Testing *p) {
-	framesPerBufferForTest = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
-	processorFactoryForTest = makeProcessorFactory(p->processing);
+void SpatialHearingAidModel::prepareNewTest(const Testing &p) {
+	framesPerBufferForTest = framesPerBuffer(p.processing);
+	processorFactoryForTest = makeProcessorFactory(p.processing);
 	prepareNewTest_(p);
 }
 
-std::shared_ptr<AudioFrameProcessorFactory> SpatialHearingAidModel::makeProcessorFactory(
-	SignalProcessing p
+int SpatialHearingAidModel::framesPerBuffer(const SignalProcessing &p) {
+	return 
+		p.usingHearingAidSimulation
+		? p.chunkSize
+		: defaultFramesPerBuffer;
+}
+
+std::shared_ptr<StereoSimulationFactory> SpatialHearingAidModel::makeProcessorFactory(
+	const SignalProcessing &p
 ) {
-	if (p.usingHearingAidSimulation) {
-		assertSizeIsPowerOfTwo(p.chunkSize);
-		assertSizeIsPowerOfTwo(p.windowSize);
-	}
-
-	AudioFrameProcessorFactory::CommonHearingAidSimulation common;
-	common.attack_ms = p.attack_ms;
-	common.release_ms = p.release_ms;
-	common.chunkSize = p.chunkSize;
-	common.windowSize = p.windowSize;
-
 	if (p.usingHearingAidSimulation && p.usingSpatialization)
 		return processorFactoryFactory->makeFullSimulation(
-			readAndCheckBrir(std::move(p.brirFilePath)), 
-			common, 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
+			readAndCheckBrir(std::move(p.brirFilePath)),
+			hearingAidSimulation(p)
 		);
 	else if (p.usingSpatialization)
 		return processorFactoryFactory->makeSpatialization(
 			readAndCheckBrir(std::move(p.brirFilePath))
 		);
 	else if (p.usingHearingAidSimulation)
-		return processorFactoryFactory->makeHearingAid(
-			common, 
-			readPrescription(std::move(p.leftDslPrescriptionFilePath)), 
-			readPrescription(std::move(p.rightDslPrescriptionFilePath))
-		);
+		return processorFactoryFactory->makeHearingAid(hearingAidSimulation(p));
 	else
 		return processorFactoryFactory->makeNoSimulation();
+}
+
+StereoSimulationFactory::HearingAidSimulation 
+	SpatialHearingAidModel::hearingAidSimulation(const SignalProcessing &p) 
+{
+	assertSizeIsPowerOfTwo(p.chunkSize);
+	assertSizeIsPowerOfTwo(p.windowSize);
+	StereoSimulationFactory::HearingAidSimulation simulation;
+	simulation.attack_ms = p.attack_ms;
+	simulation.release_ms = p.release_ms;
+	simulation.chunkSize = p.chunkSize;
+	simulation.windowSize = p.windowSize;
+	simulation.leftPrescription = readPrescription(std::move(p.leftDslPrescriptionFilePath));
+	simulation.rightPrescription = readPrescription(std::move(p.rightDslPrescriptionFilePath));
+	return simulation;
 }
 
 static std::string coefficientErrorMessage(std::string which) {
@@ -384,10 +395,10 @@ void SpatialHearingAidModel::assertSizeIsPowerOfTwo(int size) {
 		throw RequestFailure{ windowChunkSizesErrorMessage(size) };
 }
 
-void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
+void SpatialHearingAidModel::prepareNewTest_(const Testing &p) {
 	try {
-		stimulusList->initialize(p->audioDirectory);
-		documenter->initialize(p->testFilePath);
+		stimulusList->initialize(p.audioDirectory);
+		documenter->initialize(p.testFilePath);
 		documenter->documentTestParameters(p);
 		nextStimulus_ = stimulusList->next();
 	}
@@ -396,37 +407,48 @@ void SpatialHearingAidModel::prepareNewTest_(Testing *p) {
 	}
 }
 
-void SpatialHearingAidModel::playNextTrial(Trial *p) {
+void SpatialHearingAidModel::playNextTrial(const Trial &p) {
 	if (player->isPlaying())
 		return;
 
 	PlayAudioRequest request;
 	request.audioFilePath = nextStimulus_;
-	request.audioDevice = p->audioDevice;
-	request.level_dB_Spl = p->level_dB_Spl;
+	request.audioDevice = std::move(p.audioDevice);
+	request.level_dB_Spl = p.level_dB_Spl;
 	request.framesPerBuffer = framesPerBufferForTest;
 	request.processorFactory = processorFactoryForTest.get();
-	playAudio(&request);
-	Documenter::TrialParameters trial;
-	trial.level_dB_Spl = p->level_dB_Spl;
+	playAudio(request);
+	TestDocumenter::TrialParameters trial;
+	trial.level_dB_Spl = p.level_dB_Spl;
 	trial.stimulus = nextStimulus_;
 	documenter->documentTrialParameters(std::move(trial));
 	nextStimulus_ = stimulusList->next();
 }
 
-void SpatialHearingAidModel::playAudio(PlayAudioRequest *p) {
-	auto reader = makeReader(p->audioFilePath);
-	player->setAudioLoader(audioProcessingLoaderFactory->make(
-		reader, 
-		p->processorFactory->make(reader.get(), p->level_dB_Spl))
-	);
-	AudioPlayer::Preparation playing;
-	playing.channels = reader->channels();
-	playing.sampleRate = reader->sampleRate();
-	playing.framesPerBuffer = p->framesPerBuffer;
-	playing.audioDevice = p->audioDevice;
-	prepareAudioPlayer(std::move(playing));
+void SpatialHearingAidModel::playAudio(const PlayAudioRequest &p) {
+	auto reader = makeReader(p.audioFilePath);
+
+	AudioPlayer::Preparation preparation;
+	preparation.channels = reader->channels();
+	preparation.sampleRate = reader->sampleRate();
+	preparation.framesPerBuffer = p.framesPerBuffer;
+	preparation.audioDevice = std::move(p.audioDevice);
+	prepareAudioPlayer(preparation);
+
+	MakeAudioLoader makingLoader;
+	makingLoader.level_dB_Spl = p.level_dB_Spl;
+	makingLoader.reader = std::move(reader);
+	makingLoader.processorFactory = p.processorFactory;
+	player->setAudioLoader(makeLoader(makingLoader));
+
 	player->play();
+}
+
+std::shared_ptr<AudioLoader> SpatialHearingAidModel::makeLoader(const MakeAudioLoader &p) {
+	return audioProcessingLoaderFactory->make(
+		p.reader, 
+		p.processorFactory->make(p.reader.get(), p.level_dB_Spl)
+	);
 }
 
 std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string filePath) {
@@ -438,50 +460,49 @@ std::shared_ptr<AudioFrameReader> SpatialHearingAidModel::makeReader(std::string
 	}
 }
 
-void SpatialHearingAidModel::prepareAudioPlayer(AudioPlayer::Preparation p) {
+void SpatialHearingAidModel::prepareAudioPlayer(const AudioPlayer::Preparation &p) {
 	try {
-		player->prepareToPlay(std::move(p));
+		player->prepareToPlay(p);
 	}
 	catch (const AudioPlayer::PreparationFailure &e) {
 		throw RequestFailure{ e.what() };
 	}
 }
 
-void SpatialHearingAidModel::playCalibration(Calibration *p) {
+void SpatialHearingAidModel::playCalibration(const Calibration &p) {
 	if (player->isPlaying())
 		return;
 
-	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
-	auto processorFactory_ = makeProcessorFactory(p->processing);
+	const auto framesPerBuffer_ = framesPerBuffer(p.processing);
+	auto processorFactory_ = makeProcessorFactory(p.processing);
 
 	PlayAudioRequest request;
-	request.audioFilePath = p->audioFilePath;
-	request.audioDevice = p->audioDevice;
-	request.level_dB_Spl = p->level_dB_Spl;
-	request.framesPerBuffer = framesPerBuffer;
+	request.audioFilePath = std::move(p.audioFilePath);
+	request.audioDevice = std::move(p.audioDevice);
+	request.level_dB_Spl = p.level_dB_Spl;
+	request.framesPerBuffer = framesPerBuffer_;
 	request.processorFactory = processorFactory_.get();
-	playAudio(&request);
+	playAudio(request);
 }
 
 void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
 }
 
-void SpatialHearingAidModel::processAudioForSaving(SavingAudio *p) {
-	auto reader = makeReader(p->inputAudioFilePath);
-	auto processorFactory_ = makeProcessorFactory(p->processing);
-	auto processor_ = processorFactory_->make(reader.get(), p->level_dB_Spl);
-	auto loader_ = audioProcessingLoaderFactory->make(reader, processor_);
-	const auto framesPerBuffer = p->processing.usingHearingAidSimulation
-		? p->processing.chunkSize
-		: defaultFramesPerBuffer;
+void SpatialHearingAidModel::processAudioForSaving(const SavingAudio &p) {
+	auto reader = makeReader(p.inputAudioFilePath);
+	auto processorFactory_ = makeProcessorFactory(p.processing);
+	MakeAudioLoader loading;
+	loading.level_dB_Spl = p.level_dB_Spl;
+	loading.reader = reader;
+	loading.processorFactory = processorFactory_.get();
+	auto loader_ = makeLoader(loading);
+	const auto framesPerBuffer_ = framesPerBuffer(p.processing);
 	using channel_type = AudioProcessingLoader::channel_type;
 	std::vector<std::vector<channel_type::element_type>> channels(reader->channels());
 	std::vector<channel_type> adapted;
 	for (auto &channel : channels) {
-		channel.resize(framesPerBuffer);
+		channel.resize(framesPerBuffer_);
 		adapted.push_back({ channel });
 	}
 	toWrite_.resize(reader->channels());

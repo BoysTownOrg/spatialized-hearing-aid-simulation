@@ -1,25 +1,27 @@
 #pragma once
 
 #include "AudioPlayer.h"
-#include "ISpatializedHearingAidSimulationFactory.h"
+#include "SimulationChannelFactory.h"
 #include "PrescriptionReader.h"
 #include "BrirReader.h"
 #include "AudioFrameReader.h"
 #include "AudioFrameWriter.h"
 #include "AudioProcessingLoader.h"
-#include "ICalibrationComputer.h"
+#include "CalibrationComputer.h"
 #include "StimulusList.h"
-#include "Documenter.h"
+#include "TestDocumenter.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
 #include <presentation/Model.h>
 #include <memory>
 #include <string>
 
-class AudioFrameProcessorFactory {
+class StereoSimulationFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFrameProcessorFactory);
+	INTERFACE_OPERATIONS(StereoSimulationFactory);
 
-	struct CommonHearingAidSimulation {
+	struct HearingAidSimulation {
+		PrescriptionReader::Dsl leftPrescription;
+		PrescriptionReader::Dsl rightPrescription;
 		double attack_ms;
 		double release_ms;
 		int windowSize;
@@ -34,55 +36,54 @@ public:
 class AudioFrameProcessorFactoryFactory {
 public:
 	INTERFACE_OPERATIONS(AudioFrameProcessorFactoryFactory);
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeSpatialization(
-		BrirReader::BinauralRoomImpulseResponse) = 0;
+	virtual std::shared_ptr<StereoSimulationFactory> makeSpatialization(
+		BrirReader::BinauralRoomImpulseResponse
+	) = 0;
 
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeHearingAid(
-		AudioFrameProcessorFactory::CommonHearingAidSimulation,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_) = 0;
+	virtual std::shared_ptr<StereoSimulationFactory> makeHearingAid(
+		StereoSimulationFactory::HearingAidSimulation
+	) = 0;
 
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeFullSimulation(
+	virtual std::shared_ptr<StereoSimulationFactory> makeFullSimulation(
 		BrirReader::BinauralRoomImpulseResponse,
-		AudioFrameProcessorFactory::CommonHearingAidSimulation,
-		PrescriptionReader::Dsl leftPrescription_,
-		PrescriptionReader::Dsl rightPrescription_) = 0;
+		StereoSimulationFactory::HearingAidSimulation
+	) = 0;
 
-	virtual std::shared_ptr<AudioFrameProcessorFactory> makeNoSimulation() = 0;
+	virtual std::shared_ptr<StereoSimulationFactory> makeNoSimulation() = 0;
 };
 
 class SpatialHearingAidModel : public Model {
 	std::vector<std::vector<AudioFrameWriter::channel_type::element_type>> toWrite_{};
 	std::string nextStimulus_{};
-	int framesPerBufferForTest{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
-	std::shared_ptr<AudioFrameProcessorFactory> processorFactoryForTest;
+	std::shared_ptr<StereoSimulationFactory> processorFactoryForTest;
 	StimulusList *stimulusList;
-	Documenter *documenter;
+	TestDocumenter *documenter;
 	PrescriptionReader* prescriptionReader;
 	BrirReader *brirReader;
 	AudioFrameReaderFactory *audioReaderFactory;
 	AudioFrameWriterFactory *audioWriterFactory;
 	AudioPlayer *player;
 	AudioProcessingLoaderFactory *audioProcessingLoaderFactory;
+	int framesPerBufferForTest{};
 public:
 	SPATIALIZED_HA_SIMULATION_API SpatialHearingAidModel(
 		StimulusList *,
-		Documenter *,
+		TestDocumenter *,
 		AudioPlayer *,
 		AudioProcessingLoaderFactory *,
 		AudioFrameReaderFactory *,
 		AudioFrameWriterFactory *,
 		PrescriptionReader *,
 		BrirReader *,
-		ISpatializedHearingAidSimulationFactory *,
-		ICalibrationComputerFactory *
+		SimulationChannelFactory *,
+		CalibrationComputerFactory *
 	);
-	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(Testing *) override;
-	SPATIALIZED_HA_SIMULATION_API void playNextTrial(Trial *) override;
+	SPATIALIZED_HA_SIMULATION_API void prepareNewTest(const Testing &) override;
+	SPATIALIZED_HA_SIMULATION_API void playNextTrial(const Trial &) override;
 	SPATIALIZED_HA_SIMULATION_API bool testComplete() override;
-	SPATIALIZED_HA_SIMULATION_API void playCalibration(Calibration *) override;
-	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(SavingAudio *) override;
+	SPATIALIZED_HA_SIMULATION_API void playCalibration(const Calibration &) override;
+	SPATIALIZED_HA_SIMULATION_API void processAudioForSaving(const SavingAudio &) override;
 	SPATIALIZED_HA_SIMULATION_API void saveAudio(std::string) override;
 	SPATIALIZED_HA_SIMULATION_API void stopCalibration() override;
 	SPATIALIZED_HA_SIMULATION_API std::vector<std::string> audioDeviceDescriptions() override;
@@ -94,16 +95,26 @@ private:
 		std::string audioDevice;
 		double level_dB_Spl;
 		int framesPerBuffer;
-		AudioFrameProcessorFactory *processorFactory;
+		StereoSimulationFactory *processorFactory;
 	};
-	void playAudio(PlayAudioRequest *);
+	void playAudio(const PlayAudioRequest &);
+	
+	struct MakeAudioLoader {
+		double level_dB_Spl;
+		std::shared_ptr<AudioFrameReader> reader;
+		StereoSimulationFactory *processorFactory;
+	};
+	std::shared_ptr<AudioLoader>makeLoader(const MakeAudioLoader &);
+
 	void assertSizeIsPowerOfTwo(int);
+	int framesPerBuffer(const SignalProcessing &);
 	BrirReader::BinauralRoomImpulseResponse readAndCheckBrir(std::string filePath);
 	PrescriptionReader::Dsl readPrescription(std::string filePath);
 	BrirReader::BinauralRoomImpulseResponse readBrir(std::string filePath);
 	std::shared_ptr<AudioFrameReader> makeReader(std::string filePath);
 	std::shared_ptr<AudioFrameWriter> makeWriter(std::string filePath);
-	void prepareAudioPlayer(AudioPlayer::Preparation);
-	void prepareNewTest_(Testing *);
-	std::shared_ptr<AudioFrameProcessorFactory> makeProcessorFactory(SignalProcessing);
+	void prepareAudioPlayer(const AudioPlayer::Preparation &);
+	void prepareNewTest_(const Testing &);
+	std::shared_ptr<StereoSimulationFactory> makeProcessorFactory(const SignalProcessing &);
+	StereoSimulationFactory::HearingAidSimulation hearingAidSimulation(const SignalProcessing &);
 };

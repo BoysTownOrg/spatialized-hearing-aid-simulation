@@ -20,8 +20,8 @@
 #include <test-documenting/TestDocumenter.h>
 #include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <spatialized-hearing-aid-simulation/ChannelCopier.h>
-#include <spatialized-hearing-aid-simulation/SpatializedHearingAidSimulationFactory.h>
-#include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
+#include <spatialized-hearing-aid-simulation/SimulationChannelFactoryImpl.h>
+#include <spatialized-hearing-aid-simulation/CalibrationComputerImpl.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
 template<typename T>
@@ -63,9 +63,9 @@ class ScalarFactoryImpl : public ScalarFactory {
 	}
 };
 
-class CalibrationComputerFactoryImpl : public ICalibrationComputerFactory {
-	std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override {
-		return std::make_shared<CalibrationComputer>(*r);
+class CalibrationComputerFactoryImpl : public CalibrationComputerFactory {
+	std::shared_ptr<CalibrationComputer> make(AudioFrameReader *r) override {
+		return std::make_shared<CalibrationComputerImpl>(*r);
 	}
 };
 
@@ -90,7 +90,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int) {
 	ChaproFactory compressorFactory{};
 	FirFilterFactoryImpl firFilterFactory{};
 	HearingAidFactoryImpl hearingAidFactory{&compressorFactory};
-	SpatializedHearingAidSimulationFactory simulationFactory{
+	SimulationChannelFactoryImpl simulationFactory{
 		&scalarFactory, 
 		&firFilterFactory, 
 		&hearingAidFactory

@@ -29,13 +29,13 @@ public:
 		std::string audioDirectory;
 		std::string testFilePath;
 	};
-	virtual void prepareNewTest(Testing *) = 0;
+	virtual void prepareNewTest(const Testing &) = 0;
 
 	struct Trial {
 		std::string audioDevice;
 		double level_dB_Spl;
 	};
-	virtual void playNextTrial(Trial *) = 0;
+	virtual void playNextTrial(const Trial &) = 0;
 
 	struct Calibration {
 		SignalProcessing processing;
@@ -43,7 +43,7 @@ public:
 		std::string audioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void playCalibration(Calibration *) = 0;
+	virtual void playCalibration(const Calibration &) = 0;
 	virtual void stopCalibration() = 0;
 
 	struct SavingAudio {
@@ -51,7 +51,7 @@ public:
 		std::string inputAudioFilePath;
 		double level_dB_Spl;
 	};
-	virtual void processAudioForSaving(SavingAudio *) = 0;
+	virtual void processAudioForSaving(const SavingAudio &) = 0;
 	virtual void saveAudio(std::string filePath) = 0;
 
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;

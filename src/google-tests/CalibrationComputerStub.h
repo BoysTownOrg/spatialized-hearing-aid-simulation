@@ -1,10 +1,10 @@
 #pragma once
 
 #include "ArgumentCollection.h"
-#include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
+#include <spatialized-hearing-aid-simulation/CalibrationComputerImpl.h>
 #include <map>
 
-class CalibrationComputerStub : public ICalibrationComputer {
+class CalibrationComputerStub : public CalibrationComputer {
 	ArgumentCollection<double> levels_{};
 	std::map<int, double> signalScales;
 public:
@@ -23,17 +23,17 @@ public:
 	}
 };
 
-class CalibrationComputerStubFactory : public ICalibrationComputerFactory {
-	std::shared_ptr<ICalibrationComputer> computer;
+class CalibrationComputerStubFactory : public CalibrationComputerFactory {
+	std::shared_ptr<CalibrationComputer> computer;
 	AudioFrameReader *reader_;
 public:
 	explicit CalibrationComputerStubFactory(
-		std::shared_ptr<ICalibrationComputer> computer =
+		std::shared_ptr<CalibrationComputer> computer =
 			std::make_shared<CalibrationComputerStub>()
 	) :
 		computer{ computer } {}
 
-	std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override
+	std::shared_ptr<CalibrationComputer> make(AudioFrameReader *r) override
 	{
 		reader_ = r;
 		return computer;

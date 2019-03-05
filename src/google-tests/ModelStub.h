@@ -31,8 +31,8 @@ public:
 		return calibrationParameters_;
 	}
 
-	void processAudioForSaving(SavingAudio *p) override {
-		saveAudioParameters_ = *p;
+	void processAudioForSaving(const SavingAudio &p) override {
+		saveAudioParameters_ = p;
 		saveAudioLog_.insert("processAudioForSaving ");
 	}
 
@@ -62,8 +62,8 @@ public:
 		return calibrationStopped_;
 	}
 
-	void playCalibration(Calibration *p) override {
-		calibrationParameters_ = *p;
+	void playCalibration(const Calibration &p) override {
+		calibrationParameters_ = p;
 		calibrationPlayed_ = true;
 	}
 
@@ -79,8 +79,8 @@ public:
 		audioDeviceDescriptions_ = std::move(d);
 	}
 
-	void prepareNewTest(Testing *p) override {
-		testParameters_ = *p;
+	void prepareNewTest(const Testing &p) override {
+		testParameters_ = p;
 		testPrepared_ = true;
 	}
 
@@ -96,8 +96,8 @@ public:
 		return trialPlayed_;
 	}
 
-	void playNextTrial(Trial *p) override {
-		trialParameters_ = *p;
+	void playNextTrial(const Trial &p) override {
+		trialParameters_ = p;
 		trialPlayed_ = true;
 	}
 
@@ -125,21 +125,21 @@ public:
 		message = std::move(s);
 	}
 
-	void prepareNewTest(Testing *) override {
+	void prepareNewTest(const Testing &) override {
 		throw RequestFailure{ message };
 	}
 
-	void playNextTrial(Trial *) override {
+	void playNextTrial(const Trial &) override {
 		throw RequestFailure{ message };
 	}
 
-	void playCalibration(Calibration *) override {
+	void playCalibration(const Calibration &) override {
 		throw RequestFailure{ message };
 	}
 
 	bool testComplete() override { return {}; }
 	void stopCalibration() override {}
 	std::vector<std::string> audioDeviceDescriptions() override { return {}; }
-	void processAudioForSaving(SavingAudio *) override {}
+	void processAudioForSaving(const SavingAudio &) override {}
 	void saveAudio(std::string) override {}
 };
