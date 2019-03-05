@@ -1971,8 +1971,9 @@ namespace {
 		RefactoredModelFailureTests,
 		saveAudioThrowsRequestFailureWhenAudioFrameWriterCannotBeCreated
 	) {
-		ErrorAudioFrameWriterFactory failing{ "error." };
+		ErrorAudioFrameWriterFactory failing{};
 		audioWriterFactory = &failing;
-		assertThrowsRequestFailure(&savingAudio, "error.");
+		savingAudio.setAudioFilePath("a");
+		assertThrowsRequestFailure(&savingAudio, "Audio file 'a' cannot be written.");
 	}
 }

@@ -40,7 +40,7 @@ class ErrorAudioFrameWriterFactory : public AudioFrameWriterFactory {
 	std::string errorMessage{};
 public:
 	explicit ErrorAudioFrameWriterFactory(
-		std::string errorMessage
+		std::string errorMessage = {}
 	) noexcept : 
 		errorMessage{ std::move(errorMessage) } {}
 
