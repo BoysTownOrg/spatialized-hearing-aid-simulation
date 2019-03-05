@@ -3,11 +3,9 @@
 #include "LogString.h"
 #include <spatialized-hearing-aid-simulation/AudioProcessingLoader.h>
 
-class AudioProcessingLoaderStub : public AudioLoader {
+class AudioLoaderStub : public AudioLoader {
 	LogString log_{};
 	gsl::span<channel_type> audioBuffer_{};
-	int sampleRate_{};
-	int channels_{};
 	bool complete_{};
 public:
 	void setComplete() noexcept {
@@ -18,24 +16,12 @@ public:
 		return complete_;
 	}
 
-	auto audioBuffer() const noexcept {
-		return audioBuffer_;
-	}
-
 	void load(gsl::span<channel_type> audio) override {
 		audioBuffer_ = std::move(audio);
 	}
 
-	void setSampleRate(int r) noexcept {
-		sampleRate_ = r;
-	}
-
-	void setChannels(int c) noexcept {
-		channels_ = c;
-	}
-
-	auto &log() const noexcept {
-		return log_;
+	auto audioBuffer() const noexcept {
+		return audioBuffer_;
 	}
 };
 
@@ -46,7 +32,7 @@ class AudioProcessingLoaderStubFactory : public AudioProcessingLoaderFactory {
 public:
 	explicit AudioProcessingLoaderStubFactory(
 		std::shared_ptr<AudioLoader> loader =
-			std::make_shared<AudioProcessingLoaderStub>()
+			std::make_shared<AudioLoaderStub>()
 	) noexcept :
 		loader{ std::move(loader) } {}
 

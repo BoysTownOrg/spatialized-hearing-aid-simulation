@@ -1,5 +1,5 @@
 #include "FilterbankCompressorSpy.h"
-#include "FakeAudioProcessingLoader.h"
+#include "AudioLoaderStub.h"
 #include "AudioFrameReaderStub.h"
 #include "AudioProcessingLoaderStub.h"
 #include "PrescriptionReaderStub.h"
@@ -400,8 +400,8 @@ namespace {
 			= std::make_shared<AudioFrameWriterStub>();
 		AudioFrameWriterStubFactory audioFrameWriterFactory{ audioFrameWriter };
 		AudioPlayerStub audioPlayer{};
-		std::shared_ptr<AudioProcessingLoaderStub> audioLoader =
-			std::make_shared<AudioProcessingLoaderStub>();
+		std::shared_ptr<AudioLoaderStub> audioLoader =
+			std::make_shared<AudioLoaderStub>();
 		AudioProcessingLoaderStubFactory audioLoaderFactory{ audioLoader };
 		SpatializedHearingAidSimulationFactoryStub simulationFactory{};
 		std::shared_ptr<CalibrationComputerStub> calibrationComputer =
@@ -493,10 +493,6 @@ namespace {
 
 		void processAudioLoaderProcessor(gsl::span<channel_type> channels) {
 			audioLoaderFactory.audioFrameProcessor()->process(channels);
-		}
-
-		void assertAudioLoaderHasNotBeenModified() {
-			assertTrue(audioLoader->log().isEmpty());
 		}
 
 		void assertFullSimulationNotMade() {
@@ -955,12 +951,6 @@ namespace {
 		void assertPlayerPreparedPriorToPlaying(UseCase *useCase) {
 			runUseCase(useCase);
 			assertEqual("prepareToPlay play ", audioPlayer.log());
-		}
-
-		void assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(UseCase *useCase) {
-			audioPlayer.setPlaying();
-			runUseCase(useCase);
-			assertAudioLoaderHasNotBeenModified();
 		}
 
 		void assertNoHearingAidSimulationYieldsNoSuchSimulationMade(
@@ -1549,14 +1539,6 @@ namespace {
 
 	TEST_F(SpatialHearingAidModelTests, playCalibrationPreparesPlayerBeforePlaying) {
 		assertPlayerPreparedPriorToPlaying(&playingCalibration);
-	}
-
-	TEST_F(SpatialHearingAidModelTests, playTrialDoesNotAlterLoaderWhenPlayerPlaying) {
-		assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(&playingTrial);
-	}
-
-	TEST_F(SpatialHearingAidModelTests, playCalibrationDoesNotAlterLoaderWhenPlayerPlaying) {
-		assertAudioLoaderHasNotBeenModifiedWhenPlayerIsPlaying(&playingCalibration);
 	}
 
 	TEST_F(SpatialHearingAidModelTests, audioDeviceDescriptionsReturnsDescriptionsFromPlayer) {

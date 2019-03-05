@@ -140,13 +140,13 @@
     <ClInclude Include="AudioProcessingLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FakeAudioProcessingLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FakeAudioFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioFrameWriterStub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioLoaderStub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

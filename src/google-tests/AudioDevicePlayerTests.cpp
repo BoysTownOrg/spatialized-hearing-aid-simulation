@@ -8,8 +8,8 @@ namespace {
 	class AudioDevicePlayerTests : public ::testing::Test {
 	protected:
 		AudioDeviceStub device{};
-		std::shared_ptr<AudioProcessingLoaderStub> loader =
-			std::make_shared<AudioProcessingLoaderStub>();
+		std::shared_ptr<AudioLoaderStub> loader =
+			std::make_shared<AudioLoaderStub>();
 		AudioDevicePlayer player{ &device };
 
 		AudioDevicePlayerTests() {
