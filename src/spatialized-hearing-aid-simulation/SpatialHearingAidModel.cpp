@@ -10,12 +10,12 @@ class StereoSpatializationFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::Spatialization left_spatial;
 	SimulationChannelFactory::Spatialization right_spatial;
 	SimulationChannelFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		SimulationChannelFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
@@ -52,12 +52,12 @@ class StereoHearingAidFactory : public StereoSimulationFactory {
 	SimulationChannelFactory::HearingAidSimulation left_hs;
 	SimulationChannelFactory::HearingAidSimulation right_hs;
 	SimulationChannelFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoHearingAidFactory(
 		HearingAidSimulation processing,
 		SimulationChannelFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
@@ -106,13 +106,13 @@ class StereoSpatializedHearingAidSimulationFactory : public StereoSimulationFact
 	SimulationChannelFactory::FullSimulation left_fs;	
 	SimulationChannelFactory::FullSimulation right_fs;
 	SimulationChannelFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoSpatializedHearingAidSimulationFactory(
 		BrirReader::BinauralRoomImpulseResponse brir_,
 		StereoSimulationFactory::HearingAidSimulation processing,
 		SimulationChannelFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		CalibrationComputerFactory *calibrationComputerFactory
 	) :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } 
@@ -162,11 +162,11 @@ public:
 
 class StereoNoSimulation : public StereoSimulationFactory {
 	SimulationChannelFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoNoSimulation(
 		SimulationChannelFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
@@ -194,11 +194,11 @@ public:
 
 class StereoProcessorFactoryFactory : public AudioFrameProcessorFactoryFactory {
 	SimulationChannelFactory *simulationFactory;
-	ICalibrationComputerFactory *calibrationComputerFactory;
+	CalibrationComputerFactory *calibrationComputerFactory;
 public:
 	StereoProcessorFactoryFactory(
 		SimulationChannelFactory *simulationFactory,
-		ICalibrationComputerFactory *calibrationComputerFactory
+		CalibrationComputerFactory *calibrationComputerFactory
 	) noexcept :
 		simulationFactory{ simulationFactory },
 		calibrationComputerFactory{ calibrationComputerFactory } {}
@@ -257,7 +257,7 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	PrescriptionReader *prescriptionReader,
 	BrirReader *brirReader,
 	SimulationChannelFactory *simulationFactory,
-	ICalibrationComputerFactory *calibrationComputerFactory
+	CalibrationComputerFactory *calibrationComputerFactory
 ) :
 	stimulusList{ stimulusList },
 	documenter{ documenter },

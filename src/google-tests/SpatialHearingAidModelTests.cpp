@@ -1674,7 +1674,7 @@ namespace {
 		SpatializedHearingAidSimulationFactoryStub defaultSimulationFactory{};
 		SimulationChannelFactory *simulationFactory{&defaultSimulationFactory};
 		CalibrationComputerStubFactory defaultCalibrationFactory{};
-		ICalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
+		CalibrationComputerFactory *calibrationComputerFactory{ &defaultCalibrationFactory };
 
 		void assertThrowsRequestFailure(UseCase *useCase, std::string what) {
 			try {

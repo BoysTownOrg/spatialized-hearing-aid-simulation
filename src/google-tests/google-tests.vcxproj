@@ -160,7 +160,7 @@
     <ClCompile Include="AudioFileWriterAdapterTests.cpp" />
     <ClCompile Include="AudioDevicePlayerTests.cpp" />
     <ClCompile Include="BrirAdapterTests.cpp" />
-    <ClCompile Include="CalibrationComputerTests.cpp" />
+    <ClCompile Include="CalibrationComputerImplTests.cpp" />
     <ClCompile Include="RandomizedStimulusListTests.cpp" />
     <ClCompile Include="ChannelCopierTester.cpp" />
     <ClCompile Include="ChannelProcessingGroupTests.cpp" />

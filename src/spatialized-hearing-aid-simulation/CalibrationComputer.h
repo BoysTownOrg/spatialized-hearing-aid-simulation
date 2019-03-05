@@ -1,18 +1,17 @@
 #pragma once
 
-#include "ICalibrationComputer.h"
-#include "spatialized-hearing-aid-simulation-exports.h"
+#include "AudioFrameReader.h"
+#include <common-includes/Interface.h>
+#include <memory>
 
-class CalibrationComputer : public ICalibrationComputer {
-	using sample_type = AudioFrameReader::channel_type::element_type;
-	using channel_type = std::vector<sample_type>;
-    std::vector<channel_type> audioFileContents;
+class CalibrationComputer {
 public:
-	SPATIALIZED_HA_SIMULATION_API explicit CalibrationComputer(AudioFrameReader &reader);
-	SPATIALIZED_HA_SIMULATION_API double signalScale(int channel, double level) override;
-
-private:
-	bool validChannel(int channel);
-	void read(AudioFrameReader & reader);
+	INTERFACE_OPERATIONS(CalibrationComputer);
+	virtual double signalScale(int channel, double level) = 0;
 };
 
+class CalibrationComputerFactory {
+public:
+	INTERFACE_OPERATIONS(CalibrationComputerFactory);
+	virtual std::shared_ptr<CalibrationComputer> make(AudioFrameReader *) = 0;
+};

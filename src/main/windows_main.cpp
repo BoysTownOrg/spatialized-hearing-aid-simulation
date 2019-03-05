@@ -21,7 +21,7 @@
 #include <spatialized-hearing-aid-simulation/ZeroPaddedLoader.h>
 #include <spatialized-hearing-aid-simulation/ChannelCopier.h>
 #include <spatialized-hearing-aid-simulation/SimulationChannelFactoryImpl.h>
-#include <spatialized-hearing-aid-simulation/CalibrationComputer.h>
+#include <spatialized-hearing-aid-simulation/CalibrationComputerImpl.h>
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
 class HearingAidFactoryImpl : public HearingAidFactory {
@@ -47,9 +47,9 @@ class ScalarFactoryImpl : public ScalarFactory {
 	}
 };
 
-class CalibrationComputerFactoryImpl : public ICalibrationComputerFactory {
-	std::shared_ptr<ICalibrationComputer> make(AudioFrameReader *r) override {
-		return std::make_shared<CalibrationComputer>(*r);
+class CalibrationComputerFactoryImpl : public CalibrationComputerFactory {
+	std::shared_ptr<CalibrationComputer> make(AudioFrameReader *r) override {
+		return std::make_shared<CalibrationComputerImpl>(*r);
 	}
 };
 
