@@ -3,7 +3,7 @@
 #include <spatialized-hearing-aid-simulation/SpatialHearingAidModel.h>
 
 class AudioFrameWriterStub : public AudioFrameWriter {
-	std::vector<float> written_{};
+	std::vector<AudioFrameWriter::channel_type::element_type> written_{};
 public:
 	auto written() const {
 		return written_;
@@ -26,7 +26,7 @@ public:
 	) noexcept :
 		writer{ std::move(writer) } {}
 
-	std::shared_ptr<AudioFrameWriter> make(std::string filePath) {
+	std::shared_ptr<AudioFrameWriter> make(std::string filePath) override {
 		filePath_ = std::move(filePath);
 		return writer;
 	}
@@ -44,7 +44,7 @@ public:
 	) noexcept : 
 		errorMessage{ std::move(errorMessage) } {}
 
-	std::shared_ptr<AudioFrameWriter> make(std::string) {
+	std::shared_ptr<AudioFrameWriter> make(std::string) override {
 		throw CreateError{ errorMessage };
 	}
 };

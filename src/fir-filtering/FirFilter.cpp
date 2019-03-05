@@ -84,7 +84,7 @@ void FirFilter<T>::process(signal_type signal) {
 
 template<typename T>
 void FirFilter<T>::filterCompleteSegments(signal_type signal) {
-	for (coefficients_size_type i = 0; i < signal.size() / L; ++i)
+	for (coefficients_size_type i{ 0 }; i < signal.size() / L; ++i)
 		filter(signal.subspan(i * L, L));
 }
 
@@ -101,7 +101,7 @@ void FirFilter<T>::filter(signal_type signal) {
 		sample_type{ 0 }
 	);
 	overlapAdd();
-	for (index_type i = 0; i < signal.size(); ++i)
+	for (index_type i{ 0 }; i < signal.size(); ++i)
 		signal[i] = overlap.at(i) / N;
 	shiftOverlap(signal.size());
 }
@@ -128,7 +128,7 @@ void FirFilter<T>::overlapAdd() {
 
 template<typename T>
 void FirFilter<T>::shiftOverlap(index_type n) {
-	for (index_type i = 0; i < N - n; ++i)
+	for (index_type i{ 0 }; i < N - n; ++i)
 		overlap.at(i) = overlap.at(i + n);
 	std::fill(overlap.end() - n, overlap.end(), sample_type{ 0 });
 }

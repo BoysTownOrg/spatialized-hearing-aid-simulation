@@ -61,7 +61,7 @@ public:
 		frames_ = f;
 	}
 
-	auto &log() const {
+	auto &log() const noexcept {
 		return log_;
 	}
 
