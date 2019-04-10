@@ -83,7 +83,6 @@
 		26DC3D5E225E71DA002275F2 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D5D225E71DA002275F2 /* libfltk.a */; };
 		26DC3D60225E722C002275F2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D5F225E722C002275F2 /* Cocoa.framework */; };
 		26DC3D62225E7242002275F2 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D61225E7242002275F2 /* libportaudio.a */; };
-		26DC3D64225E7273002275F2 /* macos_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3D63225E7273002275F2 /* macos_main.mm */; };
 		26DC3D65225E7283002275F2 /* macos_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3D63225E7273002275F2 /* macos_main.mm */; };
 /* End PBXBuildFile section */
 
@@ -104,21 +103,17 @@
 		26DC3A75225E3F47002275F2 /* google-tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "google-tests"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DC3B52225E48A7002275F2 /* libaudio-file-reading-writing.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libaudio-file-reading-writing.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DC3B7A225E49C0002275F2 /* libbinaural-room-impulse-response.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libbinaural-room-impulse-response.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
-		26DC3B87225E4AED002275F2 /* signal-processing.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "signal-processing.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3B88225E4AED002275F2 /* ScalingProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScalingProcessor.h; sourceTree = "<group>"; };
-		26DC3B89225E4AED002275F2 /* signal-processing.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "signal-processing.vcxproj"; sourceTree = "<group>"; };
 		26DC3B8A225E4AED002275F2 /* ScalingProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScalingProcessor.cpp; sourceTree = "<group>"; };
 		26DC3B8C225E4AED002275F2 /* Chapro.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Chapro.cpp; sourceTree = "<group>"; };
 		26DC3B8D225E4AED002275F2 /* MersenneTwisterRandomizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MersenneTwisterRandomizer.h; sourceTree = "<group>"; };
 		26DC3B8E225E4AED002275F2 /* WindowsDirectoryReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WindowsDirectoryReader.cpp; sourceTree = "<group>"; };
 		26DC3B8F225E4AED002275F2 /* NlohmannJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NlohmannJsonParser.h; sourceTree = "<group>"; };
 		26DC3B90225E4AED002275F2 /* NlohmannJsonParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NlohmannJsonParser.cpp; sourceTree = "<group>"; };
-		26DC3B91225E4AED002275F2 /* main.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = main.vcxproj; sourceTree = "<group>"; };
 		26DC3B92225E4AED002275F2 /* FltkView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FltkView.cpp; sourceTree = "<group>"; };
 		26DC3B93225E4AED002275F2 /* FltkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FltkView.h; sourceTree = "<group>"; };
 		26DC3B94225E4AED002275F2 /* WindowsDirectoryReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowsDirectoryReader.h; sourceTree = "<group>"; };
 		26DC3B95225E4AED002275F2 /* Libsndfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Libsndfile.cpp; sourceTree = "<group>"; };
-		26DC3B96225E4AED002275F2 /* main.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = main.vcxproj.filters; sourceTree = "<group>"; };
 		26DC3B97225E4AED002275F2 /* Chapro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chapro.h; sourceTree = "<group>"; };
 		26DC3B98225E4AED002275F2 /* PortAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortAudioDevice.h; sourceTree = "<group>"; };
 		26DC3B99225E4AED002275F2 /* Libsndfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Libsndfile.h; sourceTree = "<group>"; };
@@ -128,9 +123,7 @@
 		26DC3B9D225E4AED002275F2 /* MersenneTwisterRandomizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MersenneTwisterRandomizer.cpp; sourceTree = "<group>"; };
 		26DC3B9E225E4AED002275F2 /* PortAudioDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PortAudioDevice.cpp; sourceTree = "<group>"; };
 		26DC3BA0225E4AED002275F2 /* FirFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirFilter.h; sourceTree = "<group>"; };
-		26DC3BA1225E4AED002275F2 /* fir-filtering.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "fir-filtering.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BA2225E4AED002275F2 /* FirFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirFilter.cpp; sourceTree = "<group>"; };
-		26DC3BA3225E4AED002275F2 /* fir-filtering.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "fir-filtering.vcxproj"; sourceTree = "<group>"; };
 		26DC3BA5225E4AED002275F2 /* SignalProcessingChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalProcessingChain.h; sourceTree = "<group>"; };
 		26DC3BA6225E4AED002275F2 /* ZeroPaddedLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZeroPaddedLoader.h; sourceTree = "<group>"; };
 		26DC3BA7225E4AED002275F2 /* CalibrationComputerImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CalibrationComputerImpl.cpp; sourceTree = "<group>"; };
@@ -140,7 +133,6 @@
 		26DC3BAB225E4AED002275F2 /* PrescriptionReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrescriptionReader.h; sourceTree = "<group>"; };
 		26DC3BAC225E4AED002275F2 /* SimulationChannelFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulationChannelFactory.h; sourceTree = "<group>"; };
 		26DC3BAD225E4AED002275F2 /* SpatialHearingAidModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpatialHearingAidModel.cpp; sourceTree = "<group>"; };
-		26DC3BAE225E4AED002275F2 /* spatialized-hearing-aid-simulation.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "spatialized-hearing-aid-simulation.vcxproj"; sourceTree = "<group>"; };
 		26DC3BAF225E4AED002275F2 /* CalibrationComputer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalibrationComputer.h; sourceTree = "<group>"; };
 		26DC3BB0225E4AED002275F2 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
 		26DC3BB1225E4AED002275F2 /* SignalProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalProcessor.h; sourceTree = "<group>"; };
@@ -153,7 +145,6 @@
 		26DC3BB8225E4AED002275F2 /* StimulusList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StimulusList.h; sourceTree = "<group>"; };
 		26DC3BB9225E4AED002275F2 /* AudioProcessingLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioProcessingLoader.h; sourceTree = "<group>"; };
 		26DC3BBA225E4AED002275F2 /* AudioFrameReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameReader.h; sourceTree = "<group>"; };
-		26DC3BBB225E4AED002275F2 /* spatialized-hearing-aid-simulation.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "spatialized-hearing-aid-simulation.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BBC225E4AED002275F2 /* AudioFrameProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameProcessor.h; sourceTree = "<group>"; };
 		26DC3BBD225E4AED002275F2 /* ChannelProcessingGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelProcessingGroup.h; sourceTree = "<group>"; };
 		26DC3BBE225E4AED002275F2 /* ChannelCopier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChannelCopier.cpp; sourceTree = "<group>"; };
@@ -162,51 +153,35 @@
 		26DC3BC1225E4AED002275F2 /* spatialized-hearing-aid-simulation-exports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "spatialized-hearing-aid-simulation-exports.h"; sourceTree = "<group>"; };
 		26DC3BC2225E4AED002275F2 /* TestDocumenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestDocumenter.h; sourceTree = "<group>"; };
 		26DC3BC4225E4AED002275F2 /* HearingAidProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingAidProcessor.cpp; sourceTree = "<group>"; };
-		26DC3BC5225E4AED002275F2 /* hearing-aid-processing.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "hearing-aid-processing.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BC6225E4AED002275F2 /* FilterbankCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbankCompressor.h; sourceTree = "<group>"; };
 		26DC3BC7225E4AED002275F2 /* HearingAidProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HearingAidProcessor.h; sourceTree = "<group>"; };
-		26DC3BC8225E4AED002275F2 /* hearing-aid-processing.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "hearing-aid-processing.vcxproj"; sourceTree = "<group>"; };
 		26DC3BCA225E4AED002275F2 /* RandomizedStimulusList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomizedStimulusList.h; sourceTree = "<group>"; };
-		26DC3BCB225E4AED002275F2 /* stimulus-list.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "stimulus-list.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BCC225E4AED002275F2 /* stimulus-list-exports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "stimulus-list-exports.h"; sourceTree = "<group>"; };
-		26DC3BCD225E4AED002275F2 /* stimulus-list.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "stimulus-list.vcxproj"; sourceTree = "<group>"; };
 		26DC3BCE225E4AED002275F2 /* FileFilterDecorator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileFilterDecorator.h; sourceTree = "<group>"; };
 		26DC3BCF225E4AED002275F2 /* Randomizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Randomizer.h; sourceTree = "<group>"; };
 		26DC3BD0225E4AED002275F2 /* RandomizedStimulusList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomizedStimulusList.cpp; sourceTree = "<group>"; };
 		26DC3BD1225E4AED002275F2 /* DirectoryReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryReader.h; sourceTree = "<group>"; };
 		26DC3BD2225E4AED002275F2 /* FileFilterDecorator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileFilterDecorator.cpp; sourceTree = "<group>"; };
 		26DC3BD4225E4AED002275F2 /* Presenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Presenter.cpp; sourceTree = "<group>"; };
-		26DC3BD5225E4AED002275F2 /* presentation.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = presentation.vcxproj; sourceTree = "<group>"; };
 		26DC3BD6225E4AED002275F2 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
-		26DC3BD7225E4AED002275F2 /* presentation.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = presentation.vcxproj.filters; sourceTree = "<group>"; };
 		26DC3BD8225E4AED002275F2 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		26DC3BD9225E4AED002275F2 /* Presenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presenter.h; sourceTree = "<group>"; };
 		26DC3BDB225E4AED002275F2 /* BrirAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrirAdapter.cpp; sourceTree = "<group>"; };
-		26DC3BDC225E4AED002275F2 /* binaural-room-impulse-response.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "binaural-room-impulse-response.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BDD225E4AED002275F2 /* BrirAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrirAdapter.h; sourceTree = "<group>"; };
-		26DC3BDE225E4AED002275F2 /* binaural-room-impulse-response.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "binaural-room-impulse-response.vcxproj"; sourceTree = "<group>"; };
 		26DC3BE0225E4AED002275F2 /* AudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDevice.h; sourceTree = "<group>"; };
-		26DC3BE1225E4AED002275F2 /* playing-audio.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "playing-audio.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BE2225E4AED002275F2 /* AudioDevicePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDevicePlayer.h; sourceTree = "<group>"; };
-		26DC3BE3225E4AED002275F2 /* playing-audio.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "playing-audio.vcxproj"; sourceTree = "<group>"; };
 		26DC3BE4225E4AED002275F2 /* AudioDevicePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDevicePlayer.cpp; sourceTree = "<group>"; };
 		26DC3BE5225E4AED002275F2 /* playing-audio-exports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "playing-audio-exports.h"; sourceTree = "<group>"; };
 		26DC3BE7225E4AED002275F2 /* PrescriptionAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrescriptionAdapter.cpp; sourceTree = "<group>"; };
-		26DC3BE8225E4AED002275F2 /* dsl-prescription.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "dsl-prescription.vcxproj.filters"; sourceTree = "<group>"; };
-		26DC3BE9225E4AED002275F2 /* dsl-prescription.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "dsl-prescription.vcxproj"; sourceTree = "<group>"; };
 		26DC3BEA225E4AED002275F2 /* PrescriptionAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrescriptionAdapter.h; sourceTree = "<group>"; };
 		26DC3BEB225E4AED002275F2 /* ConfigurationFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationFileParser.h; sourceTree = "<group>"; };
-		26DC3BED225E4AED002275F2 /* audio-file-reading-writing.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "audio-file-reading-writing.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3BEE225E4AED002275F2 /* AudioFileInMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFileInMemory.h; sourceTree = "<group>"; };
 		26DC3BEF225E4AED002275F2 /* AudioFileWriterAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFileWriterAdapter.h; sourceTree = "<group>"; };
 		26DC3BF0225E4AED002275F2 /* AudioFileWriterAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFileWriterAdapter.cpp; sourceTree = "<group>"; };
 		26DC3BF1225E4AED002275F2 /* AudioFileInMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFileInMemory.cpp; sourceTree = "<group>"; };
 		26DC3BF2225E4AED002275F2 /* audio-file-reading-writing-exports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "audio-file-reading-writing-exports.h"; sourceTree = "<group>"; };
-		26DC3BF3225E4AED002275F2 /* audio-file-reading-writing.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "audio-file-reading-writing.vcxproj"; sourceTree = "<group>"; };
 		26DC3BF4225E4AED002275F2 /* AudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFile.h; sourceTree = "<group>"; };
 		26DC3BF6225E4AED002275F2 /* TestDocumenterImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestDocumenterImpl.cpp; sourceTree = "<group>"; };
-		26DC3BF7225E4AED002275F2 /* test-documenting.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "test-documenting.vcxproj.filters"; sourceTree = "<group>"; };
-		26DC3BF8225E4AED002275F2 /* test-documenting.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "test-documenting.vcxproj"; sourceTree = "<group>"; };
 		26DC3BF9225E4AED002275F2 /* PersistentMemoryWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistentMemoryWriter.h; sourceTree = "<group>"; };
 		26DC3BFA225E4AED002275F2 /* TestDocumenterImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestDocumenterImpl.h; sourceTree = "<group>"; };
 		26DC3BFC225E4AEE002275F2 /* RandomizedStimulusListTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomizedStimulusListTests.cpp; sourceTree = "<group>"; };
@@ -220,11 +195,9 @@
 		26DC3C04225E4AEE002275F2 /* AudioLoaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioLoaderStub.h; sourceTree = "<group>"; };
 		26DC3C05225E4AEE002275F2 /* SpatializedHearingAidSimulationFactoryStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatializedHearingAidSimulationFactoryStub.h; sourceTree = "<group>"; };
 		26DC3C06225E4AEE002275F2 /* SignalProcessingChainTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignalProcessingChainTests.cpp; sourceTree = "<group>"; };
-		26DC3C07225E4AEE002275F2 /* google-tests.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "google-tests.vcxproj.filters"; sourceTree = "<group>"; };
 		26DC3C08225E4AEE002275F2 /* PersistentMemoryWriterStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistentMemoryWriterStub.h; sourceTree = "<group>"; };
 		26DC3C09225E4AEE002275F2 /* PresenterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PresenterTests.cpp; sourceTree = "<group>"; };
 		26DC3C0A225E4AEE002275F2 /* SimulationChannelFactoryImplTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimulationChannelFactoryImplTests.cpp; sourceTree = "<group>"; };
-		26DC3C0B225E4AEE002275F2 /* google-tests.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "google-tests.vcxproj"; sourceTree = "<group>"; };
 		26DC3C0C225E4AEE002275F2 /* CalibrationComputerImplTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CalibrationComputerImplTests.cpp; sourceTree = "<group>"; };
 		26DC3C0D225E4AEE002275F2 /* BrirAdapterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrirAdapterTests.cpp; sourceTree = "<group>"; };
 		26DC3C0E225E4AEE002275F2 /* ScalingProcessorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScalingProcessorTests.cpp; sourceTree = "<group>"; };
@@ -480,9 +453,7 @@
 		26DC3B86225E4AED002275F2 /* signal-processing */ = {
 			isa = PBXGroup;
 			children = (
-				26DC3B87225E4AED002275F2 /* signal-processing.vcxproj.filters */,
 				26DC3B88225E4AED002275F2 /* ScalingProcessor.h */,
-				26DC3B89225E4AED002275F2 /* signal-processing.vcxproj */,
 				26DC3B8A225E4AED002275F2 /* ScalingProcessor.cpp */,
 			);
 			path = "signal-processing";
@@ -496,12 +467,10 @@
 				26DC3B8E225E4AED002275F2 /* WindowsDirectoryReader.cpp */,
 				26DC3B8F225E4AED002275F2 /* NlohmannJsonParser.h */,
 				26DC3B90225E4AED002275F2 /* NlohmannJsonParser.cpp */,
-				26DC3B91225E4AED002275F2 /* main.vcxproj */,
 				26DC3B92225E4AED002275F2 /* FltkView.cpp */,
 				26DC3B93225E4AED002275F2 /* FltkView.h */,
 				26DC3B94225E4AED002275F2 /* WindowsDirectoryReader.h */,
 				26DC3B95225E4AED002275F2 /* Libsndfile.cpp */,
-				26DC3B96225E4AED002275F2 /* main.vcxproj.filters */,
 				26DC3B97225E4AED002275F2 /* Chapro.h */,
 				26DC3B98225E4AED002275F2 /* PortAudioDevice.h */,
 				26DC3B99225E4AED002275F2 /* Libsndfile.h */,
@@ -519,9 +488,7 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BA0225E4AED002275F2 /* FirFilter.h */,
-				26DC3BA1225E4AED002275F2 /* fir-filtering.vcxproj.filters */,
 				26DC3BA2225E4AED002275F2 /* FirFilter.cpp */,
-				26DC3BA3225E4AED002275F2 /* fir-filtering.vcxproj */,
 			);
 			path = "fir-filtering";
 			sourceTree = "<group>";
@@ -538,7 +505,6 @@
 				26DC3BAB225E4AED002275F2 /* PrescriptionReader.h */,
 				26DC3BAC225E4AED002275F2 /* SimulationChannelFactory.h */,
 				26DC3BAD225E4AED002275F2 /* SpatialHearingAidModel.cpp */,
-				26DC3BAE225E4AED002275F2 /* spatialized-hearing-aid-simulation.vcxproj */,
 				26DC3BAF225E4AED002275F2 /* CalibrationComputer.h */,
 				26DC3BB0225E4AED002275F2 /* AudioPlayer.h */,
 				26DC3BB1225E4AED002275F2 /* SignalProcessor.h */,
@@ -551,7 +517,6 @@
 				26DC3BB8225E4AED002275F2 /* StimulusList.h */,
 				26DC3BB9225E4AED002275F2 /* AudioProcessingLoader.h */,
 				26DC3BBA225E4AED002275F2 /* AudioFrameReader.h */,
-				26DC3BBB225E4AED002275F2 /* spatialized-hearing-aid-simulation.vcxproj.filters */,
 				26DC3BBC225E4AED002275F2 /* AudioFrameProcessor.h */,
 				26DC3BBD225E4AED002275F2 /* ChannelProcessingGroup.h */,
 				26DC3BBE225E4AED002275F2 /* ChannelCopier.cpp */,
@@ -567,10 +532,8 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BC4225E4AED002275F2 /* HearingAidProcessor.cpp */,
-				26DC3BC5225E4AED002275F2 /* hearing-aid-processing.vcxproj.filters */,
 				26DC3BC6225E4AED002275F2 /* FilterbankCompressor.h */,
 				26DC3BC7225E4AED002275F2 /* HearingAidProcessor.h */,
-				26DC3BC8225E4AED002275F2 /* hearing-aid-processing.vcxproj */,
 			);
 			path = "hearing-aid-processing";
 			sourceTree = "<group>";
@@ -579,9 +542,7 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BCA225E4AED002275F2 /* RandomizedStimulusList.h */,
-				26DC3BCB225E4AED002275F2 /* stimulus-list.vcxproj.filters */,
 				26DC3BCC225E4AED002275F2 /* stimulus-list-exports.h */,
-				26DC3BCD225E4AED002275F2 /* stimulus-list.vcxproj */,
 				26DC3BCE225E4AED002275F2 /* FileFilterDecorator.h */,
 				26DC3BCF225E4AED002275F2 /* Randomizer.h */,
 				26DC3BD0225E4AED002275F2 /* RandomizedStimulusList.cpp */,
@@ -595,9 +556,7 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BD4225E4AED002275F2 /* Presenter.cpp */,
-				26DC3BD5225E4AED002275F2 /* presentation.vcxproj */,
 				26DC3BD6225E4AED002275F2 /* View.h */,
-				26DC3BD7225E4AED002275F2 /* presentation.vcxproj.filters */,
 				26DC3BD8225E4AED002275F2 /* Model.h */,
 				26DC3BD9225E4AED002275F2 /* Presenter.h */,
 			);
@@ -608,9 +567,7 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BDB225E4AED002275F2 /* BrirAdapter.cpp */,
-				26DC3BDC225E4AED002275F2 /* binaural-room-impulse-response.vcxproj.filters */,
 				26DC3BDD225E4AED002275F2 /* BrirAdapter.h */,
-				26DC3BDE225E4AED002275F2 /* binaural-room-impulse-response.vcxproj */,
 			);
 			path = "binaural-room-impulse-response";
 			sourceTree = "<group>";
@@ -619,9 +576,7 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BE0225E4AED002275F2 /* AudioDevice.h */,
-				26DC3BE1225E4AED002275F2 /* playing-audio.vcxproj.filters */,
 				26DC3BE2225E4AED002275F2 /* AudioDevicePlayer.h */,
-				26DC3BE3225E4AED002275F2 /* playing-audio.vcxproj */,
 				26DC3BE4225E4AED002275F2 /* AudioDevicePlayer.cpp */,
 				26DC3BE5225E4AED002275F2 /* playing-audio-exports.h */,
 			);
@@ -632,8 +587,6 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BE7225E4AED002275F2 /* PrescriptionAdapter.cpp */,
-				26DC3BE8225E4AED002275F2 /* dsl-prescription.vcxproj.filters */,
-				26DC3BE9225E4AED002275F2 /* dsl-prescription.vcxproj */,
 				26DC3BEA225E4AED002275F2 /* PrescriptionAdapter.h */,
 				26DC3BEB225E4AED002275F2 /* ConfigurationFileParser.h */,
 			);
@@ -643,13 +596,11 @@
 		26DC3BEC225E4AED002275F2 /* audio-file-reading-writing */ = {
 			isa = PBXGroup;
 			children = (
-				26DC3BED225E4AED002275F2 /* audio-file-reading-writing.vcxproj.filters */,
 				26DC3BEE225E4AED002275F2 /* AudioFileInMemory.h */,
 				26DC3BEF225E4AED002275F2 /* AudioFileWriterAdapter.h */,
 				26DC3BF0225E4AED002275F2 /* AudioFileWriterAdapter.cpp */,
 				26DC3BF1225E4AED002275F2 /* AudioFileInMemory.cpp */,
 				26DC3BF2225E4AED002275F2 /* audio-file-reading-writing-exports.h */,
-				26DC3BF3225E4AED002275F2 /* audio-file-reading-writing.vcxproj */,
 				26DC3BF4225E4AED002275F2 /* AudioFile.h */,
 			);
 			path = "audio-file-reading-writing";
@@ -659,8 +610,6 @@
 			isa = PBXGroup;
 			children = (
 				26DC3BF6225E4AED002275F2 /* TestDocumenterImpl.cpp */,
-				26DC3BF7225E4AED002275F2 /* test-documenting.vcxproj.filters */,
-				26DC3BF8225E4AED002275F2 /* test-documenting.vcxproj */,
 				26DC3BF9225E4AED002275F2 /* PersistentMemoryWriter.h */,
 				26DC3BFA225E4AED002275F2 /* TestDocumenterImpl.h */,
 			);
@@ -681,11 +630,9 @@
 				26DC3C04225E4AEE002275F2 /* AudioLoaderStub.h */,
 				26DC3C05225E4AEE002275F2 /* SpatializedHearingAidSimulationFactoryStub.h */,
 				26DC3C06225E4AEE002275F2 /* SignalProcessingChainTests.cpp */,
-				26DC3C07225E4AEE002275F2 /* google-tests.vcxproj.filters */,
 				26DC3C08225E4AEE002275F2 /* PersistentMemoryWriterStub.h */,
 				26DC3C09225E4AEE002275F2 /* PresenterTests.cpp */,
 				26DC3C0A225E4AEE002275F2 /* SimulationChannelFactoryImplTests.cpp */,
-				26DC3C0B225E4AEE002275F2 /* google-tests.vcxproj */,
 				26DC3C0C225E4AEE002275F2 /* CalibrationComputerImplTests.cpp */,
 				26DC3C0D225E4AEE002275F2 /* BrirAdapterTests.cpp */,
 				26DC3C0E225E4AEE002275F2 /* ScalingProcessorTests.cpp */,
@@ -1193,7 +1140,6 @@
 				26DC3CB9225E4BF8002275F2 /* BrirAdapterTests.cpp in Sources */,
 				26DC3CBA225E4BF8002275F2 /* ScalingProcessorTests.cpp in Sources */,
 				26DC3CBB225E4BF8002275F2 /* HearingAidProcessorTests.cpp in Sources */,
-				26DC3D64225E7273002275F2 /* macos_main.mm in Sources */,
 				26DC3CBC225E4BF8002275F2 /* FirFilterTests.cpp in Sources */,
 				26DC3CBD225E4BF8002275F2 /* SpatialHearingAidModelTests.cpp in Sources */,
 				26DC3CBE225E4BF8002275F2 /* TestDocumenterTests.cpp in Sources */,
