@@ -67,7 +67,7 @@ namespace {
 		}
 
 		void make(std::string f = {}) {
-			adapterFactory.make(std::move(f));
+			adapterFactory.make(std::move(f), {});
 		}
 	};
 

@@ -17,5 +17,8 @@ class AudioFileWriterAdapterFactory : public AudioFrameWriterFactory {
 	AudioFileFactory *factory;
 public:
 	AUDIO_FILE_READING_WRITING_API explicit AudioFileWriterAdapterFactory(AudioFileFactory *);
-	AUDIO_FILE_READING_WRITING_API std::shared_ptr<AudioFrameWriter> make(std::string filePath) override;
+	AUDIO_FILE_READING_WRITING_API std::shared_ptr<AudioFrameWriter> make(
+        std::string filePath,
+        const AudioFrameWriter::AudioFormat &
+    ) override;
 };

@@ -494,6 +494,8 @@ void SpatialHearingAidModel::stopCalibration() {
 
 void SpatialHearingAidModel::processAudioForSaving(const SavingAudio &p) {
 	auto reader = makeReader(p.inputAudioFilePath);
+    formatToWrite_.channels = reader->channels();
+    formatToWrite_.sampleRate = reader->sampleRate();
 	auto processorFactory_ = makeProcessorFactory(p.processing);
 	MakeAudioLoader loading;
 	loading.level_dB_Spl = p.level_dB_Spl;
@@ -534,7 +536,7 @@ void SpatialHearingAidModel::saveAudio(std::string filePath) {
 
 std::shared_ptr<AudioFrameWriter> SpatialHearingAidModel::makeWriter(std::string filePath) {
 	try {
-		return audioWriterFactory->make(filePath);
+		return audioWriterFactory->make(filePath, formatToWrite_);
 	}
 	catch (const AudioFrameWriterFactory::CreateError &) {
 		throw RequestFailure{ "Audio file '" + filePath + "' cannot be written." };

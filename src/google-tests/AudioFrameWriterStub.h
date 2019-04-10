@@ -17,7 +17,8 @@ public:
 };
 
 class AudioFrameWriterStubFactory : public AudioFrameWriterFactory {
-	std::string filePath_{};
+    AudioFrameWriter::AudioFormat format_{};
+    std::string filePath_{};
 	std::shared_ptr<AudioFrameWriter> writer;
 public:
 	explicit AudioFrameWriterStubFactory(
@@ -26,14 +27,22 @@ public:
 	) noexcept :
 		writer{ std::move(writer) } {}
 
-	std::shared_ptr<AudioFrameWriter> make(std::string filePath) override {
+	std::shared_ptr<AudioFrameWriter> make(
+        std::string filePath,
+        const AudioFrameWriter::AudioFormat &format
+    ) override {
 		filePath_ = std::move(filePath);
+        format_ = format;
 		return writer;
 	}
 
 	auto filePath() const {
 		return filePath_;
 	}
+ 
+    auto &format() const {
+        return format_;
+    }
 };
 
 class ErrorAudioFrameWriterFactory : public AudioFrameWriterFactory {
@@ -44,7 +53,10 @@ public:
 	) noexcept : 
 		errorMessage{ std::move(errorMessage) } {}
 
-	std::shared_ptr<AudioFrameWriter> make(std::string) override {
+	std::shared_ptr<AudioFrameWriter> make(
+        std::string,
+        const AudioFrameWriter::AudioFormat &
+    ) override {
 		throw CreateError{ errorMessage };
 	}
 };

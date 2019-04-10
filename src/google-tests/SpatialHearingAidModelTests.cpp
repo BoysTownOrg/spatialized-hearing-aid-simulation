@@ -1553,6 +1553,15 @@ namespace {
 		assertEqual("a", audioFrameWriterFactory.filePath());
 	}
 
+    TEST_F(SpatialHearingAidModelTests, saveAudioPassesChannelsAndSampleRateToAudioWriterFactory) {
+        audioFrameReader->setChannels(1);
+        audioFrameReader->setSampleRate(2);
+        processAudioForSaving();
+        model.saveAudio({});
+        assertEqual(1, audioFrameWriterFactory.format().channels);
+        assertEqual(2, audioFrameWriterFactory.format().sampleRate);
+    }
+
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingPassesAudioFrameReaderToFactory) {
 		processAudioForSaving();
 		assertAudioFrameReaderPassedToLoaderFactory();

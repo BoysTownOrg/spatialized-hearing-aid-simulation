@@ -54,6 +54,7 @@ public:
 
 class SpatialHearingAidModel : public Model {
 	std::vector<std::vector<AudioFrameWriter::channel_type::element_type>> toWrite_{};
+    AudioFrameWriter::AudioFormat formatToWrite_{};
 	std::string nextStimulus_{};
 	std::shared_ptr<AudioFrameProcessorFactoryFactory> processorFactoryFactory;
 	std::shared_ptr<StereoSimulationFactory> processorFactoryForTest;

@@ -32,7 +32,8 @@ AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileFactory *f
 	factory{ factory } {}
 
 std::shared_ptr<AudioFrameWriter> AudioFileWriterAdapterFactory::make(
-	std::string filePath
+	std::string filePath,
+    const AudioFrameWriter::AudioFormat &
 ) {
 	try {
 		return std::make_shared<AudioFileWriterAdapter>(
