@@ -492,6 +492,16 @@ void SpatialHearingAidModel::stopCalibration() {
 	player->stop();
 }
 
+/*
+void SpatialHearingAidModel::processAudioForSavingDirectory(const SavingAudio &p) {
+    auto files = audioDirectoryReader->read(p.audioDirectory);
+    for (auto &file : files) {
+        processAudioForSaving(file, p);
+        saveAudio(transformed(file));
+    }
+}
+*/
+
 void SpatialHearingAidModel::processAudioForSaving(const SavingAudio &p) {
 	auto reader = makeReader(p.inputAudioFilePath);
     formatToWrite_.channels = reader->channels();
