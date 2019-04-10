@@ -4,7 +4,7 @@ LibsndfileReader::LibsndfileReader(std::string filePath) {
 	file = sf_open(filePath.c_str(), SFM_READ, &info);
 }
 
-LibsndfileReader::~LibsndfileReader() {
+LibsndfileReader::~LibsndfileReader() noexcept {
 	sf_close(file);
 }
 
@@ -36,7 +36,7 @@ LibsndfileWriter::LibsndfileWriter(std::string filePath, SF_INFO *info) {
 	file = sf_open(filePath.c_str(), SFM_WRITE, info);
 }
 
-LibsndfileWriter::~LibsndfileWriter() {
+LibsndfileWriter::~LibsndfileWriter() noexcept {
     sf_close(file);
 }
 

@@ -1,4 +1,5 @@
 #include "PortAudioDevice.h"
+#include <gsl/gsl>
 
 PortAudioDevice::PortAudioDevice() {
 	lastError = Pa_Initialize();
@@ -30,7 +31,7 @@ int PortAudioDevice::audioCallback(
 	void *self_
 ) {
 	auto self = static_cast<PortAudioDevice *>(self_);
-	self->controller->fillStreamBuffer(output, frames);
+	self->controller->fillStreamBuffer(output, gsl::narrow<int>(frames));
 	return self->callbackResult;
 }
 
@@ -78,6 +79,6 @@ void PortAudioDevice::setController(AudioDeviceController *c) {
 	controller = c;
 }
 
-PortAudioDevice::~PortAudioDevice() {
+PortAudioDevice::~PortAudioDevice() noexcept {
 	Pa_Terminate();
 }

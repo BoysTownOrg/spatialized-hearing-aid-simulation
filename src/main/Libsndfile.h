@@ -9,7 +9,7 @@ class LibsndfileReader : public AudioFileReader {
 	SNDFILE *file{};
 public:
 	explicit LibsndfileReader(std::string filePath);
-	~LibsndfileReader() noexcept;
+	~LibsndfileReader() noexcept override;
 	LibsndfileReader(LibsndfileReader &&) = delete;
 	LibsndfileReader &operator=(LibsndfileReader &&) = delete;
 	LibsndfileReader(const LibsndfileReader &) = delete;
@@ -27,7 +27,7 @@ class LibsndfileWriter : public AudioFileWriter {
 	SNDFILE *file{};
 public:
 	LibsndfileWriter(std::string filePath, SF_INFO *);
-	~LibsndfileWriter() noexcept;
+	~LibsndfileWriter() noexcept override;
 	LibsndfileWriter(LibsndfileWriter &&) = delete;
 	LibsndfileWriter &operator=(LibsndfileWriter &&) = delete;
 	LibsndfileWriter(const LibsndfileWriter &) = delete;

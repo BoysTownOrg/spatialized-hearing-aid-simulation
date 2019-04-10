@@ -4,8 +4,8 @@ extern "C" {
 }
 
 Chapro::Chapro(Parameters parameters) :
-	chunkSize_{ parameters.chunkSize },
 	channels_{ parameters.channels },
+    chunkSize_{ parameters.chunkSize },
 	windowSize_{ parameters.windowSize }
 {
 	CHA_DSL dsl{};

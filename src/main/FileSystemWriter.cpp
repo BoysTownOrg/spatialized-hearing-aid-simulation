@@ -1,4 +1,5 @@
 #include "FileSystemWriter.h"
+#include <string>
 
 void FileSystemWriter::initialize(std::string filePath) {
 	file.open(std::move(filePath));
@@ -13,8 +14,6 @@ bool FileSystemWriter::failed() {
 }
 
 std::string FileSystemWriter::errorMessage() {
-	char buffer[256];
-	strerror_s(buffer, sizeof buffer, errno);
-	return buffer;
+	return "Something unhelpful anyways...";
 }
 

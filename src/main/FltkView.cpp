@@ -79,12 +79,12 @@ FltkSpatialization::FltkSpatialization(int x, int y, int w, int h, const char *)
 
 FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
+    attack_ms_{x + 200, y + 60, 200, 25, "attack (ms)" },
+    release_ms_{x + 200, y + 85, 200, 25, "release (ms)" },
 	leftPrescriptionFilePath_{x + 200, y + 10, 200, 25, "left DSL prescription file path" },
-	browseLeftPrescription{x + 410, y + 10, 80, 25, "browse..." },
-	rightPrescriptionFilePath_{x + 200, y + 35, 200, 25, "right DSL prescription file path" },
-	browseRightPrescription{x + 410, y + 35, 80, 25, "browse..." },
-	attack_ms_{x + 200, y + 60, 200, 25, "attack (ms)" },
-	release_ms_{x + 200, y + 85, 200, 25, "release (ms)" },
+    rightPrescriptionFilePath_{x + 200, y + 35, 200, 25, "right DSL prescription file path" },
+    browseLeftPrescription{x + 410, y + 10, 80, 25, "browse..." },
+    browseRightPrescription{x + 410, y + 35, 80, 25, "browse..." },
 	windowSize_{x + 200, y + 110, 200, 25, "window size (samples)" },
 	chunkSize_{x + 200, y + 135, 200, 25, "chunk size (samples)" }
 {
@@ -94,8 +94,8 @@ FltkHearingAidSimulationGroup::FltkHearingAidSimulationGroup(int x, int y, int w
 FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 	Fl_Group{ x, y, w, h },
 	audioFilePath_{x + 100, y + 10, 200, 25, "audio file path"},
-	browseForAudioFile{x + 310, y + 10, 80, 25, "browse..." },
 	level_dB_Spl_{x + 100, y + 35, 200, 25, "level (dB SPL)" },
+    browseForAudioFile{x + 310, y + 10, 80, 25, "browse..." },
 	play{ x + 25, y + 60, 60, 25, "play" },
 	stop{ x + 125, y + 60, 60, 25, "stop" },
 	save{ x + 225, y + 60, 60, 25, "save" }
@@ -105,18 +105,18 @@ FltkCalibration::FltkCalibration(int x, int y, int w, int h, const char *) :
 
 FltkTestSetupGroup::FltkTestSetupGroup(int x, int y, int w, int h, const char *):
 	Fl_Group{ x, y, w, h },
+    hearingAidSimulation{ 425, 105, 500, 170 },
+    calibration{ 425, 275, 400, 95 },
+    spatialization{425, 35, 400, 45},
 	subjectId_{ 100, 10, 200, 25, "subject ID" },
 	testerId_{ 100, 35, 200, 25, "tester ID" },
-	stimulusList_{ 100, 60, 200, 25, "stimulus list" },
-	browseForStimulusList{310, 60, 80, 25, "browse..." },
 	testFilePath_{100, 85, 200, 25, "test file path" },
-	browseTestFilePath{310, 85, 80, 25, "browse..." },
-	usingSpatialization_{ 425, 10, 18, 25, "spatialization" },
-	spatialization{425, 35, 400, 45},
-	usingHearingAidSimulation_{ 425, 80, 18, 25, "hearing aid simulation" },
-	hearingAidSimulation{ 425, 105, 500, 170 },
-	calibration{ 425, 275, 400, 95 },
-	confirm{850, 550, 60, 25, "confirm" }
+    stimulusList_{ 100, 60, 200, 25, "stimulus list" },
+    browseTestFilePath{310, 85, 80, 25, "browse..." },
+    browseForStimulusList{310, 60, 80, 25, "browse..." },
+    confirm{850, 550, 60, 25, "confirm" },
+    usingSpatialization_{ 425, 10, 18, 25, "spatialization" },
+	usingHearingAidSimulation_{ 425, 80, 18, 25, "hearing aid simulation" }
 {
 	end();
 }
@@ -373,7 +373,7 @@ bool FltkView::usingHearingAidSimulation() {
 }
 
 void FltkView::showErrorDialog(std::string message) {
-	fl_alert(message.c_str());
+    fl_alert("%s", message.c_str());
 }
 
 FltkView::FltkTestSetup::FltkTestSetup(FltkTestSetupGroup *view) : view{ view }

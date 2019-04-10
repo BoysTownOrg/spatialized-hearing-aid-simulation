@@ -24,7 +24,7 @@ class Chapro : public FilterbankCompressor {
 	int error = 0;
 public:
 	explicit Chapro(Parameters);
-	~Chapro() noexcept;
+	~Chapro() noexcept override;
 	Chapro(Chapro &&) = delete;
 	Chapro &operator=(Chapro &&) = delete;
 	Chapro(const Chapro &) = delete;

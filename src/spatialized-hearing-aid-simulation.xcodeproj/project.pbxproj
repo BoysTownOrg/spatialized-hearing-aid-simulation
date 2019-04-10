@@ -60,6 +60,31 @@
 		26DC3D43225E5250002275F2 /* libfftw3f.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3CD6225E50E5002275F2 /* libfftw3f.a */; };
 		26DC3D44225E525F002275F2 /* libfftw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3CF9225E5134002275F2 /* libfftw3.a */; };
 		26DC3D46225E52FD002275F2 /* gtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D45225E52FD002275F2 /* gtest_main.a */; };
+		26DC3D47225E5375002275F2 /* Chapro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B8C225E4AED002275F2 /* Chapro.cpp */; };
+		26DC3D48225E5375002275F2 /* NlohmannJsonParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B90225E4AED002275F2 /* NlohmannJsonParser.cpp */; };
+		26DC3D49225E5375002275F2 /* FltkView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B92225E4AED002275F2 /* FltkView.cpp */; };
+		26DC3D4A225E5375002275F2 /* Libsndfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B95225E4AED002275F2 /* Libsndfile.cpp */; };
+		26DC3D4B225E5375002275F2 /* FileSystemWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B9A225E4AED002275F2 /* FileSystemWriter.cpp */; };
+		26DC3D4C225E5375002275F2 /* MersenneTwisterRandomizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B9D225E4AED002275F2 /* MersenneTwisterRandomizer.cpp */; };
+		26DC3D4D225E5375002275F2 /* PortAudioDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3B9E225E4AED002275F2 /* PortAudioDevice.cpp */; };
+		26DC3D4E225E538A002275F2 /* libaudio-file-reading-writing.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3B52225E48A7002275F2 /* libaudio-file-reading-writing.dylib */; };
+		26DC3D4F225E538A002275F2 /* libbinaural-room-impulse-response.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3B7A225E49C0002275F2 /* libbinaural-room-impulse-response.dylib */; };
+		26DC3D50225E538A002275F2 /* libdsl-prescription.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C5E225E4B0E002275F2 /* libdsl-prescription.dylib */; };
+		26DC3D51225E538A002275F2 /* libfir-filtering.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C66225E4B17002275F2 /* libfir-filtering.dylib */; };
+		26DC3D52225E538A002275F2 /* libhearing-aid-processing.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C6E225E4B1E002275F2 /* libhearing-aid-processing.dylib */; };
+		26DC3D53225E538A002275F2 /* libplaying-audio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C76225E4B2E002275F2 /* libplaying-audio.dylib */; };
+		26DC3D54225E538A002275F2 /* libpresentation.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C7E225E4B39002275F2 /* libpresentation.dylib */; };
+		26DC3D55225E538A002275F2 /* libsignal-processing.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C86225E4B42002275F2 /* libsignal-processing.dylib */; };
+		26DC3D56225E538A002275F2 /* libspatialized-hearing-aid-simulation.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C8E225E4B66002275F2 /* libspatialized-hearing-aid-simulation.dylib */; };
+		26DC3D57225E538A002275F2 /* libstimulus-list.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C96225E4B6F002275F2 /* libstimulus-list.dylib */; };
+		26DC3D58225E538A002275F2 /* libtest-documenting.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3C9E225E4B75002275F2 /* libtest-documenting.dylib */; };
+		26DC3D5A225E71C5002275F2 /* libchapro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D59225E71C5002275F2 /* libchapro.a */; };
+		26DC3D5C225E71D0002275F2 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D5B225E71D0002275F2 /* libsndfile.a */; };
+		26DC3D5E225E71DA002275F2 /* libfltk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D5D225E71DA002275F2 /* libfltk.a */; };
+		26DC3D60225E722C002275F2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D5F225E722C002275F2 /* Cocoa.framework */; };
+		26DC3D62225E7242002275F2 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DC3D61225E7242002275F2 /* libportaudio.a */; };
+		26DC3D64225E7273002275F2 /* macos_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3D63225E7273002275F2 /* macos_main.mm */; };
+		26DC3D65225E7283002275F2 /* macos_main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3D63225E7273002275F2 /* macos_main.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -277,6 +302,12 @@
 		26DC3CFA225E5134002275F2 /* libfftw3l_omp.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfftw3l_omp.3.dylib; path = ../../../../../usr/local/lib/libfftw3l_omp.3.dylib; sourceTree = "<group>"; };
 		26DC3CFB225E5134002275F2 /* libfftw3_omp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3_omp.a; path = ../../../../../usr/local/lib/libfftw3_omp.a; sourceTree = "<group>"; };
 		26DC3D45225E52FD002275F2 /* gtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = gtest_main.a; path = ../../../../../usr/local/lib/gtest_main.a; sourceTree = "<group>"; };
+		26DC3D59225E71C5002275F2 /* libchapro.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchapro.a; path = ../../../../../usr/local/lib/libchapro.a; sourceTree = "<group>"; };
+		26DC3D5B225E71D0002275F2 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = ../../../../../usr/local/lib/libsndfile.a; sourceTree = "<group>"; };
+		26DC3D5D225E71DA002275F2 /* libfltk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfltk.a; path = ../../../../../usr/local/lib/libfltk.a; sourceTree = "<group>"; };
+		26DC3D5F225E722C002275F2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		26DC3D61225E7242002275F2 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = ../../../../../usr/local/lib/libportaudio.a; sourceTree = "<group>"; };
+		26DC3D63225E7273002275F2 /* macos_main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = macos_main.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +315,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26DC3D60225E722C002275F2 /* Cocoa.framework in Frameworks */,
+				26DC3D62225E7242002275F2 /* libportaudio.a in Frameworks */,
+				26DC3D5E225E71DA002275F2 /* libfltk.a in Frameworks */,
+				26DC3D5C225E71D0002275F2 /* libsndfile.a in Frameworks */,
+				26DC3D5A225E71C5002275F2 /* libchapro.a in Frameworks */,
+				26DC3D4E225E538A002275F2 /* libaudio-file-reading-writing.dylib in Frameworks */,
+				26DC3D4F225E538A002275F2 /* libbinaural-room-impulse-response.dylib in Frameworks */,
+				26DC3D50225E538A002275F2 /* libdsl-prescription.dylib in Frameworks */,
+				26DC3D51225E538A002275F2 /* libfir-filtering.dylib in Frameworks */,
+				26DC3D52225E538A002275F2 /* libhearing-aid-processing.dylib in Frameworks */,
+				26DC3D53225E538A002275F2 /* libplaying-audio.dylib in Frameworks */,
+				26DC3D54225E538A002275F2 /* libpresentation.dylib in Frameworks */,
+				26DC3D55225E538A002275F2 /* libsignal-processing.dylib in Frameworks */,
+				26DC3D56225E538A002275F2 /* libspatialized-hearing-aid-simulation.dylib in Frameworks */,
+				26DC3D57225E538A002275F2 /* libstimulus-list.dylib in Frameworks */,
+				26DC3D58225E538A002275F2 /* libtest-documenting.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,6 +507,7 @@
 				26DC3B99225E4AED002275F2 /* Libsndfile.h */,
 				26DC3B9A225E4AED002275F2 /* FileSystemWriter.cpp */,
 				26DC3B9B225E4AED002275F2 /* windows_main.cpp */,
+				26DC3D63225E7273002275F2 /* macos_main.mm */,
 				26DC3B9C225E4AED002275F2 /* FileSystemWriter.h */,
 				26DC3B9D225E4AED002275F2 /* MersenneTwisterRandomizer.cpp */,
 				26DC3B9E225E4AED002275F2 /* PortAudioDevice.cpp */,
@@ -674,6 +722,11 @@
 		26DC3CC6225E4C0D002275F2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				26DC3D61225E7242002275F2 /* libportaudio.a */,
+				26DC3D5F225E722C002275F2 /* Cocoa.framework */,
+				26DC3D5D225E71DA002275F2 /* libfltk.a */,
+				26DC3D5B225E71D0002275F2 /* libsndfile.a */,
+				26DC3D59225E71C5002275F2 /* libchapro.a */,
 				26DC3D45225E52FD002275F2 /* gtest_main.a */,
 				26DC3CF2225E5134002275F2 /* libfftw3_mpi.3.dylib */,
 				26DC3CDC225E5133002275F2 /* libfftw3_mpi.a */,
@@ -1116,6 +1169,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26DC3D65225E7283002275F2 /* macos_main.mm in Sources */,
+				26DC3D47225E5375002275F2 /* Chapro.cpp in Sources */,
+				26DC3D48225E5375002275F2 /* NlohmannJsonParser.cpp in Sources */,
+				26DC3D49225E5375002275F2 /* FltkView.cpp in Sources */,
+				26DC3D4A225E5375002275F2 /* Libsndfile.cpp in Sources */,
+				26DC3D4B225E5375002275F2 /* FileSystemWriter.cpp in Sources */,
+				26DC3D4C225E5375002275F2 /* MersenneTwisterRandomizer.cpp in Sources */,
+				26DC3D4D225E5375002275F2 /* PortAudioDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1193,7 @@
 				26DC3CB9225E4BF8002275F2 /* BrirAdapterTests.cpp in Sources */,
 				26DC3CBA225E4BF8002275F2 /* ScalingProcessorTests.cpp in Sources */,
 				26DC3CBB225E4BF8002275F2 /* HearingAidProcessorTests.cpp in Sources */,
+				26DC3D64225E7273002275F2 /* macos_main.mm in Sources */,
 				26DC3CBC225E4BF8002275F2 /* FirFilterTests.cpp in Sources */,
 				26DC3CBD225E4BF8002275F2 /* SpatialHearingAidModelTests.cpp in Sources */,
 				26DC3CBE225E4BF8002275F2 /* TestDocumenterTests.cpp in Sources */,
@@ -1281,7 +1343,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1361,7 +1423,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -1403,11 +1465,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "spatialized-hearing-aid-simulation/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1419,11 +1481,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "spatialized-hearing-aid-simulation/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
