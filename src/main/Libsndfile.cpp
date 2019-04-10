@@ -32,8 +32,12 @@ int LibsndfileReader::sampleRate() {
 	return info.samplerate;
 }
 
-LibsndfileWriter::LibsndfileWriter(std::string filePath, SF_INFO *info) {
-	file = sf_open(filePath.c_str(), SFM_WRITE, info);
+LibsndfileWriter::LibsndfileWriter(std::string filePath, const AudioFileWriter::AudioFileFormat &format) {
+    SF_INFO info{};
+    info.channels = format.channels;
+    info.samplerate = format.sampleRate;
+    info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+	file = sf_open(filePath.c_str(), SFM_WRITE, &info);
 }
 
 LibsndfileWriter::~LibsndfileWriter() noexcept {
@@ -53,11 +57,12 @@ void LibsndfileWriter::writeFrames(float *y, long long count) {
 }
 
 std::shared_ptr<AudioFileReader> LibsndfileFactory::makeReader(std::string filePath) {
-	auto reader = std::make_shared<LibsndfileReader>(std::move(filePath));
-	lastReaderFormat = reader->sfInfo();
-	return reader;
+	return std::make_shared<LibsndfileReader>(std::move(filePath));
 }
 
-std::shared_ptr<AudioFileWriter> LibsndfileFactory::makeWriter(std::string filePath) {
-	return std::make_shared<LibsndfileWriter>(std::move(filePath), &lastReaderFormat);
+std::shared_ptr<AudioFileWriter> LibsndfileFactory::makeWriter(
+    std::string filePath,
+    const AudioFileWriter::AudioFileFormat &format
+) {
+	return std::make_shared<LibsndfileWriter>(std::move(filePath), format);
 }

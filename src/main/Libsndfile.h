@@ -26,7 +26,7 @@ public:
 class LibsndfileWriter : public AudioFileWriter {
 	SNDFILE *file{};
 public:
-	LibsndfileWriter(std::string filePath, SF_INFO *);
+	LibsndfileWriter(std::string filePath, const AudioFileWriter::AudioFileFormat &format);
 	~LibsndfileWriter() noexcept override;
 	LibsndfileWriter(LibsndfileWriter &&) = delete;
 	LibsndfileWriter &operator=(LibsndfileWriter &&) = delete;
@@ -38,8 +38,10 @@ public:
 };
 
 class LibsndfileFactory : public AudioFileFactory {
-	SF_INFO lastReaderFormat{};
 public:
 	std::shared_ptr<AudioFileReader> makeReader(std::string filePath) override;
-	std::shared_ptr<AudioFileWriter> makeWriter(std::string filePath) override;
+	std::shared_ptr<AudioFileWriter> makeWriter(
+        std::string filePath,
+        const AudioFileWriter::AudioFileFormat &
+    ) override;
 };
