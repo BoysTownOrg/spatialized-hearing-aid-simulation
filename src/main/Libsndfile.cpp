@@ -58,6 +58,6 @@ std::shared_ptr<AudioFileReader> LibsndfileFactory::makeReader(std::string fileP
 	return reader;
 }
 
-std::shared_ptr<AudioFileWriter> LibsndfileFactory::makeWriterUsingLastReaderFormat(std::string filePath) {
+std::shared_ptr<AudioFileWriter> LibsndfileFactory::makeWriter(std::string filePath) {
 	return std::make_shared<LibsndfileWriter>(std::move(filePath), &lastReaderFormat);
 }

@@ -99,6 +99,7 @@ public:
 };
 
 class FakeAudioFileFactory : public AudioFileFactory {
+    AudioFileWriter::AudioFileFormat formatForWriting_{};
 	std::string filePathForReading_{};
 	std::string filePathForWriting_{};
 	std::shared_ptr<AudioFileReader> reader;
@@ -119,8 +120,12 @@ public:
 		return reader;
 	}
 
-	std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) override {
+	std::shared_ptr<AudioFileWriter> makeWriter(
+        std::string filePath,
+        const AudioFileWriter::AudioFileFormat &format
+    ) override {
 		filePathForWriting_ = std::move(filePath);
+        formatForWriting_ = format;
 		return writer;
 	}
 
@@ -131,4 +136,8 @@ public:
 	auto filePathForWriting() const {
 		return filePathForWriting_;
 	}
+ 
+    auto &formatForWriting() const {
+        return formatForWriting_;
+    }
 };

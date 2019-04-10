@@ -33,11 +33,14 @@ AudioFileWriterAdapterFactory::AudioFileWriterAdapterFactory(AudioFileFactory *f
 
 std::shared_ptr<AudioFrameWriter> AudioFileWriterAdapterFactory::make(
 	std::string filePath,
-    const AudioFrameWriter::AudioFormat &
+    const AudioFrameWriter::AudioFormat &format
 ) {
 	try {
+        AudioFileWriter::AudioFileFormat adapted;
+        adapted.channels = format.channels;
+        adapted.sampleRate = format.sampleRate;
 		return std::make_shared<AudioFileWriterAdapter>(
-			factory->makeWriterUsingLastReaderFormat(std::move(filePath))
+			factory->makeWriter(std::move(filePath), adapted)
 		);
 	}
 	catch (const AudioFileWriterAdapter::FileError &e) {

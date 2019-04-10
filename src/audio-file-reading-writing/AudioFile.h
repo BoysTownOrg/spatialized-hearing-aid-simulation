@@ -18,6 +18,10 @@ public:
 class AudioFileWriter {
 public:
     INTERFACE_OPERATIONS(AudioFileWriter)
+    struct AudioFileFormat {
+        int channels;
+        int sampleRate;
+    };
 	virtual void writeFrames(float *, long long) = 0;
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
@@ -27,6 +31,9 @@ class AudioFileFactory {
 public:
     INTERFACE_OPERATIONS(AudioFileFactory)
 	virtual std::shared_ptr<AudioFileReader> makeReader(std::string filePath) = 0;
-	virtual std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) = 0;
+	virtual std::shared_ptr<AudioFileWriter> makeWriter(
+        std::string filePath,
+        const AudioFileWriter::AudioFileFormat &
+    ) = 0;
 };
 

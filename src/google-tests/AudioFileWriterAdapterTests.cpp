@@ -66,8 +66,11 @@ namespace {
 			}
 		}
 
-		void make(std::string f = {}) {
-			adapterFactory.make(std::move(f), {});
+		void make(
+            std::string f = {},
+            const AudioFrameWriter::AudioFormat &format = {}
+        ) {
+			adapterFactory.make(std::move(f), format);
 		}
 	};
 
@@ -81,4 +84,13 @@ namespace {
 		make("a");
 		assertEqual("a", factory.filePathForWriting());
 	}
+
+    TEST_F(AudioFileWriterAdapterFactoryTests, passesFormat) {
+        AudioFrameWriter::AudioFormat format;
+        format.channels = 1;
+        format.sampleRate = 2;
+        make({}, format);
+        assertEqual(1, factory.formatForWriting().channels);
+        assertEqual(2, factory.formatForWriting().sampleRate);
+    }
 }

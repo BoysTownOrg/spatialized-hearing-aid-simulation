@@ -41,5 +41,5 @@ class LibsndfileFactory : public AudioFileFactory {
 	SF_INFO lastReaderFormat{};
 public:
 	std::shared_ptr<AudioFileReader> makeReader(std::string filePath) override;
-	std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) override;
+	std::shared_ptr<AudioFileWriter> makeWriter(std::string filePath) override;
 };
