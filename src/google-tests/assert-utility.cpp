@@ -78,6 +78,7 @@ template void assertEqual(
 );
 
 template void assertEqual(int, int) noexcept;
+template void assertEqual(long, long) noexcept;
 template void assertEqual(float, float) noexcept;
 template void assertEqual(double, double) noexcept;
 template void assertEqual(unsigned long, unsigned long) noexcept;

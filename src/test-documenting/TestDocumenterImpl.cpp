@@ -18,7 +18,7 @@ public:
 		stream << std::fixed;
 	}
 
-	void insertPrecision(std::streamsize n) {
+	void insertPrecision(int n) {
 		stream << std::setprecision(n);
 	}
 

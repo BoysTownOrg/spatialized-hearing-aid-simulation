@@ -34,7 +34,7 @@ static auto fftw_destroy_plan_adapted(fftwf_plan p) noexcept {
 }
 
 template<typename T>
-static constexpr long nextPowerOfTwo(typename FirFilter<T>::coefficients_size_type x) noexcept {
+static constexpr int nextPowerOfTwo(typename FirFilter<T>::coefficients_size_type x) noexcept {
 	int power{};
 	while (x /= 2)
 		++power;
@@ -138,5 +138,5 @@ auto FirFilter<T>::groupDelay() -> index_type {
 	return order / 2;
 }
 
-template FirFilter<float>;
-template FirFilter<double>;
+template class FirFilter<float>;
+template class FirFilter<double>;

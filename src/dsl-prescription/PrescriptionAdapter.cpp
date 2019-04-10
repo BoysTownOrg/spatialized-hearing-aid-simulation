@@ -13,9 +13,8 @@ std::string dsl_prescription::propertyName(Property p) {
 		return "kneepoints_dB_SPL";
 	case Property::broadbandOutputLimitingThresholds_dBSpl:
 		return "BOLT_dB_SPL";
-	default:
-		return "unknown";
 	}
+    return "unknown";
 }
 
 PrescriptionAdapter::PrescriptionAdapter(ConfigurationFileParserFactory *factory) noexcept :

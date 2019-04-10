@@ -32,8 +32,8 @@ FileFilterDecoratorFactory::FileFilterDecoratorFactory(
 	DirectoryReaderFactory * decorated, 
 	std::string filter
 ) :
-	decorated{ decorated },
-	filter{ std::move(filter) }
+    filter{ std::move(filter) },
+	decorated{ decorated }
 {
 }
 

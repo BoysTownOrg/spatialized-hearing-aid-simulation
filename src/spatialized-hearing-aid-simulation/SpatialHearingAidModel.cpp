@@ -281,23 +281,23 @@ SpatialHearingAidModel::SpatialHearingAidModel(
 	SimulationChannelFactory *channelFactory,
 	CalibrationComputerFactory *calibrationComputerFactory
 ) :
+    processorFactoryFactory{
+        std::make_shared<StereoProcessorFactoryFactory>(
+            channelFactory,
+            calibrationComputerFactory
+        )
+    },
+    processorFactoryForTest{
+        std::make_shared<NullProcessorFactory>()
+    },
 	stimulusList{ stimulusList },
 	documenter{ documenter },
 	prescriptionReader{ prescriptionReader },
 	brirReader{ brirReader },
 	audioReaderFactory{ audioReaderFactory },
 	audioWriterFactory{ audioWriterFactory },
-	player{ player },
-	audioProcessingLoaderFactory{ audioLoaderFactory },
-	processorFactoryFactory{
-		std::make_shared<StereoProcessorFactoryFactory>(
-			channelFactory, 
-			calibrationComputerFactory
-		)
-	},
-	processorFactoryForTest{
-		std::make_shared<NullProcessorFactory>()
-	}
+    player{ player },
+    audioProcessingLoaderFactory{ audioLoaderFactory }
 {
 }
 

@@ -1,4 +1,5 @@
 #include "AudioFileWriterAdapter.h"
+#include <vector>
 
 AudioFileWriterAdapter::AudioFileWriterAdapter(std::shared_ptr<AudioFileWriter> writer) :
 	writer{ std::move(writer) } 

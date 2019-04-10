@@ -2,6 +2,7 @@
 
 #include "CalibrationComputer.h"
 #include "spatialized-hearing-aid-simulation-exports.h"
+#include <vector>
 
 class CalibrationComputerImpl : public CalibrationComputer {
 	using sample_type = AudioFrameReader::channel_type::element_type;

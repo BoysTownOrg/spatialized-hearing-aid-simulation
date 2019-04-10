@@ -1,4 +1,5 @@
 #include "CalibrationComputerImpl.h"
+#include <cmath>
 
 template<typename T>
 T rms(std::vector<T> x) {

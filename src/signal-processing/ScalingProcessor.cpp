@@ -14,4 +14,4 @@ auto ScalingProcessor<T>::groupDelay() -> index_type {
 	return index_type{ 0 };
 }
 
-template ScalingProcessor<float>;
+template class ScalingProcessor<float>;

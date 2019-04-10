@@ -4,6 +4,7 @@
 #include <gsl/gsl>
 #include <vector>
 #include <complex>
+#include <type_traits>
 
 #ifdef _WIN32
     #ifdef FIR_FILTERING_EXPORTS
@@ -53,7 +54,7 @@ private:
 	>::type;
 	fftw_plan_type fftPlan{};
 	fftw_plan_type ifftPlan{};
-	long N{};
+	int N{};
 	coefficients_size_type L{};
 	coefficients_size_type order;
 	
