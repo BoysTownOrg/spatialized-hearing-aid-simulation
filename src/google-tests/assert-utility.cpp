@@ -32,8 +32,9 @@ void assertEqual(
 	std::vector<T> expected,
 	std::vector<T> actual
 ) {
-	assertEqual<std::vector<T>::size_type>(expected.size(), actual.size());
-	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
+    using size_type = typename std::vector<T>::size_type;
+	assertEqual<size_type>(expected.size(), actual.size());
+	for (size_type i{ 0 }; i < expected.size(); ++i)
 		assertEqual<T>(expected.at(i), actual.at(i));
 }
 
@@ -43,8 +44,9 @@ void assertEqual(
 	std::vector<T> actual,
 	T tolerance
 ) {
-	assertEqual<std::vector<T>::size_type>(expected.size(), actual.size());
-	for (typename std::vector<T>::size_type i{ 0 }; i < expected.size(); ++i)
+    using size_type = typename std::vector<T>::size_type;
+	assertEqual<size_type>(expected.size(), actual.size());
+	for (size_type i{ 0 }; i < expected.size(); ++i)
 		assertEqual<T>(expected.at(i), actual.at(i), tolerance);
 }
 

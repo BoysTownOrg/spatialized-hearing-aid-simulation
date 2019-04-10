@@ -1,6 +1,7 @@
 #pragma once
 
 #include <spatialized-hearing-aid-simulation/SignalProcessor.h>
+#include <vector>
 
 class SignalProcessorStub : public SignalProcessor {
 	std::vector<signal_type::element_type> processed_{};

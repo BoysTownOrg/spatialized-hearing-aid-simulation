@@ -23,16 +23,6 @@ namespace {
 		auto fillStreamBuffer(void *x = {}, int n = {}) {
 			return device.fillStreamBuffer(x, n);
 		}
-
-		void assertPlayThrowsDeviceFailureWithMessage(std::string errorMessage) {
-			try {
-				prepareToPlay();
-				FAIL() << "Expected AudioDevicePlayer::PreparationFailure";
-			}
-			catch (const AudioDevicePlayer::PreparationFailure &e) {
-				assertEqual(std::move(errorMessage), e.what());
-			}
-		}
 	};
 
 	TEST_F(AudioDevicePlayerTests, constructorSetsItselfAsDeviceController) {
@@ -102,8 +92,8 @@ namespace {
 		fillStreamBuffer(x, 1);
 		assertEqual(&left, loader->audioBuffer().at(0).data());
 		assertEqual(&right, loader->audioBuffer().at(1).data());
-		assertEqual(1, loader->audioBuffer().at(0).size());
-		assertEqual(1, loader->audioBuffer().at(1).size());
+		assertEqual(1L, loader->audioBuffer().at(0).size());
+		assertEqual(1L, loader->audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioDevicePlayerTests, isPlayingWhenDeviceIsStreaming) {

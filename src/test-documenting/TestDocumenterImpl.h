@@ -3,10 +3,14 @@
 #include "PersistentMemoryWriter.h"
 #include <spatialized-hearing-aid-simulation/TestDocumenter.h>
 
-#ifdef TEST_DOCUMENTING_EXPORTS
-	#define TEST_DOCUMENTING_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef TEST_DOCUMENTING_EXPORTS
+        #define TEST_DOCUMENTING_API __declspec(dllexport)
+    #else
+        #define TEST_DOCUMENTING_API __declspec(dllimport)
+    #endif
 #else
-	#define TEST_DOCUMENTING_API __declspec(dllimport)
+    #define TEST_DOCUMENTING_API
 #endif
 
 class TestDocumenterImpl : public TestDocumenter {

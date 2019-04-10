@@ -6,9 +6,9 @@
 
 class StimulusList {
 public:
-	INTERFACE_OPERATIONS(StimulusList);
+    INTERFACE_OPERATIONS(StimulusList)
 	virtual void initialize(std::string directory) = 0;
-	RUNTIME_ERROR(InitializationFailure);
+    RUNTIME_ERROR(InitializationFailure)
 	virtual std::string next() = 0;
 	virtual bool empty() = 0;
 };

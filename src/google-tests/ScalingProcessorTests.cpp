@@ -18,6 +18,6 @@ namespace {
 
 	TEST_F(ScalingProcessorTests, groupDelayReturnsZero) {
 		ScalingProcessor<float> processor{ {} };
-		assertEqual(0, processor.groupDelay());
+		assertEqual(0L, processor.groupDelay());
 	};
 }

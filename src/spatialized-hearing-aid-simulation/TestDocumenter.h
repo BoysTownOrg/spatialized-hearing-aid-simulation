@@ -7,9 +7,9 @@
 
 class TestDocumenter {
 public:
-	INTERFACE_OPERATIONS(TestDocumenter);
+    INTERFACE_OPERATIONS(TestDocumenter)
 	virtual void initialize(std::string filePath) = 0;
-	RUNTIME_ERROR(InitializationFailure);
+    RUNTIME_ERROR(InitializationFailure)
 
 	virtual void documentTestParameters(const Model::Testing &) = 0;
 	

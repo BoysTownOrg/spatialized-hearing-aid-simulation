@@ -7,7 +7,7 @@
 
 class DirectoryReader {
 public:
-    INTERFACE_OPERATIONS(DirectoryReader);
+    INTERFACE_OPERATIONS(DirectoryReader)
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
     virtual std::vector<std::string> files() = 0;
@@ -15,6 +15,6 @@ public:
 
 class DirectoryReaderFactory {
 public:
-    INTERFACE_OPERATIONS(DirectoryReaderFactory);
+    INTERFACE_OPERATIONS(DirectoryReaderFactory)
     virtual std::shared_ptr<DirectoryReader> make(std::string directory) = 0;
 };

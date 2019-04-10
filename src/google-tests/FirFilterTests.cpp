@@ -29,7 +29,7 @@ namespace {
 		template<typename T>
 		void assertGroupDelayReturnsHalfFilterOrder() {
 			FirFilter<T> filter{ typename FirFilter<T>::coefficients_type(256 + 1) };
-			assertEqual(128, filter.groupDelay());
+			assertEqual(128L, filter.groupDelay());
 		}
 		
 		template<typename T>

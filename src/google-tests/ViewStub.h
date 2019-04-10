@@ -224,35 +224,35 @@ public:
 	
 	void activateReleaseTime_ms() override {
 		release_msActivated_ = true;
-	};
+    }
 
 	void activateAttackTime_ms() override {
 		attack_msActivated_ = true;
-	};
+    }
 	
 	void activateWindowSize() override {
 		windowSizeActivated_ = true;
-	};
+    }
 	
 	void activateChunkSize() override {
 		chunkSizeActivated_ = true;
-	};
+    }
 	
 	void deactivateReleaseTime_ms() override {
 		release_msDeactivated_ = true;
-	};
+    }
 	
 	void deactivateAttackTime_ms() override {
 		attack_msDeactivated_ = true;
-	};
+    }
 	
 	void deactivateWindowSize() override {
 		windowSizeDeactivated_ = true;
-	};
+    }
 	
 	void deactivateChunkSize() override {
 		chunkSizeDeactivated_ = true;
-	};
+    }
 
 	void toggleHearingAidSimulation() {
 		listener_->toggleUsingHearingAidSimulation();
@@ -260,35 +260,35 @@ public:
 
 	void activateLeftDslPrescriptionFilePath() override {
 		leftDslPrescriptionFilePathActivated_ = true;
-	};
+    }
 	
 	void activateRightDslPrescriptionFilePath() override {
 		rightDslPrescriptionFilePathActivated_ = true;
-	};
+    }
 	
 	void activateBrowseForLeftDslPrescriptionButton() override {
 		browseForLeftDslPrescriptionButtonActivated_ = true;
-	};
+    }
 	
 	void activateBrowseForRightDslPrescriptionButton() override {
 		browseForRightDslPrescriptionButtonActivated_ = true;
-	};
+    }
 	
 	void deactivateLeftDslPrescriptionFilePath() override {
 		leftDslPrescriptionFilePathDeactivated_ = true;
-	};
+    }
 	
 	void deactivateRightDslPrescriptionFilePath() override {
 		rightDslPrescriptionFilePathDeactivated_ = true;
-	};
+    }
 	
 	void deactivateBrowseForLeftDslPrescriptionButton() override {
 		browseForLeftDslPrescriptionButtonDeactivated_ = true;
-	};
+    }
 	
 	void deactivateBrowseForRightDslPrescriptionButton() override {
 		browseForRightDslPrescriptionButtonDeactivated_ = true;
-	};
+    }
 
 	bool usingHearingAidSimulation() override {
 		return usingHearingAidSimulation_;

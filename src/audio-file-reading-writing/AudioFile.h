@@ -6,7 +6,7 @@
 
 class AudioFileReader {
 public:
-	INTERFACE_OPERATIONS(AudioFileReader);
+    INTERFACE_OPERATIONS(AudioFileReader)
 	virtual long long frames() = 0;
 	virtual int channels() = 0;
 	virtual int sampleRate() = 0;
@@ -17,7 +17,7 @@ public:
 
 class AudioFileWriter {
 public:
-	INTERFACE_OPERATIONS(AudioFileWriter);
+    INTERFACE_OPERATIONS(AudioFileWriter)
 	virtual void writeFrames(float *, long long) = 0;
 	virtual bool failed() = 0;
 	virtual std::string errorMessage() = 0;
@@ -25,7 +25,7 @@ public:
 
 class AudioFileFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFileFactory);
+    INTERFACE_OPERATIONS(AudioFileFactory)
 	virtual std::shared_ptr<AudioFileReader> makeReader(std::string filePath) = 0;
 	virtual std::shared_ptr<AudioFileWriter> makeWriterUsingLastReaderFormat(std::string filePath) = 0;
 };

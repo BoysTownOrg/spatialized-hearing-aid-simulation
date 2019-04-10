@@ -5,10 +5,14 @@
 #include <common-includes/RuntimeError.h>
 #include <functional>
 
-#ifdef PRESENTATION_EXPORTS
-	#define PRESENTATION_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef PRESENTATION_EXPORTS
+        #define PRESENTATION_API __declspec(dllexport)
+    #else
+        #define PRESENTATION_API __declspec(dllimport)
+    #endif
 #else
-	#define PRESENTATION_API __declspec(dllimport)
+    #define PRESENTATION_API
 #endif
 
 class Presenter : public View::EventListener {
@@ -49,7 +53,7 @@ private:
 	Model::Testing testing();
 	Model::Trial trial();
 	Model::SignalProcessing signalProcessing();
-	RUNTIME_ERROR(BadInput);
+    RUNTIME_ERROR(BadInput)
 	double convertToDouble(std::string x, std::string identifier);
 	int convertToPositiveInteger(std::string x, std::string identifier);
 	int convertToInteger(std::string x, std::string identifier);

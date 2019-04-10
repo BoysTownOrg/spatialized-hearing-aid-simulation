@@ -1,0 +1,532 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		26DC3AA7225E40EF002275F2 /* AudioFileWriterAdapterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A7D225E40ED002275F2 /* AudioFileWriterAdapterTests.cpp */; };
+		26DC3AA8225E40EF002275F2 /* FirFilterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A7E225E40ED002275F2 /* FirFilterTests.cpp */; };
+		26DC3AA9225E40EF002275F2 /* assert-utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A7F225E40ED002275F2 /* assert-utility.cpp */; };
+		26DC3AAA225E40EF002275F2 /* SpatialHearingAidModelTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A82225E40ED002275F2 /* SpatialHearingAidModelTests.cpp */; };
+		26DC3AAB225E40EF002275F2 /* AudioFileInMemoryTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A85225E40ED002275F2 /* AudioFileInMemoryTests.cpp */; };
+		26DC3AAC225E40EF002275F2 /* TestDocumenterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A89225E40ED002275F2 /* TestDocumenterTests.cpp */; };
+		26DC3AAD225E40EF002275F2 /* SimulationChannelFactoryImplTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A8D225E40ED002275F2 /* SimulationChannelFactoryImplTests.cpp */; };
+		26DC3AAE225E40EF002275F2 /* HearingAidProcessorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A95225E40ED002275F2 /* HearingAidProcessorTests.cpp */; };
+		26DC3AAF225E40EF002275F2 /* PresenterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A96225E40EE002275F2 /* PresenterTests.cpp */; };
+		26DC3AB0225E40EF002275F2 /* ZeroPaddedLoaderTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A98225E40EE002275F2 /* ZeroPaddedLoaderTests.cpp */; };
+		26DC3AB1225E40EF002275F2 /* RandomizedStimulusListTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A99225E40EE002275F2 /* RandomizedStimulusListTests.cpp */; };
+		26DC3AB2225E40EF002275F2 /* PrescriptionAdapterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A9B225E40EE002275F2 /* PrescriptionAdapterTests.cpp */; };
+		26DC3AB3225E40EF002275F2 /* AudioDevicePlayerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A9C225E40EE002275F2 /* AudioDevicePlayerTests.cpp */; };
+		26DC3AB4225E40EF002275F2 /* BrirAdapterTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3A9D225E40EE002275F2 /* BrirAdapterTests.cpp */; };
+		26DC3AB5225E40EF002275F2 /* ChannelCopierTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3AA1225E40EE002275F2 /* ChannelCopierTester.cpp */; };
+		26DC3AB6225E40EF002275F2 /* ScalingProcessorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3AA2225E40EE002275F2 /* ScalingProcessorTests.cpp */; };
+		26DC3AB7225E40EF002275F2 /* ChannelProcessingGroupTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3AA3225E40EE002275F2 /* ChannelProcessingGroupTests.cpp */; };
+		26DC3AB8225E40EF002275F2 /* SignalProcessingChainTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3AA4225E40EF002275F2 /* SignalProcessingChainTests.cpp */; };
+		26DC3AB9225E40EF002275F2 /* CalibrationComputerImplTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3AA5225E40EF002275F2 /* CalibrationComputerImplTests.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		26DC3A73225E3F47002275F2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		26C895FB225E3EB7009114F4 /* spatialized-hearing-aid-simulation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spatialized-hearing-aid-simulation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26DC3A75225E3F47002275F2 /* google-tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "google-tests"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26DC3A7C225E40ED002275F2 /* DocumenterStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumenterStub.h; sourceTree = "<group>"; };
+		26DC3A7D225E40ED002275F2 /* AudioFileWriterAdapterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFileWriterAdapterTests.cpp; sourceTree = "<group>"; };
+		26DC3A7E225E40ED002275F2 /* FirFilterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FirFilterTests.cpp; sourceTree = "<group>"; };
+		26DC3A7F225E40ED002275F2 /* assert-utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "assert-utility.cpp"; sourceTree = "<group>"; };
+		26DC3A80225E40ED002275F2 /* PersistentMemoryWriterStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistentMemoryWriterStub.h; sourceTree = "<group>"; };
+		26DC3A81225E40ED002275F2 /* ModelStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelStub.h; sourceTree = "<group>"; };
+		26DC3A82225E40ED002275F2 /* SpatialHearingAidModelTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpatialHearingAidModelTests.cpp; sourceTree = "<group>"; };
+		26DC3A83225E40ED002275F2 /* CalibrationComputerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalibrationComputerStub.h; sourceTree = "<group>"; };
+		26DC3A84225E40ED002275F2 /* AudioLoaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioLoaderStub.h; sourceTree = "<group>"; };
+		26DC3A85225E40ED002275F2 /* AudioFileInMemoryTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFileInMemoryTests.cpp; sourceTree = "<group>"; };
+		26DC3A86225E40ED002275F2 /* SpatializedHearingAidSimulationFactoryStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatializedHearingAidSimulationFactoryStub.h; sourceTree = "<group>"; };
+		26DC3A87225E40ED002275F2 /* FilterbankCompressorSpy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbankCompressorSpy.h; sourceTree = "<group>"; };
+		26DC3A88225E40ED002275F2 /* AudioDeviceStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceStub.h; sourceTree = "<group>"; };
+		26DC3A89225E40ED002275F2 /* TestDocumenterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestDocumenterTests.cpp; sourceTree = "<group>"; };
+		26DC3A8A225E40ED002275F2 /* FakeStimulusList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeStimulusList.h; sourceTree = "<group>"; };
+		26DC3A8B225E40ED002275F2 /* FakeConfigurationFileParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeConfigurationFileParser.h; sourceTree = "<group>"; };
+		26DC3A8C225E40ED002275F2 /* BrirReaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrirReaderStub.h; sourceTree = "<group>"; };
+		26DC3A8D225E40ED002275F2 /* SimulationChannelFactoryImplTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimulationChannelFactoryImplTests.cpp; sourceTree = "<group>"; };
+		26DC3A8E225E40ED002275F2 /* AudioFrameReaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameReaderStub.h; sourceTree = "<group>"; };
+		26DC3A8F225E40ED002275F2 /* FakeAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeAudioFile.h; sourceTree = "<group>"; };
+		26DC3A90225E40ED002275F2 /* RandomizerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomizerStub.h; sourceTree = "<group>"; };
+		26DC3A91225E40ED002275F2 /* SignalProcessorStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalProcessorStub.h; sourceTree = "<group>"; };
+		26DC3A92225E40ED002275F2 /* assert-utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "assert-utility.h"; sourceTree = "<group>"; };
+		26DC3A93225E40ED002275F2 /* ArgumentCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArgumentCollection.h; sourceTree = "<group>"; };
+		26DC3A94225E40ED002275F2 /* AudioFrameWriterStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameWriterStub.h; sourceTree = "<group>"; };
+		26DC3A95225E40ED002275F2 /* HearingAidProcessorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HearingAidProcessorTests.cpp; sourceTree = "<group>"; };
+		26DC3A96225E40EE002275F2 /* PresenterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PresenterTests.cpp; sourceTree = "<group>"; };
+		26DC3A97225E40EE002275F2 /* ViewStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewStub.h; sourceTree = "<group>"; };
+		26DC3A98225E40EE002275F2 /* ZeroPaddedLoaderTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZeroPaddedLoaderTests.cpp; sourceTree = "<group>"; };
+		26DC3A99225E40EE002275F2 /* RandomizedStimulusListTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomizedStimulusListTests.cpp; sourceTree = "<group>"; };
+		26DC3A9A225E40EE002275F2 /* AudioFrameProcessorStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFrameProcessorStub.h; sourceTree = "<group>"; };
+		26DC3A9B225E40EE002275F2 /* PrescriptionAdapterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrescriptionAdapterTests.cpp; sourceTree = "<group>"; };
+		26DC3A9C225E40EE002275F2 /* AudioDevicePlayerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDevicePlayerTests.cpp; sourceTree = "<group>"; };
+		26DC3A9D225E40EE002275F2 /* BrirAdapterTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BrirAdapterTests.cpp; sourceTree = "<group>"; };
+		26DC3A9E225E40EE002275F2 /* LogString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogString.h; sourceTree = "<group>"; };
+		26DC3A9F225E40EE002275F2 /* PrescriptionReaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrescriptionReaderStub.h; sourceTree = "<group>"; };
+		26DC3AA0225E40EE002275F2 /* AudioPlayerStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerStub.h; sourceTree = "<group>"; };
+		26DC3AA1225E40EE002275F2 /* ChannelCopierTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChannelCopierTester.cpp; sourceTree = "<group>"; };
+		26DC3AA2225E40EE002275F2 /* ScalingProcessorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScalingProcessorTests.cpp; sourceTree = "<group>"; };
+		26DC3AA3225E40EE002275F2 /* ChannelProcessingGroupTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChannelProcessingGroupTests.cpp; sourceTree = "<group>"; };
+		26DC3AA4225E40EF002275F2 /* SignalProcessingChainTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignalProcessingChainTests.cpp; sourceTree = "<group>"; };
+		26DC3AA5225E40EF002275F2 /* CalibrationComputerImplTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CalibrationComputerImplTests.cpp; sourceTree = "<group>"; };
+		26DC3AA6225E40EF002275F2 /* DirectoryReaderStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryReaderStub.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		26C895F8225E3EB7009114F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26DC3A72225E3F47002275F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		26C895F2225E3EB7009114F4 = {
+			isa = PBXGroup;
+			children = (
+				26DC3A76225E3F47002275F2 /* google-tests */,
+				26C895FC225E3EB7009114F4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		26C895FC225E3EB7009114F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26C895FB225E3EB7009114F4 /* spatialized-hearing-aid-simulation.app */,
+				26DC3A75225E3F47002275F2 /* google-tests */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26DC3A76225E3F47002275F2 /* google-tests */ = {
+			isa = PBXGroup;
+			children = (
+				26DC3A93225E40ED002275F2 /* ArgumentCollection.h */,
+				26DC3A7F225E40ED002275F2 /* assert-utility.cpp */,
+				26DC3A92225E40ED002275F2 /* assert-utility.h */,
+				26DC3A9C225E40EE002275F2 /* AudioDevicePlayerTests.cpp */,
+				26DC3A88225E40ED002275F2 /* AudioDeviceStub.h */,
+				26DC3A85225E40ED002275F2 /* AudioFileInMemoryTests.cpp */,
+				26DC3A7D225E40ED002275F2 /* AudioFileWriterAdapterTests.cpp */,
+				26DC3A9A225E40EE002275F2 /* AudioFrameProcessorStub.h */,
+				26DC3A8E225E40ED002275F2 /* AudioFrameReaderStub.h */,
+				26DC3A94225E40ED002275F2 /* AudioFrameWriterStub.h */,
+				26DC3A84225E40ED002275F2 /* AudioLoaderStub.h */,
+				26DC3AA0225E40EE002275F2 /* AudioPlayerStub.h */,
+				26DC3A9D225E40EE002275F2 /* BrirAdapterTests.cpp */,
+				26DC3A8C225E40ED002275F2 /* BrirReaderStub.h */,
+				26DC3AA5225E40EF002275F2 /* CalibrationComputerImplTests.cpp */,
+				26DC3A83225E40ED002275F2 /* CalibrationComputerStub.h */,
+				26DC3AA1225E40EE002275F2 /* ChannelCopierTester.cpp */,
+				26DC3AA3225E40EE002275F2 /* ChannelProcessingGroupTests.cpp */,
+				26DC3AA6225E40EF002275F2 /* DirectoryReaderStub.h */,
+				26DC3A7C225E40ED002275F2 /* DocumenterStub.h */,
+				26DC3A8F225E40ED002275F2 /* FakeAudioFile.h */,
+				26DC3A8B225E40ED002275F2 /* FakeConfigurationFileParser.h */,
+				26DC3A8A225E40ED002275F2 /* FakeStimulusList.h */,
+				26DC3A87225E40ED002275F2 /* FilterbankCompressorSpy.h */,
+				26DC3A7E225E40ED002275F2 /* FirFilterTests.cpp */,
+				26DC3A95225E40ED002275F2 /* HearingAidProcessorTests.cpp */,
+				26DC3A9E225E40EE002275F2 /* LogString.h */,
+				26DC3A81225E40ED002275F2 /* ModelStub.h */,
+				26DC3A80225E40ED002275F2 /* PersistentMemoryWriterStub.h */,
+				26DC3A9B225E40EE002275F2 /* PrescriptionAdapterTests.cpp */,
+				26DC3A9F225E40EE002275F2 /* PrescriptionReaderStub.h */,
+				26DC3A96225E40EE002275F2 /* PresenterTests.cpp */,
+				26DC3A99225E40EE002275F2 /* RandomizedStimulusListTests.cpp */,
+				26DC3A90225E40ED002275F2 /* RandomizerStub.h */,
+				26DC3AA2225E40EE002275F2 /* ScalingProcessorTests.cpp */,
+				26DC3AA4225E40EF002275F2 /* SignalProcessingChainTests.cpp */,
+				26DC3A91225E40ED002275F2 /* SignalProcessorStub.h */,
+				26DC3A8D225E40ED002275F2 /* SimulationChannelFactoryImplTests.cpp */,
+				26DC3A82225E40ED002275F2 /* SpatialHearingAidModelTests.cpp */,
+				26DC3A86225E40ED002275F2 /* SpatializedHearingAidSimulationFactoryStub.h */,
+				26DC3A89225E40ED002275F2 /* TestDocumenterTests.cpp */,
+				26DC3A97225E40EE002275F2 /* ViewStub.h */,
+				26DC3A98225E40EE002275F2 /* ZeroPaddedLoaderTests.cpp */,
+			);
+			path = "google-tests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		26C895FA225E3EB7009114F4 /* spatialized-hearing-aid-simulation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "spatialized-hearing-aid-simulation" */;
+			buildPhases = (
+				26C895F7225E3EB7009114F4 /* Sources */,
+				26C895F8225E3EB7009114F4 /* Frameworks */,
+				26C895F9225E3EB7009114F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "spatialized-hearing-aid-simulation";
+			productName = "spatialized-hearing-aid-simulation";
+			productReference = 26C895FB225E3EB7009114F4 /* spatialized-hearing-aid-simulation.app */;
+			productType = "com.apple.product-type.application";
+		};
+		26DC3A74225E3F47002275F2 /* google-tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26DC3A79225E3F47002275F2 /* Build configuration list for PBXNativeTarget "google-tests" */;
+			buildPhases = (
+				26DC3A71225E3F47002275F2 /* Sources */,
+				26DC3A72225E3F47002275F2 /* Frameworks */,
+				26DC3A73225E3F47002275F2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "google-tests";
+			productName = "google-tests";
+			productReference = 26DC3A75225E3F47002275F2 /* google-tests */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		26C895F3225E3EB7009114F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Bashford, Seth";
+				TargetAttributes = {
+					26C895FA225E3EB7009114F4 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					26DC3A74225E3F47002275F2 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 26C895F6225E3EB7009114F4 /* Build configuration list for PBXProject "spatialized-hearing-aid-simulation" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 26C895F2225E3EB7009114F4;
+			productRefGroup = 26C895FC225E3EB7009114F4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				26C895FA225E3EB7009114F4 /* spatialized-hearing-aid-simulation */,
+				26DC3A74225E3F47002275F2 /* google-tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		26C895F9225E3EB7009114F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26C895F7225E3EB7009114F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26DC3A71225E3F47002275F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26DC3AB3225E40EF002275F2 /* AudioDevicePlayerTests.cpp in Sources */,
+				26DC3AA9225E40EF002275F2 /* assert-utility.cpp in Sources */,
+				26DC3AB5225E40EF002275F2 /* ChannelCopierTester.cpp in Sources */,
+				26DC3AAD225E40EF002275F2 /* SimulationChannelFactoryImplTests.cpp in Sources */,
+				26DC3AB0225E40EF002275F2 /* ZeroPaddedLoaderTests.cpp in Sources */,
+				26DC3AB9225E40EF002275F2 /* CalibrationComputerImplTests.cpp in Sources */,
+				26DC3AA7225E40EF002275F2 /* AudioFileWriterAdapterTests.cpp in Sources */,
+				26DC3AAF225E40EF002275F2 /* PresenterTests.cpp in Sources */,
+				26DC3AAB225E40EF002275F2 /* AudioFileInMemoryTests.cpp in Sources */,
+				26DC3AAE225E40EF002275F2 /* HearingAidProcessorTests.cpp in Sources */,
+				26DC3AB7225E40EF002275F2 /* ChannelProcessingGroupTests.cpp in Sources */,
+				26DC3AB2225E40EF002275F2 /* PrescriptionAdapterTests.cpp in Sources */,
+				26DC3AAC225E40EF002275F2 /* TestDocumenterTests.cpp in Sources */,
+				26DC3AB1225E40EF002275F2 /* RandomizedStimulusListTests.cpp in Sources */,
+				26DC3AAA225E40EF002275F2 /* SpatialHearingAidModelTests.cpp in Sources */,
+				26DC3AB8225E40EF002275F2 /* SignalProcessingChainTests.cpp in Sources */,
+				26DC3AB4225E40EF002275F2 /* BrirAdapterTests.cpp in Sources */,
+				26DC3AB6225E40EF002275F2 /* ScalingProcessorTests.cpp in Sources */,
+				26DC3AA8225E40EF002275F2 /* FirFilterTests.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		26C8960A225E3EB9009114F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(SRCROOT)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-c++98-compat",
+					"-Wno-c++98-compat-pedantic",
+					"-isystem",
+					/usr/local/include,
+					"-Wno-global-constructors",
+					"-Wno-padded",
+					"-Wno-weak-vtables",
+					"-Werror",
+					"-Wno-unused-private-field",
+					"-Wno-objc-messaging-id",
+					"-Wno-direct-ivar-access",
+					"-Wno-double-promotion",
+					"-Wno-undefined-var-template",
+					"-Wno-undefined-func-template",
+				);
+			};
+			name = Debug;
+		};
+		26C8960B225E3EB9009114F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(SRCROOT)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Weverything",
+					"-Wno-c++98-compat",
+					"-Wno-c++98-compat-pedantic",
+					"-isystem",
+					/usr/local/include,
+					"-Wno-global-constructors",
+					"-Wno-padded",
+					"-Wno-weak-vtables",
+					"-Werror",
+					"-Wno-unused-private-field",
+					"-Wno-objc-messaging-id",
+					"-Wno-direct-ivar-access",
+					"-Wno-double-promotion",
+					"-Wno-undefined-var-template",
+					"-Wno-undefined-func-template",
+				);
+			};
+			name = Release;
+		};
+		26C8960D225E3EB9009114F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "spatialized-hearing-aid-simulation/spatialized_hearing_aid_simulation.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "spatialized-hearing-aid-simulation/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		26C8960E225E3EB9009114F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "spatialized-hearing-aid-simulation/spatialized_hearing_aid_simulation.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "spatialized-hearing-aid-simulation/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		26DC3A7A225E3F47002275F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		26DC3A7B225E3F47002275F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		26C895F6225E3EB7009114F4 /* Build configuration list for PBXProject "spatialized-hearing-aid-simulation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26C8960A225E3EB9009114F4 /* Debug */,
+				26C8960B225E3EB9009114F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "spatialized-hearing-aid-simulation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26C8960D225E3EB9009114F4 /* Debug */,
+				26C8960E225E3EB9009114F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26DC3A79225E3F47002275F2 /* Build configuration list for PBXNativeTarget "google-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26DC3A7A225E3F47002275F2 /* Debug */,
+				26DC3A7B225E3F47002275F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 26C895F3225E3EB7009114F4 /* Project object */;
+}

@@ -7,8 +7,8 @@
 
 class Model {
 public:
-	INTERFACE_OPERATIONS(Model);
-	RUNTIME_ERROR(RequestFailure);
+    INTERFACE_OPERATIONS(Model)
+    RUNTIME_ERROR(RequestFailure)
 
 	struct SignalProcessing {
 		std::string leftDslPrescriptionFilePath;

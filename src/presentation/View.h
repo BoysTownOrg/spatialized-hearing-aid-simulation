@@ -8,7 +8,7 @@ class View {
 public:
 	class TestSetup {
 	public:
-		INTERFACE_OPERATIONS(TestSetup);
+        INTERFACE_OPERATIONS(TestSetup)
 		virtual void show() = 0;
 		virtual void hide() = 0;
 		virtual std::string subjectId() = 0;
@@ -34,7 +34,7 @@ public:
 
 	class EventListener {
 	public:
-		INTERFACE_OPERATIONS(EventListener);
+        INTERFACE_OPERATIONS(EventListener)
 		virtual void browseForTestFile() = 0;
 		virtual void browseForAudioFile() = 0;
 		virtual void browseForLeftDslPrescription() = 0;
@@ -50,7 +50,7 @@ public:
 		virtual void saveAudio() = 0;
 	};
 
-	INTERFACE_OPERATIONS(View);
+    INTERFACE_OPERATIONS(View)
 	virtual TestSetup *testSetup() = 0;
 	virtual void subscribe(EventListener *listener) = 0;
 	virtual void runEventLoop() = 0;

@@ -7,7 +7,7 @@
 
 class AudioFrameReader {
 public:
-	INTERFACE_OPERATIONS(AudioFrameReader);
+    INTERFACE_OPERATIONS(AudioFrameReader)
 	using channel_type = gsl::span<float>;
 	virtual void read(gsl::span<channel_type> audio) = 0;
 	virtual bool complete() = 0;
@@ -20,8 +20,8 @@ public:
 
 class AudioFrameReaderFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFrameReaderFactory);
+    INTERFACE_OPERATIONS(AudioFrameReaderFactory)
 	virtual std::shared_ptr<AudioFrameReader> make(std::string filePath) = 0;
-	RUNTIME_ERROR(CreateError);
+    RUNTIME_ERROR(CreateError)
 };
 

@@ -16,7 +16,7 @@ class AudioFileInMemory : public AudioFrameReader {
 	int sampleRate_;
 public:
 	AUDIO_FILE_READING_WRITING_API explicit AudioFileInMemory(AudioFileReader &);
-	RUNTIME_ERROR(FileError);
+    RUNTIME_ERROR(FileError)
 	AUDIO_FILE_READING_WRITING_API void read(gsl::span<channel_type> audio) override;
 	AUDIO_FILE_READING_WRITING_API bool complete() override;
 	AUDIO_FILE_READING_WRITING_API int sampleRate() override;

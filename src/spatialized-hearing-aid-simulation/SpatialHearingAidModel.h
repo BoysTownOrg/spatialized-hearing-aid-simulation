@@ -17,7 +17,7 @@
 
 class StereoSimulationFactory {
 public:
-	INTERFACE_OPERATIONS(StereoSimulationFactory);
+    INTERFACE_OPERATIONS(StereoSimulationFactory)
 
 	struct HearingAidSimulation {
 		PrescriptionReader::Dsl leftPrescription;
@@ -35,7 +35,7 @@ public:
 
 class AudioFrameProcessorFactoryFactory {
 public:
-	INTERFACE_OPERATIONS(AudioFrameProcessorFactoryFactory);
+    INTERFACE_OPERATIONS(AudioFrameProcessorFactoryFactory)
 	virtual std::shared_ptr<StereoSimulationFactory> makeSpatialization(
 		BrirReader::BinauralRoomImpulseResponse
 	) = 0;

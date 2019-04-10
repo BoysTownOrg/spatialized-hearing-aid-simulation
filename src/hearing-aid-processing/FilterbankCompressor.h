@@ -20,7 +20,7 @@ public:
 		int chunkSize;
 		int channels;
 	};
-	INTERFACE_OPERATIONS(FilterbankCompressor);
+    INTERFACE_OPERATIONS(FilterbankCompressor)
 	using real_type = float;
 	using complex_type = float;
 	virtual void compressInput(
@@ -56,7 +56,7 @@ public:
 
 class FilterbankCompressorFactory {
 public:
-	INTERFACE_OPERATIONS(FilterbankCompressorFactory);
+    INTERFACE_OPERATIONS(FilterbankCompressorFactory)
 	virtual std::shared_ptr<FilterbankCompressor> make(
 		FilterbankCompressor::Parameters
 	) = 0;

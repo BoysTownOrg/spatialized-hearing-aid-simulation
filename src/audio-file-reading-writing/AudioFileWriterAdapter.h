@@ -9,7 +9,7 @@ class AudioFileWriterAdapter : public AudioFrameWriter {
 	std::shared_ptr<AudioFileWriter> writer;
 public:
 	AUDIO_FILE_READING_WRITING_API explicit AudioFileWriterAdapter(std::shared_ptr<AudioFileWriter>);
-	RUNTIME_ERROR(FileError);
+    RUNTIME_ERROR(FileError)
 	AUDIO_FILE_READING_WRITING_API void write(gsl::span<channel_type> audio) override;
 };
 

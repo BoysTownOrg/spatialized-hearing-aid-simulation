@@ -2,10 +2,14 @@
 
 #include <gsl/gsl>
 
-#ifdef SIGNAL_PROCESSING_EXPORTS
-	#define SIGNAL_PROCESSING_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef SIGNAL_PROCESSING_EXPORTS
+        #define SIGNAL_PROCESSING_API __declspec(dllexport)
+    #else
+        #define SIGNAL_PROCESSING_API __declspec(dllimport)
+    #endif
 #else
-	#define SIGNAL_PROCESSING_API __declspec(dllimport)
+    #define SIGNAL_PROCESSING_API
 #endif
 
 template<typename T>

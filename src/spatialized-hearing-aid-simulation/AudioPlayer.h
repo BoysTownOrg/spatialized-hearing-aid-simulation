@@ -9,8 +9,8 @@
 
 class AudioPlayer {
 public:
-	INTERFACE_OPERATIONS(AudioPlayer);
-	RUNTIME_ERROR(DeviceFailure);
+    INTERFACE_OPERATIONS(AudioPlayer)
+    RUNTIME_ERROR(DeviceFailure)
 
 	struct Preparation {
 		std::string audioDevice;
@@ -19,7 +19,7 @@ public:
 		int sampleRate;
 	};
 	virtual void prepareToPlay(Preparation) = 0;
-	RUNTIME_ERROR(PreparationFailure);
+    RUNTIME_ERROR(PreparationFailure)
 	virtual std::vector<std::string> audioDeviceDescriptions() = 0;
 	virtual void setAudioLoader(std::shared_ptr<AudioLoader>) = 0;
 	virtual void play() = 0;

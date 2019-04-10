@@ -81,7 +81,7 @@ namespace {
 	) {
 		reader->setFileNames({ "a", "b", "c" });
 		initialize();
-		assertEqual({ "a", "b", "c" }, randomizer.toShuffle());
+		assertEqual<std::string>({ "a", "b", "c" }, randomizer.toShuffle());
 	}
 
 	TEST_F(

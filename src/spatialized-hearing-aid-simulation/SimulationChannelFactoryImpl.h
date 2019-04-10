@@ -6,13 +6,13 @@
 
 class FirFilterFactory {
 public:
-	INTERFACE_OPERATIONS(FirFilterFactory);
+    INTERFACE_OPERATIONS(FirFilterFactory)
 	virtual std::shared_ptr<SignalProcessor> make(BrirReader::impulse_response_type) = 0;
 };
 
 class HearingAidFactory {
 public:
-	INTERFACE_OPERATIONS(HearingAidFactory);
+    INTERFACE_OPERATIONS(HearingAidFactory)
 	virtual std::shared_ptr<SignalProcessor> make(
 		FilterbankCompressor::Parameters
 	) = 0;
@@ -20,7 +20,7 @@ public:
 
 class ScalarFactory {
 public:
-	INTERFACE_OPERATIONS(ScalarFactory);
+    INTERFACE_OPERATIONS(ScalarFactory)
 	virtual std::shared_ptr<SignalProcessor> make(float) = 0;
 };
 

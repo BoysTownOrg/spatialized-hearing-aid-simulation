@@ -7,7 +7,7 @@
 
 class SimulationChannelFactory {
 public:
-	INTERFACE_OPERATIONS(SimulationChannelFactory);
+    INTERFACE_OPERATIONS(SimulationChannelFactory)
 
 	virtual std::shared_ptr<SignalProcessor> makeWithoutSimulation(
 		float

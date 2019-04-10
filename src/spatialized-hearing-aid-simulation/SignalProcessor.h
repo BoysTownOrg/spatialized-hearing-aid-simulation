@@ -5,7 +5,7 @@
 
 class SignalProcessor {
 public:
-	INTERFACE_OPERATIONS(SignalProcessor);
+    INTERFACE_OPERATIONS(SignalProcessor)
 	using signal_type = gsl::span<float>;
 	using index_type = signal_type::index_type;
 	virtual void process(signal_type signal) = 0;

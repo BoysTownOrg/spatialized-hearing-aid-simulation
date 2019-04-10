@@ -75,7 +75,7 @@ namespace {
 		groupDelayReturnsHalfWindowSize
 	) {
 		compressor->setWindowSize(512);
-		assertEqual(256, processor.groupDelay());
+		assertEqual(256L, processor.groupDelay());
 	}
 
 	class CompressorErrorTests : public ::testing::Test {

@@ -47,12 +47,12 @@ namespace {
 		processors.at(1)->setGroupDelay(2);
 		processors.at(2)->setGroupDelay(3);
 		auto group = construct();
-		assertEqual(3, group.groupDelay());
+		assertEqual(3L, group.groupDelay());
 	}
 
 	TEST_F(ChannelProcessingGroupTests, groupDelayReturnsZeroWhenNoProcessors) {
 		auto group = construct();
-		assertEqual(0, group.groupDelay());
+		assertEqual(0L, group.groupDelay());
 	}
 
 	TEST_F(ChannelProcessingGroupTests, processIgnoresExtraChannels) {

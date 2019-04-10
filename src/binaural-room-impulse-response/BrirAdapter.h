@@ -3,10 +3,14 @@
 #include <spatialized-hearing-aid-simulation/BrirReader.h>
 #include <audio-file-reading-writing/AudioFile.h>
 
-#ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
-	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef BINAURAL_ROOM_IMPULSE_RESPONSE_EXPORTS
+        #define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllexport)
+    #else
+        #define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
+    #endif
 #else
-	#define BINAURAL_ROOM_IMPULSE_RESPONSE_API __declspec(dllimport)
+    #define BINAURAL_ROOM_IMPULSE_RESPONSE_API
 #endif
 
 class BrirAdapter : public BrirReader {

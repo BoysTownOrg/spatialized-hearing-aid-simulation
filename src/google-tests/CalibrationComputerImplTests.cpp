@@ -4,6 +4,7 @@
 #include <audio-file-reading-writing/AudioFileInMemory.h>
 #include <spatialized-hearing-aid-simulation/CalibrationComputerImpl.h>
 #include <gtest/gtest.h>
+#include <cmath>
 
 class CalibrationComputerImplTests : public ::testing::Test {
 protected:

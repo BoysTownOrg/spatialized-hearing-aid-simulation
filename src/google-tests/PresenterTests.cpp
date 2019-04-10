@@ -8,7 +8,7 @@
 namespace {
 	class UseCase {
 	public:
-		INTERFACE_OPERATIONS(UseCase);
+        INTERFACE_OPERATIONS(UseCase)
 		virtual void run(View::EventListener *) = 0;
 	};
 

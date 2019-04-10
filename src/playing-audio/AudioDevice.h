@@ -6,13 +6,13 @@
 
 class AudioDeviceController {
 public:
-	INTERFACE_OPERATIONS(AudioDeviceController);
+    INTERFACE_OPERATIONS(AudioDeviceController)
 	virtual void fillStreamBuffer(void *channels, int frames) = 0;
 };
 
 class AudioDevice {
 public:
-	INTERFACE_OPERATIONS(AudioDevice);
+    INTERFACE_OPERATIONS(AudioDevice)
 	virtual void setController(AudioDeviceController *) = 0;
 	virtual void startStream() = 0;
 	virtual void stopStream() = 0;

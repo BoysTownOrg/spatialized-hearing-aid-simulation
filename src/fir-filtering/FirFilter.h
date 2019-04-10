@@ -5,10 +5,14 @@
 #include <vector>
 #include <complex>
 
-#ifdef FIR_FILTERING_EXPORTS
-	#define FIR_FILTERING_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef FIR_FILTERING_EXPORTS
+        #define FIR_FILTERING_API __declspec(dllexport)
+    #else
+        #define FIR_FILTERING_API __declspec(dllimport)
+    #endif
 #else
-	#define FIR_FILTERING_API __declspec(dllimport)
+    #define FIR_FILTERING_API
 #endif
 
 template<typename T>

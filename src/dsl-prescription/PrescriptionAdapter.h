@@ -4,10 +4,14 @@
 #include <spatialized-hearing-aid-simulation/PrescriptionReader.h>
 #include <string>
 
-#ifdef DSL_PRESCRIPTION_EXPORTS
-	#define DSL_PRESCRIPTION_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef DSL_PRESCRIPTION_EXPORTS
+        #define DSL_PRESCRIPTION_API __declspec(dllexport)
+    #else
+        #define DSL_PRESCRIPTION_API __declspec(dllimport)
+    #endif
 #else
-	#define DSL_PRESCRIPTION_API __declspec(dllimport)
+    #define DSL_PRESCRIPTION_API
 #endif
 
 namespace dsl_prescription {

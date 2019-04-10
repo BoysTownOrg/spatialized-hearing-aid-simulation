@@ -6,10 +6,14 @@
 #include <memory>
 #include <vector>
 
-#ifdef HEARING_AID_PROCESSING_EXPORTS
-	#define HEARING_AID_PROCESSING_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef HEARING_AID_PROCESSING_EXPORTS
+        #define HEARING_AID_PROCESSING_API __declspec(dllexport)
+    #else
+        #define HEARING_AID_PROCESSING_API __declspec(dllimport)
+    #endif
 #else
-	#define HEARING_AID_PROCESSING_API __declspec(dllimport)
+    #define HEARING_AID_PROCESSING_API
 #endif
 
 class HearingAidProcessor {
@@ -22,7 +26,7 @@ public:
 	HEARING_AID_PROCESSING_API explicit HearingAidProcessor(
 		std::shared_ptr<FilterbankCompressor>
 	);
-	RUNTIME_ERROR(CompressorError);
+    RUNTIME_ERROR(CompressorError)
 	HEARING_AID_PROCESSING_API void process(signal_type);
 	HEARING_AID_PROCESSING_API index_type groupDelay();
 private:

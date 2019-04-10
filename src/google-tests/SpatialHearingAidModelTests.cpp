@@ -20,7 +20,7 @@
 namespace {
 	class UseCase {
 	public:
-		INTERFACE_OPERATIONS(UseCase);
+        INTERFACE_OPERATIONS(UseCase)
 		virtual void run(Model *) = 0;
 	};
 
@@ -447,10 +447,6 @@ namespace {
 			model.playNextTrial(trial);
 		}
 
-		void playCalibration() {
-			model.playCalibration(calibration);
-		}
-
 		void processAudioForSaving() {
 			model.processAudioForSaving(savingAudio);
 		}
@@ -477,10 +473,6 @@ namespace {
 		void setFullSimulation(SignalProcessingUseCase *useCase) {
 			useCase->setHearingAidSimulationOn();
 			useCase->setSpatializationOn();
-		}
-		
-		void setInMemoryReader(AudioFileReader &reader_) {
-			audioFrameReaderFactory.setReader(std::make_shared<AudioFileInMemory>(reader_));
 		}
 		
 		void processWhenPlayerPlays(gsl::span<channel_type> channels) {
@@ -1572,7 +1564,7 @@ namespace {
 		fakeLoader->setLoadCompleteThreshold(2);
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
-		assertEqual(2U, fakeLoader->audio().size());
+		assertEqual(2UL, fakeLoader->audio().size());
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsChannelSizeMatchedAudio) {
@@ -1582,7 +1574,7 @@ namespace {
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
 		for (auto audio : fakeLoader->audio())
-			assertEqual(3U, audio.size());
+			assertEqual(3UL, audio.size());
 	}
 
 	TEST_F(
@@ -1598,7 +1590,7 @@ namespace {
 		processAudioForSaving();
 		for (auto audio : fakeLoader->audio())
 			for (auto channel : audio)
-				assertEqual(4U, channel.size());
+				assertEqual(4UL, channel.size());
 	}
 
 	TEST_F(

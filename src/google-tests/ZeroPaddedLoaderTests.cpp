@@ -147,7 +147,7 @@ namespace {
 
 	class AddsOne : public AudioFrameProcessor {
 		void process(gsl::span<channel_type> audio) override {
-			for (const auto channel : audio)
+			for (const auto &channel : audio)
 				for (auto &x : channel)
 					x += 1;
 		}
