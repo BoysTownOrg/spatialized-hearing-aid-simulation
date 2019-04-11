@@ -18,6 +18,7 @@ namespace {
 
 	TEST_F(ScalingProcessorTests, groupDelayReturnsZero) {
 		ScalingProcessor<float> processor{ {} };
-		assertEqual(0L, processor.groupDelay());
+		using index_type = typename ScalingProcessor<float>::index_type;
+		assertEqual(index_type{ 0 }, processor.groupDelay());
 	};
 }

@@ -1573,7 +1573,7 @@ namespace {
 		fakeLoader->setLoadCompleteThreshold(2);
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
-		assertEqual(2UL, fakeLoader->audio().size());
+		assertEqual(size_t{ 2 }, fakeLoader->audio().size());
 	}
 
 	TEST_F(SpatialHearingAidModelTests, processAudioForSavingLoadsChannelSizeMatchedAudio) {
@@ -1583,7 +1583,7 @@ namespace {
 		audioLoaderFactory.setLoader(fakeLoader);
 		processAudioForSaving();
 		for (auto audio : fakeLoader->audio())
-			assertEqual(3UL, audio.size());
+			assertEqual(size_t{ 3 }, audio.size());
 	}
 
 	TEST_F(
@@ -1599,7 +1599,7 @@ namespace {
 		processAudioForSaving();
 		for (auto audio : fakeLoader->audio())
 			for (auto channel : audio)
-				assertEqual(4UL, channel.size());
+				assertEqual(size_t{ 4 }, channel.size());
 	}
 
 	TEST_F(

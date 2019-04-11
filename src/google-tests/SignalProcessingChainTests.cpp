@@ -34,6 +34,7 @@ namespace {
 		auto processor3 = std::make_shared<SignalProcessorStub>();
 		processor3->setGroupDelay(3);
 		chain.add(processor3);
-		assertEqual(1L + 2 + 3, chain.groupDelay());
+		using index_type = typename SignalProcessingChain::index_type;
+		assertEqual(index_type{ 1 + 2 + 3 }, chain.groupDelay());
 	}
 }

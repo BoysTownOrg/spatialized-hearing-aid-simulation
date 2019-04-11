@@ -92,8 +92,9 @@ namespace {
 		fillStreamBuffer(x, 1);
 		assertEqual(&left, loader->audioBuffer().at(0).data());
 		assertEqual(&right, loader->audioBuffer().at(1).data());
-		assertEqual(1L, loader->audioBuffer().at(0).size());
-		assertEqual(1L, loader->audioBuffer().at(1).size());
+		using size_type = typename gsl::span<float>::size_type;
+		assertEqual(size_type{ 1 }, loader->audioBuffer().at(0).size());
+		assertEqual(size_type{ 1 }, loader->audioBuffer().at(1).size());
 	}
 
 	TEST_F(AudioDevicePlayerTests, isPlayingWhenDeviceIsStreaming) {

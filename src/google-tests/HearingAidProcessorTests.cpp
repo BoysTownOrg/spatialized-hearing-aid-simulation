@@ -75,7 +75,8 @@ namespace {
 		groupDelayReturnsHalfWindowSize
 	) {
 		compressor->setWindowSize(512);
-		assertEqual(256L, processor.groupDelay());
+		using index_type = typename HearingAidProcessor::index_type;
+		assertEqual(index_type{ 256 }, processor.groupDelay());
 	}
 
 	class CompressorErrorTests : public ::testing::Test {
