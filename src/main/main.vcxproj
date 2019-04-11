@@ -70,22 +70,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);C:\Users\basset\Source\Repos\chapro;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir);C:\Users\basset\Source\Repos\chapro\VS15\$(Configuration)\chapro_dll;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);C:\Users\basset\Source\Repos\chapro;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir);C:\Users\basset\Source\Repos\chapro\VS15\$(Configuration)\chapro_dll;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);C:\Users\basset\Source\Repos\chapro;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir);C:\Users\basset\Source\Repos\chapro\VS15\$(Configuration)\chapro_dll;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);C:\Users\basset\Source\Repos\chapro;$(IncludePath)</IncludePath>
     <LibraryPath>$(OutDir);C:\Users\basset\Source\Repos\chapro\VS15\$(Configuration)\chapro_dll;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
