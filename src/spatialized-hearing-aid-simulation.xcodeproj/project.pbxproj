@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26D2EEE52285D2B000D92571 /* libaudio-file-reading-writing.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3B52225E48A7002275F2 /* libaudio-file-reading-writing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEE62285D2B000D92571 /* libbinaural-room-impulse-response.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3B7A225E49C0002275F2 /* libbinaural-room-impulse-response.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEE72285D2B000D92571 /* libdsl-prescription.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C5E225E4B0E002275F2 /* libdsl-prescription.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEE82285D2B000D92571 /* libfir-filtering.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C66225E4B17002275F2 /* libfir-filtering.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEE92285D2B000D92571 /* libhearing-aid-processing.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C6E225E4B1E002275F2 /* libhearing-aid-processing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEEA2285D2B000D92571 /* libplaying-audio.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C76225E4B2E002275F2 /* libplaying-audio.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEEB2285D2B000D92571 /* libpresentation.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C7E225E4B39002275F2 /* libpresentation.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEEC2285D2B000D92571 /* libsignal-processing.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C86225E4B42002275F2 /* libsignal-processing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEED2285D2B000D92571 /* libspatialized-hearing-aid-simulation.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C8E225E4B66002275F2 /* libspatialized-hearing-aid-simulation.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEEE2285D2B000D92571 /* libstimulus-list.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C96225E4B6F002275F2 /* libstimulus-list.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEEF2285D2B000D92571 /* libtest-documenting.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26DC3C9E225E4B75002275F2 /* libtest-documenting.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEF92285D46B00D92571 /* libvorbis.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26D2EEF42285D46A00D92571 /* libvorbis.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEFA2285D46B00D92571 /* libFLAC.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26D2EEF52285D46A00D92571 /* libFLAC.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEFB2285D46B00D92571 /* libvorbisenc.2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26D2EEF62285D46A00D92571 /* libvorbisenc.2.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEFC2285D46B00D92571 /* libogg.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26D2EEF72285D46B00D92571 /* libogg.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		26D2EEFD2285D46B00D92571 /* libsndfile.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26D2EEF82285D46B00D92571 /* libsndfile.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		26DC3C58225E4B02002275F2 /* AudioFileWriterAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3BF0225E4AED002275F2 /* AudioFileWriterAdapter.cpp */; };
 		26DC3C59225E4B02002275F2 /* AudioFileInMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3BF1225E4AED002275F2 /* AudioFileInMemory.cpp */; };
 		26DC3CA2225E4B7D002275F2 /* BrirAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26DC3BDB225E4AED002275F2 /* BrirAdapter.cpp */; };
@@ -87,6 +103,31 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		26D2EEE42285D29600D92571 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				26D2EEF92285D46B00D92571 /* libvorbis.0.dylib in CopyFiles */,
+				26D2EEFA2285D46B00D92571 /* libFLAC.8.dylib in CopyFiles */,
+				26D2EEFB2285D46B00D92571 /* libvorbisenc.2.dylib in CopyFiles */,
+				26D2EEFC2285D46B00D92571 /* libogg.0.dylib in CopyFiles */,
+				26D2EEFD2285D46B00D92571 /* libsndfile.1.dylib in CopyFiles */,
+				26D2EEE52285D2B000D92571 /* libaudio-file-reading-writing.dylib in CopyFiles */,
+				26D2EEE62285D2B000D92571 /* libbinaural-room-impulse-response.dylib in CopyFiles */,
+				26D2EEE72285D2B000D92571 /* libdsl-prescription.dylib in CopyFiles */,
+				26D2EEE82285D2B000D92571 /* libfir-filtering.dylib in CopyFiles */,
+				26D2EEE92285D2B000D92571 /* libhearing-aid-processing.dylib in CopyFiles */,
+				26D2EEEA2285D2B000D92571 /* libplaying-audio.dylib in CopyFiles */,
+				26D2EEEB2285D2B000D92571 /* libpresentation.dylib in CopyFiles */,
+				26D2EEEC2285D2B000D92571 /* libsignal-processing.dylib in CopyFiles */,
+				26D2EEED2285D2B000D92571 /* libspatialized-hearing-aid-simulation.dylib in CopyFiles */,
+				26D2EEEE2285D2B000D92571 /* libstimulus-list.dylib in CopyFiles */,
+				26D2EEEF2285D2B000D92571 /* libtest-documenting.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		26DC3A73225E3F47002275F2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -100,6 +141,12 @@
 
 /* Begin PBXFileReference section */
 		26C895FB225E3EB7009114F4 /* main-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "main-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26D2EEF12285D30F00D92571 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26D2EEF42285D46A00D92571 /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = ../../../../../usr/local/Cellar/libvorbis/1.3.6/lib/libvorbis.0.dylib; sourceTree = "<group>"; };
+		26D2EEF52285D46A00D92571 /* libFLAC.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.8.dylib; path = ../../../../../usr/local/Cellar/flac/1.3.2_1/lib/libFLAC.8.dylib; sourceTree = "<group>"; };
+		26D2EEF62285D46A00D92571 /* libvorbisenc.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbisenc.2.dylib; path = ../../../../../usr/local/Cellar/libvorbis/1.3.6/lib/libvorbisenc.2.dylib; sourceTree = "<group>"; };
+		26D2EEF72285D46B00D92571 /* libogg.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libogg.0.dylib; path = ../../../../../usr/local/Cellar/libogg/1.3.3/lib/libogg.0.dylib; sourceTree = "<group>"; };
+		26D2EEF82285D46B00D92571 /* libsndfile.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsndfile.1.dylib; path = ../../../../../usr/local/Cellar/libsndfile/1.0.28/lib/libsndfile.1.dylib; sourceTree = "<group>"; };
 		26DC3A75225E3F47002275F2 /* google-tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "google-tests"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DC3B52225E48A7002275F2 /* libaudio-file-reading-writing.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libaudio-file-reading-writing.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26DC3B7A225E49C0002275F2 /* libbinaural-room-impulse-response.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "libbinaural-room-impulse-response.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -412,6 +459,11 @@
 		26C895F2225E3EB7009114F4 = {
 			isa = PBXGroup;
 			children = (
+				26D2EEF52285D46A00D92571 /* libFLAC.8.dylib */,
+				26D2EEF72285D46B00D92571 /* libogg.0.dylib */,
+				26D2EEF82285D46B00D92571 /* libsndfile.1.dylib */,
+				26D2EEF42285D46A00D92571 /* libvorbis.0.dylib */,
+				26D2EEF62285D46A00D92571 /* libvorbisenc.2.dylib */,
 				26DC3BEC225E4AED002275F2 /* audio-file-reading-writing */,
 				26DC3BDA225E4AED002275F2 /* binaural-room-impulse-response */,
 				26DC3BE6225E4AED002275F2 /* dsl-prescription */,
@@ -462,6 +514,7 @@
 		26DC3B8B225E4AED002275F2 /* main */ = {
 			isa = PBXGroup;
 			children = (
+				26D2EEF12285D30F00D92571 /* Info.plist */,
 				26DC3B8C225E4AED002275F2 /* Chapro.cpp */,
 				26DC3B8D225E4AED002275F2 /* MersenneTwisterRandomizer.h */,
 				26DC3B8E225E4AED002275F2 /* WindowsDirectoryReader.cpp */,
@@ -806,7 +859,9 @@
 			buildPhases = (
 				26C895F7225E3EB7009114F4 /* Sources */,
 				26C895F8225E3EB7009114F4 /* Frameworks */,
-				26C895F9225E3EB7009114F4 /* Resources */,
+				26D2EEE42285D29600D92571 /* CopyFiles */,
+				26D2EEF22285D38E00D92571 /* ShellScript */,
+				26D2EEF32285D3DB00D92571 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1101,15 +1156,42 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		26C895F9225E3EB7009114F4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* Begin PBXShellScriptBuildPhase section */
+		26D2EEF22285D38E00D92571 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/../Frameworks/libogg.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libvorbisenc.2.dylib\"\ninstall_name_tool -change /usr/local/Cellar/libvorbis/1.3.6/lib/libvorbis.0.dylib @executable_path/../Frameworks/libvorbis.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libvorbisenc.2.dylib\"\ninstall_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/../Frameworks/libogg.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libvorbis.0.dylib\"\ninstall_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/../Frameworks/libogg.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libFLAC.8.dylib\"\ninstall_name_tool -change /usr/local/opt/libvorbis/lib/libvorbisenc.2.dylib @executable_path/../Frameworks/libvorbisenc.2.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libsndfile.1.dylib\"\ninstall_name_tool -change /usr/local/opt/libvorbis/lib/libvorbis.0.dylib @executable_path/../Frameworks/libvorbis.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libsndfile.1.dylib\"\ninstall_name_tool -change /usr/local/opt/libogg/lib/libogg.0.dylib @executable_path/../Frameworks/libogg.0.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libsndfile.1.dylib\"\ninstall_name_tool -change /usr/local/opt/flac/lib/libFLAC.8.dylib @executable_path/../Frameworks/libFLAC.8.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/Frameworks/libsndfile.1.dylib\"\ninstall_name_tool -change /usr/local/opt/libsndfile/lib/libsndfile.1.dylib @executable_path/../Frameworks/libsndfile.1.dylib \"${TARGET_BUILD_DIR}/${TARGET_NAME}.app/Contents/MacOS/${TARGET_NAME}\"\n";
 		};
-/* End PBXResourcesBuildPhase section */
+		26D2EEF32285D3DB00D92571 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		26C895F7225E3EB7009114F4 /* Sources */ = {
@@ -1409,8 +1491,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 773JMU98F4;
+				INFOPLIST_FILE = "$(SRCROOT)/main/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1418,6 +1503,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -1425,8 +1511,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 773JMU98F4;
+				INFOPLIST_FILE = "$(SRCROOT)/main/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1434,6 +1523,7 @@
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = "btnrh.spatialized-hearing-aid-simulation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -1462,6 +1552,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1474,6 +1565,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1486,6 +1578,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1498,6 +1591,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1510,6 +1604,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1522,6 +1617,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1534,6 +1630,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1547,6 +1644,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1560,6 +1658,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1572,6 +1671,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1584,6 +1684,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1596,6 +1697,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1608,6 +1710,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1620,6 +1723,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1632,6 +1736,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1644,6 +1749,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1656,6 +1762,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1668,6 +1775,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1680,6 +1788,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1692,6 +1801,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1704,6 +1814,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1716,6 +1827,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
