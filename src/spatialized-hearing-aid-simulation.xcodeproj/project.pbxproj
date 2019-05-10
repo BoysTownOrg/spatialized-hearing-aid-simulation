@@ -140,7 +140,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		26C895FB225E3EB7009114F4 /* main-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "main-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		26C895FB225E3EB7009114F4 /* Spatialized Hearing Aid Simulation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spatialized Hearing Aid Simulation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		26D2EEF12285D30F00D92571 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26D2EEF42285D46A00D92571 /* libvorbis.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvorbis.0.dylib; path = ../../../../../usr/local/Cellar/libvorbis/1.3.6/lib/libvorbis.0.dylib; sourceTree = "<group>"; };
 		26D2EEF52285D46A00D92571 /* libFLAC.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.8.dylib; path = ../../../../../usr/local/Cellar/flac/1.3.2_1/lib/libFLAC.8.dylib; sourceTree = "<group>"; };
@@ -485,7 +485,7 @@
 		26C895FC225E3EB7009114F4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				26C895FB225E3EB7009114F4 /* main-macos.app */,
+				26C895FB225E3EB7009114F4 /* Spatialized Hearing Aid Simulation.app */,
 				26DC3A75225E3F47002275F2 /* google-tests */,
 				26DC3B52225E48A7002275F2 /* libaudio-file-reading-writing.dylib */,
 				26DC3B7A225E49C0002275F2 /* libbinaural-room-impulse-response.dylib */,
@@ -853,9 +853,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		26C895FA225E3EB7009114F4 /* main-macos */ = {
+		26C895FA225E3EB7009114F4 /* Spatialized Hearing Aid Simulation */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "main-macos" */;
+			buildConfigurationList = 26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "Spatialized Hearing Aid Simulation" */;
 			buildPhases = (
 				26C895F7225E3EB7009114F4 /* Sources */,
 				26C895F8225E3EB7009114F4 /* Frameworks */,
@@ -867,9 +867,9 @@
 			);
 			dependencies = (
 			);
-			name = "main-macos";
+			name = "Spatialized Hearing Aid Simulation";
 			productName = "spatialized-hearing-aid-simulation";
-			productReference = 26C895FB225E3EB7009114F4 /* main-macos.app */;
+			productReference = 26C895FB225E3EB7009114F4 /* Spatialized Hearing Aid Simulation.app */;
 			productType = "com.apple.product-type.application";
 		};
 		26DC3A74225E3F47002275F2 /* google-tests */ = {
@@ -1139,7 +1139,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				26C895FA225E3EB7009114F4 /* main-macos */,
+				26C895FA225E3EB7009114F4 /* Spatialized Hearing Aid Simulation */,
 				26DC3A74225E3F47002275F2 /* google-tests */,
 				26DC3B51225E48A7002275F2 /* audio-file-reading-writing */,
 				26DC3B79225E49C0002275F2 /* binaural-room-impulse-response */,
@@ -1845,7 +1845,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "main-macos" */ = {
+		26C8960C225E3EB9009114F4 /* Build configuration list for PBXNativeTarget "Spatialized Hearing Aid Simulation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				26C8960D225E3EB9009114F4 /* Debug */,
